@@ -21,6 +21,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " Themes
 " Use private personal configuration of ayu theme
@@ -50,6 +52,10 @@ let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
 "map <Leader>k <Plug>(easymotion-k)
 
 nnoremap <leader>n :NERDTreeToggle<CR>
+
+" ------------- fzf configuration --------------- "
+
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
 
 " ----------- coc.vim configuration ------------- "
 

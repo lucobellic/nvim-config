@@ -4,10 +4,10 @@ fpath+=$HOME/.zsh/typewritten
 autoload -U promptinit; promptinit
 prompt typewritten
 
-path+=/home/luco/.local/bin
+path+=$HOME/.local/bin
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/luco/.oh-my-zsh"
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -83,6 +83,27 @@ source $ZSH/oh-my-zsh.sh
 
 path+=/opt/protoc-3.6.1/bin
 
+# --------------------------- FZF Configuration  ---------------------------  #
+
+alias fd=fdfind
+
+export FZF_DEFAULT_COMMAND="fdfind --type f --hidden --follow --exclude .git"
+
+# Options to fzf command
+export FZF_COMPLETION_OPTS='+c -x'
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
 #
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -106,5 +127,5 @@ path+=/opt/protoc-3.6.1/bin
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
+alias zshconfig="nvim ~/.zshrc"
+alias ohmyzsh="nvim ~/.oh-my-z"
