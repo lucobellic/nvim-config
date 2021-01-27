@@ -48,6 +48,23 @@ set cmdheight=2
 let g:session_autosave = 'yes'
 let g:session_autosload = 'no'
 
+nnoremap <leader>1 1gt
+nnoremap <leader>2 2gt
+nnoremap <leader>3 3gt
+nnoremap <leader>4 4gt
+nnoremap <leader>5 5gt
+nnoremap <leader>6 6gt
+nnoremap <leader>7 7gt
+nnoremap <leader>8 8gt
+nnoremap <leader>9 9gt
+
+nnoremap <leader>th :tabprev<CR>
+nnoremap <leader>tl :tabnext<CR>
+nnoremap <leader>tt :tabedit<Space>
+nnoremap <leader>tn :tabnext<Space>
+nnoremap <leader>tm :tabm<Space>
+nnoremap <leader>td :tabclose<CR>
+
 " ------------- color configuration ------------- "
 
 set termguicolors     " enable true colors support
@@ -64,7 +81,6 @@ let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
 set autochdir
 let NERDTreeChDirMode=2
 nnoremap <leader>n :NERDTreeToggle<CR>
-
 
 let g:rainbow_active = 1
 
