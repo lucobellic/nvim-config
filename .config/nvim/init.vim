@@ -28,6 +28,7 @@ Plug 'junegunn/fzf.vim'
 " Use private personal configuration of ayu theme
 Plug 'git@gitlab.com:luco-bellic/ayu-vim.git', { 'branch': 'personal' }
 Plug 'itchyny/lightline.vim'
+Plug 'frazrepo/vim-rainbow'
 
 " UI 
 Plug 'wfxr/minimap.vim'
@@ -35,10 +36,20 @@ Plug 'airblade/vim-gitgutter'
 
 " Other
 Plug 'jceb/vim-orgmode'
+Plug 'xolox/vim-session'
+Plug 'xolox/vim-misc'
 
 call plug#end()
 
-" Color Scheme
+" ------------------- Editor -------------------- "
+
+" Give more space for displaying messages.
+set cmdheight=2
+let g:session_autosave = 'yes'
+let g:session_autosload = 'no'
+
+" ------------- color configuration ------------- "
+
 set termguicolors     " enable true colors support
 "set ayucolor="dark"   " for dark version of theme
 colorscheme ayu
@@ -50,9 +61,23 @@ let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
 " JK motions: Line motions
 "map <Leader>j <Plug>(easymotion-j)
 "map <Leader>k <Plug>(easymotion-k)
-
+set autochdir
+let NERDTreeChDirMode=2
 nnoremap <leader>n :NERDTreeToggle<CR>
 
+
+let g:rainbow_active = 1
+
+let g:rainbow_load_separately = [
+    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
+    \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
+    \ ]
+
+let g:rainbow_guifgs = ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
+" let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
+"
 " ------------- fzf configuration --------------- "
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
