@@ -1,0 +1,29 @@
+{
+    "suggest.autoTrigger": "none",
+    "snippets.textmateSnippetsRoots": ["~/.config/snippets"],
+    "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                ".ccls",
+                "compile_commands.json",
+                ".vim/",
+                ".git/",
+                ".hg/"
+            ],
+            "initializationOptions": {
+                "highlight": { "lsRanges" : true },
+                "cache": {
+                    "directory": "/tmp/ccls"
+                }
+            }
+        }
+    }
+}
+

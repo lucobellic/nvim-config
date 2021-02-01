@@ -2,13 +2,6 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
 
-set clipboard+=unnamedplus
-let mapleader="\<SPACE>"
-set number
-set signcolumn=number
-"  set signcolumn=yes
-
-
 call plug#begin('~/.vim/plugged')
 
 " Completion
@@ -29,6 +22,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'git@gitlab.com:luco-bellic/ayu-vim.git', { 'branch': 'personal' }
 Plug 'itchyny/lightline.vim'
 Plug 'frazrepo/vim-rainbow'
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 " UI 
 Plug 'wfxr/minimap.vim'
@@ -43,10 +37,21 @@ call plug#end()
 
 " ------------------- Editor -------------------- "
 
+set clipboard+=unnamedplus
+let mapleader="\<SPACE>"
+set number
+set signcolumn=number
+set noswapfile 
+set autoread
+set noshowmode
+
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 let g:session_autosave = 'yes'
-let g:session_autosload = 'no'
+let g:session_autoload = 'no'
+set splitright
+
+" ----------------- Navigation ------------------ "
 
 nnoremap <leader>1 1gt
 nnoremap <leader>2 2gt
@@ -61,9 +66,17 @@ nnoremap <leader>9 9gt
 nnoremap <leader>th :tabprev<CR>
 nnoremap <leader>tl :tabnext<CR>
 nnoremap <leader>tt :tabedit<Space>
-nnoremap <leader>tn :tabnext<Space>
+nnoremap <leader>tn :tabnew<CR>
 nnoremap <leader>tm :tabm<Space>
-nnoremap <leader>td :tabclose<CR>
+nnoremap <leader>tq :tabclose<CR>
+
+" Move to line
+map  <leader><leader>l <Plug>(easymotion-bd-jk)
+nmap <leader><leader>l <Plug>(easymotion-overwin-line)
+
+" Move to word
+map  <leader><leader>w <Plug>(easymotion-bd-w)
+nmap <leader><leader>w <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
 function! ToggleHiddenAll()
@@ -84,7 +97,10 @@ endfunction
 
 nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
-" ------------- color configuration ------------- "
+nnoremap <silent> <Esc> :nohl<CR>
+nnoremap <leader>w <C-w>
+
+" -------------------- Color ------------------- "
 
 set termguicolors     " enable true colors support
 "set ayucolor="dark"   " for dark version of theme
@@ -112,7 +128,10 @@ let g:rainbow_load_separately = [
 
 let g:rainbow_guifgs = ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
 " let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
-"
+
+hi link LspCxxHlSymParameter Constant
+hi link LspCxxHlSymField Todo 
+
 " ------------- fzf configuration --------------- "
 
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
@@ -164,8 +183,8 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nmap <silent> <g <Plug>(coc-diagnostic-prev)
+nmap <silent> >g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -252,16 +271,18 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 let g:lightline = {
 	\ 'colorscheme': 'ayu',
 	\ 'active': {
 	\   'left': [ [ 'mode', 'paste' ],
-	\             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+	\             [ 'gitbranch', 'cocstatus', 'readonly', 'filename', 'modified' ] ],
+        \   'right': [ [ 'percent', 'charvaluehex' ] ],
 	\ },
 	\ 'component_function': {
-	\   'cocstatus': 'coc#status'
+	\   'cocstatus': 'coc#status',
+      	\   'gitbranch': 'FugitiveHead'
 	\ },
 	\ }
 
@@ -286,15 +307,5 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-
-
-
-
-
-
-
-
-
 
 
