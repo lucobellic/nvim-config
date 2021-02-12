@@ -72,11 +72,11 @@ nnoremap <leader>tq :tabclose<CR>
 
 " Move to line
 map  <leader><leader>l <Plug>(easymotion-bd-jk)
-nmap <leader><leader>l <Plug>(easymotion-overwin-line)
+"nmap <leader><leader>l <Plug>(easymotion-overwin-line)
 
 " Move to word
 map  <leader><leader>w <Plug>(easymotion-bd-w)
-nmap <leader><leader>w <Plug>(easymotion-overwin-w)
+"nmap <leader><leader>w <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
 function! ToggleHiddenAll()
