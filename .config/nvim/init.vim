@@ -13,7 +13,6 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
@@ -75,7 +74,7 @@ map  <leader><leader>l <Plug>(easymotion-bd-jk)
 "nmap <leader><leader>l <Plug>(easymotion-overwin-line)
 
 " Move to word
-map  <leader><leader>w <Plug>(easymotion-bd-w)
+map  <leader><leader>h <Plug>(easymotion-bd-w)
 "nmap <leader><leader>w <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
@@ -97,9 +96,9 @@ endfunction
 
 nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
-nmap <h <Plug>GitGutterPrevHunk
-nmap >h <Plug>GitGutterNextHunk
-nmap <Leader>hv <Plug>GitGutterPreviewHunk
+nmap <h <Plug>(GitGutterPrevHunk)
+nmap >h <Plug>(GitGutterNextHunk)
+nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 
 nnoremap <silent> <Esc> :nohl<CR>
 nnoremap <leader>w <C-w>
@@ -115,12 +114,6 @@ colorscheme ayu
 map <leader><leader> <Plug>(easymotion-prefix)
 let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
 
-" JK motions: Line motions
-"map <Leader>j <Plug>(easymotion-j)
-"map <Leader>k <Plug>(easymotion-k)
-set autochdir
-let NERDTreeChDirMode=2
-nnoremap <leader>e :NERDTreeToggle<CR>
 
 let g:rainbow_active = 1
 
