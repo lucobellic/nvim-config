@@ -80,7 +80,7 @@ map  <leader><leader>l <Plug>(easymotion-bd-jk)
 "nmap <leader><leader>l <Plug>(easymotion-overwin-line)
 
 " Move to word
-map  <leader><leader>h <Plug>(easymotion-bd-w)
+map  <leader><leader>w <Plug>(easymotion-bd-w)
 "nmap <leader><leader>w <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
@@ -293,3 +293,41 @@ let g:lightline = {
 " Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
+let g:coc_explorer_global_presets = {
+\   '.vim': {
+\     'root-uri': '~/.vim',
+\   },
+\   'cocConfig': {
+\      'root-uri': '~/.config/coc',
+\   },
+\   'tab': {
+\     'position': 'tab',
+\     'quit-on-open': v:true,
+\   },
+\   'floatingLeftside': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingRightside': {
+\     'position': 'floating',
+\     'floating-position': 'right-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'simplify': {
+\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   },
+\   'buffer': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'sources': [{'name': 'buffer', 'expand': v:true}]
+\   },
+\ }
+
+" Use preset argument to open it
+nmap <leader>ef :CocCommand explorer --preset floatingLeftside<CR>
+nmap <leader>eb :CocCommand explorer --preset buffer<CR>
+nmap <leader>ee :CocCommand explorer<CR>
