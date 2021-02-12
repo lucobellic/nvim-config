@@ -97,6 +97,10 @@ endfunction
 
 nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
+nmap <h <Plug>GitGutterPrevHunk
+nmap >h <Plug>GitGutterNextHunk
+nmap <Leader>hv <Plug>GitGutterPreviewHunk
+
 nnoremap <silent> <Esc> :nohl<CR>
 nnoremap <leader>w <C-w>
 
