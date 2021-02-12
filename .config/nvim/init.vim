@@ -103,6 +103,7 @@ nmap <Leader>hv <Plug>GitGutterPreviewHunk
 
 nnoremap <silent> <Esc> :nohl<CR>
 nnoremap <leader>w <C-w>
+tnoremap <Esc> <C-\><C-n>
 
 " -------------------- Color ------------------- "
 
