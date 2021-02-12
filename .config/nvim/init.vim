@@ -2,10 +2,16 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
 
+function! PostCocInstall(info)
+	if a:info.status == 'installed' || a:info.force
+		:CocInstall coc-explorer coc-json coc-fzf-preview coc-highlight coc-python coc-rls coc-rust-analyzer coc-toml coc-yaml coc-cmake
+	endif
+endfunction
+
 call plug#begin('~/.vim/plugged')
 
 " Completion
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('PostCocInstall')}
 
 " Navigation
 Plug 'easymotion/vim-easymotion'
