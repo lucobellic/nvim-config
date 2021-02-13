@@ -129,6 +129,10 @@ nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <leader>mq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> <leader>ml     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
+" Git command
+nnoremap <leader>gc :<C-u>Git commit -m ""<Left>
+nnoremap <leader>ga :<C-u>Git commit --amend<CR>
+
 " ----------------- Navigation ------------------ "
 
 nnoremap <leader>1 1gt
