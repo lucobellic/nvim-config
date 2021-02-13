@@ -51,6 +51,10 @@ set noswapfile
 set autoread
 set noshowmode
 
+"tab behavior
+set tabstop=2
+set shiftwidth=2
+
 " Give more space for displaying messages.
 set cmdheight=1
 let g:session_autosave = 'yes'
