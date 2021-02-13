@@ -100,11 +100,6 @@ set wrap! " Disable wrapping
 set tabstop=2
 set shiftwidth=2
 
-" Give more space for displaying messages.
-set cmdheight=1
-let g:session_autosave = 'yes'
-let g:session_autoload = 'no'
-
 " which-key configuration
 let g:mapleader = "\<Space>"
 "let g:maplocalleader = ','
@@ -112,6 +107,9 @@ nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
 nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 "nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 set timeoutlen=250
+
+" Zen mode activation
+nnoremap <silent> <C-z> :<C-u>Goyo<CR>
 
 nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
 nnoremap <silent> <leader>mgs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
