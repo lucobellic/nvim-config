@@ -33,6 +33,8 @@ Plug 'ryanoasis/vim-devicons'
 " UI 
 Plug 'wfxr/minimap.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'psliwka/vim-smoothie'
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
 " Other
 Plug 'jceb/vim-orgmode'
@@ -60,24 +62,29 @@ set cmdheight=1
 let g:session_autosave = 'yes'
 let g:session_autoload = 'no'
 
-nmap <Leader>m [fzf-p]
-xmap <Leader>m [fzf-p]
+" which-key configuration
+let g:mapleader = "\<Space>"
+"let g:maplocalleader = ','
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+"nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+set timeoutlen=250
 
-nnoremap <silent> [fzf-p]p     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
-nnoremap <silent> [fzf-p]gs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
-nnoremap <silent> [fzf-p]ga    :<C-u>CocCommand fzf-preview.GitActions<CR>
-nnoremap <silent> [fzf-p]b     :<C-u>CocCommand fzf-preview.Buffers<CR>
-nnoremap <silent> [fzf-p]B     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> [fzf-p]o     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
-nnoremap <silent> [fzf-p]<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
-nnoremap <silent> [fzf-p]g;    :<C-u>CocCommand fzf-preview.Changes<CR>
-nnoremap <silent> [fzf-p]/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
-nnoremap <silent> [fzf-p]*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-nnoremap          [fzf-p]gr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap          [fzf-p]gr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
-nnoremap <silent> [fzf-p]t     :<C-u>CocCommand fzf-preview.BufferTags<CR>
-nnoremap <silent> [fzf-p]q     :<C-u>CocCommand fzf-preview.QuickFix<CR>
-nnoremap <silent> [fzf-p]l     :<C-u>CocCommand fzf-preview.LocationList<CR>
+nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
+nnoremap <silent> <leader>mgs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
+nnoremap <silent> <leader>mga    :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> <leader>mb     :<C-u>CocCommand fzf-preview.Buffers<CR>
+nnoremap <silent> <leader>mB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
+nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
+nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
+nnoremap <silent> <leader>mg;    :<C-u>CocCommand fzf-preview.Changes<CR>
+nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
+nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+nnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+xnoremap          <leader>mgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
+nnoremap <silent> <leader>mq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
+nnoremap <silent> <leader>ml     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
 " ----------------- Navigation ------------------ "
 
