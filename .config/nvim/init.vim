@@ -40,7 +40,6 @@ Plug 'junegunn/goyo.vim' " Zen mode
 
 " Other
 Plug 'jceb/vim-orgmode'
-Plug 'xolox/vim-session'
 Plug 'xolox/vim-misc'
 
 call plug#end()
@@ -95,6 +94,7 @@ set noswapfile
 set autoread
 set noshowmode
 set wrap! " Disable wrapping
+set ignorecase
 
 "tab behavior
 set tabstop=2
@@ -109,18 +109,22 @@ nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
 set timeoutlen=250
 
 " Zen mode activation
+let g:goyo_width = 120
+let g:goyo_height = '90%'
+let g:goyo_linenr = 1
 nnoremap <silent> <C-z> :<C-u>Goyo<CR>
 
-nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project_mru git<CR>
-nnoremap <silent> <leader>mgs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
-nnoremap <silent> <leader>mga    :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project<CR>
 nnoremap <silent> <leader>mb     :<C-u>CocCommand fzf-preview.Buffers<CR>
 nnoremap <silent> <leader>mB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
-nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
-nnoremap <silent> <leader>mg;    :<C-u>CocCommand fzf-preview.Changes<CR>
+nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>	nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
 nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+" Git related
+nnoremap <silent> <leader>mgs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
+nnoremap <silent> <leader>mga    :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> <leader>mg;    :<C-u>CocCommand fzf-preview.Changes<CR>
+" Project Grep
 nnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
 xnoremap          <leader>mgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
@@ -182,7 +186,7 @@ nmap >h <Plug>(GitGutterNextHunk)
 nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 
 nnoremap <silent> <Esc> :nohl<CR>
-nnoremap <leader>w <C-w>
+map <leader>w <C-w>
 tnoremap <Esc> <C-\><C-n>
 
 " -------------------- Color ------------------- "
