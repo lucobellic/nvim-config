@@ -54,7 +54,7 @@ autocmd BufEnter *
        \   Startify |
        \ endif
 
-let g:start_screen_ascci = [
+let g:start_screen_ascii = [
 			\ '       ______________________________________________________________________________________________________________________________________ ',
 			\ '      /_____/￣\ ___________________________________________________/￣￣￣￣\ _______________/￣\ ______/￣\ ______/￣\ ___________________/ ',
 			\ '     /_____/￣\/_______/￣\____/￣\ __/￣￣￣\ ___/￣￣￣\ ________/￣\__/￣\/__/￣￣￣￣\ __/￣\/______/￣\/_____________/￣￣￣\ ________/ ',
@@ -65,7 +65,7 @@ let g:start_screen_ascci = [
 			\ ''
 			\]
 
-let g:start_screen_ascci_2 = [
+let g:start_screen_ascii_2 = [
 			\ '                            ______/￣\ ___________________________________________________         ',
 			\ '                           /_____/￣\/_______/￣\____/￣\ __/￣￣￣\ ___/￣￣￣\ ________/        ',
 			\ '                          /_____/￣\/_______/￣\/___/￣\/__/￣\ _____/￣\_____/￣\ _____/        ',
@@ -83,7 +83,7 @@ let g:start_screen_ascci_2 = [
 			\]
 
 let g:startify_custom_header =
-			\ 'startify#pad(g:start_screen_ascci + startify#fortune#boxed())'
+			\ 'startify#center(g:start_screen_ascii_2) + startify#center(startify#fortune#boxed())'
 
 " ------------------- Editor -------------------- "
 
@@ -94,6 +94,7 @@ set signcolumn=number
 set noswapfile 
 set autoread
 set noshowmode
+set wrap! " Disable wrapping
 
 "tab behavior
 set tabstop=2
@@ -350,17 +351,19 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 let g:lightline = {
-	\ 'colorscheme': 'ayu',
-	\ 'active': {
-	\   'left': [ [ 'mode', 'paste' ],
-	\             [ 'gitbranch', 'cocstatus', 'readonly', 'filename', 'modified' ] ],
-        \   'right': [ [ 'percent', 'charvaluehex' ] ],
-	\ },
-	\ 'component_function': {
-	\   'cocstatus': 'coc#status',
-      	\   'gitbranch': 'FugitiveHead'
-	\ },
-	\ }
+			\ 'colorscheme': 'ayu',
+			\ 'active': {
+			\   'left': [ [ 'mode', 'paste' ],
+			\             [ 'gitbranch', 'cocstatus' ],
+			\             [ 'readonly', 'filename', 'modified' ] ],
+			\   'right': [ ['lineinfo'],
+			\              [ 'percent'] ]
+			\ },
+			\ 'component_function': {
+			\   'cocstatus': 'coc#status',
+			\   'gitbranch': 'FugitiveHead'
+			\ },
+			\ }
 
 " Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
