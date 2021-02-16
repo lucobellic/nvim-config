@@ -94,9 +94,16 @@ set noswapfile
 set autoread
 set noshowmode
 set wrap! " Disable wrapping
+set wmw=0 " Minimum window width
+set wmh=0 " Minimum window height
 set ignorecase
+autocmd BufEnter * silent! lcd %:p:h
 
-"tab behavior
+" Tabulation improvement
+set wildmode=longest:full,full
+set wildmenu
+
+"tab/space behavior
 set tabstop=2
 set shiftwidth=2
 
@@ -114,26 +121,36 @@ let g:goyo_height = '90%'
 let g:goyo_linenr = 1
 nnoremap <silent> <C-z> :<C-u>Goyo<CR>
 
+" Bottom terminial with height 40
+nnoremap <silent> <leader>p      :<C-u>bo 20split tmp<CR>:terminal<CR>
+
 nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project<CR>
 nnoremap <silent> <leader>mb     :<C-u>CocCommand fzf-preview.Buffers<CR>
 nnoremap <silent> <leader>mB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>	nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
+nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>	
+nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
 nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
-" Git related
-nnoremap <silent> <leader>mgs    :<C-u>CocCommand fzf-preview.GitStatus<CR>
-nnoremap <silent> <leader>mga    :<C-u>CocCommand fzf-preview.GitActions<CR>
-nnoremap <silent> <leader>mg;    :<C-u>CocCommand fzf-preview.Changes<CR>
+
 " Project Grep
 nnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap          <leader>mgr    "sy:CocCommand   fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+xnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <leader>mq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 nnoremap <silent> <leader>ml     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
 " Git command
-nnoremap <leader>gc :<C-u>Git commit -m ""<Left>
-nnoremap <leader>ga :<C-u>Git commit --amend<CR>
+nnoremap <silent> <leader>gs     :<C-u>CocCommand fzf-preview.GitStatus<CR>
+nnoremap <silent> <leader>ga     :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> <leader>g;     :<C-u>CocCommand fzf-preview.Changes<CR>
+nnoremap <leader>gc              :<C-u>Git commit -m ""<Left>
+nnoremap <leader>ga              :<C-u>Git commit --amend<CR>
+
+" Windows resizing
+nnoremap <C-left>                :vertical resize +5<cr>
+nnoremap <C-down>                :resize +5<cr>
+nnoremap <C-up>                  :resize -5<cr>
+nnoremap <C-right>               :vertical resize -5<cr>
 
 " ----------------- Navigation ------------------ "
 
@@ -156,11 +173,11 @@ nnoremap <leader>tq :tabclose<CR>
 
 " Move to line
 map  <leader><leader>l <Plug>(easymotion-bd-jk)
-"nmap <leader><leader>l <Plug>(easymotion-overwin-line)
+" nmap <leader><leader>i <Plug>(easymotion-overwin-line)
 
 " Move to word
-map  <leader><leader>w <Plug>(easymotion-bd-w)
-"nmap <leader><leader>w <Plug>(easymotion-overwin-w)
+map  <leader><leader>i <Plug>(easymotion-bd-w)
+" nmap <leader><leader>i <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
 function! ToggleHiddenAll()
@@ -181,8 +198,8 @@ endfunction
 
 nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
-nmap <h <Plug>(GitGutterPrevHunk)
-nmap >h <Plug>(GitGutterNextHunk)
+nmap <leader>hH <Plug>(GitGutterPrevHunk)
+nmap <leader>hh <Plug>(GitGutterNextHunk)
 nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 
 nnoremap <silent> <Esc> :nohl<CR>
@@ -412,3 +429,4 @@ let g:coc_explorer_global_presets = {
 nmap <leader>ef :CocCommand explorer --preset floatingLeftside<CR>
 nmap <leader>eb :CocCommand explorer --preset buffer<CR>
 nmap <leader>ee :CocCommand explorer<CR>
+
