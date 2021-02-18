@@ -107,6 +107,18 @@ set wildmenu
 set tabstop=2
 set shiftwidth=2
 
+" Removes trailing spaces
+function TrimWhiteSpace()
+  %s/\s*$//
+  ''
+endfunction
+
+set list listchars=trail:.,extends:>
+autocmd FileWritePre * call TrimWhiteSpace()
+autocmd FileAppendPre * call TrimWhiteSpace()
+autocmd FilterWritePre * call TrimWhiteSpace()
+autocmd BufWritePre * call TrimWhiteSpace()
+
 " which-key configuration
 let g:mapleader = "\<Space>"
 "let g:maplocalleader = ','
