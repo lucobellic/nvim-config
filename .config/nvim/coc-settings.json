@@ -2,28 +2,51 @@
     "suggest.autoTrigger": "none",
     "snippets.textmateSnippetsRoots": ["~/.config/snippets"],
     "languageserver": {
-        "ccls": {
-            "command": "ccls",
-            "filetypes": [
-                "c",
-                "cpp",
-                "objc",
-                "objcpp"
-            ],
-            "rootPatterns": [
-                ".ccls",
-                "compile_commands.json",
-                ".vim/",
-                ".git/",
-                ".hg/"
-            ],
-            "initializationOptions": {
-                "highlight": { "lsRanges" : true },
-                "cache": {
-                    "directory": "/tmp/ccls"
-                }
-            }
-        }
-    }
+			"vimls": {
+   			"command": "vim-language-server",
+    		"args": ["--stdio"],
+				"initializationOptions": {
+					"iskeyword": "@,48-57,_,192-255,-#",
+					"vimruntime": "",
+					"runtimepath": "",
+					"diagnostic": {
+						"enable": true
+					},
+					"indexes": {
+						"runtimepath": true,
+						"gap": 100,
+						"count": 3,
+						"projectRootPatterns" : [".git", "autoload", "plugin"]
+					},
+					"suggest": {
+						"fromVimruntime": true,
+						"fromRuntimepath": false
+					}
+				},
+				"filetypes": [ "vim" ]
+			},
+			"ccls": {
+				"command": "ccls",
+				"filetypes": [
+					"c",
+					"cpp",
+					"objc",
+					"objcpp"
+				],
+				"rootPatterns": [
+					".ccls",
+					"compile_commands.json",
+					".vim/",
+					".git/",
+					".hg/"
+				],
+				"initializationOptions": {
+					"highlight": { "lsRanges" : true },
+					"cache": {
+						"directory": "/tmp/ccls"
+					}
+				}
+			}
+		}
 }
 
