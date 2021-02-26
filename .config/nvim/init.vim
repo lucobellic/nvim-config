@@ -3,9 +3,9 @@ let &packpath = &runtimepath
 source ~/.vimrc
 
 function! PostCocInstall(info)
-	if a:info.status == 'installed' || a:info.force
-		:CocInstall coc-explorer coc-json coc-fzf-preview coc-highlight coc-python coc-rls coc-rust-analyzer coc-toml coc-yaml coc-cmake
-	endif
+  if a:info.status == 'installed' || a:info.force
+    :CocInstall coc-explorer coc-json coc-fzf-preview coc-highlight coc-python coc-rls coc-rust-analyzer coc-toml coc-yaml coc-cmake coc-vimlsp
+  endif
 endfunction
 
 call plug#begin('~/.vim/plugged')
@@ -30,12 +30,12 @@ Plug 'frazrepo/vim-rainbow'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'ryanoasis/vim-devicons'
 
-" UI 
+" UI
 Plug 'wfxr/minimap.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'psliwka/vim-smoothie'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-Plug 'mhinz/vim-startify' " start screen 
+Plug 'mhinz/vim-startify' " start screen
 Plug 'junegunn/goyo.vim' " Zen mode
 
 " Other
@@ -48,41 +48,41 @@ call plug#end()
 " ----------------- Start Screen ----------------- "
 " Handle new tab with goyo
 autocmd BufEnter *
-       \ if !exists('t:startify_new_tab') && empty(expand('%')) && !exists('t:goyo_master') | 
+       \ if !exists('t:startify_new_tab') && empty(expand('%')) && !exists('t:goyo_master') |
        \   let t:startify_new_tab = 1 |
        \   Startify |
        \ endif
 
 let g:start_screen_ascii = [
-			\ '       ______________________________________________________________________________________________________________________________________ ',
-			\ '      /_____/￣\ ___________________________________________________/￣￣￣￣\ _______________/￣\ ______/￣\ ______/￣\ ___________________/ ',
-			\ '     /_____/￣\/_______/￣\____/￣\ __/￣￣￣\ ___/￣￣￣\ ________/￣\__/￣\/__/￣￣￣￣\ __/￣\/______/￣\/_____________/￣￣￣\ ________/ ',
-			\ '    /_____/￣\/_______/￣\/___/￣\/__/￣\ _____/￣\_____/￣\ _____/￣￣￣￣\ __/￣\__/￣\/__/￣\/______/￣\/______/￣\ __/￣\ ____________/ ',
-			\ '   /_____/￣\/_______/￣\/___/￣\/__/￣\/_____/￣\/____/￣\/_____/￣\__/￣\ __/￣\/________/￣\/______/￣\/______/￣\/__/￣\/____________/ ',
-			\ '  /_____/￣￣￣￣\ _/￣￣￣￣￣\/__/￣￣￣\ ___/￣￣￣\ ________/￣￣￣￣\/__/￣￣￣￣\ __/￣￣￣\ __/￣￣￣\ __/￣\/__/￣￣￣\ ________/ ',
-			\ ' /_____________________________________________________________________________________________________________________________________/ ',
-			\ ''
-			\]
+      \ '       ______________________________________________________________________________________________________________________________________ ',
+      \ '      /_____/￣\ ___________________________________________________/￣￣￣￣\ _______________/￣\ ______/￣\ ______/￣\ ___________________/ ',
+      \ '     /_____/￣\/_______/￣\____/￣\ __/￣￣￣\ ___/￣￣￣\ ________/￣\__/￣\/__/￣￣￣￣\ __/￣\/______/￣\/_____________/￣￣￣\ ________/ ',
+      \ '    /_____/￣\/_______/￣\/___/￣\/__/￣\ _____/￣\_____/￣\ _____/￣￣￣￣\ __/￣\__/￣\/__/￣\/______/￣\/______/￣\ __/￣\ ____________/ ',
+      \ '   /_____/￣\/_______/￣\/___/￣\/__/￣\/_____/￣\/____/￣\/_____/￣\__/￣\ __/￣\/________/￣\/______/￣\/______/￣\/__/￣\/____________/ ',
+      \ '  /_____/￣￣￣￣\ _/￣￣￣￣￣\/__/￣￣￣\ ___/￣￣￣\ ________/￣￣￣￣\/__/￣￣￣￣\ __/￣￣￣\ __/￣￣￣\ __/￣\/__/￣￣￣\ ________/ ',
+      \ ' /_____________________________________________________________________________________________________________________________________/ ',
+      \ ''
+      \]
 
 let g:start_screen_ascii_2 = [
-			\ '                            ______/￣\ ___________________________________________________         ',
-			\ '                           /_____/￣\/_______/￣\____/￣\ __/￣￣￣\ ___/￣￣￣\ ________/        ',
-			\ '                          /_____/￣\/_______/￣\/___/￣\/__/￣\ _____/￣\_____/￣\ _____/        ',
-			\ '                         /_____/￣\/_______/￣\/___/￣\/__/￣\/_____/￣\/____/￣\/_____/        ',
-			\ '                        /_____/￣￣￣￣\ _/￣￣￣￣￣\/__/￣￣￣\ ___/￣￣￣\ ________/        ',
-			\ '                       /_____________________________________________________________/        ',
-			\ '                                                                                               ',
-			\ '                 ______/￣￣￣￣\ _______________/￣\ ______/￣\ ______/￣\ ________________  ',
-			\ '                /_____/￣\__/￣\/__/￣￣￣￣\ __/￣\/______/￣\/_____________/￣￣￣\ _____/ ',
-			\ '               /_____/￣￣￣￣\ __/￣\__/￣\/__/￣\/______/￣\/______/￣\ __/￣\ _________/ ',
-			\ '              /_____/￣\__/￣\ __/￣\/________/￣\/______/￣\/______/￣\/__/￣\/_________/ ',
-			\ '             /_____/￣￣￣￣\/__/￣￣￣￣\ __/￣￣￣\ __/￣￣￣\ __/￣\/__/￣￣￣\ _____/ ',
-			\ '            /__________________________________________________________________________/ ',
-			\ ''
-			\]
+      \ '                            ______/￣\ ___________________________________________________         ',
+      \ '                           /_____/￣\/_______/￣\____/￣\ __/￣￣￣\ ___/￣￣￣\ ________/        ',
+      \ '                          /_____/￣\/_______/￣\/___/￣\/__/￣\ _____/￣\_____/￣\ _____/        ',
+      \ '                         /_____/￣\/_______/￣\/___/￣\/__/￣\/_____/￣\/____/￣\/_____/        ',
+      \ '                        /_____/￣￣￣￣\ _/￣￣￣￣￣\/__/￣￣￣\ ___/￣￣￣\ ________/        ',
+      \ '                       /_____________________________________________________________/        ',
+      \ '                                                                                               ',
+      \ '                 ______/￣￣￣￣\ _______________/￣\ ______/￣\ ______/￣\ ________________  ',
+      \ '                /_____/￣\__/￣\/__/￣￣￣￣\ __/￣\/______/￣\/_____________/￣￣￣\ _____/ ',
+      \ '               /_____/￣￣￣￣\ __/￣\__/￣\/__/￣\/______/￣\/______/￣\ __/￣\ _________/ ',
+      \ '              /_____/￣\__/￣\ __/￣\/________/￣\/______/￣\/______/￣\/__/￣\/_________/ ',
+      \ '             /_____/￣￣￣￣\/__/￣￣￣￣\ __/￣￣￣\ __/￣￣￣\ __/￣\/__/￣￣￣\ _____/ ',
+      \ '            /__________________________________________________________________________/ ',
+      \ ''
+      \]
 
 let g:startify_custom_header =
-			\ 'startify#center(g:start_screen_ascii_2) + startify#center(startify#fortune#boxed())'
+      \ 'startify#center(g:start_screen_ascii_2) + startify#center(startify#fortune#boxed())'
 
 " ------------------- Editor -------------------- "
 
@@ -90,40 +90,46 @@ set clipboard+=unnamedplus
 let mapleader="\<SPACE>"
 set number
 set signcolumn=number
-set noswapfile 
+set noswapfile
 set autoread
 set noshowmode
 set wrap! " Disable wrapping
 set wmw=0 " Minimum window width
 set wmh=0 " Minimum window height
 set ignorecase
-autocmd BufEnter * silent! lcd %:p:h
+autocmd BufEnter * silent! :lcd%:p:h.
 
 " Tabulation improvement
 set wildmode=longest:full,full
 set wildmenu
 
-"tab/space behavior
+" tab/space behavior
 set tabstop=2
 set shiftwidth=2
 
 " Removes trailing spaces
-function TrimWhiteSpace()
-  %s/\s*$//
-  ''
+function! Preserve(command)
+  " Preparation: save last search, and cursor position.
+  let _s=@/
+  let l = line(".")
+  let c = col(".")
+  " Do the business:
+  execute a:command
+  " Clean up: restore previous search history, and cursor position
+  let @/=_s
+  call cursor(l, c)
 endfunction
 
-set list listchars=trail:.,extends:>
-autocmd FileWritePre * call TrimWhiteSpace()
-autocmd FileAppendPre * call TrimWhiteSpace()
-autocmd FilterWritePre * call TrimWhiteSpace()
-autocmd BufWritePre * call TrimWhiteSpace()
+"map = :call Preserve("%s/\\s\\+$//e")<CR>
+set showbreak=↪
+"set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
+set listchars=tab:·\ ,trail:.,extends:⟩,precedes:⟨
 
 " which-key configuration
 let g:mapleader = "\<Space>"
 "let g:maplocalleader = ','
-nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <leader>  :WhichKey '<Space>'<CR>
+nnoremap <silent> <leader>  :<c-u>WhichKey '<Space>'<CR>
 "nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 set timeoutlen=250
 
@@ -133,13 +139,13 @@ let g:goyo_height = '90%'
 let g:goyo_linenr = 1
 nnoremap <silent> <C-z> :<C-u>Goyo<CR>
 
-" Bottom terminial with height 40
+" Bottom terminial with defined height
 nnoremap <silent> <leader>p      :<C-u>bo 20split tmp<CR>:terminal<CR>
 
 nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project<CR>
 nnoremap <silent> <leader>mb     :<C-u>CocCommand fzf-preview.Buffers<CR>
 nnoremap <silent> <leader>mB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>	
+nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
 nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
 nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
@@ -155,63 +161,68 @@ nnoremap <silent> <leader>ml     :<C-u>CocCommand fzf-preview.LocationList<CR>
 nnoremap <silent> <leader>gs     :<C-u>CocCommand fzf-preview.GitStatus<CR>
 nnoremap <silent> <leader>ga     :<C-u>CocCommand fzf-preview.GitActions<CR>
 nnoremap <silent> <leader>g;     :<C-u>CocCommand fzf-preview.Changes<CR>
-nnoremap <leader>gc              :<C-u>Git commit -m ""<Left>
-nnoremap <leader>ga              :<C-u>Git commit --amend<CR>
+nnoremap          <leader>gc     :<C-u>Git commit -m ""<Left>
+nnoremap <silent> <leader>ga     :<C-u>Git commit --amend<CR>
 
 " Windows resizing
-nnoremap <C-left>                :vertical resize +5<cr>
-nnoremap <C-up>                  :resize +5<cr>
-nnoremap <C-down>                :resize -5<cr>
-nnoremap <C-right>               :vertical resize -5<cr>
+nnoremap <silent> <C-left>      :vertical resize +5<cr>
+nnoremap <silent> <C-up>        :resize +5<cr>
+nnoremap <silent> <C-down>      :resize -5<cr>
+nnoremap <silent> <C-right>     :vertical resize -5<cr>
+nnoremap <silent> <S-left>      <C-w>h
+nnoremap <silent> <S-up>        <C-w>k
+nnoremap <silent> <S-down>      <C-w>j
+nnoremap <silent> <S-right>     <C-w>l
+
 
 " ----------------- Navigation ------------------ "
 
-nnoremap <leader>1 1gt
-nnoremap <leader>2 2gt
-nnoremap <leader>3 3gt
-nnoremap <leader>4 4gt
-nnoremap <leader>5 5gt
-nnoremap <leader>6 6gt
-nnoremap <leader>7 7gt
-nnoremap <leader>8 8gt
-nnoremap <leader>9 9gt
+nnoremap <silent> <leader>1 1gt
+nnoremap <silent> <leader>2 2gt
+nnoremap <silent> <leader>3 3gt
+nnoremap <silent> <leader>4 4gt
+nnoremap <silent> <leader>5 5gt
+nnoremap <silent> <leader>6 6gt
+nnoremap <silent> <leader>7 7gt
+nnoremap <silent> <leader>8 8gt
+nnoremap <silent> <leader>9 9gt
 
-nnoremap <leader>th :tabprev<CR>
-nnoremap <leader>tl :tabnext<CR>
-nnoremap <leader>tt :tabedit<Space>
-nnoremap <leader>tn :tabnew<CR>
-nnoremap <leader>tm :tabm<Space>
-nnoremap <leader>tq :tabclose<CR>
+nnoremap <silent> <leader>th :tabprev<CR>
+nnoremap <silent> <leader>tl :tabnext<CR>
+nnoremap          <leader>tt :tabedit<Space>
+nnoremap <silent> <leader>tn :tabnew<CR>
+nnoremap          <leader>tm :tabm<Space>
+nnoremap <silent> <leader>tq :tabclose<CR>
 
 " Move to line
 map  <leader><leader>l <Plug>(easymotion-bd-jk)
 " nmap <leader><leader>i <Plug>(easymotion-overwin-line)
 
 " Move to word
-map  <leader><leader>i <Plug>(easymotion-bd-w)
+map  <leader><leader>h <Plug>(easymotion-bd-w)
 " nmap <leader><leader>i <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
 function! ToggleHiddenAll()
-	if s:hidden_all  == 0
-		let s:hidden_all = 1
-		set noshowmode
-		set noruler
-		set laststatus=0
-		set noshowcmd
-	else
-		let s:hidden_all = 0
-		set showmode
-		set ruler
-		set laststatus=2
-		set showcmd
-	endif
+  if s:hidden_all  == 0
+    let s:hidden_all = 1
+    set noshowmode
+    set noruler
+    set laststatus=0
+    set noshowcmd
+  else
+    let s:hidden_all = 0
+    set showmode
+    set ruler
+    set laststatus=2
+    set showcmd
+  endif
 endfunction
 
 nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
-nmap <leader>hH <Plug>(GitGutterPrevHunk)
-nmap <leader>hh <Plug>(GitGutterNextHunk)
+nmap <H <Plug>(GitGutterPrevHunk)
+nmap >H <Plug>(GitGutterNextHunk)
 nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 
 nnoremap <silent> <Esc> :nohl<CR>
@@ -242,7 +253,12 @@ let g:rainbow_guifgs = ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
 " let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
 
 hi link LspCxxHlSymParameter Constant
-hi link LspCxxHlSymField Todo 
+hi link LspCxxHlSymField Todo
+
+let g:markdown_fenced_languages = [
+      \ 'vim',
+      \ 'help'
+      \]
 
 " ------------- fzf configuration --------------- "
 
@@ -257,8 +273,8 @@ set hidden
 set nobackup
 set nowritebackup
 
-" Give more space for displaying messages.
-set cmdheight=2
+" Space for displaying messages.
+set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
@@ -295,8 +311,8 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> <g <Plug>(coc-diagnostic-prev)
-nmap <silent> >g <Plug>(coc-diagnostic-next)
+nmap <silent> <C <Plug>(coc-diagnostic-prev)
+nmap <silent> >C <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
@@ -304,8 +320,8 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Show documentation in preview window.
+nnoremap <silent> <leader>d :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -321,7 +337,8 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>cr <Plug>(coc-rename)
+nmap <F2>       <Plug>(coc-rename)
 
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
@@ -341,9 +358,9 @@ xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>cac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>cf  <Plug>(coc-fix-current)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -386,56 +403,56 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 let g:lightline = {
-			\ 'colorscheme': 'ayu',
-			\ 'active': {
-			\   'left': [ [ 'mode', 'paste' ],
-			\             [ 'gitbranch', 'cocstatus' ],
-			\             [ 'readonly', 'filename', 'modified' ] ],
-			\   'right': [ ['lineinfo'],
-			\              [ 'percent'] ]
-			\ },
-			\ 'component_function': {
-			\   'cocstatus': 'coc#status',
-			\   'gitbranch': 'FugitiveHead'
-			\ },
-			\ }
+      \ 'colorscheme': 'ayu',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'cocstatus' ],
+      \             [ 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ ['lineinfo'],
+      \              [ 'percent'] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status',
+      \   'gitbranch': 'FugitiveHead'
+      \ },
+      \ }
 
 " Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
 let g:coc_explorer_global_presets = {
-\   '.vim': {
-\     'root-uri': '~/.vim',
-\   },
-\   'cocConfig': {
-\      'root-uri': '~/.config/coc',
-\   },
-\   'tab': {
-\     'position': 'tab',
-\     'quit-on-open': v:true,
-\   },
-\   'floatingLeftside': {
-\     'position': 'floating',
-\     'floating-position': 'left-center',
-\     'floating-width': 50,
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingRightside': {
-\     'position': 'floating',
-\     'floating-position': 'right-center',
-\     'floating-width': 50,
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'simplify': {
-\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
-\   },
-\   'buffer': {
-\     'position': 'floating',
-\     'floating-position': 'left-center',
-\     'floating-width': 50,
-\     'sources': [{'name': 'buffer', 'expand': v:true}]
-\   },
-\ }
+			\   '.vim': {
+			\     'root-uri': '~/.vim',
+			\   },
+			\   'cocConfig': {
+			\      'root-uri': '~/.config/coc',
+			\   },
+			\   'tab': {
+			\     'position': 'tab',
+			\     'quit-on-open': v:true,
+			\   },
+			\   'floatingLeftside': {
+			\     'position': 'floating',
+			\     'floating-position': 'left-center',
+			\     'floating-width': 50,
+			\     'open-action-strategy': 'sourceWindow',
+			\   },
+			\   'floatingRightside': {
+			\     'position': 'floating',
+			\     'floating-position': 'right-center',
+			\     'floating-width': 50,
+			\     'open-action-strategy': 'sourceWindow',
+			\   },
+			\   'simplify': {
+			\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+			\   },
+			\   'buffer': {
+			\     'position': 'floating',
+			\     'floating-position': 'left-center',
+			\     'floating-width': 50,
+			\     'sources': [{'name': 'buffer', 'expand': v:true}]
+			\   },
+			\ }
 
 " Use preset argument to open it
 nmap <leader>ef :CocCommand explorer --preset floatingLeftside<CR>
