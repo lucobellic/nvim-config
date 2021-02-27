@@ -31,12 +31,13 @@ Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'ryanoasis/vim-devicons'
 
 " UI
-Plug 'wfxr/minimap.vim'
+"Plug 'wfxr/minimap.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'psliwka/vim-smoothie'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'mhinz/vim-startify' " start screen
 Plug 'junegunn/goyo.vim' " Zen mode
+Plug 'voldikss/vim-floaterm'
 
 " Other
 Plug 'jceb/vim-orgmode'
@@ -92,6 +93,8 @@ set number
 set signcolumn=number
 set noswapfile
 set autoread
+set autowriteall
+"autocmd TextChanged,TextChangedI <buffer> silent! write
 set noshowmode
 set wrap! " Disable wrapping
 set wmw=0 " Minimum window width
@@ -124,6 +127,7 @@ endfunction
 set showbreak=↪
 "set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 set listchars=tab:·\ ,trail:.,extends:⟩,precedes:⟨
+set fillchars=vert:\ 
 
 " which-key configuration
 let g:mapleader = "\<Space>"
@@ -139,8 +143,12 @@ let g:goyo_height = '90%'
 let g:goyo_linenr = 1
 nnoremap <silent> <C-z> :<C-u>Goyo<CR>
 
-" Bottom terminial with defined height
+" Bottom terminal with defined height
 nnoremap <silent> <leader>p      :<C-u>bo 20split tmp<CR>:terminal<CR>
+
+" Floating terminal
+nnoremap <silent> <F7>           :FloatermToggle<CR>
+tnoremap <silent> <F7>           <C-\><C-n>:FloatermToggle<CR>
 
 nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project<CR>
 nnoremap <silent> <leader>mb     :<C-u>CocCommand fzf-preview.Buffers<CR>
@@ -161,8 +169,8 @@ nnoremap <silent> <leader>ml     :<C-u>CocCommand fzf-preview.LocationList<CR>
 nnoremap <silent> <leader>gs     :<C-u>CocCommand fzf-preview.GitStatus<CR>
 nnoremap <silent> <leader>ga     :<C-u>CocCommand fzf-preview.GitActions<CR>
 nnoremap <silent> <leader>g;     :<C-u>CocCommand fzf-preview.Changes<CR>
-nnoremap          <leader>gc     :<C-u>Git commit -m ""<Left>
-nnoremap <silent> <leader>ga     :<C-u>Git commit --amend<CR>
+nnoremap <silent> <leader>gc     :<C-u>Git commit<CR>
+"nnoremap <silent> <leader>ga     :<C-u>Git commit --amend<CR>
 
 " Windows resizing
 nnoremap <silent> <C-left>      :vertical resize +5<cr>
@@ -229,21 +237,30 @@ nnoremap <silent> <Esc> :nohl<CR>
 map <leader>w <C-w>
 tnoremap <Esc> <C-\><C-n>
 
-" -------------------- Color ------------------- "
+"let g:EasyMotion_do_mapping = 0 " Disable default mappings
+map <leader><leader> <Plug>(easymotion-prefix)
+let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
+
+" ---------------- Color & Scheme --------------- "
 
 set termguicolors     " enable true colors support
 "set ayucolor="dark"   " for dark version of theme
 colorscheme ayu
 
-"let g:EasyMotion_do_mapping = 0 " Disable default mappings
-map <leader><leader> <Plug>(easymotion-prefix)
-let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
+" Use vim-devicons
+let g:fzf_preview_use_dev_icons = 1
 
+" devicons character width
+let g:fzf_preview_dev_icon_prefix_string_length = 3
+
+" Devicons can make fzf-preview slow when the number of results is high
+" By default icons are disable when number of results is higher that 5000
+let g:fzf_preview_dev_icons_limit = 5000
 
 let g:rainbow_active = 1
 
+" \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
 let g:rainbow_load_separately = [
-    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
     \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
@@ -259,6 +276,29 @@ let g:markdown_fenced_languages = [
       \ 'vim',
       \ 'help'
       \]
+
+" transparent bg
+function! Transparency()
+	hi Normal guibg=none ctermbg=none
+	hi CursorColumn guibg=none ctermbg=none
+	hi CursorLine guibg=none ctermbg=none 
+	hi CursorLineNr guibg=none ctermbg=none
+  hi LineNr guibg=none ctermbg=none
+  hi Folded guibg=none ctermbg=none
+  hi NonText guibg=none ctermbg=none
+  hi SpecialKey guibg=none ctermbg=none
+  hi VertSplit guibg=none ctermbg=none
+  hi SignColumn guibg=none ctermbg=none
+	hi Pmenu guibg=none ctermbg=none
+	hi StatusLine guibg=none ctermbg=none
+	hi LightlineMiddle_inactive guibg=none ctermbg=none
+	hi LightlineMiddle_active guibg=none ctermbg=none
+	hi VertSplit guibg=none ctermbg=none 
+endfunction
+
+autocmd vimenter * call Transparency()
+autocmd ColorScheme * call Transparency()
+
 
 " ------------- fzf configuration --------------- "
 
