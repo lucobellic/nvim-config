@@ -11,8 +11,9 @@ export ZSH=$HOME/.oh-my-zsh
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="typewritten/typewritten"
-TYPEWRITTEN_PROMPT_LAYOUT="pure"
+TYPEWRITTEN_PROMPT_LAYOUT="half_pure"
 TYPEWRITTEN_RELATIVE_PATH="git"
+TYPEWRITTEN_SYMBOL="ϡ"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -84,7 +85,7 @@ path+=/opt/nvim-linux64/bin
 
 # --------------------------- FZF Configuration  ---------------------------  #
 
-export FZF_DEFAULT_COMMAND="rg --files --hidden --follow"
+export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --no-ignore-vcs"
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
