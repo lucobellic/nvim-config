@@ -2,16 +2,18 @@ set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath = &runtimepath
 source ~/.vimrc
 
-function! PostCocInstall(info)
+function! CocPostInstall(info)
   if a:info.status == 'installed' || a:info.force
-    :CocInstall coc-explorer coc-json coc-fzf-preview coc-highlight coc-python coc-rls coc-rust-analyzer coc-toml coc-yaml coc-cmake coc-vimlsp
+    :CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-rust-analyzer coc-toml coc-yaml coc-cmake coc-vimlsp coc-clangd vim-lsp-cxx-highlight
   endif
 endfunction
 
 call plug#begin('~/.vim/plugged')
 
-" Completion
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('PostCocInstall')}
+" Completion & Languages
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('CocPostInstall')}
+Plug 'rust-lang/rust.vim'
+Plug 'liuchengxu/vista.vim'
 
 " Navigation
 Plug 'easymotion/vim-easymotion'
@@ -42,6 +44,8 @@ Plug 'voldikss/vim-floaterm'
 " Other
 Plug 'jceb/vim-orgmode'
 Plug 'xolox/vim-misc'
+Plug 'moll/vim-bbye'
+Plug 'honza/vim-snippets'
 
 call plug#end()
 
@@ -95,7 +99,8 @@ set noswapfile
 set autoread
 set autowriteall
 "autocmd TextChanged,TextChangedI <buffer> silent! write
-set noshowmode
+"set noshowmode
+set showmode
 set wrap! " Disable wrapping
 set wmw=0 " Minimum window width
 set wmh=0 " Minimum window height
@@ -124,9 +129,10 @@ function! Preserve(command)
 endfunction
 
 "map = :call Preserve("%s/\\s\\+$//e")<CR>
+set list
 set showbreak=↪
 "set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
-set listchars=tab:·\ ,trail:.,extends:⟩,precedes:⟨
+set listchars=tab:→\ ,trail:.,extends:⟩,precedes:⟨
 set fillchars=vert:\ 
 
 " which-key configuration
@@ -150,10 +156,19 @@ nnoremap <silent> <leader>p      :<C-u>bo 20split tmp<CR>:terminal<CR>
 nnoremap <silent> <F7>           :FloatermToggle<CR>
 tnoremap <silent> <F7>           <C-\><C-n>:FloatermToggle<CR>
 
-nnoremap <silent> <leader>mp     :<C-u>CocCommand fzf-preview.FromResources project<CR>
-nnoremap <silent> <leader>mb     :<C-u>CocCommand fzf-preview.Buffers<CR>
+nnoremap <silent> <C-p>          :<C-u>:Files<CR>
+nnoremap <silent> <leader>mp     :<C-u>:Files<CR>
+nnoremap <silent> <leader>mb     :<C-u>:Buffers<CR>
+nnoremap <silent> <leader>mf     :<C-u>:BLines<CR>
+nnoremap <silent> <leader>mF     :<C-u>:Rg<CR>
+nnoremap <silent> <C-S-f>        :<C-u>:Rg<CR>
+nnoremap <silent> <leader>ml     :<C-u>:Lines<CR>
 nnoremap <silent> <leader>mB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
-nnoremap <silent> <leader>mo     :<C-u>CocCommand fzf-preview.FromResources buffer project_mru<CR>
+nnoremap <silent> <leader>mo     :<C-u>Vista!!<CR>
+nnoremap <silent> <leader>O      :<C-u>Vista finder<CR>
+nnoremap <silent> <leader>o      :<C-u>Vista focus<CR>
+nnoremap <silent> <leader><leader>o: <C-u>Vista finder<CR>
+
 nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
 nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
 nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
@@ -163,7 +178,6 @@ nnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
 xnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
 nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
 nnoremap <silent> <leader>mq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
-nnoremap <silent> <leader>ml     :<C-u>CocCommand fzf-preview.LocationList<CR>
 
 " Git command
 nnoremap <silent> <leader>gs     :<C-u>CocCommand fzf-preview.GitStatus<CR>
@@ -181,8 +195,11 @@ nnoremap <silent> <S-left>      <C-w>h
 nnoremap <silent> <S-up>        <C-w>k
 nnoremap <silent> <S-down>      <C-w>j
 nnoremap <silent> <S-right>     <C-w>l
-
-
+" nnoremap <silent> <C-h>         <C-w>h
+" nnoremap <silent> <C-k>         <C-w>k
+" nnoremap <silent> <C-j>         <C-w>j
+" nnoremap <silent> <C-l>         <C-w>l
+"
 " ----------------- Navigation ------------------ "
 
 nnoremap <silent> <leader>1 1gt
@@ -227,7 +244,7 @@ function! ToggleHiddenAll()
   endif
 endfunction
 
-nnoremap <C-h> :call ToggleHiddenAll()<CR>
+"nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
 nmap <H <Plug>(GitGutterPrevHunk)
 nmap >H <Plug>(GitGutterNextHunk)
@@ -235,6 +252,7 @@ nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 
 nnoremap <silent> <Esc> :nohl<CR>
 map <leader>w <C-w>
+nnoremap <Leader>wd :Bdelete<CR>
 tnoremap <Esc> <C-\><C-n>
 
 "let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -248,7 +266,7 @@ set termguicolors     " enable true colors support
 colorscheme ayu
 
 " Use vim-devicons
-let g:fzf_preview_use_dev_icons = 1
+let g:fzf_preview_use_dev_icons = 0
 
 " devicons character width
 let g:fzf_preview_dev_icon_prefix_string_length = 3
@@ -259,8 +277,8 @@ let g:fzf_preview_dev_icons_limit = 5000
 
 let g:rainbow_active = 1
 
-" \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
 let g:rainbow_load_separately = [
+		\ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
     \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
@@ -283,12 +301,12 @@ function! Transparency()
 	hi CursorColumn guibg=none ctermbg=none
 	hi CursorLine guibg=none ctermbg=none 
 	hi CursorLineNr guibg=none ctermbg=none
-  hi LineNr guibg=none ctermbg=none
-  hi Folded guibg=none ctermbg=none
-  hi NonText guibg=none ctermbg=none
-  hi SpecialKey guibg=none ctermbg=none
-  hi VertSplit guibg=none ctermbg=none
-  hi SignColumn guibg=none ctermbg=none
+	hi LineNr guibg=none ctermbg=none
+	hi Folded guibg=none ctermbg=none
+	hi NonText guibg=none ctermbg=none
+	hi SpecialKey guibg=none ctermbg=none
+	hi VertSplit guibg=none ctermbg=none
+	hi SignColumn guibg=none ctermbg=none
 	hi Pmenu guibg=none ctermbg=none
 	hi StatusLine guibg=none ctermbg=none
 	hi LightlineMiddle_inactive guibg=none ctermbg=none
@@ -296,13 +314,38 @@ function! Transparency()
 	hi VertSplit guibg=none ctermbg=none 
 endfunction
 
-autocmd vimenter * call Transparency()
-autocmd ColorScheme * call Transparency()
+" autocmd vimenter * call Transparency()
+" autocmd ColorScheme * call Transparency()
 
 
-" ------------- fzf configuration --------------- "
+" -------- fzf and vista configuration ---------- "
 
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.5, 'highlight': 'Comment' } }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8, 'highlight': 'Comment' } }
+let g:rg_derive_root='true'
+
+let g:vista_default_executive = 'coc'
+let g:vista_sidebar_width = 50
+let g:vista_echo_cursor_startegy = 'scroll'
+let g:vista_echo_cursor = 0
+let g:vista_keep_fzf_colors = 1
+let g:vista_enable_centering_jump = 0
+
+
+command! -bang -nargs=* Rg
+			\ call fzf#vim#grep(
+			\   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
+			\   fzf#vim#with_preview(), <bang>0)
+
+" function! RipgrepFzf(query, fullscreen)
+"   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+"   let initial_command = printf(command_fmt, shellescape(a:query))
+"   let reload_command = printf(command_fmt, '{q}')
+"   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+"   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+" endfunction
+
+" command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+" let g:vista_fzf_preview = ['width:80%']
 
 " ----------- coc.vim configuration ------------- "
 
@@ -384,6 +427,8 @@ nmap <F2>       <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
+map <silent> <M-o> :CocCommand clangd.switchSourceHeader<CR>
+
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
@@ -441,21 +486,33 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
 " provide custom statusline: lightline.vim, vim-airline.
 " set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+"
 
+" Use vista.vim to display function
+function! NearestMethodOrFunction() abort
+  return get(b:, 'vista_nearest_method_or_function', '')
+endfunction
+
+set statusline+=%{NearestMethodOrFunction()}
+
+" Nearest function in statusline
+autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
+
+" ['cocstatus', 'lineinfo']
 let g:lightline = {
-      \ 'colorscheme': 'ayu',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'cocstatus' ],
-      \             [ 'readonly', 'filename', 'modified' ] ],
-      \   'right': [ ['lineinfo'],
-      \              [ 'percent'] ]
-      \ },
-      \ 'component_function': {
-      \   'cocstatus': 'coc#status',
-      \   'gitbranch': 'FugitiveHead'
-      \ },
-      \ }
+			\ 'colorscheme': 'ayu',
+			\ 'active': {
+			\   'left': [ [ 'mode', 'paste' ],
+			\             [ 'gitbranch' ],
+			\             [ 'readonly', 'filename', 'modified' ] ],
+			\   'right': [ ['method'] ]
+			\ },
+			\ 'component_function': {
+			\   'cocstatus': 'coc#status',
+			\   'gitbranch': 'FugitiveHead',
+			\   'method': 'NearestMethodOrFunction'
+			\ },
+			\ }
 
 " Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()

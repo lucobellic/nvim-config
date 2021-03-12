@@ -4,6 +4,10 @@
 		"~/.config/snippets"
 	],
 	"explorer.icon.enableVimDevicons": true,
+	"clangd.enabled" : true,
+	"clangd.semanticHighlighting": true,
+	"rust.clippy_preference": "on",
+	"rust.all_features": true,
 	"languageserver": {
 		"vimls": {
 			"command": "vim-language-server",
@@ -35,30 +39,6 @@
 			"filetypes": [
 				"vim"
 			]
-		},
-		"ccls": {
-			"command": "ccls",
-			"filetypes": [
-				"c",
-				"cpp",
-				"objc",
-				"objcpp"
-			],
-			"rootPatterns": [
-				".ccls",
-				"compile_commands.json",
-				".vim/",
-				".git/",
-				".hg/"
-			],
-			"initializationOptions": {
-				"highlight": {
-					"lsRanges": true
-				},
-				"cache": {
-					"directory": "/tmp/ccls"
-				}
-			}
 		}
 	}
 }

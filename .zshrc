@@ -84,9 +84,7 @@ path+=/opt/nvim-linux64/bin
 
 # --------------------------- FZF Configuration  ---------------------------  #
 
-alias fd=fdfind
-
-export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
+export FZF_DEFAULT_COMMAND="rg --files --hidden --follow"
 
 # Options to fzf command
 export FZF_COMPLETION_OPTS='+c -x'
@@ -95,14 +93,14 @@ export FZF_COMPLETION_OPTS='+c -x'
 # command for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
-_fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
-}
+# _fzf_compgen_path() {
+#   fd --hidden --follow --exclude ".git" . "$1"
+# }
 
 # Use fd to generate the list for directory completion
-_fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
-}
+# _fzf_compgen_dir() {
+#   fd --type d --hidden --follow --exclude ".git" . "$1"
+# }
 #
 
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -120,6 +118,9 @@ _fzf_compgen_dir() {
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
+# rust cargo source
+source $HOME/.cargo/env
+
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -128,3 +129,4 @@ _fzf_compgen_dir() {
 # Example aliases
 alias zshconfig="nvim ~/.zshrc"
 alias ohmyzsh="nvim ~/.oh-my-z"
+
