@@ -27,6 +27,7 @@ Plug 'junegunn/fzf.vim'
 " Themes
 " Use private personal configuration of ayu theme
 Plug 'git@gitlab.com:luco-bellic/ayu-vim.git', { 'branch': 'personal' }
+"Plug 'Luxed/ayu-vim'
 Plug 'itchyny/lightline.vim'
 Plug 'frazrepo/vim-rainbow'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
@@ -40,6 +41,8 @@ Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 Plug 'mhinz/vim-startify' " start screen
 Plug 'junegunn/goyo.vim' " Zen mode
 Plug 'voldikss/vim-floaterm'
+"Plug 'camspiers/animate.vim' " Animation with lens.vim
+"Plug 'camspiers/lens.vim'    " Automatic window resize
 
 " Other
 Plug 'jceb/vim-orgmode'
@@ -49,14 +52,13 @@ Plug 'honza/vim-snippets'
 
 call plug#end()
 
-
 " ----------------- Start Screen ----------------- "
 " Handle new tab with goyo
-autocmd BufEnter *
-       \ if !exists('t:startify_new_tab') && empty(expand('%')) && !exists('t:goyo_master') |
-       \   let t:startify_new_tab = 1 |
-       \   Startify |
-       \ endif
+" autocmd BufEnter *
+"        \ if !exists('t:startify_new_tab') && empty(expand('%')) && !exists('t:goyo_master') |
+"        \   let t:startify_new_tab = 1 |
+"        \   Startify |
+"        \ endif
 
 let g:start_screen_ascii = [
       \ '       ______________________________________________________________________________________________________________________________________ ',
@@ -87,7 +89,10 @@ let g:start_screen_ascii_2 = [
       \]
 
 let g:startify_custom_header =
-      \ 'startify#center(g:start_screen_ascii_2) + startify#center(startify#fortune#boxed())'
+      \ 'startify#center(g:start_screen_ascii_2)'
+      " \ 'startify#center(g:start_screen_ascii_2) + startify#center(startify#fortune#boxed())'
+
+let g:startify_disable_at_vimenter = 0
 
 " ------------------- Editor -------------------- "
 
@@ -95,17 +100,17 @@ set clipboard+=unnamedplus
 let mapleader="\<SPACE>"
 set number
 set signcolumn=number
+set cursorline
 set noswapfile
-set autoread
-set autowriteall
+"set autoread
+"set autowriteall
 "autocmd TextChanged,TextChangedI <buffer> silent! write
-"set noshowmode
-set showmode
+set noshowmode " Disable -- INSERT -- and similar
 set wrap! " Disable wrapping
 set wmw=0 " Minimum window width
 set wmh=0 " Minimum window height
 set ignorecase
-autocmd BufEnter * silent! :lcd%:p:h.
+autocmd BufEnter * silent! :Glcd
 
 " Tabulation improvement
 set wildmode=longest:full,full
@@ -113,7 +118,9 @@ set wildmenu
 
 " tab/space behavior
 set tabstop=2
+set expandtab
 set shiftwidth=2
+set smarttab
 
 " Removes trailing spaces
 function! Preserve(command)
@@ -132,7 +139,7 @@ endfunction
 set list
 set showbreak=↪
 "set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
-set listchars=tab:→\ ,trail:.,extends:⟩,precedes:⟨
+set listchars=tab:-\ ,trail:.,extends:⟩,precedes:⟨
 set fillchars=vert:\ 
 
 " which-key configuration
@@ -141,13 +148,29 @@ let g:mapleader = "\<Space>"
 nnoremap <silent> <leader>  :WhichKey '<Space>'<CR>
 nnoremap <silent> <leader>  :<c-u>WhichKey '<Space>'<CR>
 "nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-set timeoutlen=250
+set timeoutlen=500
+
+" Snippets completion
+inoremap <silent><expr> <TAB>
+			\ pumvisible() ? coc#_select_confirm() :
+			\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+			\ <SID>check_back_space() ? "\<TAB>" :
+			\ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
 
 " Zen mode activation
 let g:goyo_width = 120
 let g:goyo_height = '90%'
 let g:goyo_linenr = 1
 nnoremap <silent> <C-z> :<C-u>Goyo<CR>
+
+let g:lens#disabled_filetypes = ['nerdtree', 'fzf', 'coc-explorer', 'Goyo']
 
 " Bottom terminal with defined height
 nnoremap <silent> <leader>p      :<C-u>bo 20split tmp<CR>:terminal<CR>
@@ -163,26 +186,24 @@ nnoremap <silent> <leader>mf     :<C-u>:BLines<CR>
 nnoremap <silent> <leader>mF     :<C-u>:Rg<CR>
 nnoremap <silent> <C-S-f>        :<C-u>:Rg<CR>
 nnoremap <silent> <leader>ml     :<C-u>:Lines<CR>
-nnoremap <silent> <leader>mB     :<C-u>CocCommand fzf-preview.AllBuffers<CR>
 nnoremap <silent> <leader>mo     :<C-u>Vista!!<CR>
 nnoremap <silent> <leader>O      :<C-u>Vista finder<CR>
 nnoremap <silent> <leader>o      :<C-u>Vista focus<CR>
-nnoremap <silent> <leader><leader>o: <C-u>Vista finder<CR>
 
-nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
-nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
-nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
+" nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
+" nnoremap <silent> <leader>m/     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'"<CR>
+" nnoremap <silent> <leader>m*     :<C-u>CocCommand fzf-preview.Lines --add-fzf-arg=--no-sort --add-fzf-arg=--query="'<C-r>=expand('<cword>')<CR>"<CR>
 
 " Project Grep
-nnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
-xnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
-nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
-nnoremap <silent> <leader>mq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
+" nnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>
+" xnoremap          <leader>mgr    :<C-u>CocCommand fzf-preview.ProjectGrep<Space>-F<Space>"<C-r>=substitute(substitute(@s, '\n', '', 'g'), '/', '\\/', 'g')<CR>"
+" nnoremap <silent> <leader>mt     :<C-u>CocCommand fzf-preview.BufferTags<CR>
+" nnoremap <silent> <leader>mq     :<C-u>CocCommand fzf-preview.QuickFix<CR>
 
 " Git command
-nnoremap <silent> <leader>gs     :<C-u>CocCommand fzf-preview.GitStatus<CR>
-nnoremap <silent> <leader>ga     :<C-u>CocCommand fzf-preview.GitActions<CR>
-nnoremap <silent> <leader>g;     :<C-u>CocCommand fzf-preview.Changes<CR>
+" nnoremap <silent> <leader>gs     :<C-u>CocCommand fzf-preview.GitStatus<CR>
+" nnoremap <silent> <leader>ga     :<C-u>CocCommand fzf-preview.GitActions<CR>
+nnoremap <silent> <leader>g;     :<C-u>Commits<CR>
 nnoremap <silent> <leader>gc     :<C-u>Git commit<CR>
 "nnoremap <silent> <leader>ga     :<C-u>Git commit --amend<CR>
 
@@ -253,6 +274,8 @@ nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 nnoremap <silent> <Esc> :nohl<CR>
 map <leader>w <C-w>
 nnoremap <Leader>wd :Bdelete<CR>
+
+" Escape terminal insert mode and floating terminal
 tnoremap <Esc> <C-\><C-n>
 
 "let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -262,6 +285,7 @@ let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
 " ---------------- Color & Scheme --------------- "
 
 set termguicolors     " enable true colors support
+set background=dark
 "set ayucolor="dark"   " for dark version of theme
 colorscheme ayu
 
@@ -330,22 +354,10 @@ let g:vista_echo_cursor = 0
 let g:vista_keep_fzf_colors = 1
 let g:vista_enable_centering_jump = 0
 
-
 command! -bang -nargs=* Rg
 			\ call fzf#vim#grep(
-			\   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
+			\   'rg --line-number --color=always --smart-case --hidden -- '.shellescape(<q-args>), 0,
 			\   fzf#vim#with_preview(), <bang>0)
-
-" function! RipgrepFzf(query, fullscreen)
-"   let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-"   let initial_command = printf(command_fmt, shellescape(a:query))
-"   let reload_command = printf(command_fmt, '{q}')
-"   let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-"   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-" endfunction
-
-" command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-" let g:vista_fzf_preview = ['width:80%']
 
 " ----------- coc.vim configuration ------------- "
 
@@ -517,6 +529,11 @@ let g:lightline = {
 " Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
+function! ExplorerCurDir()
+  let node_info = CocAction('runCommand', 'explorer.getNodeInfo', 0)
+  return fnamemodify(node_info['fullpath'], ':h')
+endfunction
+
 let g:coc_explorer_global_presets = {
 			\   '.vim': {
 			\     'root-uri': '~/.vim',
@@ -545,14 +562,14 @@ let g:coc_explorer_global_presets = {
 			\   },
 			\   'buffer': {
 			\     'position': 'floating',
-			\     'floating-position': 'left-center',
-			\     'floating-width': 50,
+			\     'floating-position': 'center',
+			\     'floating-width': 120,
 			\     'sources': [{'name': 'buffer', 'expand': v:true}]
 			\   },
 			\ }
 
 " Use preset argument to open it
-nmap <leader>ef :CocCommand explorer --preset floatingLeftside<CR>
-nmap <leader>eb :CocCommand explorer --preset buffer<CR>
-nmap <leader>ee :CocCommand explorer<CR>
+nmap <silent><leader>ef :CocCommand explorer --preset floatingLeftside<CR>
+nmap <silent><leader>eb :CocCommand explorer --preset buffer<CR>
+nmap <silent><leader>ee :CocCommand explorer --preset simplify<CR>
 
