@@ -21,28 +21,36 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf' ", { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
 
 " Themes
 " Use private personal configuration of ayu theme
 Plug 'git@gitlab.com:luco-bellic/ayu-vim.git', { 'branch': 'personal' }
 "Plug 'Luxed/ayu-vim'
-Plug 'itchyny/lightline.vim'
 Plug 'frazrepo/vim-rainbow'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
+
+" Icons
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
 
 " UI
 "Plug 'wfxr/minimap.vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'psliwka/vim-smoothie'
+Plug 'psliwka/vim-smoothie' " or Plug 'yuttie/comfortable-motion.vim'
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
-Plug 'mhinz/vim-startify' " start screen
-Plug 'junegunn/goyo.vim' " Zen mode
-Plug 'voldikss/vim-floaterm'
+Plug 'mhinz/vim-startify'    " Start screen
+Plug 'junegunn/goyo.vim'     " Zen mode
+Plug 'voldikss/vim-floaterm' " Flaoting terminal
+"Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
 "Plug 'camspiers/animate.vim' " Animation with lens.vim
 "Plug 'camspiers/lens.vim'    " Automatic window resize
+Plug 'onsails/lspkind-nvim' " Pictogram for neovim
+
+
+Plug 'airblade/vim-gitgutter' " Plug 'lewis6991/gitsigns.nvim'
+Plug 'itchyny/lightline.vim'
 
 " Other
 Plug 'jceb/vim-orgmode'
@@ -138,9 +146,9 @@ endfunction
 "map = :call Preserve("%s/\\s\\+$//e")<CR>
 set list
 set showbreak=↪
-"set listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
-set listchars=tab:-\ ,trail:.,extends:⟩,precedes:⟨
-set fillchars=vert:\ 
+"set listchars=tab:→\ ,eol:↲,nbsp:␣
+set listchars=tab:-\ ,trail:·,extends:⟩,precedes:⟨
+set fillchars=vert:\
 
 " which-key configuration
 let g:mapleader = "\<Space>"
@@ -179,15 +187,19 @@ nnoremap <silent> <leader>p      :<C-u>bo 20split tmp<CR>:terminal<CR>
 nnoremap <silent> <F7>           :FloatermToggle<CR>
 tnoremap <silent> <F7>           <C-\><C-n>:FloatermToggle<CR>
 
-nnoremap <silent> <C-p>          :<C-u>:Files<CR>
-nnoremap <silent> <leader>mp     :<C-u>:Files<CR>
-nnoremap <silent> <leader>mb     :<C-u>:Buffers<CR>
-nnoremap <silent> <leader>mf     :<C-u>:BLines<CR>
+nnoremap <silent> <C-p>          :<C-u>:Clap! files<CR>
+nnoremap <silent> <leader>mp     :<C-u>:Clap! files<CR>
+nnoremap <silent> <leader>my     :<C-u>:Clap yanks<CR>
+nnoremap <silent> <leader>mb     :<C-u>:Clap buffers<cr>
+nnoremap <silent> <leader>mf     :<C-u>:Clap blines<CR>
 nnoremap <silent> <leader>mF     :<C-u>:Rg<CR>
 nnoremap <silent> <C-S-f>        :<C-u>:Rg<CR>
-nnoremap <silent> <leader>ml     :<C-u>:Lines<CR>
+nnoremap <silent> <leader>ml     :<C-u>:Clap! lines<CR>
+nnoremap <silent> <leader>m'     :<C-u>:Clap! marks<CR>
+nnoremap <silent> <leader>ef     :<C-u>:Clap! filer<CR>
+
 nnoremap <silent> <leader>mo     :<C-u>Vista!!<CR>
-nnoremap <silent> <leader>O      :<C-u>Vista finder<CR>
+nnoremap <silent> <leader>mO     :<C-u>:Clap tags<CR>
 nnoremap <silent> <leader>o      :<C-u>Vista focus<CR>
 
 " nnoremap <silent> <leader>m<C-o> :<C-u>CocCommand fzf-preview.Jumps<CR>
@@ -205,7 +217,7 @@ nnoremap <silent> <leader>o      :<C-u>Vista focus<CR>
 " nnoremap <silent> <leader>ga     :<C-u>CocCommand fzf-preview.GitActions<CR>
 nnoremap <silent> <leader>g;     :<C-u>Commits<CR>
 nnoremap <silent> <leader>gc     :<C-u>Git commit<CR>
-"nnoremap <silent> <leader>ga     :<C-u>Git commit --amend<CR>
+nnoremap <silent> <leader>ga     :<C-u>Git commit --amend<CR>
 
 " Windows resizing
 nnoremap <silent> <C-left>      :vertical resize +5<cr>
@@ -241,12 +253,12 @@ nnoremap          <leader>tm :tabm<Space>
 nnoremap <silent> <leader>tq :tabclose<CR>
 
 " Move to line
-map  <leader><leader>l <Plug>(easymotion-bd-jk)
-" nmap <leader><leader>i <Plug>(easymotion-overwin-line)
+nmap <leader>l <Plug>(easymotion-bd-jk)
+nmap <leader>L <Plug>(easymotion-overwin-line)
 
 " Move to word
-map  <leader><leader>h <Plug>(easymotion-bd-w)
-" nmap <leader><leader>i <Plug>(easymotion-overwin-w)
+map  <leader>j <Plug>(easymotion-bd-w)
+nmap <leader>J <Plug>(easymotion-overwin-w)
 
 let s:hidden_all = 0
 function! ToggleHiddenAll()
@@ -264,23 +276,28 @@ function! ToggleHiddenAll()
     set showcmd
   endif
 endfunction
-
 "nnoremap <C-h> :call ToggleHiddenAll()<CR>
 
 nmap <H <Plug>(GitGutterPrevHunk)
 nmap >H <Plug>(GitGutterNextHunk)
 nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
 
-nnoremap <silent> <Esc> :nohl<CR>
-map <leader>w <C-w>
-nnoremap <Leader>wd :Bdelete<CR>
+nnoremap <silent> <Esc>       :nohl<CR>
+map               <leader>w   <C-w>
+nnoremap <silent> <leader>wd  :Bdelete<CR>
 
 " Escape terminal insert mode and floating terminal
 tnoremap <Esc> <C-\><C-n>
 
 "let g:EasyMotion_do_mapping = 0 " Disable default mappings
 map <leader><leader> <Plug>(easymotion-prefix)
-let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
+map <leader>s        <Plug>(easymotion-s)
+
+let g:EasyMotion_smartcase         = 1 " Turn on case-insensitive 
+let g:EasyMotion_use_smartsign_us  = 1 " Match both '1' and '!'
+let g:EasyMotion_off_screen_search = 0 " Do not search outside the screen range
+let g:EasyMotion_do_shade          = 1
+
 
 " ---------------- Color & Scheme --------------- "
 
@@ -313,6 +330,9 @@ let g:rainbow_guifgs = ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
 
 hi link LspCxxHlSymParameter Constant
 hi link LspCxxHlSymField Todo
+hi link ClapPreview Normal
+hi link ClapDisplay Normal
+hi link ClapCurrentSelection CursorLine
 
 let g:markdown_fenced_languages = [
       \ 'vim',
@@ -323,7 +343,7 @@ let g:markdown_fenced_languages = [
 function! Transparency()
 	hi Normal guibg=none ctermbg=none
 	hi CursorColumn guibg=none ctermbg=none
-	hi CursorLine guibg=none ctermbg=none 
+	hi CursorLine guibg=none ctermbg=none
 	hi CursorLineNr guibg=none ctermbg=none
 	hi LineNr guibg=none ctermbg=none
 	hi Folded guibg=none ctermbg=none
@@ -335,16 +355,20 @@ function! Transparency()
 	hi StatusLine guibg=none ctermbg=none
 	hi LightlineMiddle_inactive guibg=none ctermbg=none
 	hi LightlineMiddle_active guibg=none ctermbg=none
-	hi VertSplit guibg=none ctermbg=none 
+	hi VertSplit guibg=none ctermbg=none
 endfunction
 
 " autocmd vimenter * call Transparency()
 " autocmd ColorScheme * call Transparency()
 
-
 " -------- fzf and vista configuration ---------- "
 
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8, 'highlight': 'Comment' } }
+"let g:clap_no_matches_msg = "¯\\_(ツ)_/¯"
+"let g:clap_preview_size = { '*': 5, 'files': 10 }
+let g:clap_preview_direction = 'UD' "Upside down preview display
+let g:clap_layout = { 'relative': 'editor', 'row': '2%'} " Relative to the whole editor
+"let g:clap_layout:  { 'width': '67%', 'height': '33%', 'row': '33%', 'col': '17%' }
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.7, 'border': 'none', 'highlight': 'Comment' } }
 let g:rg_derive_root='true'
 
 let g:vista_default_executive = 'coc'
@@ -353,6 +377,11 @@ let g:vista_echo_cursor_startegy = 'scroll'
 let g:vista_echo_cursor = 0
 let g:vista_keep_fzf_colors = 1
 let g:vista_enable_centering_jump = 0
+
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow'
+
+command! -bang -nargs=? -complete=dir Files
+    \ call fzf#vim#files(<q-args>, {'options': ['--info=inline']}, <bang>0)
 
 command! -bang -nargs=* Rg
 			\ call fzf#vim#grep(
@@ -494,37 +523,31 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-"
-
 " Use vista.vim to display function
 function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
-set statusline+=%{NearestMethodOrFunction()}
 
 " Nearest function in statusline
 autocmd VimEnter * call vista#RunForNearestMethodOrFunction()
 
 " ['cocstatus', 'lineinfo']
 let g:lightline = {
-			\ 'colorscheme': 'ayu',
-			\ 'active': {
-			\   'left': [ [ 'mode', 'paste' ],
-			\             [ 'gitbranch' ],
-			\             [ 'readonly', 'filename', 'modified' ] ],
-			\   'right': [ ['method'] ]
-			\ },
-			\ 'component_function': {
-			\   'cocstatus': 'coc#status',
-			\   'gitbranch': 'FugitiveHead',
-			\   'method': 'NearestMethodOrFunction'
-			\ },
-			\ }
+      \ 'colorscheme': 'ayu',
+      \ 'active': {
+      \   'left': [ [ 'm', 'paste' ],
+      \             [ 'gitbranch' ],
+      \             [ 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ ['method'] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status',
+      \   'gitbranch': 'FugitiveHead',
+      \   'method': 'NearestMethodOrFunction',
+      \   'm': 'LightMode'
+      \ },
+      \ }
 
 " Use autocmd to force lightline update.
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
@@ -532,6 +555,11 @@ autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 function! ExplorerCurDir()
   let node_info = CocAction('runCommand', 'explorer.getNodeInfo', 0)
   return fnamemodify(node_info['fullpath'], ':h')
+endfunction
+
+function! LightMode()
+  let l:m = mode()
+  return toupper(m)
 endfunction
 
 let g:coc_explorer_global_presets = {
@@ -569,7 +597,5 @@ let g:coc_explorer_global_presets = {
 			\ }
 
 " Use preset argument to open it
-nmap <silent><leader>ef :CocCommand explorer --preset floatingLeftside<CR>
 nmap <silent><leader>eb :CocCommand explorer --preset buffer<CR>
 nmap <silent><leader>ee :CocCommand explorer --preset simplify<CR>
-
