@@ -1,4 +1,16 @@
 {
+  "diagnostic.warningSign": "-",
+  "diagnostic.infoSign": "-",
+  "diagnostic.errorSign": "-",
+  "diagnostic.hintSign": "-",
+  "diagnostic.enableHighlightLineNumber": true,
+  "diagnostic.enableSign": true,
+  "diagnostic.signPriority": 20,
+  "diagnostic.enableMessage": "jump",
+  "diagnostic.showUnused": true,
+  "diagnostic.level": "information",
+  "diagnostic.showDeprecated": true,
+  "diagnostic.refreshOnInsertMode": false,
   "suggest.autoTrigger": "none",
   "snippets.textmateSnippetsRoots": [
     "~/.config/snippets"
@@ -13,7 +25,7 @@
     "--clang-tidy",
     "--enable-config"
   ],
-  "clangd.path": "/opt/clangd_12.0.0-rc2/bin/clangd",
+  "clangd.path": "C:/Program Files/LLVM/bin/clangd.exe",
   "rust.clippy_preference": "on",
   "rust.all_features": true,
   "languageserver": {
@@ -50,4 +62,3 @@
     }
   }
 }
-
