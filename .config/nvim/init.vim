@@ -13,16 +13,17 @@ source ~/.vimrc
 "    - Find a correct non-exsting preview navigation shortcut
 "  - treesitter :
 "    - highlight parameter reference (variable parameter in function body do not have the correct highlight)
-"
+".
 " 2. Correct exit from lazygit lspsaga floating terminal
 " 3. Add new shortcut for terminal escaping
 " 4. Add switch between header/cpp shortcut
 " 5. Add several configuration files to easly switch from lspconfig to coc
-"
+".
 
 "let g:config_path = stdpath('config')
-let g:config_path = '$HOME/.config/nvim/config'
-execute 'source ' . g:config_path . '/' . 'plug.vim'
+let g:nvim_path = '$HOME/.config/nvim/'
+let g:config_path = g:nvim_path . 'config'
+execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 
 let g:mapleader = "\<Space>"
 "let g:maplocalleader = ','
@@ -42,6 +43,7 @@ endif
 
 let config_files = [
       \ "editor",
+      \ "easymotion",
       \ "clap",
       \ "colors",
       \ "floaterm",

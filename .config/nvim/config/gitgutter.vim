@@ -10,3 +10,9 @@ hi link GitGutterAddLineNr          GitGutterAdd
 hi link GitGutterChangeLineNr       GitGutterChange
 hi link GitGutterDeleteLineNr       GitGutterDelete
 hi link GitGutterChangeDeleteLineNr GitGutterChangeDelete
+
+
+nmap <H <Plug>(GitGutterPrevHunk)
+nmap >H <Plug>(GitGutterNextHunk)
+nmap <Leader>hv <Plug>(GitGutterPreviewHunk)
+
