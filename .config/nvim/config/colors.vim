@@ -5,8 +5,8 @@ colorscheme ayu
 
 let g:rainbow_active = 1
 
+" \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
 let g:rainbow_load_separately = [
-    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
     \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
@@ -36,3 +36,5 @@ endfunction
 " autocmd vimenter * call Transparency()
 " autocmd ColorScheme * call Transparency()
 
+hi link LspCxxHlSymParameter Constant
+hi link LspCxxHlSymField Todo

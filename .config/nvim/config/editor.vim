@@ -48,8 +48,11 @@ set showbreak=↪
 set listchars=tab:-\ ,trail:·,extends:⟩,precedes:⟨
 set fillchars=vert:\|
 
-nnoremap <silent> <leader>  :WhichKey '<Space>'<CR>
-nnoremap <silent> <leader>  :<c-u>WhichKey '<Space>'<CR>
-"nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 set timeoutlen=500
+
+
+let g:markdown_fenced_languages = [
+      \ 'vim',
+      \ 'help'
+      \]
 

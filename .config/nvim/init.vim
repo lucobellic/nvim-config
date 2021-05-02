@@ -1,4 +1,5 @@
-set runtimepath^=~/.vim runtimepath+=~/.config/nvim
+"set runtimepath^=~/.vim runtimepath+=~/.config/nvim
+let &runtimepath.=',~/.config/nvim'
 let &packpath = &runtimepath
 source ~/.vimrc
 
@@ -27,38 +28,46 @@ execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 
 let g:mapleader = "\<Space>"
 "let g:maplocalleader = ','
-let g:lsp_provider = 'coc' " 'nvim_lsp'
+let g:lsp_provider = 'coc'
+" let g:lsp_provider = 'nvim_lsp'
 
 """ Load configuration
 
-if lsp_provider ==? 'coc'
+if g:lsp_provider ==? 'coc'
     execute 'source ' . g:config_path . '/' . 'coc.vim'
-else
-  " TODO with lua
+elseif g:lsp_provider ==? 'nvim_lsp'
     execute 'source ' . g:config_path . '/' . 'completion.vim'
-    " lspsage.lua
-    " lspconfig.lua
-    " treesitter.lua
+    lua require('lsp')
+    lua require('highlight')
 endif
 
-let config_files = [
+let vim_config_files = [
       \ "editor",
+      \ "colors",
+      \ "keybindings",
+      \ "barbar",
       \ "easymotion",
       \ "clap",
-      \ "colors",
       \ "floaterm",
       \ "fzf",
       \ "gitgutter",
       \ "goyo",
-      \ "lightline",
       \ "startify",
       \ "vista",
-      \ "whichkey",
-      \ "keybindings"
       \ ]
 
-for config_file in g:config_files
-    execute 'source ' . g:config_path . '/' . config_file . '.vim'
+for config_file in g:vim_config_files
+  execute 'source ' . g:config_path . '/' . config_file . '.vim'
+endfor
+
+
+let lua_config_files = [
+      \ 'statusline',
+      \ 'mapping',
+      \]
+
+for config_file in g:lua_config_files
+  execute "lua require('" . config_file . "')"
 endfor
 
 let g:markdown_fenced_languages = [
