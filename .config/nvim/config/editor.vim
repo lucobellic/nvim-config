@@ -50,6 +50,7 @@ set fillchars=vert:\|
 
 set timeoutlen=500
 
+let g:lion_squeeze_spaces = 1
 
 let g:markdown_fenced_languages = [
       \ 'vim',

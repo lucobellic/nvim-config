@@ -32,6 +32,13 @@ Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
 "Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python -m chadtree deps'}
 Plug 'romgrk/barbar.nvim'
+Plug 'tommcdo/vim-exchange'
+Plug 'tommcdo/vim-lion'
+Plug 'preservim/nerdcommenter'
+
+Plug 'kana/vim-textobj-user'
+Plug 'rhysd/vim-textobj-anyblock' " ib/ab selection
+
 
 " Themes
 " Use private personal configuration of ayu theme
