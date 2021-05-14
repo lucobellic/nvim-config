@@ -12,10 +12,12 @@ call plug#begin('~/.vim/plugged')
   Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('CocPostInstall')}
   Plug 'jackguo380/vim-lsp-cxx-highlight'
 "elseif lsp_provider ==? 'nvim_lsp'
-  "Plug 'neovim/nvim-lspconfig'
-  "Plug 'glepnir/lspsaga.nvim'
-  "Plug 'nvim-lua/completion-nvim'
-  "Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  " Plug 'neovim/nvim-lspconfig'
+  " Plug 'glepnir/lspsaga.nvim'
+  " Plug 'nvim-lua/completion-nvim'
+  " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  " Plug 'kyazdani42/nvim-web-devicons' " file icons
+  " Plug 'kyazdani42/nvim-tree.lua'
 "endif
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
@@ -38,6 +40,7 @@ Plug 'preservim/nerdcommenter'
 
 Plug 'kana/vim-textobj-user'
 Plug 'rhysd/vim-textobj-anyblock' " ib/ab selection
+
 
 
 " Themes

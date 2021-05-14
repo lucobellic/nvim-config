@@ -7,8 +7,12 @@ hi link ClapPreview Normal
 hi link ClapDisplay Normal
 hi link ClapCurrentSelection CursorLine
 
+" nnoremap <silent> <C-p>          :<C-u>:Clap files ++finder=rg --files --smart-case --follow<CR>
+" nnoremap <silent> <leader>mp     :<C-u>:Clap files ++finder=rg --files --smart-case --follow --hidden --no-ignore<CR>
+
+nnoremap <silent> <leader>mp     :<C-u>:Files<CR>
+"nnoremap <silent> <C-p>          :<C-u>:Files<CR>
 nnoremap <silent> <C-p>          :<C-u>:Clap files ++finder=rg --files --smart-case --follow<CR>
-nnoremap <silent> <leader>mp     :<C-u>:Clap files ++finder=rg --files --smart-case --follow --hidden<CR>
 nnoremap <silent> <leader>my     :<C-u>:Clap yanks<CR>
 nnoremap <silent> <leader>mb     :<C-u>:Clap buffers<CR>
 nnoremap <silent> <leader>mf     :<C-u>:Clap blines<CR>

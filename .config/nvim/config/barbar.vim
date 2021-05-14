@@ -43,7 +43,7 @@ nnoremap <silent>    <leader>9 :BufferGoto 9<CR>
 nnoremap <silent>    <leader>0 :BufferLast<CR>
 " Close buffer
 nnoremap <silent>   <leader>wd :BufferClose<CR>
-nnoremap <silent>   <C-d>      :BufferClose<CR>
+nnoremap <silent>   <C-q>      :BufferClose<CR>
 nnoremap <silent>   <leader>bd :BufferClose<CR>
 " Wipeout buffer
 "                          :BufferWipeout<CR>

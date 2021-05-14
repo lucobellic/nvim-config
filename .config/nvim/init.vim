@@ -36,7 +36,6 @@ let g:lsp_provider = 'coc'
 if g:lsp_provider ==? 'coc'
     execute 'source ' . g:config_path . '/' . 'coc.vim'
 elseif g:lsp_provider ==? 'nvim_lsp'
-    execute 'source ' . g:config_path . '/' . 'completion.vim'
     lua require('lsp')
     lua require('highlight')
 endif
@@ -55,7 +54,9 @@ let vim_config_files = [
       \ "startify",
       \ "vista",
       \ ]
-
+      " \ "explorer",
+      " \ "completion"
+ 
 for config_file in g:vim_config_files
   execute 'source ' . g:config_path . '/' . config_file . '.vim'
 endfor
@@ -65,7 +66,8 @@ let lua_config_files = [
       \ 'statusline',
       \ 'mapping',
       \]
-
+      " \ 'explorer'
+ 
 for config_file in g:lua_config_files
   execute "lua require('" . config_file . "')"
 endfor

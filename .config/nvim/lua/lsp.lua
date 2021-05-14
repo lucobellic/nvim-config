@@ -34,8 +34,8 @@ local on_attach = function(client, bufnr)
 --  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua require(\'lspsaga.provider\').lsp_finder()<CR>', opts)
   buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '<D', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', '>D', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<C', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '>C', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
   buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
 
   -- Set some keybinds conditional on server capabilities
@@ -66,15 +66,22 @@ local saga = require'lspsaga'
 local cmd = vim.cmd
 
 saga.init_lsp_saga {
-  use_saga_diagnostic_sign = false,
+  use_saga_diagnostic_sign = true,
+  border_style = 'single',
   error_sign = '-',
   warn_sign = '-',
   hint_sign = '-',
   infor_sign = '-'
 }
 
-cmd('nnoremap <silent> g; <cmd>lua require(\'lspsaga.floaterm\').open_float_terminal(\'lazygit\')<CR>')
-cmd('tnoremap <silent> g; <C-\\><C-n>:lua require(\'lspsaga.floaterm\').close_float_terminal()<CR>')
+-- vim.cmd('hi link DiagnosticError TODO')
+-- vim.cmd('hi link DiagnosticWarning TODO')
+-- vim.cmd('hi link DiagnosticInformation TODO')
+-- vim.cmd('hi link DiagnosticHint TODO')
+
+
+-- cmd('nnoremap <silent> g; <cmd>lua require(\'lspsaga.floaterm\').open_float_terminal(\'lazygit\')<CR>')
+-- cmd('tnoremap <silent> g; <C-\\><C-n>:lua require(\'lspsaga.floaterm\').close_float_terminal()<CR>')
 
 
 

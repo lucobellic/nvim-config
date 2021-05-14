@@ -38,3 +38,9 @@ endfunction
 
 hi link LspCxxHlSymParameter Constant
 hi link LspCxxHlSymField Todo
+
+
+" hi link DiagnosticError TODO
+" hi link DiagnosticWarning TODO
+" hi link DiagnosticInformation TODO
+" hi link DiagnosticHint TODO

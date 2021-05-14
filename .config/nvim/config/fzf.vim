@@ -1,7 +1,7 @@
 let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.5, 'relative': v:false, 'yoffset': 0.0, 'border': 'none', 'highlight': 'Comment' } }
 let g:fzf_preview_window = ['down:50%:hidden:noborder', 'ctrl-/']
 
-let $FZF_DEFAULT_COMMAND = 'rg --ignore-case --no-ignore --files --hidden --follow'
+let $FZF_DEFAULT_COMMAND = 'rg --smart-case --no-ignore --files --hidden --follow'
 
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
