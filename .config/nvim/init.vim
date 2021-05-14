@@ -22,14 +22,14 @@ source ~/.vimrc
 ".
 
 "let g:config_path = stdpath('config')
-let g:nvim_path = '$HOME/.config/nvim/'
-let g:config_path = g:nvim_path . 'config'
+let g:nvim_path    = '$HOME/.config/nvim/'
+let g:config_path  = g:nvim_path . 'config'
 execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 
-let g:mapleader = "\<Space>"
+let g:mapleader       = "\<Space>"
 "let g:maplocalleader = ','
-let g:lsp_provider = 'coc'
-" let g:lsp_provider = 'nvim_lsp'
+let g:lsp_provider    = 'coc'
+" let g:lsp_provider  = 'nvim_lsp'
 
 """ Load configuration
 
@@ -56,7 +56,7 @@ let vim_config_files = [
       \ ]
       " \ "explorer",
       " \ "completion"
- 
+
 for config_file in g:vim_config_files
   execute 'source ' . g:config_path . '/' . config_file . '.vim'
 endfor
@@ -67,7 +67,7 @@ let lua_config_files = [
       \ 'mapping',
       \]
       " \ 'explorer'
- 
+
 for config_file in g:lua_config_files
   execute "lua require('" . config_file . "')"
 endfor
