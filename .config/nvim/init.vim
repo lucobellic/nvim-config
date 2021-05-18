@@ -1,7 +1,7 @@
 "set runtimepath^=~/.vim runtimepath+=~/.config/nvim
-let &runtimepath.=',~/.config/nvim'
-let &packpath = &runtimepath
-source ~/.vimrc
+"let &runtimepath.=',~/.config/nvim'
+"let &packpath = &runtimepath
+"source ~/.vimrc
 
 " TODO
 " 1. WIP switch from coc.vim to the following plugin:
@@ -46,7 +46,7 @@ let vim_config_files = [
       \ "keybindings",
       \ "barbar",
       \ "easymotion",
-      \ "clap",
+      \ "search",
       \ "floaterm",
       \ "fzf",
       \ "gitgutter",
@@ -64,8 +64,9 @@ endfor
 
 let lua_config_files = [
       \ 'statusline',
-      \ 'mapping',
+      \ 'telescope-config'
       \]
+      " \ 'mapping',
       " \ 'explorer'
 
 for config_file in g:lua_config_files

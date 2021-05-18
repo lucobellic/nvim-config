@@ -29,9 +29,15 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth'
+
 Plug 'junegunn/fzf' ", { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
 "Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python -m chadtree deps'}
 Plug 'romgrk/barbar.nvim'
 Plug 'tommcdo/vim-exchange'
@@ -47,7 +53,7 @@ Plug 'rhysd/vim-textobj-anyblock' " ib/ab selection
 " Use private personal configuration of ayu theme
 Plug 'git@gitlab.com:luco-bellic/ayu-vim.git', { 'branch': 'personal' }
 "Plug 'Luxed/ayu-vim'
-Plug 'frazrepo/vim-rainbow'
+"Plug 'frazrepo/vim-rainbow'
 
 " Icons
 Plug 'kyazdani42/nvim-web-devicons'
@@ -57,15 +63,19 @@ Plug 'ryanoasis/vim-devicons'
 " UI
 "Plug 'wfxr/minimap.vim'
 Plug 'psliwka/vim-smoothie' " or Plug 'yuttie/comfortable-motion.vim'
-Plug 'folke/which-key.nvim'
+"Plug 'folke/which-key.nvim'
 Plug 'mhinz/vim-startify'    " Start screen
 Plug 'junegunn/goyo.vim'     " Zen mode
+Plug 'junegunn/limelight.vim'
 Plug 'voldikss/vim-floaterm' " Floating terminal
 "Plug 'camspiers/animate.vim' " Animation with lens.vim
 "Plug 'camspiers/lens.vim'    " Automatic window resize
 "Plug 'onsails/lspkind-nvim' " Pictogram for neovim
+"
 
-
+Plug 'folke/todo-comments.nvim'
+Plug 'folke/trouble.nvim'
+Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'airblade/vim-gitgutter'
 
 "Plug 'itchyny/lightline.vim'
