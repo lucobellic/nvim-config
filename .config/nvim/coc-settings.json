@@ -1,8 +1,8 @@
 {
-  "diagnostic.warningSign": "-",
-  "diagnostic.infoSign": "-",
-  "diagnostic.errorSign": "-",
-  "diagnostic.hintSign": "-",
+  "diagnostic.warningSign": "•",
+  "diagnostic.infoSign": "•",
+  "diagnostic.errorSign": "•",
+  "diagnostic.hintSign": "•",
   "diagnostic.enableHighlightLineNumber": true,
   "diagnostic.enableSign": true,
   "diagnostic.signPriority": 20,
