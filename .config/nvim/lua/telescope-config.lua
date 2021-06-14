@@ -9,41 +9,49 @@ require('telescope').setup{
       '--column',
       '--smart-case'
     },
-    prompt_position = "bottom",
+
+    show_line = false;
+    prompt_title = "";
+    results_title = "";
+    preview_title = "";
+
     prompt_prefix = "> ",
     selection_caret = "> ",
     entry_prefix = "  ",
+
     initial_mode = "insert",
     selection_strategy = "reset",
-    sorting_strategy = "descending",
-    layout_strategy = "horizontal",
+    sorting_strategy = "ascending",
+    layout_strategy = "vertical",
     layout_defaults = {
-      horizontal = {
-        mirror = false,
-      },
       vertical = {
-        mirror = false,
+        height_padding = 5,
+        preview_height = 0.5,
+        mirror = true,
       },
     },
-    file_sorter =  require'telescope.sorters'.get_fuzzy_file,
+
     file_ignore_patterns = {},
-    generic_sorter =  require'telescope.sorters'.get_generic_fuzzy_sorter,
     shorten_path = true,
-    winblend = 0,
-    width = 0.75,
-    preview_cutoff = 120,
-    results_height = 1,
-    results_width = 0.8,
-    border = {},
-    borderchars = { '─', '│', '─', '│', '╭', '╮', '╯', '╰' },
+    winblend = 20,
+    preview_cutoff = 80,
+    width = 0.65,
+    results_height = 20,
+    previewer = false,
+    -- results_width = 0.8,
+    borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
     color_devicons = true,
-    use_less = true,
+    -- use_less = true,
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
-    file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
-    grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
-    qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
+
+
+    -- file_sorter =  require'telescope.sorters'.get_fuzzy_file,
+    -- generic_sorter =  require'telescope.sorters'.get_generic_fuzzy_sorter,
+    -- file_previewer = require'telescope.previewers'.vim_buffer_cat.new,
+    -- grep_previewer = require'telescope.previewers'.vim_buffer_vimgrep.new,
+    -- qflist_previewer = require'telescope.previewers'.vim_buffer_qflist.new,
 
     -- Developer configurations: Not meant for general override
-    buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
+    -- buffer_previewer_maker = require'telescope.previewers'.buffer_previewer_maker
   }
 }
