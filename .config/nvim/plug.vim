@@ -24,7 +24,7 @@ Plug 'cespare/vim-toml'
 Plug 'liuchengxu/vista.vim'
 
 " Navigation
-Plug 'easymotion/vim-easymotion'
+Plug 'phaazon/hop.nvim'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
