@@ -1,4 +1,4 @@
-let g:goyo_width = 100
+let g:goyo_width = '50%'
 let g:goyo_height = '90%'
 let g:goyo_linenr = 1
 
@@ -13,6 +13,8 @@ let g:limelight_conceal_guifg = '#1B2733'
 "autocmd! User GoyoEnter nested call <SID>goyo_enter()
 "autocmd! User GoyoLeave nested call <SID>goyo_leave()
 nnoremap <silent> <C-z> :<C-u>Goyo<CR>
+nnoremap <silent> <C-x> :<C-u>Limelight<CR>
+nnoremap <silent> <A-x> :<C-u>Limelight!<CR>
 
 function! s:goyo_enter()
   "  if executable('tmux') && strlen($TMUX)
