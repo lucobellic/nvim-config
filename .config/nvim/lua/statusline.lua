@@ -22,6 +22,27 @@ local colors = {
     greenYel = "#EBCB8B"
 }
 
+local mode_color = function()
+    local mode_colors = {
+        n = colors.cyan,
+        i = colors.green,
+        c = colors.accent,
+        V = colors.greenYel,
+        [""] = colors.greenYel,
+        v = colors.greenYel,
+        R = colors.magenta,
+        r = colors.magenta
+    }
+
+    local color = mode_colors[vim.fn.mode()]
+
+    if color == nil then
+        color = colors.cyan
+    end
+
+    return color
+end
+
 gls.left[1] = {
     Space = {
         provider = function()
@@ -32,21 +53,13 @@ gls.left[1] = {
 }
 
 gls.left[2] = {
-    SiMode = {
+    ViMode = {
         provider = function()
-            local alias = {
-                n = "N",
-                i = "I",
-                c = "C",
-                V = "V",
-                [""] = "V",
-                v = "V",
-                R = "R"
-            }
-            return alias[vim.fn.mode()]
+            vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color())
+            return '▌  '
+            -- 
         end,
-        separator = " ",
-        highlight = {colors.accent, colors.bg}
+        -- highlight = {colors.cyan, colors.bg}
     }
 }
 
