@@ -15,7 +15,7 @@
   "snippets.textmateSnippetsRoots": [
     "~/.config/snippets"
   ],
-  "explorer.icon.enableVimDevicons": true,
+  "explorer.icon.enableVimDevicons": false,
   "explorer.icon.enableNerdfont": true,
   "explorer.file.showHiddenFiles": true,
   "clangd.enabled": true,
