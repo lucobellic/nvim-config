@@ -34,6 +34,8 @@ Plug 'tpope/vim-sleuth'
 Plug 'junegunn/fzf' ", { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
+
+" Telescope
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -75,8 +77,8 @@ Plug 'voldikss/vim-floaterm' " Floating terminal
 
 Plug 'folke/todo-comments.nvim'
 Plug 'folke/trouble.nvim'
-Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'luochen1990/rainbow'
 
 "Plug 'itchyny/lightline.vim'
 Plug 'glepnir/galaxyline.nvim' , {'branch': 'main'}
