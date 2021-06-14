@@ -42,10 +42,9 @@ endif
 
 let vim_config_files = [
       \ "editor",
+      \ "barbar",
       \ "colors",
       \ "keybindings",
-      \ "barbar",
-      \ "easymotion",
       \ "search",
       \ "floaterm",
       \ "fzf",
@@ -54,6 +53,7 @@ let vim_config_files = [
       \ "startify",
       \ "vista",
       \ ]
+
       " \ "explorer",
       " \ "completion"
 
@@ -64,7 +64,8 @@ endfor
 
 let lua_config_files = [
       \ 'statusline',
-      \ 'telescope-config'
+      \ 'telescope-config',
+      \ 'hop-config'
       \]
       " \ 'mapping',
       " \ 'explorer'
