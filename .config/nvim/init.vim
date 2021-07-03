@@ -50,10 +50,12 @@ let vim_config_files = [
       \ "fzf",
       \ "gitgutter",
       \ "goyo",
-      \ "startify",
+      \ "dashboard",
       \ "vista",
+      \ "indent",
       \ ]
 
+      "\ "startify",
       " \ "explorer",
       " \ "completion"
 
@@ -65,9 +67,12 @@ endfor
 let lua_config_files = [
       \ 'statusline',
       \ 'telescope-config',
-      \ 'hop-config'
+      \ 'hop-config',
+      \ 'trouble-config',
+      \ 'zenmode',
       \]
       " \ 'mapping',
+      " \ 'indent'
       " \ 'explorer'
 
 for config_file in g:lua_config_files
