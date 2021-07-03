@@ -56,7 +56,9 @@ gls.left[2] = {
     ViMode = {
         provider = function()
             vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color())
-            return '▌  '
+            -- return ' ' .. '  ' .. os.date('%H:%M') .. ' '
+            return '▌ ' .. os.date('%H:%M') .. ' '
+            -- return '▌  '
             -- 
         end,
         -- highlight = {colors.cyan, colors.bg}
