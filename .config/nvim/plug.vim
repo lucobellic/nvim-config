@@ -34,17 +34,20 @@ Plug 'tpope/vim-sleuth'
 Plug 'junegunn/fzf' ", { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
+Plug 'vn-ki/coc-clap'
 
 " Telescope
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'fannheyward/telescope-coc.nvim'
+Plug 'Shatur/neovim-session-manager'
 
 "Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python -m chadtree deps'}
 Plug 'romgrk/barbar.nvim'
 Plug 'tommcdo/vim-exchange'
 Plug 'tommcdo/vim-lion'
-Plug 'preservim/nerdcommenter'
+"Plug 'preservim/nerdcommenter'
 
 Plug 'kana/vim-textobj-user'
 Plug 'rhysd/vim-textobj-anyblock' " ib/ab selection
@@ -66,14 +69,19 @@ Plug 'ryanoasis/vim-devicons'
 "Plug 'wfxr/minimap.vim'
 Plug 'psliwka/vim-smoothie' " or Plug 'yuttie/comfortable-motion.vim'
 "Plug 'folke/which-key.nvim'
-Plug 'mhinz/vim-startify'    " Start screen
+"Plug 'mhinz/vim-startify'    " Start screen
+Plug 'glepnir/dashboard-nvim'
+" Plug 'Yggdroot/indentLine'
+Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
+" Plug 'glepnir/indent-guides.nvim'
 Plug 'junegunn/goyo.vim'     " Zen mode
+Plug 'folke/zen-mode.nvim'
 Plug 'junegunn/limelight.vim'
 Plug 'voldikss/vim-floaterm' " Floating terminal
 "Plug 'camspiers/animate.vim' " Animation with lens.vim
 "Plug 'camspiers/lens.vim'    " Automatic window resize
-"Plug 'onsails/lspkind-nvim' " Pictogram for neovim
 "
+Plug 'onsails/lspkind-nvim' " Pictogram for neovim
 
 Plug 'folke/todo-comments.nvim'
 Plug 'folke/trouble.nvim'
