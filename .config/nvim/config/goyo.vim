@@ -12,9 +12,19 @@ let g:limelight_conceal_guifg = '#1B2733'
 
 "autocmd! User GoyoEnter nested call <SID>goyo_enter()
 "autocmd! User GoyoLeave nested call <SID>goyo_leave()
-nnoremap <silent> <C-z> :<C-u>Goyo<CR>
-nnoremap <silent> <C-x> :<C-u>Limelight<CR>
-nnoremap <silent> <A-x> :<C-u>Limelight!<CR>
+" nnoremap <silent> <C-z> :<C-u>Goyo<CR>
+let s:enabled = v:false
+function! LimelightToggle()
+	if s:enabled
+		let s:enabled = v:false
+		Limelight!
+	else
+		Limelight
+		let s:enabled = v:true
+	endif
+endfunction
+
+nnoremap <silent> <C-x> :call LimelightToggle()<cr>
 
 function! s:goyo_enter()
   "  if executable('tmux') && strlen($TMUX)
@@ -25,6 +35,7 @@ function! s:goyo_enter()
   set noshowcmd
   set scrolloff=999
   Limelight
+  setlocal statusline=\
   "  let b:coc_diagnostic_disable = 1
   "  CocDisable
   "  hi link LspCxxHlSymParameter Constant
@@ -49,13 +60,13 @@ function! s:goyo_leave()
   "  CocEnable
   "  hi link LspCxxHlSymParameter Constant
   "  hi link LspCxxHlSymField Todo
-  "  hi link LspCxxHlGroupMemberVariable Todo
+  "  hi link LspCxxHlGroupMembmelightToggle()
+	"  erVariable Todo
   "  hi link ClapPreview Normal
   "  hi link ClapDisplay Normal
   "  hi link ClapCurrentSelection CursorLine
   "  " ...
 endfunction
-
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
