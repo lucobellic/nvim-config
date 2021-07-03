@@ -5,6 +5,7 @@ set signcolumn=yes:1
 set cursorline
 set noswapfile
 set autoread
+set autowrite
 set autowriteall
 "autocmd TextChanged,TextChangedI <buffer> silent! write
 set spell
@@ -19,13 +20,7 @@ set hidden
 set nobackup
 set nowritebackup
 set cmdheight=1
-set updatetime=100
-
-" Set completeopt to have a better completion experience
-set completeopt=menuone,noinsert,noselect
-
-" Avoid showing message extra message when using completion
-set shortmess+=c
+set updatetime=4000
 
 autocmd BufEnter * silent! :Glcd
 
@@ -34,17 +29,31 @@ set wildmode=longest:full,full
 set wildmenu
 
 " tab/space behavior
-set tabstop=2
-set expandtab
-set shiftwidth=2
-set smarttab
+" with tpope/sleuth usage
+if get(g:, '_has_set_default_indent_settings', 0) == 0
+  " Indenting defaults (does not override vim-sleuth's indenting detection)
+  " Defaults to 2 spaces for most filetypes
+  " Set the indenting level to 2 spaces for the following file types.
+  " autocmd FileType typescript,javascript,jsx,tsx,css,html,ruby,elixir,kotlin,vim,plantuml
+        " \ setlocal expandtab tabstop=2 shiftwidth=2
+  set expandtab
+  set tabstop=2
+  set shiftwidth=2
+  let g:_has_set_default_indent_settings = 1
+endif
+
+" set expandtab
+" set shiftwidth=2
+" set tabstop=2
+" set smarttab
 
 set list
 set showbreak=↪
 set listchars=tab:-\ ,trail:·,extends:⟩,precedes:⟨
 set fillchars=vert:\|
 
-set timeoutlen=500
+set notimeout
+"set timeoutlen=500
 
 let g:lion_squeeze_spaces = 1
 
