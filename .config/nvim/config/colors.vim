@@ -12,7 +12,9 @@ let g:rainbow_load_separately = [
     \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
     \ ]
 
-let g:rainbow_guifgs = ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
+let g:rainbow_conf = {
+    \ 'guifgs' : ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
+\}
 
 " transparent bg
 function! Transparency()
