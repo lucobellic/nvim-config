@@ -30,10 +30,15 @@ nmap <silent> <C <Plug>(coc-diagnostic-prev)
 nmap <silent> >C <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
+
+nmap <silent> gd <cmd>Telescope coc definitions<cr>
+nmap <silent> gy <cmd>Telescope coc declarations<cr>
+nmap <silent> gi <cmd>Telescope coc implementations<cr>
+nmap <silent> gr <cmd>Telescope coc references<cr>
 
 " Show documentation in preview window.
 nnoremap <silent> <leader>d :call <SID>show_documentation()<CR>
@@ -75,9 +80,11 @@ xmap <leader>a  <Plug>(coc-codeaction-selected)
 nmap <leader>a  <Plug>(coc-codeaction-selected)
 
 " Remap keys for applying codeAction to the current buffer.
-nmap <leader>cac  <Plug>(coc-codeaction)
+" nmap <leader>ca  <Plug>(coc-codeaction)
+nmap <silent> <leader>cd <cmd>Telescope coc workspace_diagnostics<cr>
+
 " Apply AutoFix to problem on the current line.
-nmap <leader>cf  <Plug>(coc-fix-current)
+nmap <silent> <leader>cf <Plug>(coc-fix-current)
 
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
@@ -162,4 +169,5 @@ let g:coc_explorer_global_presets = {
 
 " Use preset argument to open it
 nmap <silent> <leader>ee :CocCommand explorer --preset simplify<CR>
+nnoremap <silent> <leader>er :call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])<CR>
 
