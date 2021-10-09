@@ -15,8 +15,8 @@ call plug#begin('~/.vim/plugged')
   " Plug 'neovim/nvim-lspconfig'
   " Plug 'glepnir/lspsaga.nvim'
   " Plug 'nvim-lua/completion-nvim'
-  " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  " Plug 'kyazdani42/nvim-web-devicons' " file icons
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'kyazdani42/nvim-web-devicons' " file icons
   " Plug 'kyazdani42/nvim-tree.lua'
 "endif
 Plug 'rust-lang/rust.vim'
@@ -36,12 +36,17 @@ Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
 Plug 'vn-ki/coc-clap'
 
+
 " Telescope
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'fannheyward/telescope-coc.nvim'
 Plug 'Shatur/neovim-session-manager'
+
+" Plug 'rmagatti/auto-session'
+" Plug 'rmagatti/session-lens'
+
 
 "Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python -m chadtree deps'}
 Plug 'romgrk/barbar.nvim'
@@ -51,8 +56,6 @@ Plug 'tommcdo/vim-lion'
 
 Plug 'kana/vim-textobj-user'
 Plug 'rhysd/vim-textobj-anyblock' " ib/ab selection
-
-
 
 " Themes
 " Use private personal configuration of ayu theme
@@ -72,9 +75,8 @@ Plug 'psliwka/vim-smoothie' " or Plug 'yuttie/comfortable-motion.vim'
 "Plug 'mhinz/vim-startify'    " Start screen
 Plug 'glepnir/dashboard-nvim'
 " Plug 'Yggdroot/indentLine'
-Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
+" Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
 " Plug 'glepnir/indent-guides.nvim'
-Plug 'junegunn/goyo.vim'     " Zen mode
 Plug 'folke/zen-mode.nvim'
 Plug 'junegunn/limelight.vim'
 Plug 'voldikss/vim-floaterm' " Floating terminal
