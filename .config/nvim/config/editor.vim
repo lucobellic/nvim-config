@@ -23,6 +23,8 @@ set cmdheight=1
 set updatetime=4000
 
 autocmd BufEnter * silent! :Glcd
+" Remove trailing whitespace on save
+autocmd BufWritePre * :%s/\s\+$//e
 
 " Tabulation improvement
 set wildmode=longest:full,full
