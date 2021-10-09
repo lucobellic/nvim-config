@@ -23,8 +23,10 @@ require('telescope').setup{
     selection_strategy = "reset",
     sorting_strategy = "ascending",
     layout_strategy = "vertical",
-    layout_defaults = {
+    layout_config = {
       vertical = {
+
+        width = 0.65,
         height_padding = 5,
         preview_height = 0.5,
         mirror = true,
@@ -32,11 +34,7 @@ require('telescope').setup{
     },
 
     file_ignore_patterns = {},
-    shorten_path = true,
     winblend = 20,
-    preview_cutoff = 80,
-    width = 0.65,
-    results_height = 20,
     previewer = false,
     -- results_width = 0.8,
     borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
@@ -57,12 +55,11 @@ require('telescope').setup{
 }
 
 require('telescope').load_extension('coc')
-require('telescope').load_extension('session_manager')
+require('telescope').load_extension('sessions')
 
-
-local actions = require("telescope.actions")
-local trouble = require("trouble.providers.telescope")
-local telescope = require("telescope")
+local actions = require('telescope.actions')
+local trouble = require('trouble.providers.telescope')
+local telescope = require('telescope')
 
 telescope.setup {
   defaults = {
@@ -72,3 +69,8 @@ telescope.setup {
     },
   },
 }
+
+-- require('telescope').load_extension('session-lens')
+-- require('session-lens').setup {
+--     path_display={'shorten'},
+-- }

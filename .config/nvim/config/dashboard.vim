@@ -14,7 +14,8 @@ let g:dashboard_custom_header = [
 \]
 
 nmap <leader>xs :<C-u>SaveSession<cr>
-nmap <leader>fs :<C-u>Telescope session_manager load<cr>
+" nmap <leader>fs :<C-u>Telescope session-lens search_session<cr>
+nmap <leader>fs :<C-u>Telescope sessions<cr>
 
 let g:dashboard_custom_shortcut = {
 \ 'last_session'       : 'SPC f s',
