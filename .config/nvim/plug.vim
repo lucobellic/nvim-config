@@ -1,6 +1,6 @@
 function! CocPostInstall(info)
   if a:info.status == 'installed' || a:info.force
-    :CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd
+    :CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright
   endif
 endfunction
 
@@ -9,7 +9,8 @@ call plug#begin('~/.vim/plugged')
 " Completion & Languages
 
 "if lsp_provider ==? 'coc'
-  Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('CocPostInstall')}
+  Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': function('CocPostInstall')}
   Plug 'jackguo380/vim-lsp-cxx-highlight'
 "elseif lsp_provider ==? 'nvim_lsp'
   " Plug 'neovim/nvim-lspconfig'
