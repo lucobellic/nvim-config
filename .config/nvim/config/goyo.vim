@@ -24,7 +24,7 @@ function! LimelightToggle()
 	endif
 endfunction
 
-nnoremap <silent> <C-x> :call LimelightToggle()<cr>
+nnoremap <silent> <A-z> :call LimelightToggle()<cr>
 
 function! s:goyo_enter()
   "  if executable('tmux') && strlen($TMUX)
