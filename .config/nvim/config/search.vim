@@ -14,27 +14,27 @@ nnoremap     <silent>   <leader>FF               :<C-u>:Files                   
 nnoremap     <silent>   <leader>fg               :<C-u>:Rg                                                                      <CR>
 nnoremap     <silent>   <C-S-f>                  :<C-u>:Rg                                                                      <CR>
 
-" nnoremap   <silent>   <C-p>                    <cmd>Telescope find_files                                                      <cr>
-" nnoremap   <silent>   <leader>ff               <cmd>Telescope find_files                                                      <cr>
-" nnoremap   <silent>   <leader>fr               <cmd>Telescope oldfiles                                                        <cr>
-" nnoremap   <silent>   <leader>fe               <cmd>Telescope file_browser                                                    <cr>
-" nnoremap   <silent>   <leader>fy               <cmd>Telescope registers                                                       <cr>
-" nnoremap   <silent>   <leader>y                <cmd>Telescope registers                                                       <cr>
-" nnoremap   <silent>   <leader>f'               <cmd>Telescope marks                                                           <cr>
-" nnoremap   <silent>   <leader>'                <cmd>Telescope marks                                                           <cr>
-" nnoremap   <silent>   <leader>fb               <cmd>Telescope buffers                                                         <cr>
-" nnoremap   <silent>   <leader>fl               <cmd>Telescope current_buffer_fuzzy_find                                       <cr>
+nnoremap   <silent>   <C-p>                    <cmd>Telescope find_files                                                      <cr>
+nnoremap   <silent>   <leader>ff               <cmd>Telescope find_files                                                      <cr>
+nnoremap   <silent>   <leader>fr               <cmd>Telescope oldfiles                                                        <cr>
+nnoremap   <silent>   <leader>fe               <cmd>Telescope file_browser                                                    <cr>
+nnoremap   <silent>   <leader>fy               <cmd>Telescope registers                                                       <cr>
+nnoremap   <silent>   <leader>y                <cmd>Telescope registers                                                       <cr>
+nnoremap   <silent>   <leader>f'               <cmd>Telescope marks                                                           <cr>
+nnoremap   <silent>   <leader>'                <cmd>Telescope marks                                                           <cr>
+nnoremap   <silent>   <leader>fb               <cmd>Telescope buffers                                                         <cr>
+nnoremap   <silent>   <leader>fl               <cmd>Telescope current_buffer_fuzzy_find                                       <cr>
 
-nnoremap     <silent>   <C-p>                    :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
-nnoremap     <silent>   <leader>ff               :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
-nnoremap     <silent>   <leader>fr               :<C-u>:Clap history                                                            <cr>
-nnoremap     <silent>   <leader>fe               :<C-u>:Clap! filer                                                             <cr>
-nnoremap     <silent>   <leader>fy               :<C-u>:Clap yanks                                                              <cr>
-nnoremap     <silent>   <leader>y                :<C-u>:Clap yanks                                                              <cr>
-nnoremap     <silent>   <leader>f'               :<C-u>:Clap! marks                                                             <cr>
-nnoremap     <silent>   <leader>'                :<C-u>:Clap! marks                                                             <cr>
-nnoremap     <silent>   <leader>fb               :<C-u>:Clap buffers                                                            <cr>
-nnoremap     <silent>   <leader>fl               :<C-u>:Clap! lines                                                             <cr>
+" nnoremap     <silent>   <C-p>                    :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
+" nnoremap     <silent>   <leader>ff               :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
+" nnoremap     <silent>   <leader>fr               :<C-u>:Clap history                                                            <cr>
+" nnoremap     <silent>   <leader>fe               :<C-u>:Clap! filer                                                             <cr>
+" nnoremap     <silent>   <leader>fy               :<C-u>:Clap yanks                                                              <cr>
+" nnoremap     <silent>   <leader>y                :<C-u>:Clap yanks                                                              <cr>
+" nnoremap     <silent>   <leader>f'               :<C-u>:Clap! marks                                                             <cr>
+" nnoremap     <silent>   <leader>'                :<C-u>:Clap! marks                                                             <cr>
+" nnoremap     <silent>   <leader>fb               :<C-u>:Clap buffers                                                            <cr>
+" nnoremap     <silent>   <leader>fl               :<C-u>:Clap! lines                                                             <cr>
 
 
 
