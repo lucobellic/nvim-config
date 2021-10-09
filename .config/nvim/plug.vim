@@ -62,7 +62,7 @@ Plug 'git@gitlab.com:luco-bellic/ayu-vim.git', { 'branch': 'personal' }
 
 " Icons
 Plug 'kyazdani42/nvim-web-devicons'
-Plug 'ryanoasis/vim-devicons'
+" Plug 'ryanoasis/vim-devicons'
 " Plug 'adelarsq/vim-emoji-icon-theme'
 
 " UI
