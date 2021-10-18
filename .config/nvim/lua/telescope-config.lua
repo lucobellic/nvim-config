@@ -2,7 +2,7 @@ require('telescope').setup{
   defaults = {
     vimgrep_arguments = {
       'rg',
-      '--color=never',
+      '--colo r=never',
       '--no-heading',
       '--with-filename',
       '--line-number',
@@ -60,6 +60,15 @@ require('telescope').load_extension('sessions')
 local actions = require('telescope.actions')
 local trouble = require('trouble.providers.telescope')
 local telescope = require('telescope')
+
+require('session_manager').setup {
+  sessions_dir = vim.fn.stdpath('data') .. '/sessions', -- The directory where the session files will be saved.
+  -- path_replacer = '__', -- The character to which the path separator will be replaced for session files.
+  -- colon_replacer = '▏', -- The character to which the colon symbol will be replaced for session files.
+  autoload_last_session = false, -- Automatically load last session on startup is started without arguments.
+  autosave_last_session = true, -- Automatically save last session on exit.
+  -- autosave_ignore_paths = { '~' }, -- Folders to ignore when autosaving a session.
+}
 
 telescope.setup {
   defaults = {

@@ -53,12 +53,12 @@ let vim_config_files = [
       \ "search",
       \ "floaterm",
       \ "fzf",
-      \ "gitgutter",
       \ "goyo",
       \ "dashboard",
       \ "vista",
       \ ]
-      " \ "indent",
+
+      " \ "gitgutter",
       " \ "startify",
       " \ "explorer",
       " \ "completion"
@@ -74,10 +74,11 @@ let lua_config_files = [
       \ 'trouble-config',
       \ 'zenmode',
       \ 'web-devicons',
-      \ 'highlight'
+      \ 'highlight',
+      \ 'gitsigns-config',
+      \ 'indent'
       \]
       " \ 'mapping',
-      " \ 'indent'
       " \ 'explorer'
 
 for config_file in g:lua_config_files

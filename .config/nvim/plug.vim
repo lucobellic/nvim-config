@@ -37,6 +37,10 @@ Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vim-clap' ", { 'do': ':Clap install-binary' }
 Plug 'vn-ki/coc-clap'
 
+" Tasks
+Plug 'skywind3000/asynctasks.vim'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'GustavoKatel/telescope-asynctasks.nvim'
 
 " Telescope
 Plug 'nvim-lua/popup.nvim'
@@ -56,7 +60,7 @@ Plug 'tommcdo/vim-lion'
 "Plug 'preservim/nerdcommenter'
 
 Plug 'kana/vim-textobj-user'
-Plug 'rhysd/vim-textobj-anyblock' " ib/ab selection
+Plug 'rhysd/vim-textobj-anyblock' " vib/vab selection
 
 " Themes
 " Use private personal configuration of ayu theme
@@ -76,7 +80,7 @@ Plug 'psliwka/vim-smoothie' " or Plug 'yuttie/comfortable-motion.vim'
 "Plug 'mhinz/vim-startify'    " Start screen
 Plug 'glepnir/dashboard-nvim'
 " Plug 'Yggdroot/indentLine'
-" Plug 'lukas-reineke/indent-blankline.nvim', {'branch': 'lua'}
+Plug 'lukas-reineke/indent-blankline.nvim'
 " Plug 'glepnir/indent-guides.nvim'
 Plug 'folke/zen-mode.nvim'
 Plug 'junegunn/limelight.vim'
@@ -88,7 +92,8 @@ Plug 'onsails/lspkind-nvim' " Pictogram for neovim
 
 Plug 'folke/todo-comments.nvim'
 Plug 'folke/trouble.nvim'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
 Plug 'luochen1990/rainbow'
 
 "Plug 'itchyny/lightline.vim'
