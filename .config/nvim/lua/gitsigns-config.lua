@@ -14,8 +14,8 @@ require('gitsigns').setup {
     -- Default keymap options
     noremap = true,
 
-    ['n <h'] = { expr = true, "&diff ? '<h' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'"},
-    ['n >h'] = { expr = true, "&diff ? '>h' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'"},
+    ['n <H'] = { expr = true, "&diff ? '<H' : '<cmd>lua require\"gitsigns.actions\".next_hunk()<CR>'"},
+    ['n >H'] = { expr = true, "&diff ? '>H' : '<cmd>lua require\"gitsigns.actions\".prev_hunk()<CR>'"},
 
     ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
     ['v <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk({vim.fn.line("."), vim.fn.line("v")})<CR>',
@@ -29,8 +29,8 @@ require('gitsigns').setup {
     ['n <leader>hU'] = '<cmd>lua require"gitsigns".reset_buffer_index()<CR>',
 
     -- Text objects
-    -- ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
-    -- ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>'
+    ['o ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>',
+    ['x ih'] = ':<C-U>lua require"gitsigns.actions".select_hunk()<CR>'
   },
   watch_gitdir = {
     interval = 1000,
@@ -46,7 +46,7 @@ require('gitsigns').setup {
   current_line_blame_formatter_opts = {
     relative_time = false
   },
-  sign_priority = 6,
+  sign_priority = 30,
   update_debounce = 100,
   status_formatter = nil, -- Use default
   max_file_length = 40000,
