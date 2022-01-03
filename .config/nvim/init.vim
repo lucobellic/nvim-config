@@ -35,6 +35,7 @@ let g:mapleader       = "\<Space>"
 let g:lsp_provider    = 'coc'
 " let g:lsp_provider  = 'nvim_lsp'
 
+lua require('plugins')
 """ Load configuration
 
 if g:lsp_provider ==? 'coc'
@@ -75,7 +76,6 @@ let lua_config_files = [
       \ 'zenmode',
       \ 'web-devicons',
       \ 'highlight',
-      \ 'gitsigns-config',
       \ 'indent'
       \]
       " \ 'mapping',
