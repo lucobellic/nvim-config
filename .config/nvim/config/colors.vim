@@ -42,6 +42,15 @@ hi link LspCxxHlSymParameter Constant
 hi link LspCxxHlSymField Todo
 
 
+hi link BufferVisible BufferInactive
+hi link BufferVisibleIcon BufferInactive
+hi link BufferVisibleSign BufferInactive
+
+hi link BufferCurrentMod GitGutterChange
+hi link BufferVisibleMod GitGutterChange
+hi link BufferInactiveMod GitGutterChange
+
+
 " hi link DiagnosticError TODO
 " hi link DiagnosticWarning TODO
 " hi link DiagnosticInformation TODO
