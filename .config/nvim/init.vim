@@ -30,39 +30,18 @@ let g:nvim_path    = '$HOME/.config/nvim/'
 let g:config_path  = g:nvim_path . 'config'
 execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 
-let g:mapleader       = "\<Space>"
-"let g:maplocalleader = ','
-let g:lsp_provider    = 'coc'
-" let g:lsp_provider  = 'nvim_lsp'
+let g:lsp_provider = 'coc'
+let g:mapleader    = "\<Space>"
 
-lua require('plugins')
 """ Load configuration
-
-if g:lsp_provider ==? 'coc'
-    execute 'source ' . g:config_path . '/' . 'coc.vim'
-elseif g:lsp_provider ==? 'nvim_lsp'
-    lua require('lsp')
-endif
-
-" g:ultisnips_python_style="numpy"
+lua require('plugins')
 
 let vim_config_files = [
       \ "editor",
-      \ "barbar",
       \ "colors",
       \ "keybindings",
       \ "search",
-      \ "floaterm",
-      \ "fzf",
-      \ "goyo",
-      \ "dashboard",
-      \ "vista",
       \ ]
-
-      " \ "gitgutter",
-      " \ "startify",
-      " \ "explorer",
-      " \ "completion"
 
 for config_file in g:vim_config_files
   execute 'source ' . g:config_path . '/' . config_file . '.vim'
