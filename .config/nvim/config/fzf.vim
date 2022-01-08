@@ -11,6 +11,11 @@ command! -bang -nargs=* Rg
       \   'rg --line-number --smart-case --hidden --no-ignore --ignore-exclude -- '.shellescape(<q-args>), 0,
       \   fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 
+command! -bang -nargs=* RgFull
+      \ call fzf#vim#grep(
+      \   'rg --line-number --smart-case --hidden --no-ignore -- '.shellescape(<q-args>), 0,
+      \   fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+
 
 " Use vim-devicons
 let g:fzf_preview_use_dev_icons = 1
@@ -28,17 +33,17 @@ let g:fzf_colors =
       \ {
       \ 'fg':      ['fg', 'Normal'],
       \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Identifier'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'TODO'],
-      \ 'query':   ['fg', 'String'],
+      \ 'hl':      ['fg', 'Normal'],
+      \ 'fg+':     ['fg', 'Normal', 'Normal', 'Normal'],
+      \ 'bg+':     ['bg', 'Normal', 'Normal', 'Normal'],
+      \ 'hl+':     ['fg', 'Normal'],
+      \ 'query':   ['fg', 'Normal'],
       \ 'gutter':  ['bg', 'Normal'],
-      \ 'info':    ['fg', 'NonText'],
+      \ 'info':    ['fg', 'Normal'],
       \ 'border':  ['fg', 'Normal'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Keyword'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Keyword'],
-      \ 'header':  ['fg', 'String'] }
+      \ 'prompt':  ['fg', 'Normal'],
+      \ 'pointer': ['fg', 'Normal'],
+      \ 'marker':  ['fg', 'Normal'],
+      \ 'spinner': ['fg', 'Normal'],
+      \ 'header':  ['fg', 'Normal'] }
 
