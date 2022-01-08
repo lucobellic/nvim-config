@@ -12,6 +12,7 @@ hi link ClapCurrentSelection CursorLine
 " nnoremap <leader>fh <cmd>Telescope help_tags <cr>
 nnoremap     <silent>   <leader>FF               :<C-u>:Files                                                                   <CR>
 nnoremap     <silent>   <leader>fg               :<C-u>:Rg                                                                      <CR>
+nnoremap     <silent>   <leader>FL               :<C-u>:Rg                                                                      <CR>
 nnoremap     <silent>   <C-S-f>                  :<C-u>:Rg                                                                      <CR>
 
 " nnoremap   <silent>   <C-p>                    <cmd>Telescope find_files                                                      <cr>
