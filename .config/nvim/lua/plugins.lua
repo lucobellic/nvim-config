@@ -21,6 +21,13 @@ return require('packer').startup(function()
     run = ':CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright'
   }
   use 'jackguo380/vim-lsp-cxx-highlight'
+  -- Completion & Languages
+  use {'neoclide/coc.nvim',
+    branch = 'release',
+    disable = false,
+    run = ':CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright'
+  }
+  use 'jackguo380/vim-lsp-cxx-highlight'
 
   use 'liuchengxu/vista.vim'
 
@@ -30,6 +37,9 @@ return require('packer').startup(function()
 
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'rust-lang/rust.vim'
+  use {'neovim/nvim-lspconfig', disable = true}
+  use {'glepnir/lspsaga.nvim', disable = true}
+  use {'nvim-lua/completion-nvim', disable = true}
   use 'cespare/vim-toml'
 
   -- Navigation

@@ -68,23 +68,6 @@ for config_file in g:vim_config_files
   execute 'source ' . g:config_path . '/' . config_file . '.vim'
 endfor
 
-let lua_config_files = [
-      \ 'statusline',
-      \ 'hop-config',
-      \ 'telescope-config',
-      \ 'trouble-config',
-      \ 'zenmode',
-      \ 'web-devicons',
-      \ 'highlight',
-      \ 'indent'
-      \]
-      " \ 'mapping',
-      " \ 'explorer'
-
-for config_file in g:lua_config_files
-  execute "lua require('" . config_file . "')"
-endfor
-
 let g:markdown_fenced_languages = [
       \ 'vim',
       \ 'help'
