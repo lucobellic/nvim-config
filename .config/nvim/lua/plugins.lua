@@ -20,15 +20,16 @@ return require('packer').startup(function()
   -- Completion & Languages
   use {'neoclide/coc.nvim',
     branch = 'release',
-    disable = false,
+    opt = true,
+    cond = function() return vim.g.lsp_provider == 'coc' end,
     run = ':CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright',
-    config =  function() vim.cmd('source ' .. config_path .. '/' .. 'coc.vim') end
+    config = function() vim.cmd('source ' .. config_path .. '/' .. 'coc.vim') end
   }
   use 'jackguo380/vim-lsp-cxx-highlight'
 
-  use {'neovim/nvim-lspconfig', disable = true}
-  use {'glepnir/lspsaga.nvim', disable = true}
-  use {'nvim-lua/completion-nvim', disable = true}
+  use {'neovim/nvim-lspconfig', opt = true, cond = false}
+  use {'glepnir/lspsaga.nvim', after = 'nvim-lspconfig'}
+  use {'nvim-lua/completion-nvim', after = 'nvim-lspconfig'}
 
   use {'liuchengxu/vista.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'vista.vim') end} -- Outline
   use {'nvim-treesitter/nvim-treesitter',
@@ -51,19 +52,34 @@ return require('packer').startup(function()
   use {'junegunn/fzf', run = 'fzf#install()'}
   use {'junegunn/fzf.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'fzf.vim') end}
   use {'liuchengxu/vim-clap', run = ':Clap install-binary'}
-  use  'vn-ki/coc-clap'
+  use {'vn-ki/coc-clap', after = {'coc.nvim', 'vim-clap'}}
 
   -- Telescope
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use {'nvim-telescope/telescope.nvim', config = function() require('telescope-config') end}
-  use 'fannheyward/telescope-coc.nvim'
-  use 'Shatur/neovim-session-manager'
+
+  use {'fannheyward/telescope-coc.nvim',
+    after = {'coc.nvim', 'telescope.nvim'},
+    config = function() require('telescope').load_extension('coc') end
+  }
+
+  use {'Shatur/neovim-session-manager',
+    after = 'telescope.nvim',
+    config = function()
+      require('telescope').load_extension('sessions')
+      require('session_manager').setup {
+        sessions_dir = vim.fn.stdpath('data') .. '/sessions', -- The directory where the session files will be saved.
+        autoload_last_session = false, -- Automatically load last session on startup is started without arguments.
+        autosave_last_session = true, -- Automatically save last session on exit.
+      }
+    end
+  }
 
   -- Tasks
-  use 'skywind3000/asynctasks.vim'
   use 'skywind3000/asyncrun.vim'
-  use 'GustavoKatel/telescope-asynctasks.nvim'
+  use {'skywind3000/asynctasks.vim', after = 'asyncrun.vim'}
+  use {'GustavoKatel/telescope-asynctasks.nvim', after = 'asynctasks.vim'}
 
   use {'romgrk/barbar.nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'barbar.vim') end}
   use 'tommcdo/vim-exchange'
@@ -103,6 +119,7 @@ return require('packer').startup(function()
     config = function() require('todo-comments-config') end
   }
 
+  use  'luochen1990/rainbow'  -- Color brackets
 
   -- Other
   use  'jceb/vim-orgmode'
