@@ -70,14 +70,6 @@ require('session_manager').setup {
   -- autosave_ignore_paths = { '~' }, -- Folders to ignore when autosaving a session.
 }
 
-telescope.setup {
-  defaults = {
-    mappings = {
-      i = { ["<c-t>"] = trouble.open_with_trouble },
-      n = { ["<c-t>"] = trouble.open_with_trouble },
-    },
-  },
-}
 
 -- require('telescope').load_extension('session-lens')
 -- require('session-lens').setup {

@@ -92,9 +92,16 @@ return require('packer').startup(function()
   use {'voldikss/vim-floaterm', config = function() vim.cmd('source ' .. config_path .. '/' .. '/floaterm.vim') end}  -- Floating terminal
   use  'onsails/lspkind-nvim'   -- Pictogram for neovim
 
-  use  'folke/todo-comments.nvim'
-  use {'folke/trouble.nvim', config = function() require('trouble-config') end} -- Super nice trouble plugin
-  use  'luochen1990/rainbow'  -- Color brackets
+  use {'folke/trouble.nvim',
+    config = function()
+        require('trouble-config')
+        require('trouble.providers.telescope')
+      end
+  }
+  use {'folke/todo-comments.nvim',
+    after = 'trouble.nvim',
+    config = function() require('todo-comments-config') end
+  }
 
 
   -- Other
