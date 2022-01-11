@@ -12,6 +12,12 @@ vim.g.config_path = vim.g.nvim_path .. "config"
 
 config_path = vim.g.config_path
 
+-- TODO:
+--  - Find replacement for glepnir repository
+--  - Complete switch from coc to lsp
+--  - Remove lsp saga related shortcuts
+--  - Configure Trouble to work with coc
+
 return require('packer').startup(function()
   -- Packer  manage itself
   use {'wbthomason/packer.nvim', opt = false}
@@ -27,8 +33,15 @@ return require('packer').startup(function()
   }
   use 'jackguo380/vim-lsp-cxx-highlight'
 
-  use {'neovim/nvim-lspconfig', opt = true, cond = false}
-  use {'glepnir/lspsaga.nvim', after = 'nvim-lspconfig'}
+  use {'neovim/nvim-lspconfig', opt = true, cond = function() return vim.g.lsp_provider == 'nvim' end}
+  -- lspsaga is dead - find replacement or fork
+  use {'glepnir/lspsaga.nvim',
+    after = 'nvim-lspconfig',
+    config = function()
+      require('lsp')
+      require('saga-config')
+    end
+  }
   use {'nvim-lua/completion-nvim', after = 'nvim-lspconfig'}
 
   use {'liuchengxu/vista.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'vista.vim') end} -- Outline

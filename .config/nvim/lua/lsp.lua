@@ -1,4 +1,5 @@
-local nvim_lsp = require'lspconfig'
+local nvim_lsp = require('lspconfig')
+local saga = require('lspsaga')
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -53,25 +54,13 @@ for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup { on_attach = on_attach }
 end
 
+-- C/C++ Clangd configuration
 nvim_lsp.clangd.setup {
   on_attach = on_attach,
   cmd = {"clangd", "--background-index", "--clang-tidy", "--enable-config" },
   settings = {
      semanticHighlighting = true
   }
-}
-
-
-local saga = require'lspsaga'
-local cmd = vim.cmd
-
-saga.init_lsp_saga {
-  use_saga_diagnostic_sign = true,
-  border_style = 'single',
-  error_sign = '-',
-  warn_sign = '-',
-  hint_sign = '-',
-  infor_sign = '-'
 }
 
 -- vim.cmd('hi link DiagnosticError TODO')
