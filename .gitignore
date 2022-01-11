@@ -4,3 +4,5 @@
 !.zshrc
 !.gitignore
 !/.config
+.config/nvim/plugin
+
