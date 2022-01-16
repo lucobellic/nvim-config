@@ -18,7 +18,7 @@ config_path = vim.g.config_path
 --  - Remove lsp saga related shortcuts
 --  - Configure Trouble to work with coc
 
-return require('packer').startup(function()
+return require('packer').startup({function(use)
   -- Packer  manage itself
   use {'wbthomason/packer.nvim', opt = false}
   use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
@@ -31,9 +31,8 @@ return require('packer').startup(function()
     run = ':CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright',
     config = function() vim.cmd('source ' .. config_path .. '/' .. 'coc.vim') end
   }
-  use 'jackguo380/vim-lsp-cxx-highlight'
-
   use {'neovim/nvim-lspconfig', opt = true, cond = function() return vim.g.lsp_provider == 'nvim' end}
+
   -- lspsaga is dead - find replacement or fork
   use {'glepnir/lspsaga.nvim',
     after = 'nvim-lspconfig',
@@ -43,6 +42,7 @@ return require('packer').startup(function()
     end
   }
   use {'nvim-lua/completion-nvim', after = 'nvim-lspconfig'}
+  use 'jackguo380/vim-lsp-cxx-highlight'
 
   use {'liuchengxu/vista.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'vista.vim') end} -- Outline
   use {'nvim-treesitter/nvim-treesitter',
@@ -70,22 +70,27 @@ return require('packer').startup(function()
   -- Telescope
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
-  use {'nvim-telescope/telescope.nvim', config = function() require('telescope-config') end}
+  use {'nvim-telescope/telescope.nvim',
+    requires = 'plenary.nvim',
+    config = function() require('telescope-config') end
+  }
 
   use {'fannheyward/telescope-coc.nvim',
-    after = {'coc.nvim', 'telescope.nvim'},
+    requires = {'telescope.nvim', 'coc.nvim'},
+    opt = true,
+    cond = function() return vim.g.lsp_provider == 'coc' end,
     config = function() require('telescope').load_extension('coc') end
   }
 
   use {'Shatur/neovim-session-manager',
-    after = 'telescope.nvim',
+    requires = {'telescope.nvim', 'plenary.nvim'},
     config = function()
-      require('telescope').load_extension('sessions')
       require('session_manager').setup {
         sessions_dir = vim.fn.stdpath('data') .. '/sessions', -- The directory where the session files will be saved.
         autoload_last_session = false, -- Automatically load last session on startup is started without arguments.
         autosave_last_session = true, -- Automatically save last session on exit.
       }
+      -- require('telescope').load_extension('sessions')
     end
   }
 
@@ -111,7 +116,7 @@ return require('packer').startup(function()
 
   -- UI
   use {'glepnir/galaxyline.nvim', config = function() require('statusline') end}
-  use {'lewis6991/gitsigns.nvim', config = function() require('gitsigns-config') end}
+  use {'lewis6991/gitsigns.nvim', after = 'plenary.nvim', config = function() require('gitsigns-config') end}
 
   use  'psliwka/vim-smoothie'    -- or Plug 'yuttie/comfortable-motion.vim'
   use {'glepnir/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
@@ -122,6 +127,7 @@ return require('packer').startup(function()
   use  'onsails/lspkind-nvim'   -- Pictogram for neovim
 
   use {'folke/trouble.nvim',
+    after = 'telescope.nvim',
     config = function()
         require('trouble-config')
         require('trouble.providers.telescope')
@@ -146,4 +152,6 @@ return require('packer').startup(function()
   if packer_bootstrap then
     require('packer').sync()
   end
-end)
+end,
+  config = {max_jobs=10}
+})

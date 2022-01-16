@@ -55,7 +55,6 @@ require('telescope').setup{
 }
 
 local actions = require('telescope.actions')
-local trouble = require('trouble.providers.telescope')
 
 -- require('telescope').load_extension('session-lens')
 -- require('session-lens').setup {
