@@ -41,6 +41,7 @@ return require('packer').startup({function(use)
       require('saga-config')
     end
   }
+  use {'neovim/nvim-lspconfig', opt = true, cond = function() return vim.g.lsp_provider == 'nvim' end}
   use {'nvim-lua/completion-nvim', after = 'nvim-lspconfig'}
   use 'jackguo380/vim-lsp-cxx-highlight'
 
