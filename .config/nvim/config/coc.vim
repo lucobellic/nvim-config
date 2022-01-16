@@ -161,6 +161,7 @@ let g:coc_explorer_global_presets = {
 			\     'open-action-strategy': 'sourceWindow',
 			\   },
 			\   'simplify': {
+			\     'file-root-template': '[icon] [root] [fullpath]',
 			\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
 			\   },
 			\   'buffer': {
