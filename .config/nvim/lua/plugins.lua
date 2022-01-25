@@ -15,12 +15,11 @@ config_path = vim.g.config_path
 -- TODO:
 --  - Find replacement for glepnir repository
 --  - Complete switch from coc to lsp
---  - Remove lsp saga related shortcuts
 --  - Configure Trouble to work with coc
 
 return require('packer').startup({function(use)
   -- Packer  manage itself
-  use {'wbthomason/packer.nvim', opt = false}
+  use {'wbthomason/packer.nvim', opt = false, commit = '7f62848f3a92eac61ae61def5f59ddb5e2cc6823'}
   use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
 
   -- Completion & Languages
@@ -29,21 +28,21 @@ return require('packer').startup({function(use)
     opt = true,
     cond = function() return vim.g.lsp_provider == 'coc' end,
     run = ':CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright',
-    config = function() vim.cmd('source ' .. config_path .. '/' .. 'coc.vim') end
-  }
-  use {'neovim/nvim-lspconfig', opt = true, cond = function() return vim.g.lsp_provider == 'nvim' end}
-
-  -- lspsaga is dead - find replacement or fork
-  use {'glepnir/lspsaga.nvim',
-    after = 'nvim-lspconfig',
     config = function()
-      require('lsp')
-      require('saga-config')
+      vim.cmd('source ' .. config_path .. '/' .. 'coc.vim')
     end
   }
-  use {'neovim/nvim-lspconfig', opt = true, cond = function() return vim.g.lsp_provider == 'nvim' end}
-  use {'nvim-lua/completion-nvim', after = 'nvim-lspconfig'}
+
   use 'jackguo380/vim-lsp-cxx-highlight'
+  -- use  'adam-wolski/nvim-lsp-clangd-highlight' -- Clangd semantic highlight
+
+  -- Use native nvim lsp
+  use {'neovim/nvim-lspconfig',
+    opt = true,
+    cond = function() return vim.g.lsp_provider == 'nvim' end,
+    config = function() require('lsp') end
+  }
+  -- use {'nvim-lua/completion-nvim', requires = 'nvim-lspconfig'}
 
   use {'liuchengxu/vista.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'vista.vim') end} -- Outline
   use {'nvim-treesitter/nvim-treesitter',
@@ -72,7 +71,7 @@ return require('packer').startup({function(use)
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use {'nvim-telescope/telescope.nvim',
-    requires = 'plenary.nvim',
+    requires = {'plenary.nvim'},
     config = function() require('telescope-config') end
   }
 
@@ -91,9 +90,11 @@ return require('packer').startup({function(use)
         autoload_last_session = false, -- Automatically load last session on startup is started without arguments.
         autosave_last_session = true, -- Automatically save last session on exit.
       }
-      -- require('telescope').load_extension('sessions')
     end
   }
+
+  -- Selector
+  use {'stevearc/dressing.nvim', config = function() require('dressing-config') end}
 
   -- Tasks
   use 'skywind3000/asyncrun.vim'
@@ -117,7 +118,10 @@ return require('packer').startup({function(use)
 
   -- UI
   use {'glepnir/galaxyline.nvim', config = function() require('statusline') end}
-  use {'lewis6991/gitsigns.nvim', after = 'plenary.nvim', config = function() require('gitsigns-config') end}
+  use {'lewis6991/gitsigns.nvim',
+    requires = 'plenary.nvim',
+    config = function() require('gitsigns-config') end
+  }
 
   use  'psliwka/vim-smoothie'    -- or Plug 'yuttie/comfortable-motion.vim'
   use {'glepnir/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
@@ -128,10 +132,10 @@ return require('packer').startup({function(use)
   use  'onsails/lspkind-nvim'   -- Pictogram for neovim
 
   use {'folke/trouble.nvim',
-    after = 'telescope.nvim',
+    requires = {'telescope.nvim'},
     config = function()
-        require('trouble-config')
         require('trouble.providers.telescope')
+        require('trouble-config')
       end
   }
   use {'folke/todo-comments.nvim',
@@ -146,7 +150,7 @@ return require('packer').startup({function(use)
   use  'xolox/vim-misc'
   use  'moll/vim-bbye'  -- Close buffer and window
   use  'honza/vim-snippets'
-  use {'andymass/vim-matchup', event = 'VimEnter'} -- Better matchup '%' usage
+  use {'andymass/vim-matchup', event = 'VimEnter', config = function() vim.g.matchup_matchparen_offscreen = {method='status_manual'} end} -- Better matchup '%' usage
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
@@ -156,3 +160,4 @@ return require('packer').startup({function(use)
 end,
   config = {max_jobs=10}
 })
+
