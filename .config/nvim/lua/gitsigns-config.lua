@@ -62,6 +62,10 @@ require('gitsigns').setup {
   yadm = {
     enable = false
   },
+  -- Solve CRLF issue with gitsigns
+  diff_opts = {
+    internal = false
+  }
 }
 -- gs.setup {
     -- signs = {
