@@ -33,9 +33,6 @@ return require('packer').startup({function(use)
     end
   }
 
-  use 'jackguo380/vim-lsp-cxx-highlight'
-  -- use  'adam-wolski/nvim-lsp-clangd-highlight' -- Clangd semantic highlight
-
   -- Use native nvim lsp
   use {'neovim/nvim-lspconfig',
     opt = true,

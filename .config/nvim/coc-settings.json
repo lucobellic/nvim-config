@@ -1,5 +1,4 @@
 {
-  "coc.preferences.semanticTokensHighlights": false,
   "diagnostic.warningSign": "•",
   "diagnostic.infoSign": "•",
   "diagnostic.errorSign": "•",
@@ -24,7 +23,6 @@
   "python.analysis.autoImportCompletions": true,
   "python.analysis.autoSearchPaths": true,
   "clangd.enabled": true,
-  "clangd.semanticHighlighting": true,
   "clangd.arguments": [
     "--background-index",
     "--clang-tidy",
