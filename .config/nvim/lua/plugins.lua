@@ -123,6 +123,7 @@ return require('packer').startup({function(use)
     config = function() require('gitsigns-config') end
   }
 
+  use {'gelguy/wilder.nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'wilder.vim') end}
   use  'psliwka/vim-smoothie'    -- or Plug 'yuttie/comfortable-motion.vim'
   use {'glepnir/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
   use {'lukas-reineke/indent-blankline.nvim', config = function() require('indent') end}
