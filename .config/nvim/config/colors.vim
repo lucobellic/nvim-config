@@ -50,6 +50,40 @@ hi link BufferCurrentMod GitGutterChange
 hi link BufferVisibleMod GitGutterChange
 hi link BufferInactiveMod GitGutterChange
 
+hi link CocSemVariable Normal
+hi link CocSemProperty Todo
+hi link CocSemClass Structure
+hi link CocSemStorageClass Keyword
+hi link CocSemModifier Keyword
+hi link CocSemParameter Constant
+hi link CocSemKeyword Keyword
+
+
+" hi link CocSemNamespace Todo
+" hi link CocSemType Todo
+" hi link CocSemClass Todo
+" hi link CocSemEnum Todo
+" hi link CocSemInterface Todo
+" hi link CocSemStruct Todo
+" hi link CocSemTypeParameter Todo
+" hi link CocSemParameter Todo
+" hi link CocSemVariable Todo
+" hi link CocSemProperty Todo
+" hi link CocSemEnumMember Todo
+" hi link CocSemEvent Todo
+" hi link CocSemFunction Todo
+" hi link CocSemMethod Todo
+" hi link CocSemMacro Todo
+" hi link CocSemKeyword Todo
+" hi link CocSemModifier Todo
+" hi link CocSemComment Todo
+" hi link CocSemString Todo
+" hi link CocSemNumber Todo
+" hi link CocSemBoolean Todo
+" hi link CocSemRegexp Todo
+" hi link CocSemOperator Todo
+" hi link CocSemDecorator Todo
+" hi link CocSemDeprecated Todo
 
 " hi link DiagnosticError TODO
 " hi link DiagnosticWarning TODO

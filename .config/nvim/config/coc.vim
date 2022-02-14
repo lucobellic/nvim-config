@@ -167,7 +167,7 @@ let g:coc_explorer_global_presets = {
 			\   },
 			\ }
 
-let g:coc_default_semantic_highlight_groups = 0
+let g:coc_default_semantic_highlight_groups = v:true
 
 " Use preset argument to open it
 nmap <silent> <leader>ee :CocCommand explorer --preset simplify<CR>

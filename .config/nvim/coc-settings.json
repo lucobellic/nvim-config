@@ -22,6 +22,7 @@
   "python.analysis.useLibraryCodeForTypes": false,
   "python.analysis.autoImportCompletions": true,
   "python.analysis.autoSearchPaths": true,
+  "semanticTokens.filetypes": ["*"],
   "clangd.enabled": true,
   "clangd.arguments": [
     "--background-index",
