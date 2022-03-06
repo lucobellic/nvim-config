@@ -1,4 +1,4 @@
-let g:floaterm_autoclose = 0 "Close only if the job exits normally
+let g:floaterm_autoclose = 1           " Close only if the job exits normally
 let g:floaterm_borderchars = '       ' " (top, right, bottom, left, topleft, topright, botright, botleft)
 let g:floaterm_autoinsert = v:false
 nnoremap <silent> <F7> :FloatermToggle!<CR>
