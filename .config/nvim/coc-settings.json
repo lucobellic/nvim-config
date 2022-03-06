@@ -18,6 +18,7 @@
   ],
   "explorer.icon.enableNerdfont": true,
   "explorer.file.showHiddenFiles": true,
+  "explorer.git.icon.status.ignored": " ",
   "python.formatting.provider": "yapf",
   "python.analysis.useLibraryCodeForTypes": false,
   "python.analysis.autoImportCompletions": true,

@@ -157,7 +157,11 @@ let g:coc_explorer_global_presets = {
 			\   },
 			\   'simplify': {
 			\     'file-root-template': '[icon] [root] [fullpath]',
-			\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+			\     'file-child-template': '[git | 2] [selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]',
+			\     'explorer.git.icon.status.modified': '~',
+			\     'explorer.git.icon.status.added': '+',
+			\     'explorer.git.icon.status.deleted': '✗',
+			\     'explorer.git.icon.status.ignored': ' '
 			\   },
 			\   'buffer': {
 			\     'position': 'floating',
