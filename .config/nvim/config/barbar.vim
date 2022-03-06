@@ -20,6 +20,12 @@ let bufferline.icon_separator_inactive = ' '
 let bufferline.icon_close_tab = ''
 let bufferline.icon_close_tab_modified = ''
 
+let bufferline.exclude_ft = ['coc-explorer']
+
+let bufferline.semantic_letters = v:false
+let bufferline.letters =
+  \ 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP'
+
 " Sets the maximum padding width with which to surround each tab
 let bufferline.maximum_padding = 1
 
@@ -44,7 +50,6 @@ nnoremap <silent>    <leader>0 :BufferLast<CR>
 " Close buffer
 nnoremap <silent>   <leader>wd :BufferClose<CR>
 nnoremap <silent>   <C-q>      :BufferClose<CR>
-nnoremap <silent>   <leader>bd :BufferClose<CR>
 " Wipeout buffer
 "                          :BufferWipeout<CR>
 " Close commands
