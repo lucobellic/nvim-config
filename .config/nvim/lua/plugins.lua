@@ -84,6 +84,7 @@ return require('packer').startup({function(use)
     config = function()
       require('session_manager').setup {
         sessions_dir = vim.fn.stdpath('data') .. '/sessions', -- The directory where the session files will be saved.
+        autoload_mode = require('session_manager.config').AutoloadMode.Disabled, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
         autoload_last_session = false, -- Automatically load last session on startup is started without arguments.
         autosave_last_session = true, -- Automatically save last session on exit.
       }
@@ -123,7 +124,8 @@ return require('packer').startup({function(use)
 
   use {'gelguy/wilder.nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'wilder.vim') end}
   use  'psliwka/vim-smoothie'    -- or Plug 'yuttie/comfortable-motion.vim'
-  use {'glepnir/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
+  -- use {'glepnir/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
+  use {'Neelfrost/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
   use {'lukas-reineke/indent-blankline.nvim', config = function() require('indent') end}
   use {'folke/zen-mode.nvim', config = function() require('zenmode') end}
   use {'junegunn/limelight.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'goyo.vim') end} -- Highlight paragraph
