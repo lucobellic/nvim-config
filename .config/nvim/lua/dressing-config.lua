@@ -9,8 +9,6 @@ require('dressing').setup({
     -- These are passed to nvim_open_win
     anchor = "SW",
     relative = "cursor",
-    row = 0,
-    col = 0,
     border = "rounded",
 
     -- These can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
