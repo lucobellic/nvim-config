@@ -102,8 +102,9 @@ return require('packer').startup({function(use)
   use 'tommcdo/vim-exchange'
   use 'tommcdo/vim-lion'
 
-  use 'kana/vim-textobj-user'
-  use 'rhysd/vim-textobj-anyblock'   -- 'ib/'ab selection
+  use 'kana/vim-textobj-user'        -- user defined textobj
+  use 'kana/vim-textobj-line'        -- il/ib line selection
+  use 'rhysd/vim-textobj-anyblock'   -- ib/ab block selection
 
   -- Themes
   -- Use private personal configuration of ayu theme
