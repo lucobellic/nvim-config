@@ -59,6 +59,11 @@ set fillchars=vert:\|
 set notimeout
 "set timeoutlen=500
 
+" Paste do not copy
+" Restore register to always keep exact same behavior with default p/P
+vnoremap <silent> p p :let @"=@0 \| let @*=@0 \| let@+=@0<CR>
+vnoremap <silent> P P :let @"=@0 \| let @*=@0 \| let@+=@0<CR>
+
 let g:lion_squeeze_spaces = 1
 
 let g:markdown_fenced_languages = [
