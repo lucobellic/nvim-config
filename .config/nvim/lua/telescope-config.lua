@@ -2,7 +2,7 @@ require('telescope').setup{
   defaults = {
     vimgrep_arguments = {
       'rg',
-      '--colo r=never',
+      '--color=never',
       '--no-heading',
       '--with-filename',
       '--line-number',
