@@ -12,7 +12,6 @@ hi link ClapCurrentSelection CursorLine
 " nnoremap <leader>fh <cmd>Telescope help_tags <cr>
 nnoremap     <silent>   <leader>FF               :<C-u>:Files                                                                   <CR>
 nnoremap     <silent>   <leader>fg               :<C-u>:Rg                                                                      <CR>
-nnoremap     <silent>   <leader>FL               :<C-u>:Rg                                                                      <CR>
 nnoremap     <silent>   <C-S-f>                  :<C-u>:Rg                                                                      <CR>
 
 nnoremap   <silent>   <C-p>                    <cmd>Telescope find_files                                                      <cr>
@@ -25,6 +24,7 @@ nnoremap   <silent>   <leader>f'               <cmd>Telescope marks             
 nnoremap   <silent>   <leader>'                <cmd>Telescope marks                                                           <cr>
 nnoremap   <silent>   <leader>fb               <cmd>Telescope buffers                                                         <cr>
 nnoremap   <silent>   <leader>fl               <cmd>Telescope current_buffer_fuzzy_find                                       <cr>
+nnoremap   <silent>   <leader>FL               <cmd>Telescope live_grep                                                       <cr>
 
 " nnoremap     <silent>   <C-p>                    :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
 " nnoremap     <silent>   <leader>ff               :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
