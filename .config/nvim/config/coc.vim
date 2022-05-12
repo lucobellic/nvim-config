@@ -156,12 +156,13 @@ let g:coc_explorer_global_presets = {
 			\     'open-action-strategy': 'sourceWindow',
 			\   },
 			\   'simplify': {
-			\     'file-root-template': '[icon] [root] [fullpath]',
-			\     'file-child-template': '[git | 2] [selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]',
+			\     'buffer-root-template': '',
+			\     'file-root-template': ' [fullpath]',
+			\     'file-child-template': '  [indent][icon | 1] [selection | clip][filename omitCenter 1][1 & git]',
 			\     'explorer.git.icon.status.modified': '~',
 			\     'explorer.git.icon.status.added': '+',
 			\     'explorer.git.icon.status.deleted': '✗',
-			\     'explorer.git.icon.status.ignored': ' '
+			\     'explorer.git.icon.status.ignored': '',
 			\   },
 			\   'buffer': {
 			\     'position': 'floating',
