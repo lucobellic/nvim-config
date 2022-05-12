@@ -147,7 +147,30 @@ return require('packer').startup({function(use)
   use  'luochen1990/rainbow'  -- Color brackets
 
   -- Other
-  use  'jceb/vim-orgmode'
+  use {'nvim-neorg/neorg',
+    ft = 'norg',
+    after = {'nvim-treesitter', 'telescope.nvim'},
+    requires = {'nvim-neorg/neorg-telescope'},
+    config = function()
+      require('neorg').setup {
+        load = {
+          ['core.defaults'] = {},
+          ['core.integrations.telescope'] = {},
+          ['core.norg.concealer'] = {},
+          ['core.norg.completion'] = {},
+          ['core.norg.dirman'] = {
+            config = {
+              workspaces = {
+                work = '~/notes/work',
+                home = '~/notes/home',
+              }
+            }
+          }
+        }
+      }
+    end
+  }
+
   use  'xolox/vim-misc'
   use  'moll/vim-bbye'  -- Close buffer and window
   use  'honza/vim-snippets'
