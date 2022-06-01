@@ -57,6 +57,7 @@ hi link CocSemStorageClass Keyword
 hi link CocSemModifier Keyword
 hi link CocSemParameter Constant
 hi link CocSemKeyword Keyword
+hi link CocSemNamespace Regexp
 
 
 " hi link CocSemNamespace Todo
