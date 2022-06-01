@@ -17,7 +17,7 @@ config_path = vim.g.config_path
 --  - Complete switch from coc to lsp
 --  - Configure Trouble to work with coc
 
-return require('packer').startup({function(use)
+require('packer').startup({function(use)
   -- Packer  manage itself
   use {'wbthomason/packer.nvim', opt = false, commit = '7f62848f3a92eac61ae61def5f59ddb5e2cc6823'}
   use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
@@ -184,4 +184,8 @@ return require('packer').startup({function(use)
 end,
   config = {max_jobs=10}
 })
+
+-- Workaround to manually source the packer compiled file
+local packer_compiled = vim.g.nvim_path .. '/plugin/packer_compiled.lua'
+vim.cmd('luafile'  .. packer_compiled)
 
