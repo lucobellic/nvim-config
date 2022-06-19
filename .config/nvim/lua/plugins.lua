@@ -14,8 +14,6 @@ config_path = vim.g.config_path
 
 -- TODO:
 --  - Find replacement for glepnir repository
---  - Complete switch from coc to lsp
---  - Configure Trouble to work with coc
 
 require('packer').startup({function(use)
   -- Packer  manage itself
@@ -23,25 +21,47 @@ require('packer').startup({function(use)
   use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
 
   -- Completion & Languages
+
   use {'neoclide/coc.nvim',
-    branch = 'release',
-    opt = true,
-    cond = function() return vim.g.lsp_provider == 'coc' end,
-    run = ':CocInstall coc-explorer coc-json coc-fzf-preview coc-snippets coc-highlight coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright',
-    config = function()
-      vim.cmd('source ' .. config_path .. '/' .. 'coc.vim')
+  branch = 'release',
+  opt = false,
+  -- Keep usage of coc-explorer as file explorer
+  -- Keep proper cpp highliglith from coc-highlight and coc-clang as lsp
+  run = ':CocInstall coc-explorer coc-highlight coc-clang', -- coc-json coc-fzf coc-telescope coc-snippets coc-python coc-rls coc-toml coc-yaml coc-cmake coc-lists coc-vimlsp coc-clangd coc-pyright',
+  config = function()
+      if vim.g.lsp_provider == 'coc' then
+        vim.cmd('source ' .. config_path .. '/' .. 'coc.vim')
+      else
+        vim.fn['coc#config']('diagnostic', { enable = false })
+      end
+      vim.cmd('source ' .. config_path .. '/' .. 'coc-explorer.vim')
     end
   }
 
-  -- Use native nvim lsp
-  use {'neovim/nvim-lspconfig',
-    opt = true,
-    cond = function() return vim.g.lsp_provider == 'nvim' end,
-    config = function() require('lsp') end
-  }
-  -- use {'nvim-lua/completion-nvim', requires = 'nvim-lspconfig'}
 
-  use {'liuchengxu/vista.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'vista.vim') end} -- Outline
+  -- Use native nvim lsp
+  use { 'neovim/nvim-lspconfig',
+    requires = {{'williamboman/nvim-lsp-installer'}},
+    config = function()
+      require('nvim-lsp-installer').setup{}
+      require('lsp')
+    end
+  }
+
+  -- Completion
+  use { 'hrsh7th/cmp-nvim-lsp' }
+  use { 'hrsh7th/cmp-buffer' }
+  use { 'hrsh7th/cmp-path' }
+  use { 'hrsh7th/cmp-cmdline' }
+  use { 'hrsh7th/nvim-cmp', config = function() require('completion') end }
+
+  use { 'stevearc/aerial.nvim' } -- LSP symbols
+
+  -- Completion
+  use { 'L3MON4D3/LuaSnip', module = 'luasnip'} -- Snippet engine
+  use { 'saadparwaiz1/cmp_luasnip' }
+
+  -- use {'liuchengxu/vista.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'vista.vim') end} -- Outline
   use {'nvim-treesitter/nvim-treesitter',
     run = ':TSUpdate',
     config = function() require('highlight') end
@@ -116,7 +136,9 @@ require('packer').startup({function(use)
   use  {'kyazdani42/nvim-web-devicons', config = function() require('web-devicons') end}
 
   -- UI
+  -- TODO: change galaxyline to lualine or filene
   use {'glepnir/galaxyline.nvim', config = function() require('statusline') end}
+  -- use { 'feline-nvim/feline.nvim', config = function () require('feline-config') end }
   use {'lewis6991/gitsigns.nvim',
     requires = 'plenary.nvim',
     config = function() require('gitsigns-config') end
@@ -161,7 +183,7 @@ require('packer').startup({function(use)
           ['core.defaults'] = {},
           ['core.integrations.telescope'] = {},
           ['core.norg.concealer'] = {},
-          ['core.norg.completion'] = {},
+          -- ['core.norg.completion'] = {},
           ['core.norg.dirman'] = {
             config = {
               workspaces = {

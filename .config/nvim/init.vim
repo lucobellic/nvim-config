@@ -30,8 +30,8 @@ let g:nvim_path    = '$HOME/.config/nvim/'
 let g:config_path  = g:nvim_path . 'config'
 execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 
-let g:lsp_provider = 'coc'
-" let g:lsp_provider = 'nvim'
+" let g:lsp_provider = 'coc'
+let g:lsp_provider = 'nvim'
 let g:mapleader    = "\<Space>"
 
 """ Load configuration
