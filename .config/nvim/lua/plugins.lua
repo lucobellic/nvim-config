@@ -61,8 +61,8 @@ require('packer').startup({function(use)
   -- Search and navigation
   use {'junegunn/fzf', run = 'fzf#install()'}
   use {'junegunn/fzf.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'fzf.vim') end}
-  use {'liuchengxu/vim-clap', run = ':Clap install-binary'}
-  use {'vn-ki/coc-clap', after = {'coc.nvim', 'vim-clap'}}
+  -- use {'liuchengxu/vim-clap', run = ':Clap install-binary'}
+  -- use {'vn-ki/coc-clap', after = {'coc.nvim', 'vim-clap'}}
 
   -- Telescope
   use 'nvim-lua/popup.nvim'
@@ -146,9 +146,13 @@ require('packer').startup({function(use)
 
   use  'luochen1990/rainbow'  -- Color brackets
 
+  -- Debugger
+  use {'mfussenegger/nvim-dap'}
+  use {'Shatur/neovim-cmake', config = function() require('cmake-config') end}
+
   -- Other
   use {'nvim-neorg/neorg',
-    ft = 'norg',
+    -- ft = 'norg', -- Load neorg only upon entering a .norg file
     after = {'nvim-treesitter', 'telescope.nvim'},
     requires = {'nvim-neorg/neorg-telescope'},
     config = function()
