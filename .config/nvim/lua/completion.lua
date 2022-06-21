@@ -1,6 +1,7 @@
 vim.cmd([[set completeopt=menu,menuone,noselect]])
 
 -- Setup nvim-cmp.
+local lspkind = require('lspkind')
 local cmp = require'cmp'
 
 cmp.setup({
@@ -13,7 +14,11 @@ cmp.setup({
     end,
   },
   window = {
-    -- completion = cmp.config.window.bordered(),
+    completion = {
+      winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+      col_offset = -3,
+      side_padding = 0,
+    }
     -- documentation = cmp.config.window.bordered(),
   },
   mapping = cmp.mapping.preset.insert({
@@ -24,15 +29,17 @@ cmp.setup({
     ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     ['<tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
   }),
-  sources = cmp.config.sources({
+  sources = {
     { name = 'nvim_lsp' },
-    -- { name = 'vsnip' }, -- For vsnip users.
-    { name = 'luasnip' }, -- For luasnip users.
-    -- { name = 'ultisnips' }, -- For ultisnips users.
-    -- { name = 'snippy' }, -- For snippy users.
-  }, {
+    { name = 'luasnip' },
     { name = 'buffer' },
-  })
+  },
+  formatting = {
+    format = function (entry, vim_item)
+      local kind = lspkind.cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
+      return kind
+    end
+  }
 })
 
 -- Set configuration for specific filetype.
@@ -64,3 +71,32 @@ cmp.setup.cmdline(':', {
 
 -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- gray
+vim.cmd [[hi! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080]]
+
+-- blue
+vim.cmd [[
+  hi! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
+  hi! CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
+]]
+
+-- light blue
+vim.cmd [[
+  hi! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
+  hi! CmpItemKindInterface guibg=NONE guifg=#9CDCFE
+  hi! CmpItemKindText guibg=NONE guifg=#9CDCFE
+]]
+
+-- pink
+vim.cmd [[
+  hi! CmpItemKindFunction guibg=NONE guifg=#C586C0
+  hi! CmpItemKindMethod guibg=NONE guifg=#C586C0
+]]
+
+-- front
+vim.cmd [[
+  hi! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
+  hi! CmpItemKindProperty guibg=NONE guifg=#D4D4D4
+  hi! CmpItemKindUnit guibg=NONE guifg=#D4D4D4
+]]

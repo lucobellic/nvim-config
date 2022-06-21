@@ -17,7 +17,7 @@ config_path = vim.g.config_path
 
 require('packer').startup({function(use)
   -- Packer  manage itself
-  use {'wbthomason/packer.nvim', opt = false, commit = '7f62848f3a92eac61ae61def5f59ddb5e2cc6823'}
+  use {'wbthomason/packer.nvim', opt = false} --, commit = '7f62848f3a92eac61ae61def5f59ddb5e2cc6823'}
   use {'tpope/vim-dispatch', opt = true, cmd = {'Dispatch', 'Make', 'Focus', 'Start'}}
 
   -- Completion & Languages
@@ -32,8 +32,9 @@ require('packer').startup({function(use)
       if vim.g.lsp_provider == 'coc' then
         vim.cmd('source ' .. config_path .. '/' .. 'coc.vim')
       else
-        vim.fn['coc#config']('diagnostic', { enable = false })
+        -- vim.fn['coc#config']('diagnostic', { enable = false })
       end
+      require('colors')
       vim.cmd('source ' .. config_path .. '/' .. 'coc-explorer.vim')
     end
   }
@@ -53,7 +54,7 @@ require('packer').startup({function(use)
   use { 'hrsh7th/cmp-buffer' }
   use { 'hrsh7th/cmp-path' }
   use { 'hrsh7th/cmp-cmdline' }
-  use { 'hrsh7th/nvim-cmp', config = function() require('completion') end }
+  use { 'hrsh7th/nvim-cmp', requires = {'onsails/lspkind.nvim'}, config = function() require('completion') end }
 
   use { 'stevearc/aerial.nvim' } -- LSP symbols
 
@@ -133,10 +134,11 @@ require('packer').startup({function(use)
   -- use {'Luxed/ayu-vim'} -- Maintained ayu theme
 
   -- Icons
-  use  {'kyazdani42/nvim-web-devicons', config = function() require('web-devicons') end}
+  use {'kyazdani42/nvim-web-devicons', config = function() require('web-devicons') end}
+  use {'onsails/lspkind.nvim'}
 
   -- UI
-  -- TODO: change galaxyline to lualine or filene
+  -- TODO: change galaxyline to lualine or feline
   use {'glepnir/galaxyline.nvim', config = function() require('statusline') end}
   -- use { 'feline-nvim/feline.nvim', config = function () require('feline-config') end }
   use {'lewis6991/gitsigns.nvim',
@@ -152,7 +154,6 @@ require('packer').startup({function(use)
   use {'folke/zen-mode.nvim', config = function() require('zenmode') end}
   use {'junegunn/limelight.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'goyo.vim') end} -- Highlight paragraph
   use {'voldikss/vim-floaterm', config = function() vim.cmd('source ' .. config_path .. '/' .. '/floaterm.vim') end}  -- Floating terminal
-  use  'onsails/lspkind-nvim'   -- Pictogram for neovim
 
   use {'folke/trouble.nvim',
     requires = {'telescope.nvim'},
@@ -170,7 +171,7 @@ require('packer').startup({function(use)
 
   -- Debugger
   use {'mfussenegger/nvim-dap'}
-  use {'Shatur/neovim-cmake', config = function() require('cmake-config') end}
+  -- use {'Shatur/neovim-cmake', config = function() require('cmake-config') end}
 
   -- Other
   use {'nvim-neorg/neorg',
