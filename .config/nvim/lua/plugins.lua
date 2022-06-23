@@ -34,7 +34,6 @@ require('packer').startup({function(use)
       else
         -- vim.fn['coc#config']('diagnostic', { enable = false })
       end
-      require('colors')
       vim.cmd('source ' .. config_path .. '/' .. 'coc-explorer.vim')
     end
   }
@@ -211,6 +210,8 @@ require('packer').startup({function(use)
 end,
   config = {max_jobs=10}
 })
+
+require('colors') -- Apply coloscheme configuration
 
 -- Workaround to manually source the packer compiled file
 local packer_compiled = vim.g.nvim_path .. '/plugin/packer_compiled.lua'

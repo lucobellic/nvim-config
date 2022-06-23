@@ -24,13 +24,3 @@ hop.setup {
   teasing = true
 }
 
-vim.api.nvim_exec([[
-    augroup MyColors
-    autocmd!
-    autocmd ColorScheme * hi HopNextKey guifg=#FF8F40
-                      \ | hi HopNextKey1 guifg=#59C2FF
-                      \ | hi HopNextKey2 guifg=#C2D94C
-                      \ | hi HopUnmatched guifg=#4D5566
-    augroup END
-]], true)
-
