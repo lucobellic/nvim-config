@@ -1,3 +1,13 @@
+local hop = require('hop')
+hop.setup {
+  perm_method = require('hop.perm').TrieBacktrackFilling,
+  reverse_distribution = false,
+  case_insensitive = true,
+  term_seq_bias = 3 / 4,
+  winblend = 50,
+  teasing = true
+}
+
 vim.api.nvim_set_keymap('n', '<leader>j', "<cmd>lua require'hop'.hint_words()<cr>", {})
 vim.api.nvim_set_keymap('v', '<leader>j', "<cmd>lua require'hop'.hint_words()<cr>", {})
 vim.api.nvim_set_keymap('n', '<leader>J', "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", {})

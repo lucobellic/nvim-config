@@ -2,7 +2,7 @@ return {config = function(use)
     use {'junegunn/fzf', run = 'fzf#install()'}
     use {'junegunn/fzf.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'fzf.vim') end}
 
-    use {'phaazon/hop.nvim', config = function() require('plugin.navigation.config') end}
+    use {'phaazon/hop.nvim', config = function() require('plugin.navigation.hop') end}
     use  'tpope/vim-sensible'
     use  'tpope/vim-surround'
     use  'tpope/vim-commentary'
@@ -12,12 +12,14 @@ return {config = function(use)
     use 'tommcdo/vim-exchange'
     use 'tommcdo/vim-lion'
 
-    use 'kana/vim-textobj-user'        -- user defined textobj
-    use 'kana/vim-textobj-line'        -- il/ib line selection
-    use 'rhysd/vim-textobj-anyblock'   -- ib/ab block selection
+    use 'kana/vim-textobj-user'      -- user defined textobj
+    use 'kana/vim-textobj-line'      -- il/ib line selection
+    use 'rhysd/vim-textobj-anyblock' -- ib/ab block selection
 
-    require('plugin.navigation.keymap')
+    -- Better matchup '%' usage
+    use {'andymass/vim-matchup', event = 'VimEnter', config = function() vim.g.matchup_matchparen_offscreen = {method='status_manual'} end}
   end
 }
+
 
 
