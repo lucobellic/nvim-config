@@ -1,4 +1,4 @@
-return {config = function(use)
+return { config = function(use)
     use {'neoclide/coc.nvim',
       branch = 'release',
       opt = false,
@@ -24,6 +24,9 @@ return {config = function(use)
         require('plugin.lsp.config')
       end
     }
+
+    -- Outline
+    use { 'simrat39/symbols-outline.nvim', config = function () require('plugin.lsp.outline') end }
   end
 }
 
