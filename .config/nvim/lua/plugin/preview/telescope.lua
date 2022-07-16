@@ -10,10 +10,11 @@ require('telescope').setup{
       '--smart-case'
     },
 
-    show_line = false;
-    prompt_title = "";
-    results_title = "";
-    preview_title = "";
+    show_line = false,
+    prompt_title = false,
+    results_title = false,
+    preview_title = false,
+    dynamic_preview_title = false,
 
     prompt_prefix = "> ",
     selection_caret = "> ",
@@ -22,14 +23,22 @@ require('telescope').setup{
     initial_mode = "insert",
     selection_strategy = "reset",
     sorting_strategy = "ascending",
-    layout_strategy = "vertical",
+
+
+    -- layout_strategy = "vertical",
+    layout_strategy = "horizontal",
+
     layout_config = {
-      vertical = {
-        width = 0.65,
-        height_padding = 5,
-        preview_height = 0.5,
-        mirror = true,
+      horizontal = {
+        prompt_position = 'top',
+        mirror = false
       },
+      -- vertical = {
+      --   width = 0.65,
+      --   height_padding = 5,
+      --   preview_height = 0.5,
+      --   mirror = true,
+      -- },
     },
 
     file_ignore_patterns = {},
@@ -43,5 +52,5 @@ require('telescope').setup{
   }
 }
 
-local actions = require('telescope.actions')
+require('telescope.actions')
 
