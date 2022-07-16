@@ -18,7 +18,7 @@ return {config = function(use)
       config = function() require('plugin.ui.treesitter') end
     }
 
-    use {'glepnir/dashboard-nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'dashboard.vim') end}  -- Start screen
+    use {'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end}  -- Start screen
 
   end
 }
