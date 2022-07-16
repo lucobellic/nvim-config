@@ -5,7 +5,7 @@ let g:clap_layout = { 'relative': 'editor', 'row': '2%'} " Relative to the whole
 
 hi link ClapPreview Normal
 hi link ClapDisplay Normal
-hi link ClapCurrentSelection CursorLine
+hi link ClapCurrent CursorLine
 
 " nnoremap <silent>   <C-p>                    :<C-u>:Clap files ++finder=rg --files --smart-case --follow                     <CR>
 " nnoremap <silent>   <leader>mp               :<C-u>:Clap files ++finder=rg --files --smart-case --follow --hidden --no-ignore<CR>
@@ -25,6 +25,10 @@ nnoremap   <silent>   <leader>'                <cmd>Telescope marks             
 nnoremap   <silent>   <leader>fb               <cmd>Telescope buffers                                                         <cr>
 nnoremap   <silent>   <leader>fl               <cmd>Telescope current_buffer_fuzzy_find                                       <cr>
 nnoremap   <silent>   <leader>FL               <cmd>Telescope live_grep                                                       <cr>
+nnoremap   <silent>   <leader>s                :execute 'Telescope grep_string default_text='.expand('<cword>')               <cr>
+" From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
+vnoremap   <silent>   <leader>s                "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
+vnoremap              /                        "hy:<C-r>h
 
 " nnoremap     <silent>   <C-p>                    :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
 " nnoremap     <silent>   <leader>ff               :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>

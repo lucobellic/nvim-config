@@ -23,13 +23,11 @@ require('todo-comments').setup{
     -- * after: highlights after the keyword (todo text)
     -- highlight sample:
     -- * TODO: something
-    -- * TODO(id): something
-    -- * TODO something
     highlight = {
         before = "", -- "fg" or "bg" or empty
-        keyword = "fg", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
-        after = "", -- "fg" or "bg" or empty
-        pattern = [[.*<(KEYWORDS)]], -- pattern or table of patterns, used for highlightng (vim regex)
+        keyword = "bg", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
+        after = "fg", -- "fg" or "bg" or empty
+        pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
         comments_only = true, -- uses treesitter to match keywords in comments only
         max_line_len = 400, -- ignore lines longer than this
         exclude = {}, -- list of file types to exclude highlighting
@@ -37,8 +35,8 @@ require('todo-comments').setup{
     -- list of named colors where we try to extract the guifg from the
     -- list of hilight groups or use the hex color if hl not found as a fallback
     colors = {
-        error = { "LspDiagnosticsDefaultError", "ErrorMsg", "#DC2626" },
-        warning = { "LspDiagnosticsDefaultWarning", "WarningMsg", "#FBBF24" },
+        error = { "LspDiagnosticsDefaultError", "#DC2626" },
+        warning = { "LspDiagnosticsDefaultWarning", "#FBBF24" },
         info = { "LspDiagnosticsDefaultInformation", "#2563EB" },
         hint = { "LspDiagnosticsDefaultHint", "#10B981" },
         default = { "Identifier", "#7C3AED" },

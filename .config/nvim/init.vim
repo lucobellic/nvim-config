@@ -34,12 +34,30 @@ execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 let g:lsp_provider = 'nvim'
 let g:mapleader    = "\<Space>"
 
+
+set termguicolors     " enable true colors support
+set background=dark
+"set ayucolor="dark"   " for dark version of theme
+colorscheme ayu
+
+let g:rainbow_active = 1
+
+" \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+let g:rainbow_load_separately = [
+    \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
+    \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
+    \ ]
+
+let g:rainbow_conf = {
+    \ 'guifgs' : ['Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange']
+\}
+
 """ Load configuration
 lua require('plugins')
 
 let vim_config_files = [
       \ "editor",
-      \ "colors",
       \ "keybindings",
       \ "search",
       \ ]
@@ -47,9 +65,3 @@ let vim_config_files = [
 for config_file in g:vim_config_files
   execute 'source ' . g:config_path . '/' . config_file . '.vim'
 endfor
-
-let g:markdown_fenced_languages = [
-      \ 'vim',
-      \ 'help'
-      \]
-

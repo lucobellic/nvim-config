@@ -1,8 +1,5 @@
 local nvim_lsp = require('lspconfig')
 
-
-
-
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -24,8 +21,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>rf' , '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>'                   , opts)
   buf_set_keymap('n', '<F2>'      , '<cmd>lua vim.lsp.buf.rename()<CR>'                                    , opts)
   buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>'                               , opts)
-  -- buf_set_keymap('n', '<leader>cf', '<cmd>lua vim.lsp.buf.code_action({"quickfix"})<CR>'                   , opts)
-  buf_set_keymap('n', '<leader>cf', '<cmd>lua require("lsp_fixcurrent")()<CR>'                             , opts)
+  buf_set_keymap('n', '<leader>cf', '<cmd>lua require("plugin.lsp.fixcurrent")()<CR>'                      , opts)
   buf_set_keymap('n', 'gr'        , '<cmd>lua vim.lsp.buf.references()<CR>'                                , opts)
   buf_set_keymap('n', '<leader>e' , '<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>'                  , opts)
   buf_set_keymap('n', '<C'        , '<cmd>lua vim.diagnostic.goto_prev()<CR>'                              , opts)
@@ -46,7 +42,7 @@ end
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = { 'pyright', 'rust_analyzer', 'sumneko_lua', 'vimls' }
+local servers = { 'pyright', 'rust_analyzer', 'sumneko_lua', 'vimls', 'cmake' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach
@@ -74,6 +70,9 @@ nvim_lsp.clangd.setup {
   },
 }
 
+-- TODO: set it in clangd.setup
+vim.cmd [[map <silent> <M-o> :ClangdSwitchSourceHeader <CR>]]
+
 local signs = { Error = "•", Warn = "•", Hint = "•", Info = "•" }
 vim.diagnostic.config({
   virtual_text = false,
@@ -100,16 +99,5 @@ vim.cmd [[
   sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo linehl= numhl=DiagnosticLineNrInfo
   sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=DiagnosticLineNrHint
 ]]
-
--- vim.cmd('hi link DiagnosticError TODO')
--- vim.cmd('hi link DiagnosticWarning TODO')
--- vim.cmd('hi link DiagnosticInformation TODO')
--- vim.cmd('hi link DiagnosticHint TODO')
-
-
--- cmd('nnoremap <silent> g; <cmd>lua require(\'lspsaga.floaterm\').open_float_terminal(\'lazygit\')<CR>')
--- cmd('tnoremap <silent> g; <C-\\><C-n>:lua require(\'lspsaga.floaterm\').close_float_terminal()<CR>')
-
-
 
 
