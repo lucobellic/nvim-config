@@ -45,11 +45,12 @@ trouble.setup{
     use_diagnostic_signs = true -- enabling this will use the signs defined in your lsp client
 }
 
+local trouble_provider = require("trouble.providers.telescope")
 require('telescope').setup {
   defaults = {
     mappings = {
-      i = { ["<c-t>"] = trouble.open_with_trouble },
-      n = { ["<c-t>"] = trouble.open_with_trouble },
+      i = { ["<c-t>"] = trouble_provider.open_with_trouble },
+      n = { ["<c-t>"] = trouble_provider.open_with_trouble },
     },
   },
 }
