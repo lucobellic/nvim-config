@@ -16,14 +16,11 @@ return { config = function(use)
     }
 
 
+    use {'williamboman/mason.nvim', config = function() require('mason').setup() end }
+    use {'williamboman/mason-lspconfig.nvim', config = function() require('mason-lspconfig').setup() end }
+
     -- Use native nvim lsp
-    use {'neovim/nvim-lspconfig',
-      requires = {{'williamboman/nvim-lsp-installer'}},
-      config = function()
-        require('nvim-lsp-installer').setup{}
-        require('plugin.lsp.config')
-      end
-    }
+    use {'neovim/nvim-lspconfig', config = function() require('plugin.lsp.config') end}
 
     -- Outline
     use { 'simrat39/symbols-outline.nvim', config = function () require('plugin.lsp.outline') end }
