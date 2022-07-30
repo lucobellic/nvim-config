@@ -7,14 +7,24 @@ vim.g.lsp_provider = 'nvim'
 
 require('plugins')
 
-vim.cmd[[
-  set shellquote= shellpipe=\| shellxquote=
-  set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
-  set shellredir=\|\ Out-File\ -Encoding\ UTF8
+vim.o.shellquote = ''
+vim.o.shellpipe= '|'
+vim.o.shellxquote= ''
 
-  "let g:config_path = stdpath('config')
-  let g:nvim_path    = '$HOME/.config/nvim/'
-  let g:config_path  = g:nvim_path . 'config'
+vim.o.shellcmdflag='-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+
+vim.o.shellredir = '| Out-File -Encoding UTF8'
+vim.g.nvim_path = '$HOME/.config/nvim/'
+vim.g.config_path = vim.g.nvim_path .. 'config'
+
+-- set shellquote= shellpipe=\| shellxquote=
+-- set shellcmdflag=-NoLogo\ -NoProfile\ -ExecutionPolicy\ RemoteSigned\ -Command
+-- set shellredir=\|\ Out-File\ -Encoding\ UTF8
+-- "let g:config_path = stdpath('config')
+-- let g:nvim_path    = '$HOME/.config/nvim/'
+-- let g:config_path  = g:nvim_path . 'config'
+
+vim.cmd[[
   execute 'source ' . g:nvim_path . '/' . 'plug.vim'
 
   set termguicolors     " enable true colors support
