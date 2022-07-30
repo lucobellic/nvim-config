@@ -25,9 +25,9 @@ nnoremap   <silent>   <leader>'                <cmd>Telescope marks             
 nnoremap   <silent>   <leader>fb               <cmd>Telescope buffers                                                         <cr>
 nnoremap   <silent>   <leader>fl               <cmd>Telescope current_buffer_fuzzy_find                                       <cr>
 nnoremap   <silent>   <leader>FL               <cmd>Telescope live_grep                                                       <cr>
-nnoremap   <silent>   <leader>s                :execute 'Telescope grep_string default_text='.expand('<cword>')               <cr>
+nnoremap   <silent>   <leader>fw                :execute 'Telescope grep_string default_text='.expand('<cword>')               <cr>
 " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
-vnoremap   <silent>   <leader>s                "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
+vnoremap   <silent>   <leader>fw                "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
 vnoremap              /                        "hy:<C-r>h
 
 " nnoremap     <silent>   <C-p>                    :<C-u>:Clap files ++finder=rg --files --smart-case --follow                    <cr>
