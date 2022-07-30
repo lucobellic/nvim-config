@@ -18,7 +18,11 @@ return {config = function(use)
       config = function() require('plugin.ui.treesitter') end
     }
 
-    use {'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end}  -- Start screen
+    -- Start screen
+    use {'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end}
+
+    -- Scrollbar
+    use {'petertriho/nvim-scrollbar', config = function() require('plugin.ui.scrollbar') end}
 
   end
 }
