@@ -7,5 +7,8 @@ return {config = function(use)
   use  'psliwka/vim-smoothie' -- smooth scroll
   use {'lukas-reineke/indent-blankline.nvim', config = function() require('plugin.editor.indent') end}
 
+  require('plugin.editor.fold')
+  vim.opt.laststatus=3
+
   end
 }

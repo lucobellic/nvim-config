@@ -19,9 +19,12 @@ vim.cmd [[hi IndentBlanklineContextChar guifg=#6C7380 gui=nocombine]]
 -- vim.cmd [[hi IndentBlanklineContextChar guifg=#D2A6FF gui=nocombine]]
 
 require('indent_blankline').setup {
-  enabled = false,
+  enabled = true,
   use_treesitter = true,
+  use_treesitter_scope = true,
   show_current_context = true,
+  show_current_context_start = true,
+  show_trailing_blankline_indent = true,
   char = '▏',
   filetype_exclude = {
     'help',
@@ -38,14 +41,23 @@ require('indent_blankline').setup {
     'clap'
   },
   context_patterns = {
-    'def',
-    'class',
-    'return',
-    'function',
-    'method',
-    '^if',
-    '^while',
-    'jsx_element',
-    '^for',
+    "class",
+    "^func",
+    "method",
+    "^if",
+    "while",
+    "for",
+    "with",
+    "try",
+    "except",
+    "arguments",
+    "argument_list",
+    "object",
+    "dictionary",
+    "element",
+    "table",
+    "tuple",
+    "do_block",
+    "def",
   }
 }
