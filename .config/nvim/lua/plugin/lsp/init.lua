@@ -22,7 +22,10 @@ return { config = function(use)
     -- Use native nvim lsp
     use {'neovim/nvim-lspconfig', config = function() require('plugin.lsp.config') end}
 
+    -- use {'glepnir/lspsaga.nvim', config = function() require('plugin.lsp.lspsaga') end}
+
     -- Outline
+    -- TODO: Change to lsp-saga
     use { 'simrat39/symbols-outline.nvim', config = function () require('plugin.lsp.outline') end }
   end
 }
