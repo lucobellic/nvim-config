@@ -9,6 +9,9 @@ return {config = function(use)
     use  'tpope/vim-fugitive'
     use  'tpope/vim-sleuth'
 
+
+    use {'kyazdani42/nvim-tree.lua', config = function() require('plugin.navigation.tree') end}
+
     use 'tommcdo/vim-exchange'
     use 'tommcdo/vim-lion'
 
