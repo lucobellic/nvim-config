@@ -79,7 +79,8 @@ vim.diagnostic.config({
   signs = true,
   underline = true,
   update_in_insert = false,
-  severity_sort = true
+  severity_sort = true,
+  float = {source = true, header = {}}
 })
 
 for type, icon in pairs(signs) do
