@@ -7,7 +7,7 @@ vim.o.foldmethod = 'syntax'
 -- foldopen:c	'-'		mark the beginning of a fold
 -- foldclose:c	'+'		show a closed fold
 -- foldsep:c	'│' or '|'      open fold middle marker
-vim.opt.fillchars = {foldopen = '-', foldclose='-', foldsep = ' ', fold = ' '}
+vim.opt.fillchars = {diff = '╱', foldopen = '-', foldclose = '-', foldsep = ' ', fold = ' '}
 
 function _G.custom_fold_text()
     local line = vim.fn.getline(vim.v.foldstart)

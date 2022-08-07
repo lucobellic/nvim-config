@@ -9,6 +9,7 @@ return {config = function(use)
 
   require('plugin.editor.fold')
   vim.opt.laststatus=3
+    use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim', config = function() require('plugin.editor.diffview') end }
 
   end
 }
