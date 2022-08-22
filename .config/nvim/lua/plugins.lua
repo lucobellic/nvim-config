@@ -16,18 +16,17 @@ require('packer').startup({function(use)
   -- Packer manage itself
   use {'wbthomason/packer.nvim', opt = false}
 
+  use 'nvim-lua/popup.nvim'
+  use 'nvim-lua/plenary.nvim'
+
   require('plugin.lsp').config(use)
+
   require('plugin.completion').config(use)
+
   require('plugin.navigation').config(use)
   require('plugin.preview').config(use)
   require('plugin.ui').config(use)
   require('plugin.editor').config(use)
-
-  use 'rust-lang/rust.vim'
-  use 'cespare/vim-toml'
-
-  use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
 
   -- Tasks
   use 'skywind3000/asyncrun.vim'
