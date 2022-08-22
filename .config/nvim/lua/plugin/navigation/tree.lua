@@ -5,7 +5,7 @@ require('nvim-tree').setup({
   view = {
     adaptive_size = false,
     side = 'left',
-    width = 35,
+    width = 40,
     mappings = {
       custom_only = false,
       list = {
@@ -29,6 +29,16 @@ require('nvim-tree').setup({
   },
   renderer = {
     group_empty = true,
+    indent_markers = {
+      enable = false,
+      inline_arrows = true,
+    },
+    icons = {
+      webdev_colors = true,
+      show = {
+        folder_arrow = false,
+      },
+    },
   },
   filters = {
     dotfiles = false,
