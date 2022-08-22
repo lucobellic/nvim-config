@@ -22,7 +22,7 @@ return {config = function(use)
     use {'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end}
 
     -- Scrollbar
-    use {'petertriho/nvim-scrollbar', config = function() require('plugin.ui.scrollbar') end}
+    use {'petertriho/nvim-scrollbar', requires = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end}
 
   end
 }

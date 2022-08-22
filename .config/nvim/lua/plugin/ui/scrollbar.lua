@@ -77,14 +77,16 @@ require('scrollbar').setup({
 local gitsign = require('gitsigns')
 local gitsign_hunks = require('gitsigns.hunks')
 
+local colors_type = {
+    add = 'GitAdd',
+    delete = 'GitDelete',
+    change = 'GitChange',
+    changedelete = 'GitChange'
+}
+
 require('scrollbar.handlers').register('git', function(bufnr)
     local nb_lines = vim.api.nvim_buf_line_count(bufnr)
-    local colors_type = {
-        add = 'GitAdd',
-        delete = 'GitDelete',
-        change = 'GitChange',
-        changedelete = 'GitChange'
-    }
+
 
     local lines = {}
     local hunks = gitsign.get_hunks(bufnr)
