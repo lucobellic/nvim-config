@@ -54,7 +54,6 @@ autocmd FileType cpp setlocal commentstring=//\ %s
 set list
 set showbreak=↪
 set listchars=tab:-\ ,trail:·,extends:⟩,precedes:⟨
-set fillchars=fold:\ ,vert:\|
 
 set notimeout
 "set timeoutlen=500
