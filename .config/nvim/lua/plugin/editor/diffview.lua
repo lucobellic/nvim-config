@@ -1,9 +1,9 @@
 local actions = require("diffview.actions")
 
 -- colors
-vim.cmd("hi def link DiffviewDiffDelete Comment")
+vim.cmd("hi! link DiffviewDiffDelete Comment")
+vim.cmd("hi! link DiffviewDiffAddAsDelete Comment")
 
--- keymaps
 vim.keymap.set('n', '<leader>gd', ':DiffviewOpen<cr>',        { silent = true })
 vim.keymap.set('n', '<leader>gq', ':DiffviewClose<cr>',       { silent = true })
 vim.keymap.set('n', '<leader>gf', ':DiffviewFileHistory<cr>', { silent = true })
