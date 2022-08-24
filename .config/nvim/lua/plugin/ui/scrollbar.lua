@@ -86,20 +86,16 @@ local colors_type = {
 
 require('scrollbar.handlers').register('git', function(bufnr)
     local nb_lines = vim.api.nvim_buf_line_count(bufnr)
-
-
     local lines = {}
     local hunks = gitsign.get_hunks(bufnr)
-    if hunks then
-        for _, hunk in ipairs(hunks) do
-            hunk.vend = math.min(hunk.added.start, hunk.removed.start) + hunk.added.count + hunk.removed.count
-            local signs = gitsign_hunks.calc_signs(hunk, 0, nb_lines)
-            for _, sign in ipairs(signs) do
-                table.insert(lines, {
-                    line = sign.lnum,
-                    type = colors_type[sign.type]
-                })
-            end
+    for _, hunk in ipairs(hunks or {}) do
+        hunk.vend = math.min(hunk.added.start, hunk.removed.start) + hunk.added.count + hunk.removed.count
+        local signs = gitsign_hunks.calc_signs(hunk, 0, nb_lines)
+        for _, sign in ipairs(signs) do
+            table.insert(lines, {
+                line = sign.lnum,
+                type = colors_type[sign.type]
+            })
         end
     end
     return lines
