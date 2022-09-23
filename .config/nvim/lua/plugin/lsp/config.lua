@@ -19,7 +19,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<leader>D' , '<cmd>lua vim.lsp.buf.type_definition()<CR>'                           , opts)
 
   -- TODO: Setup proper refactoring shortcut
-  buf_set_keymap('n', '<space>rf' , '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>'                   , opts)
+  buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>'                   , opts)
   -- buf_set_keymap('n', '<F2>'      , '<cmd>lua vim.lsp.buf.rename()<CR>'                                    , opts)
   -- buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>'                               , opts)
 
@@ -31,7 +31,7 @@ local on_attach = function(client, bufnr)
   -- buf_set_keymap('n', '>C'        , '<cmd>lua vim.diagnostic.goto_next()<CR>'                              , opts)
   buf_set_keymap('n', '<leader>q' , '<cmd>lua vim.diagnostic.set_loclist()<CR>'                            , opts)
 
-  buf_set_keymap('n', '<leader>d' , '<cmd>Lspsaga preview_definition<CR>'                                  , opts)
+  buf_set_keymap('n', '<leader>d' , '<cmd>Lspsaga peek_definition<CR>'                                     , opts)
 
   buf_set_keymap('n', '<F2>'      , '<cmd>Lspsaga rename<CR>'                                              , opts)
 
@@ -50,12 +50,13 @@ local on_attach = function(client, bufnr)
 
   -- Set some keybinds conditional on server capabilities
   -- TODO: replace resolved_capabilities by server_capabilities
-  -- if client.resolved_capabilities.document_formatting then
-  --   buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+  -- if client.resolved_capabilities.document_formatting or client.server_capabilities.documentFormattingProvider then
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
   -- end
-  -- if client.resolved_capabilities.document_range_formatting then
-  --   buf_set_keymap("v", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
+  -- if client.resolved_capabilities.document_range_formatting or client.server_capabilities.documentRangeFormattingProvider then
+    buf_set_keymap("v", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
   -- end
+
 end
 
 -- Add additional capabilities supported by nvim-cmp
