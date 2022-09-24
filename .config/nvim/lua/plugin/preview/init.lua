@@ -39,6 +39,12 @@ return {config = function(use)
       config = function() require('plugin.preview.todo') end
     }
 
-    use {'voldikss/vim-floaterm', config = function() vim.cmd('source ' .. config_path .. '/' .. 'floaterm.vim') end}  -- Floating terminal
+    use {'voldikss/vim-floaterm', config = function()
+      vim.g.floaterm_autoclose = true -- Close only if the job exits normally
+      -- vim.g.floaterm_borderchars = '       ' -- (top, right, bottom, left, topleft, topright, botright, botleft)
+      vim.g.floaterm_borderchars = '─│─│╭╮╯╰╯'
+      vim.g.floaterm_autoinsert = true
+      end
+    }  -- Floating terminal
 end
 }

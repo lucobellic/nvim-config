@@ -85,3 +85,24 @@ vim.api.nvim_set_keymap('n', '<C-s>'     , ':BufferPick<cr>'                    
 vim.api.nvim_set_keymap('n', '<Space>bd' , ':BufferOrderByDirectory<cr>'              , {silent = true, noremap = true})
 vim.api.nvim_set_keymap('n', '<Space>bl' , ':BufferOrderByLanguage<cr>'               , {silent = true, noremap = true})
 
+
+-- Floaterm
+
+vim.api.nvim_set_keymap('n', '<F7>' , ':FloatermToggle!<cr>'                                                 , opts)
+vim.api.nvim_set_keymap('t', '<F7>' , '<C-\\><C-n>:FloatermToggle!<cr>'                                      , opts)
+vim.api.nvim_set_keymap('n', 'g;'   , ':<C-u>FloatermNew --height=0.8 --width=0.8 --name=lazygit lazygit<cr>', opts)
+
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = 'floaterm',
+    callback = function()
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', ':FloatermNext<CR>'           , opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-h>', ':FloatermPrev<CR>'           , opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-t>', ':FloatermNew<CR>'            , opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>' , opts)
+    end
+})
+
