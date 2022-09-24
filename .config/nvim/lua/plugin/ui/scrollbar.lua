@@ -2,63 +2,63 @@ require('scrollbar').setup({
     show = true,
     marks = {
         Search = {
-            text = { '▏', '▏' },
+            text = { '▕', '▕' },
             priority = 0,
             color = nil,
             cterm = nil,
             highlight = "GitSignsDelete",
         },
         Error = {
-            text = { '▏', '▏' },
+            text = { '▕', '▕' },
             priority = 1,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextError",
         },
         Warn = {
-            text = { '▏', '▏' },
+            text = { '▕', '▕' },
             priority = 2,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextWarn",
         },
         Info = {
-            text = { '▏', '▏' },
+            text = { '▕', '▕' },
             priority = 3,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextInfo",
         },
         Hint = {
-            text = { '▏', '▏' },
+            text = { '▕', '▕' },
             priority = 4,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextHint",
         },
         Misc = {
-            text = { '▏', '▏' },
+            text = { '▕', '▕' },
             priority = 5,
             color = nil,
             cterm = nil,
             highlight = "Normal",
         },
         GitAdd = {
-          text = { '▏', '▏'},
+          text = { '▕', '▕'},
           priority = 5,
           color = nil,
           cterm = nil,
           highlight = "GitSignsAdd",
         },
         GitDelete = {
-          text = { '▏', '▏' },
+          text = { '▕', '▕' },
           priority = 5,
           color = nil,
           cterm = nil,
           highlight = "GitSignsDelete",
         },
         GitChange = {
-          text = { '▏', '▏' },
+          text = { '▕', '▕' },
           priority = 5,
           color = nil,
           cterm = nil,
@@ -88,6 +88,7 @@ require('scrollbar.handlers').register('git', function(bufnr)
     local nb_lines = vim.api.nvim_buf_line_count(bufnr)
     local lines = {}
     local hunks = gitsign.get_hunks(bufnr)
+
     for _, hunk in ipairs(hunks or {}) do
         hunk.vend = math.min(hunk.added.start, hunk.removed.start) + hunk.added.count + hunk.removed.count
         local signs = gitsign_hunks.calc_signs(hunk, 0, nb_lines)
