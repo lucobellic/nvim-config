@@ -3,7 +3,7 @@ return {config = function(use)
     use {'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end}
 
     -- ui
-    use {'romgrk/barbar.nvim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'barbar.vim') end}
+    use {'romgrk/barbar.nvim', config = function() require('plugin.ui.barbar') end}
     use {'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end}
 
     -- git

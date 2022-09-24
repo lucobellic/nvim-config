@@ -63,6 +63,7 @@ vim.api.nvim_set_keymap('n', '<C-l>'     , ':BufferNext<cr>'             , opts)
 -- Re-order to previous/next
 vim.api.nvim_set_keymap('n', '<A-h>'     , ':BufferMovePrevious<cr>'     , opts)
 vim.api.nvim_set_keymap('n', '<A-l>'     , ':BufferMoveNext<cr>'         , opts)
+vim.api.nvim_set_keymap('n', '<A-p>'     , ':BufferPin<cr>'              , opts)
 
 -- Goto buffer in position...
 vim.api.nvim_set_keymap('n', '<leader>1' , ':BufferGoto 1<cr>'           , opts)
