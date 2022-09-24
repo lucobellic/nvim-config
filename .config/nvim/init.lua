@@ -20,7 +20,7 @@ require('plugins')
 vim.g.nvim_path = '$HOME/.config/nvim/'
 vim.g.config_path = vim.g.nvim_path .. 'config'
 
-for _, config_file in ipairs({'plug', 'editor', 'search'}) do
+for _, config_file in ipairs({'plug', 'editor'}) do
   vim.g.config_file = config_file
   vim.cmd[[execute 'source ' . g:config_path . '/' . g:config_file . '.vim']]
 end
