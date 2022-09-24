@@ -28,6 +28,8 @@ require('packer').startup({function(use)
   require('plugin.ui').config(use)
   require('plugin.editor').config(use)
 
+  require('plugin.mappings')
+
   -- Tasks
   use 'skywind3000/asyncrun.vim'
   use {'skywind3000/asynctasks.vim', after = 'asyncrun.vim'}
