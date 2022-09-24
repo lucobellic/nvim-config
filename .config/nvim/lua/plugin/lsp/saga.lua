@@ -8,10 +8,10 @@ local saga = require 'lspsaga'
 saga.init_lsp_saga({
     -- Options with default value
     -- "single" | "double" | "rounded" | "bold" | "plus"
-    border_style = "single",
+    border_style = "rounded",
     --the range of 0 for fully opaque window (disabled) to 100 for fully
     --transparent background. Values between 0-30 are typically most useful.
-    saga_winblend = 30,
+    saga_winblend = 0,
     -- when cursor in saga window you config these to move
     move_in_saga = { prev = '<C-p>',next = '<C-n>'},
     -- Error, Warn, Info, Hint
@@ -33,11 +33,11 @@ saga.init_lsp_saga({
     code_action_num_shortcut = true,
     -- same as nvim-lightbulb but async
     code_action_lightbulb = {
-        enable = true,
-        sign = true,
-        enable_in_insert = true,
+        enable = false,
+        sign = false,
+        enable_in_insert = false,
         sign_priority = 20,
-        virtual_text = true,
+        virtual_text = false,
     },
     -- finder icons
     finder_icons = {
@@ -88,11 +88,11 @@ saga.init_lsp_saga({
     },
     -- custom lsp kind
     -- usage { Field = 'color code'} or {Field = {your icon, your color code}}
-    -- custom_kind = {},
+    custom_kind = {},
     -- if you don't use nvim-lspconfig you must pass your server name and
     -- the related filetypes into this table
     -- like server_filetype_map = { metals = { "sbt", "scala" } }
-    -- server_filetype_map = {},
+    server_filetype_map = {},
 })
 
 -- Symbols in winbar
