@@ -64,5 +64,3 @@ require('telescope').setup{
   }
 }
 
-require('telescope.actions')
-
