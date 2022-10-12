@@ -1,8 +1,2 @@
-#Ignore everything
-/*
-
-!.zshrc
-!.gitignore
-!/.config
-.config/nvim/plugin
+/plugin
 
