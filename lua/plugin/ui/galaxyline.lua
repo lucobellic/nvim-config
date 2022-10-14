@@ -46,7 +46,7 @@ end
 gls.left[1] = {
     Space = {
         provider = function()
-            return " "
+            return ""
         end,
         highlight = {colors.bg, colors.bg}
     }
