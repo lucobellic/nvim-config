@@ -88,6 +88,9 @@ vim.api.nvim_set_keymap('n', '<C-s>'     , ':BufferPick<cr>'             , opts)
 vim.api.nvim_set_keymap('n', '<Space>bd' , ':BufferOrderByDirectory<cr>' , opts)
 vim.api.nvim_set_keymap('n', '<Space>bl' , ':BufferOrderByLanguage<cr>'  , opts)
 
+-- Zen mode
+vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
+
 
 -- Floaterm
 

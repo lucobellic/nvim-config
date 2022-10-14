@@ -1,7 +1,3 @@
-local map = vim.api.nvim_set_keymap
-local options = { noremap = true }
-map('n', '<C-z>', ':ZenMode<cr>', options)
-
 require("zen-mode").setup {
   window = {
     backdrop = 1, -- shade the backdrop of the Zen window. Set to 1 to keep the same as Normal
