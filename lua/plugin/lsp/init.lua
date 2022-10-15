@@ -23,8 +23,5 @@ return { config = function(use)
 
     use {'glepnir/lspsaga.nvim', config = function() require('plugin.lsp.saga') end}
 
-    -- Outline
-    -- TODO: Change to lsp-saga
-    -- use { 'simrat39/symbols-outline.nvim', config = function () require('plugin.lsp.outline') end }
   end
 }
