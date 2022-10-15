@@ -33,7 +33,7 @@ return {config = function(use)
     vim.o.hidden = true
     vim.o.hidden = true
 
-    vim.o.cmdheight = 1
+    vim.o.cmdheight = 0
     vim.o.updatetime = 400
 
     vim.o.wildmenu = true
