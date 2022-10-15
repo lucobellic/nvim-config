@@ -16,8 +16,8 @@ local function do_action(action, client)
     if
       not action.edit
       and client
-      and type(client.resolved_capabilities.code_action) == "table"
-      and client.resolved_capabilities.code_action.resolveProvider
+      and type(client.server_capabilities.code_action) == "table"
+      and client.server_capabilities.code_action.resolveProvider
     then
         client.request("codeAction/resolve", action, function(err, real)
             if err then
