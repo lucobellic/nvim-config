@@ -12,7 +12,6 @@ return {config = function(use)
 
     vim.o.noswapfile = true
     vim.o.laststatus = 3
-    vim.o.spell = true
 
     vim.o.clipboard = "unnamedplus"
     vim.o.number = true
