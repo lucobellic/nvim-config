@@ -128,10 +128,10 @@ end
 
 -- Highlight line number instead of having icons in sign column
 vim.cmd [[
-  hi link DiagnosticLineNrError ErrorMsg
-  hi link DiagnosticLineNrWarn WarningMsg
-  hi link DiagnosticLineNrInfo DiffChange
-  hi link DiagnosticLineNrHint DiffAdd
+  hi link DiagnosticLineNrError DiagnosticError
+  hi link DiagnosticLineNrWarn  DiagnosticWarn
+  hi link DiagnosticLineNrInfo  DiagnosticInfo
+  hi link DiagnosticLineNrHint  DiagnosticInfo
 
   sign define DiagnosticSignError text= texthl=DiagnosticSignError linehl= numhl=DiagnosticLineNrError
   sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn linehl= numhl=DiagnosticLineNrWarn
