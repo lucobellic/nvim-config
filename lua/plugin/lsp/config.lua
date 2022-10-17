@@ -50,12 +50,27 @@ local on_attach = function(client, bufnr)
 
   -- Set some keybinds conditional on server capabilities
   -- TODO: replace resolved_capabilities by server_capabilities
-  -- if client.resolved_capabilities.document_formatting or client.server_capabilities.documentFormattingProvider then
+  --
+  local caps = client.server_capabilities
+  if caps.documentFormattingProvider then
     buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-  -- end
-  -- if client.resolved_capabilities.document_range_formatting or client.server_capabilities.documentRangeFormattingProvider then
+  end
+  if caps.documentRangeFormattingProvider then
     buf_set_keymap("v", "<space>f", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-  -- end
+  end
+
+  if caps.semanticTokensProvider and caps.semanticTokensProvider.full then
+    local augroup = vim.api.nvim_create_augroup("SemanticTokens", {})
+    vim.api.nvim_create_autocmd("TextChanged", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.semantic_tokens_full()
+      end,
+    })
+    -- fire it first time on load as well
+    vim.lsp.buf.semantic_tokens_full()
+  end
 
 end
 
