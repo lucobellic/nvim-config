@@ -1,6 +1,20 @@
 local impatient_ok, impatient = pcall(require, "impatient")
 if impatient_ok then impatient.enable_profile() end
 
+
+if vim.g.neovide then
+  vim.cmd[[ set guifont=DMMono\ Nerd\ Font\ Mono:h11 ]]
+  vim.g.neovide_cursor_animation_length = 0.1
+  vim.g.neovide_cursor_trail_size = 0.2
+
+  vim.g.neovide_fullscreen = false
+  function toggle_full_screen()
+    vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
+  end
+
+  vim.api.nvim_set_keymap('n', '<F11>', ':lua toggle_full_screen()<cr>', {silent = true})
+end
+
 -- Windows configuration with powershell
 if vim.loop.os_uname().sysname:lower():find('windows') then
   vim.o.shell = 'pwsh' -- let &shell = 'pwsh'
