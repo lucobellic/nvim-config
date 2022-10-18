@@ -95,6 +95,9 @@ vim.api.nvim_set_keymap('n', '<Space>go' , ':LSoutlineToggle<cr>' , opts)
 vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
 
 
+-- Trouble
+vim.api.nvim_set_keymap('n', '<leader>gt', ':TodoTrouble<cr>', opts)
+
 -- Floaterm
 
 vim.api.nvim_set_keymap('n', '<F7>' , ':FloatermToggle!<cr>'                                                 , opts)
