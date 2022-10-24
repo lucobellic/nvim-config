@@ -6,9 +6,11 @@ if vim.g.neovide then
   vim.cmd[[ set guifont=DMMono\ Nerd\ Font\ Mono:h11 ]]
   vim.g.neovide_cursor_animation_length = 0.1
   vim.g.neovide_cursor_trail_size = 0.2
+  vim.g.neovide_scroll_animation_length = 0
 
+  vim.g.neovide_remember_window_size = true
   vim.g.neovide_fullscreen = false
-  function toggle_full_screen()
+  function _G.toggle_full_screen()
     vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
   end
 
@@ -28,6 +30,12 @@ vim.o.shellxquote= ''
 
 vim.g.mapleader = ' '
 vim.g.lsp_provider = 'nvim'
+
+vim.g.python3_host_prog ='"C:/Windows/python3.exe'
+
+vim.g.nvim_path = '$HOME/.config/nvim/'
+vim.g.config_path = vim.g.nvim_path .. "config"
+config_path = vim.g.config_path
 
 require('plugins')
 

@@ -3,11 +3,21 @@ return {config = function(use)
     use {'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end}
 
     -- ui
-    use {'romgrk/barbar.nvim', config = function() require('plugin.ui.barbar') end}
-    use {'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end}
+    use {'romgrk/barbar.nvim',
+      event = 'BufEnter',
+      config = function() require('plugin.ui.barbar') end
+    }
+
+    use {'glepnir/galaxyline.nvim',
+      event = 'BufEnter',
+      config = function()
+        require('plugin.ui.galaxyline')
+      end
+    }
 
     -- git
     use {'lewis6991/gitsigns.nvim',
+      event = 'BufRead',
       requires = 'plenary.nvim',
       config = function() require('plugin.ui.gitsigns') end
     }
@@ -22,7 +32,7 @@ return {config = function(use)
     use {'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end}
 
     -- Scrollbar
-    use {'petertriho/nvim-scrollbar', requires = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end}
+    use {'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end}
 
   end
 }
