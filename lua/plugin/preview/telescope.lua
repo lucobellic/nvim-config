@@ -4,12 +4,10 @@ require('telescope').setup{
   defaults = {
     mappings = {
       i = {
-        ["<C-t>"] = trouble.open_with_trouble,
-        ["<M-q>"] = trouble.open_selected_with_trouble,
+        ["<C-t>"] = trouble.smart_open_with_trouble,
       },
       n = {
-        ["<C-t>"] = trouble.open_with_trouble,
-        ["<M-q>"] = trouble.open_selected_with_trouble,
+        ["<C-t>"] = trouble.smart_open_with_trouble,
       },
     },
     vimgrep_arguments = {
