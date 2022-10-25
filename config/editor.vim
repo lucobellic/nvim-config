@@ -25,6 +25,7 @@ set nobackup
 set nowritebackup
 set notimeout
 set nospell
+set noswapfile
 
 autocmd FileType cpp setlocal commentstring=//\ %s
 

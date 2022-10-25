@@ -10,7 +10,6 @@ return {config = function(use)
 
     require('plugin.editor.fold')
 
-    vim.o.noswapfile = true
     vim.o.laststatus = 3
 
     vim.o.clipboard = "unnamedplus"
