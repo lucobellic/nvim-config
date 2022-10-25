@@ -13,11 +13,10 @@ local function run_action(action, offse)
 end
 
 local function do_action(action, client)
-    if
-      not action.edit
-      and client
-      and type(client.server_capabilities.code_action) == "table"
-      and client.server_capabilities.code_action.resolveProvider
+    if not action.edit
+        and client
+        and type(client.server_capabilities.code_action) == "table"
+        and client.server_capabilities.code_action.resolveProvider
     then
         client.request("codeAction/resolve", action, function(err, real)
             if err then
@@ -38,7 +37,7 @@ return function()
     local params = vim.lsp.util.make_range_params() -- get params for current position
     params.context = {
         diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
-        only = {"quickfix"}
+        only = { "quickfix" }
     }
 
     local results, err = vim.lsp.buf_request_sync(

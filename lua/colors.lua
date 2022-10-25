@@ -66,5 +66,3 @@ vim.api.nvim_exec([[
                       \ | hi CmpItemKindUnit guibg=NONE guifg=#D4D4D4
     augroup END
 ]], true)
-
-

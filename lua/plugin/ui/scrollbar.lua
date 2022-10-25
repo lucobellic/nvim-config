@@ -44,25 +44,25 @@ require('scrollbar').setup({
             highlight = "Normal",
         },
         GitAdd = {
-          text = { '▕', '▕'},
-          priority = 5,
-          color = nil,
-          cterm = nil,
-          highlight = "GitGutterAdd",
+            text = { '▕', '▕' },
+            priority = 5,
+            color = nil,
+            cterm = nil,
+            highlight = "GitGutterAdd",
         },
         GitDelete = {
-          text = { '▕', '▕' },
-          priority = 5,
-          color = nil,
-          cterm = nil,
-          highlight = "GitGutterDelete",
+            text = { '▕', '▕' },
+            priority = 5,
+            color = nil,
+            cterm = nil,
+            highlight = "GitGutterDelete",
         },
         GitChange = {
-          text = { '▕', '▕' },
-          priority = 5,
-          color = nil,
-          cterm = nil,
-          highlight = "GitGutterChange",
+            text = { '▕', '▕' },
+            priority = 5,
+            color = nil,
+            cterm = nil,
+            highlight = "GitGutterChange",
         },
     },
     excluded_buftypes = {
@@ -101,4 +101,3 @@ require('scrollbar.handlers').register('git', function(bufnr)
     end
     return lines
 end)
-

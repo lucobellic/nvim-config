@@ -27,7 +27,7 @@ db.custom_center = { { desc = 'Here start the end' } }
 -- db.hide_tabline         -- boolean default is true.it will hide tabline in dashboard buffer and auto open in other buffer
 
 -- TODO: Set portable path
-db.session_directory = 'C:/Users/uib97373/.cache/vim/session'   -- string type the directory to store the session file
+db.session_directory = 'C:/Users/uib97373/.cache/vim/session' -- string type the directory to store the session file
 
 db.preview_file_height = 12 -- number type
 db.header_pad          = 5 -- number type default is 1

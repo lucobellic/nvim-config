@@ -8,7 +8,7 @@ vim.cmd([[set completeopt=menu,menuone,noselect]])
 -- Setup nvim-cmp.
 local lspkind = require('lspkind')
 local luasnip = require('luasnip')
-local cmp = require'cmp'
+local cmp = require 'cmp'
 
 cmp.setup({
   snippet = {
@@ -78,7 +78,7 @@ cmp.setup({
     { name = 'buffer' },
   },
   formatting = {
-    format = function (entry, vim_item)
+    format = function(entry, vim_item)
       local kind = lspkind.cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
       return kind
     end
@@ -111,5 +111,3 @@ cmp.setup.cmdline(':', {
     { name = 'cmdline' }
   })
 })
-
-

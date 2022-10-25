@@ -22,4 +22,3 @@ vim.api.nvim_set_keymap('n', '<leader>s', "<cmd>lua require'hop'.hint_char1()<cr
 vim.api.nvim_set_keymap('v', '<leader>s', "<cmd>lua require'hop'.hint_char1()<cr>", {})
 vim.api.nvim_set_keymap('n', '<leader>S', "<cmd>lua require'hop'.hint_char1({multi_windows = true})<cr>", {})
 vim.api.nvim_set_keymap('v', '<leader>S', "<cmd>lua require'hop'.hint_char1({multi_windows = true})<cr>", {})
-

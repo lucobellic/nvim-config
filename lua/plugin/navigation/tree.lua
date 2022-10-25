@@ -9,13 +9,13 @@ require('nvim-tree').setup({
     mappings = {
       custom_only = false,
       list = {
-        { key = 'u',                 action = 'dir_up'                                     },
-        { key = 'l',                 action = 'edit',           action_cb = edit_or_open   },
-        { key = 'L',                 action = 'vsplit_preview', action_cb = vsplit_preview },
-        { key = 'h',                 action = 'close_node'                                 },
-        { key = '<CR>',              action = 'cd',             action_cb = cd             },
-        { key = {'E' , 'zr', 'zR'},  action = 'expand_all',     action_cb = expand_all     },
-        { key = {'H' , 'zm', 'zM'},  action = 'collapse_all',   action_cb = collapse_all   },
+        { key = 'u', action = 'dir_up' },
+        { key = 'l', action = 'edit', action_cb = edit_or_open },
+        { key = 'L', action = 'vsplit_preview', action_cb = vsplit_preview },
+        { key = 'h', action = 'close_node' },
+        { key = '<CR>', action = 'cd', action_cb = cd },
+        { key = { 'E', 'zr', 'zR' }, action = 'expand_all', action_cb = expand_all },
+        { key = { 'H', 'zm', 'zM' }, action = 'collapse_all', action_cb = collapse_all },
       },
     },
   },
@@ -53,5 +53,5 @@ require('nvim-tree').setup({
 })
 
 
-vim.keymap.set('n', '<leader>el', ':NvimTreeFindFileToggle<cr>', { silent=true, noremap=true })
-vim.keymap.set('n', '<C-b>',      ':NvimTreeFindFileToggle<cr>', { silent=true, noremap=true })
+vim.keymap.set('n', '<leader>el', ':NvimTreeFindFileToggle<cr>', { silent = true, noremap = true })
+vim.keymap.set('n', '<C-b>', ':NvimTreeFindFileToggle<cr>', { silent = true, noremap = true })

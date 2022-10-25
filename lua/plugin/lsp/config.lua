@@ -46,8 +46,10 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", ">C", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
 
   -- Only jump to error
-  buf_set_keymap("n", "<E", "<cmd> require(lspsaga.diagnostic).goto_prev({ severity = vim.diagnostic.severity.ERROR })", opts)
-  buf_set_keymap("n", ">E", "<cmd> require(lspsaga.diagnostic).goto_next({ severity = vim.diagnostic.severity.ERROR })", opts)
+  buf_set_keymap("n", "<E", "<cmd> require(lspsaga.diagnostic).goto_prev({ severity = vim.diagnostic.severity.ERROR })",
+    opts)
+  buf_set_keymap("n", ">E", "<cmd> require(lspsaga.diagnostic).goto_next({ severity = vim.diagnostic.severity.ERROR })",
+    opts)
 
   -- Set some keybinds conditional on server capabilities
   local caps = client.server_capabilities
@@ -92,7 +94,7 @@ nvim_lsp.pyright.setup {
     pyright = {
       disableLanguageServices = false,
       disableOrganizeImports  = false,
-      analysis = {
+      analysis                = {
         autoSearchPaths        = true,
         autoImportCompletions  = true,
         diagnosticMode         = 'workspace',

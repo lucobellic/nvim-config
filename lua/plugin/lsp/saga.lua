@@ -13,7 +13,7 @@ saga.init_lsp_saga({
     --transparent background. Values between 0-30 are typically most useful.
     saga_winblend = 0,
     -- when cursor in saga window you config these to move
-    move_in_saga = { prev = '<C-p>',next = '<C-n>'},
+    move_in_saga = { prev = '<C-p>', next = '<C-n>' },
     -- Error, Warn, Info, Hint
     -- use emoji like
     -- { "🙀", "😿", "😾", "😺" }
@@ -41,9 +41,9 @@ saga.init_lsp_saga({
     },
     -- finder icons
     finder_icons = {
-      def = '  ',
-      ref = '諭 ',
-      link = '  ',
+        def = '  ',
+        ref = '諭 ',
+        link = '  ',
     },
     -- finder do lsp request timeout
     -- if your project big enough or your server very slow
@@ -74,17 +74,17 @@ saga.init_lsp_saga({
     },
     -- show outline
     show_outline = {
-      win_position = 'right',
-      --set special filetype win that outline window split.like NvimTree neotree
-      -- defx, db_ui
-      win_with = '',
-      win_width = 50,
-      auto_enter = false,
-      auto_preview = false,
-      virt_text = '┃',
-      jump_key = 'o',
-      -- auto refresh when change buffer
-      auto_refresh = true,
+        win_position = 'right',
+        --set special filetype win that outline window split.like NvimTree neotree
+        -- defx, db_ui
+        win_with = '',
+        win_width = 50,
+        auto_enter = false,
+        auto_preview = false,
+        virt_text = '┃',
+        jump_key = 'o',
+        -- auto refresh when change buffer
+        auto_refresh = true,
     },
     -- custom lsp kind
     -- usage { Field = 'color code'} or {Field = {your icon, your color code}}
@@ -122,7 +122,7 @@ local function get_file_name(include_path)
     local file_path = ''
     for _, cur in ipairs(path_list) do
         file_path = (cur == '.' or cur == '~') and '' or
-                    file_path .. cur .. ' ' .. '%#LspSagaWinbarSep#>%*' .. ' %*'
+            file_path .. cur .. ' ' .. '%#LspSagaWinbarSep#>%*' .. ' %*'
     end
     return file_path .. file_name
 end
@@ -161,4 +161,3 @@ vim.api.nvim_create_autocmd('User', {
     pattern = 'LspsagaUpdateSymbol',
     callback = function() config_winbar_or_statusline() end,
 })
-

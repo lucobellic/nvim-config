@@ -1,6 +1,6 @@
 local gl = require("galaxyline")
 local gls = gl.section
-gl.short_line_list = {" "}
+gl.short_line_list = { " " }
 
 local colors = {
     bg = "#0A0E14",
@@ -48,14 +48,14 @@ gls.left[1] = {
         provider = function()
             return ""
         end,
-        highlight = {colors.bg, colors.bg}
+        highlight = { colors.bg, colors.bg }
     }
 }
 
 gls.left[2] = {
     ViMode = {
         provider = function()
-            vim.api.nvim_command('hi GalaxyViMode guifg='..mode_color())
+            vim.api.nvim_command('hi GalaxyViMode guifg=' .. mode_color())
             -- return ' ' .. '  ' .. os.date('%H:%M') .. ' '
             return '▌ ' .. os.date('%H:%M') .. ' '
             -- return '▌  '
@@ -69,15 +69,15 @@ gls.left[3] = {
     FileIcon = {
         provider = "FileIcon",
         condition = buffer_not_empty,
-        highlight = {require("galaxyline.provider_fileinfo").get_file_icon_color, colors.bg}
+        highlight = { require("galaxyline.provider_fileinfo").get_file_icon_color, colors.bg }
     }
 }
 
 gls.left[4] = {
     FileName = {
-        provider = {"FileName"},
+        provider = { "FileName" },
         condition = buffer_not_empty,
-        highlight = {colors.fg, colors.bg}
+        highlight = { colors.fg, colors.bg }
     }
 }
 
@@ -86,7 +86,7 @@ gls.left[5] = {
         provider = "GitBranch",
         condition = require("galaxyline.provider_vcs").check_git_workspace,
         separator = " ",
-        highlight = {colors.green, colors.bg}
+        highlight = { colors.green, colors.bg }
     }
 }
 
@@ -95,7 +95,7 @@ gls.left[6] = {
         provider = "DiffAdd",
         -- icon = "  ",
         icon = " +",
-        highlight = {colors.green, colors.bg}
+        highlight = { colors.green, colors.bg }
     }
 }
 
@@ -104,7 +104,7 @@ gls.left[7] = {
         provider = "DiffModified",
         -- icon = "  ",
         icon = " ~",
-        highlight = {colors.blue, colors.bg}
+        highlight = { colors.blue, colors.bg }
     }
 }
 
@@ -113,7 +113,7 @@ gls.left[8] = {
         provider = "DiffRemove",
         -- icon = "  ",
         icon = " -",
-        highlight = {colors.red, colors.bg}
+        highlight = { colors.red, colors.bg }
     }
 }
 
@@ -121,7 +121,7 @@ gls.left[9] = {
     DiagnosticError = {
         provider = "DiagnosticError",
         icon = "  ",
-        highlight = {colors.red, colors.bg}
+        highlight = { colors.red, colors.bg }
     }
 }
 
@@ -130,7 +130,7 @@ gls.left[10] = {
         provider = function()
             return " "
         end,
-        highlight = {colors.bg, colors.bg}
+        highlight = { colors.bg, colors.bg }
     }
 }
 
@@ -138,7 +138,7 @@ gls.left[11] = {
     DiagnosticWarn = {
         provider = "DiagnosticWarn",
         icon = "  ",
-        highlight = {colors.orange, colors.bg}
+        highlight = { colors.orange, colors.bg }
     }
 }
 
@@ -147,7 +147,7 @@ gls.right[1] = {
         provider = "VistaPlugin",
         icon = "",
         separator = " ",
-        highlight = {colors.fg, colors.bg}
+        highlight = { colors.fg, colors.bg }
     }
 }
 
@@ -155,9 +155,6 @@ gls.right[2] = {
     PerCent = {
         provider = "LinePercent",
         separator = " ",
-        highlight = {colors.fg, colors.bg}
+        highlight = { colors.fg, colors.bg }
     }
 }
-
-
-

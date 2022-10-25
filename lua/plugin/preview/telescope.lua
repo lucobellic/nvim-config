@@ -1,7 +1,7 @@
 local trouble = require('trouble.providers.telescope')
 local actions = require("telescope.actions")
 
-require('telescope').setup{
+require('telescope').setup {
   defaults = {
     mappings = {
       i = {
@@ -63,4 +63,3 @@ require('telescope').setup{
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
   }
 }
-
