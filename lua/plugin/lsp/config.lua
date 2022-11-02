@@ -10,29 +10,29 @@ local on_attach = function(client, bufnr)
   local opts = { noremap = true, silent = true }
 
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>TroubleToggle lsp_definitions<CR>', opts)
+  buf_set_keymap('n', 'gtd', '<cmd>TroubleToggle lsp_type_definitions<CR>', opts)
   -- buf_set_keymap('n', 'K'         , '<cmd>lua vim.lsp.buf.hover()<CR>'                                     , opts)
+  buf_set_keymap('n', 'K'         , '<cmd>Lspsaga hover_doc<CR>'                                     , opts)
   -- buf_set_keymap('n', '<leader>d' , '<Cmd>lua vim.lsp.buf.hover()<CR>'                                     , opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+
+  buf_set_keymap('n', 'gr', '<cmd>TroubleToggle lsp_references<CR>', opts)
+
   buf_set_keymap('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 
   -- TODO: Setup proper refactoring shortcut
   buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>', opts)
-  -- buf_set_keymap('n', '<F2>'      , '<cmd>lua vim.lsp.buf.rename()<CR>'                                    , opts)
-  -- buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>'                               , opts)
 
 
   buf_set_keymap('n', '<leader>cf', '<cmd>lua require("plugin.lsp.fixcurrent")()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>', opts)
+  -- buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>', opts)
   -- buf_set_keymap('n', '<C'        , '<cmd>lua vim.diagnostic.goto_prev()<CR>'                              , opts)
   -- buf_set_keymap('n', '>C'        , '<cmd>lua vim.diagnostic.goto_next()<CR>'                              , opts)
   buf_set_keymap('n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
-
   buf_set_keymap('n', '<leader>d', '<cmd>Lspsaga peek_definition<CR>', opts)
 
   buf_set_keymap('n', '<F2>', '<cmd>Lspsaga rename<CR>', opts)
@@ -42,20 +42,20 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('v', '<leader>ca', '<cmd><C-U>Lspsaga range_code_action<CR>', opts)
 
   -- Diagnsotic jump
-  buf_set_keymap("n", "<C", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
-  buf_set_keymap("n", ">C", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+  buf_set_keymap("n", "<C", "<cmd>silent Lspsaga diagnostic_jump_prev<CR>", opts)
+  buf_set_keymap("n", ">C", "<cmd>silent Lspsaga diagnostic_jump_next<CR>", opts)
 
   -- Only jump to error
-  buf_set_keymap("n", "<E", "<cmd> require(lspsaga.diagnostic).goto_prev({ severity = vim.diagnostic.severity.ERROR })",
+  buf_set_keymap("n", "<E", "<cmd>lua require('lspsaga.diagnostic').goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>",
     opts)
-  buf_set_keymap("n", ">E", "<cmd> require(lspsaga.diagnostic).goto_next({ severity = vim.diagnostic.severity.ERROR })",
+  buf_set_keymap("n", ">E", "<cmd>lua require('lspsaga.diagnostic').goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>",
     opts)
 
   -- Set some keybinds conditional on server capabilities
   local caps = client.server_capabilities
   if caps.documentFormattingProvider then
-    buf_set_keymap("n", "<space>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
-    buf_set_keymap("v", "<space>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
+    buf_set_keymap("n", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
+    buf_set_keymap("v", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
   end
 
   if caps.semanticTokensProvider and caps.semanticTokensProvider.full then
@@ -72,6 +72,10 @@ local on_attach = function(client, bufnr)
   end
 
 end
+
+-----------------------------
+--- Servers Configuration ---
+-----------------------------
 
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
@@ -110,7 +114,6 @@ nvim_lsp.pyright.setup {
 --   capabilities = capabilities,
 -- }
 
-
 -- C/C++ Clangd configuration
 -- local nvim_lsp_clangd_highlight = require('nvim-lsp-clangd-highlight')
 nvim_lsp.clangd.setup {
@@ -126,6 +129,10 @@ nvim_lsp.clangd.setup {
 
 -- TODO: set it in clangd.setup
 vim.cmd [[map <silent> <M-o> :ClangdSwitchSourceHeader <CR>]]
+
+-----------------------
+--- Color and Style ---
+-----------------------
 
 local signs = { Error = "•", Warn = "•", Hint = "•", Info = "•" }
 vim.diagnostic.config({
