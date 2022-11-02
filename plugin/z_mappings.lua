@@ -7,6 +7,7 @@ vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', op
 
 
 vim.api.nvim_set_keymap('n', '<leader>p', ':<C-u>bo 20split tmp<cr>:terminal<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 
 -- Git
 if packer_plugins and packer_plugins['vim-fugitive'] then
@@ -14,7 +15,7 @@ if packer_plugins and packer_plugins['vim-fugitive'] then
     vim.api.nvim_set_keymap('n', '<leader>ga', ':<C-u>Git commit --amend<cr>', opts)
 end
 
-vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>', opts)
+vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>', {silent = true})
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', opts)
 vim.api.nvim_set_keymap('n', '<leader>wd', ':Bdelete<cr>', opts)
 
