@@ -67,6 +67,10 @@ require("diffview").setup({
       ["<leader>e"]  = actions.focus_files, -- Bring focus to the files panel
       ["<leader>b"]  = actions.toggle_files, -- Toggle the files panel.
     },
+    merge_tool = {
+      layout = "diff3_mixed",
+      disable_diagnostics = true,   -- Temporarily disable diagnostics for conflict buffers while in the view.
+    },
     file_panel = {
       ["j"]             = actions.next_entry, -- Bring the cursor to the next file entry
       ["<down>"]        = actions.next_entry,
