@@ -15,3 +15,5 @@ require('notify').setup({
   timeout = 2000,
   top_down = true
 })
+
+vim.notify = require("notify")
