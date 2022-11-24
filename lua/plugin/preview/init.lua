@@ -5,13 +5,6 @@ return { config = function(use)
     config = function() require('plugin.preview.telescope') end
   }
 
-  use { 'fannheyward/telescope-coc.nvim',
-    requires = { 'telescope.nvim', 'coc.nvim' },
-    opt = true,
-    cond = function() return vim.g.lsp_provider == 'coc' end,
-    config = function() require('telescope').load_extension('coc') end
-  }
-
   use { 'Shatur/neovim-session-manager',
     requires = { 'telescope.nvim', 'plenary.nvim' },
     config = function()
