@@ -9,7 +9,6 @@ return { config = function(use)
         end
     }
 
-    use { 'stevearc/aerial.nvim' } -- LSP symbols
     use { 'L3MON4D3/LuaSnip', module = 'luasnip' } -- Snippet engine
     use { 'saadparwaiz1/cmp_luasnip' }
 end
