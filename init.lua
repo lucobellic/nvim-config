@@ -18,11 +18,13 @@ if vim.g.neovide then
 end
 
 -- Windows configuration with powershell
-if vim.loop.os_uname().sysname:lower():find('windows') then
-  vim.o.shell = 'pwsh' -- let &shell = 'pwsh'
-  vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
-  vim.o.shellredir = '| Out-File -Encoding UTF8'
-end
+-- if vim.loop.os_uname().sysname:lower():find('windows') then
+--   -- Windows instllation boostrap
+--   -- iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |` ni "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim" -Force
+--   vim.o.shell = 'pwsh' -- let &shell = 'pwsh'
+--   vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
+--   vim.o.shellredir = '| Out-File -Encoding UTF8'
+-- end
 
 vim.o.shellquote = ''
 vim.o.shellpipe = '|'

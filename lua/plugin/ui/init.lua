@@ -26,5 +26,8 @@ return { config = function(use)
   -- Scrollbar
   use { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end }
 
+  -- Enhanced wilder
+  use { 'gelguy/wilder.nvim', config = function() require('plugin.ui.wilder') end, requires ='romgrk/fzy-lua-native' }
+
 end
 }
