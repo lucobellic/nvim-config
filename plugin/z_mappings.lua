@@ -1,5 +1,4 @@
 local opts = { silent = true, noremap = true }
-local notify = require('notify')
 
 -- paste over currently selected text without yanking it
 vim.api.nvim_set_keymap('v', 'p', 'p :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
@@ -11,8 +10,8 @@ vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 
 -- Git
 if packer_plugins and packer_plugins['vim-fugitive'] then
-    vim.api.nvim_set_keymap('n', '<leader>gc', ':<C-u>Git commit<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>ga', ':<C-u>Git commit --amend<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 end
 
 vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>', {silent = true})
@@ -119,7 +118,7 @@ end
 if packer_plugins and packer_plugins['vim-floaterm'] then
     vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle!<cr>', opts)
     vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle!<cr>', opts)
-    vim.api.nvim_set_keymap('n', 'g;', ':<C-u>FloatermNew --height=0.8 --width=0.8 --name=lazygit lazygit<cr>', opts)
+    vim.api.nvim_set_keymap('n', 'g;', ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>', opts)
 
     vim.api.nvim_create_autocmd("FileType", {
         pattern = 'floaterm',
