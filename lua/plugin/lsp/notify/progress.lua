@@ -42,7 +42,10 @@ local function format_message(message, percentage)
   return (percentage and percentage .. "%\t" or "") .. (message or "")
 end
 
--- LSP integration
+-----------------------
+--- LSP integration ---
+-----------------------
+
 -- Make sure to also have the snippet with the common helper functions in your config!
 
 vim.lsp.handlers["$/progress"] = function(_, result, ctx)
@@ -85,7 +88,10 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
   end
 end
 
--- Lsp message
+--------------------
+--- Lsp messages ---
+--------------------
+
 -- table from lsp severity to vim severity.
 -- local severity = {
 --   "error",

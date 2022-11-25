@@ -10,7 +10,7 @@ return { config = function(use)
         after = 'nvim-semantic-tokens',
         config = function()
             require('plugin.lsp.config')
-            require('plugin.lsp.notify.progress')
+            -- require('plugin.lsp.notify.progress') -- use with notify
         end
     }
 
