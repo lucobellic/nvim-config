@@ -32,15 +32,18 @@ return { config = function(use)
     config = function() require('plugin.preview.todo') end
   }
 
-  -- Either use
+  -- Either use wilder or noice
+  local use_wilder = true
+  local use_noice = not use_wilder
+
   -- Enhanced wilder
   use { 'gelguy/wilder.nvim',
     config = function()
-      require('plugin.ui.wilder')
+      require('plugin.preview.wilder')
     end,
     requires ='romgrk/fzy-lua-native',
     opt = true,
-    cond = false
+    cond = use_wilder
   }
 
   use { 'folke/noice.nvim',
@@ -53,7 +56,7 @@ return { config = function(use)
       'rcarriga/nvim-notify',
     },
     opt = true,
-    cond = true
+    cond = use_noice
   }
 
   use { 'voldikss/vim-floaterm', config = function()
