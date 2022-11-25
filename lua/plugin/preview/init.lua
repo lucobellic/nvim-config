@@ -32,6 +32,7 @@ return { config = function(use)
     config = function() require('plugin.preview.todo') end
   }
 
+  -- Either use
   -- Enhanced wilder
   use { 'gelguy/wilder.nvim',
     config = function()
@@ -40,6 +41,19 @@ return { config = function(use)
     requires ='romgrk/fzy-lua-native',
     opt = true,
     cond = false
+  }
+
+  use { 'folke/noice.nvim',
+    config = function()
+      require('plugin.preview.noise')
+    end,
+    requires = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify',
+    },
+    opt = true,
+    cond = true
   }
 
   use { 'voldikss/vim-floaterm', config = function()
