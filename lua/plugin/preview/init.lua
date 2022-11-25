@@ -32,6 +32,16 @@ return { config = function(use)
     config = function() require('plugin.preview.todo') end
   }
 
+  -- Enhanced wilder
+  use { 'gelguy/wilder.nvim',
+    config = function()
+      require('plugin.ui.wilder')
+    end,
+    requires ='romgrk/fzy-lua-native',
+    opt = true,
+    cond = false
+  }
+
   use { 'voldikss/vim-floaterm', config = function()
     vim.g.floaterm_autoclose = true -- Close only if the job exits normally
     -- vim.g.floaterm_borderchars = '       ' -- (top, right, bottom, left, topleft, topright, botright, botleft)
