@@ -13,7 +13,7 @@ require('notify').setup({
   render = "simple",
   stages = "fade_in_slide_out",
   timeout = 2000,
-  top_down = true
+  top_down = false
 })
 
 vim.notify = require("notify")
