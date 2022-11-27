@@ -34,7 +34,7 @@ return { config = function(use)
 
   -- Either use wilder or noice
   local use_wilder = true
-  local use_noice = not use_wilder
+  local use_noice = true
 
   -- Enhanced wilder
   use { 'gelguy/wilder.nvim',
