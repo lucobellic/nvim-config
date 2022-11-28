@@ -14,7 +14,7 @@ if packer_plugins and packer_plugins['vim-fugitive'] then
     vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 end
 
-vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr>', {silent = true})
+vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr><Esc>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', opts)
 vim.api.nvim_set_keymap('n', '<leader>wd', ':Bdelete<cr>', opts)
 
@@ -30,7 +30,8 @@ vim.api.nvim_set_keymap('n', '<S-up>', '<C-w>k', opts)
 vim.api.nvim_set_keymap('n', '<S-right>', '<C-w>l', opts)
 
 -- Escape terminal insert mode and floating terminal
-vim.api.nvim_set_keymap('t', '<Esc>', '<C-\\><C-n>', opts)
+vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><C-n>"',
+    { silent = true, noremap = true, expr = true })
 
 -- Search mapping
 vim.api.nvim_set_keymap('n', '<leader>FF', ':<C-u>:Files<cr>', opts)
