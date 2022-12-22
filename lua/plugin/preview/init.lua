@@ -51,9 +51,7 @@ return { config = function(use)
       require('plugin.preview.noise')
     end,
     requires = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
       'MunifTanjim/nui.nvim',
-      'rcarriga/nvim-notify',
     },
     opt = true,
     cond = use_noice

@@ -6,7 +6,6 @@ return {config = function(use)
     use { 'psliwka/vim-smoothie', opt = true, cond = function() return vim.g.neovide end } -- smooth scroll
     use { 'lukas-reineke/indent-blankline.nvim', config = function() require('plugin.editor.indent') end }
     use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim', config = function() require('plugin.editor.diffview') end }
-    use { 'rcarriga/nvim-notify', config = function() require('plugin.editor.notify') end }
 
     require('plugin.editor.fold')
 
