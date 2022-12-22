@@ -51,9 +51,16 @@ require("noice").setup({
   routes = {
     {
       filter = {
-        event = "msg_show",
-        kind = "",
-        find = "written",
+        any = {
+          -- Hide Lspsaga messages spam message with outline open
+          -- ex:   Info  4:47:18 PM notify.info [Lspsaga] Server of this buffer not support textDocument/documentSymbol
+          { event = "notify", kind = { "info" }, find = "[Lspsaga]" },
+          -- Hide treesitter error due to experimental nvim-cmp ghost text completion
+          { event = "msg_show", kind = { "lua_error", "" }, find = "query: invalid node" },
+          -- Hide issue with autcommands "*" and matchup
+          -- ex:   Error  5:05:55 PM msg_show.lua_error Error detected while processing CursorMoved Autocommands for "*"..
+          { event = "msg_show", kind = { "lua_error" }, find = "matchup" },
+        },
       },
       opts = { skip = true },
     }
