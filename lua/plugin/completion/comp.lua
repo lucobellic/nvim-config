@@ -58,22 +58,6 @@ cmp.setup({
         fallback()
       end
     end, { "i", "s" }),
-
-    -- ['<tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    -- Intellij-like mapping
-    -- ["<tab>"] = cmp.mapping(function(fallback)
-    --   -- This little snippet will confirm with tab, and if no entry is selected, will confirm the first item
-    --   if cmp.visible() then
-    --     local entry = cmp.get_selected_entry()
-    --     if not entry then
-    --       cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-    --     else
-    --       cmp.confirm()
-    --     end
-    --   else
-    --     fallback()
-    --   end
-    -- end, {"i","s","c",}),
   }),
   sources = {
     { name = 'nvim_lsp' },
@@ -82,10 +66,9 @@ cmp.setup({
   },
   formatting = {
     format = function(entry, vim_item)
-      local kind = lspkind.cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
-      return kind
+      return lspkind.cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
     end
-  }
+  },
 })
 
 -- Set configuration for specific filetype.
@@ -96,24 +79,3 @@ cmp.setup.filetype('gitcommit', {
     { name = 'buffer' },
   })
 })
-
-
-
-
--- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline('/', {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = {
---     { name = 'buffer' }
---   }
--- })
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
--- cmp.setup.cmdline(':', {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     { name = 'cmdline' }
---   })
--- })
