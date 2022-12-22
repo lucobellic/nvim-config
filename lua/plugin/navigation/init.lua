@@ -10,6 +10,16 @@ return { config = function(use)
     use 'tpope/vim-sleuth'
     use 'tpope/vim-repeat'
 
+    use { 'smjonas/live-command.nvim',
+        config = function()
+            require("live-command").setup {
+                commands = { S = { cmd = "Subvert" } }, -- must be defined before we import vim-abolish
+                defaults = { inline_highlighting = false },
+            }
+        end
+    }
+    use { 'tpope/vim-abolish', after = 'live-command.nvim' }
+
 
     use { 'kyazdani42/nvim-tree.lua', config = function() require('plugin.navigation.tree') end }
 
