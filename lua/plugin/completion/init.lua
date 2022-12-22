@@ -9,7 +9,15 @@ return { config = function(use)
         end
     }
 
-    use { 'L3MON4D3/LuaSnip', module = 'luasnip' } -- Snippet engine
+    -- Snippets
     use { 'saadparwaiz1/cmp_luasnip' }
+    use { 'rafamadriz/friendly-snippets' }
+    use { 'L3MON4D3/LuaSnip', module = 'luasnip',
+        after = 'nvim-cmp',
+        config = function()
+            require('luasnip.loaders.from_vscode').lazy_load()
+        end
+    }
+
 end
 }
