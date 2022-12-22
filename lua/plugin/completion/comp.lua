@@ -11,6 +11,9 @@ local luasnip = require('luasnip')
 local cmp = require 'cmp'
 
 cmp.setup({
+  experimental = {
+    ghost_text = true
+  },
   snippet = {
     expand = function(args)
       -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
