@@ -6,6 +6,10 @@ require("noice").setup({
       ["vim.lsp.util.stylize_markdown"] = true,
       ["cmp.entry.get_documentation"] = true,
     },
+    message = {
+      enabled = true,
+      view = "mini"
+    },
   },
   -- you can enable a preset for easier configuration
   presets = {
@@ -69,10 +73,10 @@ require("noice").setup({
     -- NOTE: If you enable messages, then the cmdline is enabled automatically.
     -- This is a current Neovim limitation.
     enabled = true, -- enables the Noice messages UI
-    view = "messages", -- default view for messages
-    view_error = "messages", -- view for errors
-    view_warn = "messages", -- view for warnings
-    view_history = "messages", -- view for :messages
+    view = "mini", -- default view for messages
+    view_error = "mini", -- view for errors
+    view_warn = "mini", -- view for warnings
+    view_history = "mini", -- view for :messages
     view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
   },
 })
