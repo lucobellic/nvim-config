@@ -32,6 +32,8 @@ return { config = function(use)
     config = function() require('plugin.preview.todo') end
   }
 
+  use { 'folke/which-key.nvim', config = function() require('plugin.preview.whichkey') end }
+
   -- Either use wilder or noice
   local use_wilder = true
   local use_noice = true

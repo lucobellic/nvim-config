@@ -23,7 +23,6 @@ endif
 set noshowmode
 set nobackup
 set nowritebackup
-set notimeout
 set nospell
 set noswapfile
 

@@ -26,6 +26,9 @@ return {config = function(use)
     vim.o.autowrite = true
     vim.o.autowriteall = true
 
+    vim.o.timeout = true
+    vim.o.timeoutlen = 250
+
     vim.o.spell = true
 
     vim.o.wrap = false

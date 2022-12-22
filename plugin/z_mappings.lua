@@ -4,6 +4,44 @@ local opts = { silent = true, noremap = true }
 vim.api.nvim_set_keymap('v', 'p', 'p :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
 vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
 
+local wk = require("which-key")
+
+local telescope_mapping_n = {
+    ["<leader>"] = {
+        F = {
+            name = "find",
+            F = { ':<C-u>:Files<cr>', 'Find All File' },
+            L = { '<cmd>Telescope live_grep<cr>', 'Search Workspace' },
+        },
+        f = {
+            name = "find",
+            f = { '<cmd>Telescope find_files<cr>', 'Find File' },
+            F = { ':<C-u>:Files<cr>', 'Find All File' },
+            r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
+            g = { ':<C-u>:Rg<cr>', 'Search Workspace' },
+            b = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
+            l = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' },
+            L = { '<cmd>Telescope live_grep<cr>', 'Search Workspace' },
+            m = { '<cmd>Telescope marks<cr>', "Find Marks" },
+            y = { '<cmd>Telescope registers<cr>', 'Find Registers' },
+            w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' }
+        },
+    },
+
+}
+
+
+if packer_plugins and packer_plugins['telescope.nvim'] then
+    wk.register(telescope_mapping_n)
+    wk.register({ ['<C-p>'] = { '<cmd>Telescope find_files<cr>', "Find files" } })
+
+    -- TODO: try to add visual mode for Find Word in whickkey
+    -- " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
+    vim.cmd [[
+    vnoremap <silent> <leader>fw "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
+    ]]
+end
+
 
 vim.api.nvim_set_keymap('n', '<leader>p', ':<C-u>bo 20split tmp<cr>:terminal<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
@@ -15,8 +53,7 @@ if packer_plugins and packer_plugins['vim-fugitive'] then
 end
 
 vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr><Esc>', opts)
-vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', opts)
-vim.api.nvim_set_keymap('n', '<leader>wd', ':Bdelete<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
 
 
 -- Window
@@ -32,33 +69,6 @@ vim.api.nvim_set_keymap('n', '<S-right>', '<C-w>l', opts)
 -- Escape terminal insert mode and floating terminal
 vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><C-n>"',
     { silent = true, noremap = true, expr = true })
-
--- Search mapping
-vim.api.nvim_set_keymap('n', '<leader>FF', ':<C-u>:Files<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>fg', ':<C-u>:Rg<cr>', opts)
-vim.api.nvim_set_keymap('n', '<C-S-f>', ':<C-u>:Rg<cr>', opts)
-
-
-if packer_plugins and packer_plugins['telescope.nvim'] then
-    vim.api.nvim_set_keymap('n', '<C-p>', '<cmd>Telescope find_files<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>Telescope find_files<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>fr', '<cmd>Telescope oldfiles<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>fe', '<cmd>Telescope file_browser<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>fy', '<cmd>Telescope registers<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>y', '<cmd>Telescope registers<cr>', opts)
-    vim.api.nvim_set_keymap('n', "<leader>f'", '<cmd>Telescope marks<cr>', opts)
-    vim.api.nvim_set_keymap('n', "<leader>'", '<cmd>Telescope marks<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>fb', '<cmd>Telescope buffers<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>fl', '<cmd>Telescope current_buffer_fuzzy_find<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>FL', '<cmd>Telescope live_grep<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>fw', ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>",
-        opts)
-
-    -- " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
-    vim.cmd [[
-    vnoremap <silent> <leader>fw "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
-    ]]
-end
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
 vim.api.nvim_set_keymap('v', '/', '"hy/<C-r>h', { silent = false, noremap = true })
@@ -87,8 +97,12 @@ if packer_plugins and packer_plugins['barbar.nvim'] then
     vim.api.nvim_set_keymap('n', '<leader>9', ':BufferGoto 9<cr>', opts)
     vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
 
+    -- Hide BufferGoto
+    for i = 0, 9, 1 do
+        wk.register({["<leader>" .. i] = "which_key_ignore"})
+    end
+
     -- Close buffer
-    vim.api.nvim_set_keymap('n', '<leader>wd', ':BufferClose<cr>', opts)
     vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
 
     -- Magic buffer-picking mode
@@ -112,7 +126,7 @@ end
 
 -- Trouble
 if packer_plugins and packer_plugins['todo-comments.nvim'] then
-    vim.api.nvim_set_keymap('n', '<leader>gt', ':TodoTrouble<cr>', opts)
+    wk.register({ ['<leader>gt'] = { ':TodoTrouble<cr>', 'Todo Trouble' } })
 end
 
 -- Floaterm
