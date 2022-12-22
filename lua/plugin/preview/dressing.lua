@@ -17,9 +17,11 @@ require('dressing').setup({
     min_width = 20,
 
     -- Window transparency (0-100)
-    winblend = 20,
-    -- Change default highlight groups (see :help winhl)
-    winhighlight = "",
+    win_option = {
+      winblend = 20,
+      -- Change default highlight groups (see :help winhl)
+      winhighlight = "",
+    },
 
     -- see :help dressing_get_config
     get_config = nil,
