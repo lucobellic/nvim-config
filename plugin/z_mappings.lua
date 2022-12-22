@@ -124,6 +124,9 @@ if packer_plugins and packer_plugins['vim-floaterm'] then
     vim.api.nvim_create_autocmd("FileType", {
         pattern = 'floaterm',
         callback = function()
+            vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', ':FloatermKill<CR>', opts)
+            vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermKill<CR>', opts)
+
             vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', ':FloatermNext<CR>', opts)
             vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
 
