@@ -34,11 +34,13 @@ require("diffview").setup({
   },
   file_history_panel = {
     log_options = { -- See ':h diffview-config-log_options'
-      single_file = {
-        diff_merges = "combined",
-      },
-      multi_file = {
-        diff_merges = "first-parent",
+      git = {
+        single_file = {
+          diff_merges = "combined",
+        },
+        multi_file = {
+          diff_merges = "first-parent",
+        },
       },
     },
     win_config = { -- See ':h diffview-config-win_config'
@@ -69,7 +71,7 @@ require("diffview").setup({
     },
     merge_tool = {
       layout = "diff3_mixed",
-      disable_diagnostics = true,   -- Temporarily disable diagnostics for conflict buffers while in the view.
+      disable_diagnostics = true, -- Temporarily disable diagnostics for conflict buffers while in the view.
     },
     file_panel = {
       ["j"]             = actions.next_entry, -- Bring the cursor to the next file entry
