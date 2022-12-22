@@ -43,7 +43,7 @@ return { config = function(use)
     config = function()
       require('plugin.preview.wilder')
     end,
-    requires ='romgrk/fzy-lua-native',
+    requires = 'romgrk/fzy-lua-native',
     opt = true,
     cond = use_wilder
   }

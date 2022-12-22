@@ -1,4 +1,4 @@
-return {config = function(use)
+return { config = function(use)
     use { 'folke/zen-mode.nvim', config = function() require('plugin.editor.zenmode') end }
     use { 'junegunn/limelight.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'limelight.vim') end } -- Highlight paragraph
 
@@ -11,7 +11,10 @@ return {config = function(use)
     }
 
     use { 'lukas-reineke/indent-blankline.nvim', config = function() require('plugin.editor.indent') end }
-    use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim', config = function() require('plugin.editor.diffview') end }
+    use { 'sindrets/diffview.nvim',
+        requires = 'nvim-lua/plenary.nvim',
+        config = function() require('plugin.editor.diffview') end
+    }
 
     require('plugin.editor.fold')
 
@@ -46,10 +49,10 @@ return {config = function(use)
     vim.o.wildmenu = true
 
     vim.o.list = true
-    vim.o.showbreak='↪'
-    vim.opt.listchars = { tab = '- ', trail = '·', extends = '⟩', precedes='⟨' }
+    vim.o.showbreak = '↪'
+    vim.opt.listchars = { tab = '- ', trail = '·', extends = '⟩', precedes = '⟨' }
 
     vim.g.lion_squeeze_spaces = true
 
-  end
+end
 }
