@@ -3,7 +3,13 @@ return {config = function(use)
     use { 'junegunn/limelight.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'limelight.vim') end } -- Highlight paragraph
 
     use { 'luochen1990/rainbow', config = function() vim.cmd('source ' .. config_path .. '/' .. 'rainbow.vim') end }
-    use { 'psliwka/vim-smoothie', opt = true, cond = function() return vim.g.neovide end } -- smooth scroll
+
+    -- smooth scroll
+    use { 'karb94/neoscroll.nvim',
+        cond = function() return vim.g.neovide end,
+        config = function() require('plugin.editor.neoscroll') end
+    }
+
     use { 'lukas-reineke/indent-blankline.nvim', config = function() require('plugin.editor.indent') end }
     use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim', config = function() require('plugin.editor.diffview') end }
 
