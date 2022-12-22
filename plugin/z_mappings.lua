@@ -101,7 +101,7 @@ end
 
 -- Outline
 if packer_plugins and packer_plugins['lspsaga.nvim'] then
-    vim.api.nvim_set_keymap('n', '<Space>go', ':LSoutlineToggle<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<Space>go', ':Lspsaga outline<cr>', opts)
 end
 
 -- Zen mode
