@@ -170,3 +170,14 @@ if packer_plugins and packer_plugins['hop.nvim'] then
     vim.api.nvim_set_keymap('n', '<leader>S', "<cmd>lua require'hop'.hint_char1({multi_windows = true})<cr>", {})
     vim.api.nvim_set_keymap('v', '<leader>S', "<cmd>lua require'hop'.hint_char1({multi_windows = true})<cr>", {})
 end
+
+-- Diffview
+if packer_plugins and packer_plugins['diffview.nvim'] then
+    wk.register({ ["<leader>"] = {
+        g = {
+            d = { ':DiffviewOpen<cr>', 'Diffview Open' },
+            q = { ':DiffviewClose<cr>', 'Diffview Close' },
+            f = { ':DiffviewFileHistory %<cr>', 'Diffview File History' },
+        }
+    }, silent = true })
+end
