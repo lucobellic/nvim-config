@@ -99,7 +99,7 @@ if packer_plugins and packer_plugins['barbar.nvim'] then
 
     -- Hide BufferGoto
     for i = 0, 9, 1 do
-        wk.register({["<leader>" .. i] = "which_key_ignore"})
+        wk.register({ ["<leader>" .. i] = "which_key_ignore" })
     end
 
     -- Close buffer
@@ -133,7 +133,12 @@ end
 if packer_plugins and packer_plugins['vim-floaterm'] then
     vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle!<cr>', opts)
     vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle!<cr>', opts)
-    vim.api.nvim_set_keymap('n', 'g;', ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>', opts)
+    wk.register({
+        ["g;"] = {
+            ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>',
+            'Lazygit'
+        }
+    })
 
     vim.api.nvim_create_autocmd("FileType", {
         pattern = 'floaterm',
