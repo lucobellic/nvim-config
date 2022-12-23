@@ -7,6 +7,7 @@ require('nvim-tree').setup({
     adaptive_size = false,
     side = 'left',
     width = 40,
+    hide_root_folder = false,
     mappings = {
       custom_only = false,
       list = {
@@ -29,6 +30,7 @@ require('nvim-tree').setup({
     }
   },
   renderer = {
+    root_folder_label = ":t:r",
     group_empty = true,
     indent_markers = {
       enable = false,
