@@ -2,6 +2,7 @@ require('nvim-tree').setup({
   sort_by = 'case_sensitive',
   disable_netrw = true,
   hijack_netrw = true,
+  sync_root_with_cwd = true,
   view = {
     adaptive_size = false,
     side = 'left',
@@ -47,8 +48,7 @@ require('nvim-tree').setup({
     enable = true
   },
   update_focused_file = {
-    -- enable = true
-    enable = false
+    enable = true
   }
 })
 
