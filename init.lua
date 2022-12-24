@@ -17,6 +17,14 @@ if vim.g.neovide then
   vim.api.nvim_set_keymap('n', '<F11>', ':lua toggle_full_screen()<cr>', { silent = true })
 end
 
+-- Plug installation boostrap
+local plug_install_path = vim.fn.stdpath('data') .. '/site/autoload/plug.vim'
+if vim.fn.empty(vim.fn.glob(plug_install_path)) > 0 then
+  vim.notify('Plug installation', vim.log.levels.INFO)
+  local cmd = { 'iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | ni', plug_install_path , '-Force' }
+  os.execute(table.concat(cmd, " "))
+end
+
 -- Windows configuration with powershell
 -- if vim.loop.os_uname().sysname:lower():find('windows') then
 --   -- Windows instllation boostrap

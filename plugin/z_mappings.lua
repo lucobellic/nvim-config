@@ -4,7 +4,7 @@ local opts = { silent = true, noremap = true }
 vim.api.nvim_set_keymap('v', 'p', 'p :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
 vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
 
-local wk = require("which-key")
+local wk_ok, wk = pcall(require, 'which-key')
 
 local telescope_mapping_n = {
     ["<leader>"] = {
@@ -31,7 +31,7 @@ local telescope_mapping_n = {
 }
 
 
-if packer_plugins and packer_plugins['telescope.nvim'] then
+if wk_ok and packer_plugins and packer_plugins['telescope.nvim'] then
     wk.register(telescope_mapping_n)
     wk.register({ ['<C-p>'] = { '<cmd>Telescope find_files<cr>', "Find files" } })
 
@@ -98,8 +98,10 @@ if packer_plugins and packer_plugins['barbar.nvim'] then
     vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
 
     -- Hide BufferGoto
-    for i = 0, 9, 1 do
-        wk.register({ ["<leader>" .. i] = "which_key_ignore" })
+    if wk_ok then
+        for i = 0, 9, 1 do
+            wk.register({ ["<leader>" .. i] = "which_key_ignore" })
+        end
     end
 
     -- Close buffer
@@ -133,12 +135,14 @@ end
 if packer_plugins and packer_plugins['vim-floaterm'] then
     vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle!<cr>', opts)
     vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle!<cr>', opts)
-    wk.register({
-        ["g;"] = {
-            ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>',
-            'Lazygit'
-        }
-    })
+    if wk_ok then
+        wk.register({
+            ["g;"] = {
+                ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>',
+                'Lazygit'
+            }
+        })
+    end
 
     vim.api.nvim_create_autocmd("FileType", {
         pattern = 'floaterm',
@@ -177,7 +181,7 @@ if packer_plugins and packer_plugins['hop.nvim'] then
 end
 
 -- Diffview
-if packer_plugins and packer_plugins['diffview.nvim'] then
+if wk_ok and packer_plugins and packer_plugins['diffview.nvim'] then
     wk.register({ ["<leader>"] = {
         g = {
             d = { ':DiffviewOpen<cr>', 'Diffview Open' },
