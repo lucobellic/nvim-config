@@ -163,21 +163,17 @@ if packer_plugins and packer_plugins['vim-floaterm'] then
 end
 
 -- Hop
-if packer_plugins and packer_plugins['hop.nvim'] then
-    vim.api.nvim_set_keymap('n', '<leader>j', "<cmd>lua require'hop'.hint_words()<cr>", {})
-    vim.api.nvim_set_keymap('v', '<leader>j', "<cmd>lua require'hop'.hint_words()<cr>", {})
-    vim.api.nvim_set_keymap('n', '<leader>J', "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", {})
-    vim.api.nvim_set_keymap('v', '<leader>J', "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", {})
-
-    vim.api.nvim_set_keymap('n', '<leader>l', "<cmd>lua require'hop'.hint_lines()<cr>", {})
-    vim.api.nvim_set_keymap('v', '<leader>l', "<cmd>lua require'hop'.hint_lines()<cr>", {})
-    vim.api.nvim_set_keymap('n', '<leader>L', "<cmd>lua require'hop'.hint_lines({multi_windows = true})<cr>", {})
-    vim.api.nvim_set_keymap('v', '<leader>L', "<cmd>lua require'hop'.hint_lines({multi_windows = true})<cr>", {})
-
-    vim.api.nvim_set_keymap('n', '<leader>s', "<cmd>lua require'hop'.hint_char1()<cr>", {})
-    vim.api.nvim_set_keymap('v', '<leader>s', "<cmd>lua require'hop'.hint_char1()<cr>", {})
-    vim.api.nvim_set_keymap('n', '<leader>S', "<cmd>lua require'hop'.hint_char1({multi_windows = true})<cr>", {})
-    vim.api.nvim_set_keymap('v', '<leader>S', "<cmd>lua require'hop'.hint_char1({multi_windows = true})<cr>", {})
+if wk_ok and packer_plugins and packer_plugins['hop.nvim'] then
+    local hop_mapping = { ["<leader>"] = {
+        j = { "<cmd>lua require'hop'.hint_words()<cr>", 'Hop words' },
+        J = { "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", 'Hop all words' },
+        l = { "<cmd>lua require'hop'.hint_lines()<cr>", 'Hop lines' },
+        L = { "<cmd>lua require'hop'.hint_lines({multi_windows = true})<cr>", 'Hop all lines' },
+        k = { "<cmd> silent lua require'hop'.hint_char1()<cr>", 'Hop char' },
+        K = { "<cmd> silent lua require'hop'.hint_char1({multi_windows = true})<cr>", 'Hop all char' },
+    } }
+    wk.register(hop_mapping, { silent = true, mode = 'n' })
+    wk.register(hop_mapping, { silent = true, mode = 'v' })
 end
 
 -- Diffview
