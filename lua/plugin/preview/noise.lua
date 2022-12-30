@@ -1,4 +1,4 @@
-require("noice").setup({
+require("noice").setup {
   lsp = {
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
     override = {
@@ -10,6 +10,13 @@ require("noice").setup({
       enabled = true,
       view = "mini"
     },
+    -- Prefer lspsaga for hover
+    hover = {
+      enabled = false
+    },
+    signature = {
+      enabled = true
+    }
   },
   -- you can enable a preset for easier configuration
   presets = {
@@ -31,6 +38,8 @@ require("noice").setup({
       },
     },
     popupmenu = {
+      enabled = true,
+      backend = "nui",
       relative = "editor",
       position = {
         row = 8,
@@ -60,10 +69,13 @@ require("noice").setup({
           -- ex:   Info  4:47:18 PM notify.info [Lspsaga] Server of this buffer not support textDocument/documentSymbol
           { event = "notify", kind = { "info" }, find = "[Lspsaga]" },
           -- Hide treesitter error due to experimental nvim-cmp ghost text completion
-          { event = "msg_show", kind = { "lua_error", "" }, find = "query: invalid node" },
-          -- Hide issue with autcommands "*" and matchup
+          { event = "msg_show", kind = { "lua_error", "" }, find =  "query: invalid node" },
+          -- Hide issues with autcommands "*" and matchup
           -- ex:   Error  5:05:55 PM msg_show.lua_error Error detected while processing CursorMoved Autocommands for "*"..
           { event = "msg_show", kind = { "lua_error" }, find = "matchup" },
+          -- Hide issues with neovim-tree-parser while editing
+          -- ex: col value outside range
+          { event = "msg_show", kind = { "lua_error" }, find = "nvim-semantic-tokens" },
         },
       },
       opts = { skip = true },
@@ -79,4 +91,20 @@ require("noice").setup({
     view_history = "mini", -- view for :messages
     view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
   },
-})
+  commands = {
+    history = {
+      -- options for the message history that you get with `:Noice`
+      view = "split",
+      opts = { enter = true, format = "details" },
+      filter = {
+        any = {
+          { event = "notify" },
+          { error = true },
+          { warning = true },
+          { event = "msg_show", kind = { "" } },
+          { event = "lsp", kind = "message" },
+        },
+      },
+    },
+  }
+}
