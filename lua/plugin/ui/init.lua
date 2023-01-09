@@ -1,31 +1,41 @@
-return { config = function(use)
-  -- icons
-  use { 'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end }
+local ui_plugins = {
 
-  -- ui
-  use { 'romgrk/barbar.nvim', config = function() require('plugin.ui.barbar') end }
+   -- colorscheme
+   { url = 'git@gitlab.com:luco-bellic/ayu-vim.git', branch = 'personal', name = 'ayu',
+      config = function()
+         vim.o.termguicolors = true
+         vim.o.background = "dark"
+         vim.cmd [[ colorscheme ayu ]]
+      end
+   },
 
-  use { 'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end }
+   -- icons
+   { 'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
 
-  -- git
-  use { 'lewis6991/gitsigns.nvim',
-    event = 'BufRead',
-    requires = 'plenary.nvim',
-    config = function() require('plugin.ui.gitsigns') end
-  }
+   -- ui
+   { 'romgrk/barbar.nvim', config = function() require('plugin.ui.barbar') end },
 
-  -- Color Syntax
-  use { 'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    config = function() require('plugin.ui.treesitter') end
-  }
+   { 'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end },
 
-  -- Start screen
-  use { 'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end }
+   -- git
+   { 'lewis6991/gitsigns.nvim',
+      event = 'BufRead',
+      requires = 'plenary.nvim',
+      config = function() require('plugin.ui.gitsigns') end
+   },
 
-  -- Scrollbar
-  use { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end }
+   -- Color Syntax
+   { 'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdate',
+      config = function() require('plugin.ui.treesitter') end,
+   },
 
+   -- Start screen
+   { 'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end },
 
-end
+   -- Scrollbar
+   { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end },
+
 }
+
+return ui_plugins

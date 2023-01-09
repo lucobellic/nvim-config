@@ -1,50 +1,42 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
-local fn = vim.fn
-local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({ 'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim',
-    install_path })
-end
-
-local packer_ok, packer = pcall(require, 'packer')
-if packer_ok then
-  packer.startup({ function(use)
-    -- Packer manage itself
-    use { 'wbthomason/packer.nvim', opt = false }
-
-    use 'nvim-lua/popup.nvim'
-    use 'nvim-lua/plenary.nvim'
-    use 'dstein64/vim-startuptime'
-
-    require('plugin.lsp').config(use)
-    require('plugin.completion').config(use)
-    require('plugin.navigation').config(use)
-    require('plugin.preview').config(use)
-    require('plugin.ui').config(use)
-    require('plugin.editor').config(use)
-
-    -- Tasks
-    use 'skywind3000/asyncrun.vim'
-    use { 'skywind3000/asynctasks.vim', after = 'asyncrun.vim' }
-    use { 'GustavoKatel/telescope-asynctasks.nvim', after = 'asynctasks.vim' }
-
-    -- Debugger
-    use { 'mfussenegger/nvim-dap' }
-
-    -- Other
-    use 'lewis6991/impatient.nvim'
-    use 'moll/vim-bbye' -- Close buffer and window
-    use 'xolox/vim-misc'
-    use 'honza/vim-snippets'
-
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
-    if packer_bootstrap then
-      require('packer').sync()
-    end
-  end,
-    config = { max_jobs = 10 }
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
   })
 end
+vim.opt.rtp:prepend(lazypath)
+
+require("lazy").setup({
+  'nvim-lua/popup.nvim',
+  'nvim-lua/plenary.nvim',
+  'dstein64/vim-startuptime',
+  require('plugin.completion'),
+  require('plugin.lsp'),
+  require('plugin.navigation'),
+  require('plugin.preview'),
+  require('plugin.ui'),
+  require('plugin.editor'),
+
+  -- Tasks
+  'skywind3000/asyncrun.vim',
+  'skywind3000/asynctasks.vim',
+  { 'GustavoKatel/telescope-asynctasks.nvim', dependencies = { 'asynctasks.vim' } },
+
+  -- Debugger
+  'mfussenegger/nvim-dap',
+
+  -- Other
+  'lewis6991/impatient.nvim',
+  'moll/vim-bbye', -- Close buffer and window
+  'xolox/vim-misc',
+  'honza/vim-snippets',
+})
+
 
 require('colors') -- Apply coloscheme configuration
+require('mappings')
