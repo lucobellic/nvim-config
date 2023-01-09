@@ -27,6 +27,7 @@ vim.g.config_path = vim.g.nvim_path .. "config"
 config_path = vim.g.config_path
 
 require('plugins')
+require('plugin.editor.config')
 
 vim.g.nvim_path = '$HOME/.config/nvim/'
 vim.g.config_path = vim.g.nvim_path .. 'config'
