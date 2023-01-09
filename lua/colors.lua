@@ -1,68 +1,21 @@
--- vim.cmd[[
---     hi link LspCxxHlSymParameter Constant
---     hi link LspCxxHlSymField Todo
---     hi link BufferVisible BufferInactive
---     hi link BufferVisibleIcon BufferInactive
---     hi link BufferVisibleSign BufferInactive
---     hi link BufferCurrentMod GitGutterChange
---     hi link BufferVisibleMod GitGutterChange
---     hi link BufferInactiveMod GitGutterChange
---     hi link CocSemVariable Normal
---     hi link CocSemProperty Todo
---     hi link CocSemClass Structure
---     hi link CocSemStorageClass Keyword
---     hi link CocSemModifier Keyword
---     hi link CocSemParameter Constant
---     hi link CocSemKeyword Keyword
---     hi link CocSemNamespace Regexp
---     hi HopNextKey guifg=#FF8F40
---     hi HopNextKey1 guifg=#59C2FF
---     hi HopNextKey2 guifg=#C2D94C
---     hi CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
---     hi CmpItemAbbrMatch guibg=NONE guifg=#569CD6
---     hi CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
---     hi CmpItemKindVariable guibg=NONE guifg=#9CDCFE
---     hi CmpItemKindInterface guibg=NONE guifg=#9CDCFE
---     hi CmpItemKindText guibg=NONE guifg=#9CDCFE
---     hi CmpItemKindFunction guibg=NONE guifg=#C586C0
---     hi CmpItemKindMethod guibg=NONE guifg=#C586C0
---     hi CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
---     hi CmpItemKindProperty guibg=NONE guifg=#D4D4D4
---     hi CmpItemKindUnit guibg=NONE guifg=#D4D4D4
--- ]]
+vim.api.nvim_set_hl(0, "HopNextKey", { fg = '#FF8F40' })
+vim.api.nvim_set_hl(0, "HopNextKey1", { fg = '#59C2FF' })
+vim.api.nvim_set_hl(0, "HopNextKey2", { fg = '#C2D94C' })
+vim.api.nvim_set_hl(0, "BufferVisible", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferVisibleIcon", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferVisibleSign", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferCurrentMod", { link = "GitGutterChange" })
+vim.api.nvim_set_hl(0, "BufferVisibleMod", { link = "GitGutterChange" })
+vim.api.nvim_set_hl(0, "BufferInactiveMod", { link = "GitGutterChange" })
 
-vim.api.nvim_exec([[
-    augroup MyColors
-    autocmd!
-    autocmd ColorScheme * hi link LspCxxHlSymParameter Constant
-                      \ | hi link LspCxxHlSymField Todo
-                      \ | hi link BufferVisible BufferInactive
-                      \ | hi link BufferVisibleIcon BufferInactive
-                      \ | hi link BufferVisibleSign BufferInactive
-                      \ | hi link BufferCurrentMod GitGutterChange
-                      \ | hi link BufferVisibleMod GitGutterChange
-                      \ | hi link BufferInactiveMod GitGutterChange
-                      \ | hi link CocSemVariable Normal
-                      \ | hi link CocSemProperty Todo
-                      \ | hi link CocSemClass Structure
-                      \ | hi link CocSemStorageClass Keyword
-                      \ | hi link CocSemModifier Keyword
-                      \ | hi link CocSemParameter Constant
-                      \ | hi link CocSemKeyword Keyword
-                      \ | hi link CocSemNamespace Regexp
-                      \ | hi HopNextKey guifg=#FF8F40
-                      \ | hi HopNextKey1 guifg=#59C2FF
-                      \ | hi HopNextKey2 guifg=#C2D94C
-                      \ | hi CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
-                      \ | hi CmpItemAbbrMatch guibg=NONE guifg=#569CD6
-                      \ | hi CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
-                      \ | hi CmpItemKindVariable guibg=NONE guifg=#9CDCFE
-                      \ | hi CmpItemKindInterface guibg=NONE guifg=#9CDCFE
-                      \ | hi CmpItemKindText guibg=NONE guifg=#9CDCFE
-                      \ | hi CmpItemKindFunction guibg=NONE guifg=#C586C0
-                      \ | hi CmpItemKindMethod guibg=NONE guifg=#C586C0
-                      \ | hi CmpItemKindKeyword guibg=NONE guifg=#D4D4D4
-                      \ | hi CmpItemKindProperty guibg=NONE guifg=#D4D4D4
-                      \ | hi CmpItemKindUnit guibg=NONE guifg=#D4D4D4
-    augroup END
-]], true)
+vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", { bg = "NONE", strikethrough = true, fg = "#808080" })
+vim.api.nvim_set_hl(0, "CmpItemAbbrMatch", { bg = "NONE", fg = "#569CD6" })
+vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", { bg = "NONE", fg = "#569CD6" })
+vim.api.nvim_set_hl(0, "CmpItemKindVariable", { bg = "NONE", fg = "#9CDCFE" })
+vim.api.nvim_set_hl(0, "CmpItemKindInterface", { bg = "NONE", fg = "#9CDCFE" })
+vim.api.nvim_set_hl(0, "CmpItemKindText", { bg = "NONE", fg = "#9CDCFE" })
+vim.api.nvim_set_hl(0, "CmpItemKindFunction", { bg = "NONE", fg = "#C586C0" })
+vim.api.nvim_set_hl(0, "CmpItemKindMethod", { bg = "NONE", fg = "#C586C0" })
+vim.api.nvim_set_hl(0, "CmpItemKindKeyword", { bg = "NONE", fg = "#D4D4D4" })
+vim.api.nvim_set_hl(0, "CmpItemKindProperty", { bg = "NONE", fg = "#D4D4D4" })
+vim.api.nvim_set_hl(0, "CmpItemKindUnit", { bg = "NONE", fg = "#D4D4D4" })
