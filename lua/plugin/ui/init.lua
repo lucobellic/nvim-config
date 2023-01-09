@@ -1,5 +1,14 @@
 local ui_plugins = {
 
+   -- colorscheme
+   { url = 'git@gitlab.com:luco-bellic/ayu-vim.git', branch = 'personal', name = 'ayu',
+      config = function()
+         vim.o.termguicolors = true
+         vim.o.background = "dark"
+         vim.cmd [[ colorscheme ayu ]]
+      end
+   },
+
    -- icons
    { 'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
 

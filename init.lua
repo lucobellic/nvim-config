@@ -13,23 +13,6 @@ if vim.g.neovide then
   vim.api.nvim_set_keymap('n', '<F11>', ':lua toggle_full_screen()<cr>', { silent = true })
 end
 
--- Plug installation boostrap
-local plug_install_path = vim.fn.stdpath('data') .. '/site/autoload/plug.vim'
-if vim.fn.empty(vim.fn.glob(plug_install_path)) > 0 then
-  vim.notify('Plug installation', vim.log.levels.INFO)
-  local cmd = { 'iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim | ni', plug_install_path , '-Force' }
-  os.execute(table.concat(cmd, " "))
-end
-
--- Windows configuration with powershell
--- if vim.loop.os_uname().sysname:lower():find('windows') then
---   -- Windows instllation boostrap
---   -- iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim |` ni "$(@($env:XDG_DATA_HOME, $env:LOCALAPPDATA)[$null -eq $env:XDG_DATA_HOME])/nvim-data/site/autoload/plug.vim" -Force
---   vim.o.shell = 'pwsh' -- let &shell = 'pwsh'
---   vim.o.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command'
---   vim.o.shellredir = '| Out-File -Encoding UTF8'
--- end
-
 vim.o.shellquote = ''
 vim.o.shellpipe = '|'
 vim.o.shellxquote = ''
@@ -48,11 +31,8 @@ require('plugins')
 vim.g.nvim_path = '$HOME/.config/nvim/'
 vim.g.config_path = vim.g.nvim_path .. 'config'
 
-for _, config_file in ipairs({ 'plug', 'editor' }) do
+for _, config_file in ipairs({ 'editor' }) do
   vim.g.config_file = config_file
   vim.cmd [[execute 'source ' . g:config_path . '/' . g:config_file . '.vim']]
 end
 
-vim.o.termguicolors = true
-vim.o.background = "dark"
-vim.cmd [[ colorscheme ayu ]]
