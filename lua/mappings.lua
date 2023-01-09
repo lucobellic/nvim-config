@@ -31,7 +31,7 @@ local telescope_mapping_n = {
 }
 
 
-if wk_ok and packer_plugins and packer_plugins['telescope.nvim'] then
+if wk_ok then
     wk.register(telescope_mapping_n)
     wk.register({ ['<C-p>'] = { '<cmd>Telescope find_files<cr>', "Find files" } })
 
@@ -47,10 +47,9 @@ vim.api.nvim_set_keymap('n', '<leader>p', ':<C-u>bo 20split tmp<cr>:terminal<cr>
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 
 -- Git
-if packer_plugins and packer_plugins['vim-fugitive'] then
-    vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
-end
+
+vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 
 vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr><Esc>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
@@ -74,96 +73,86 @@ vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><
 vim.api.nvim_set_keymap('v', '/', '"hy/<C-r>h', { silent = false, noremap = true })
 
 
-if packer_plugins and packer_plugins['barbar.nvim'] then
-    -- barbar buffer line mappings
-    -- Move to previous/next
-    vim.api.nvim_set_keymap('n', '<C-h>', ':BufferPrevious<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<C-l>', ':BufferNext<cr>', opts)
+-- barbar buffer line mappings
+-- Move to previous/next
+vim.api.nvim_set_keymap('n', '<C-h>', ':BufferPrevious<cr>', opts)
+vim.api.nvim_set_keymap('n', '<C-l>', ':BufferNext<cr>', opts)
 
-    -- Re-order to previous/next
-    vim.api.nvim_set_keymap('n', '<A-h>', ':BufferMovePrevious<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<A-l>', ':BufferMoveNext<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<A-p>', ':BufferPin<cr>', opts)
+-- Re-order to previous/next
+vim.api.nvim_set_keymap('n', '<A-h>', ':BufferMovePrevious<cr>', opts)
+vim.api.nvim_set_keymap('n', '<A-l>', ':BufferMoveNext<cr>', opts)
+vim.api.nvim_set_keymap('n', '<A-p>', ':BufferPin<cr>', opts)
 
-    -- Goto buffer in position...
-    vim.api.nvim_set_keymap('n', '<leader>1', ':BufferGoto 1<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>2', ':BufferGoto 2<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>3', ':BufferGoto 3<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>4', ':BufferGoto 4<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>5', ':BufferGoto 5<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>6', ':BufferGoto 6<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>7', ':BufferGoto 7<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>8', ':BufferGoto 8<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>9', ':BufferGoto 9<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
+-- Goto buffer in position...
+vim.api.nvim_set_keymap('n', '<leader>1', ':BufferGoto 1<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>2', ':BufferGoto 2<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>3', ':BufferGoto 3<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>4', ':BufferGoto 4<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>5', ':BufferGoto 5<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>6', ':BufferGoto 6<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>7', ':BufferGoto 7<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>8', ':BufferGoto 8<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>9', ':BufferGoto 9<cr>', opts)
+vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
 
-    -- Hide BufferGoto
-    if wk_ok then
-        for i = 0, 9, 1 do
-            wk.register({ ["<leader>" .. i] = "which_key_ignore" })
-        end
+-- Hide BufferGoto
+if wk_ok then
+    for i = 0, 9, 1 do
+        wk.register({ ["<leader>" .. i] = "which_key_ignore" })
     end
-
-    -- Close buffer
-    vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
-
-    -- Magic buffer-picking mode
-    vim.api.nvim_set_keymap('n', '<C-s>', ':BufferPick<cr>', opts)
-
-    -- Sort automatically by...
-    vim.api.nvim_set_keymap('n', '<Space>bd', ':BufferOrderByDirectory<cr>', opts)
-    vim.api.nvim_set_keymap('n', '<Space>bl', ':BufferOrderByLanguage<cr>', opts)
 end
+
+-- Close buffer
+vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
+
+-- Magic buffer-picking mode
+vim.api.nvim_set_keymap('n', '<C-s>', ':BufferPick<cr>', opts)
+
+-- Sort automatically by...
+vim.api.nvim_set_keymap('n', '<Space>bd', ':BufferOrderByDirectory<cr>', opts)
+vim.api.nvim_set_keymap('n', '<Space>bl', ':BufferOrderByLanguage<cr>', opts)
 
 -- Outline
-if packer_plugins and packer_plugins['lspsaga.nvim'] then
-    vim.api.nvim_set_keymap('n', '<Space>go', ':Lspsaga outline<cr>', opts)
-end
+vim.api.nvim_set_keymap('n', '<Space>go', ':Lspsaga outline<cr>', opts)
 
 -- Zen mode
-if packer_plugins and packer_plugins['zen-mode.nvim'] then
-    vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
-end
+vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
 
 
 -- Trouble
-if packer_plugins and packer_plugins['todo-comments.nvim'] then
-    wk.register({ ['<leader>gt'] = { ':TodoTrouble<cr>', 'Todo Trouble' } })
-end
+wk.register({ ['<leader>gt'] = { ':TodoTrouble<cr>', 'Todo Trouble' } })
 
 -- Floaterm
-if packer_plugins and packer_plugins['vim-floaterm'] then
-    vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle!<cr>', opts)
-    vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle!<cr>', opts)
-    if wk_ok then
-        wk.register({
-            ["g;"] = {
-                ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>',
-                'Lazygit'
-            }
-        })
-    end
-
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = 'floaterm',
-        callback = function()
-            vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', ':FloatermKill<CR>', opts)
-            vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermKill<CR>', opts)
-
-            vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', ':FloatermNext<CR>', opts)
-            vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
-
-            vim.api.nvim_buf_set_keymap(0, 'n', '<C-h>', ':FloatermPrev<CR>', opts)
-            vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
-
-            vim.api.nvim_buf_set_keymap(0, 'n', '<C-t>', ':FloatermNew<CR>', opts)
-            vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts)
-        end
+vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle!<cr>', opts)
+vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle!<cr>', opts)
+if wk_ok then
+    wk.register({
+        ["g;"] = {
+            ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit --name=lazygit lazygit<cr>',
+            'Lazygit'
+        }
     })
 end
 
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = 'floaterm',
+    callback = function()
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', ':FloatermKill<CR>', opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermKill<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', ':FloatermNext<CR>', opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-h>', ':FloatermPrev<CR>', opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
+
+        vim.api.nvim_buf_set_keymap(0, 'n', '<C-t>', ':FloatermNew<CR>', opts)
+        vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts)
+    end
+})
+
 -- Hop
-if wk_ok and packer_plugins and packer_plugins['hop.nvim'] then
+if wk_ok then
     local hop_mapping = { ["<leader>"] = {
         j = { "<cmd>lua require'hop'.hint_words()<cr>", 'Hop words' },
         J = { "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", 'Hop all words' },
@@ -177,7 +166,7 @@ if wk_ok and packer_plugins and packer_plugins['hop.nvim'] then
 end
 
 -- Diffview
-if wk_ok and packer_plugins and packer_plugins['diffview.nvim'] then
+if wk_ok then
     wk.register({ ["<leader>"] = {
         g = {
             d = { ':DiffviewOpen<cr>', 'Diffview Open' },
