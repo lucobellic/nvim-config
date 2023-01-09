@@ -1,7 +1,3 @@
-local impatient_ok, impatient = pcall(require, "impatient")
-if impatient_ok then impatient.enable_profile() end
-
-
 if vim.g.neovide then
   vim.cmd [[ set guifont=DMMono\ Nerd\ Font\ Mono:h11 ]]
   vim.g.neovide_cursor_animation_length = 0.1

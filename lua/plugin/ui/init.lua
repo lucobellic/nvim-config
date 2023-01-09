@@ -1,31 +1,32 @@
-return { config = function(use)
-  -- icons
-  use { 'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end }
+local ui_plugins = {
 
-  -- ui
-  use { 'romgrk/barbar.nvim', config = function() require('plugin.ui.barbar') end }
+   -- icons
+   { 'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
 
-  use { 'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end }
+   -- ui
+   { 'romgrk/barbar.nvim', config = function() require('plugin.ui.barbar') end },
 
-  -- git
-  use { 'lewis6991/gitsigns.nvim',
-    event = 'BufRead',
-    requires = 'plenary.nvim',
-    config = function() require('plugin.ui.gitsigns') end
-  }
+   { 'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end },
 
-  -- Color Syntax
-  use { 'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate',
-    config = function() require('plugin.ui.treesitter') end
-  }
+   -- git
+   { 'lewis6991/gitsigns.nvim',
+      event = 'BufRead',
+      requires = 'plenary.nvim',
+      config = function() require('plugin.ui.gitsigns') end
+   },
 
-  -- Start screen
-  use { 'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end }
+   -- Color Syntax
+   { 'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdate',
+      config = function() require('plugin.ui.treesitter') end,
+   },
 
-  -- Scrollbar
-  use { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end }
+   -- Start screen
+   { 'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end },
 
+   -- Scrollbar
+   { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end },
 
-end
 }
+
+return ui_plugins

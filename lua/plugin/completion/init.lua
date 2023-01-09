@@ -1,23 +1,23 @@
-return { config = function(use)
-    use { 'hrsh7th/cmp-nvim-lsp' }
-    use { 'hrsh7th/cmp-buffer' }
-    use { 'hrsh7th/cmp-path' }
-    use { 'hrsh7th/cmp-cmdline' }
-    use { 'hrsh7th/nvim-cmp', requires = { 'onsails/lspkind.nvim' },
+local completion_plugins = {
+    { 'hrsh7th/cmp-nvim-lsp' },
+    { 'hrsh7th/cmp-buffer' },
+    { 'hrsh7th/cmp-path' },
+    { 'hrsh7th/cmp-cmdline' },
+    { 'hrsh7th/nvim-cmp',
+        dependencies = { 'onsails/lspkind.nvim' },
         config = function()
             require('plugin.completion.comp')
         end
-    }
+    },
 
     -- Snippets
-    use { 'saadparwaiz1/cmp_luasnip' }
-    use { 'rafamadriz/friendly-snippets' }
-    use { 'L3MON4D3/LuaSnip', module = 'luasnip',
-        after = 'nvim-cmp',
+    { 'saadparwaiz1/cmp_luasnip' },
+    { 'rafamadriz/friendly-snippets' },
+    { 'L3MON4D3/LuaSnip',
         config = function()
             require('luasnip.loaders.from_vscode').lazy_load()
         end
     }
-
-end
 }
+
+return completion_plugins

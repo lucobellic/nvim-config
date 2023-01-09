@@ -1,19 +1,17 @@
-return { config = function(use)
-    use { 'williamboman/mason.nvim', config = function() require('mason').setup() end }
-    use { 'williamboman/mason-lspconfig.nvim', config = function() require('mason-lspconfig').setup() end }
+local lsp_plugins = {
+    { 'williamboman/mason.nvim', config = function() require('mason').setup() end },
+    { 'williamboman/mason-lspconfig.nvim', config = function() require('mason-lspconfig').setup() end },
 
-    use { 'glepnir/lspsaga.nvim', config = function() require('plugin.lsp.saga') end }
+    { 'glepnir/lspsaga.nvim', config = function() require('plugin.lsp.saga') end },
 
-    -- Use native nvim lsp
-    use { 'theHamsta/nvim-semantic-tokens', config = function() require('plugin.lsp.tokens') end }
-    use { 'neovim/nvim-lspconfig',
-        after = 'nvim-semantic-tokens',
+    --  native nvim lsp
+    { 'theHamsta/nvim-semantic-tokens', config = function() require('plugin.lsp.tokens') end },
+    { 'neovim/nvim-lspconfig',
+        dependencies = { 'nvim-semantic-tokens' },
         config = function()
             require('plugin.lsp.config')
-            -- require('plugin.lsp.notify.progress') -- use with notify
         end
-    }
-
-
-end
+    },
 }
+
+return lsp_plugins
