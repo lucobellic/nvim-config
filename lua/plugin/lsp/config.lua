@@ -82,32 +82,13 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = { 'sumneko_lua', 'rust_analyzer', 'jsonls', 'vimls', 'cmake' }
--- local servers = {'pyright', 'clangd', 'cmake-language-server', 'docker-langserver', 'json', 'vim', 'lua'
+local servers = { 'sumneko_lua', 'rust_analyzer', 'jsonls', 'vimls', 'cmake', 'pylsp' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities
   }
 end
-
-nvim_lsp.pyright.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    pyright = {
-      disableLanguageServices = false,
-      disableOrganizeImports  = false,
-      analysis                = {
-        autoSearchPaths        = true,
-        autoImportCompletions  = true,
-        diagnosticMode         = 'workspace',
-        typeCheckingMode       = 'basic',
-        useLibraryCodeForTypes = true,
-      }
-    }
-  }
-}
 
 -- nvim_lsp.pylsp.setup{
 --   on_attach = on_attach,
