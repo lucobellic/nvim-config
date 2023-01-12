@@ -6,7 +6,7 @@ local editor_plugins = {
     -- smooth scroll
     { 'karb94/neoscroll.nvim', config = function() require('plugin.editor.neoscroll') end },
 
-    { 'lukas-reineke/indent-blankline.nvim', config = function() require('plugin.editor.indent') end },
+    { 'echasnovski/mini.indentscope', branch = 'stable', config = function() require('plugin.editor.indentscope') end },
     { 'sindrets/diffview.nvim',
         dependencies = {'nvim-lua/plenary.nvim' } ,
         config = function() require('plugin.editor.diffview') end
