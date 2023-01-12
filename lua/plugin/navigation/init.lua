@@ -26,9 +26,7 @@ local navigation_plugins = {
     'tommcdo/vim-exchange',
     'tommcdo/vim-lion',
 
-    'kana/vim-textobj-user', -- user defined textobj
-    'kana/vim-textobj-line', -- il/ib line selection
-    'rhysd/vim-textobj-anyblock', -- ib/ab block selection
+    { 'echasnovski/mini.ai', branch = 'stable', config = function() require('mini.ai').setup() end },
 
     -- Better matchup '%' usage
     { 'andymass/vim-matchup',
