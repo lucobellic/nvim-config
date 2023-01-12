@@ -1,6 +1,7 @@
 local trouble = require('trouble.providers.telescope')
 local actions = require("telescope.actions")
 
+require('telescope').load_extension('live_grep_args')
 require('telescope').setup {
   defaults = {
     mappings = {

@@ -2,7 +2,7 @@ local preview_plugins = {
 
   { 'folke/trouble.nvim' },
   { 'nvim-telescope/telescope.nvim',
-    dependencies = { 'plenary.nvim', 'folke/trouble.nvim' },
+    dependencies = { 'plenary.nvim', 'folke/trouble.nvim', 'nvim-telescope/telescope-live-grep-args.nvim'},
     config = function() require('plugin.preview.telescope') end
   },
 

@@ -11,7 +11,7 @@ local telescope_mapping_n = {
         F = {
             name = "find",
             F = { ':<C-u>:Files<cr>', 'Find All File' },
-            L = { '<cmd>Telescope live_grep<cr>', 'Search Workspace' },
+            L = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' },
         },
         f = {
             name = "find",
@@ -21,7 +21,7 @@ local telescope_mapping_n = {
             g = { ':<C-u>:Rg<cr>', 'Search Workspace' },
             b = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
             l = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' },
-            L = { '<cmd>Telescope live_grep<cr>', 'Search Workspace' },
+            L = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' },
             m = { '<cmd>Telescope marks<cr>', "Find Marks" },
             y = { '<cmd>Telescope registers<cr>', 'Find Registers' },
             w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' }
