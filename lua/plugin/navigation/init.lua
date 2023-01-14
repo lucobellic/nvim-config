@@ -2,7 +2,7 @@ local navigation_plugins = {
     { 'junegunn/fzf', run = 'fzf#install()' },
     { 'junegunn/fzf.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'fzf.vim') end },
 
-    { 'phaazon/hop.nvim', config = function() require('plugin.navigation.hop') end },
+    { 'phaazon/hop.nvim', branch = 'v2', config = function() require('plugin.navigation.hop') end },
     'tpope/vim-sensible',
     'tpope/vim-surround',
     'tpope/vim-commentary',
