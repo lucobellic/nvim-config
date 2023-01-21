@@ -1,7 +1,7 @@
 local cmd = vim.cmd
 
 require 'nvim-treesitter.configs'.setup {
-  -- ensure_installed = {"norg", "python"},
+  ensure_installed = {"cmake", "python", "yaml", "json", "vim"},
   highlight = {
     enable = true,
     disable = { "c", "cpp", "rust", "lua" }, -- disable highlight supported by lsp

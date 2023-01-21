@@ -20,6 +20,7 @@ if get(g:, '_has_set_default_indent_settings', 0) == 0
 endif
 
 
+set filetype=1
 set noshowmode
 set nobackup
 set nowritebackup

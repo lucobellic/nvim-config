@@ -1,7 +1,12 @@
-require('mini.indentscope').setup({
+local indentscope = require('mini.indentscope')
+indentscope.setup({
   draw = {
     -- Delay (in ms) between event and start of drawing scope indicator
     delay = 50,
+    -- animation = indentscope.gen_animation.quadratic(
+    --   { easing = 'in-out', duration = 200, unit = 'total' }
+    -- ),
+    animation = indentscope.gen_animation('quadraticInOut', { duration = 10, unit = 'step' })
   },
   -- Options which control scope computation
   options = {
@@ -11,7 +16,7 @@ require('mini.indentscope').setup({
 
     -- Whether to use cursor column when computing reference indent.
     -- Useful to see incremental scopes with horizontal cursor movements.
-    indent_at_cursor = true,
+    indent_at_cursor = false,
 
     -- Whether to first check input line to be a border of adjacent scope.
     -- Use it if you want to place cursor on function header to get scope of
@@ -30,6 +35,6 @@ require('mini.indentscope').setup({
   symbol = '▏',
 })
 
-vim.cmd[[
+vim.cmd [[
   autocmd Filetype dashboard lua vim.b.miniindentscope_disable = true
 ]]

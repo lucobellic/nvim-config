@@ -100,7 +100,7 @@ end
 nvim_lsp.clangd.setup {
   -- on_init = nvim_lsp_clangd_highlight.on_init,
   on_attach = on_attach,
-  cmd = { "clangd", "--background-index", "--clang-tidy", "--enable-config" },
+  cmd = { "clangd", "--background-index", "--clang-tidy", "--enable-config", "--header-insertion=iwyu" },
   filetypes = { "c", "cpp", "objc", "objcpp" },
   settings = {
     semanticHighlighting = true

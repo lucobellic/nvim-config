@@ -3,6 +3,7 @@ vim.o.laststatus = 3
 vim.o.clipboard = "unnamedplus"
 vim.o.number = true
 vim.o.signcolumn = "yes:1"
+vim.o.number = true
 vim.o.cursorline = true
 
 vim.o.autoread = true

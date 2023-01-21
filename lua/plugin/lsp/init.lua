@@ -10,7 +10,8 @@ local lsp_plugins = {
                     'rust_analyzer',
                     'pylsp',
                     'pyright',
-                    'yapf'
+                    'yapf',
+                    'clangd'
                 }}
         end
     },
