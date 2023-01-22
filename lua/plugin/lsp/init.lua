@@ -10,7 +10,6 @@ local lsp_plugins = {
                     'rust_analyzer',
                     'pylsp',
                     'pyright',
-                    'yapf',
                     'clangd'
                 }}
         end
@@ -19,9 +18,7 @@ local lsp_plugins = {
     { 'glepnir/lspsaga.nvim', config = function() require('plugin.lsp.saga') end },
 
     --  native nvim lsp
-    { 'theHamsta/nvim-semantic-tokens', config = function() require('plugin.lsp.tokens') end },
     { 'neovim/nvim-lspconfig',
-        dependencies = { 'nvim-semantic-tokens' },
         config = function()
             require('plugin.lsp.config')
         end
