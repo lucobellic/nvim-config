@@ -169,7 +169,7 @@ if wk_ok then
         f = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", 'Hop next char'},
         F = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", 'Hop prev char'},
         t = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", 'Hop next char'},
-        T = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", 'Hop prev char'},
+        T = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })<cr>", 'Hop prev char'},
     }
     wk.register(hop_reimplement_mapping, {silent = true, mode = 'n'})
     wk.register(hop_reimplement_mapping, {silent = true, mode = 'v'})
