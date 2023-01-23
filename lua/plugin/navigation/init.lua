@@ -21,7 +21,18 @@ local navigation_plugins = {
     { 'tpope/vim-abolish', dependencies = { 'live-command.nvim' } },
 
 
-    { 'kyazdani42/nvim-tree.lua', config = function() require('plugin.navigation.tree') end },
+    -- { 'kyazdani42/nvim-tree.lua', config = function() require('plugin.navigation.tree') end },
+    { 'nvim-neo-tree/neo-tree.nvim',
+        branch = 'v2.x',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'MunifTanjim/nui.nvim',
+            'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+        },
+        config = function ()
+            require('plugin.navigation.neo-tree')
+        end
+    },
 
     'tommcdo/vim-exchange',
     'tommcdo/vim-lion',

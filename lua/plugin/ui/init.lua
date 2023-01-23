@@ -12,7 +12,7 @@ local ui_plugins = {
    },
 
    -- icons
-   { 'kyazdani42/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
+   { 'nvim-tree/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
 
    -- ui
    { 'romgrk/barbar.nvim',

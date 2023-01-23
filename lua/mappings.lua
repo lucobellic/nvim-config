@@ -185,3 +185,6 @@ if wk_ok then
         }
     }, silent = true })
 end
+
+vim.keymap.set('n', '<C-b>', '<cmd>:NeoTreeShowToggle<cr>', opts)
+-- vim.keymap.set('n', '<C-b>', ':NvimTreeFindFileToggle<cr>', opts)
