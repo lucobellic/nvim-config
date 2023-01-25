@@ -1,3 +1,10 @@
+local components = require("neo-tree.sources.common.components")
+
+local function trim_or_space(res)
+  if res and res.text then res.text = vim.trim(res.text) end
+  return res and res or { text = " " }
+end
+
 require("neo-tree").setup({
   close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
   popup_border_style = "rounded",
@@ -13,12 +20,12 @@ require("neo-tree").setup({
   --       end
   --   end , -- this sorts files and directories descendantly
   default_component_configs = {
-    diagnostics = {
+    trim_diagnostics = {
       symbols = {
-        hint = "▏",
-        info = "▏",
-        warn = "▏",
-        error = "▏",
+        hint = "⬥",
+        info = "⬥",
+        warn = "⬥",
+        error = "⬥",
       },
       highlights = {
         hint = "DiagnosticSignHint",
@@ -62,19 +69,19 @@ require("neo-tree").setup({
       use_git_status_colors = false,
       highlight = "NeoTreeFileName",
     },
-    git_status = {
+    trim_git_status = {
       symbols = {
         -- Change type
-        added     = "▕",
-        modified  = "▕",
-        deleted   = "▕",
-        renamed   = "-",
+        added     = "",
+        modified  = "",
+        deleted   = "",
+        renamed   = "",
         -- Status type
-        untracked = "",
-        ignored   = "",
-        unstaged  = "",
-        staged    = "",
-        conflict  = "",
+        untracked = "",
+        ignored   = "",
+        unstaged  = "",
+        staged    = "",
+        conflict  = "",
       }
     },
   },
@@ -90,10 +97,12 @@ require("neo-tree").setup({
         "toggle_node",
         nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
       },
+      ["/"] = "none",
       ["<2-LeftMouse>"] = "open",
       ["<cr>"] = "open",
       ["l"] = "open",
       ["<esc>"] = "revert_preview",
+      --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
       ["P"] = { "toggle_preview", config = { use_float = true } },
       ["S"] = "open_split",
       ["s"] = "open_vsplit",
@@ -103,10 +112,10 @@ require("neo-tree").setup({
       -- ["<cr>"] = "open_drop",
       -- ["t"] = "open_tab_drop",
       ["w"] = "open_with_window_picker",
-      --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
       ["C"] = "close_node",
       ["h"] = "close_node",
-      ["z"] = "close_all_nodes",
+      ["z"] = "none",
+      -- ["z"] = "close_all_nodes",
       --["Z"] = "expand_all_nodes",
       ["a"] = {
         "add",
@@ -133,12 +142,22 @@ require("neo-tree").setup({
       ["q"] = "close_window",
       ["R"] = "refresh",
       ["?"] = "show_help",
-      ["<"] = "prev_source",
-      [">"] = "next_source",
+      ["<"] = "none", -- "prev_source",
+      [">"] = "none", -- "next_source",
+      ["["] = "prev_source",
+      ["]"] = "next_source",
     }
   },
   nesting_rules = {},
   filesystem = {
+    components = {
+      trim_git_status = function(config, node, state)
+        return { trim_or_space(components.git_status(config, node, state)[1]) }
+      end,
+      trim_diagnostics = function(config, node, state)
+        return trim_or_space(components.diagnostics(config, node, state))
+      end
+    },
     renderers = {
       directory = {
         {
@@ -170,15 +189,20 @@ require("neo-tree").setup({
           right_padding = 0,
           content = {
             { "name", zindex = 10 },
-
-            -- { "git_stage_status", zindex = 20, align = "right" },
-            { "git_status",
+            { "trim_diagnostics", zindex = 20, align = "right" },
+            { "trim_git_status",
               symbols = {
                 -- Change type
-                added     = "",
-                modified  = "",
-                deleted   = "",
-                renamed   = "",
+                added    = "▕",
+                modified = "▕",
+                deleted  = "▕",
+                renamed  = "-",
+              },
+              zindex = 10,
+              align = "right"
+            },
+            { "trim_git_status",
+              symbols = {
                 -- Status type
                 untracked = "",
                 ignored   = "",
@@ -186,28 +210,9 @@ require("neo-tree").setup({
                 staged    = "",
                 conflict  = "",
               },
-              zindex = 20,
+              zindex = 10,
               align = "right"
             },
-            { "git_status",
-              symbols = {
-                -- Change type
-                added     = "▕",
-                modified  = "▕",
-                deleted   = "▕",
-                renamed   = "-",
-                -- Status type
-                untracked = "",
-                ignored   = "",
-                unstaged  = "",
-                staged    = "",
-                conflict  = "",
-              },
-
-              zindex = 20,
-              align = "right"
-            },
-            { "diagnostics", zindex = 20, align = "right" },
           },
         },
       },
@@ -250,12 +255,14 @@ require("neo-tree").setup({
         ["<bs>"] = "navigate_up",
         ["."] = "set_root",
         ["H"] = "toggle_hidden",
-        ["/"] = "fuzzy_finder",
+        ["F"] = "fuzzy_finder",
         ["D"] = "fuzzy_finder_directory",
         ["f"] = "filter_on_submit",
         ["<c-x>"] = "clear_filter",
-        ["[g"] = "prev_git_modified",
-        ["]g"] = "next_git_modified",
+        ["<g"] = "prev_git_modified",
+        ["<G"] = "prev_git_modified",
+        [">g"] = "next_git_modified",
+        [">G"] = "next_git_modified",
       }
     }
   },

@@ -50,3 +50,9 @@ vim.api.nvim_set_hl(0, '@regexp'             , { link = 'TSStringRegex' })
 vim.api.nvim_set_hl(0, '@operator'           , { link = 'TSOperator' })
 vim.api.nvim_set_hl(0, '@decorator'          , { link = 'TSKeyword' })
 vim.api.nvim_set_hl(0, '@punctuation.bracket', { link = '' })
+
+vim.api.nvim_set_hl(0, "Todo", { fg = "NONE", bg = "NONE" })
+vim.api.nvim_set_hl(0, "Error", { bg = "NONE" })
+
+vim.api.nvim_set_hl(0, "NeoTreeGitUntracked", { link = 'NeoTreeDotfile' })
+vim.api.nvim_set_hl(0, "NeoTreeGitUnstaged",  { link = 'NeoTreeDotfile' })
