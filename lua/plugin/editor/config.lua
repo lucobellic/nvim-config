@@ -34,5 +34,3 @@ vim.o.showbreak = '↪'
 vim.opt.listchars = { tab = '- ', trail = '·', extends = '⟩', precedes = '⟨' }
 
 vim.g.lion_squeeze_spaces = true
-
-require('plugin.editor.fold')

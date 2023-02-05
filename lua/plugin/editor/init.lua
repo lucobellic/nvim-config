@@ -16,6 +16,11 @@ local editor_plugins = {
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function() require('plugin.editor.diffview') end
     },
+
+    { 'kevinhwang91/nvim-ufo',
+        dependencies = { 'kevinhwang91/promise-async' },
+        config = function() require('plugin.editor.fold') end
+    }
 }
 
 return editor_plugins

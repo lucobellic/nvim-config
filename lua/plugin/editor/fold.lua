@@ -1,6 +1,9 @@
 vim.o.foldcolumn = '0'
 vim.o.foldenable = false
 vim.o.foldmethod = 'syntax'
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
 
 
 -- fold:c	'·' or '-'	filling 'foldtext'
@@ -16,3 +19,5 @@ function _G.custom_fold_text()
 end
 
 vim.o.foldtext = 'v:lua.custom_fold_text()'
+
+require('ufo').setup()
