@@ -36,5 +36,5 @@ indentscope.setup({
 })
 
 vim.cmd [[
-  autocmd Filetype dashboard lua vim.b.miniindentscope_disable = true
+  autocmd Filetype dashboard,lspsagaoutline lua vim.b.miniindentscope_disable = true
 ]]
