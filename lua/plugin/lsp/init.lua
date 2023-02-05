@@ -2,16 +2,20 @@ local lsp_plugins = {
     { 'williamboman/mason.nvim', config = function() require('mason').setup() end },
     { 'williamboman/mason-lspconfig.nvim',
         config = function()
-                require('mason-lspconfig').setup { ensure_installed = {
-                    'jsonls',
-                    'vimls',
-                    'cmake',
-                    'sumneko_lua',
-                    'rust_analyzer',
-                    'pylsp',
-                    'pyright',
-                    'clangd'
-                }}
+            require('mason-lspconfig').setup { ensure_installed = {
+                'jsonls',
+                'vimls',
+                'cmake',
+                'sumneko_lua',
+                'rust_analyzer',
+                'pylsp',
+                'pyright',
+                'clangd',
+                'yapf',
+                'pylint',
+                'autoflake',
+                'autopep8',
+            } }
         end
     },
 

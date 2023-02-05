@@ -82,18 +82,41 @@ for _, lsp in ipairs(servers) do
   }
 end
 
--- nvim_lsp.pylsp.setup{
---   on_attach = on_attach,
---   capabilities = capabilities,
--- }
+nvim_lsp.pylsp.setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  configurationSources = { 'flake8', 'pycodestyle' },
+  plugins = {
+    rope_completion = {
+      enabled = true
+    },
+    flake8 = {
+      enabled = true
+    },
+    pylint = {
+      enabled = true
+    },
+    pydocstyle = {
+      enabled = true
+    },
+  }
+}
 
 -- C/C++ Clangd configuration
 -- local nvim_lsp_clangd_highlight = require('nvim-lsp-clangd-highlight')
 nvim_lsp.clangd.setup {
   -- on_init = nvim_lsp_clangd_highlight.on_init,
   on_attach = on_attach,
-  cmd = { "clangd", "--background-index", "--clang-tidy", "--enable-config", "--header-insertion=iwyu" },
-  filetypes = { "c", "cpp", "objc", "objcpp" },
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--enable-config",
+    "--header-insertion=iwyu",
+    "--all-scopes-completion",
+    "-j=2",
+  },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
   settings = {
     semanticHighlighting = true
   },
