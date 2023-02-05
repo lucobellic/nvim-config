@@ -2,12 +2,15 @@ local trouble = require('trouble.providers.telescope')
 local actions = require("telescope.actions")
 
 require('telescope').load_extension('live_grep_args')
+local lga_actions = require("telescope-live-grep-args.actions")
 require('telescope').setup {
   defaults = {
     mappings = {
       i = {
         ["<C-t>"] = trouble.smart_open_with_trouble,
-        ["<esc>"] = actions.close
+        ["<esc>"] = actions.close,
+        ["<C-k>"] = lga_actions.quote_prompt(),
+        ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
       },
       n = {
         ["<C-t>"] = trouble.smart_open_with_trouble,
@@ -23,6 +26,7 @@ require('telescope').setup {
       '--smart-case'
     },
 
+    path_display = {'smart'},
     show_line = false,
     prompt_title = false,
     results_title = false,
