@@ -28,10 +28,14 @@ end
 
 wilder.set_option('renderer', wilder.popupmenu_renderer(
   wilder.popupmenu_palette_theme({
-    border = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    prompt_border = { ' ', '─', ' ' },
+    -- border = {
+    --   ' ', ' ', ' ',
+    --   ' ', ' ', ' ',
+    --   ' ', ' ', ' '
+    -- },
+    -- prompt_border = { '╭', '─', '╮' },
     -- 'single', 'double', 'rounded' or 'solid'
-    -- border = 'rounded',
+    border = 'rounded',
     max_height = '30%', -- max height of the palette
     max_width = '40%',
     margin = '2%',
@@ -42,8 +46,8 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     -- empty_message = 'Test',
     highlights = {
       prompt = 'Normal',
-      prompt_cursor = 'ErrorMsg',
-      border = 'Comment',
+      prompt_cursor = 'Title',
+      border = 'Structure',
       gradient = gradient, -- must be set
       -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
     },
@@ -52,5 +56,12 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
       wilder.lua_fzy_highlighter(),
     }),
     left = { ' ', wilder.popupmenu_devicons() },
+    right = { ' ',
+      wilder.popupmenu_scrollbar({
+        thumb_char = '│',
+        thumb_hl = 'CursorLine',
+        scrollbar_hl = ''
+      })
+    },
   })
 ))
