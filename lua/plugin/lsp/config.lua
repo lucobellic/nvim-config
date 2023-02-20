@@ -13,7 +13,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gd', '<cmd>TroubleToggle lsp_definitions<CR>', opts)
   buf_set_keymap('n', 'gtd', '<cmd>TroubleToggle lsp_type_definitions<CR>', opts)
   -- buf_set_keymap('n', 'K'         , '<cmd>lua vim.lsp.buf.hover()<CR>'                                     , opts)
-  buf_set_keymap('n', 'K'         , '<cmd>Lspsaga hover_doc<CR>'                                     , opts)
+  buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
   -- buf_set_keymap('n', '<leader>d' , '<Cmd>lua vim.lsp.buf.hover()<CR>'                                     , opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
@@ -45,11 +45,19 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "<C", "<cmd>silent Lspsaga diagnostic_jump_prev<CR>", opts)
   buf_set_keymap("n", ">C", "<cmd>silent Lspsaga diagnostic_jump_next<CR>", opts)
 
+  local key_opts = { noremap = true, silent = true, buffer = bufnr }
   -- Only jump to error
-  buf_set_keymap("n", "<E", "<cmd>lua require('lspsaga.diagnostic').goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>",
-    opts)
-  buf_set_keymap("n", ">E", "<cmd>lua require('lspsaga.diagnostic').goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>",
-    opts)
+  vim.keymap.set("n", "<E",
+    function()
+      require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })
+    end,
+    key_opts)
+
+  vim.keymap.set("n", ">E",
+    function()
+      require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })
+    end,
+    key_opts)
 
   -- Set some keybinds conditional on server capabilities
   local caps = client.server_capabilities
@@ -57,9 +65,7 @@ local on_attach = function(client, bufnr)
     buf_set_keymap("n", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
     buf_set_keymap("v", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
   end
-
 end
-
 -----------------------------
 --- Servers Configuration ---
 -----------------------------
