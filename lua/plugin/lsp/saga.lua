@@ -1,4 +1,7 @@
 require('lspsaga').setup({
+    diagnostic = {
+        on_insert = false,
+    },
     lightbulb = { enable = false },
     outline = {
         auto_preview = false,
