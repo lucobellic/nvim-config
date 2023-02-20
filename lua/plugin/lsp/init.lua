@@ -6,15 +6,11 @@ local lsp_plugins = {
                 'jsonls',
                 'vimls',
                 'cmake',
-                'sumneko_lua',
+                'lua_ls',
                 'rust_analyzer',
                 'pylsp',
                 'pyright',
                 'clangd',
-                'yapf',
-                'pylint',
-                'autoflake',
-                'autopep8',
             } }
         end
     },
