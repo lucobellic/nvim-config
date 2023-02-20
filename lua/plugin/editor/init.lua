@@ -20,6 +20,11 @@ local editor_plugins = {
     { 'kevinhwang91/nvim-ufo',
         dependencies = { 'kevinhwang91/promise-async' },
         config = function() require('plugin.editor.fold') end
+    },
+
+    { 'windwp/nvim-spectre',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = function() require('plugin.editor.spectre') end
     }
 }
 

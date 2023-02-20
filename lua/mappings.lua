@@ -187,4 +187,10 @@ if wk_ok then
 end
 
 vim.keymap.set('n', '<C-b>', '<cmd>:NeoTreeShowToggle<cr>', opts)
--- vim.keymap.set('n', '<C-b>', ':NvimTreeFindFileToggle<cr>', opts)
+
+-- search current word
+vim.keymap.set( {"n"}, "<leader>sw", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>")
+vim.keymap.set( {"v"}, "<leader>s", "<esc>:lua require('spectre').open_visual()<CR>")
+
+-- search in current file
+vim.keymap.set( {"n", "x"}, "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>")
