@@ -177,15 +177,19 @@ end
 
 -- Diffview
 if wk_ok then
-    wk.register({ ["<leader>"] = {
-        g = {
-            d = { ':DiffviewOpen<cr>', 'Diffview Open' },
-            q = { ':DiffviewClose<cr>', 'Diffview Close' },
-            f = { ':DiffviewFileHistory %<cr>', 'Diffview File History' },
-        }
-    }, silent = true })
+    local diffview_mapping = {
+        ["<leader>"] = {
+            g = {
+                d = { ':DiffviewOpen<cr>', 'Diffview Open' },
+                q = { ':DiffviewClose<cr>', 'Diffview Close' },
+                f = { ':DiffviewFileHistory %<cr>', 'Diffview File History' },
+            }
+        },
+        silent = true
+    }
+    wk.register(diffview_mapping, { silent = true, mode = 'n' })
+    wk.register(diffview_mapping, { silent = true, mode = 'v' })
 end
-
 vim.keymap.set('n', '<C-b>', '<cmd>:NeoTreeShowToggle<cr>', opts)
 
 -- search current word
