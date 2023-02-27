@@ -9,7 +9,7 @@ local editor_plugins = {
     },
 
     -- smooth scroll
-    { 'karb94/neoscroll.nvim', config = function() require('plugin.editor.neoscroll') end },
+    -- { 'karb94/neoscroll.nvim', config = function() require('plugin.editor.neoscroll') end },
 
     { 'echasnovski/mini.indentscope', branch = 'stable', config = function() require('plugin.editor.indentscope') end },
     { 'sindrets/diffview.nvim',

@@ -44,6 +44,9 @@ local ui_plugins = {
    -- Scrollbar
    { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end },
 
+   -- Animation
+   { 'echasnovski/mini.animate', event = "VeryLazy", config = function() require('plugin.ui.animate') end },
+
 }
 
 return ui_plugins
