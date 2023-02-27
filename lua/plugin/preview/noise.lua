@@ -1,10 +1,21 @@
 require("noice").setup {
+  cmdline = {
+    enabled = false,
+    view = "cmdline_popup",
+    opts = {},
+    format = {
+      conceal = false -- Hide the text in the that matches the pattern.
+    }
+  },
   lsp = {
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
     override = {
       ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
       ["vim.lsp.util.stylize_markdown"] = true,
       ["cmp.entry.get_documentation"] = true,
+    },
+    progress = {
+      enabled = false
     },
     message = {
       enabled = true,
@@ -30,7 +41,7 @@ require("noice").setup {
     cmdline_popup = {
       border = {
         style = "none",
-        padding = { 2, 3 },
+        padding = { 1, 1 },
       },
       filter_options = {},
       win_options = {
@@ -39,7 +50,7 @@ require("noice").setup {
     },
     popupmenu = {
       enabled = true,
-      backend = "nui",
+      backend = "cmp",
       relative = "editor",
       position = {
         row = 8,
@@ -51,15 +62,12 @@ require("noice").setup {
       },
       border = {
         style = "none",
-        padding = { 0, 1 },
+        padding = { 0, 0 },
       },
       win_options = {
         winhighlight = { Normal = "CursorLine", DiagnosticSignInfo = "CursorLine", FloatBorder = "CursorLine" },
       },
     },
-  },
-  cmdline = {
-    enabled = false
   },
   routes = {
     {
@@ -68,14 +76,16 @@ require("noice").setup {
           -- Hide Lspsaga messages spam message with outline open
           -- ex:   Info  4:47:18 PM notify.info [Lspsaga] Server of this buffer not support textDocument/documentSymbol
           { event = "notify", kind = { "info" }, find = "[Lspsaga]" },
+          { event = "notify", kind = { "error" }, find = "[Neo-tree ERROR]"},
           -- Hide treesitter error due to experimental nvim-cmp ghost text completion
-          { event = "msg_show", kind = { "lua_error", "" }, find =  "query: invalid node" },
+          { event = "msg_show", kind = { "lua_error", "" }, find = "query: invalid node" },
           -- Hide issues with autcommands "*" and matchup
           -- ex:   Error  5:05:55 PM msg_show.lua_error Error detected while processing CursorMoved Autocommands for "*"..
           { event = "msg_show", kind = { "lua_error" }, find = "matchup" },
           -- Hide issues with neovim-tree-parser while editing
           -- ex: col value outside range
           { event = "msg_show", kind = { "lua_error" }, find = "nvim-semantic-tokens" },
+          { event = "lsp", kind = { "" }, find = "pylsp" },
         },
       },
       opts = { skip = true },
@@ -88,23 +98,11 @@ require("noice").setup {
     view = "mini", -- default view for messages
     view_error = "mini", -- view for errors
     view_warn = "mini", -- view for warnings
-    view_history = "mini", -- view for :messages
+    view_history = "split", -- view for :messages
     view_search = "virtualtext", -- view for search count messages. Set to `false` to disable
   },
-  commands = {
-    history = {
-      -- options for the message history that you get with `:Noice`
-      view = "split",
-      opts = { enter = true, format = "details" },
-      filter = {
-        any = {
-          { event = "notify" },
-          { error = true },
-          { warning = true },
-          { event = "msg_show", kind = { "" } },
-          { event = "lsp", kind = "message" },
-        },
-      },
-    },
+  notify = {
+    enabled = true,
+    view = "mini"
   }
 }
