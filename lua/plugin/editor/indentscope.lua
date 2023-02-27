@@ -3,10 +3,9 @@ indentscope.setup({
   draw = {
     -- Delay (in ms) between event and start of drawing scope indicator
     delay = 50,
-    -- animation = indentscope.gen_animation.quadratic(
-    --   { easing = 'in-out', duration = 200, unit = 'total' }
-    -- ),
-    animation = indentscope.gen_animation('quadraticInOut', { duration = 10, unit = 'step' })
+    animation = indentscope.gen_animation.quadratic(
+      { easing = 'in-out', duration = 10, unit = 'step' }
+    ),
   },
   -- Options which control scope computation
   options = {
