@@ -91,20 +91,29 @@ end
 nvim_lsp.pylsp.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-  configurationSources = { 'flake8', 'pycodestyle' },
-  plugins = {
-    rope_completion = {
-      enabled = true
-    },
-    flake8 = {
-      enabled = true
-    },
-    pylint = {
-      enabled = true
-    },
-    pydocstyle = {
-      enabled = true
-    },
+  -- configurationSources = { 'flake8', 'pycodestyle' },
+  settings = {
+    pylsp = {
+      configurationSources = { 'flake8', 'pycodestyle' },
+      plugins = {
+        rope_completion = {
+          enabled = true
+        },
+        flake8 = {
+          enabled = true
+        },
+        pylint = {
+          enabled = false
+        },
+        pydocstyle = {
+          enabled = false
+        },
+        pycodestyle = {
+          maxLineLength = 100,
+          enabled = true
+        }
+      }
+    }
   }
 }
 
