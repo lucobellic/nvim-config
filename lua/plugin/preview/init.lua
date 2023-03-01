@@ -54,6 +54,8 @@ local preview_plugins = {
       vim.g.floaterm_autoinsert = true
     end
   }, -- Floating terminal
+
+  {'akinsho/toggleterm.nvim', config = function() require('plugin.preview.toggleterm') end},
 }
 
 return preview_plugins

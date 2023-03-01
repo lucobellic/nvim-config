@@ -45,7 +45,6 @@ if wk_ok then
 end
 
 
-vim.api.nvim_set_keymap('n', '<leader>p', ':<C-u>bo 20split tmp<cr>:terminal<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 
 -- Git
@@ -200,3 +199,6 @@ vim.keymap.set( {"v"}, "<leader>s", "<esc>:lua require('spectre').open_visual()<
 
 -- search in current file
 vim.keymap.set( {"n", "x"}, "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>")
+
+vim.keymap.set({"n"}, "<leader>p", ":ToggleTerm<cr>")
+vim.keymap.set({"n"}, "<leader>P", ":ToggleTermToggleAll<cr>")
