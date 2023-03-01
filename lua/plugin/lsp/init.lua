@@ -17,12 +17,18 @@ local lsp_plugins = {
 
     { 'glepnir/lspsaga.nvim', config = function() require('plugin.lsp.saga') end },
 
+    {'jose-elias-alvarez/null-ls.nvim'},
+
     --  native nvim lsp
     { 'neovim/nvim-lspconfig',
         config = function()
             require('plugin.lsp.config')
         end
     },
+
+
+
+
 }
 
 return lsp_plugins

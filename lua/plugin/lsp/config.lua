@@ -46,7 +46,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", ">C", "<cmd>silent Lspsaga diagnostic_jump_next<CR>", opts)
 
   local key_opts = { noremap = true, silent = true, buffer = bufnr }
-  -- Only jump to error
+  -- Jump to error
   vim.keymap.set("n", "<E",
     function()
       require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })
@@ -70,7 +70,7 @@ end
 --- Servers Configuration ---
 -----------------------------
 
--- Add additional capabilities supported by nvim-cmp
+-- Add capabilities supported by nvim-cmp
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 -- Enable folding to work with nvim-ufo
 capabilities.textDocument.foldingRange = {
@@ -140,6 +140,17 @@ nvim_lsp.clangd.setup {
 
 -- TODO: set it in clangd.setup
 vim.cmd [[map <silent> <M-o> :ClangdSwitchSourceHeader <CR>]]
+
+-- null-ls
+local null_ls = require("null-ls")
+null_ls.setup({
+  on_attach = on_attach,
+  fallback_severity = vim.diagnostic.severity.INFO,
+  sources = {
+    null_ls.builtins.completion.spell,
+    null_ls.builtins.diagnostics.write_good.with({ filetypes = {} }),
+  },
+})
 
 -----------------------
 --- Color and Style ---
