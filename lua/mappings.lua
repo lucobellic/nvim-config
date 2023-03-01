@@ -55,6 +55,12 @@ vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr><Esc>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
 
+-- Spelling
+vim.api.nvim_set_keymap('n', '>S', ']s', opts)
+vim.api.nvim_set_keymap('n', '>s', ']s', opts)
+vim.api.nvim_set_keymap('n', '<S', '[s', opts)
+vim.api.nvim_set_keymap('n', '<s', '[s', opts)
+
 
 -- Window
 vim.api.nvim_set_keymap('n', '<C-left>', ':vertical resize +5<cr>', opts)
