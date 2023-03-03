@@ -34,8 +34,8 @@ local telescope_mapping_n = {
 if wk_ok then
     wk.register(telescope_mapping_n)
     wk.register({ ['<C-p>'] = { '<cmd>Telescope find_files<cr>', "Find files" } })
-    wk.register({ ['<C-f>'] = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' } })
-    wk.register({ ['<C-S-f>'] = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' } })
+    wk.register({ ['<C-n>'] = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' } })
+    wk.register({ ['<C-f>'] = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' } })
 
     -- TODO: try to add visual mode for Find Word in whickkey
     -- " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
