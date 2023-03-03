@@ -1,6 +1,13 @@
 require("toggleterm").setup({
   start_in_insert = false,
-  close_on_exit = true
+  close_on_exit = true,
+  shade_terminals = false,
+  winbar = {
+    enabled = true,
+    name_formatter = function(term) --  term: Terminal
+      return term.id
+    end
+  },
 })
 
 local function split_terminal_right()

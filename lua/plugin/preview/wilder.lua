@@ -58,9 +58,7 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     left = { ' ', wilder.popupmenu_devicons() },
     right = { ' ',
       wilder.popupmenu_scrollbar({
-        thumb_char = '│',
-        thumb_hl = 'CursorLine',
-        scrollbar_hl = ''
+        thumb_char = '█',
       })
     },
   })
