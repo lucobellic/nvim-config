@@ -143,15 +143,31 @@ gls.left[11] = {
 }
 
 gls.right[1] = {
-    NearestFunction = {
-        provider = "VistaPlugin",
-        icon = "",
-        separator = " ",
-        highlight = { colors.fg, colors.bg }
-    }
+  ShowLspClient = {
+    provider = 'GetLspClient',
+    condition = function ()
+      local tbl = {['dashboard'] = true,['']=true}
+      if tbl[vim.bo.filetype] then
+        return false
+      end
+      return true
+    end,
+    icon = ' ',
+    highlight = {colors.magenta, colors.bg},
+    separator = " "
+  }
 }
 
 gls.right[2] = {
+    LineInfo = {
+        provider = function()
+            return string.format("%3d", vim.fn.col('.'))
+        end,
+        separator = " "
+    }
+}
+
+gls.right[3] = {
     PerCent = {
         provider = "LinePercent",
         separator = " ",
