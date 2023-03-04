@@ -45,7 +45,7 @@ local navigation_plugins = {
         branch = 'v2.2',
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
-            require 'mind'.setup()
+            require('plugin.navigation.mind')
         end
     }
 }
