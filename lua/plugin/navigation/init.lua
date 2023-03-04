@@ -9,17 +9,7 @@ local navigation_plugins = {
     'tpope/vim-fugitive',
     'tpope/vim-sleuth',
     'tpope/vim-repeat',
-
-    { 'smjonas/live-command.nvim',
-        config = function()
-            require("live-command").setup {
-                commands = { S = { cmd = "Subvert" } }, -- must be defined before we import vim-abolish
-                defaults = { inline_highlighting = false },
-            }
-        end
-    },
-    { 'tpope/vim-abolish', dependencies = { 'live-command.nvim' } },
-
+    'tpope/vim-abolish',
 
     -- { 'kyazdani42/nvim-tree.lua', config = function() require('plugin.navigation.tree') end },
     { 'nvim-neo-tree/neo-tree.nvim',
