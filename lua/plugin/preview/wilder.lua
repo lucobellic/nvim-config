@@ -29,24 +29,25 @@ end
 wilder.set_option('renderer', wilder.popupmenu_renderer(
   wilder.popupmenu_palette_theme({
     border = {
+      '', '', '',
+      ' ', ' ',
       ' ', ' ', ' ',
-      ' ', ' ', ' ',
-      ' ', ' ', ' '
     },
-    prompt_border = { ' ', ' ', ' ' },
-    -- 'single', 'double', 'rounded' or 'solid'
-    -- border = 'rounded',
-    max_height = '30%', -- max height of the palette
-    max_width = '40%',
-    margin = 'auto',
-    min_height = 0, -- set to the same as 'max_height' for a fixed height window
+    -- border = {
+    --   '╭', '─', '╮',
+    --   '│',      '│',
+    --   '╰', '─', '╯',
+    -- },
+    max_width = '31%',
+    margin = 6,              -- 5 stick to noice cmdline with 1 margin and without border
+    min_height = 0,          -- set to the same as 'max_height' for a fixed height window
     prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
-    reverse = 0, -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
+    reverse = 0,             -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
     pumblend = 20,
     -- empty_message = 'Test',
     highlights = {
-      prompt = 'CursorLine',
-      prompt_cursor = 'Special',
+      prompt = 'Dark',
+      prompt_cursor = 'Dark',
       border = 'CursorLine',
       default = 'CursorLine',
       gradient = gradient, -- must be set

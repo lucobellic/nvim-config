@@ -1,3 +1,5 @@
+vim.api.nvim_set_hl(0, "Dark", { fg = '#00010a', bg = '#00010a' })
+
 vim.api.nvim_set_hl(0, "HopNextKey"       , { fg = '#FF8F40' })
 vim.api.nvim_set_hl(0, "HopNextKey1"      , { fg = '#59C2FF' })
 vim.api.nvim_set_hl(0, "HopNextKey2"      , { fg = '#C2D94C' })
