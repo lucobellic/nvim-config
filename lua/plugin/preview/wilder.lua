@@ -28,26 +28,27 @@ end
 
 wilder.set_option('renderer', wilder.popupmenu_renderer(
   wilder.popupmenu_palette_theme({
-    -- border = {
-    --   ' ', ' ', ' ',
-    --   ' ', ' ', ' ',
-    --   ' ', ' ', ' '
-    -- },
-    -- prompt_border = { '╭', '─', '╮' },
+    border = {
+      ' ', ' ', ' ',
+      ' ', ' ', ' ',
+      ' ', ' ', ' '
+    },
+    prompt_border = { ' ', ' ', ' ' },
     -- 'single', 'double', 'rounded' or 'solid'
-    border = 'rounded',
+    -- border = 'rounded',
     max_height = '30%', -- max height of the palette
     max_width = '40%',
-    margin = '2%',
+    margin = 'auto',
     min_height = 0, -- set to the same as 'max_height' for a fixed height window
     prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
     reverse = 0, -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
     pumblend = 20,
     -- empty_message = 'Test',
     highlights = {
-      prompt = 'Normal',
-      prompt_cursor = 'Title',
-      border = 'Structure',
+      prompt = 'CursorLine',
+      prompt_cursor = 'Special',
+      border = 'CursorLine',
+      default = 'CursorLine',
       gradient = gradient, -- must be set
       -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
     },
