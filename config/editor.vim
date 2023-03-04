@@ -23,8 +23,8 @@ endif
 set filetype=1
 set noshowmode
 set nobackup
+set number
 set nowritebackup
-set nospell
 set noswapfile
 
 autocmd FileType cpp setlocal commentstring=//\ %s

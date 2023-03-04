@@ -1,64 +1,73 @@
 require('scrollbar').setup({
     show = true,
+    show_in_active_only = true,
+    set_highlights = true,
+    handle = {
+        text = " ",
+        color = nil,
+        color_nr = nil,
+        highlight = "Visual",
+        hide_if_all_visible = true
+    },
     marks = {
         Search = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 0,
             color = nil,
             cterm = nil,
             highlight = "GitSignsDelete",
         },
         Error = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 1,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextError",
         },
         Warn = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 2,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextWarn",
         },
         Info = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 3,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextInfo",
         },
         Hint = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 4,
             color = nil,
             cterm = nil,
             highlight = "DiagnosticVirtualTextHint",
         },
         Misc = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 5,
             color = nil,
             cterm = nil,
             highlight = "Normal",
         },
         GitAdd = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 5,
             color = nil,
             cterm = nil,
             highlight = "GitGutterAdd",
         },
         GitDelete = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 5,
             color = nil,
             cterm = nil,
             highlight = "GitGutterDelete",
         },
         GitChange = {
-            text = { '▕', '▕' },
+            text = { '│', '│' },
             priority = 5,
             color = nil,
             cterm = nil,
@@ -72,6 +81,14 @@ require('scrollbar').setup({
         "prompt",
         "TelescopePrompt",
     },
+    handlers = {
+        cursor = false,
+        diagnostic = true,
+        gitsigns = false,
+        handle = true,
+        search = false,
+        ale = false,
+    }
 })
 
 local gitsign = require('gitsigns')
