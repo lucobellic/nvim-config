@@ -8,7 +8,10 @@ wilder.set_option('use_python_remote_plugin', 0)
 wilder.set_option('pipeline', {
   wilder.branch(
     wilder.cmdline_pipeline({
-      fuzzy = 1,
+      -- 0 turns off fuzzy matching
+      -- 1 turns on fuzzy matching
+      -- 2 partial fuzzy matching (match does not have to begin with the same first letter)
+      fuzzy = 2,
       fuzzy_filter = wilder.lua_fzy_filter(),
     }),
     wilder.vim_search_pipeline()
