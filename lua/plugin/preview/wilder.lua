@@ -7,6 +7,10 @@ wilder.set_option('use_python_remote_plugin', 0)
 -- Fuzzy find
 wilder.set_option('pipeline', {
   wilder.branch(
+    {
+      wilder.check(function(_, x) return x == '' end),
+      wilder.history(),
+    },
     wilder.cmdline_pipeline({
       -- 0 turns off fuzzy matching
       -- 1 turns on fuzzy matching
