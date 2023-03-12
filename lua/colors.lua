@@ -72,3 +72,9 @@ vim.api.nvim_set_hl(0, "SpellBad", { underline = false, undercurl = true })
 vim.api.nvim_set_hl(0, "SpellCap", { underline = false, undercurl = true })
 
 vim.api.nvim_set_hl(0, "IndentBlankLineChar", { fg = "#273747" })
+
+-- vim-illuminate highlight
+vim.api.nvim_set_hl(0, "IlluminatedWordText" , { link = "Visual" })
+vim.api.nvim_set_hl(0, "IlluminatedWordRead" , { link = "Visual" })
+vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
+
