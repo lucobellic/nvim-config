@@ -7,6 +7,12 @@ vim.cmd([[set completeopt=menu,menuone,noselect]])
 
 -- Setup nvim-cmp.
 local lspkind = require('lspkind')
+lspkind.init({
+  symbol_map = {
+    Copilot = "",
+  },
+})
+
 local luasnip = require('luasnip')
 local cmp = require 'cmp'
 
@@ -63,6 +69,7 @@ cmp.setup({
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'buffer' },
+    { name = 'copilot' }
   },
   formatting = {
     format = function(entry, vim_item)

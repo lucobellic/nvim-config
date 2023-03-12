@@ -208,3 +208,8 @@ vim.keymap.set( {"n", "x"}, "<leader>sp", "<cmd>lua require('spectre').open_file
 
 vim.keymap.set({"n"}, "<leader>p", ":ToggleTerm<cr>")
 vim.keymap.set({"n"}, "<leader>P", ":ToggleTermToggleAll<cr>")
+
+-- Copilot
+if wk_ok then
+    wk.register({ ['<leader>cp'] = { ':Copilot panel<cr>', 'Copilot Panel' } })
+end
