@@ -37,10 +37,14 @@ local ui_plugins = {
       run = ':TSUpdate',
       config = function() require('plugin.ui.treesitter') end,
    },
-
    -- Start screen
-   { 'glepnir/dashboard-nvim', config = function() require('plugin.ui.dashboard') end },
-
+   {
+      'glepnir/dashboard-nvim',
+      event = 'VimEnter',
+      config = function()
+         require('plugin.ui.dashboard')
+      end
+   },
    -- Scrollbar
    { 'petertriho/nvim-scrollbar', after = 'gitsigns.nvim', config = function() require('plugin.ui.scrollbar') end },
 
