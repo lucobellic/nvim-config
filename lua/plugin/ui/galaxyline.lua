@@ -26,6 +26,7 @@ local mode_color = function()
     local mode_colors = {
         n = colors.cyan,
         i = colors.green,
+        t = colors.green,
         c = colors.accent,
         V = colors.greenYel,
         [""] = colors.greenYel,
