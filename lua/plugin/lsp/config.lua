@@ -11,7 +11,6 @@ local on_attach = function(client, bufnr)
 
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>TroubleToggle lsp_definitions<CR>', opts)
-  buf_set_keymap('n', 'gtd', '<cmd>TroubleToggle lsp_type_definitions<CR>', opts)
   -- buf_set_keymap('n', 'K'         , '<cmd>lua vim.lsp.buf.hover()<CR>'                                     , opts)
   buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
   -- buf_set_keymap('n', '<leader>d' , '<Cmd>lua vim.lsp.buf.hover()<CR>'                                     , opts)
