@@ -27,7 +27,6 @@ local telescope_mapping_n = {
             w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' }
         },
     },
-
 }
 
 
@@ -127,7 +126,26 @@ vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
 
 
 -- Trouble
-wk.register({ ['<leader>gt'] = { ':TodoTrouble<cr>', 'Todo Trouble' } })
+if wk_ok then
+    wk.register({
+        ["<leader>"] = {
+            t = {
+                c = { ':TroubleClose<cr>', 'Trouble close' },
+                d = { ':Trouble document_diagnostic<cr>', 'Trouble diagnostic' },
+                f = { ':TodoTelescope<cr>', 'Todo telescope' },
+                l = {
+                    d = { ':Trouble lsp_definitions<cr>', 'Trouble lsp definitions' },
+                    i = { ':Trouble lsp_implementations<cr>', 'Trouble lsp implementations' },
+                    r = { ':Trouble lsp_references<cr>', 'Trouble lsp references' },
+                    t = { ':Trouble lsp_type_definitions<cr>', 'Trouble lsp type definitions' }
+                },
+                q = { ':Trouble quickfix<cr>', 'Trouble quickfix' },
+                r = { ':TroubleRefresh<cr>', 'Trouble refresh' },
+                t = { ':Trouble todo<cr>', 'Trouble todo' },
+            }
+        }
+    }, opts)
+end
 
 -- Floaterm
 vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle<cr>', opts)
@@ -178,8 +196,8 @@ if wk_ok then
         t = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", 'Hop next char'},
         T = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })<cr>", 'Hop prev char'},
     }
-    wk.register(hop_reimplement_mapping, {silent = true, mode = 'n'})
-    wk.register(hop_reimplement_mapping, {silent = true, mode = 'v'})
+    wk.register(hop_reimplement_mapping, { silent = true, mode = 'n' })
+    wk.register(hop_reimplement_mapping, { silent = true, mode = 'v' })
 end
 
 -- Diffview
@@ -200,8 +218,8 @@ end
 vim.keymap.set('n', '<C-b>', '<cmd>:NeoTreeShowToggle<cr>', opts)
 
 -- search current word
-vim.keymap.set( {"n"}, "<leader>sw", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>")
-vim.keymap.set( {"v"}, "<leader>s", "<esc>:lua require('spectre').open_visual()<CR>")
+vim.keymap.set({ "n" }, "<leader>sw", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>")
+vim.keymap.set({ "v" }, "<leader>s", "<esc>:lua require('spectre').open_visual()<CR>")
 
 -- search in current file
 vim.keymap.set( {"n", "x"}, "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>")
