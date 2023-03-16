@@ -33,8 +33,10 @@ local ui_plugins = {
    },
 
    -- Color Syntax
-   { 'nvim-treesitter/nvim-treesitter',
+   {
+      'nvim-treesitter/nvim-treesitter',
       run = ':TSUpdate',
+      dependencies = { 'mrjones2014/nvim-ts-rainbow' },
       config = function() require('plugin.ui.treesitter') end,
    },
    -- Start screen

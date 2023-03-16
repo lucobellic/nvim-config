@@ -10,6 +10,10 @@ require 'nvim-treesitter.configs'.setup {
       -- ["foo.bar"] = "Constant",
     },
   },
+  rainbow = {
+    enable = true,
+    colors = { 'Gold', 'Orchid', 'LightSkyBlue', 'DarkOrange' }
+  }
 }
 
 if vim.loop.os_uname().sysname:lower():find('windows') then
