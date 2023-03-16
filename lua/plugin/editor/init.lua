@@ -32,6 +32,18 @@ local editor_plugins = {
         config = function() require('plugin.editor.fold') end
     },
     {
+        'echasnovski/mini.splitjoin',
+        config = function()
+            require('mini.splitjoin').setup({
+                mappings = {
+                    toggle = '<leader>S',
+                    split = '',
+                    join = '',
+                },
+            })
+        end
+    },
+    {
         'windwp/nvim-spectre',
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function() require('plugin.editor.spectre') end
@@ -44,3 +56,4 @@ local editor_plugins = {
 }
 
 return editor_plugins
+
