@@ -14,3 +14,6 @@ vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts
 
 vim.wo.spell = false
 
+vim.b.miniindentscope_disable = true
+vim.b.minianimate_disable = true
+
