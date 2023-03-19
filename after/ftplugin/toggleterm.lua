@@ -1,0 +1,2 @@
+vim.wo.spell = false
+
