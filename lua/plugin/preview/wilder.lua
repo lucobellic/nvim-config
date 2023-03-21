@@ -67,7 +67,10 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     left = { ' ', wilder.popupmenu_devicons() },
     right = { ' ',
       wilder.popupmenu_scrollbar({
-        thumb_char = '█',
+        thumb_char = ' ',
+        thumb_hl = 'Visual',
+        scrollbar_char = ' ',
+        scrollbar_hl = 'NONE'
       })
     },
   })
