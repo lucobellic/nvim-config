@@ -44,6 +44,13 @@ local editor_plugins = {
         end
     },
     {
+        'echasnovski/mini.move',
+        version = '*',
+        config = function()
+            require('mini.move').setup({})
+        end
+    },
+    {
         'windwp/nvim-spectre',
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function() require('plugin.editor.spectre') end
@@ -56,4 +63,3 @@ local editor_plugins = {
 }
 
 return editor_plugins
-
