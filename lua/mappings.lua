@@ -79,40 +79,59 @@ vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><
 vim.api.nvim_set_keymap('v', '/', '"hy/<C-r>h', { silent = false, noremap = true })
 
 
--- barbar buffer line mappings
--- Move to previous/next
-vim.api.nvim_set_keymap('n', '<C-h>', ':BufferPrevious<cr>', opts)
-vim.api.nvim_set_keymap('n', '<C-l>', ':BufferNext<cr>', opts)
+local bufferline_ok, _ = pcall(require, 'bufferline')
+local barbar_ok, _ = pcall(require, 'barbar')
+if barbar_ok then
+    -- Move to previous/next
+    vim.api.nvim_set_keymap('n', '<C-h>', ':BufferLineCyclePrev<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<C-l>', ':BufferLineCycleNext<cr>', opts)
 
--- Re-order to previous/next
-vim.api.nvim_set_keymap('n', '<A-h>', ':BufferMovePrevious<cr>', opts)
-vim.api.nvim_set_keymap('n', '<A-l>', ':BufferMoveNext<cr>', opts)
-vim.api.nvim_set_keymap('n', '<A-p>', ':BufferPin<cr>', opts)
+    -- Re-order to previous/next
+    vim.api.nvim_set_keymap('n', '<A-h>', ':BufferLineMovePrev<cr>' , opts)
+    vim.api.nvim_set_keymap('n', '<A-l>', ':BufferLineMoveNext<cr>' , opts)
+    vim.api.nvim_set_keymap('n', '<A-p>', ':BufferLineTogglePin<cr>', opts)
 
--- Goto buffer in position...
-vim.api.nvim_set_keymap('n', '<leader>1', ':BufferGoto 1<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>2', ':BufferGoto 2<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>3', ':BufferGoto 3<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>4', ':BufferGoto 4<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>5', ':BufferGoto 5<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>6', ':BufferGoto 6<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>7', ':BufferGoto 7<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>8', ':BufferGoto 8<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>9', ':BufferGoto 9<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
+    -- Close buffer
+    vim.api.nvim_set_keymap('n', '<C-q>', ':Bdelete<cr>', opts)
 
--- Hide BufferGoto
-if wk_ok then
-    for i = 0, 9, 1 do
-        wk.register({ ["<leader>" .. i] = "which_key_ignore" })
+    -- Magic buffer-picking mode
+    vim.api.nvim_set_keymap('n', '<C-s>', ':BufferLinePick<cr>'     , opts)
+    vim.api.nvim_set_keymap('n', '<A-s>', ':BufferLinePickClose<cr>', opts)
+elseif bufferline_ok then
+    -- Move to previous/next
+    vim.api.nvim_set_keymap('n', '<C-h>', ':BufferPrevious<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<C-l>', ':BufferNext<cr>', opts)
+
+    -- Re-order to previous/next
+    vim.api.nvim_set_keymap('n', '<A-h>', ':BufferMovePrevious<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<A-l>', ':BufferMoveNext<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<A-p>', ':BufferPin<cr>', opts)
+
+    -- Goto buffer in position...
+    vim.api.nvim_set_keymap('n', '<leader>1', ':BufferGoto 1<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>2', ':BufferGoto 2<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>3', ':BufferGoto 3<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>4', ':BufferGoto 4<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>5', ':BufferGoto 5<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>6', ':BufferGoto 6<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>7', ':BufferGoto 7<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>8', ':BufferGoto 8<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>9', ':BufferGoto 9<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
+
+    -- Hide BufferGoto
+    if wk_ok then
+        for i = 0, 9, 1 do
+            wk.register({ ["<leader>" .. i] = "which_key_ignore" })
+        end
     end
+
+    -- Close buffer
+    vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
+
+    -- Magic buffer-picking mode
+    vim.api.nvim_set_keymap('n', '<C-s>', ':BufferPick<cr>', opts)
 end
-
--- Close buffer
-vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
-
--- Magic buffer-picking mode
-vim.api.nvim_set_keymap('n', '<C-s>', ':BufferPick<cr>', opts)
 
 -- Sort automatically by...
 vim.api.nvim_set_keymap('n', '<Space>bd', ':BufferOrderByDirectory<cr>', opts)
