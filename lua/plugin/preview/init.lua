@@ -48,11 +48,7 @@ local preview_plugins = {
 
   { 'voldikss/vim-floaterm',
     config = function()
-      vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
-      vim.g.floaterm_autohide = 1
-      -- vim.g.floaterm_borderchars = '       ' -- (top, right, bottom, left, topleft, topright, botright, botleft)
-      vim.g.floaterm_borderchars = '─│─│╭╮╯╰╯'
-      vim.g.floaterm_autoinsert = true
+      require('plugin.preview.floaterm')
     end
   }, -- Floating terminal
 

@@ -150,14 +150,14 @@ end
 -- Floaterm
 vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle<cr>', opts)
 vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', opts)
-if wk_ok then
-    wk.register({
-        ["g;"] = {
-            ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit($1/$2) --name=lazygit lazygit<cr>',
-            'Lazygit'
-        }
-    })
-end
+-- if wk_ok then
+--     wk.register({
+--         ["g;"] = {
+--             ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit($1/$2) --name=lazygit lazygit<cr>',
+--             'Lazygit'
+--         }
+--     })
+-- end
 
 -- Hop
 if wk_ok then
