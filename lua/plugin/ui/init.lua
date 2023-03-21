@@ -15,12 +15,23 @@ local ui_plugins = {
    { 'nvim-tree/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
 
    -- ui
-   { 'romgrk/barbar.nvim',
+   {
+      'romgrk/barbar.nvim',
+      enabled = true,
       config = function()
          require('plugin.ui.barbar')
       end,
       lazy = true,
       event = { 'BufRead' }
+   },
+
+   {
+      'akinsho/bufferline.nvim',
+      enabled = false,
+      requires = 'nvim-tree/nvim-web-devicons',
+      config = function()
+         require('plugin.ui.bufferline')
+      end
    },
 
    { 'glepnir/galaxyline.nvim', config = function() require('plugin.ui.galaxyline') end },
