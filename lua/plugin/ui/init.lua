@@ -47,7 +47,7 @@ local ui_plugins = {
    {
       'nvim-treesitter/nvim-treesitter',
       run = ':TSUpdate',
-      dependencies = { 'mrjones2014/nvim-ts-rainbow' },
+      dependencies = { 'HiPhish/nvim-ts-rainbow2' },
       config = function() require('plugin.ui.treesitter') end,
    },
    -- Start screen
