@@ -57,7 +57,7 @@ local editor_plugins = {
     },
     {
         'RRethy/vim-illuminate',
-        enabled = false,
+        enabled = true,
         config = function() require('plugin.editor.illuminate') end
     },
 }
