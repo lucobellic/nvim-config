@@ -26,7 +26,12 @@ require('telescope').setup {
       '--smart-case'
     },
 
-    path_display = {'smart'},
+    -- path_display = { 'smart' },
+    path_display = function(opts, path)
+      local utils = require("telescope.utils")
+      local tail = utils.path_tail(path)
+      return string.format("%s - %s", tail, path)
+    end,
     show_line = false,
     prompt_title = false,
     results_title = false,
