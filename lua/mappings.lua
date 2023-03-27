@@ -7,7 +7,7 @@ vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', op
 local wk_ok, wk = pcall(require, 'which-key')
 
 local telescope_mapping_n = {
-    ["<leader>"] = {
+        ["<leader>"] = {
         F = {
             name = "find",
             F = { ':<C-u>:Files<cr>', 'Find All File' },
@@ -15,20 +15,21 @@ local telescope_mapping_n = {
         },
         f = {
             name = "find",
+            b = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
+            e = { ":lua require('telescope.builtin').symbols{ sources = {'emoji', 'kaomoji', 'gitmoji'} }<cr>", 'Find Symbols' },
             f = { '<cmd>Telescope find_files<cr>', 'Find File' },
             F = { ':<C-u>:Files<cr>', 'Find All File' },
-            r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
             g = { ':<C-u>:Rg<cr>', 'Search Workspace' },
-            b = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
+            k = { ":lua require('telescope.builtin').symbols{ sources = {'kaomoji'} }<cr>", 'Find Symbols' },
             l = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' },
             L = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' },
             m = { '<cmd>Telescope marks<cr>', "Find Marks" },
+            r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
+            w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' },
             y = { '<cmd>Telescope registers<cr>', 'Find Registers' },
-            w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' }
         },
     },
 }
-
 
 if wk_ok then
     wk.register(telescope_mapping_n)
