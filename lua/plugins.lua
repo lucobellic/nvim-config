@@ -15,6 +15,7 @@ require("lazy").setup({
   'nvim-lua/popup.nvim',
   'nvim-lua/plenary.nvim',
   'dstein64/vim-startuptime',
+  'kkharji/sqlite.lua',
   require('plugin.completion'),
   require('plugin.lsp'),
   require('plugin.navigation'),
