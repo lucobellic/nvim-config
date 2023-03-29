@@ -158,7 +158,7 @@ if wk_ok then
         ["<leader>"] = {
             t = {
                 c = { ':TroubleClose<cr>', 'Trouble close' },
-                d = { ':Trouble document_diagnostic<cr>', 'Trouble diagnostic' },
+                d = { ':Trouble document_diagnostics<cr>', 'Trouble diagnostics' },
                 f = { ':TodoTelescope<cr>', 'Todo telescope' },
                 l = {
                     d = { ':Trouble lsp_definitions<cr>', 'Trouble lsp definitions' },
