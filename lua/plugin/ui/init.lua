@@ -17,12 +17,11 @@ local ui_plugins = {
    -- ui
    {
       'romgrk/barbar.nvim',
-      enabled = true,
+      ft = 'neo-tree',
       config = function()
          require('plugin.ui.barbar')
       end,
-      lazy = true,
-      event = { 'BufRead' }
+      module = false,
    },
 
    {

@@ -81,8 +81,8 @@ vim.api.nvim_set_keymap('v', '/', '"hy/<C-r>h', { silent = false, noremap = true
 
 
 local bufferline_ok, _ = pcall(require, 'bufferline')
-local barbar_ok, _ = pcall(require, 'barbar')
-if barbar_ok then
+local barbar_ok = true
+if bufferline_ok then
     -- Move to previous/next
     vim.api.nvim_set_keymap('n', '<C-h>', ':BufferLineCyclePrev<cr>', opts)
     vim.api.nvim_set_keymap('n', '<C-l>', ':BufferLineCycleNext<cr>', opts)
@@ -98,7 +98,7 @@ if barbar_ok then
     -- Magic buffer-picking mode
     vim.api.nvim_set_keymap('n', '<C-s>', ':BufferLinePick<cr>'     , opts)
     vim.api.nvim_set_keymap('n', '<A-s>', ':BufferLinePickClose<cr>', opts)
-elseif bufferline_ok then
+elseif barbar_ok then
     -- Move to previous/next
     vim.api.nvim_set_keymap('n', '<C-h>', ':BufferPrevious<cr>', opts)
     vim.api.nvim_set_keymap('n', '<C-l>', ':BufferNext<cr>', opts)
