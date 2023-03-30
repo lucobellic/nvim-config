@@ -6,6 +6,13 @@ vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', op
 
 local wk_ok, wk = pcall(require, 'which-key')
 
+local neoclip_ok, _ = pcall(require, 'neoclip')
+if neoclip_ok and wk_ok then
+    wk.register({
+        ['<leader>y'] = { ':Telescope neoclip<cr>', 'Yank History' },
+    })
+end
+
 local telescope_mapping_n = {
         ["<leader>"] = {
         F = {

@@ -60,6 +60,14 @@ local editor_plugins = {
         enabled = true,
         config = function() require('plugin.editor.illuminate') end
     },
+    {
+        "AckslD/nvim-neoclip.lua",
+        requires = { 'kkharji/sqlite.lua', 'nvim-telescope/telescope.nvim' },
+        after = { 'telescope.nvim' },
+        config = function()
+            require('plugin.editor.neoclip')
+        end,
+    }
 }
 
 return editor_plugins
