@@ -3,9 +3,9 @@ local gls = gl.section
 gl.short_line_list = { " " }
 
 local colors = {
-    bg = "#0A0E14",
-    line_bg = "#00010A",
-    fg = "#B3B1AD",
+    bg = "Normal",
+    line_bg = "CursorLine",
+    fg = "Normal",
     accent = "#FF8F40",
     fg_green = "#C2D9RC",
     yellow = "#A3BE8C",
@@ -62,7 +62,7 @@ gls.left[2] = {
             -- return '▌  '
             -- 
         end,
-        -- highlight = {colors.cyan, colors.bg}
+        separator = " ",
     }
 }
 
@@ -78,13 +78,15 @@ gls.left[4] = {
     FileName = {
         provider = { "FileName" },
         condition = buffer_not_empty,
-        highlight = { colors.fg, colors.bg }
+        highlight = { colors.fg, colors.bg },
+        separator = " ",
     }
 }
 
 gls.left[5] = {
     GitBranch = {
         provider = "GitBranch",
+        icon = " ",
         condition = require("galaxyline.provider_vcs").check_git_workspace,
         separator = " ",
         highlight = { colors.green, colors.bg }
@@ -94,8 +96,7 @@ gls.left[5] = {
 gls.left[6] = {
     DiffAdd = {
         provider = "DiffAdd",
-        -- icon = "  ",
-        icon = " +",
+        icon = "  ",
         highlight = { colors.green, colors.bg }
     }
 }
@@ -103,8 +104,7 @@ gls.left[6] = {
 gls.left[7] = {
     DiffModified = {
         provider = "DiffModified",
-        -- icon = "  ",
-        icon = " ~",
+        icon = "  ",
         highlight = { colors.blue, colors.bg }
     }
 }
@@ -112,26 +112,25 @@ gls.left[7] = {
 gls.left[8] = {
     DiffRemove = {
         provider = "DiffRemove",
-        -- icon = "  ",
-        icon = " -",
+        icon = "  ",
         highlight = { colors.red, colors.bg }
     }
 }
 
 gls.left[9] = {
-    DiagnosticError = {
-        provider = "DiagnosticError",
-        icon = "  ",
-        highlight = { colors.red, colors.bg }
+    Space = {
+        provider = function()
+            return  " "
+        end,
+        highlight = { colors.bg, colors.bg }
     }
 }
 
 gls.left[10] = {
-    Space = {
-        provider = function()
-            return " "
-        end,
-        highlight = { colors.bg, colors.bg }
+    DiagnosticError = {
+        provider = "DiagnosticError",
+        icon = "  ",
+        highlight = { colors.red, colors.bg }
     }
 }
 
