@@ -53,6 +53,8 @@ end
 
 
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
+vim.api.nvim_set_keymap('n', '<c-s>', ':w<cr>', opts)
+
 
 -- Git
 
@@ -87,7 +89,8 @@ vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><
 vim.api.nvim_set_keymap('v', '/', '"hy/<C-r>h', { silent = false, noremap = true })
 
 
-local bufferline_ok, _ = pcall(require, 'bufferline')
+-- local bufferline_ok, _ = pcall(require, 'bufferline')
+local bufferline_ok = false
 local barbar_ok = true
 if bufferline_ok then
     -- Move to previous/next
@@ -103,8 +106,8 @@ if bufferline_ok then
     vim.api.nvim_set_keymap('n', '<C-q>', ':Bdelete<cr>', opts)
 
     -- Magic buffer-picking mode
-    vim.api.nvim_set_keymap('n', '<C-s>', ':BufferLinePick<cr>'     , opts)
-    vim.api.nvim_set_keymap('n', '<A-s>', ':BufferLinePickClose<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<C-i>', ':BufferLinePick<cr>'     , opts)
+    vim.api.nvim_set_keymap('n', '<A-i>', ':BufferLinePickClose<cr>', opts)
 elseif barbar_ok then
     -- Move to previous/next
     vim.api.nvim_set_keymap('n', '<C-h>', ':BufferPrevious<cr>', opts)
@@ -138,7 +141,7 @@ elseif barbar_ok then
     vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
 
     -- Magic buffer-picking mode
-    vim.api.nvim_set_keymap('n', '<C-s>', ':BufferPick<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<C-i>', ':BufferPick<cr>', opts)
 end
 
 -- Sort automatically by...

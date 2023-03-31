@@ -53,10 +53,10 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     pumblend = 20,
     -- empty_message = 'Test',
     highlights = {
-      prompt = 'Dark',
-      prompt_cursor = 'Dark',
-      border = 'CursorLine',
-      default = 'CursorLine',
+      prompt = 'Transparent',
+      prompt_cursor = 'Transparent',
+      border = 'Normal',
+      default = 'Normal',
       gradient = gradient, -- must be set
       -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
     },
