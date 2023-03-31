@@ -1,4 +1,5 @@
-vim.api.nvim_set_hl(0, "Dark", { fg = '#00010a', bg = '#00010a' })
+local normal_bg = vim.fn.synIDattr(vim.fn.hlID('Normal'), 'bg', 'gui')
+vim.api.nvim_set_hl(0, "Transparent", { fg = normal_bg, bg = 'none', blend = 0 })
 
 vim.api.nvim_set_hl(0, "HopNextKey"       , { fg = '#FF8F40' })
 vim.api.nvim_set_hl(0, "HopNextKey1"      , { fg = '#59C2FF' })

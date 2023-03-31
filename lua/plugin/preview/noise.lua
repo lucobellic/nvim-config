@@ -10,9 +10,9 @@ require("noice").setup {
   lsp = {
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
     override = {
-          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-          ["vim.lsp.util.stylize_markdown"] = true,
-          ["cmp.entry.get_documentation"] = true,
+      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+      ["vim.lsp.util.stylize_markdown"] = true,
+      ["cmp.entry.get_documentation"] = true,
     },
     progress = {
       enabled = false
@@ -54,7 +54,11 @@ require("noice").setup {
       },
       filter_options = {},
       win_options = {
-        winhighlight = { Normal = "CursorLine", NormalFloat = "CursorLine", FloatBorder = "CursorLine" },
+        winhighlight = {
+          Normal = "Normal",
+          NormalFloat = "Normal",
+          FloatBorder = "Normal"
+        },
       },
     },
   },
