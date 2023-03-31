@@ -128,6 +128,7 @@ nvim_lsp.clangd.setup {
     "--enable-config",
     "--header-insertion=iwyu",
     "--all-scopes-completion",
+    "--offset-encoding=utf-16",
     "-j=2",
   },
   filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
