@@ -7,7 +7,8 @@ local preview_plugins = {
       'plenary.nvim',
       'folke/trouble.nvim',
       'nvim-telescope/telescope-live-grep-args.nvim',
-      'nvim-telescope/telescope-symbols.nvim'
+      'nvim-telescope/telescope-symbols.nvim',
+      'nvim-telescope/telescope-fzf-native.nvim'
       -- 'prochri/telescope-all-recent.nvim',
     },
     config = function() require('plugin.preview.telescope') end
