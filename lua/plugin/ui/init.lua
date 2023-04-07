@@ -14,6 +14,8 @@ local ui_plugins = {
       end
    },
 
+   { 'rktjmp/lush.nvim' },
+
    -- icons
    { 'nvim-tree/nvim-web-devicons', config = function() require('plugin.ui.web-devicons') end },
 
