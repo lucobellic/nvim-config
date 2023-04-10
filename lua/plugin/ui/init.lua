@@ -14,6 +14,12 @@ local ui_plugins = {
       end
    },
 
+   {
+      url = 'git@github.com:lucobellic/ayugloom.nvim.git',
+      name = 'ayugloom',
+      dev = true,
+   },
+
    { 'rktjmp/lush.nvim' },
 
    -- icons
