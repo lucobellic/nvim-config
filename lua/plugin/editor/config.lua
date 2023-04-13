@@ -27,6 +27,7 @@ vim.o.hidden = true
 vim.o.cmdheight = 0
 vim.o.updatetime = 400
 
+vim.o.pumheight = 15
 vim.o.wildmenu = true
 
 vim.o.list = true
