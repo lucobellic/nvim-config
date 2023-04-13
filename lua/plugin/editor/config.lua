@@ -35,3 +35,13 @@ vim.o.showbreak = '↪'
 vim.opt.listchars = { tab = '- ', trail = '·', extends = '⟩', precedes = '⟨' }
 
 vim.g.lion_squeeze_spaces = true
+
+-- Display cursorline only in focused window
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "WinEnter" }, {
+  pattern = "*",
+  command = "setlocal cursorline",
+})
+vim.api.nvim_create_autocmd({ "WinLeave" }, {
+  pattern = "*",
+  command = "setlocal nocursorline",
+})
