@@ -50,7 +50,7 @@ local preview_plugins = {
   {
     'folke/noice.nvim',
     config = function()
-      require('plugin.preview.noise')
+      require('plugin.preview.noice')
     end,
     dependencies = {
       'MunifTanjim/nui.nvim',
