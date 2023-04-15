@@ -5,19 +5,19 @@ local ui_plugins = {
       url = 'git@github.com:lucobellic/ayu-dark.git',
       branch = 'personal',
       name = 'ayu',
-      lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-      priority = 1000, -- make sure to load this before all the other start plugins
-      config = function()
-         vim.o.termguicolors = true
-         vim.o.background = "dark"
-         vim.cmd [[ colorscheme ayu ]]
-      end
    },
 
    {
       url = 'git@github.com:lucobellic/ayugloom.nvim.git',
       name = 'ayugloom',
       dev = true,
+      lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+      priority = 1000, -- make sure to load this before all the other start plugins
+      config = function()
+         vim.o.termguicolors = true
+         vim.o.background = "dark"
+         vim.cmd [[ colorscheme ayugloom ]]
+      end,
    },
 
    { 'rktjmp/lush.nvim' },
