@@ -1,10 +1,6 @@
 local normal_bg = vim.fn.synIDattr(vim.fn.hlID('Normal'), 'bg', 'gui')
 vim.api.nvim_set_hl(0, "Transparent", { fg = normal_bg, bg = 'none', blend = 0 })
 
-vim.api.nvim_set_hl(0, "HopNextKey"       , { fg = '#FF8F40' })
-vim.api.nvim_set_hl(0, "HopNextKey1"      , { fg = '#59C2FF' })
-vim.api.nvim_set_hl(0, "HopNextKey2"      , { fg = '#C2D94C' })
-
 vim.api.nvim_set_hl(0, "CmpItemAbbrDeprecated", { bg = "NONE", strikethrough = true, fg = "#808080" })
 vim.api.nvim_set_hl(0, "CmpItemAbbrMatch"     , { bg = "NONE", fg = "#569CD6" })
 vim.api.nvim_set_hl(0, "CmpItemAbbrMatchFuzzy", { bg = "NONE", fg = "#569CD6" })
@@ -21,56 +17,8 @@ vim.api.nvim_set_hl(0, "CmpItemKindCopilot"   , { link = "Identifier" })
 vim.api.nvim_set_hl(0, "OutlineIndent", { fg = "#FF8F40" })
 vim.api.nvim_set_hl(0, "SagaShadow"   , { bg = "#000000" })
 
--- semantic tokens
-
-vim.api.nvim_set_hl(0, '@identifier'         , { link = 'TSNamespace' })
-vim.api.nvim_set_hl(0, '@namespace'          , { link = 'TSNamespace' })
-vim.api.nvim_set_hl(0, '@type'               , { link = 'TSType' })
-vim.api.nvim_set_hl(0, '@class'              , { link = 'TSType' })
-vim.api.nvim_set_hl(0, '@enum'               , { link = 'TSType' })
-vim.api.nvim_set_hl(0, '@interface'          , { link = 'TSType' })
-vim.api.nvim_set_hl(0, '@struct'             , { link = 'TSType' })
-vim.api.nvim_set_hl(0, '@constructor'        , { link = 'TSConstructor' })
-vim.api.nvim_set_hl(0, '@typeParameter'      , { link = 'TSParameter' })
-vim.api.nvim_set_hl(0, '@parameter'          , { link = 'TSParameter' })
-vim.api.nvim_set_hl(0, '@variable'           , { link = 'TSVariableBuiltin' })
-vim.api.nvim_set_hl(0, '@property'           , { link = 'TSProperty' })
-vim.api.nvim_set_hl(0, '@enumMember'         , { link = 'TSProperty' })
-vim.api.nvim_set_hl(0, '@event'              , { link = 'TSFunction' })
-vim.api.nvim_set_hl(0, '@function'           , { link = 'TSFunction' })
-vim.api.nvim_set_hl(0, '@method'             , { link = 'TSMethod' })
-vim.api.nvim_set_hl(0, '@macro'              , { link = 'TSFuncMacro' })
-vim.api.nvim_set_hl(0, '@keyword'            , { link = 'TSKeyword' })
-vim.api.nvim_set_hl(0, '@modifier'           , { link = 'TSOperator' })
-vim.api.nvim_set_hl(0, '@comment'            , { link = 'TSComment' })
-vim.api.nvim_set_hl(0, '@string'             , { link = 'TSString' })
-vim.api.nvim_set_hl(0, '@number'             , { link = 'TSNumber' })
-vim.api.nvim_set_hl(0, '@float'              , { link = 'TSNumber' })
-vim.api.nvim_set_hl(0, '@regexp'             , { link = 'TSStringRegex' })
-vim.api.nvim_set_hl(0, '@operator'           , { link = 'TSOperator' })
-vim.api.nvim_set_hl(0, '@decorator'          , { link = 'TSKeyword' })
-
-vim.api.nvim_set_hl(0, "Todo", { fg = "NONE", bg = "NONE" })
-vim.api.nvim_set_hl(0, "Error", { bg = "NONE" })
-
 vim.api.nvim_set_hl(0, "NeoTreeGitUntracked", { link = 'NeoTreeDotfile' })
 vim.api.nvim_set_hl(0, "NeoTreeGitUnstaged",  { link = 'NeoTreeDotfile' })
 
-vim.api.nvim_set_hl(0, "SpellBad", { underline = false, undercurl = true })
-vim.api.nvim_set_hl(0, "SpellCap", { underline = false, undercurl = true })
-
 vim.api.nvim_set_hl(0, "IndentBlankLineChar", { fg = "#273747" })
 
--- vim-illuminate highlight
-vim.api.nvim_set_hl(0, "IlluminatedWordText" , { link = "Visual" })
-vim.api.nvim_set_hl(0, "IlluminatedWordRead" , { link = "Visual" })
-vim.api.nvim_set_hl(0, "IlluminatedWordWrite", { link = "Visual" })
-
--- rainbow parentheses
-vim.api.nvim_set_hl(0, 'TSRainbowRed'   , { link = "ErrorMsg" })
-vim.api.nvim_set_hl(0, 'TSRainbowOrange', { link = "TSOperator" })
-vim.api.nvim_set_hl(0, 'TSRainbowYellow', { link = "TSKeyword" })
-vim.api.nvim_set_hl(0, 'TSRainbowGreen' , { link = "TSString" })
-vim.api.nvim_set_hl(0, 'TSRainbowCyan'  , { link = "TSNamespace" })
-vim.api.nvim_set_hl(0, 'TSRainbowBlue'  , { link = "TSNumber" })
-vim.api.nvim_set_hl(0, 'TSRainbowViolet', { link = "TSParameter" })
