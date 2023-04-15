@@ -80,6 +80,8 @@ require('scrollbar').setup({
     excluded_filetypes = {
         "prompt",
         "TelescopePrompt",
+        "cmp_menu",
+        "cmp_docs"
     },
     handlers = {
         cursor = false,
