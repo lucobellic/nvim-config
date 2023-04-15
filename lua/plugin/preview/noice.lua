@@ -69,6 +69,32 @@ local filter_skip = {
   opts = { skip = true },
 }
 
+local spinners = require('noice.util.spinners').spinners
+
+-- Custom spinners
+-- add programming font progress bar and spinner
+-- such as fira code https://github.com/tonsky/FiraCode#whats-in-the-box
+spinners.font_progress_bar = {
+  frames = {
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  },
+  interval = 100,
+}
+
+spinners.font_spinner = {
+  frames = { "", "", "", "", "", "" },
+  interval = 100,
+}
+
 require("noice").setup {
   cmdline = cmdline,
   lsp = lsp,
@@ -95,4 +121,9 @@ require("noice").setup {
     enabled = false,
     view = "mini"
   },
+  format = {
+    spinner = {
+      name = "font_progress_bar",
+    }
+  }
 }
