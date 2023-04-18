@@ -7,5 +7,3 @@ vim.api.nvim_set_hl(0, "SagaShadow"   , { bg = "#000000" })
 vim.api.nvim_set_hl(0, "NeoTreeGitUntracked", { link = 'NeoTreeDotfile' })
 vim.api.nvim_set_hl(0, "NeoTreeGitUnstaged",  { link = 'NeoTreeDotfile' })
 
-vim.api.nvim_set_hl(0, "IndentBlankLineChar", { fg = "#273747" })
-

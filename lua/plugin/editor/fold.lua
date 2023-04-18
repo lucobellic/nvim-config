@@ -5,13 +5,6 @@ vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
-
--- fold:c	'·' or '-'	filling 'foldtext'
--- foldopen:c	'-'		mark the beginning of a fold
--- foldclose:c	'+'		show a closed fold
--- foldsep:c	'│' or '|'      open fold middle marker
-vim.opt.fillchars = { diff = '╱', foldopen = '-', foldclose = '-', foldsep = ' ', fold = ' ' }
-
 function _G.custom_fold_text()
     local line = vim.fn.getline(vim.v.foldstart)
     local line_count = vim.v.foldend - vim.v.foldstart + 1
