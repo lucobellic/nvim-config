@@ -22,6 +22,7 @@ require("lazy").setup({
     require('plugin.preview'),
     require('plugin.ui'),
     require('plugin.editor'),
+    require('plugin.telescope'),
 
     -- Tasks
     'skywind3000/asyncrun.vim',
