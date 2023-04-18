@@ -18,7 +18,7 @@ require('dressing').setup({
 
     -- Window transparency (0-100)
     win_option = {
-      winblend = 20,
+      -- winblend = 20,
       -- Change default highlight groups (see :help winhl)
       winhighlight = "",
     },
@@ -66,7 +66,7 @@ require('dressing').setup({
       },
 
       file_ignore_patterns = {},
-      winblend = 20,
+      -- winblend = 20,
       previewer = false,
       -- results_width = 0.8,
       borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },

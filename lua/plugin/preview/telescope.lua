@@ -65,10 +65,10 @@ require('telescope').setup {
     },
 
     file_ignore_patterns = {},
-    winblend = 20,
+    -- winblend = 20,
     previewer = false,
     -- results_width = 0.8,
-    borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    -- borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
     color_devicons = true,
     -- use_less = true,
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
