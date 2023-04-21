@@ -1,7 +1,6 @@
 local trouble = require('trouble.providers.telescope')
 local actions = require("telescope.actions")
 
-require('telescope').load_extension('live_grep_args')
 local lga_actions = require("telescope-live-grep-args.actions")
 require('telescope').setup {
   defaults = {
@@ -74,3 +73,6 @@ require('telescope').setup {
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
   }
 }
+
+require('telescope').load_extension('live_grep_args')
+require('telescope').load_extension('git_diffs')
