@@ -106,7 +106,7 @@ if bufferline_ok then
     vim.api.nvim_set_keymap('n', '<C-q>', ':Bdelete<cr>', opts)
 
     -- Magic buffer-picking mode
-    vim.api.nvim_set_keymap('n', '<C-i>', ':BufferLinePick<cr>'     , opts)
+    vim.api.nvim_set_keymap('n', '<C-/>', ':BufferLinePick<cr>', opts)
     vim.api.nvim_set_keymap('n', '<A-i>', ':BufferLinePickClose<cr>', opts)
 elseif barbar_ok then
     -- Move to previous/next
@@ -141,7 +141,7 @@ elseif barbar_ok then
     vim.api.nvim_set_keymap('n', '<C-q>', ':BufferClose<cr>', opts)
 
     -- Magic buffer-picking mode
-    vim.api.nvim_set_keymap('n', '<C-i>', ':BufferPick<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<C-/>', ':BufferPick<cr>', opts)
 end
 
 -- Sort automatically by...
