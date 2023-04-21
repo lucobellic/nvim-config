@@ -23,14 +23,12 @@ require("lazy").setup({
     require('plugin.ui'),
     require('plugin.editor'),
     require('plugin.telescope'),
+    require('plugin.dap'),
 
     -- Tasks
     'skywind3000/asyncrun.vim',
     'skywind3000/asynctasks.vim',
     { 'GustavoKatel/telescope-asynctasks.nvim', dependencies = { 'asynctasks.vim' } },
-
-    -- Debugger
-    'mfussenegger/nvim-dap',
 
     -- Other
     'lewis6991/impatient.nvim',
@@ -43,7 +41,7 @@ require("lazy").setup({
       -- directory where you store your local plugin projects
       path = "~/Development/personal",
       ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-      patterns = {},    -- For example {"folke"}
+      patterns = {},   -- For example {"folke"}
       fallback = true, -- Fallback to git when local plugin doesn't exist
     },
   }
