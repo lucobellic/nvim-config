@@ -16,7 +16,18 @@ local ui_plugins = {
       config = function()
          vim.o.termguicolors = true
          vim.o.background = "dark"
-         vim.cmd [[ colorscheme ayugloom ]]
+         vim.g.transparent_colorscheme = false
+         local toggle_transparency = function()
+            vim.g.transparent_colorscheme = not vim.g.transparent_colorscheme
+            if vim.g.transparent_colorscheme then
+               vim.cmd("colorscheme ayubleak")
+            else
+               vim.cmd("colorscheme ayugloom")
+            end
+         end
+         vim.api.nvim_create_user_command("TransparencyToggle", toggle_transparency, {})
+
+         vim.cmd("colorscheme ayugloom")
       end,
    },
 

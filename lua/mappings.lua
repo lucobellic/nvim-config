@@ -272,3 +272,8 @@ vim.keymap.set({ "n" }, "<leader>P", ":ToggleTermToggleAll<cr>")
 if wk_ok then
     wk.register({ ['<leader>cp'] = { ':Copilot panel<cr>', 'Copilot Panel' } })
 end
+
+-- Colorscheme
+if wk_ok then
+    wk.register({ ['<leader>ut'] = { ':TransparencyToggle<cr>', 'Toggle Transparency' } })
+end
