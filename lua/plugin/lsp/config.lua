@@ -79,13 +79,25 @@ capabilities.textDocument.foldingRange = {
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = { 'lua_ls', 'rust_analyzer', 'jsonls', 'vimls', 'cmake' }
+local servers = { 'rust_analyzer', 'jsonls', 'vimls', 'cmake' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities
   }
 end
+
+nvim_lsp.lua_ls.setup({
+  on_attach = on_attach,
+  capabilities = capabilities,
+  settings = {
+    Lua = {
+      completion = {
+        callSnippet = "Replace"
+      }
+    }
+  }
+})
 
 nvim_lsp.pylsp.setup {
   on_attach = on_attach,

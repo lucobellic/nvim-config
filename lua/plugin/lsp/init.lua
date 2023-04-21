@@ -1,5 +1,12 @@
 local lsp_plugins = {
     {
+        'folke/neodev.nvim',
+        config = function()
+            -- Enable type checking for nvim-dap-ui to get type checking, documentation and autocompletion for all API functions.
+            require('neodev').setup({ library = { plugins = { 'nvim-dap-ui' }, types = true }, })
+        end
+    },
+    {
         'williamboman/mason.nvim',
         config = function()
             require('mason').setup()
@@ -32,6 +39,7 @@ local lsp_plugins = {
     { 'jose-elias-alvarez/null-ls.nvim' },
     {
         'neovim/nvim-lspconfig',
+        dependencies = { 'folke/neodev.nvim' },
         config = function()
             require('plugin.lsp.config')
         end
