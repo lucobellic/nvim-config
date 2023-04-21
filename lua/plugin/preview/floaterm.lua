@@ -34,8 +34,6 @@ function! ToggleTool(tool, count) abort
   endif
 endfunction
 
-hi link FloatermBorder FloatBorder
-
 command! -nargs=? -count=0 ToggleTool call ToggleTool(<q-args>, <count>)
 nnoremap <silent> <leader>g; <Cmd>execute v:count . 'ToggleTool lazygit'<CR>
 tnoremap <silent> <leader>g; <Cmd>execute v:count . 'ToggleTool lazygit'<CR>
