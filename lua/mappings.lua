@@ -14,7 +14,7 @@ if neoclip_ok and wk_ok then
 end
 
 local telescope_mapping_n = {
-        ["<leader>"] = {
+    ["<leader>"] = {
         F = {
             name = "find",
             F = { ':<C-u>:Files<cr>', 'Find All File' },
@@ -23,7 +23,8 @@ local telescope_mapping_n = {
         f = {
             name = "find",
             b = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
-            e = { ":lua require('telescope.builtin').symbols{ sources = {'emoji', 'kaomoji', 'gitmoji'} }<cr>", 'Find Symbols' },
+            e = { ":lua require('telescope.builtin').symbols{ sources = {'emoji', 'kaomoji', 'gitmoji'} }<cr>",
+                'Find Symbols' },
             f = { '<cmd>Telescope find_files<cr>', 'Find File' },
             F = { ':<C-u>:Files<cr>', 'Find All File' },
             g = { ':<C-u>:Rg<cr>', 'Search Workspace' },
@@ -41,8 +42,8 @@ local telescope_mapping_n = {
 if wk_ok then
     wk.register(telescope_mapping_n)
     wk.register({ ['<C-p>'] = { '<cmd>Telescope find_files<cr>', "Find files" } })
-    wk.register({ ['<C-n>'] = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' } })
-    wk.register({ ['<C-f>'] = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' } })
+    wk.register({
+        ['<C-f>'] = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' } })
 
     -- TODO: try to add visual mode for Find Word in whickkey
     -- " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
@@ -69,6 +70,7 @@ wk.register({
     }
 }, { mode = "n" })
 
+-- Git
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 
@@ -109,8 +111,8 @@ if bufferline_ok then
     vim.api.nvim_set_keymap('n', '<C-l>', ':BufferLineCycleNext<cr>', opts)
 
     -- Re-order to previous/next
-    vim.api.nvim_set_keymap('n', '<A-h>', ':BufferLineMovePrev<cr>' , opts)
-    vim.api.nvim_set_keymap('n', '<A-l>', ':BufferLineMoveNext<cr>' , opts)
+    vim.api.nvim_set_keymap('n', '<A-h>', ':BufferLineMovePrev<cr>', opts)
+    vim.api.nvim_set_keymap('n', '<A-l>', ':BufferLineMoveNext<cr>', opts)
     vim.api.nvim_set_keymap('n', '<A-p>', ':BufferLineTogglePin<cr>', opts)
 
     -- Close buffer
@@ -237,14 +239,16 @@ if wk_ok then
     end
 end
 
--- Diffview
+-- Git
 if wk_ok then
     local diffview_mapping = {
         ["<leader>"] = {
             g = {
-                d = { ':DiffviewOpen<cr>', 'Diffview Open' },
+                name = "git",
+                g = { ':DiffviewOpen<cr>', 'Diffview Open' },
                 q = { ':DiffviewClose<cr>', 'Diffview Close' },
                 f = { ':DiffviewFileHistory %<cr>', 'Diffview File History' },
+                d = { ':DiffviewOpen origin/develop...HEAD<cr>', 'Diffview origin/develop...HEAD' },
             }
         },
         silent = true
@@ -259,10 +263,10 @@ vim.keymap.set({ "n" }, "<leader>sw", "<cmd>lua require('spectre').open_visual({
 vim.keymap.set({ "v" }, "<leader>s", "<esc>:lua require('spectre').open_visual()<CR>")
 
 -- search in current file
-vim.keymap.set( {"n", "x"}, "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>")
+vim.keymap.set({ "n", "x" }, "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>")
 
-vim.keymap.set({"n"}, "<leader>p", ":ToggleTerm<cr>")
-vim.keymap.set({"n"}, "<leader>P", ":ToggleTermToggleAll<cr>")
+vim.keymap.set({ "n" }, "<leader>p", ":ToggleTerm<cr>")
+vim.keymap.set({ "n" }, "<leader>P", ":ToggleTermToggleAll<cr>")
 
 -- Copilot
 if wk_ok then
