@@ -191,26 +191,39 @@ vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', opts)
 
 -- Hop
 if wk_ok then
-    local hop_mapping = { ["<leader>"] = {
-        j = { "<cmd>lua require'hop'.hint_words()<cr>", 'Hop words' },
-        J = { "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", 'Hop all words' },
-        l = { "<cmd>lua require'hop'.hint_lines()<cr>", 'Hop lines' },
-        L = { "<cmd>lua require'hop'.hint_lines({multi_windows = true})<cr>", 'Hop all lines' },
-        k = { "<cmd>silent lua require'hop'.hint_patterns()<cr>", 'Hop patterns' },
-        K = { "<cmd>silent lua require'hop'.hint_patterns({multi_windows = true})<cr>", 'Hop all patterns' },
-    } }
+    local hop_mapping = {
+        ["<leader>"] = {
+            j = { "<cmd>lua require'hop'.hint_words()<cr>", 'Hop words' },
+            J = { "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", 'Hop all words' },
+            l = { "<cmd>lua require'hop'.hint_lines()<cr>", 'Hop lines' },
+            L = { "<cmd>lua require'hop'.hint_lines({multi_windows = true})<cr>", 'Hop all lines' },
+            k = { "<cmd>silent lua require'hop'.hint_patterns()<cr>", 'Hop patterns' },
+            K = { "<cmd>silent lua require'hop'.hint_patterns({multi_windows = true})<cr>", 'Hop all patterns' },
+        }
+    }
     wk.register(hop_mapping, { silent = true, mode = 'n' })
     wk.register(hop_mapping, { silent = true, mode = 'v' })
 
     -- f/F, t/T
-    local hop_reimplement_mapping = {
-        f = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>", 'Hop next char'},
-        F = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>", 'Hop prev char'},
-        t = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>", 'Hop next char'},
-        T = {"<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })<cr>", 'Hop prev char'},
-    }
-    wk.register(hop_reimplement_mapping, { silent = true, mode = 'n' })
-    wk.register(hop_reimplement_mapping, { silent = true, mode = 'v' })
+    local overwrite_navigation = false
+    if overwrite_navigation then
+        local hop_reimplement_mapping = {
+            f = {
+                "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true })<cr>",
+                'Hop next char' },
+            F = {
+                "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true })<cr>",
+                'Hop prev char' },
+            t = {
+                "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })<cr>",
+                'Hop next char' },
+            T = {
+                "<cmd>lua require'hop'.hint_char1({ direction = require'hop.hint'.HintDirection.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })<cr>",
+                'Hop prev char' },
+        }
+        wk.register(hop_reimplement_mapping, { silent = true, mode = 'n' })
+        wk.register(hop_reimplement_mapping, { silent = true, mode = 'v' })
+    end
 end
 
 -- Diffview
