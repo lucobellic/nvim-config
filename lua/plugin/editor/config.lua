@@ -13,7 +13,7 @@ vim.o.autowriteall = true
 vim.o.timeout = true
 vim.o.timeoutlen = 250
 
-vim.o.spell = true
+vim.o.spell = false
 
 vim.o.wrap = false
 
