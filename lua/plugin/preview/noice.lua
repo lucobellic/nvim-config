@@ -63,10 +63,11 @@ local filter_skip = {
       -- Hide display messages but still show them in :messages
       { event = "msg_show", kind = { "", "echo", "echomsg", "search_count" }, find = "written" },
       { event = "msg_show", kind = "wmsg",                                    find = "BOTTOM" },
+      { event = "msg_show", kind = "emsg",                                    find = "Neo" },
       { event = "msg_show", kind = "emsg",                                    find = "Pattern not found" },
     }
   },
-  opts = { skip = true },
+  opts = { stop = true, skip = true },
 }
 
 local spinners = require('noice.util.spinners').spinners
