@@ -1,6 +1,6 @@
 require('scrollbar').setup({
     show = true,
-    show_in_active_only = true,
+    show_in_active_only = false,
     set_highlights = true,
     handle = {
         text = " ",
@@ -103,7 +103,7 @@ local colors_type = {
     changedelete = 'GitChange'
 }
 
-require('scrollbar.handlers').register('git', function(bufnr)
+local add_git_signs = function(bufnr)
     local nb_lines = vim.api.nvim_buf_line_count(bufnr)
     local lines = {}
     local hunks = gitsign.get_hunks(bufnr)
@@ -119,4 +119,6 @@ require('scrollbar.handlers').register('git', function(bufnr)
         end
     end
     return lines
-end)
+end
+
+-- require('scrollbar.handlers').register('git', add_git_signs)
