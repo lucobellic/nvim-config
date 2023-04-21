@@ -85,8 +85,6 @@ local ui_plugins = {
    -- Animation
    { 'echasnovski/mini.animate', event = "VeryLazy", config = function() require('plugin.ui.animate') end },
 
-   -- Transparent
-   { 'xiyaowong/transparent.nvim', config = function() require('transparent').setup({}) end }
 
 }
 
