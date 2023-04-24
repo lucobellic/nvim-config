@@ -124,6 +124,61 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'neo-tree', -- or any other filetree's `ft`
 })
 
+--------------------------------------------------------------------------------
+------------------------- Tabpage buffers management ---------------------------
+--------------------------------------------------------------------------------
+-- TODO: Handle buffer order when same buffer is present in multiple tabpages.
+
+local state = require('barbar.state')
+
+---On TabLeave, save the list of visible buffers and hide them if any.
+---@package
+local save_and_hide_tabpage_buffers = function()
+  -- Save visible buffers
+  vim.t.visible_buffers = state.get_buffer_list()
+
+  -- Hide buffers
+  for _, buffer in ipairs(vim.t.visible_buffers or {}) do
+    if vim.api.nvim_buf_is_valid(buffer) then
+      vim.api.nvim_buf_set_option(buffer, 'buflisted', false)
+    end
+  end
+end
+
+
+---On TabEnter, display previously saved visible buffer if any.
+---@package
+local load_tabpage_buffers = function()
+  for _, buffer in ipairs(vim.t.visible_buffers or {}) do
+    vim.api.nvim_buf_set_option(buffer, 'buflisted', true)
+  end
+end
+
+---On TabClosed, clear the list of visible buffers.
+---@package
+local function clear_tabpage_buffers(tabpage_id)
+  if tabpage_id and vim.api.nvim_tabpage_is_valid(tabpage_id) then
+    vim.api.nvim_tabpage_del_var(tabpage_id, 'visible_buffers')
+  end
+end
+
+vim.api.nvim_create_autocmd({ 'TabLeave' }, {
+  pattern = { '*' },
+  callback = save_and_hide_tabpage_buffers
+})
+
+vim.api.nvim_create_autocmd({ 'TabEnter' }, {
+  pattern = { '*' },
+  callback = load_tabpage_buffers
+})
+
+vim.api.nvim_create_autocmd({ 'TabClosed' }, {
+  pattern = { '*' },
+  callback = function(ev)
+    clear_tabpage_buffers(ev.id)
+  end
+})
+
 vim.api.nvim_set_hl(0, "BufferDefaultInactive" , { link = "Directory"})
 vim.api.nvim_set_hl(0, "BufferInactive"        , { link = "BufferDefaultInactive" })
 vim.api.nvim_set_hl(0, "BufferInactiveSign"    , { link = "BufferInactive" })
