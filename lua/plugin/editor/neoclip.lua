@@ -1,4 +1,5 @@
 require('neoclip').setup({
+  enable_persistent_history = true,
   on_select = {
     move_to_front = false,
   },
