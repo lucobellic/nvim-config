@@ -167,6 +167,16 @@ vim.api.nvim_set_keymap('n', '<Space>go', ':Lspsaga outline<cr>', opts)
 -- Zen mode
 vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
 
+if wk_ok then
+    wk.register({
+        ["<C-k>"] = { ':tabnext<cr>', 'Next Tab' },
+        ["<C-j>"] = { ':tabprev<cr>', 'Previous Tab' },
+        g = {
+            n = { ':tabnew<cr>', 'New Tab' },
+            N = { ':tabclose<cr>', 'Close Tab' },
+        }
+    })
+end
 
 -- Trouble
 if wk_ok then
