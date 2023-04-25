@@ -10,9 +10,11 @@ require('telescope').setup {
         ["<esc>"] = actions.close,
         ["<C-k>"] = lga_actions.quote_prompt(),
         ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+        ["<C-n>"] = actions.select_tab,
       },
       n = {
         ["<C-t>"] = trouble.smart_open_with_trouble,
+        ["<C-n>"] = actions.select_tab,
       },
     },
     vimgrep_arguments = {
