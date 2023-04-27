@@ -6,5 +6,14 @@ require("indent_blankline").setup {
     char = "▏",
     show_first_indent_level = true,
     show_trailing_blankline_indent = false,
+    filetype_exclude = {
+        "dashboard",
+        "lspinfo",
+        "packer",
+        "checkhealth",
+        "help",
+        "man",
+        "",
+    }
 }
 
