@@ -36,6 +36,12 @@ local lsp_plugins = {
             require('plugin.lsp.saga')
         end
     },
+    {
+        'simrat39/symbols-outline.nvim',
+        config = function()
+            require('symbols-outline').setup()
+        end
+    },
     { 'jose-elias-alvarez/null-ls.nvim' },
     {
         'neovim/nvim-lspconfig',

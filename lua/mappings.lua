@@ -162,7 +162,7 @@ vim.api.nvim_set_keymap('n', '<Space>bd', ':BufferOrderByDirectory<cr>', opts)
 vim.api.nvim_set_keymap('n', '<Space>bl', ':BufferOrderByLanguage<cr>', opts)
 
 -- Outline
-vim.api.nvim_set_keymap('n', '<Space>go', ':Lspsaga outline<cr>', opts)
+vim.api.nvim_set_keymap('n', '<Space>go', ':SymbolsOutline<cr>', opts)
 
 -- Zen mode
 vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
