@@ -16,13 +16,14 @@ require 'nvim-treesitter.configs'.setup {
   rainbow = {
     enable = true,
     hlgroups = {
-      'Gold',
-      'Orchid',
-      'LightSkyBlue',
-      'DarkOrange',
+      'TSRainbowYellow',
+      'TSRainbowViolet',
+      'TSRainbowBlue',
+      'TSRainbowOrange',
       'TSRainbowGreen',
       'TSRainbowViolet',
-      'TSRainbowCyan'
+      'TSRainbowCyan',
+      'TSRainbowRed',
     },
   }
 }
