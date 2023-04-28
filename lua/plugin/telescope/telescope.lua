@@ -67,7 +67,7 @@ require('telescope').setup {
 
     file_ignore_patterns = {},
     -- winblend = 20,
-    previewer = false,
+    preview = { treesitter = { enable = true } },
     -- results_width = 0.8,
     -- borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
     color_devicons = true,
