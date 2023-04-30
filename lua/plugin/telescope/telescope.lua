@@ -26,12 +26,19 @@ require('telescope').setup {
       '--column',
       '--smart-case'
     },
-
-    -- path_display = { 'smart' },
+    --- User defined function to transform the paths displayed in the picker.
+    ---@param opts table: The opts the users passed into the picker. Might contains a path_display key
+    ---@param path string: The path that should be formatted
+    ---@return string: The transformed path ready to be displayed
+    ---@diagnostic disable-next-line: unused-local
     path_display = function(opts, path)
+      local Path = require('plenary.path')
       local utils = require("telescope.utils")
       local tail = utils.path_tail(path)
-      return string.format("%s - %s", tail, path)
+      local head = Path:new(path):parent():make_relative()
+      local folder = utils.transform_path({ path_display = { 'truncate' } }, head)
+      return string.format("%-20s • %s", tail, folder)
+      -- return (folder and folder ~= ".") and string.format(format, tail, folder) or tail
     end,
     show_line = false,
     prompt_title = false,
