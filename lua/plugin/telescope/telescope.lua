@@ -43,21 +43,15 @@ require('telescope').setup {
     show_line = false,
     prompt_title = false,
     results_title = false,
-    preview_title = false,
-    dynamic_preview_title = false,
-
+    preview_title = true,
+    dynamic_preview_title = true,
     prompt_prefix = "> ",
     selection_caret = "> ",
     entry_prefix = "  ",
-
     initial_mode = "insert",
     selection_strategy = "reset",
     sorting_strategy = "ascending",
-
-
-    -- layout_strategy = "vertical",
     layout_strategy = "horizontal",
-
     layout_config = {
       horizontal = {
         prompt_position = 'top',
@@ -71,7 +65,6 @@ require('telescope').setup {
       --   mirror = true,
       -- },
     },
-
     file_ignore_patterns = {},
     -- winblend = 20,
     preview = { treesitter = { enable = true } },
