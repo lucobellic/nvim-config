@@ -27,6 +27,6 @@ animate.setup({
   },
   cursor = {
     enable = true,
-    timing = animate.gen_timing.linear({ duration = 150, unit = 'total' }),
+    timing = animate.gen_timing.linear({ duration = 200, unit = 'total' }),
   }
 })
