@@ -1,4 +1,4 @@
-require('gitsigns').setup {
+return {
 
   signs = {
     add          = { hl = 'GitSignsAdd', text = '▕', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },

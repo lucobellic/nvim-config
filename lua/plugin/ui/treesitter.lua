@@ -1,9 +1,4 @@
-vim.api.nvim_set_hl(0, 'Gold', { fg = "gold" })
-vim.api.nvim_set_hl(0, 'Orchid', { fg = "orchid" })
-vim.api.nvim_set_hl(0, 'LightSkyBlue', { fg = "LightSkyBlue" })
-vim.api.nvim_set_hl(0, 'DarkOrange', { fg = "DarkOrange" })
-
-require 'nvim-treesitter.configs'.setup {
+return {
   ensure_installed = { "cmake", "python", "yaml", "json", "vim", "markdown" },
   highlight = {
     enable = true,
@@ -27,7 +22,3 @@ require 'nvim-treesitter.configs'.setup {
     },
   }
 }
-
-if vim.loop.os_uname().sysname:lower():find('windows') then
-  require 'nvim-treesitter.install'.compilers = { 'cl', 'clang' }
-end

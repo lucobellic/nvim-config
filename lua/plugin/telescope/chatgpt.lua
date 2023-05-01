@@ -1,4 +1,4 @@
-require('chatgpt').setup({
+return {
   chat = {
     -- welcome_message = WELCOME_MESSAGE,
     -- loading_text = "Loading, please wait ...",
@@ -32,5 +32,4 @@ require('chatgpt').setup({
   },
 
 
-})
-
+}
