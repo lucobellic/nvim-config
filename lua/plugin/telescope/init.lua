@@ -19,9 +19,7 @@ local telescope_plugins = {
   {
     "jackMort/ChatGPT.nvim",
     event = "VeryLazy",
-    config = function()
-      require("plugin.telescope.chatgpt")
-    end,
+    opts = require("plugin.telescope.chatgpt"),
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",

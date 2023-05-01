@@ -92,9 +92,26 @@ nvim_lsp.lua_ls.setup({
   capabilities = capabilities,
   settings = {
     Lua = {
+      format = {
+        enable = true,
+        defaultConfig = {
+          indent_style = 'space',
+          indent_size = '2',
+          column_width = '120'
+        }
+      },
       completion = {
-        callSnippet = "Replace"
-      }
+        callSnippet = 'Replace'
+      },
+      telemetry = {
+        enable = false,
+      },
+      diagnostic = {
+        enable = true,
+        neededFileStatus = {
+          ['codestyle-check'] = 'Any'
+        }
+      },
     }
   }
 })
