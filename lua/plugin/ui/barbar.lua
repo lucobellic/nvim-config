@@ -164,12 +164,20 @@ end
 
 vim.api.nvim_create_autocmd({ 'TabLeave' }, {
   pattern = { '*' },
-  callback = save_and_hide_tabpage_buffers
+  callback = function()
+    vim.t.buffers = state.buffers
+    save_and_hide_tabpage_buffers()
+  end
 })
 
 vim.api.nvim_create_autocmd({ 'TabEnter' }, {
   pattern = { '*' },
-  callback = load_tabpage_buffers
+  callback = function()
+    load_tabpage_buffers()
+    if vim.t.buffers then
+      state.buffers = vim.t.buffers
+    end
+  end
 })
 
 vim.api.nvim_create_autocmd({ 'TabClosed' }, {
