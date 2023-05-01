@@ -7,7 +7,7 @@ local completion_plugins = {
     'hrsh7th/nvim-cmp',
     dependencies = { 'onsails/lspkind.nvim' },
     config = function()
-      require('plugin.completion.comp')
+      require('plugins.completion.comp')
     end
   },
 
@@ -27,7 +27,7 @@ local completion_plugins = {
     cmd = "Copilot",
     event = "VeryLazy",
     config = function()
-      require("plugin.completion.copilot")
+      require("plugins.completion.copilot")
     end,
   },
   {

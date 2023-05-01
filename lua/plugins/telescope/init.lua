@@ -11,7 +11,7 @@ local telescope_plugins = {
       'tsakirist/telescope-lazy.nvim'
       -- 'prochri/telescope-all-recent.nvim',
     },
-    config = function() require('plugin.telescope.telescope') end
+    config = function() require('plugins.telescope.telescope') end
   },
 
   { 'stevearc/dressing.nvim' },
@@ -19,7 +19,7 @@ local telescope_plugins = {
   {
     "jackMort/ChatGPT.nvim",
     event = "VeryLazy",
-    opts = require("plugin.telescope.chatgpt"),
+    opts = require("plugins.telescope.chatgpt"),
     dependencies = {
       "MunifTanjim/nui.nvim",
       "nvim-lua/plenary.nvim",

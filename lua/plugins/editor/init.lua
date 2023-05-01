@@ -1,34 +1,45 @@
 local editor_plugins = {
-  { 'folke/zen-mode.nvim',    config = function() require('plugin.editor.zenmode') end },
-  { 'junegunn/limelight.vim', config = function() vim.cmd('source ' .. config_path .. '/' .. 'limelight.vim') end },   -- Highlight paragraph
+  {
+    'folke/zen-mode.nvim',
+    config = function()
+      require('plugins.editor.zenmode')
+    end
+  },
+  {
+    'junegunn/limelight.vim',
+    config =
+        function()
+          vim.cmd('source ' .. vim.fn.stdpath('config') .. '/config/limelight.vim')
+        end
+  }, -- Highlight paragraph
 
   -- use term as in editor
   {
     'chomosuke/term-edit.nvim',
-    config = function() require('plugin.editor.term-edit') end
+    config = function() require('plugins.editor.term-edit') end
   },
   {
     "lukas-reineke/indent-blankline.nvim",
     config = function()
-      require('plugin.editor.indent-blankline')
+      require('plugins.editor.indent-blankline')
     end
   },
   {
     'echasnovski/mini.indentscope',
     branch = 'stable',
     config = function()
-      require('plugin.editor.indentscope')
+      require('plugins.editor.indentscope')
     end
   },
   {
     'sindrets/diffview.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() require('plugin.editor.diffview') end
+    config = function() require('plugins.editor.diffview') end
   },
   {
     'kevinhwang91/nvim-ufo',
     dependencies = { 'kevinhwang91/promise-async' },
-    config = function() require('plugin.editor.fold') end
+    config = function() require('plugins.editor.fold') end
   },
   {
     'echasnovski/mini.splitjoin',
@@ -52,19 +63,19 @@ local editor_plugins = {
   {
     'windwp/nvim-spectre',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() require('plugin.editor.spectre') end
+    config = function() require('plugins.editor.spectre') end
   },
   {
     'RRethy/vim-illuminate',
     enabled = true,
-    config = function() require('plugin.editor.illuminate') end
+    config = function() require('plugins.editor.illuminate') end
   },
   {
     "AckslD/nvim-neoclip.lua",
     requires = { 'kkharji/sqlite.lua', 'nvim-telescope/telescope.nvim' },
     after = { 'telescope.nvim' },
     config = function()
-      require('plugin.editor.neoclip')
+      require('plugins.editor.neoclip')
     end,
   }
 }

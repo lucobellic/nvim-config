@@ -38,7 +38,7 @@ local lsp_plugins = {
   {
     'glepnir/lspsaga.nvim',
     config = function()
-      require('plugin.lsp.saga')
+      require('plugins.lsp.saga')
     end
   },
   {
@@ -52,7 +52,7 @@ local lsp_plugins = {
     'neovim/nvim-lspconfig',
     dependencies = { 'folke/neodev.nvim' },
     config = function()
-      require('plugin.lsp.config')
+      require('plugins.lsp.config')
     end
   },
 }

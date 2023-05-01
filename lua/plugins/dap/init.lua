@@ -22,6 +22,6 @@ return {
       'nvim-neotest/neotest-python',
       'nvim-neotest/neotest-vim-test'
     },
-    -- opts = require('plugin.dap.neotest')
+    -- opts = require('plugins.dap.neotest')
   }
 }

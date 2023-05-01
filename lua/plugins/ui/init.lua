@@ -33,25 +33,25 @@ local ui_plugins = {
   },
 
   -- icons
-  { 'nvim-tree/nvim-web-devicons', opts = require('plugin.ui.web-devicons') },
+  { 'nvim-tree/nvim-web-devicons', opts = require('plugins.ui.web-devicons') },
 
   -- ui
   {
     'romgrk/barbar.nvim',
-    event = 'VeryLazy',
-    config = function() require('plugin.ui.barbar') end,
+    ft = 'neo-tree',
+    config = function() require('plugins.ui.barbar') end,
   },
 
   {
     'akinsho/bufferline.nvim',
     enabled = false,
     requires = 'nvim-tree/nvim-web-devicons',
-    config = function() require('plugin.ui.bufferline') end
+    config = function() require('plugins.ui.bufferline') end
   },
 
   {
     'glepnir/galaxyline.nvim',
-    config = function() require('plugin.ui.galaxyline') end,
+    config = function() require('plugins.ui.galaxyline') end,
   },
 
   -- git
@@ -59,7 +59,7 @@ local ui_plugins = {
     'lewis6991/gitsigns.nvim',
     event = 'BufRead',
     requires = 'plenary.nvim',
-    opts = require('plugin.ui.gitsigns')
+    opts = require('plugins.ui.gitsigns')
   },
 
   -- Color Syntax
@@ -67,28 +67,28 @@ local ui_plugins = {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     dependencies = { 'HiPhish/nvim-ts-rainbow2' },
-    opts = require('plugin.ui.treesitter'),
+    opts = require('plugins.ui.treesitter'),
   },
 
   -- Start screen
   {
     'glepnir/dashboard-nvim',
     event = 'VimEnter',
-    -- opts = require('plugin.ui.dashboard')
+    config = function() require('plugins.ui.dashboard') end
   },
 
   -- Scrollbar
   {
     'petertriho/nvim-scrollbar',
     dependencies = 'lewis6991/gitsigns.nvim',
-    config = function() require('plugin.ui.scrollbar') end
+    config = function() require('plugins.ui.scrollbar') end
   },
 
   -- Animation
   {
     'echasnovski/mini.animate',
     event = "VeryLazy",
-    config = function() require('plugin.ui.animate') end,
+    config = function() require('plugins.ui.animate') end,
   },
 }
 

@@ -21,7 +21,7 @@ db.setup({
   theme = 'hyper',
   preview = {
     command = 'cat | lolcat -F 0.3',
-    file_path = vim.fn.stdpath("config") .. '/lua/plugin/ui/header.cat',
+    file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
     file_width = 69,
     file_height = 10,
   },
@@ -51,7 +51,7 @@ db.setup({
       {
         desc = ' Recent',
         group = 'Number',
-        action = 'Telescope oldfiles',
+        action = 'Telescope oldiles',
         key = 'r',
       },
     },

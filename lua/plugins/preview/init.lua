@@ -18,16 +18,16 @@ local preview_plugins = {
   {
     'folke/todo-comments.nvim',
     after = 'trouble.nvim',
-    config = function() require('plugin.preview.todo') end
+    config = function() require('plugins.preview.todo') end
   },
 
-  { 'folke/which-key.nvim', config = function() require('plugin.preview.whichkey') end },
+  { 'folke/which-key.nvim', config = function() require('plugins.preview.whichkey') end },
 
   -- Enhanced wilder
   {
     'gelguy/wilder.nvim',
     config = function()
-      require('plugin.preview.wilder')
+      require('plugins.preview.wilder')
     end,
     dependencies = { 'romgrk/fzy-lua-native' },
   },
@@ -35,7 +35,7 @@ local preview_plugins = {
   {
     'folke/noice.nvim',
     config = function()
-      require('plugin.preview.noice')
+      require('plugins.preview.noice')
     end,
     dependencies = {
       'MunifTanjim/nui.nvim',
@@ -46,11 +46,11 @@ local preview_plugins = {
   {
     'voldikss/vim-floaterm',
     config = function()
-      require('plugin.preview.floaterm')
+      require('plugins.preview.floaterm')
     end
   }, -- Floating terminal
 
-  { 'akinsho/toggleterm.nvim', config = function() require('plugin.preview.toggleterm') end },
+  { 'akinsho/toggleterm.nvim', config = function() require('plugins.preview.toggleterm') end },
 }
 
 return preview_plugins
