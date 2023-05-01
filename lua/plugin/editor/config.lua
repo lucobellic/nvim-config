@@ -33,20 +33,20 @@ vim.o.wildmenu = true
 vim.o.list = true
 vim.o.showbreak = '↪'
 vim.opt.listchars = { tab = '>-', trail = '·', extends = '⟩', precedes = '⟨' }
-vim.opt.fillchars =  {
-    diff = '/',
-    eob = ' ',
-    horiz = ' ',
-    horizup = ' ',
-    horizdown = ' ',
-    vert = ' ',
-    vertleft = ' ',
-    vertright = ' ',
-    verthoriz = ' ',
-    fold = ' ',
-    foldsep = ' ',
-    foldopen = '▾',
-    foldclose = '▸',
+vim.opt.fillchars = {
+  diff = '/',
+  eob = ' ',
+  horiz = ' ',
+  horizup = ' ',
+  horizdown = ' ',
+  vert = ' ',
+  vertleft = ' ',
+  vertright = ' ',
+  verthoriz = ' ',
+  fold = ' ',
+  foldsep = ' ',
+  foldopen = '▾',
+  foldclose = '▸',
 }
 
 vim.o.guicursor = "n-v-c:hor15,i-ci-ve:ver15,r-cr-o:block,a:blinkon0-Cursor/lCursor"

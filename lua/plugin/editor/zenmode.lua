@@ -4,7 +4,7 @@ require("zen-mode").setup {
     -- height and width can be:
     -- * an absolute number of cells when > 1
     -- * a percentage of the width / height of the editor when <= 1
-    width = 0.5, -- width of the Zen window
+    width = 0.5,  -- width of the Zen window
     height = 0.9, -- height of the Zen window
     -- by default, no options are changed for the Zen window
     -- uncomment any of the options below, or add other vim.wo options you want to apply
@@ -23,11 +23,11 @@ require("zen-mode").setup {
     -- comment the lines to not apply the options
     options = {
       enabled = true,
-      ruler = false, -- disables the ruler text in the cmd line area
-      showcmd = false, -- disables the command in the last line of the screen
+      ruler = false,                -- disables the ruler text in the cmd line area
+      showcmd = false,              -- disables the command in the last line of the screen
     },
     gitsigns = { enabled = false }, -- disables git signs
-    tmux = { enabled = false }, -- disables the tmux statusline
+    tmux = { enabled = false },     -- disables the tmux statusline
     -- this will change the font size on kitty when in zen mode
     -- to make this work, you need to set the following kitty options:
     -- - allow_remote_control socket-only

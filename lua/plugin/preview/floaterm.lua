@@ -1,5 +1,5 @@
 -- TODO: Replace this vim code to lua
-vim.cmd[[
+vim.cmd [[
 function! GetBufnrUnnamed() abort
   let buflist = floaterm#buflist#gather()
   for bufnr in buflist

@@ -42,10 +42,10 @@ require('barbar').setup {
     button = '',
     -- Enables / disables diagnostic symbols
     diagnostics = {
-          [vim.diagnostic.severity.ERROR] = { enabled = false, icon = '💀' },
-          [vim.diagnostic.severity.WARN] = { enabled = false },
-          [vim.diagnostic.severity.INFO] = { enabled = false },
-          [vim.diagnostic.severity.HINT] = { enabled = false },
+      [vim.diagnostic.severity.ERROR] = { enabled = false, icon = '💀' },
+      [vim.diagnostic.severity.WARN] = { enabled = false },
+      [vim.diagnostic.severity.INFO] = { enabled = false },
+      [vim.diagnostic.severity.HINT] = { enabled = false },
     },
     filetype = {
       -- Sets the icon's highlight group.
@@ -187,15 +187,15 @@ vim.api.nvim_create_autocmd({ 'TabClosed' }, {
   end
 })
 
-vim.api.nvim_set_hl(0, "BufferDefaultInactive" , { link = "Directory"})
-vim.api.nvim_set_hl(0, "BufferInactive"        , { link = "BufferDefaultInactive" })
-vim.api.nvim_set_hl(0, "BufferInactiveSign"    , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferTabpageFill"     , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferTabpages"        , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferOffset"          , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferVisible"         , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferVisibleIcon"     , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferVisibleSign"     , { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferCurrentMod"      , { link = "GitGutterChange" })
-vim.api.nvim_set_hl(0, "BufferVisibleMod"      , { link = "GitGutterChange" })
-vim.api.nvim_set_hl(0, "BufferInactiveMod"     , { link = "GitGutterChange" })
+vim.api.nvim_set_hl(0, "BufferDefaultInactive", { link = "Directory" })
+vim.api.nvim_set_hl(0, "BufferInactive", { link = "BufferDefaultInactive" })
+vim.api.nvim_set_hl(0, "BufferInactiveSign", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferTabpageFill", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferTabpages", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferOffset", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferVisible", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferVisibleIcon", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferVisibleSign", { link = "BufferInactive" })
+vim.api.nvim_set_hl(0, "BufferCurrentMod", { link = "GitGutterChange" })
+vim.api.nvim_set_hl(0, "BufferVisibleMod", { link = "GitGutterChange" })
+vim.api.nvim_set_hl(0, "BufferInactiveMod", { link = "GitGutterChange" })

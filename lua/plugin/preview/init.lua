@@ -21,7 +21,7 @@ local preview_plugins = {
     config = function() require('plugin.preview.todo') end
   },
 
-  { 'folke/which-key.nvim',    config = function() require('plugin.preview.whichkey') end },
+  { 'folke/which-key.nvim', config = function() require('plugin.preview.whichkey') end },
 
   -- Enhanced wilder
   {

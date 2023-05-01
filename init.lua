@@ -36,4 +36,3 @@ for _, config_file in ipairs({ 'editor' }) do
   vim.g.config_file = config_file
   vim.cmd [[execute 'source ' . g:config_path . '/' . g:config_file . '.vim']]
 end
-

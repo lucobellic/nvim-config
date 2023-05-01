@@ -78,11 +78,11 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
     })
   elseif val.kind == "end" and notif_data then
     notif_data.notification =
-    vim.notify(val.message and format_message(val.message) or "Complete", "info", {
-      icon = "",
-      replace = notif_data.notification,
-      timeout = 2000
-    })
+        vim.notify(val.message and format_message(val.message) or "Complete", "info", {
+          icon = "",
+          replace = notif_data.notification,
+          timeout = 2000
+        })
 
     notif_data.spinner = nil
   end
