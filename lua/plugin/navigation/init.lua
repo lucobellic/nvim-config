@@ -12,7 +12,6 @@ local navigation_plugins = {
     'tpope/vim-surround',
     'tpope/vim-commentary',
     'tpope/vim-fugitive',
-    'tpope/vim-sleuth',
     'tpope/vim-repeat',
     'tpope/vim-abolish',
 
