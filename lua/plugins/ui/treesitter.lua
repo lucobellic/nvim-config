@@ -1,4 +1,4 @@
-return {
+require'nvim-treesitter.configs'.setup {
   ensure_installed = { "cmake", "python", "yaml", "json", "vim", "markdown" },
   highlight = {
     enable = true,
