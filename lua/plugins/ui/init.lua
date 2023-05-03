@@ -32,6 +32,19 @@ local ui_plugins = {
     end,
   },
 
+  {
+    'catppuccin/nvim',
+    event = 'VeryLazy',
+    name = 'catppuccin'
+  },
+
+  {
+    'folke/tokyonight.nvim',
+    event = 'VeryLazy',
+    name = 'tokyonight'
+  },
+
+
   -- icons
   { 'nvim-tree/nvim-web-devicons', opts = require('plugins.ui.web-devicons') },
 
