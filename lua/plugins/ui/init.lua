@@ -119,6 +119,11 @@ local ui_plugins = {
     end
   },
 
+  {
+    'b0o/incline.nvim',
+    config = function() require('plugins.ui.incline') end
+  },
+
   -- Colors
   {
     'NvChad/nvim-colorizer.lua',
