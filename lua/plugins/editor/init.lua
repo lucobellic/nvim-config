@@ -7,10 +7,7 @@ local editor_plugins = {
   },
   {
     'junegunn/limelight.vim',
-    config =
-        function()
-          vim.cmd('source ' .. vim.fn.stdpath('config') .. '/config/limelight.vim')
-        end
+    config = function() require('plugins.editor.limelight') end
   }, -- Highlight paragraph
 
   -- use term as in editor

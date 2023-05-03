@@ -170,6 +170,10 @@ vim.api.nvim_set_keymap('n', '<Space>go', ':SymbolsOutline<cr>', opts)
 -- Zen mode
 vim.api.nvim_set_keymap('n', '<C-z>', ':ZenMode<cr>', opts)
 
+-- Limelight
+vim.api.nvim_set_keymap('n', '<A-z>', ':LimelightToggle<cr>', opts)
+
+-- Tab navigation
 if wk_ok then
   wk.register({
     ["<C-k>"] = { ':tabnext<cr>', 'Next Tab' },
