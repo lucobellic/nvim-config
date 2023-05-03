@@ -1,6 +1,16 @@
 local navigation_plugins = {
-  { 'junegunn/fzf',     run = 'fzf#install()' },
-  { 'junegunn/fzf.vim', config = function() vim.cmd('source ' .. vim.fn.stdpath('config') .. '/config/fzf.vim') end },
+  {
+    'junegunn/fzf',
+    run = 'fzf#install()'
+  },
+
+  {
+    'junegunn/fzf.vim',
+    config = function()
+      require('plugins.navigation.fzf')
+    end
+  },
+
   {
     'phaazon/hop.nvim',
     branch = 'v2',
@@ -8,6 +18,7 @@ local navigation_plugins = {
       require('plugins.navigation.hop')
     end
   },
+
   'tpope/vim-sensible',
   'tpope/vim-surround',
   'tpope/vim-commentary',
@@ -22,7 +33,7 @@ local navigation_plugins = {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
-      'nvim-tree/nvim-web-devicons',       -- not strictly required, but recommended
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     },
     config = function()
       require('plugins.navigation.neo-tree')
