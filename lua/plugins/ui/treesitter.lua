@@ -1,8 +1,16 @@
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "cmake", "python", "yaml", "json", "vim", "markdown" },
+require 'nvim-treesitter.configs'.setup {
+  ensure_installed = {
+    'cmake',
+    'python',
+    'yaml',
+    'json',
+    'vim',
+    'markdown',
+    'markdown_inline',
+  },
   highlight = {
     enable = true,
-    disable = { "c", "cpp", "rust", "lua" }, -- disable highlight supported by lsp
+    disable = { 'c', 'cpp', 'rust', 'lua' }, -- disable highlight supported by lsp
     custom_captures = {
       -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
       -- ["foo.bar"] = "Constant",
