@@ -203,6 +203,21 @@ if wk_ok then
   }, opts)
 end
 
+
+-- Diagnostics
+if wk_ok then
+  wk.register({
+    ["<leader>"] = {
+      d = {
+        name = 'diagnostics',
+        t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle virtual text' },
+        l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle virtual lines' },
+     }
+    }
+  }, opts)
+end
+
+
 -- Floaterm
 vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle<cr>', opts)
 vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', opts)

@@ -43,14 +43,22 @@ local lsp_plugins = {
   },
   {
     'simrat39/symbols-outline.nvim',
+    opts = {
+      show_guides = false,
+      fold_markers = { '', '' },
+    }
+  },
+  {
+    'ErichDonGubler/lsp_lines.nvim',
+    name = 'lsp_lines',
     config = function()
-      require('symbols-outline').setup()
-    end
+      require("lsp_lines").setup()
+    end,
   },
   { 'jose-elias-alvarez/null-ls.nvim' },
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'folke/neodev.nvim' },
+    dependencies = { 'folke/neodev.nvim', 'lsp_lines' },
     config = function()
       require('plugins.lsp.config')
     end
