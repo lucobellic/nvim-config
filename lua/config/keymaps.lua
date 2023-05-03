@@ -97,6 +97,11 @@ vim.api.nvim_set_keymap('n', '<S-down>', '<C-w>j', opts)
 vim.api.nvim_set_keymap('n', '<S-up>', '<C-w>k', opts)
 vim.api.nvim_set_keymap('n', '<S-right>', '<C-w>l', opts)
 
+vim.api.nvim_set_keymap('n', '<C-w>z', ':WindowsMaximize<cr>', opts)
+vim.api.nvim_set_keymap('n', '<C-w>_', ':WindowsMaximizeVertically<cr>', opts)
+vim.api.nvim_set_keymap('n', '<C-w>|', ':WindowsMaximizeHorizontally<cr>', opts)
+vim.api.nvim_set_keymap('n', '<C-w>=', ':WindowsEqualize<cr>', opts)
+
 -- Escape terminal insert mode and floating terminal
 vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><C-n>"',
   { silent = true, noremap = true, expr = true })
@@ -216,7 +221,7 @@ if wk_ok then
         name = 'diagnostics',
         t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle virtual text' },
         l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle virtual lines' },
-     }
+      }
     }
   }, opts)
 end

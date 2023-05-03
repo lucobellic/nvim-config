@@ -103,6 +103,21 @@ local ui_plugins = {
     event = "VeryLazy",
     config = function() require('plugins.ui.animate') end,
   },
+
+  -- Windows auto resize
+  {
+    "anuvyklack/windows.nvim",
+    dependencies = {
+      "anuvyklack/middleclass",
+      "anuvyklack/animation.nvim"
+    },
+    config = function()
+      vim.o.winwidth = 10
+      vim.o.winminwidth = 10
+      vim.o.equalalways = false
+      require('windows').setup({})
+    end
+  },
 }
 
 return ui_plugins
