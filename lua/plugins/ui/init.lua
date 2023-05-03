@@ -118,6 +118,12 @@ local ui_plugins = {
       require('windows').setup({})
     end
   },
+
+  -- Colors
+  {
+    'NvChad/nvim-colorizer.lua',
+    config = function() require('colorizer').setup() end,
+  }
 }
 
 return ui_plugins
