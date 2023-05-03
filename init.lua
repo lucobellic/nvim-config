@@ -1,5 +1,6 @@
 vim.g.mapleader = ' '
 
+require("config.autocmd")
 require("config.filetype")
 require("config.neovide")
 require("config.options")

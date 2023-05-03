@@ -63,13 +63,3 @@ vim.opt.fillchars = {
 vim.o.guicursor = "n-v-c:hor15,i-ci-ve:ver15,r-cr-o:block,a:blinkon0-Cursor/lCursor"
 
 vim.g.lion_squeeze_spaces = true
-
--- Display cursorline only in focused window
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter", "WinEnter" }, {
-  pattern = "*",
-  command = "setlocal cursorline",
-})
-vim.api.nvim_create_autocmd({ "WinLeave" }, {
-  pattern = "*",
-  command = "setlocal nocursorline",
-})
