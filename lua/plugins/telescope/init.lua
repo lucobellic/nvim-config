@@ -8,7 +8,8 @@ local telescope_plugins = {
       'nvim-telescope/telescope-symbols.nvim',
       'nvim-telescope/telescope-fzf-native.nvim',
       'nvim-telescope/telescope-file-browser.nvim',
-      'tsakirist/telescope-lazy.nvim'
+      'tsakirist/telescope-lazy.nvim',
+      'GustavoKatel/telescope-asynctasks.nvim'
       -- 'prochri/telescope-all-recent.nvim',
     },
     config = function() require('plugins.telescope.telescope') end

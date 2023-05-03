@@ -12,7 +12,6 @@ return {
     -- Tasks
     'skywind3000/asyncrun.vim',
     'skywind3000/asynctasks.vim',
-    { 'GustavoKatel/telescope-asynctasks.nvim', dependencies = { 'asynctasks.vim' } },
 
     -- Other
     'lewis6991/impatient.nvim',
