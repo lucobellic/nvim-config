@@ -22,7 +22,7 @@ db.setup({
   preview = {
     command = 'cat | lolcat -F 0.3',
     file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
-    file_width = 69,
+    file_width = 70,
     file_height = 10,
   },
   config = {
