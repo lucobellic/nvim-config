@@ -11,7 +11,7 @@ indentscope.setup({
   options = {
     -- Type of scope's border: which line(s) with smaller indent to
     -- categorize as border. Can be one of: 'both', 'top', 'bottom', 'none'.
-    border = 'both',
+    border = 'top',
 
     -- Whether to use cursor column when computing reference indent.
     -- Useful to see incremental scopes with horizontal cursor movements.
@@ -34,6 +34,7 @@ indentscope.setup({
   symbol = '▏',
 })
 
-vim.cmd [[
-  autocmd Filetype dashboard,lspsagaoutline lua vim.b.miniindentscope_disable = true
-]]
+vim.api.nvim_create_autocmd({ 'Filetype' }, {
+  pattern = { 'dashboard', 'lspsagaoutline' },
+  callback = function() vim.b.miniindentscope_disable = true end,
+})
