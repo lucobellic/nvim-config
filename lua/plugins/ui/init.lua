@@ -100,6 +100,7 @@ local ui_plugins = {
   -- Animation
   {
     'echasnovski/mini.animate',
+    enabled = vim.g.neovide,
     event = "VeryLazy",
     config = function() require('plugins.ui.animate') end,
   },

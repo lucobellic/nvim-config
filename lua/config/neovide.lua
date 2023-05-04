@@ -9,6 +9,8 @@ if vim.g.neovide then
   function _G.toggle_full_screen()
     vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
   end
+  -- Disable mini.animate with neovide
+  vim.g.minianimate_disable = true
 
   vim.api.nvim_set_keymap('n', '<F11>', ':lua toggle_full_screen()<cr>', { silent = true })
 end
