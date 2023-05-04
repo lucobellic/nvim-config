@@ -344,3 +344,63 @@ if wk_ok then
     }
   })
 end
+
+-- Refactoring
+if wk_ok then
+  -- Remaps for the refactoring operations currently offered by the plugin
+  local visual_refactoring = {
+    ['<leader>r'] = {
+      name = 'refactoring',
+      e = {
+        [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function')<CR>]],
+        'Extract Function'
+      },
+      f = {
+        [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Function To File')<CR>]],
+        'Extract Function To File'
+      },
+      v = {
+        [[ <Esc><Cmd>lua require('refactoring').refactor('Extract Variable')<CR>]],
+        'Extract Variable'
+      },
+      i = {
+        [[ <Esc><Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
+        'Inline Variable'
+      },
+      -- prompt for a refactor to apply when the remap is triggered
+      r = {
+        ":lua require('refactoring').select_refactor()<CR>",
+        'Select Refactor'
+      },
+      -- remap to open the Telescope refactoring menu in visual mode
+      t = {
+        "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
+        'Telescope Refactor'
+      },
+    }
+  }
+
+  local normal_refactoring = {
+    ['<leader>r'] = {
+      -- Extract block doesn't need visual mode
+      b = {
+        b = {
+          [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]],
+          'Extract Block'
+        },
+        f = {
+          [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]],
+          'Extract Block To File'
+        }
+      },
+      -- Inline variable can also pick up the identifier currently under the cursor without visual mode
+      i = {
+        [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
+        'Inline Variable'
+      }
+    }
+  }
+
+  wk.register(visual_refactoring, { mode = 'v', noremap = true, silent = true, expr = false })
+  wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
+end

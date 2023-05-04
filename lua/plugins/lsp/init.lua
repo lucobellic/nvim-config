@@ -80,6 +80,15 @@ local lsp_plugins = {
         input_after_comment = false,
       })
     end,
+  },
+
+  -- Refactoring
+  {
+    'ThePrimeagen/refactoring.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('refactoring').setup({})
+    end
   }
 }
 

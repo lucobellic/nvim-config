@@ -10,7 +10,8 @@ local telescope_plugins = {
       'nvim-telescope/telescope-file-browser.nvim',
       'tsakirist/telescope-lazy.nvim',
       'GustavoKatel/telescope-asynctasks.nvim',
-      'gbprod/yanky.nvim'
+      'gbprod/yanky.nvim',
+      'ThePrimeagen/refactoring.nvim',
       -- 'prochri/telescope-all-recent.nvim',
     },
     config = function() require('plugins.telescope.telescope') end
