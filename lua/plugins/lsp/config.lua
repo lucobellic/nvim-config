@@ -178,6 +178,7 @@ null_ls.setup({
   sources = {
     -- null_ls.builtins.completion.spell, <- Do not use, bad spell completion
     null_ls.builtins.diagnostics.write_good.with({ filetypes = {} }),
+    null_ls.builtins.diagnostics.rstcheck,
   },
 })
 
