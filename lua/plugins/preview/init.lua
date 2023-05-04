@@ -2,17 +2,14 @@ local preview_plugins = {
 
   { 'folke/trouble.nvim' },
 
+  -- Session manager
   {
-    'Shatur/neovim-session-manager',
-    dependencies = { 'telescope.nvim', 'plenary.nvim' },
+    'folke/persistence.nvim',
+    event = 'VeryLazy',
+    module = 'persistence',
     config = function()
-      require('session_manager').setup {
-        sessions_dir = vim.fn.stdpath('data') .. '/sessions',                    -- The directory where the session files will be saved.
-        autoload_mode = require('session_manager.config').AutoloadMode.Disabled, -- Define what to do when Neovim is started without arguments. Possible values: Disabled, CurrentDir, LastSession
-        autoload_last_session = false,                                           -- Automatically load last session on startup is started without arguments.
-        autosave_last_session = true,                                            -- Automatically save last session on exit.
-      }
-    end
+      require('plugins.preview.persistence')
+    end,
   },
 
   {

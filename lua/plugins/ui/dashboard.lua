@@ -45,7 +45,7 @@ db.setup({
       {
         desc = ' Sessions',
         group = 'DiagnosticHint',
-        action = 'SessionManager load_session',
+        action = 'PersistenceLoadSession',
         key = 's',
       },
       {
@@ -57,10 +57,3 @@ db.setup({
     },
   },
 })
-
-
--- Command
-vim.cmd [[
-    nmap <leader>xs :<C-u>SessionManager save_current_session<cr>
-    nmap <leader>fs :<C-u>SessionManager load_session<cr>
-]]

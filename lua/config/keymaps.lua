@@ -34,6 +34,7 @@ local telescope_mapping_n = {
       r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
       w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' },
       y = { '<cmd>Telescope yank_history<cr>', 'Yank History' },
+      s = { ':PersistenceLoadSession<cr>', 'Load session' },
     },
   },
 }
@@ -325,4 +326,21 @@ if wk_ok then
       }
     }
   )
+end
+
+-- Session
+if wk_ok then
+  wk.register({
+    ['<leader>q'] = {
+      name = 'session',
+      -- restore the session for the current directory
+      r = { ':lua require("persistence").load()<cr>', 'Restore session' },
+      -- restore the last session
+      l = { ':lua require("persistence").load({ last = true })<cr>', 'Load last session' },
+      -- stop Persistence => session won't be saved on exit
+      d = { ':lua require("persistence").stop()<cr>', 'Stop session' },
+      -- load saved sessions
+      s = { ':PersistenceLoadSession<cr>', 'Load session' },
+    }
+  })
 end
