@@ -37,6 +37,10 @@ local lsp_plugins = {
   },
   {
     'glepnir/lspsaga.nvim',
+    dependencies = {
+      { 'nvim-tree/nvim-web-devicons' },
+      { 'nvim-treesitter/nvim-treesitter' }
+    },
     config = function()
       require('plugins.lsp.saga')
     end
