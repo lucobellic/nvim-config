@@ -65,6 +65,18 @@ local lsp_plugins = {
       require('plugins.lsp.config.misc')
     end
   },
+
+  -- Code documentation
+  {
+    'danymat/neogen',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('neogen').setup({
+        snippet_engine = 'luasnip',
+        input_after_comment = false,
+      })
+    end,
+  }
 }
 
 return lsp_plugins

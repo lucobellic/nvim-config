@@ -313,3 +313,16 @@ end
 if wk_ok then
   wk.register({ ['<leader>ut'] = { ':TransparencyToggle<cr>', 'Toggle Transparency' } })
 end
+
+-- Documentaion generation
+if wk_ok then
+  wk.register(
+    {
+      ['<leader>n'] = {
+        name = 'documentation',
+        f = { ':lua require("neogen").generate()<cr>', 'Document' },
+        c = { ":lua require('neogen').generate({ type = 'class' })<CR>", 'Document class' }
+      }
+    }
+  )
+end
