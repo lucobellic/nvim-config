@@ -60,7 +60,9 @@ local lsp_plugins = {
     'neovim/nvim-lspconfig',
     dependencies = { 'folke/neodev.nvim', 'lsp_lines' },
     config = function()
-      require('plugins.lsp.config')
+      require('plugins.lsp.config.servers')
+      require('plugins.lsp.config.null-ls')
+      require('plugins.lsp.config.misc')
     end
   },
 }
