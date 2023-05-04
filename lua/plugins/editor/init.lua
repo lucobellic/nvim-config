@@ -67,14 +67,20 @@ local editor_plugins = {
     enabled = true,
     config = function() require('plugins.editor.illuminate') end
   },
+
+  -- Yank
   {
-    "AckslD/nvim-neoclip.lua",
-    requires = { 'kkharji/sqlite.lua', 'nvim-telescope/telescope.nvim' },
-    after = { 'telescope.nvim' },
+    'gbprod/yanky.nvim',
+    dependencies = { 'kkharji/sqlite.lua' },
     config = function()
-      require('plugins.editor.neoclip')
-    end,
+      require('yanky').setup({
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      })
+    end
   }
+
 }
 
 return editor_plugins

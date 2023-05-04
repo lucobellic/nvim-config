@@ -9,7 +9,8 @@ local telescope_plugins = {
       'nvim-telescope/telescope-fzf-native.nvim',
       'nvim-telescope/telescope-file-browser.nvim',
       'tsakirist/telescope-lazy.nvim',
-      'GustavoKatel/telescope-asynctasks.nvim'
+      'GustavoKatel/telescope-asynctasks.nvim',
+      'gbprod/yanky.nvim'
       -- 'prochri/telescope-all-recent.nvim',
     },
     config = function() require('plugins.telescope.telescope') end

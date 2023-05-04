@@ -6,10 +6,9 @@ vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', op
 
 local wk_ok, wk = pcall(require, 'which-key')
 
-local neoclip_ok, _ = pcall(require, 'neoclip')
-if neoclip_ok and wk_ok then
+if wk_ok then
   wk.register({
-    ['<leader>y'] = { ':Telescope neoclip<cr>', 'Yank History' },
+    ['<leader>y'] = { ':YankyRingHistory<cr>', 'Yank History' },
   })
 end
 
@@ -34,7 +33,7 @@ local telescope_mapping_n = {
       m = { '<cmd>Telescope marks<cr>', "Find Marks" },
       r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
       w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' },
-      y = { '<cmd>Telescope registers<cr>', 'Find Registers' },
+      y = { '<cmd>Telescope yank_history<cr>', 'Yank History' },
     },
   },
 }
