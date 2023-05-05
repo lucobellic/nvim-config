@@ -65,6 +65,8 @@ local filter_skip = {
       { event = "msg_show", kind = "wmsg",                                    find = "BOTTOM" },
       { event = "msg_show", kind = "emsg",                                    find = "Neo" },
       { event = "msg_show", kind = "emsg",                                    find = "Pattern not found" },
+      -- Hide spamming pylsp messages
+      { find = "pylsp" }
     }
   },
   opts = { stop = true, skip = true },
