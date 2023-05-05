@@ -116,7 +116,12 @@ local ui_plugins = {
       vim.o.winwidth = 10
       vim.o.winminwidth = 10
       vim.o.equalalways = false
-      require('windows').setup({})
+      require('windows').setup({
+        ignore = {
+          buftype = { 'quickfix', 'nofile' },
+          filetype = { 'NvimTree', 'neo-tree', 'undotree', 'gundo', 'Outline' },
+        },
+      })
     end
   },
 
