@@ -35,16 +35,16 @@ end
 
 wilder.set_option('renderer', wilder.popupmenu_renderer(
   wilder.popupmenu_palette_theme({
-    border = {
-      '', '', '',
-      ' ', ' ',
-      ' ', ' ', ' ',
-    },
     -- border = {
-    --   '╭', '─', '╮',
-    --   '│',      '│',
-    --   '╰', '─', '╯',
+    --   ' ', ' ', ' ',
+    --   ' ',      ' ',
+    --   ' ', ' ', ' ',
     -- },
+    border = {
+      '╭', '─', '╮',
+      '│',      '│',
+      '╰', '─', '╯',
+    },
     max_width = '31%',
     margin = 6,              -- 5 stick to noice cmdline with 1 margin and without border
     min_height = 0,          -- set to the same as 'max_height' for a fixed height window
@@ -53,9 +53,8 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     -- pumblend = 20,
     -- empty_message = 'Test',
     highlights = {
-      prompt = 'Transparent',
-      prompt_cursor = 'Transparent',
       default = 'NormalFloat',
+      border = 'FloatBorder',
       gradient = gradient, -- must be set
       -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
     },
