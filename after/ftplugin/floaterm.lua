@@ -1,5 +1,8 @@
 local opts = { silent = true, noremap = true }
 
+vim.api.nvim_buf_set_keymap(0, 'n', 'q', ':FloatermHide<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<esc>', ':FloatermHide<CR>', opts)
+
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', ':FloatermKill<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermKill<CR>', opts)
 
@@ -16,4 +19,3 @@ vim.wo.spell = false
 
 vim.b.miniindentscope_disable = true
 vim.b.minianimate_disable = true
-
