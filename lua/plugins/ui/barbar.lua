@@ -54,12 +54,12 @@ require('barbar').setup {
       -- Requires `nvim-web-devicons` if `true`
       enabled = true,
     },
-    separator = { left = '▎', right = '' },
+    separator = { left = '▎', right = ' ' },
     -- Configure the icons on the bufferline when modified or pinned.
     -- Supports all the base icon options.
     modified = { button = '' },
-    pinned = { button = '🧷' },
-    inactive = { separator = { left = ' ', right = '' } },
+    pinned = { button = '📎'},
+    inactive = { separator = { left = ' ', right = ' ' } },
   },
 
   -- If true, new buffers will be inserted at the start/end of the list.
