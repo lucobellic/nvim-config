@@ -22,7 +22,8 @@ local preview_plugins = {
 
   -- Enhanced wilder
   {
-    'gelguy/wilder.nvim',
+    'lucobellic/wilder.nvim',
+    branch = 'personal',
     config = function()
       require('plugins.preview.wilder')
     end,
