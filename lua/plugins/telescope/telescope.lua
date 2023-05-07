@@ -36,9 +36,9 @@ require('telescope').setup {
       local utils = require("telescope.utils")
       local tail = utils.path_tail(path)
       local head = Path:new(path):parent():make_relative()
-      local folder = utils.transform_path({ path_display = { 'truncate' } }, head)
-      return string.format("%-20s • %s", tail, folder)
-      -- return (folder and folder ~= ".") and string.format(format, tail, folder) or tail
+      local short_head = utils.transform_path({ path_display = { 'truncate' } }, head)
+      local short_tail = truncate(tail, 20, nil, -1)
+      return string.format("%-20s • %s", short_tail, short_head)
     end,
     show_line = false,
     prompt_title = false,
