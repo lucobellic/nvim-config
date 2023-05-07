@@ -63,7 +63,7 @@ local ui_plugins = {
   },
 
   {
-    'glepnir/galaxyline.nvim',
+    'nvimdev/galaxyline.nvim',
     config = function() require('plugins.ui.galaxyline') end,
   },
 
