@@ -1,4 +1,4 @@
-local preview_plugins = {
+local popup_plugins = {
 
   { 'folke/trouble.nvim' },
 
@@ -8,24 +8,24 @@ local preview_plugins = {
     event = 'VeryLazy',
     module = 'persistence',
     config = function()
-      require('plugins.preview.persistence')
+      require('plugins.popup.persistence')
     end,
   },
 
   {
     'folke/todo-comments.nvim',
     after = 'trouble.nvim',
-    config = function() require('plugins.preview.todo') end
+    config = function() require('plugins.popup.todo') end
   },
 
-  { 'folke/which-key.nvim', config = function() require('plugins.preview.whichkey') end },
+  { 'folke/which-key.nvim', config = function() require('plugins.popup.whichkey') end },
 
   -- Enhanced wilder
   {
     'lucobellic/wilder.nvim',
     branch = 'personal',
     config = function()
-      require('plugins.preview.wilder')
+      require('plugins.popup.wilder')
     end,
     dependencies = { 'romgrk/fzy-lua-native' },
   },
@@ -33,7 +33,7 @@ local preview_plugins = {
   {
     'folke/noice.nvim',
     config = function()
-      require('plugins.preview.noice')
+      require('plugins.popup.noice')
     end,
     dependencies = {
       'MunifTanjim/nui.nvim',
@@ -44,11 +44,11 @@ local preview_plugins = {
   {
     'voldikss/vim-floaterm',
     config = function()
-      require('plugins.preview.floaterm')
+      require('plugins.popup.floaterm')
     end
   }, -- Floating terminal
 
-  { 'akinsho/toggleterm.nvim', config = function() require('plugins.preview.toggleterm') end },
+  { 'akinsho/toggleterm.nvim', config = function() require('plugins.popup.toggleterm') end },
 }
 
-return preview_plugins
+return popup_plugins
