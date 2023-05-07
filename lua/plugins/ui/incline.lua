@@ -1,5 +1,5 @@
 local function get_diagnostic_label(props)
-  local icons = { error = '', warn = '', info = '', hint = '', }
+  local icons = { error = '', warn = '', info = '', hint = '', }
   local label = {}
 
   for severity, icon in pairs(icons) do
@@ -9,7 +9,7 @@ local function get_diagnostic_label(props)
     end
   end
   if #label > 0 then
-    table.insert(label, {'| '})
+    table.insert(label, {'| ', group = 'NonText' })
   end
   return label
 end
@@ -19,7 +19,6 @@ local function get_git_diff(props)
   local hightligh = { removed = 'GitSignsDelete', changed = "GitSignsChange", added = 'GitSignsAdd' }
   local labels = {}
   local signs = vim.api.nvim_buf_get_var(props.buf, "gitsigns_status_dict")
-  -- local signs = vim.b.gitsigns_status_dict
   for name, icon in pairs(icons) do
     if tonumber(signs[name]) and signs[name] > 0 then
       table.insert(labels, { icon .. " " .. signs[name] .. " ",
@@ -28,7 +27,7 @@ local function get_git_diff(props)
     end
   end
   if #labels > 0 then
-    table.insert(labels, { '| ' })
+    table.insert(labels, { '| ', group = 'NonText' })
   end
   return labels
 end
