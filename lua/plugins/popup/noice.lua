@@ -39,11 +39,10 @@ local lsp = {
   },
   message = {
     enabled = false,
-    view = "mini"
+    view = "notify"
   },
-  -- Prefer lspsaga for hover
   hover = {
-    enabled = false
+    enabled = true
   },
   signature = {
     enabled = true
@@ -55,6 +54,7 @@ local filter_skip = {
     any = {
       -- Hide display messages but still show them in :messages
       { event = "msg_show", kind = { "", "echo", "echomsg", "search_count" }, find = "written" },
+      { event = "msg_show", kind = { "", "echo", "echomsg", "search_count" }, find = "yanked" },
       { event = "msg_show", kind = "wmsg",                                    find = "BOTTOM" },
       { event = "msg_show", kind = "emsg",                                    find = "Neo" },
       { event = "msg_show", kind = "emsg",                                    find = "Pattern not found" },
@@ -107,15 +107,15 @@ require("noice").setup {
   routes = { filter_skip },
   messages = {
     enabled = true,            -- enables the Noice messages UI
-    view = "mini",             -- default view for messages
-    view_error = "mini",       -- view for errors
-    view_warn = "mini",        -- view for warnings
+    view = "notify",           -- default view for messages
+    view_error = "notify",     -- view for errors
+    view_warn = "notify",      -- view for warnings
     view_history = "messages", -- view for :messages
     view_search = false,       -- view for search count messages. Set to `false` to disable
   },
   notify = {
-    enabled = false,
-    view = "mini"
+    enabled = true,
+    view = "notify"
   },
   format = {
     spinner = {

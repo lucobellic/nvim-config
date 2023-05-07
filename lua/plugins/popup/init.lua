@@ -31,6 +31,13 @@ local popup_plugins = {
   },
 
   {
+    'rcarriga/nvim-notify',
+    config = function()
+      require('plugins.popup.notify')
+    end
+  },
+
+  {
     'folke/noice.nvim',
     config = function()
       require('plugins.popup.noice')

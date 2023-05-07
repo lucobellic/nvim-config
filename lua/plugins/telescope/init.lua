@@ -12,6 +12,7 @@ local telescope_plugins = {
       'GustavoKatel/telescope-asynctasks.nvim',
       'gbprod/yanky.nvim',
       'ThePrimeagen/refactoring.nvim',
+      'rcarriga/nvim-notify'
       -- 'prochri/telescope-all-recent.nvim',
     },
     config = function() require('plugins.telescope.telescope') end

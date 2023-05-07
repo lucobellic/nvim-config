@@ -1,5 +1,6 @@
 local trouble = require('trouble.providers.telescope')
 local actions = require("telescope.actions")
+local truncate = require("plenary.strings").truncate
 
 local lga_actions = require("telescope-live-grep-args.actions")
 require('telescope').setup {
