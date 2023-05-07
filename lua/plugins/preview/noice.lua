@@ -18,17 +18,10 @@ local cmdline_popup_view = {
     height = "auto",
   },
   border = {
-    style = "none",
-    padding = { 1, 1 },
+    style = "rounded",
+    padding = { 0, 0 },
   },
   filter_options = {},
-  win_options = {
-    winhighlight = {
-      Normal = "Normal",
-      NormalFloat = "Normal",
-      FloatBorder = "Normal"
-    },
-  },
 }
 
 local views = { cmdline_popup = cmdline_popup_view }
