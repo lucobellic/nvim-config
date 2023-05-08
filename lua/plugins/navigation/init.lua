@@ -19,7 +19,6 @@ local navigation_plugins = {
     end
   },
 
-  'tpope/vim-sensible',
   'tpope/vim-surround',
   'tpope/vim-commentary',
   'tpope/vim-fugitive',
@@ -43,12 +42,6 @@ local navigation_plugins = {
   'tommcdo/vim-exchange',
   'tommcdo/vim-lion',
   { 'echasnovski/mini.ai', branch = 'stable', config = function() require('mini.ai').setup() end },
-
-  -- Better matchup '%' usage
-  {
-    'andymass/vim-matchup',
-    config = function() vim.g.matchup_matchparen_offscreen = { method = 'status_manual' } end
-  },
 
 }
 
