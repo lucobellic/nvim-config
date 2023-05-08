@@ -14,12 +14,12 @@ local cmdline_popup_view = {
     col = "50%",
   },
   size = {
-    width = "30%",
+    width = "28%",
     height = "auto",
   },
   border = {
     style = "rounded",
-    padding = { 0, 0 },
+    padding = { 0, 1 },
   },
   filter_options = {},
 }

@@ -45,7 +45,7 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
       '│',      '│',
       '╰', '─', '╯',
     },
-    max_width = '31%',
+    max_width = '30%',
     margin = 6,              -- 5 stick to noice cmdline with 1 margin and without border
     min_height = 0,          -- set to the same as 'max_height' for a fixed height window
     prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
