@@ -18,7 +18,7 @@ local cmp = require 'cmp'
 
 cmp.setup({
   experimental = {
-    ghost_text = true
+    ghost_text = { hl_group = 'Comment' }
   },
   snippet = {
     expand = function(args)
