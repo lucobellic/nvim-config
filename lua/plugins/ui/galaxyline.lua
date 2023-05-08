@@ -1,6 +1,5 @@
 local gl = require("galaxyline")
 local gls = gl.section
-gl.short_line_list = { " " }
 
 local colors = {
   bg = "Normal",
@@ -44,105 +43,17 @@ local mode_color = function()
   return color
 end
 
+vim.api.nvim_set_hl(0, "GalaxySpace", { link = 'Normal' })
+
 gls.left[1] = {
-  Space = {
-    provider = function()
-      return ""
-    end,
-    highlight = { colors.bg, colors.bg }
-  }
-}
-
-gls.left[2] = {
-  ViMode = {
-    provider = function()
-      vim.api.nvim_command('hi GalaxyViMode guifg=' .. mode_color())
-      -- return ' ' .. '  ' .. os.date('%H:%M') .. ' '
-      return '▌ ' .. os.date('%H:%M') .. ' '
-      -- return '▌  '
-      -- 
-    end,
-    separator = " ",
-  }
-}
-
-gls.left[3] = {
-  FileIcon = {
-    provider = "FileIcon",
-    condition = buffer_not_empty,
-    highlight = { require("galaxyline.provider_fileinfo").get_file_icon_color, colors.bg }
-  }
-}
-
-gls.left[4] = {
-  FileName = {
-    provider = { "FileName" },
-    condition = buffer_not_empty,
-    highlight = { colors.fg, colors.bg },
-    separator = " ",
-  }
-}
-
-gls.left[5] = {
-  GitBranch = {
-    provider = "GitBranch",
-    icon = " ",
-    condition = require("galaxyline.provider_vcs").check_git_workspace,
-    separator = " ",
-    highlight = { colors.green, colors.bg }
-  }
-}
-
-gls.left[6] = {
-  DiffAdd = {
-    provider = "DiffAdd",
-    icon = "  ",
-    highlight = { colors.green, colors.bg }
-  }
-}
-
-gls.left[7] = {
-  DiffModified = {
-    provider = "DiffModified",
-    icon = "  ",
-    highlight = { colors.blue, colors.bg }
-  }
-}
-
-gls.left[8] = {
-  DiffRemove = {
-    provider = "DiffRemove",
-    icon = "  ",
-    highlight = { colors.red, colors.bg }
-  }
-}
-
-gls.left[9] = {
   Space = {
     provider = function()
       return " "
     end,
-    highlight = { colors.bg, colors.bg }
-  }
+  },
 }
 
-gls.left[10] = {
-  DiagnosticError = {
-    provider = "DiagnosticError",
-    icon = "  ",
-    highlight = { colors.red, colors.bg }
-  }
-}
-
-gls.left[11] = {
-  DiagnosticWarn = {
-    provider = "DiagnosticWarn",
-    icon = "  ",
-    highlight = { colors.orange, colors.bg }
-  }
-}
-
-gls.right[1] = {
+gls.left[2] = {
   ShowLspClient = {
     provider = 'GetLspClient',
     condition = function()
@@ -152,13 +63,30 @@ gls.right[1] = {
       end
       return true
     end,
-    icon = ' ',
-    highlight = { colors.magenta, colors.bg },
+    icon = '  ',
+    highlight = { colors.magenta },
     separator = " "
   }
 }
 
-gls.right[2] = {
+
+-- NOTE: To center mid section on screen update galaxyline.lua:200 replace with the following:
+-- local mid_screen = math.floor(vim.api.nvim_get_option("columns") / 2)
+-- local left_width = vim.api.nvim_eval_statusline(left_section, {}).width
+-- local mid_width = vim.api.nvim_eval_statusline(mid_section, {}).width
+-- local left_padding = string.rep(' ', mid_screen - math.floor(mid_width / 2) - left_width)
+-- line = left_section .. left_padding .. mid_section .. fill_section .. right_section
+gls.mid[1] = {
+  ViMode = {
+    provider = function()
+      vim.api.nvim_command('hi GalaxyViMode guifg=#0F131A guibg=' .. mode_color())
+      return ' ' .. os.date('%H:%M') .. ' '
+    end,
+    separator = "  ",
+  }
+}
+
+gls.right[1] = {
   LineInfo = {
     provider = function()
       return string.format("%3d", vim.fn.col('.'))
@@ -167,10 +95,9 @@ gls.right[2] = {
   }
 }
 
-gls.right[3] = {
+gls.right[2] = {
   PerCent = {
     provider = "LinePercent",
     separator = " ",
-    highlight = { colors.fg, colors.bg }
   }
 }
