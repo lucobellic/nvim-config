@@ -26,7 +26,7 @@ function M.on_attach(client, bufnr)
   buf_set_keymap('n', '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>', opts)
 
 
-  buf_set_keymap('n', '<leader>cf', '<cmd>lua require("plugin.lsp.fixcurrent")()<CR>', opts)
+  buf_set_keymap('n', '<leader>cf', '<cmd>lua require("plugins.lsp.fixcurrent")()<CR>', opts)
   -- buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.show_line_diagnostics()<CR>', opts)
   -- buf_set_keymap('n', '<C'        , '<cmd>lua vim.diagnostic.goto_prev()<CR>'                              , opts)
   -- buf_set_keymap('n', '>C'        , '<cmd>lua vim.diagnostic.goto_next()<CR>'                              , opts)
