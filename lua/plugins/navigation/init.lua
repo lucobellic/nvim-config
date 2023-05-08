@@ -50,14 +50,6 @@ local navigation_plugins = {
     config = function() vim.g.matchup_matchparen_offscreen = { method = 'status_manual' } end
   },
 
-  {
-    'phaazon/mind.nvim',
-    branch = 'v2.2',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('plugins.navigation.mind')
-    end
-  }
 }
 
 return navigation_plugins
