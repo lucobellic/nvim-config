@@ -73,11 +73,7 @@ local editor_plugins = {
     'gbprod/yanky.nvim',
     dependencies = { 'kkharji/sqlite.lua' },
     config = function()
-      require('yanky').setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
+      require('plugins.editor.yanky')
     end
   }
 
