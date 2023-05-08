@@ -1,6 +1,9 @@
 local gl = require("galaxyline")
 local gls = gl.section
 
+local fileinfo = require('galaxyline.provider_fileinfo')
+local lspclient = require('galaxyline.provider_lsp')
+
 local colors = {
   bg = "Normal",
   line_bg = "CursorLine",
@@ -55,7 +58,11 @@ gls.left[1] = {
 
 gls.left[2] = {
   ShowLspClient = {
-    provider = 'GetLspClient',
+    provider = function()
+      vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
+      return lspclient.get_lsp_client()
+    end,
+
     condition = function()
       local tbl = { ['dashboard'] = true, [''] = true }
       if tbl[vim.bo.filetype] then
@@ -64,7 +71,6 @@ gls.left[2] = {
       return true
     end,
     icon = '  ',
-    highlight = { colors.magenta },
     separator = " "
   }
 }
@@ -82,6 +88,7 @@ gls.mid[1] = {
 gls.right[1] = {
   LineInfo = {
     provider = function()
+      vim.api.nvim_command('hi GalaxyLineInfo guifg=' .. mode_color())
       return string.format("%3d", vim.fn.col('.'))
     end,
     separator = " "
@@ -90,7 +97,10 @@ gls.right[1] = {
 
 gls.right[2] = {
   PerCent = {
-    provider = "LinePercent",
+    provider = function()
+      vim.api.nvim_command('hi GalaxyPerCent guifg=' .. mode_color())
+      return fileinfo.current_line_percent()
+    end,
     separator = " ",
   }
 }
