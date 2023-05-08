@@ -63,7 +63,8 @@ local ui_plugins = {
   },
 
   {
-    'nvimdev/galaxyline.nvim',
+    'lucobellic/galaxyline.nvim',
+    branch = 'personal',
     config = function() require('plugins.ui.galaxyline') end,
   },
 

@@ -69,13 +69,6 @@ gls.left[2] = {
   }
 }
 
-
--- NOTE: To center mid section on screen update galaxyline.lua:200 replace with the following:
--- local mid_screen = math.floor(vim.api.nvim_get_option("columns") / 2)
--- local left_width = vim.api.nvim_eval_statusline(left_section, {}).width
--- local mid_width = vim.api.nvim_eval_statusline(mid_section, {}).width
--- local left_padding = string.rep(' ', mid_screen - math.floor(mid_width / 2) - left_width)
--- line = left_section .. left_padding .. mid_section .. fill_section .. right_section
 gls.mid[1] = {
   ViMode = {
     provider = function()
