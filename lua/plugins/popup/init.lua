@@ -49,7 +49,8 @@ local popup_plugins = {
   },
 
   {
-    'voldikss/vim-floaterm',
+    'lucobellic/vim-floaterm',
+    branch = 'personal',
     config = function()
       require('plugins.popup.floaterm')
     end
