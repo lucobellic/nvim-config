@@ -87,6 +87,7 @@ local ui_plugins = {
   -- Start screen
   {
     'glepnir/dashboard-nvim',
+    dependencies = { 'folke/persistence.nvim' },
     event = 'VimEnter',
     config = function() require('plugins.ui.dashboard') end
   },
