@@ -28,13 +28,30 @@ local telescope_mapping_n = {
       F = { ':<C-u>:Files<cr>', 'Find All File' },
       g = { ':<C-u>:Rg<cr>', 'Search Workspace' },
       k = { ":lua require('telescope.builtin').symbols{ sources = {'kaomoji'} }<cr>", 'Find Symbols' },
-      l = { '<cmd>Telescope current_buffer_fuzzy_find<cr>', 'Search in Buffer' },
-      L = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' },
       m = { '<cmd>Telescope marks<cr>', "Find Marks" },
       r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
       w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' },
       y = { '<cmd>Telescope yank_history<cr>', 'Yank History' },
       s = { ':PersistenceLoadSession<cr>', 'Load session' },
+
+      l = {
+        name = 'lsp',
+        r = { '<cmd>Telescope lsp_references<cr>', 'Find References' },
+        d = { '<cmd>Telescope lsp_definitions<cr>', 'Find Definitions' },
+        i = { '<cmd>Telescope lsp_implementations<cr>', 'Find Implementations' },
+        s = {
+          name = 'symbols',
+          s = { '<cmd>Telescope lsp_document_symbols<cr>', 'Find Document Symbols' },
+          d = { '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', 'Find Workspace Symbols' },
+          w = { '<cmd>Telescope lsp_workspace_symbols<cr>', 'Find Dynamic Workspace Symbols' },
+        },
+        t = { '<cmd>Telescope lsp_type_definitions<cr>', 'Find Type Definitions' },
+        c = {
+          name = 'call',
+          i = { '<cmd>Telescope lsp_incoming_calls<cr>', 'Find Incoming Calls' },
+          o = { '<cmd>Telescope lsp_outgoing_calls<cr>', 'Find Outgoing Calls' },
+        }
+      },
     },
   },
 }
@@ -77,7 +94,7 @@ end
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 
-vim.api.nvim_set_keymap('n', '<Esc>', ':nohl<cr><Esc>', opts)
+vim.api.nvim_set_keymap('n', '<esc>', '<cmd>nohl<cr><esc>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
 
 -- Spelling
@@ -195,10 +212,12 @@ if wk_ok then
   wk.register({
     ["<leader>"] = {
       t = {
+        name = 'trouble',
         c = { ':TroubleClose<cr>', 'Trouble close' },
         d = { ':Trouble document_diagnostics<cr>', 'Trouble diagnostics' },
         f = { ':TodoTelescope<cr>', 'Todo telescope' },
         l = {
+          name = 'lsp',
           d = { ':Trouble lsp_definitions<cr>', 'Trouble lsp definitions' },
           i = { ':Trouble lsp_implementations<cr>', 'Trouble lsp implementations' },
           r = { ':Trouble lsp_references<cr>', 'Trouble lsp references' },
