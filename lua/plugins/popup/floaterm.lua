@@ -43,6 +43,7 @@ tnoremap <silent> <leader>g; <Cmd>execute v:count . 'ToggleTool lazygit'<CR>
 vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
 vim.g.floaterm_autohide = 1
 -- vim.g.floaterm_borderchars = '       ' -- (top, right, bottom, left, topleft, topright, botright, botleft)
--- vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
-vim.g.floaterm_borderchars = '─│─│┌┐┘└'
+vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
+-- vim.g.floaterm_borderchars = '─│─│┌┐┘└'
 vim.g.floaterm_autoinsert = true
+vim.g.floaterm_titleposition = 'center'
