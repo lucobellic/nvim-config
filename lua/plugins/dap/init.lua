@@ -26,6 +26,7 @@ return {
     },
     -- opts = require('plugins.dap.neotest')
   },
+  { 'junegunn/vader.vim' },
 
   -- Coverage
   {
