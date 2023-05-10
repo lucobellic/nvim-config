@@ -352,6 +352,7 @@ if wk_ok then
   wk.register({
     ['<leader>q'] = {
       name = 'session',
+      a  = { ':qa!<cr>', 'Quit all' },
       -- restore the session for the current directory
       r = { ':lua require("persistence").load()<cr>', 'Restore session' },
       -- restore the last session
