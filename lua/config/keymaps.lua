@@ -423,3 +423,13 @@ if wk_ok then
   wk.register(visual_refactoring, { mode = 'v', noremap = true, silent = true, expr = false })
   wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
 end
+
+-- Tasks/Run/Execute
+if wk_ok then
+  wk.register({
+    ['<leader>x'] = {
+      name = 'execute',
+      l = { ':TasksList<cr>', 'Execute Task' }
+    }
+  })
+end

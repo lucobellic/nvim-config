@@ -9,10 +9,6 @@ return {
     'dstein64/vim-startuptime',
     'kkharji/sqlite.lua',
 
-    -- Tasks
-    'skywind3000/asyncrun.vim',
-    'skywind3000/asynctasks.vim',
-
     -- Other
     'lewis6991/impatient.nvim',
     'moll/vim-bbye', -- Close buffer and window

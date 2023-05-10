@@ -42,5 +42,15 @@ return {
         }
       })
     end,
-  }
+  },
+
+  -- Tasks
+  {
+    'skywind3000/asynctasks.vim',
+    dependencies = { 'skywind3000/asyncrun.vim' },
+    event = 'VeryLazy',
+    config = function()
+      require('plugins.dap.asynctasks')
+    end
+  },
 }
