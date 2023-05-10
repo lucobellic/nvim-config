@@ -7,13 +7,13 @@ local servers = { 'rust_analyzer', 'jsonls', 'vimls', 'cmake' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = util.on_attach,
-    capabilities = capabilities
+    capabilities = util.capabilities
   }
 end
 
 nvim_lsp.lua_ls.setup({
   on_attach = util.on_attach,
-  capabilities = capabilities,
+  capabilities = util.capabilities,
   settings = {
     Lua = {
       format = {
@@ -41,8 +41,8 @@ nvim_lsp.lua_ls.setup({
 })
 
 nvim_lsp.pylsp.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
+  on_attach = util.on_attach,
+  capabilities = util.capabilities,
   -- configurationSources = { 'flake8', 'pycodestyle' },
   settings = {
     pylsp = {
@@ -73,7 +73,7 @@ nvim_lsp.pylsp.setup {
 -- local nvim_lsp_clangd_highlight = require('nvim-lsp-clangd-highlight')
 nvim_lsp.clangd.setup {
   -- on_init = nvim_lsp_clangd_highlight.on_init,
-  on_attach = on_attach,
+  on_attach = util.on_attach,
   cmd = {
     "clangd",
     "--background-index",
@@ -88,7 +88,7 @@ nvim_lsp.clangd.setup {
   settings = {
     semanticHighlighting = true
   },
-  capabilities = capabilities
+  capabilities = util.capabilities
 }
 
 -- TODO: set it in clangd.setup
