@@ -1,3 +1,5 @@
+local limited_slide = require('plugins.popup.notify.limited_slide')
+
 require('notify').setup({
   background_colour = "NotifyBackground",
   fps = 30,
@@ -6,7 +8,7 @@ require('notify').setup({
   max_width = 100,
   max_height = 5,
   render = 'compact', -- 'default', 'minimal', 'simple', 'compact'
-  stages = 'slide',   -- 'fade_in_slide_out', 'fade', 'slide', 'static'
+  stages = limited_slide,
   timeout = 1000,
   top_down = false
 })
