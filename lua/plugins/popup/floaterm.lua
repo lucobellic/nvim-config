@@ -23,7 +23,7 @@ function! ToggleTool(tool, count) abort
       call floaterm#run('new', 0, [visualmode(), 0, 0, 0], '')
     else
       call floaterm#run('new', 0, [visualmode(), 0, 0, 0],
-        \ printf('--height=0.8 --width=0.8 --title=%s($1/$2) --name=%s %s', a:tool, a:tool, a:tool))
+        \ printf('--height=0.8 --width=0.8 --title=%s\ $1/$2 --name=%s %s', a:tool, a:tool, a:tool))
     endif
   else
     call floaterm#toggle(0, a:count ? a:count : bufnr, '')
@@ -39,6 +39,7 @@ nnoremap <silent> <leader>g; <Cmd>execute v:count . 'ToggleTool lazygit'<CR>
 tnoremap <silent> <leader>g; <Cmd>execute v:count . 'ToggleTool lazygit'<CR>
 ]]
 
+vim.g.floaterm_shell = vim.o.shell
 
 vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
 vim.g.floaterm_autohide = 1
@@ -47,3 +48,4 @@ vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
 -- vim.g.floaterm_borderchars = '─│─│┌┐┘└'
 vim.g.floaterm_autoinsert = true
 vim.g.floaterm_titleposition = 'center'
+vim.g.floaterm_title = 'Terminal $1/$2'
