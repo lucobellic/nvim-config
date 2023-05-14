@@ -33,6 +33,7 @@ local telescope_mapping_n = {
       w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' },
       y = { '<cmd>Telescope yank_history<cr>', 'Yank History' },
       s = { ':PersistenceLoadSession<cr>', 'Load session' },
+      x = { ':Telescope asynctasks<cr>', 'Find Tasks'},
 
       l = {
         name = 'lsp',

@@ -9,7 +9,6 @@ local telescope_plugins = {
       'nvim-telescope/telescope-fzf-native.nvim',
       'nvim-telescope/telescope-file-browser.nvim',
       'tsakirist/telescope-lazy.nvim',
-      'GustavoKatel/telescope-asynctasks.nvim',
       'gbprod/yanky.nvim',
       'ThePrimeagen/refactoring.nvim',
       'rcarriga/nvim-notify'
