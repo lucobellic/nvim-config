@@ -3,7 +3,7 @@ local util = require('plugins.lsp.config.util')
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
-local servers = { 'rust_analyzer', 'jsonls', 'vimls', 'cmake' }
+local servers = { 'rust_analyzer', 'jsonls', 'vimls', 'cmake', 'yamlls' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = util.on_attach,
@@ -77,6 +77,7 @@ nvim_lsp.clangd.setup {
   cmd = {
     "clangd",
     "--background-index",
+    "--background-index-priority=background",
     "--clang-tidy",
     "--enable-config",
     "--header-insertion=iwyu",
