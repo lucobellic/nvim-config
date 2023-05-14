@@ -1,5 +1,4 @@
 vim.o.foldcolumn = '0'
-vim.o.foldenable = false
 vim.o.foldmethod = 'syntax'
 vim.o.foldlevel = 99
 vim.o.foldlevelstart = 99
