@@ -17,7 +17,12 @@ local telescope_plugins = {
     config = function() require('plugins.telescope.telescope') end
   },
 
-  { 'stevearc/dressing.nvim' },
+  {
+    'stevearc/dressing.nvim',
+    config = function()
+      require('plugins.telescope.dressing')
+    end
+  },
 
   {
     "jackMort/ChatGPT.nvim",

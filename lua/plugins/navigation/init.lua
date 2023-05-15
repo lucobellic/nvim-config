@@ -19,6 +19,13 @@ local navigation_plugins = {
     end
   },
 
+  {
+    'mrjones2014/legendary.nvim',
+    config = function()
+      require('plugins.navigation.legendary')
+    end
+  },
+
   'tpope/vim-surround',
   'tpope/vim-commentary',
   'tpope/vim-fugitive',
