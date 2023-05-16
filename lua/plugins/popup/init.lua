@@ -50,6 +50,7 @@ local popup_plugins = {
   {
     'lucobellic/vim-floaterm',
     branch = 'personal',
+    dependencies = { 'MunifTanjim/nui.nvim' },
     config = function()
       require('plugins.popup.floaterm')
     end
