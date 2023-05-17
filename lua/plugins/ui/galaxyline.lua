@@ -48,59 +48,57 @@ end
 
 vim.api.nvim_set_hl(0, "GalaxySpace", { link = 'Normal' })
 
-gls.left[1] = {
-  Space = {
-    provider = function()
-      return " "
-    end,
+gls.left = {
+  {
+    ShowLspClient = {
+      provider = function()
+        vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
+        return lspclient.get_lsp_client()
+      end,
+
+      condition = function()
+        local tbl = { ['dashboard'] = true, [''] = true }
+        if tbl[vim.bo.filetype] then
+          return false
+        end
+        return true
+      end,
+      icon = '   ',
+      separator = " "
+    }
+  }
+}
+
+gls.mid =
+{
+  {
+    ViMode = {
+      provider = function()
+        vim.api.nvim_command('hi GalaxyViMode guifg=#0F131A guibg=' .. mode_color())
+        return ' ' .. os.date('%H:%M') .. ' '
+      end,
+      separator = "  ",
+    }
+  }
+}
+
+gls.right = {
+  {
+    LineInfo = {
+      provider = function()
+        vim.api.nvim_command('hi GalaxyLineInfo guifg=' .. mode_color())
+        return string.format("%3d", vim.fn.col('.'))
+      end,
+      separator = " "
+    }
   },
-}
-
-gls.left[2] = {
-  ShowLspClient = {
-    provider = function()
-      vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
-      return lspclient.get_lsp_client()
-    end,
-
-    condition = function()
-      local tbl = { ['dashboard'] = true, [''] = true }
-      if tbl[vim.bo.filetype] then
-        return false
-      end
-      return true
-    end,
-    icon = '  ',
-    separator = " "
-  }
-}
-
-gls.mid[1] = {
-  ViMode = {
-    provider = function()
-      vim.api.nvim_command('hi GalaxyViMode guifg=#0F131A guibg=' .. mode_color())
-      return ' ' .. os.date('%H:%M') .. ' '
-    end,
-    separator = "  ",
-  }
-}
-
-gls.right[1] = {
-  LineInfo = {
-    provider = function()
-      vim.api.nvim_command('hi GalaxyLineInfo guifg=' .. mode_color())
-      return string.format("%3d", vim.fn.col('.'))
-    end,
-    separator = " "
-  }
-}
-
-gls.right[2] = {
-  PerCent = {
-    provider = function()
-      vim.api.nvim_command('hi GalaxyPerCent guifg=' .. mode_color())
-      return fileinfo.current_line_percent()
-    end,
-    separator = " ",
+  {
+    PerCent = {
+      provider = function()
+        vim.api.nvim_command('hi GalaxyPerCent guifg=' .. mode_color())
+        return fileinfo.current_line_percent()
+      end,
+      separator = " ",
+    }
   }
 }
