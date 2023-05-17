@@ -3,6 +3,7 @@ local gls = gl.section
 
 local fileinfo = require('galaxyline.provider_fileinfo')
 local lspclient = require('galaxyline.provider_lsp')
+local vcs = require('galaxyline.provider_vcs')
 
 local colors = {
   bg = "Normal",
@@ -28,7 +29,7 @@ local mode_color = function()
   local mode_colors = {
     n = colors.cyan,
     i = colors.green,
-    t = colors.green,
+    t = colors.nord,
     c = colors.accent,
     V = colors.greenYel,
     [""] = colors.greenYel,
@@ -50,12 +51,29 @@ vim.api.nvim_set_hl(0, "GalaxySpace", { link = 'Normal' })
 
 gls.left = {
   {
+    Space = {
+      provider = function()
+        return " "
+      end,
+    },
+  },
+  {
+    GitBranch = {
+      icon = " ",
+      provider = function()
+        vim.api.nvim_command('hi GalaxyGitBranch guifg=' .. mode_color())
+        local branch = vcs.get_git_branch()
+        return branch and branch .. ' ' or nil
+      end,
+      separator = ""
+    }
+  },
+  {
     ShowLspClient = {
       provider = function()
         vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
         return lspclient.get_lsp_client()
       end,
-
       condition = function()
         local tbl = { ['dashboard'] = true, [''] = true }
         if tbl[vim.bo.filetype] then
@@ -64,7 +82,7 @@ gls.left = {
         return true
       end,
       icon = '   ',
-      separator = " "
+      separator = ""
     }
   }
 }
