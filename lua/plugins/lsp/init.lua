@@ -62,7 +62,11 @@ local lsp_plugins = {
   { 'jose-elias-alvarez/null-ls.nvim' },
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'folke/neodev.nvim', 'lsp_lines' },
+    dependencies = {
+      'folke/neodev.nvim',
+      'lsp_lines',
+      'hrsh7th/nvim-cmp'
+    },
     config = function()
       require('plugins.lsp.config.servers')
       require('plugins.lsp.config.null-ls')
@@ -78,6 +82,13 @@ local lsp_plugins = {
       require('neogen').setup({
         snippet_engine = 'luasnip',
         input_after_comment = false,
+        languages = {
+          python = {
+            template = {
+              annotation_convention = 'numpydoc',
+            }
+          }
+        }
       })
     end,
   },
