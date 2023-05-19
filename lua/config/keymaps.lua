@@ -12,45 +12,54 @@ if wk_ok then
   })
 end
 
+local telescope_builtin = require('telescope.builtin')
+local telescope_extensions = require('telescope').extensions
 local telescope_mapping_n = {
   ["<leader>"] = {
     F = {
       name = "find",
       F = { ':<C-u>:Files<cr>', 'Find All File' },
-      L = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' },
+      L = { function() telescope_extensions.live_grep_args.live_grep_args() end, 'Search Workspace' },
     },
     f = {
       name = "find",
-      b = { '<cmd>Telescope buffers<cr>', 'Find Buffer' },
-      e = { ":lua require('telescope.builtin').symbols{ sources = {'emoji', 'kaomoji', 'gitmoji'} }<cr>",
-        'Find Symbols' },
-      f = { '<cmd>Telescope find_files<cr>', 'Find File' },
+      b = { function() telescope_builtin.buffers() end, 'Find Buffer' },
+      e = {
+        function()
+          telescope_builtin.symbols({ sources = { 'emoji', 'kaomoji', 'gitmoji' } })
+        end,
+        'Find Emoji'
+      },
+      f = { function() telescope_builtin.find_files() end, 'Find File' },
       F = { ':<C-u>:Files<cr>', 'Find All File' },
-      g = { ':<C-u>:Rg<cr>', 'Search Workspace' },
-      k = { ":lua require('telescope.builtin').symbols{ sources = {'kaomoji'} }<cr>", 'Find Symbols' },
-      m = { '<cmd>Telescope marks<cr>', "Find Marks" },
-      r = { '<cmd>Telescope oldfiles<cr>', 'Find Recent File' },
-      w = { ":execute 'Telescope grep_string default_text='.expand('<cword>')<cr>", 'Find Word' },
-      y = { '<cmd>Telescope yank_history<cr>', 'Yank History' },
-      s = { ':PersistenceLoadSession<cr>', 'Load session' },
-      x = { ':Telescope asynctasks<cr>', 'Find Tasks'},
+      g = {
+        name = 'git',
+        s = { function() telescope_builtin.git_status() end, 'Git Status' }
+      },
+      k = { function() telescope_builtin.symbols({ sources = { 'kaomoji' } }) end, 'Find Symbols' },
+      m = { function() telescope_builtin.marks() end, "Find Marks" },
+      r = { function() telescope_builtin.oldfiles() end, 'Find Recent File' },
+      w = { function() telescope_builtin.grep_string({ default_text = vim.fn.expand('<cword>') }) end, 'Find Word' },
+      y = { function() telescope_extensions.yank_history.yank_history() end, 'Yank History' },
+      s = { '<cmd>PersistenceLoadSession<cr>', 'Load session' },
+      x = { function() telescope_extensions.asynctasks.asynctasks() end, 'Find Tasks' },
 
       l = {
         name = 'lsp',
-        r = { '<cmd>Telescope lsp_references<cr>', 'Find References' },
-        d = { '<cmd>Telescope lsp_definitions<cr>', 'Find Definitions' },
-        i = { '<cmd>Telescope lsp_implementations<cr>', 'Find Implementations' },
+        r = { function() telescope_builtin.lsp_references() end, 'Find References' },
+        d = { function() telescope_builtin.lsp_definitions() end, 'Find Definitions' },
+        i = { function() telescope_builtin.lsp_implementations() end, 'Find Implementations' },
         s = {
           name = 'symbols',
-          s = { '<cmd>Telescope lsp_document_symbols<cr>', 'Find Document Symbols' },
-          d = { '<cmd>Telescope lsp_dynamic_workspace_symbols<cr>', 'Find Workspace Symbols' },
-          w = { '<cmd>Telescope lsp_workspace_symbols<cr>', 'Find Dynamic Workspace Symbols' },
+          s = { function() telescope_builtin.lsp_document_symbols() end, 'Find Document Symbols' },
+          d = { function() telescope_builtin.lsp_dynamic_workspace_symbols() end, 'Find Workspace Symbols' },
+          w = { function() telescope_builtin.lsp_workspace_symbols() end, 'Find Dynamic Workspace Symbols' },
         },
-        t = { '<cmd>Telescope lsp_type_definitions<cr>', 'Find Type Definitions' },
+        t = { function() telescope_builtin.lsp_type_definitions() end, 'Find Type Definitions' },
         c = {
           name = 'call',
-          i = { '<cmd>Telescope lsp_incoming_calls<cr>', 'Find Incoming Calls' },
-          o = { '<cmd>Telescope lsp_outgoing_calls<cr>', 'Find Outgoing Calls' },
+          i = { function() telescope_builtin.lsp_incoming_calls() end, 'Find Incoming Calls' },
+          o = { function() telescope_builtin.lsp_outgoing_calls() end, 'Find Outgoing Calls' },
         }
       },
     },
@@ -238,7 +247,6 @@ if wk_ok then
   wk.register({
     ["<leader>"] = {
       d = {
-        name = 'diagnostics',
         t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle virtual text' },
         l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle virtual lines' },
       }
@@ -353,15 +361,15 @@ if wk_ok then
   wk.register({
     ['<leader>q'] = {
       name = 'session',
-      a  = { ':qa!<cr>', 'Quit all' },
+      a    = { ':qa!<cr>', 'Quit all' },
       -- restore the session for the current directory
-      r = { ':lua require("persistence").load()<cr>', 'Restore session' },
+      r    = { ':lua require("persistence").load()<cr>', 'Restore session' },
       -- restore the last session
-      l = { ':lua require("persistence").load({ last = true })<cr>', 'Load last session' },
+      l    = { ':lua require("persistence").load({ last = true })<cr>', 'Load last session' },
       -- stop Persistence => session won't be saved on exit
-      d = { ':lua require("persistence").stop()<cr>', 'Stop session' },
+      d    = { ':lua require("persistence").stop()<cr>', 'Stop session' },
       -- load saved sessions
-      s = { ':PersistenceLoadSession<cr>', 'Load session' },
+      s    = { ':PersistenceLoadSession<cr>', 'Load session' },
     }
   })
 end
