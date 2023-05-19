@@ -1,11 +1,11 @@
+local symbol = '🭳' -- '▕', '┃', '┆', '┇', '┊', '┋', '🭰','🭱', '🭲','🭳','🭴','🭵'
 return {
-
   signs = {
-    add          = { hl = 'GitSignsAdd', text = '▕', numhl = 'GitSignsAddNr', linehl = 'GitSignsAddLn' },
-    change       = { hl = 'GitSignsChange', text = '▕', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
-    delete       = { hl = 'GitSignsDelete', text = '▕', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
-    topdelete    = { hl = 'GitSignsDelete', text = '▕', numhl = 'GitSignsDeleteNr', linehl = 'GitSignsDeleteLn' },
-    changedelete = { hl = 'GitSignsChange', text = '▕', numhl = 'GitSignsChangeNr', linehl = 'GitSignsChangeLn' },
+    add          = { text = symbol, },
+    change       = { text = symbol, },
+    delete       = { text = symbol, },
+    topdelete    = { text = symbol, },
+    changedelete = { text = symbol, },
   },
 
   signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
@@ -55,7 +55,7 @@ return {
     relative_time = false
   },
 
-  sign_priority    = 30,
+  sign_priority    = 10,
   update_debounce  = 100,
   status_formatter = nil, -- Use default
   max_file_length  = 40000,
