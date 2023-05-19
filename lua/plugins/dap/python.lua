@@ -1,0 +1,2 @@
+require('dap-python').setup()
+
