@@ -81,7 +81,8 @@ require('scrollbar').setup({
     "prompt",
     "TelescopePrompt",
     "cmp_menu",
-    "cmp_docs"
+    "cmp_docs",
+    "chatgpt"
   },
   handlers = {
     cursor = false,
@@ -103,8 +104,7 @@ local colors_type = {
   changedelete = 'GitChange'
 }
 
-local add_git_signs = function(bufnr)
-  local nb_lines = vim.api.nvim_buf_line_count(bufnr)
+local function get_gitsign_lines(bufnr, nb_lines)
   local lines = {}
   local hunks = gitsign.get_hunks(bufnr)
 
@@ -121,4 +121,9 @@ local add_git_signs = function(bufnr)
   return lines
 end
 
--- require('scrollbar.handlers').register('git', add_git_signs)
+local add_git_signs = function(bufnr)
+  local nb_lines = vim.api.nvim_buf_line_count(bufnr)
+  return get_gitsign_lines(bufnr, nb_lines)
+end
+
+require('scrollbar.handlers').register('git', add_git_signs)
