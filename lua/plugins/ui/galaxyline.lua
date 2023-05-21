@@ -5,6 +5,9 @@ local fileinfo = require('galaxyline.provider_fileinfo')
 local lspclient = require('galaxyline.provider_lsp')
 local vcs = require('galaxyline.provider_vcs')
 
+local dap = require('dap')
+local controls = require('dapui.controls')
+
 local colors = {
   bg = "Normal",
   line_bg = "CursorLine",
@@ -49,6 +52,36 @@ end
 
 vim.api.nvim_set_hl(0, "GalaxySpace", { link = 'Normal' })
 
+local lsp_client = {
+  ShowLspClient = {
+    provider = function()
+      vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
+      return lspclient.get_lsp_client()
+    end,
+    condition = function()
+      local tbl = { ['dashboard'] = true, [''] = true }
+      if tbl[vim.bo.filetype] then
+        return false
+      end
+      return true
+    end,
+    icon = '   ',
+    separator = ""
+  }
+}
+
+local git_branch = {
+  GitBranch = {
+    icon = " ",
+    provider = function()
+      vim.api.nvim_command('hi GalaxyGitBranch guifg=' .. mode_color())
+      local branch = vcs.get_git_branch()
+      return branch and branch .. ' ' or nil
+    end,
+    separator = ""
+  }
+}
+
 gls.left = {
   {
     Space = {
@@ -57,34 +90,7 @@ gls.left = {
       end,
     },
   },
-  {
-    GitBranch = {
-      icon = " ",
-      provider = function()
-        vim.api.nvim_command('hi GalaxyGitBranch guifg=' .. mode_color())
-        local branch = vcs.get_git_branch()
-        return branch and branch .. ' ' or nil
-      end,
-      separator = ""
-    }
-  },
-  {
-    ShowLspClient = {
-      provider = function()
-        vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
-        return lspclient.get_lsp_client()
-      end,
-      condition = function()
-        local tbl = { ['dashboard'] = true, [''] = true }
-        if tbl[vim.bo.filetype] then
-          return false
-        end
-        return true
-      end,
-      icon = '   ',
-      separator = ""
-    }
-  }
+  git_branch,
 }
 
 gls.mid =
@@ -101,6 +107,7 @@ gls.mid =
 }
 
 gls.right = {
+  lsp_client,
   {
     LineInfo = {
       provider = function()
