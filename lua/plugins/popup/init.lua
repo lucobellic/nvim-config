@@ -1,11 +1,11 @@
 local popup_plugins = {
 
-  { 'folke/trouble.nvim' },
+  { 'folke/trouble.nvim', event = "VeryLazy" },
 
   -- Session manager
   {
     'folke/persistence.nvim',
-    module = 'persistence',
+    lazy = false,
     config = function()
       require('plugins.popup.persistence')
     end,
@@ -13,15 +13,21 @@ local popup_plugins = {
 
   {
     'folke/todo-comments.nvim',
+    event = "VeryLazy",
     after = 'trouble.nvim',
     config = function() require('plugins.popup.todo') end
   },
 
-  { 'folke/which-key.nvim', config = function() require('plugins.popup.whichkey') end },
+  {
+    'folke/which-key.nvim',
+    event = "VeryLazy",
+    config = function() require('plugins.popup.whichkey') end
+  },
 
   -- Enhanced wilder
   {
     'lucobellic/wilder.nvim',
+    event = "VeryLazy",
     branch = 'personal',
     config = function()
       require('plugins.popup.wilder')
@@ -49,6 +55,7 @@ local popup_plugins = {
 
   {
     'lucobellic/vim-floaterm',
+    event = "VeryLazy",
     branch = 'personal',
     dependencies = { 'MunifTanjim/nui.nvim' },
     config = function()
@@ -56,7 +63,11 @@ local popup_plugins = {
     end
   }, -- Floating terminal
 
-  { 'akinsho/toggleterm.nvim', config = function() require('plugins.popup.toggleterm') end },
+  {
+    'akinsho/toggleterm.nvim',
+    event = "VeryLazy",
+    config = function() require('plugins.popup.toggleterm') end
+  },
 }
 
 return popup_plugins

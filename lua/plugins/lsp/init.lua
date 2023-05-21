@@ -1,6 +1,7 @@
 local lsp_plugins = {
   {
     'folke/neodev.nvim',
+    event = "VeryLazy",
     config = function()
       -- Enable type checking for nvim-dap-ui to get type checking, documentation and autocompletion for all API functions.
       require('neodev').setup({
@@ -13,6 +14,7 @@ local lsp_plugins = {
   },
   {
     'williamboman/mason.nvim',
+    event = 'VeryLazy',
     config = function()
       require('mason').setup({
         PATH = 'prepend'
@@ -21,6 +23,7 @@ local lsp_plugins = {
   },
   {
     'williamboman/mason-lspconfig.nvim',
+    event = 'VeryLazy',
     config = function()
       require('mason-lspconfig').setup {
         ensure_installed = {
@@ -39,6 +42,7 @@ local lsp_plugins = {
   },
   {
     'glepnir/lspsaga.nvim',
+    event = 'VeryLazy',
     dependencies = {
       { 'nvim-tree/nvim-web-devicons' },
       { 'nvim-treesitter/nvim-treesitter' }
@@ -49,6 +53,7 @@ local lsp_plugins = {
   },
   {
     'simrat39/symbols-outline.nvim',
+    event = 'VeryLazy',
     opts = {
       show_guides = false,
       fold_markers = { '', '' },
@@ -57,13 +62,15 @@ local lsp_plugins = {
   {
     'ErichDonGubler/lsp_lines.nvim',
     name = 'lsp_lines',
+    event = 'VeryLazy',
     config = function()
       require("lsp_lines").setup()
     end,
   },
-  { 'jose-elias-alvarez/null-ls.nvim' },
+  { 'jose-elias-alvarez/null-ls.nvim', event = 'VeryLazy' },
   {
     'neovim/nvim-lspconfig',
+    event = 'VeryLazy',
     dependencies = {
       'folke/neodev.nvim',
       'lsp_lines',
@@ -79,6 +86,7 @@ local lsp_plugins = {
   -- Code documentation
   {
     'danymat/neogen',
+    event = 'VeryLazy',
     dependencies = 'nvim-treesitter/nvim-treesitter',
     config = function()
       require('neogen').setup({
@@ -98,6 +106,7 @@ local lsp_plugins = {
   -- Refactoring
   {
     'ThePrimeagen/refactoring.nvim',
+    event = 'VeryLazy',
     dependencies = { 'nvim-lua/plenary.nvim', 'nvim-treesitter/nvim-treesitter' },
     config = function()
       require('refactoring').setup({})

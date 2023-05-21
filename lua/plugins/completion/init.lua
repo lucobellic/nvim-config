@@ -11,27 +11,30 @@ local completion_plugins = {
   {
     "zbirenbaum/copilot-cmp",
     dependencies = { "copilot.lua" },
+    event = "VeryLazy",
     config = function()
       require("copilot_cmp").setup()
     end
   },
 
   -- Snippets
-  { 'saadparwaiz1/cmp_luasnip' },
-  { 'rafamadriz/friendly-snippets' },
+  { 'saadparwaiz1/cmp_luasnip',     event = "VeryLazy" },
+  { 'rafamadriz/friendly-snippets', event = "VeryLazy" },
   {
     'L3MON4D3/LuaSnip',
+    event = "VeryLazy",
     config = function()
       require('luasnip.loaders.from_vscode').lazy_load()
     end
   },
 
-  { 'hrsh7th/cmp-nvim-lsp' },
-  { 'hrsh7th/cmp-buffer' },
-  { 'hrsh7th/cmp-path' },
-  { 'hrsh7th/cmp-cmdline' },
+  { 'hrsh7th/cmp-nvim-lsp', event = "VeryLazy" },
+  { 'hrsh7th/cmp-buffer',   event = "VeryLazy" },
+  { 'hrsh7th/cmp-path',     event = "VeryLazy" },
+  { 'hrsh7th/cmp-cmdline',  event = "VeryLazy" },
   {
     'hrsh7th/nvim-cmp',
+    event = "VeryLazy",
     dependencies = {
       'onsails/lspkind.nvim',
       'zbirenbaum/copilot-cmp'
@@ -43,6 +46,7 @@ local completion_plugins = {
 
   {
     "huggingface/hfcc.nvim",
+    event = 'VeryLazy',
     opts = {
       api_token = "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",
       model = "bigcode/starcoder",
@@ -50,7 +54,7 @@ local completion_plugins = {
         max_new_tokens = 200,
       },
     },
-    init = function()
+    config = function()
       vim.api.nvim_create_user_command("StarCoder", function()
         require("hfcc.completion").complete()
       end, {})

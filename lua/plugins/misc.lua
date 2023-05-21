@@ -1,17 +1,15 @@
 return {
-    'nvim-lua/popup.nvim',
-    {
-      'nvim-lua/plenary.nvim',
-      config = function()
-        require('plenary.filetype').add_file('filetype')
-      end
-    },
-    'dstein64/vim-startuptime',
-    'kkharji/sqlite.lua',
+  { 'nvim-lua/popup.nvim', event = 'VeryLazy' },
+  {
+    'nvim-lua/plenary.nvim',
+    config = function()
+      require('plenary.filetype').add_file('filetype')
+    end
+  },
+  { 'kkharji/sqlite.lua',  event = 'VeryLazy' },
 
-    -- Other
-    'lewis6991/impatient.nvim',
-    'moll/vim-bbye', -- Close buffer and window
-    'xolox/vim-misc',
-    'honza/vim-snippets',
+  -- Other
+  { 'moll/vim-bbye',       event = 'VeryLazy' },     -- Close buffer and window
+  { 'xolox/vim-misc',      event = 'VeryLazy' },
+  { 'honza/vim-snippets',  event = 'VeryLazy' }
 }

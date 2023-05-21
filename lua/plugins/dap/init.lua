@@ -7,6 +7,7 @@ return {
       -- fancy UI for the debugger
       {
         'rcarriga/nvim-dap-ui',
+        event = "VeryLazy",
         -- stylua: ignore
         keys = {
           { '<leader>du', function() require('dapui').toggle({}) end, desc = 'Dap UI' },
@@ -117,12 +118,14 @@ return {
   },
   {
     'mfussenegger/nvim-dap-python',
+    event = "VeryLazy",
     config = function() require('plugins.dap.python') end
   },
 
   -- Tests
   {
     'nvim-neotest/neotest',
+    event = 'VeryLazy',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -135,11 +138,12 @@ return {
       require('plugins.dap.neotest')
     end
   },
-  { 'junegunn/vader.vim' },
+  { 'junegunn/vader.vim', event = 'VeryLazy' },
 
   -- Coverage
   {
     'andythigpen/nvim-coverage',
+    event = 'VeryLazy',
     dependencies = 'nvim-lua/plenary.nvim',
     -- Optional: needed for PHP when using the cobertura parser
     -- rocks = { 'lua-xmlreader' },

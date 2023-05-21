@@ -1,6 +1,7 @@
 local telescope_plugins = {
   {
     'nvim-telescope/telescope.nvim',
+    event = "VeryLazy",
     dependencies = {
       'plenary.nvim',
       'folke/trouble.nvim',
@@ -19,6 +20,7 @@ local telescope_plugins = {
 
   {
     'stevearc/dressing.nvim',
+    event = "VeryLazy",
     config = function()
       require('plugins.telescope.dressing')
     end
@@ -37,6 +39,7 @@ local telescope_plugins = {
 
   {
     'paopaol/telescope-git-diffs.nvim',
+    event = "VeryLazy",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "sindrets/diffview.nvim",

@@ -3,11 +3,6 @@ local ui_plugins = {
   -- colorscheme
   { 'rktjmp/lush.nvim' },
   {
-    url = 'git@github.com:lucobellic/ayu-dark.git',
-    branch = 'personal',
-    name = 'ayu',
-  },
-  {
     url = 'git@github.com:lucobellic/ayugloom.nvim.git',
     name = 'ayugloom',
     dependencies = 'rktjmp/lush.nvim',
@@ -46,24 +41,30 @@ local ui_plugins = {
 
 
   -- icons
-  { 'nvim-tree/nvim-web-devicons', opts = require('plugins.ui.web-devicons') },
+  {
+    'nvim-tree/nvim-web-devicons',
+    lazy = true,
+    opts = require('plugins.ui.web-devicons')
+  },
 
   -- ui
   {
     'romgrk/barbar.nvim',
-    ft = 'neo-tree',
+    lazy = false,
+    dependencies = { 'folke/persistence.nvim' },
     config = function() require('plugins.ui.barbar') end,
   },
 
   {
     'akinsho/bufferline.nvim',
     enabled = false,
-    requires = 'nvim-tree/nvim-web-devicons',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function() require('plugins.ui.bufferline') end
   },
 
   {
     'lucobellic/galaxyline.nvim',
+    event = 'VeryLazy',
     branch = 'personal',
     config = function() require('plugins.ui.galaxyline') end,
   },
@@ -71,7 +72,7 @@ local ui_plugins = {
   -- git
   {
     'lewis6991/gitsigns.nvim',
-    event = 'BufRead',
+    event = 'VeryLazy',
     requires = 'plenary.nvim',
     opts = require('plugins.ui.gitsigns')
   },
@@ -80,6 +81,7 @@ local ui_plugins = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
+    event = 'VeryLazy',
     dependencies = { 'HiPhish/nvim-ts-rainbow2' },
     config = function() require('plugins.ui.treesitter') end,
   },
@@ -87,14 +89,16 @@ local ui_plugins = {
   -- Start screen
   {
     'glepnir/dashboard-nvim',
-    dependencies = { 'folke/persistence.nvim' },
-    event = 'VimEnter',
+    lazy = false,
+    priority = 100,
+    dependencies = { 'folke/persistence.nvim', 'nvim-tree/nvim-web-devicons' },
     config = function() require('plugins.ui.dashboard') end
   },
 
   -- Scrollbar
   {
     'petertriho/nvim-scrollbar',
+    event = 'BufRead',
     dependencies = 'lewis6991/gitsigns.nvim',
     config = function() require('plugins.ui.scrollbar') end
   },
@@ -110,6 +114,7 @@ local ui_plugins = {
   -- Windows auto resize
   {
     "anuvyklack/windows.nvim",
+    event = 'VeryLazy',
     dependencies = {
       "anuvyklack/middleclass",
       "anuvyklack/animation.nvim"
@@ -129,12 +134,14 @@ local ui_plugins = {
 
   {
     'b0o/incline.nvim',
+    event = 'VeryLazy',
     config = function() require('plugins.ui.incline') end
   },
 
   -- Colors
   {
     'NvChad/nvim-colorizer.lua',
+    event = 'VeryLazy',
     config = function() require('colorizer').setup() end,
   }
 }

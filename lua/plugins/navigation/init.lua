@@ -1,11 +1,7 @@
 local navigation_plugins = {
   {
-    'junegunn/fzf',
-    run = 'fzf#install()'
-  },
-
-  {
     'junegunn/fzf.vim',
+    event = 'VeryLazy',
     config = function()
       require('plugins.navigation.fzf')
     end
@@ -13,6 +9,7 @@ local navigation_plugins = {
 
   {
     'phaazon/hop.nvim',
+    event = 'VeryLazy',
     branch = 'v2',
     config = function()
       require('plugins.navigation.hop')
@@ -21,20 +18,22 @@ local navigation_plugins = {
 
   {
     'mrjones2014/legendary.nvim',
+    event = 'VeryLazy',
     config = function()
       require('plugins.navigation.legendary')
     end
   },
 
-  'tpope/vim-surround',
-  'tpope/vim-commentary',
-  'tpope/vim-fugitive',
-  'tpope/vim-repeat',
-  'tpope/vim-abolish',
+  { 'tpope/vim-surround',   event = 'VeryLazy' },
+  { 'tpope/vim-commentary', event = 'VeryLazy' },
+  { 'tpope/vim-fugitive',   event = 'VeryLazy' },
+  { 'tpope/vim-repeat',     event = 'VeryLazy' },
+  { 'tpope/vim-abolish',    event = 'VeryLazy' },
 
   -- { 'kyazdani42/nvim-tree.lua', config = function() require('plugins.navigation.tree') end },
   {
     'nvim-neo-tree/neo-tree.nvim',
+    event = 'VeryLazy',
     branch = 'v2.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -46,9 +45,14 @@ local navigation_plugins = {
     end
   },
 
-  'tommcdo/vim-exchange',
-  'tommcdo/vim-lion',
-  { 'echasnovski/mini.ai', branch = 'stable', config = function() require('mini.ai').setup() end },
+  { 'tommcdo/vim-exchange', event = 'VeryLazy' },
+  { 'tommcdo/vim-lion',     event = 'VeryLazy' },
+  {
+    'echasnovski/mini.ai',
+    event = 'VeryLazy',
+    branch = 'stable',
+    config = function() require('mini.ai').setup() end
+  },
 
 }
 

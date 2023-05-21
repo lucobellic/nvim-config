@@ -51,7 +51,7 @@ db.setup({
     },
     shortcut = {
       {
-        desc = ' Update',
+        desc = '󰊳 Update',
         group = '@property',
         action = 'Lazy update',
         key = 'u'
