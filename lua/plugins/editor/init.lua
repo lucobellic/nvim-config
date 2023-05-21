@@ -67,6 +67,12 @@ local editor_plugins = {
     enabled = true,
     config = function() require('plugins.editor.illuminate') end
   },
+  {
+    'andymass/vim-matchup',
+    config = function()
+      vim.g.matchup_matchparen_offscreen = {}
+    end
+  },
 
   -- Yank
   {
