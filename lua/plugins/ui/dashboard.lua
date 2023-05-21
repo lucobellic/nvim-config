@@ -71,7 +71,7 @@ db.setup({
       {
         desc = ' Recent',
         group = 'Number',
-        action = 'Telescope oldiles',
+        action = 'Telescope oldfiles',
         key = 'r',
       },
     },
