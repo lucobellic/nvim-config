@@ -71,11 +71,23 @@ nvim_lsp.pylsp.setup {
 }
 
 -- C/C++ Clangd configuration
+local mason_clangd_path = Path:new(vim.fn.stdpath('data')):joinpath('mason', 'bin', 'clangd'):absolute()
+local clangd_capabilities = vim.tbl_extend('force',
+  util.capabilities,
+  {
+    offsetEncoding = { "utf-16" },
+    textDocument = {
+      completion = {
+        editsNearCursor = true }
+    }
+  }
+  )
+
 nvim_lsp.clangd.setup {
   on_attach = util.on_attach,
   filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
   settings = {
-    path = Path:new(vim.fn.stdpath('data')).joinpath({ 'mason', 'bin', 'clangd' }),
+    path = mason_clangd_path,
     arguments = {
       "--background-index",
       "--background-index-priority=background",
@@ -87,7 +99,7 @@ nvim_lsp.clangd.setup {
     },
     semanticHighlighting = true
   },
-  capabilities = vim.tbl_extend('force', util.capabilities, { offsetEncoding = { "utf-16" } })
+  capabilities = clangd_capabilities
 }
 
 -- TODO: set it in clangd.setup
