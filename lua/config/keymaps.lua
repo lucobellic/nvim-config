@@ -212,7 +212,7 @@ if wk_ok then
     ["<C-j>"] = { ':tabprev<cr>', 'Previous Tab' },
     g = {
       n = { ':tabnew<cr>', 'New Tab' },
-      N = { ':tabclose<cr>', 'Close Tab' },
+      q = { ':tabclose<cr>', 'Close Tab' },
     }
   })
 end
