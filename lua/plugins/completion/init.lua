@@ -40,7 +40,7 @@ local completion_plugins = {
       'zbirenbaum/copilot-cmp'
     },
     config = function()
-      require('plugins.completion.comp')
+      require('plugins.completion.cmp')
     end
   },
 
