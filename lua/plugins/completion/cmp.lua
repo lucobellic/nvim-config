@@ -12,7 +12,9 @@ lspkind.init({
 })
 
 local luasnip = require('luasnip')
-local cmp = require 'cmp'
+local cmp = require('cmp')
+local types = require('cmp.types')
+local autocomplete = true
 
 cmp.setup({
   experimental = {
@@ -26,9 +28,14 @@ cmp.setup({
       -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
     end,
   },
+  completion = {
+    autocomplete = autocomplete and {
+      types.cmp.TriggerEvent.TextChanged,
+    }
+  },
   window = {
     completion = {
-      border = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
+      border = 'rounded',
       winhighlight = 'CursorLine:PmenuSel,Search:None',
       scrolloff = 0,
       col_offset = -3,
@@ -36,7 +43,7 @@ cmp.setup({
       scrollbar = true,
     },
     documentation = {
-      border = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
+      border = 'rounded',
       winhighlight = 'CursorLine:PmenuSel,Search:None',
     },
   },
@@ -45,7 +52,7 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = not autocomplete }),
 
     ["<Tab>"] = cmp.mapping(function(fallback)
       if cmp.visible() then
