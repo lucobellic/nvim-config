@@ -312,7 +312,7 @@ if wk_ok then
         name = "git",
         g = { ':DiffviewOpen<cr>', 'Diffview Open' },
         q = { ':DiffviewClose<cr>', 'Diffview Close' },
-        f = { ':DiffviewFileHistory %<cr>', 'Diffview File History' },
+        f = { ':DiffviewFileHistory --follow %<cr>', 'Diffview File History' },
         d = { ':DiffviewOpen origin/develop...HEAD<cr>', 'Diffview origin/develop...HEAD' },
       }
     },
