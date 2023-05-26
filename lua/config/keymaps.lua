@@ -275,8 +275,8 @@ if wk_ok then
       J = { "<cmd>lua require'hop'.hint_words({multi_windows = true})<cr>", 'Hop all words' },
       l = { "<cmd>lua require'hop'.hint_lines()<cr>", 'Hop lines' },
       L = { "<cmd>lua require'hop'.hint_lines({multi_windows = true})<cr>", 'Hop all lines' },
-      k = { "<cmd>silent lua require'hop'.hint_patterns()<cr>", 'Hop patterns' },
-      K = { "<cmd>silent lua require'hop'.hint_patterns({multi_windows = true})<cr>", 'Hop all patterns' },
+      k = { "<cmd>lua require'hop'.hint_char2()<cr>", 'Hop patterns' },
+      K = { "<cmd>lua require'hop'.hint_char2hint_patterns({multi_windows = true})<cr>", 'Hop all patterns' },
     }
   }
   wk.register(hop_mapping, { silent = true, mode = 'n' })
