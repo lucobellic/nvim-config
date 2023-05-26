@@ -56,11 +56,15 @@ require('scrollbar').setup({
     -- "terminal",
   },
   excluded_filetypes = {
-    "prompt",
+    "",
     "TelescopePrompt",
-    "cmp_menu",
+    "chatgpt",
     "cmp_docs",
-    "chatgpt"
+    "cmp_menu",
+    "incline",
+    "neo-tree",
+    "notify",
+    "prompt",
   },
   handlers = {
     cursor = true,
