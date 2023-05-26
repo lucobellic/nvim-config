@@ -88,7 +88,7 @@ local ui_plugins = {
 
   -- Start screen
   {
-    'glepnir/dashboard-nvim',
+    'nvimdev/dashboard-nvim',
     lazy = false,
     priority = 100,
     dependencies = { 'folke/persistence.nvim', 'nvim-tree/nvim-web-devicons' },
