@@ -1,81 +1,59 @@
+local scrollbar_utils = require('scrollbar.utils')
+scrollbar_utils.set_highlights = function() end -- Provide full control over highlights
+
+
 require('scrollbar').setup({
   show = true,
   show_in_active_only = false,
   set_highlights = true,
   handle = {
-    text = " ",
-    color = nil,
-    color_nr = nil,
-    highlight = "Visual",
+    text = "│",
     hide_if_all_visible = true
   },
   marks = {
+    Cursor = {
+      text = "▢",  -- ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
+      priority = 0,
+    },
     Search = {
       text = { '│', '│' },
       priority = 0,
-      color = nil,
-      cterm = nil,
-      highlight = "GitSignsDelete",
     },
     Error = {
       text = { '│', '│' },
       priority = 1,
-      color = nil,
-      cterm = nil,
-      highlight = "DiagnosticVirtualTextError",
     },
     Warn = {
       text = { '│', '│' },
       priority = 2,
-      color = nil,
-      cterm = nil,
-      highlight = "DiagnosticVirtualTextWarn",
     },
     Info = {
       text = { '│', '│' },
       priority = 3,
-      color = nil,
-      cterm = nil,
-      highlight = "DiagnosticVirtualTextInfo",
     },
     Hint = {
       text = { '│', '│' },
       priority = 4,
-      color = nil,
-      cterm = nil,
-      highlight = "DiagnosticVirtualTextHint",
     },
     Misc = {
       text = { '│', '│' },
       priority = 5,
-      color = nil,
-      cterm = nil,
-      highlight = "Normal",
     },
     GitAdd = {
       text = { '│', '│' },
       priority = 5,
-      color = nil,
-      cterm = nil,
-      highlight = "GitGutterAdd",
     },
     GitDelete = {
       text = { '│', '│' },
       priority = 5,
-      color = nil,
-      cterm = nil,
-      highlight = "GitGutterDelete",
     },
     GitChange = {
       text = { '│', '│' },
       priority = 5,
-      color = nil,
-      cterm = nil,
-      highlight = "GitGutterChange",
     },
   },
   excluded_buftypes = {
-    "terminal",
+    -- "terminal",
   },
   excluded_filetypes = {
     "prompt",
@@ -85,7 +63,7 @@ require('scrollbar').setup({
     "chatgpt"
   },
   handlers = {
-    cursor = false,
+    cursor = true,
     diagnostic = true,
     gitsigns = false,
     handle = true,
