@@ -1,6 +1,5 @@
 local nvim_lsp = require('lspconfig')
 local util = require('plugins.lsp.config.util')
-local Path = require('plenary.path')
 
 -- Use a loop to conveniently both setup defined servers
 -- and map buffer local keybindings when the language server attaches
@@ -69,38 +68,3 @@ nvim_lsp.pylsp.setup {
     }
   }
 }
-
--- C/C++ Clangd configuration
-local mason_clangd_path = Path:new(vim.fn.stdpath('data')):joinpath('mason', 'bin', 'clangd'):absolute()
-local clangd_capabilities = vim.tbl_extend('force',
-  util.capabilities,
-  {
-    offsetEncoding = { "utf-16" },
-    textDocument = {
-      completion = {
-        editsNearCursor = true }
-    }
-  }
-  )
-
-nvim_lsp.clangd.setup {
-  on_attach = util.on_attach,
-  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
-  settings = {
-    path = mason_clangd_path,
-    arguments = {
-      "--background-index",
-      "--background-index-priority=background",
-      "--clang-tidy",
-      "--enable-config",
-      "--header-insertion=iwyu",
-      "--all-scopes-completion",
-      "-j=2",
-    },
-    semanticHighlighting = true
-  },
-  capabilities = clangd_capabilities
-}
-
--- TODO: set it in clangd.setup
-vim.cmd [[map <silent> <M-o> :ClangdSwitchSourceHeader <CR>]]
