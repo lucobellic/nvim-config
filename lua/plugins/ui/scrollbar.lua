@@ -65,6 +65,7 @@ require('scrollbar').setup({
     "neo-tree",
     "notify",
     "prompt",
+    "floaterm",
   },
   handlers = {
     cursor = true,

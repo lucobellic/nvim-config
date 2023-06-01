@@ -100,8 +100,20 @@ local editor_plugins = {
     config = function()
       require('plugins.editor.yanky')
     end
+  },
+  {
+    "Pocco81/auto-save.nvim",
+    config = function()
+      require("auto-save").setup {
+        -- Disable message after saving
+        execution_message = {
+          message = function() return '' end,
+          dim = 0.18,       -- dim the color of `message`
+          cleaning_interval = 1250, -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
+        },
+      }
+    end,
   }
-
 }
 
 return editor_plugins
