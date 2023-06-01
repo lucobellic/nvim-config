@@ -23,7 +23,7 @@ animate.setup({
     }),
   },
   cursor = {
-    enable = true,
+    enable = false,
     timing = animate.gen_timing.linear({ duration = 200, unit = 'total' }),
   }
 })
