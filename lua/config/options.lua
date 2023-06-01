@@ -45,7 +45,7 @@ vim.o.list = true
 vim.o.showbreak = '↪'
 vim.opt.listchars = { tab = '>-', trail = '·', extends = '⟩', precedes = '⟨' }
 vim.opt.fillchars = {
-  diff = '/',
+  diff = '╱',
   eob = ' ',
   stl = ' ',
   stlnc = ' ',
