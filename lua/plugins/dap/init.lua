@@ -13,11 +13,16 @@ return {
           { '<leader>du', function() require('dapui').toggle({}) end, desc = 'Dap UI' },
           { '<leader>de', function() require('dapui').eval() end,     desc = 'Eval',  mode = { 'n', 'v' } },
         },
-        opts = {},
+        opts = {
+          floating = {
+            border = 'rounded'
+          }
+        },
         config = function(_, opts)
           local dap = require('dap')
           local dapui = require('dapui')
           dapui.setup(opts)
+
           dap.listeners.after.event_initialized['dapui_config'] = function()
             dapui.open({})
           end
@@ -98,10 +103,10 @@ return {
 
       -- Setup ui and icons
       local dap_icons = {
-        Stopped = { '󰁕 ', 'DiagnosticWarn', 'DapStoppedLine' },
-        Breakpoint = ' ',
-        BreakpointCondition = ' ',
-        BreakpointRejected = { ' ', 'DiagnosticError' },
+        Stopped = { ' ', 'DiagnosticWarn', 'DapStoppedLine' }, --  
+        Breakpoint = { ' ', 'DiagnosticError' }, -- 󰧞  
+        BreakpointCondition = { '󱗜 ', 'DiagnosticError' }, --  󰬸 󱡓 󰻂 󱗜
+        BreakpointRejected = { ' ', 'DiagnosticError' }, --  󰀨 
         LogPoint = '.>',
       }
 
