@@ -115,14 +115,20 @@ vim.api.nvim_set_keymap('n', '<s', '[s', opts)
 
 
 -- Window
-vim.api.nvim_set_keymap('n', '<C-left>', ':vertical resize +5<cr>', opts)
-vim.api.nvim_set_keymap('n', '<C-down>', ':resize -5<cr>', opts)
-vim.api.nvim_set_keymap('n', '<C-up>', ':resize +5<cr>', opts)
-vim.api.nvim_set_keymap('n', '<C-right>', ':vertical resize -5<cr>', opts)
-vim.api.nvim_set_keymap('n', '<S-left>', '<C-w>h', opts)
-vim.api.nvim_set_keymap('n', '<S-down>', '<C-w>j', opts)
-vim.api.nvim_set_keymap('n', '<S-up>', '<C-w>k', opts)
-vim.api.nvim_set_keymap('n', '<S-right>', '<C-w>l', opts)
+vim.keymap.set('n', '<C-left>', require('smart-splits').resize_left, { desc = 'Resize left' })
+vim.keymap.set('n', '<C-down>', require('smart-splits').resize_down, { desc = 'Resize down' })
+vim.keymap.set('n', '<C-up>', require('smart-splits').resize_up, { desc = 'Resize up' })
+vim.keymap.set('n', '<C-right>', require('smart-splits').resize_right, { desc = 'Resize right' })
+-- moving between splits
+vim.keymap.set('n', '<S-left>', require('smart-splits').move_cursor_left, { desc = 'Move cursor left' })
+vim.keymap.set('n', '<S-down>', require('smart-splits').move_cursor_down, { desc = 'Move cursor down' })
+vim.keymap.set('n', '<S-up>', require('smart-splits').move_cursor_up, { desc = 'Move cursor up' })
+vim.keymap.set('n', '<S-right>', require('smart-splits').move_cursor_right, { desc = 'Move cursor right' })
+-- swap windows
+vim.keymap.set('n', '<A-H>', require('smart-splits').swap_buf_left, { desc = 'Swap buffer left' })
+vim.keymap.set('n', '<A-J>', require('smart-splits').swap_buf_down, { desc = 'Swap buffer down' })
+vim.keymap.set('n', '<A-K>', require('smart-splits').swap_buf_up, { desc = 'Swap buffer up' })
+vim.keymap.set('n', '<A-L>', require('smart-splits').swap_buf_right, { desc = 'Swap buffer right' })
 
 vim.api.nvim_set_keymap('n', '<C-w>z', ':WindowsMaximize<cr>', opts)
 vim.api.nvim_set_keymap('n', '<C-w>_', ':WindowsMaximizeVertically<cr>', opts)
