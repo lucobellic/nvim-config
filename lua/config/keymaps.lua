@@ -30,7 +30,8 @@ local telescope_mapping_n = {
         end,
         'Find Emoji'
       },
-      f = { function() telescope_builtin.find_files() end, 'Find File' },
+      c = { function() telescope_builtin.commands() end, 'Find Commands' },
+      f = { function() telescope_builtin.find_files() end, 'Find Files' },
       F = { ':<C-u>:Files<cr>', 'Find All File' },
       g = {
         name = 'git',
