@@ -36,7 +36,7 @@ local telescope_mapping_n = {
         name = 'git',
         s = { function() telescope_builtin.git_status() end, 'Git Status' }
       },
-      k = { function() telescope_builtin.symbols({ sources = { 'kaomoji' } }) end, 'Find Symbols' },
+      k = { function() telescope_builtin.keymaps() end, 'Find Keymaps' },
       m = { function() telescope_builtin.marks() end, "Find Marks" },
       r = { function() telescope_builtin.oldfiles() end, 'Find Recent File' },
       w = { function() telescope_builtin.grep_string({ default_text = vim.fn.expand('<cword>') }) end, 'Find Word' },
