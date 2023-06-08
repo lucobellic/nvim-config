@@ -450,3 +450,13 @@ if wk_ok then
     }
   })
 end
+
+-- Noice
+wk.register({
+  ['<leader>n'] = {
+    e = { ':Noice errors<cr>', 'Noice Errors' },
+    m = { ':messages<cr>', 'Noice Messages' },
+    n = { ':Noice<cr>', 'Noice' },
+    v = { ':NoiceDismiss<cr>', 'Noice Dismis' },
+  },
+}, opts)
