@@ -72,7 +72,17 @@ local lsp_plugins = {
       require("lsp_lines").setup()
     end,
   },
-  { 'jose-elias-alvarez/null-ls.nvim', event = 'VeryLazy' },
+  {
+    'jose-elias-alvarez/null-ls.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'davidmh/cspell.nvim',
+      'neovim/nvim-lspconfig'
+    },
+    config = function()
+      require('plugins.lsp.config.null-ls')
+    end
+  },
   {
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
@@ -83,7 +93,6 @@ local lsp_plugins = {
     },
     config = function()
       require('plugins.lsp.config.servers')
-      require('plugins.lsp.config.null-ls')
       require('plugins.lsp.config.misc')
     end
   },

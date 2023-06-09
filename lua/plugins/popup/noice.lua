@@ -60,7 +60,11 @@ local filter_skip = {
       { event = "msg_show", kind = "emsg",                                    find = "Pattern not found" },
       { event = "notify",   kind = "warn",                                    find = "Unsupported input type" },
       -- Hide spamming pylsp messages
-      { event = "lsp",      find = "pylsp" }
+      { event = "lsp",      find = "pylsp" },
+      -- Hide spamming cspell messages
+      { event = "lsp",      find = "cspell" },
+      -- Hide spamming null-ls messages
+      { event = "lsp",      find = "null-ls" },
     }
   },
   opts = { stop = true, skip = true },
