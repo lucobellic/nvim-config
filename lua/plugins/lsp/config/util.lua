@@ -42,18 +42,40 @@ function M.on_attach(client, bufnr)
   buf_set_keymap("n", ">C", "<cmd>silent Lspsaga diagnostic_jump_next<CR>", opts)
 
   local key_opts = { noremap = true, silent = true, buffer = bufnr }
+
+  -- Jump to warning or above
+  vim.keymap.set(
+    "n", "<W",
+    function()
+      require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } })
+    end,
+    key_opts
+  )
+
+  vim.keymap.set(
+    "n", ">W",
+    function()
+      require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } })
+    end,
+    key_opts
+  )
+
   -- Jump to error
-  vim.keymap.set("n", "<E",
+  vim.keymap.set(
+    "n", "<E",
     function()
       require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })
     end,
-    key_opts)
+    key_opts
+  )
 
-  vim.keymap.set("n", ">E",
+  vim.keymap.set(
+    "n", ">E",
     function()
       require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })
     end,
-    key_opts)
+    key_opts
+  )
 
   -- Set some keybinds conditional on server capabilities
   local caps = client.server_capabilities
