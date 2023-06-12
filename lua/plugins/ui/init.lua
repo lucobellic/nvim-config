@@ -131,7 +131,12 @@ local ui_plugins = {
       })
     end
   },
-
+  {
+    "folke/edgy.nvim",
+    enabled = false,
+    event = "VeryLazy",
+    opts = require('plugins.ui.edgy')
+  },
   {
     'mrjones2014/smart-splits.nvim',
     config = function()
