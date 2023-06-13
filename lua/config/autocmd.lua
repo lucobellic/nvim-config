@@ -4,13 +4,6 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   desc = 'Set // as defalut comment string for c++',
 })
 
--- TODO: restore cursor position
-vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-  pattern = '*',
-  command = ':%s/\\s\\+$//e',
-  desc = 'Remove trailing whitespace on save',
-})
-
 -- Display cursorline only in focused window
 vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter', 'WinEnter' }, {
   pattern = '*',

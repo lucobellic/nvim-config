@@ -108,9 +108,17 @@ local editor_plugins = {
         -- Disable message after saving
         execution_message = {
           message = function() return '' end,
-          dim = 0.18,       -- dim the color of `message`
+          dim = 0.18,               -- dim the color of `message`
           cleaning_interval = 1250, -- (milliseconds) automatically clean MsgArea after displaying `message`. See :h MsgArea
         },
+        callbacks = {
+          before_saving = function()
+            -- Remove trailing whitespace and restore cursor position
+            local save_cursor = vim.fn.getpos(".")
+            vim.cmd([[%s/\s\+$//e]])
+            vim.fn.setpos(".", save_cursor)
+          end
+        }
       }
     end,
   }
