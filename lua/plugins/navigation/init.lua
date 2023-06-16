@@ -1,6 +1,7 @@
 local navigation_plugins = {
   {
     'junegunn/fzf.vim',
+    dependencies = { 'junegunn/fzf' },
     event = 'VeryLazy',
     config = function()
       require('plugins.navigation.fzf')
@@ -18,6 +19,7 @@ local navigation_plugins = {
 
   {
     'mrjones2014/legendary.nvim',
+    dependencies = { 'folke/which-key.nvim' },
     event = 'VeryLazy',
     config = function()
       require('plugins.navigation.legendary')
