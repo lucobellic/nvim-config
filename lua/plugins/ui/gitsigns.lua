@@ -13,31 +13,47 @@ return {
   linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
   word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
 
-  keymaps = {
+ on_attach = function(bufnr)
+    local gs = package.loaded.gitsigns
 
-    -- Default keymap options
-    noremap = true,
-    silent = true,
+    local function map(mode, l, r, opts)
+      opts = opts or {}
+      opts.buffer = bufnr
+      vim.keymap.set(mode, l, r, opts)
+    end
 
-    ['n >H'] = { expr = true, "&diff ? '>H' : '<cmd>silent lua require\"gitsigns.actions\".next_hunk()<CR>'" },
-    ['n <H'] = { expr = true, "&diff ? '<H' : '<cmd>silent lua require\"gitsigns.actions\".prev_hunk()<CR>'" },
+    -- Navigation
+    map('n', '>H', function()
+      if vim.wo.diff then return '>H' end
+      vim.schedule(function() gs.next_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
 
-    ['n <leader>hs'] = '<cmd>Gitsigns stage_hunk<CR>',
-    ['v <leader>hs'] = ':Gitsigns stage_hunk<CR>',
-    ['n <leader>hu'] = '<cmd>Gitsigns undo_stage_hunk<CR>',
-    ['n <leader>hr'] = '<cmd>Gitsigns reset_hunk<CR>',
-    ['v <leader>hr'] = ':Gitsigns reset_hunk<CR>',
-    ['n <leader>hR'] = '<cmd>Gitsigns reset_buffer<CR>',
-    ['n <leader>hv'] = '<cmd>Gitsigns preview_hunk<CR>',
-    ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line{full=true}<CR>',
-    ['n <leader>hS'] = '<cmd>Gitsigns stage_buffer<CR>',
-    ['n <leader>hU'] = '<cmd>Gitsigns reset_buffer_index<CR>',
-    ['n <leader>ht'] = '<cmd>Gitsigns toggle_current_line_blame<CR>',
+    map('n', '<H', function()
+      if vim.wo.diff then return '<H' end
+      vim.schedule(function() gs.prev_hunk() end)
+      return '<Ignore>'
+    end, {expr=true})
 
-    -- Text objects
-    ['o ih'] = ':<C-U>Gitsigns select_hunk<CR>',
-    ['x ih'] = ':<C-U>Gitsigns select_hunk<CR>'
-  },
+    -- Actions
+    map('n', '<leader>hs', gs.stage_hunk)
+    map('n', '<leader>hr', gs.reset_hunk)
+    map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+    map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+    map('n', '<leader>hS', gs.stage_buffer)
+    map('n', '<leader>hu', gs.undo_stage_hunk)
+    map('n', '<leader>hU', gs.reset_buffer_index)
+    map('n', '<leader>hR', gs.reset_buffer)
+    map('n', '<leader>hp', gs.preview_hunk)
+    map('n', '<leader>hb', function() gs.blame_line{full=true} end)
+    map('n', '<leader>tb', gs.toggle_current_line_blame)
+    map('n', '<leader>hd', gs.diffthis)
+    map('n', '<leader>hD', function() gs.diffthis('~') end)
+
+    -- Text object
+    map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+  end,
+
   watch_gitdir = {
     interval = 1000,
     follow_files = true
@@ -49,10 +65,7 @@ return {
     virt_text = true,
     virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
     delay = 1000,
-  },
-
-  current_line_blame_formatter_opts = {
-    relative_time = false
+    ignore_whitespace = true,
   },
 
   sign_priority    = 10,
@@ -72,9 +85,4 @@ return {
   yadm = {
     enable = false
   },
-
-  -- Solve CRLF issue with gitsigns
-  diff_opts = {
-    internal = false
-  }
 }
