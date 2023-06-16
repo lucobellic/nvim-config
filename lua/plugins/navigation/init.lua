@@ -24,11 +24,17 @@ local navigation_plugins = {
     end
   },
 
-  { 'tpope/vim-surround',   event = 'VeryLazy' },
-  { 'tpope/vim-commentary', event = 'VeryLazy' },
-  { 'tpope/vim-fugitive',   event = 'VeryLazy' },
-  { 'tpope/vim-repeat',     event = 'VeryLazy' },
-  { 'tpope/vim-abolish',    event = 'VeryLazy' },
+  { 'tpope/vim-surround', event = 'VeryLazy' },
+  { 'tpope/vim-fugitive', event = 'VeryLazy' },
+  { 'tpope/vim-repeat',   event = 'VeryLazy' },
+  { 'tpope/vim-abolish',  event = 'VeryLazy' },
+
+  {
+    'echasnovski/mini.comment',
+    config = function()
+      require('mini.comment').setup()
+    end
+  },
 
   -- { 'kyazdani42/nvim-tree.lua', config = function() require('plugins.navigation.tree') end },
   {
