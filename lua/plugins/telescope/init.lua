@@ -9,6 +9,7 @@ local telescope_plugins = {
       'nvim-telescope/telescope-symbols.nvim',
       'nvim-telescope/telescope-fzf-native.nvim',
       'nvim-telescope/telescope-file-browser.nvim',
+      'nvim-telescope/telescope-smart-history.nvim',
       'tsakirist/telescope-lazy.nvim',
       'gbprod/yanky.nvim',
       'ThePrimeagen/refactoring.nvim',

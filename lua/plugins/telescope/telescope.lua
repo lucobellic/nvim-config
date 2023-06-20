@@ -12,11 +12,17 @@ require('telescope').setup {
         ["<C-k>"] = lga_actions.quote_prompt(),
         ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
         ["<C-n>"] = actions.select_tab,
+        ['<S-up>'] = actions.cycle_history_prev,
+        ['<S-down>'] = actions.cycle_history_next,
       },
       n = {
         ["<C-t>"] = trouble.smart_open_with_trouble,
         ["<C-n>"] = actions.select_tab,
       },
+    },
+    history = {
+      path = "~/.local/share/nvim/telescope_history.sqlite3",
+      limit = 100,
     },
     vimgrep_arguments = {
       'rg',
@@ -84,3 +90,4 @@ require('telescope').load_extension('asynctasks')
 require('telescope').load_extension('yank_history')
 require('telescope').load_extension('refactoring')
 require('telescope').load_extension('notify')
+require('telescope').load_extension('smart_history')
