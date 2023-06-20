@@ -44,6 +44,7 @@ local navigation_plugins = {
     event = 'VeryLazy',
     branch = 'v2.x',
     dependencies = {
+      'nvim-telescope/telescope.nvim',
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
       'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended

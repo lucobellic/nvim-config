@@ -4,6 +4,16 @@ local function align(res)
   return (res and res.text) and res or { text = '  ' }
 end
 
+local function get_telescope_options(state)
+  local node = state.tree:get_node()
+  local path = node:get_id()
+  -- if path is a file then get the directory
+  if vim.fn.isdirectory(path) == 0 then
+    path = vim.fn.fnamemodify(path, ":h")
+  end
+  return { search_dirs = { path } }
+end
+
 require("neo-tree").setup({
   close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
   popup_border_style = "rounded",
@@ -260,6 +270,8 @@ require("neo-tree").setup({
     -- instead of relying on nvim autocmd events.
     window = {
       mappings = {
+        ["<C-p>"] = "telescope_find",
+        ["<C-f>"] = "telescope_grep",
         ["<bs>"] = "navigate_up",
         ["."] = "set_root",
         ["H"] = "toggle_hidden",
@@ -300,5 +312,13 @@ require("neo-tree").setup({
         ["gg"] = "git_commit_and_push",
       }
     }
+  },
+  commands = {
+    telescope_find = function(state)
+      require('telescope.builtin').find_files(get_telescope_options(state))
+    end,
+    telescope_grep = function(state)
+      require('telescope.builtin').live_grep(get_telescope_options(state))
+    end,
   }
 })
