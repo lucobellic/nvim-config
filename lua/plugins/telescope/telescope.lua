@@ -1,23 +1,33 @@
 local trouble = require('trouble.providers.telescope')
 local actions = require("telescope.actions")
-local truncate = require("plenary.strings").truncate
+local Path = require('plenary.path')
+local utils = require("telescope.utils")
+local layout = require("telescope.actions.layout")
 
 local lga_actions = require("telescope-live-grep-args.actions")
 require('telescope').setup {
   defaults = {
     mappings = {
       i = {
-        ["<C-t>"] = trouble.smart_open_with_trouble,
-        ["<esc>"] = actions.close,
-        ["<C-k>"] = lga_actions.quote_prompt(),
-        ["<C-g>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
-        ["<C-n>"] = actions.select_tab,
+        ['<C-t>'] = trouble.smart_open_with_trouble,
+        ['<esc>'] = actions.close,
+        ['<C-k>'] = lga_actions.quote_prompt(),
+        ['<C-g>'] = lga_actions.quote_prompt({ postfix = ' --iglob ' }),
+        ['<C-n>'] = actions.select_tab,
+        ['<C-b>'] = layout.toggle_preview,
+        ['<C-x>'] = layout.cycle_layout_next,
+        ['<RightMouse>'] = actions.close,
+        ['<LeftMouse>'] = actions.select_default,
+        ['<ScrollWheelDown>'] = actions.move_selection_next,
+        ['<ScrollWheelUp>'] = actions.move_selection_previous,
         ['<S-up>'] = actions.cycle_history_prev,
         ['<S-down>'] = actions.cycle_history_next,
       },
       n = {
-        ["<C-t>"] = trouble.smart_open_with_trouble,
-        ["<C-n>"] = actions.select_tab,
+        ['<C-t>'] = trouble.smart_open_with_trouble,
+        ['<C-n>'] = actions.select_tab,
+        ['<C-b>'] = layout.toggle_preview,
+        ['<C-x>'] = layout.cycle_layout_next,
       },
     },
     history = {
@@ -39,13 +49,10 @@ require('telescope').setup {
     ---@return string: The transformed path ready to be displayed
     ---@diagnostic disable-next-line: unused-local
     path_display = function(opts, path)
-      local Path = require('plenary.path')
-      local utils = require("telescope.utils")
       local tail = utils.path_tail(path)
       local head = Path:new(path):parent():make_relative()
-      local short_head = utils.transform_path({ path_display = { 'truncate' } }, head)
-      local short_tail = truncate(tail, 20, nil, -1)
-      return string.format("%-20s • %s", short_tail, short_head)
+      -- local short_head = truncate(head, 35, nil, -1)
+      return string.format("%-40s • %s", tail, head)
     end,
     show_line = false,
     prompt_title = false,
@@ -58,19 +65,22 @@ require('telescope').setup {
     initial_mode = "insert",
     selection_strategy = "reset",
     sorting_strategy = "ascending",
-    layout_strategy = "horizontal",
+    -- layout_strategy = "horizontal",
+    layout_strategy = "vertical",
     layout_config = {
       horizontal = {
+        width = 0.8,
         prompt_position = 'top',
         mirror = false,
         preview_width = 0.6
       },
-      -- vertical = {
-      --   width = 0.65,
-      --   height_padding = 5,
-      --   preview_height = 0.5,
-      --   mirror = true,
-      -- },
+      vertical = {
+        width = 0.8,
+        height_padding = 0,
+        preview_height = 0.70,
+        mirror = true,
+        prompt_position = 'top',
+      },
     },
     file_ignore_patterns = {},
     -- winblend = 20,
