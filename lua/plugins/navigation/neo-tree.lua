@@ -1,8 +1,7 @@
 local components = require("neo-tree.sources.common.components")
 
-local function trim_or_space(res)
-  if res and res.text then res.text = vim.trim(res.text) end
-  return res and res or { text = " " }
+local function align(res)
+  return (res and res.text) and res or { text = '  ' }
 end
 
 require("neo-tree").setup({
@@ -19,8 +18,12 @@ require("neo-tree").setup({
   --           return a.type > b.type
   --       end
   --   end , -- this sorts files and directories descendantly
+  source_selector = {
+    winbar = true,
+    statusline = false,
+  },
   default_component_configs = {
-    trim_diagnostics = {
+    align_diagnostics = {
       symbols = {
         hint = "⬥",
         info = "⬥",
@@ -69,7 +72,7 @@ require("neo-tree").setup({
       use_git_status_colors = false,
       highlight = "NeoTreeFileName",
     },
-    trim_git_status = {
+    align_git_status = {
       symbols = {
         -- Change type
         added     = "",
@@ -151,11 +154,14 @@ require("neo-tree").setup({
   nesting_rules = {},
   filesystem = {
     components = {
-      trim_git_status = function(config, node, state)
-        return { trim_or_space(components.git_status(config, node, state)[1]) }
+      align_git_changes = function(config, node, state)
+        return { align(components.git_status(config, node, state)[1]) }
       end,
-      trim_diagnostics = function(config, node, state)
-        return trim_or_space(components.diagnostics(config, node, state))
+      align_git_status = function(config, node, state)
+        return { align(components.git_status(config, node, state)[1]) }
+      end,
+      align_diagnostics = function(config, node, state)
+        return align(components.diagnostics(config, node, state))
       end
     },
     renderers = {
@@ -189,31 +195,31 @@ require("neo-tree").setup({
           right_padding = 0,
           content = {
             { "name",             zindex = 10 },
-            { "trim_diagnostics", zindex = 20, align = "right" },
+            { "align_diagnostics", zindex = 10, align = "right" },
             {
-              "trim_git_status",
+              "align_git_changes",
               symbols = {
                 -- Change type
-                added    = "▕",
-                modified = "▕",
-                deleted  = "▕",
-                renamed  = "-",
+                added    = "✚",
+                deleted  = "✖",
+                modified = "",
+                renamed  = "",
               },
               zindex = 10,
               align = "right"
             },
             {
-              "trim_git_status",
+              "align_git_status",
               symbols = {
                 -- Status type
-                untracked = "",
-                ignored   = "",
-                unstaged  = "",
-                staged    = "",
+                untracked = "",
+                ignored   = "",
+                unstaged  = "",
+                staged    = "",
                 conflict  = "",
               },
-              zindex = 10,
-              align = "right"
+              zindex  = 10,
+              align   = "right"
             },
           },
         },
