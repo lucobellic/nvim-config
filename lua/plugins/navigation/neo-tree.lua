@@ -35,10 +35,10 @@ require("neo-tree").setup({
   default_component_configs = {
     align_diagnostics = {
       symbols = {
-        hint = "⬥",
-        info = "⬥",
-        warn = "⬥",
-        error = "⬥",
+        hint = '', -- '',
+        info = '󰳦', -- '',
+        warn = '󰳦', --'', '',
+        error = '󰅝', -- '',
       },
       highlights = {
         hint = "DiagnosticSignHint",
@@ -74,7 +74,7 @@ require("neo-tree").setup({
       highlight = "NeoTreeFileIcon"
     },
     modified = {
-      symbol = "",
+      symbol = "",
       highlight = "GitSignsChange",
     },
     name = {
@@ -204,16 +204,16 @@ require("neo-tree").setup({
           width = "100%",
           right_padding = 0,
           content = {
-            { "name",             zindex = 10 },
+            { "name",              zindex = 10 },
             { "align_diagnostics", zindex = 10, align = "right" },
             {
               "align_git_changes",
               symbols = {
                 -- Change type
-                added    = "✚",
-                deleted  = "✖",
-                modified = "",
-                renamed  = "",
+                added    = "",
+                deleted  = "",
+                modified = "",
+                renamed  = "",
               },
               zindex = 10,
               align = "right"
@@ -222,11 +222,11 @@ require("neo-tree").setup({
               "align_git_status",
               symbols = {
                 -- Status type
-                untracked = "",
-                ignored   = "",
-                unstaged  = "",
-                staged    = "",
-                conflict  = "",
+                untracked = "󱍯",
+                ignored   = "",
+                unstaged  = "󱍫",
+                staged    = "󱍨",
+                conflict  = " ",
               },
               zindex  = 10,
               align   = "right"
