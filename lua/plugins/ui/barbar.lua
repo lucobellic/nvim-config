@@ -92,38 +92,6 @@ require('barbar').setup {
   no_name_title = nil,
 }
 
-
-vim.api.nvim_create_autocmd('FileType', {
-  callback = function(tbl)
-    local set_offset = require('barbar.api').set_offset
-
-    local bufwinid
-    local last_width
-    local autocmd = vim.api.nvim_create_autocmd('WinScrolled', {
-      callback = function()
-        bufwinid = bufwinid or vim.fn.bufwinid(tbl.buf)
-
-        local width = vim.api.nvim_win_get_width(bufwinid)
-        if width ~= last_width then
-          set_offset(width, '')
-          last_width = width
-        end
-      end,
-    })
-
-    vim.api.nvim_create_autocmd('BufWipeout', {
-      buffer = tbl.buf,
-      callback = function()
-        vim.api.nvim_del_autocmd(autocmd)
-        set_offset(0)
-      end,
-      once = true,
-    })
-  end,
-  -- pattern = 'NvimTree', -- or any other filetree's `ft`
-  pattern = 'neo-tree', -- or any other filetree's `ft`
-})
-
 --------------------------------------------------------------------------------
 ------------------------- Tabpage buffers management ---------------------------
 --------------------------------------------------------------------------------
@@ -187,15 +155,3 @@ vim.api.nvim_create_autocmd({ 'TabClosed' }, {
   end
 })
 
-vim.api.nvim_set_hl(0, "BufferDefaultInactive", { link = "Directory" })
-vim.api.nvim_set_hl(0, "BufferInactive", { link = "BufferDefaultInactive" })
-vim.api.nvim_set_hl(0, "BufferInactiveSign", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferTabpageFill", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferTabpages", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferOffset", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferVisible", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferVisibleIcon", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferVisibleSign", { link = "BufferInactive" })
-vim.api.nvim_set_hl(0, "BufferCurrentMod", { link = "GitGutterChange" })
-vim.api.nvim_set_hl(0, "BufferVisibleMod", { link = "GitGutterChange" })
-vim.api.nvim_set_hl(0, "BufferInactiveMod", { link = "GitGutterChange" })
