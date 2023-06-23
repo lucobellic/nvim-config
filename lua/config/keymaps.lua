@@ -39,6 +39,11 @@ local telescope_mapping_n = {
       },
       k = { function() telescope_builtin.keymaps() end, 'Find Keymaps' },
       m = { function() telescope_builtin.marks() end, "Find Marks" },
+      o = {
+        name = 'obsidian',
+        f = { ':ObsidianQuickSwitch<cr>', 'Obsidian Find Files' },
+        w = { ':ObsidianSearch<cr>', 'Obsidian Search' },
+      },
       r = { function() telescope_builtin.oldfiles() end, 'Find Recent File' },
       w = { function() telescope_builtin.grep_string({ default_text = vim.fn.expand('<cword>') }) end, 'Find Word' },
       y = { function() telescope_extensions.yank_history.yank_history() end, 'Yank History' },
