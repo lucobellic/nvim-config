@@ -104,6 +104,8 @@ vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 
 vim.api.nvim_set_keymap('n', '<esc>', '<cmd>nohl<cr><esc>', opts)
+vim.api.nvim_set_keymap('c', '<esc>', '<C-c>', opts)
+vim.api.nvim_set_keymap('t', '<esc>', '<C-\\><C-n>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
 
 -- Spelling
