@@ -10,7 +10,7 @@ require("copilot").setup({
     gitcommit = true,
     gitrebase = true,
     hgcommit = true,
-    svn = false,
+    svn = true,
     cvs = false,
     ["."] = false,
   },
