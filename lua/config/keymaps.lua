@@ -43,8 +43,6 @@ local telescope_mapping_n = {
       w = { function() telescope_builtin.grep_string({ default_text = vim.fn.expand('<cword>') }) end, 'Find Word' },
       y = { function() telescope_extensions.yank_history.yank_history() end, 'Yank History' },
       s = { '<cmd>PersistenceLoadSession<cr>', 'Load session' },
-      x = { function() telescope_extensions.asynctasks.asynctasks() end, 'Find Tasks' },
-
       l = {
         name = 'lsp',
         r = { function() telescope_builtin.lsp_references() end, 'Find References' },
@@ -439,16 +437,6 @@ if wk_ok then
 
   wk.register(visual_refactoring, { mode = 'v', noremap = true, silent = true, expr = false })
   wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
-end
-
--- Tasks/Run/Execute
-if wk_ok then
-  wk.register({
-    ['<leader>x'] = {
-      name = 'execute',
-      l = { ':TasksList<cr>', 'Execute Task' }
-    }
-  })
 end
 
 -- Noice

@@ -165,11 +165,30 @@ return {
 
   -- Tasks
   {
-    'skywind3000/asynctasks.vim',
-    dependencies = { 'skywind3000/asyncrun.vim' },
+    'stevearc/overseer.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('plugins.dap.asynctasks')
-    end
-  },
+    keys = {
+      { '<leader>xr', ':OverseerRun<cr>',    desc = 'Overseer Run' },
+      { '<leader>xi', ':OverseerInfo<cr>',   desc = 'Overseer Info' },
+      { '<leader>xo', ':OverseerToggle<cr>', desc = 'Overseer Toggle' },
+    },
+    opts = {
+      strategy = {
+        'toggleterm',
+        open_on_start = false,
+        close_on_exit = false,
+        hidden = false,
+        quit_on_exit = "never",
+      },
+      form = {
+        win_opts = {
+          winblend = 0,
+        },
+      }
+    },
+    config = function(opts)
+      require('overseer').setup(opts)
+      require('plugins.dap.overseer')
+    end,
+  }
 }
