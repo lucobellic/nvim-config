@@ -4,15 +4,15 @@ scrollbar_utils.set_highlights = function() end -- Provide full control over hig
 
 require('scrollbar').setup({
   show = true,
-  show_in_active_only = false,
+  show_in_active_only = true,
   set_highlights = true,
   handle = {
-    text = "│",
+    text = " ",
     hide_if_all_visible = true
   },
   marks = {
     Cursor = {
-      text = "▢",  -- ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
+      text = "█",  -- ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
       priority = 0,
     },
     Search = {
@@ -28,16 +28,16 @@ require('scrollbar').setup({
       priority = 2,
     },
     Info = {
-      text = { '│', '│' },
-      priority = 3,
+      text = { ' ', ' ' },
+      priority = 10,
     },
     Hint = {
-      text = { '│', '│' },
-      priority = 4,
+      text = { ' ', ' ' },
+      priority = 10,
     },
     Misc = {
-      text = { '│', '│' },
-      priority = 5,
+      text = { ' ', ' ' },
+      priority = 10,
     },
     GitAdd = {
       text = { '│', '│' },
@@ -68,7 +68,7 @@ require('scrollbar').setup({
     "floaterm",
   },
   handlers = {
-    cursor = true,
+    cursor = false,
     diagnostic = true,
     gitsigns = false,
     handle = true,
