@@ -1,6 +1,9 @@
 local persistence = require('persistence')
 local Path = require('plenary.path')
-persistence.setup({})
+persistence.setup({
+  options = { 'globals', 'buffers', 'curdir', 'folds', 'tabpages', 'winsize' },
+  pre_save = function() vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePre' }) end
+})
 
 --- Get persistence sessions sorted by last modification time
 local get_sorted_sessions = function()

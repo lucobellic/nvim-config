@@ -5,7 +5,7 @@ local popup_plugins = {
   -- Session manager
   {
     'folke/persistence.nvim',
-    lazy = false,
+    event = 'BufReadPre',
     config = function()
       require('plugins.popup.persistence')
     end,

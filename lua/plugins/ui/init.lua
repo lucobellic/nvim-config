@@ -54,6 +54,13 @@ local ui_plugins = {
     dependencies = { 'folke/persistence.nvim' },
     config = function() require('plugins.ui.barbar') end,
   },
+  {
+    'tiagovla/scope.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('scope').setup({ restore_state = true })
+    end
+  },
 
   {
     'akinsho/bufferline.nvim',
