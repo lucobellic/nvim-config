@@ -94,12 +94,6 @@ local lsp_plugins = {
     config = function()
       require('plugins.lsp.config.servers')
       require('plugins.lsp.config.misc')
-    end
-  },
-  {
-    'p00f/clangd_extensions.nvim',
-    event = 'VeryLazy',
-    config = function()
       require('plugins.lsp.config.clangd')
     end
   },
