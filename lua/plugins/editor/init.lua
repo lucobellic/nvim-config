@@ -12,12 +12,6 @@ local editor_plugins = {
     config = function() require('plugins.editor.limelight') end
   }, -- Highlight paragraph
 
-  -- use term as in editor
-  {
-    'chomosuke/term-edit.nvim',
-    event = "VeryLazy",
-    config = function() require('plugins.editor.term-edit') end
-  },
   {
     "lukas-reineke/indent-blankline.nvim",
     event = "VeryLazy",
