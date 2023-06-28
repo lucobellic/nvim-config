@@ -53,7 +53,7 @@ local tab_confirm_mapping = {
     behavior = cmp.ConfirmBehavior.Insert,
     select = true,
   }),
-  ['<right>'] = cmp.mapping(function(fallback)
+  ['<C-right>'] = cmp.mapping(function(fallback)
     if cmp.visible() then
       local active_entry = cmp.get_active_entry() or cmp.get_entries()[1]
       if active_entry then
@@ -118,6 +118,7 @@ local tab_selection_mapping = {
 
 cmp.setup({
   experimental = {
+    native_menu = false,
     ghost_text = { hl_group = 'Comment' }
   },
   snippet = {
