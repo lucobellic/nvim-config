@@ -1,5 +1,9 @@
 vim.o.laststatus = 3
 
+-- Default splitting will cause your main splits to jump when opening an edgebar.
+-- To prevent this, set `splitkeep` to either `screen` or `topline`.
+vim.o.splitkeep = 'screen'
+
 vim.o.clipboard = "unnamedplus"
 vim.o.signcolumn = "yes:1"
 vim.o.number = true
@@ -64,6 +68,6 @@ vim.opt.fillchars = {
   foldclose = '▸',
 }
 
-vim.o.guicursor = "n-v-c:hor15,i-ci-ve:ver15,r-cr-o:block,a:blinkon0-Cursor/lCursor"
+vim.o.guicursor = "n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:blinkon0-Cursor/lCursor"
 
 vim.g.lion_squeeze_spaces = true
