@@ -126,26 +126,45 @@ local ui_plugins = {
       "anuvyklack/middleclass",
       "anuvyklack/animation.nvim"
     },
-    config = function()
+    init = function()
       vim.o.winwidth = 10
       vim.o.winminwidth = 10
       vim.o.equalalways = false
+    end,
+    config = function()
       require('windows').setup({
         ignore = {
-          buftype = { 'quickfix', 'nofile' },
-          filetype = { 'NvimTree', 'neo-tree', 'undotree', 'gundo', 'Outline' },
+          buftype = { 'quickfix', 'nofile', 'neo-tree' },
+          filetype = {
+            'NvimTree',
+            'neo-tree',
+            'undotree',
+            'undo',
+            'Outline',
+            'dapui_scopes',
+            'dapui_breakpoints',
+            'dapui_stacks',
+            'dapui_watches'
+          },
         },
+        animation = {
+          enable = false,
+          duration = 500,
+          fps = 60,
+          easing = 'in_out_sine'
+        }
       })
     end
   },
   {
-    "folke/edgy.nvim",
+    'folke/edgy.nvim',
     enabled = false,
-    event = "VeryLazy",
+    event = 'VeryLazy',
     opts = require('plugins.ui.edgy')
   },
   {
     'mrjones2014/smart-splits.nvim',
+    event = 'VeryLazy',
     config = function()
       require('smart-splits').setup({
         -- Ignored filetypes (only while resizing)
