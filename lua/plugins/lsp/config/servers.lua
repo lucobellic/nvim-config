@@ -36,6 +36,9 @@ nvim_lsp.lua_ls.setup({
           ['codestyle-check'] = 'Any'
         }
       },
+      hint = {
+        enable = true,
+      }
     }
   }
 })
