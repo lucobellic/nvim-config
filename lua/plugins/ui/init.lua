@@ -99,7 +99,7 @@ local ui_plugins = {
     lazy = false,
     priority = 100,
     dependencies = { 'folke/persistence.nvim', 'nvim-tree/nvim-web-devicons' },
-    config = function() require('plugins.ui.dashboard') end
+    opts = require('plugins.ui.dashboard')
   },
 
   -- Scrollbar

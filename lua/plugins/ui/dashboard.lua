@@ -1,4 +1,3 @@
-local db = require('dashboard')
 local persistence_config = require('persistence.config')
 
 local banner = {
@@ -30,50 +29,94 @@ local function load_session(path)
   end
 end
 
-db.setup({
-  theme = 'hyper',
-  preview = {
-    command = 'cat | lolcat -F 0.3',
-    file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
-    file_width = 70,
-    file_height = 10,
+-- local theme = 'doom'
+local theme = 'hyper'
+local doom_shortcut = {
+  {
+    icon = '󰊳 ',
+    icon_hl = '@property',
+    desc = 'Update',
+    desc_hl = '@property',
+    group = '@property',
+    action = 'Lazy update',
+    key = 'u',
+    key_hl = '@property',
   },
-  config = {
+  {
+    desc = ' Files',
+    group = 'Label',
+    action = 'Telescope find_files',
+    key = 'f',
+  },
+  {
+    desc = ' Sessions',
+    group = 'DiagnosticHint',
+    action = 'PersistenceLoadSession',
+    key = 's',
+  },
+  {
+    desc = ' Recent',
+    group = 'Number',
+    action = 'Telescope oldfiles',
+    key = 'r',
+  },
+}
+
+local shortcut = {
+  {
+    desc = '󰊳 Update',
+    group = '@property',
+    action = 'Lazy update',
+    key = 'u'
+  },
+  {
+    desc = ' Files',
+    group = 'Label',
+    action = 'Telescope find_files',
+    key = 'f',
+  },
+  {
+    desc = ' Sessions',
+    group = 'DiagnosticHint',
+    action = 'PersistenceLoadSession',
+    key = 's',
+  },
+  {
+    desc = ' Recent',
+    group = 'Number',
+    action = 'Telescope oldfiles',
+    key = 'r',
+  },
+}
+
+local configs = {
+  hyper = {
     week_header = {
       enable = false,
     },
     project = {
       enable = true,
       limit = 10,
-      icon = '󰏓 ',
-      label = 'Recent Projects:',
+      icon = '󰏓',
+      label = '  Recent Projects:',
       action = load_session,
     },
-    shortcut = {
-      {
-        desc = '󰊳 Update',
-        group = '@property',
-        action = 'Lazy update',
-        key = 'u'
-      },
-      {
-        desc = ' Files',
-        group = 'Label',
-        action = 'Telescope find_files',
-        key = 'f',
-      },
-      {
-        desc = ' Sessions',
-        group = 'DiagnosticHint',
-        action = 'PersistenceLoadSession',
-        key = 's',
-      },
-      {
-        desc = ' Recent',
-        group = 'Number',
-        action = 'Telescope oldfiles',
-        key = 'r',
-      },
-    },
+    shortcut = doom_shortcut,
   },
-})
+  doom = {
+    -- header = {},
+    center = doom_shortcut,
+    -- footer = {},
+  },
+}
+
+return {
+  theme = theme,
+  preview = {
+    command = 'cat | lolcat -F 0.3',
+    file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
+    file_width = 70,
+    file_height = 10,
+  },
+  config = configs[theme],
+}
