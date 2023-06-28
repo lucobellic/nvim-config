@@ -56,15 +56,19 @@ local filter_skip = {
       { event = "msg_show", kind = { "", "echo", "echomsg", "search_count" }, find = "written" },
       { event = "msg_show", kind = { "", "echo", "echomsg", "search_count" }, find = "yanked" },
       { event = "msg_show", kind = "wmsg",                                    find = "BOTTOM" },
-      { event = "msg_show", kind = "emsg",                                    find = "Neo" },
+      { event = "notify",   kind = "error",                                   find = "Neo" },
       { event = "msg_show", kind = "emsg",                                    find = "Pattern not found" },
+      { event = "msg_show", kind = "lua_error",                               find = "bdelete" },
+      { event = "msg_show", kind = "lua_error",                               find = "inlay_hint" },
+      { event = "msg_show", kind = "",                                        find = "lnum" },
+      { event = "msg_show", kind = "",                                        find = "line" },
       { event = "notify",   kind = "warn",                                    find = "Unsupported input type" },
       -- Hide spamming pylsp messages
       { event = "lsp",      find = "pylsp" },
       -- Hide spamming cspell messages
       { event = "lsp",      find = "cspell" },
       -- Hide spamming null-ls messages
-      { event = "lsp",      find = "null-ls" },
+      { event = "lsp",      find = 'diagnostics' },
     }
   },
   opts = { stop = true, skip = true },
@@ -120,11 +124,18 @@ require("noice").setup {
   },
   notify = {
     enabled = true,
-    view = "notify"
+    view = 'notify'
   },
   format = {
     spinner = {
       name = "font_progress_bar",
+    }
+  },
+  commands = {
+    history = {
+      view = "split",
+      opts = { enter = true, format = "details" },
+      filter = {},
     }
   }
 }
