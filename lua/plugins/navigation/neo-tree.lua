@@ -19,18 +19,27 @@ require("neo-tree").setup({
   popup_border_style = "rounded",
   enable_git_status = true,
   enable_diagnostics = true,
-  sort_case_insensitive = true, -- used when sorting files and directories in the tree
-  sort_function = nil,          -- use a custom function for sorting files and directories in the tree
-  -- sort_function = function (a,b)
-  --       if a.type == b.type then
-  --           return a.path > b.path
-  --       else
-  --           return a.type > b.type
-  --       end
-  --   end , -- this sorts files and directories descendantly
+  sort_case_insensitive = true,    -- used when sorting files and directories in the tree
+  sort_function = nil,             -- use a custom function for sorting files and directories in the tree
   source_selector = {
-    winbar = true,
-    statusline = false,
+    winbar = true,                 -- toggle to show selector on winbar
+    statusline = false,            -- toggle to show selector on statusline
+    sources = {                    -- table
+      {
+        source = "filesystem",     -- string
+        display_name = "  Files " -- string | nil
+      },
+      {
+        source = "git_status",   -- string
+        display_name = "  Git " -- string | nil
+      },
+    },
+    truncation_character = '…',            -- string
+    tabs_min_width = nil,                    -- int | nil
+    tabs_max_width = nil,                    -- int | nil
+    padding = 0,                             -- int | { left: int, right: int }
+    separator = { left = ' ', right = ' ' }, -- string | { left: string, right: string, override: string | nil }
+    separator_active = nil,                  -- string | { left: string, right: string, override: string | nil } | nil
   },
   default_component_configs = {
     align_diagnostics = {
