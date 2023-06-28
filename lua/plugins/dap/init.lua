@@ -180,15 +180,14 @@ return {
         hidden = false,
         quit_on_exit = "never",
       },
+      task_list = {
+        direction = 'right',
+      },
       form = {
         win_opts = {
           winblend = 0,
         },
       }
     },
-    config = function(opts)
-      require('overseer').setup(opts)
-      require('plugins.dap.overseer')
-    end,
   }
 }
