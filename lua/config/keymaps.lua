@@ -72,9 +72,9 @@ local telescope_mapping_n = {
 
 if wk_ok then
   wk.register(telescope_mapping_n)
-  wk.register({ ['<C-p>'] = { '<cmd>Telescope find_files<cr>', "Find files" } })
+  wk.register({ ['<C-p>'] = { function() telescope_builtin.find_files() end, 'Find Files' } })
   wk.register({
-    ['<C-f>'] = { ":lua require('telescope').extensions.live_grep_args.live_grep_args()<cr>", 'Search Workspace' } })
+    ['<C-f>'] = { function() require('telescope').extensions.live_grep_args.live_grep_args() end, 'Search Workspace' } })
 
   -- TODO: try to add visual mode for Find Word in whickkey
   -- " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
@@ -82,6 +82,9 @@ if wk_ok then
   vnoremap <silent> <leader>fw "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
   ]]
 end
+
+-- Toggle
+vim.keymap.set("n", "<leader>uh", function() vim.lsp.buf.inlay_hint(0, nil) end, { desc = "Toggle Inlay Hints" })
 
 
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
