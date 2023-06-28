@@ -85,6 +85,10 @@ function M.on_attach(client, bufnr)
     buf_set_keymap("n", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
     buf_set_keymap("v", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
   end
+
+  if client.server_capabilities.inlayHintProvider then
+    vim.lsp.buf.inlay_hint(bufnr, true)
+  end
 end
 
 -- Add capabilities supported by nvim-cmp
