@@ -38,8 +38,10 @@ function M.on_attach(client, bufnr)
   buf_set_keymap('v', '<leader>ca', '<cmd><C-U>Lspsaga range_code_action<CR>', opts)
 
   -- Diagnsotic jump
-  buf_set_keymap("n", "<C", "<cmd>silent Lspsaga diagnostic_jump_prev<CR>", opts)
-  buf_set_keymap("n", ">C", "<cmd>silent Lspsaga diagnostic_jump_next<CR>", opts)
+  buf_set_keymap("n", "<C", "<cmd>silent Lspsaga diagnostic_jump_prev<CR>",
+    vim.tbl_deep_extend('keep', opts, { desc = 'Previous Diagnostic' }))
+  buf_set_keymap("n", ">C", "<cmd>silent Lspsaga diagnostic_jump_next<CR>",
+    vim.tbl_deep_extend('keep', opts, { desc = 'Next Diagnostic' }))
 
   local key_opts = { noremap = true, silent = true, buffer = bufnr }
 
@@ -49,7 +51,7 @@ function M.on_attach(client, bufnr)
     function()
       require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } })
     end,
-    key_opts
+    vim.tbl_deep_extend('keep', key_opts, { desc = 'Previous Warning' })
   )
 
   vim.keymap.set(
@@ -57,7 +59,7 @@ function M.on_attach(client, bufnr)
     function()
       require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } })
     end,
-    key_opts
+    vim.tbl_deep_extend('keep', key_opts, { desc = 'Next Warning' })
   )
 
   -- Jump to error
@@ -66,7 +68,7 @@ function M.on_attach(client, bufnr)
     function()
       require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR })
     end,
-    key_opts
+    vim.tbl_deep_extend('keep', key_opts, { desc = 'Previous Error' })
   )
 
   vim.keymap.set(
@@ -74,10 +76,10 @@ function M.on_attach(client, bufnr)
     function()
       require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR })
     end,
-    key_opts
+    vim.tbl_deep_extend('keep', key_opts, { desc = 'Next Error' })
   )
 
-  -- Set some keybinds conditional on server capabilities
+  -- Set some keybinding conditional on server capabilities
   local caps = client.server_capabilities
   if caps.documentFormattingProvider then
     buf_set_keymap("n", "<leader>=", "<cmd>lua vim.lsp.buf.format({async=true})<CR>", opts)
