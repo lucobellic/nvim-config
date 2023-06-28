@@ -159,7 +159,6 @@ cmp.setup({
     { name = 'copilot' },
     { name = "nvim_lsp_signature_help" },
     { name = "path" },
-    { name = "git" },
   },
   formatting = {
     format = function(entry, vim_item)
