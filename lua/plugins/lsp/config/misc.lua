@@ -9,26 +9,6 @@ vim.diagnostic.config({
   float = { source = true, header = {} }
 })
 
-vim.api.nvim_create_user_command(
-  'ToggleDiagnosticVirtualText',
-  function()
-    vim.diagnostic.config({
-      virtual_text = not vim.diagnostic.config().virtual_text
-    })
-  end,
-  { desc = 'Toggle diagnostic virtual text' }
-)
-
-vim.api.nvim_create_user_command(
-  'ToggleDiagnosticVirtualLines',
-  function()
-    vim.diagnostic.config({
-      virtual_lines = not vim.diagnostic.config().virtual_lines
-    })
-  end,
-  { desc = 'Toggle diagnostic virtual lines' }
-)
-
 for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
