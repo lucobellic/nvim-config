@@ -63,6 +63,8 @@ local filter_skip = {
       { event = "msg_show", kind = "",                                        find = "lnum" },
       { event = "msg_show", kind = "",                                        find = "line" },
       { event = "notify",   kind = "warn",                                    find = "Unsupported input type" },
+      { event = "msg_show", kind = "",                                        find = "query" },
+      { event = "msg_show", kind = "lua_error",                               find = "Autocommands" },
       -- Hide spamming pylsp messages
       { event = "lsp",      find = "pylsp" },
       -- Hide spamming cspell messages
@@ -100,42 +102,50 @@ spinners.font_spinner = {
   interval = 100,
 }
 
-require("noice").setup {
-  cmdline = cmdline,
-  lsp = lsp,
 
-  -- you can enable a preset for easier configuration
-  presets = {
-    bottom_search = { enabled = false },        -- use a classic bottom cmdline for search
-    command_palette = { enabled = false },      -- position the cmdline and popupmenu together
-    long_message_to_split = { enabled = true }, -- long messages will be sent to a split
-    inc_rename = false,                         -- enables an input dialog for inc-rename.nvim
-    lsp_doc_border = true,                      -- add a border to hover docs and signature help
+return {
+  'folke/noice.nvim',
+  keys = {
+    { '<c-f>', false },
+    { '<c-p>', false },
   },
-  views = views,
-  routes = { filter_skip },
-  messages = {
-    enabled = true,            -- enables the Noice messages UI
-    view = "notify",           -- default view for messages
-    view_error = "notify",     -- view for errors
-    view_warn = "notify",      -- view for warnings
-    view_history = "messages", -- view for :messages
-    view_search = false,       -- view for search count messages. Set to `false` to disable
-  },
-  notify = {
-    enabled = true,
-    view = 'notify'
-  },
-  format = {
-    spinner = {
-      name = "font_progress_bar",
-    }
-  },
-  commands = {
-    history = {
-      view = "split",
-      opts = { enter = true, format = "details" },
-      filter = {},
+  opts = {
+    cmdline = cmdline,
+    lsp = lsp,
+
+    -- you can enable a preset for easier configuration
+    presets = {
+      bottom_search = { enabled = false },        -- use a classic bottom cmdline for search
+      command_palette = { enabled = false },      -- position the cmdline and popupmenu together
+      long_message_to_split = { enabled = true }, -- long messages will be sent to a split
+      inc_rename = false,                         -- enables an input dialog for inc-rename.nvim
+      lsp_doc_border = true,                      -- add a border to hover docs and signature help
+    },
+    views = views,
+    routes = { filter_skip },
+    messages = {
+      enabled = true,            -- enables the Noice messages UI
+      view = "notify",           -- default view for messages
+      view_error = "notify",     -- view for errors
+      view_warn = "notify",      -- view for warnings
+      view_history = "messages", -- view for :messages
+      view_search = false,       -- view for search count messages. Set to `false` to disable
+    },
+    notify = {
+      enabled = true,
+      view = 'notify'
+    },
+    format = {
+      spinner = {
+        name = "font_progress_bar",
+      }
+    },
+    commands = {
+      history = {
+        view = "split",
+        opts = { enter = true, format = "details" },
+        filter = {},
+      }
     }
   }
 }

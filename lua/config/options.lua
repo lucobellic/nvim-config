@@ -8,51 +8,21 @@ vim.o.laststatus = 3
 -- To prevent this, set `splitkeep` to either `screen` or `topline`.
 vim.o.splitkeep = 'screen'
 
-vim.o.clipboard = "unnamedplus"
-vim.o.signcolumn = "yes:1"
-vim.o.number = true
-vim.o.cursorline = true
+vim.o.number = false
 
-vim.o.autoread = true
-vim.o.autowrite = true
-vim.o.autowriteall = true
-vim.o.timeout = true
-vim.o.timeoutlen = 250
+vim.o.showbreak = '↪'
 
-vim.o.spell = false
-
-vim.o.wrap = false
-
-vim.o.wmw = 0
-vim.o.wmh = 0
-vim.o.ignorecase = true
-
-vim.o.hidden = true
-vim.o.hidden = true
-
-vim.o.cmdheight = 0
-vim.o.updatetime = 400
-
-vim.o.pumheight = 15
-vim.o.wildmenu = true
-
-vim.o.hlsearch = true
-vim.o.incsearch = true
-
-vim.o.expandtab = true
-vim.o.tabstop = 2
-vim.o.shiftwidth = 2
-
--- No backup mode
 vim.o.backup = false
 vim.o.writebackup = false
+vim.o.swapfile = false
 
-vim.o.showmode = false -- Hide the INSERT mode message
-vim.o.swapfile = false -- Disable swap files
+vim.opt.listchars = {
+  tab = '>-',
+  trail = '·',
+  extends = '⟩',
+  precedes = '⟨'
+}
 
-vim.o.list = true
-vim.o.showbreak = '↪'
-vim.opt.listchars = { tab = '>-', trail = '·', extends = '⟩', precedes = '⟨' }
 vim.opt.fillchars = {
   diff = '╱',
   eob = ' ',
@@ -71,6 +41,21 @@ vim.opt.fillchars = {
   foldopen = '▾',
   foldclose = '▸',
 }
+
+-- Fold configuration
+vim.o.foldcolumn = '0'
+vim.o.foldmethod = 'syntax'
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
+function _G.custom_fold_text()
+  local line = vim.fn.getline(vim.v.foldstart)
+  local line_count = vim.v.foldend - vim.v.foldstart + 1
+  return line .. ' ... ' .. line_count
+end
+
+vim.o.foldtext = 'v:lua.custom_fold_text()'
 
 vim.o.guicursor = "n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:blinkon0-Cursor/lCursor"
 

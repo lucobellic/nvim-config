@@ -1,48 +1,28 @@
 local completion_plugins = {
-  -- Copilot
   {
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "VeryLazy",
-    config = function()
-      require("plugins.completion.copilot")
+    "L3MON4D3/LuaSnip",
+    keys = function()
+      return {}
     end,
   },
   {
-    "zbirenbaum/copilot-cmp",
-    dependencies = { "copilot.lua" },
-    event = "VeryLazy",
-    config = function()
-      require("copilot_cmp").setup()
-    end
-  },
-
-  -- Snippets
-  { 'saadparwaiz1/cmp_luasnip',     event = "VeryLazy" },
-  { 'rafamadriz/friendly-snippets', event = "VeryLazy" },
-  {
-    'L3MON4D3/LuaSnip',
-    event = "VeryLazy",
-    config = function()
-      require('luasnip.loaders.from_vscode').lazy_load()
-    end
-  },
-
-  { 'hrsh7th/cmp-nvim-lsp', event = "VeryLazy" },
-  { 'hrsh7th/cmp-buffer',   event = "VeryLazy" },
-  { 'hrsh7th/cmp-path',     event = "VeryLazy" },
-  { 'hrsh7th/cmp-cmdline',  event = "VeryLazy" },
-  {
     'hrsh7th/nvim-cmp',
-    event = "VeryLazy",
     dependencies = {
-      'onsails/lspkind.nvim',
-      'zbirenbaum/copilot-cmp',
+      {
+        'onsails/lspkind.nvim',
+        config = function()
+          require('lspkind').init({
+            symbol_map = {
+              Copilot = "",
+            },
+          })
+        end
+      }
     },
-    config = function()
-      require('plugins.completion.cmp')
-    end
+    opts = require('plugins.completion.cmp'),
   },
+
+  { 'echasnovski/mini.pairs', enabled = false },
 
   {
     "huggingface/hfcc.nvim",

@@ -1,11 +1,10 @@
-local indentscope = require('mini.indentscope')
-indentscope.setup({
+return {
   draw = {
     -- Delay (in ms) between event and start of drawing scope indicator
     delay = 50,
-    animation = indentscope.gen_animation.quadratic(
+    animation = require('mini.indentscope').gen_animation.quadratic(
       { easing = 'in-out', duration = 10, unit = 'step' }
-    ),
+    )
   },
   -- Options which control scope computation
   options = {
@@ -32,9 +31,4 @@ indentscope.setup({
   -- symbol = '▍',
   -- symbol = '▎',
   symbol = '▏',
-})
-
-vim.api.nvim_create_autocmd({ 'Filetype' }, {
-  pattern = { 'dashboard', 'lspsagaoutline' },
-  callback = function() vim.b.miniindentscope_disable = true end,
-})
+}

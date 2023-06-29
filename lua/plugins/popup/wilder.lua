@@ -42,7 +42,7 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     -- },
     border = {
       '╭', '─', '╮',
-      '│',      '│',
+      '│', '│',
       '╰', '─', '╯',
     },
     max_width = '30%',
@@ -50,7 +50,7 @@ wilder.set_option('renderer', wilder.popupmenu_renderer(
     min_height = 0,          -- set to the same as 'max_height' for a fixed height window
     prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
     reverse = 0,             -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
-    -- pumblend = 20,
+    pumblend = vim.o.pumblend,
     -- empty_message = 'Test',
     highlights = {
       default = 'NormalFloat',

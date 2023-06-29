@@ -13,19 +13,12 @@ local editor_plugins = {
   }, -- Highlight paragraph
 
   {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "VeryLazy",
-    config = function()
-      require('plugins.editor.indent-blankline')
-    end
+    'lukas-reineke/indent-blankline.nvim',
+    opts = require('plugins.editor.indent-blankline')
   },
   {
     'echasnovski/mini.indentscope',
-    event = "VeryLazy",
-    branch = 'stable',
-    config = function()
-      require('plugins.editor.indentscope')
-    end
+    opts = require('plugins.editor.indentscope')
   },
   {
     'sindrets/diffview.nvim',
@@ -35,9 +28,18 @@ local editor_plugins = {
   },
   {
     'kevinhwang91/nvim-ufo',
-    event = "VeryLazy",
+    event = 'VeryLazy',
     dependencies = { 'kevinhwang91/promise-async' },
-    config = function() require('plugins.editor.fold') end
+    opts = {},
+    init = function()
+      -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+      vim.keymap.set("n", "zR", function()
+        require("ufo").openAllFolds()
+      end)
+      vim.keymap.set("n", "zM", function()
+        require("ufo").closeAllFolds()
+      end)
+    end
   },
   {
     'echasnovski/mini.splitjoin',
@@ -68,20 +70,21 @@ local editor_plugins = {
     end
   },
   {
-    'windwp/nvim-spectre',
-    event = "VeryLazy",
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() require('plugins.editor.spectre') end
+    'nvim-pack/nvim-spectre',
+    opts = {
+      highlight = {
+        ui = 'Title',
+        search = 'Search',
+        replace = 'Substitute',
+      },
+      result_padding = '▏  ',
+    }
   },
-  {
-    'RRethy/vim-illuminate',
-    enabled = false,
-    event = "VeryLazy",
-    config = function() require('plugins.editor.illuminate') end
-  },
+  { 'RRethy/vim-illuminate', enabled = false },
   {
     'andymass/vim-matchup',
     event = "VeryLazy",
+    opts = {},
     config = function()
       vim.g.matchup_matchparen_offscreen = {}
     end

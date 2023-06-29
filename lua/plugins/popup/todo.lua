@@ -1,4 +1,4 @@
-require('todo-comments').setup {
+return {
   signs = false,
   sign_priority = 8,   -- sign priority
   -- keywords recognized as todo comments

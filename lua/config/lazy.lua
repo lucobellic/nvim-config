@@ -13,8 +13,17 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   spec = {
+    { "LazyVim/LazyVim",                                    import = 'lazyvim.plugins' },
+    -- import any extras modules here
+    -- { import = "lazyvim.plugins.extras.lang.typescript" },
+    -- { import = "lazyvim.plugins.extras.lang.json" },
+    { import = "lazyvim.plugins.extras.dap.core" },
+    { import = "lazyvim.plugins.extras.lang.rust" },
+    { import = "lazyvim.plugins.extras.test.core" },
+    { import = "lazyvim.plugins.extras.ui.mini-animate" },
+    { import = "lazyvim.plugins.extras.formatting.prettier" },
+    { import = 'lazyvim.plugins.extras.coding.copilot' },
     { import = 'plugins' },
-    { "LazyVim/LazyVim", import = 'lazyvim.plugins' },
   },
   defaults = {
     lazy = false,
@@ -26,7 +35,7 @@ require('lazy').setup({
   ui = {
     border = 'rounded',
   },
-  install = { colorscheme = { 'tokyonight', 'habamax' } },
+  install = { colorscheme = { 'habamax', 'gruvbox', 'ayugloom' } },
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = {
     -- automatically check for config file changes and reload the ui
