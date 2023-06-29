@@ -74,6 +74,11 @@ return {
       open_app_foreground = true,
       finder = "telescope.nvim",
     },
+    keys = {
+      { '<leader>oo', ':ObsidianOpen<cr>',        desc = 'Obsidian Open' },
+      { '<leader>of', ':ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>os', ':ObsidianSearch<cr>',      desc = 'Obsidian Find Files' },
+    },
     config = function(_, opts)
       require("obsidian").setup(opts)
 
