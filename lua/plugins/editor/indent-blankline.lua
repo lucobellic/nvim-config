@@ -1,4 +1,4 @@
-require("indent_blankline").setup {
+return {
   use_treesitter = true,
   use_treesitter_scope = true,
   show_current_context = false,

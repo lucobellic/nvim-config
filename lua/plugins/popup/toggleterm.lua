@@ -1,15 +1,3 @@
-require("toggleterm").setup({
-  start_in_insert = false,
-  close_on_exit = true,
-  shade_terminals = false,
-  winbar = {
-    enabled = true,
-    name_formatter = function(term) --  term: Terminal
-      return term.id
-    end
-  },
-})
-
 local function split_terminal_right()
   local Terminal = require('toggleterm.terminal').Terminal
   Terminal:new({ direction = 'horizontal' }):open()
@@ -37,3 +25,25 @@ end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')
+
+return {
+  'akinsho/toggleterm.nvim',
+  event = 'VeryLazy',
+  keys = {
+    { '<leader>uP', ':ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
+    { '<leader>P',  ':ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
+    { '<leader>up', ':ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
+    { '<leader>p',  ':ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
+  },
+  opts = {
+    start_in_insert = false,
+    close_on_exit = true,
+    shade_terminals = false,
+    winbar = {
+      enabled = true,
+      name_formatter = function(term) --  term: Terminal
+        return term.id
+      end
+    },
+  }
+}

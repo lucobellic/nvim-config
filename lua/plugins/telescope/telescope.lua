@@ -1,33 +1,26 @@
-local trouble = require('trouble.providers.telescope')
-local actions = require("telescope.actions")
-local Path = require('plenary.path')
-local utils = require("telescope.utils")
-local layout = require("telescope.actions.layout")
-
-local lga_actions = require("telescope-live-grep-args.actions")
-require('telescope').setup {
+return {
   defaults = {
     mappings = {
       i = {
-        ['<C-t>'] = trouble.smart_open_with_trouble,
-        ['<esc>'] = actions.close,
-        ['<C-k>'] = lga_actions.quote_prompt(),
-        ['<C-g>'] = lga_actions.quote_prompt({ postfix = ' --iglob ' }),
-        ['<C-n>'] = actions.select_tab,
-        ['<C-b>'] = layout.toggle_preview,
-        ['<C-x>'] = layout.cycle_layout_next,
-        ['<RightMouse>'] = actions.close,
-        ['<LeftMouse>'] = actions.select_default,
-        ['<ScrollWheelDown>'] = actions.move_selection_next,
-        ['<ScrollWheelUp>'] = actions.move_selection_previous,
-        ['<S-up>'] = actions.cycle_history_prev,
-        ['<S-down>'] = actions.cycle_history_next,
+        ['<C-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
+        ['<esc>'] = require('telescope.actions').close,
+        ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
+        ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
+        ['<C-n>'] = require('telescope.actions').select_tab,
+        ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
+        ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
+        ['<RightMouse>'] = require('telescope.actions').close,
+        ['<LeftMouse>'] = require('telescope.actions').select_default,
+        ['<ScrollWheelDown>'] = require('telescope.actions').move_selection_next,
+        ['<ScrollWheelUp>'] = require('telescope.actions').move_selection_previous,
+        ['<S-up>'] = require('telescope.actions').cycle_history_prev,
+        ['<S-down>'] = require('telescope.actions').cycle_history_next,
       },
       n = {
-        ['<C-t>'] = trouble.smart_open_with_trouble,
-        ['<C-n>'] = actions.select_tab,
-        ['<C-b>'] = layout.toggle_preview,
-        ['<C-x>'] = layout.cycle_layout_next,
+        ['<C-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
+        ['<C-n>'] = require('telescope.actions').select_tab,
+        ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
+        ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
       },
     },
     history = {
@@ -43,17 +36,6 @@ require('telescope').setup {
       '--column',
       '--smart-case'
     },
-    --- User defined function to transform the paths displayed in the picker.
-    ---@param opts table: The opts the users passed into the picker. Might contains a path_display key
-    ---@param path string: The path that should be formatted
-    ---@return string: The transformed path ready to be displayed
-    ---@diagnostic disable-next-line: unused-local
-    path_display = function(opts, path)
-      local tail = utils.path_tail(path)
-      local head = Path:new(path):parent():make_relative()
-      -- local short_head = truncate(head, 35, nil, -1)
-      return string.format("%-40s • %s", tail, head)
-    end,
     show_line = false,
     prompt_title = false,
     results_title = false,
@@ -83,7 +65,7 @@ require('telescope').setup {
       },
     },
     file_ignore_patterns = {},
-    -- winblend = 20,
+    winblend = vim.o.pumblend,
     preview = { treesitter = { enable = true } },
     -- results_width = 0.8,
     -- borderchars = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
@@ -92,11 +74,3 @@ require('telescope').setup {
     set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
   }
 }
-
-require('telescope').load_extension('live_grep_args')
-require('telescope').load_extension('git_diffs')
-require('telescope').load_extension('lazy')
-require('telescope').load_extension('yank_history')
-require('telescope').load_extension('refactoring')
-require('telescope').load_extension('notify')
-require('telescope').load_extension('smart_history')

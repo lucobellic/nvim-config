@@ -1,3 +1,7 @@
+-- Keymaps are automatically loaded on the VeryLazy event
+-- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+-- Add any additional keymaps here
+
 local opts = { silent = true, noremap = true }
 
 -- paste over currently selected text without yanking it
@@ -12,76 +16,13 @@ if wk_ok then
   })
 end
 
-local telescope_builtin = require('telescope.builtin')
-local telescope_extensions = require('telescope').extensions
-local telescope_mapping_n = {
-  ["<leader>"] = {
-    F = {
-      name = "find",
-      F = { ':<C-u>:Files<cr>', 'Find All File' },
-      L = { function() telescope_extensions.live_grep_args.live_grep_args() end, 'Search Workspace' },
-    },
-    f = {
-      name = "find",
-      b = { function() telescope_builtin.buffers() end, 'Find Buffer' },
-      e = {
-        function()
-          telescope_builtin.symbols({ sources = { 'emoji', 'kaomoji', 'gitmoji' } })
-        end,
-        'Find Emoji'
-      },
-      c = { function() telescope_builtin.commands() end, 'Find Commands' },
-      f = { function() telescope_builtin.find_files() end, 'Find Files' },
-      F = { ':<C-u>:Files<cr>', 'Find All File' },
-      g = {
-        name = 'git',
-        s = { function() telescope_builtin.git_status() end, 'Git Status' }
-      },
-      k = { function() telescope_builtin.keymaps() end, 'Find Keymaps' },
-      m = { function() telescope_builtin.marks() end, "Find Marks" },
-      o = {
-        name = 'obsidian',
-        f = { ':ObsidianQuickSwitch<cr>', 'Obsidian Find Files' },
-        w = { ':ObsidianSearch<cr>', 'Obsidian Search' },
-      },
-      r = { function() telescope_builtin.oldfiles() end, 'Find Recent File' },
-      w = { function() telescope_builtin.grep_string({ default_text = vim.fn.expand('<cword>') }) end, 'Find Word' },
-      y = { function() telescope_extensions.yank_history.yank_history() end, 'Yank History' },
-      s = { '<cmd>PersistenceLoadSession<cr>', 'Load session' },
-      l = {
-        name = 'lsp',
-        r = { function() telescope_builtin.lsp_references() end, 'Find References' },
-        d = { function() telescope_builtin.lsp_definitions() end, 'Find Definitions' },
-        i = { function() telescope_builtin.lsp_implementations() end, 'Find Implementations' },
-        s = {
-          name = 'symbols',
-          s = { function() telescope_builtin.lsp_document_symbols() end, 'Find Document Symbols' },
-          d = { function() telescope_builtin.lsp_dynamic_workspace_symbols() end, 'Find Workspace Symbols' },
-          w = { function() telescope_builtin.lsp_workspace_symbols() end, 'Find Dynamic Workspace Symbols' },
-        },
-        t = { function() telescope_builtin.lsp_type_definitions() end, 'Find Type Definitions' },
-        c = {
-          name = 'call',
-          i = { function() telescope_builtin.lsp_incoming_calls() end, 'Find Incoming Calls' },
-          o = { function() telescope_builtin.lsp_outgoing_calls() end, 'Find Outgoing Calls' },
-        }
-      },
-    },
-  },
-}
-
-if wk_ok then
-  wk.register(telescope_mapping_n)
-  wk.register({ ['<C-p>'] = { function() telescope_builtin.find_files() end, 'Find Files' } })
-  wk.register({
-    ['<C-f>'] = { function() require('telescope').extensions.live_grep_args.live_grep_args() end, 'Search Workspace' } })
-
-  -- TODO: try to add visual mode for Find Word in whickkey
-  -- " From https://github.com/nvim-telescope/telescope.nvim/issues/905#issuecomment-991165992
-  vim.cmd [[
-  vnoremap <silent> <leader>fw "sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')"<cr><cr>
-  ]]
-end
+-- NOTE: Set <c-f> keymap once again due to configuration issue
+vim.keymap.set(
+  'n',
+  '<C-f>',
+  function() require('telescope').extensions.live_grep_args.live_grep_args() end,
+  { desc = 'Search Workspace' }
+)
 
 -- Toggle
 vim.keymap.set("n", "<leader>uh", function() vim.lsp.buf.inlay_hint(0, nil) end, { desc = "Toggle Inlay Hints" })
@@ -182,16 +123,16 @@ elseif barbar_ok then
   vim.api.nvim_set_keymap('n', '<A-p>', ':BufferPin<cr>', opts)
 
   -- Goto buffer in position...
-  vim.api.nvim_set_keymap('n', '<leader>1', ':BufferGoto 1<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>2', ':BufferGoto 2<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>3', ':BufferGoto 3<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>4', ':BufferGoto 4<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>5', ':BufferGoto 5<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>6', ':BufferGoto 6<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>7', ':BufferGoto 7<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>8', ':BufferGoto 8<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>9', ':BufferGoto 9<cr>', opts)
-  vim.api.nvim_set_keymap('n', '<leader>0', ':BufferLast<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-1>', ':BufferGoto 1<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-2>', ':BufferGoto 2<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-3>', ':BufferGoto 3<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-4>', ':BufferGoto 4<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-5>', ':BufferGoto 5<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-6>', ':BufferGoto 6<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-7>', ':BufferGoto 7<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-8>', ':BufferGoto 8<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-9>', ':BufferGoto 9<cr>', opts)
+  vim.api.nvim_set_keymap('n', '<C-0>', ':BufferLast<cr>', opts)
 
   -- Hide BufferGoto
   if wk_ok then
@@ -336,7 +277,7 @@ if wk_ok then
   wk.register(diffview_mapping, { silent = true, mode = 'n' })
   wk.register(diffview_mapping, { silent = true, mode = 'v' })
 end
-vim.keymap.set('n', '<C-b>', '<cmd>:NeoTreeShowToggle<cr>', opts)
+vim.keymap.set('n', '<C-b>', '<cmd>:Neotree toggle reveal_force_cwd<cr>', opts)
 
 -- search current word
 vim.keymap.set({ "n" }, "<leader>sw", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>")
@@ -344,9 +285,6 @@ vim.keymap.set({ "v" }, "<leader>s", "<esc>:lua require('spectre').open_visual()
 
 -- search in current file
 vim.keymap.set({ "n", "x" }, "<leader>sp", "<cmd>lua require('spectre').open_file_search()<cr>")
-
-vim.keymap.set({ "n" }, "<leader>p", ":ToggleTerm<cr>")
-vim.keymap.set({ "n" }, "<leader>P", ":ToggleTermToggleAll<cr>")
 
 -- Copilot
 if wk_ok then
@@ -449,12 +387,3 @@ if wk_ok then
   wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
 end
 
--- Noice
-wk.register({
-  ['<leader>n'] = {
-    e = { ':Noice errors<cr>', 'Noice Errors' },
-    m = { ':messages<cr>', 'Noice Messages' },
-    n = { ':Noice<cr>', 'Noice' },
-    v = { ':NoiceDismiss<cr>', 'Noice Dismis' },
-  },
-}, opts)

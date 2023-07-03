@@ -1,22 +1,16 @@
-local util = require('plugins.lsp.config.util')
+return function(_, opts)
+  local cspell_config = {
+    find_json = function(cwd)
+      return vim.fn.stdpath("config") .. '/spell/cspell.json'
+    end
+  }
 
--- null-ls
-local null_ls = require("null-ls")
-local cspell_config = {
-  find_json = function(cwd)
-    return vim.fn.stdpath("config") .. '/spell/cspell.json'
-  end
-}
-
-local cspell = require('cspell')
-null_ls.setup({
-  on_attach = util.on_attach,
-  fallback_severity = vim.diagnostic.severity.INFO,
-  sources = {
-    null_ls.builtins.diagnostics.rstcheck,
-    null_ls.builtins.diagnostics.markdownlint,
-    null_ls.builtins.formatting.prettier,
-    cspell.diagnostics.with({ config = cspell_config }),
-    cspell.code_actions.with({ config = cspell_config }),
-  },
-})
+  opts.fallback_severity = vim.diagnostic.severity.INFO
+  opts.sources = vim.tbl_extend('force', opts.sources, {
+    require('null-ls').builtins.diagnostics.rstcheck,
+    require('null-ls').builtins.diagnostics.markdownlint,
+    require('null-ls').builtins.formatting.prettier,
+    require('cspell').diagnostics.with({ config = cspell_config }),
+    require('cspell').code_actions.with({ config = cspell_config }),
+  })
+end

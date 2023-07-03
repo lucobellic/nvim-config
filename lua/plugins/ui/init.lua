@@ -1,59 +1,11 @@
 local ui_plugins = {
 
-  -- colorscheme
-  { 'rktjmp/lush.nvim' },
-  {
-    url = 'git@github.com:lucobellic/ayugloom.nvim.git',
-    name = 'ayugloom',
-    dependencies = 'rktjmp/lush.nvim',
-    dev = true,
-    lazy = false,    -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
-    config = function()
-      vim.o.termguicolors = true
-      vim.o.background = "dark"
-      vim.g.transparent_colorscheme = false
-      local toggle_transparency = function()
-        vim.g.transparent_colorscheme = not vim.g.transparent_colorscheme
-        if vim.g.transparent_colorscheme then
-          vim.cmd("colorscheme ayubleak")
-        else
-          vim.cmd("colorscheme ayugloom")
-        end
-      end
-      vim.api.nvim_create_user_command("TransparencyToggle", toggle_transparency, {})
-
-      vim.cmd("colorscheme ayugloom")
-    end,
-  },
-
-  {
-    'catppuccin/nvim',
-    event = 'VeryLazy',
-    name = 'catppuccin'
-  },
-
-  {
-    'folke/tokyonight.nvim',
-    event = 'VeryLazy',
-    name = 'tokyonight'
-  },
-
-
-  -- icons
-  {
-    'nvim-tree/nvim-web-devicons',
-    lazy = true,
-    opts = require('plugins.ui.web-devicons')
-  },
+  require('plugins.ui.gitsigns'),
 
   -- ui
-  {
-    'romgrk/barbar.nvim',
-    lazy = false,
-    dependencies = { 'folke/persistence.nvim' },
-    config = function() require('plugins.ui.barbar') end,
-  },
+  { 'akinsho/bufferline.nvim',   enabled = false },
+  require('plugins.ui.barbar'),
+
   {
     'tiagovla/scope.nvim',
     event = 'VeryLazy',
@@ -62,45 +14,18 @@ local ui_plugins = {
     end
   },
 
-  {
-    'akinsho/bufferline.nvim',
-    enabled = false,
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function() require('plugins.ui.bufferline') end
-  },
-
+  { 'nvim-lualine/lualine.nvim', enabled = false },
   {
     'lucobellic/galaxyline.nvim',
+    enabled = true,
     event = 'VeryLazy',
     branch = 'personal',
     config = function() require('plugins.ui.galaxyline') end,
   },
 
-  -- git
-  {
-    'lewis6991/gitsigns.nvim',
-    event = 'VeryLazy',
-    requires = 'plenary.nvim',
-    opts = require('plugins.ui.gitsigns')
-  },
-
-  -- Color Syntax
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
-    event = 'VeryLazy',
-    dependencies = { 'HiPhish/nvim-ts-rainbow2' },
-    config = function() require('plugins.ui.treesitter') end,
-  },
-
   -- Start screen
-  {
-    'nvimdev/dashboard-nvim',
-    lazy = false,
-    priority = 100,
-    dependencies = { 'folke/persistence.nvim', 'nvim-tree/nvim-web-devicons' },
-    opts = require('plugins.ui.dashboard')
-  },
+  { 'goolord/alpha-nvim', enabled = false },
+  require('plugins.ui.dashboard'),
 
   -- Scrollbar
   {
@@ -110,21 +35,13 @@ local ui_plugins = {
     config = function() require('plugins.ui.scrollbar') end
   },
 
-  -- Animation
-  {
-    'echasnovski/mini.animate',
-    enabled = vim.g.neovide,
-    event = "VeryLazy",
-    config = function() require('plugins.ui.animate') end,
-  },
-
   -- Windows auto resize
   {
-    "anuvyklack/windows.nvim",
+    'anuvyklack/windows.nvim',
     event = 'VeryLazy',
     dependencies = {
-      "anuvyklack/middleclass",
-      "anuvyklack/animation.nvim"
+      'anuvyklack/middleclass',
+      'anuvyklack/animation.nvim'
     },
     init = function()
       vim.o.winwidth = 10
@@ -187,6 +104,7 @@ local ui_plugins = {
   },
 
   -- Colors
+  require('plugins.ui.treesitter'),
   {
     'NvChad/nvim-colorizer.lua',
     event = 'VeryLazy',

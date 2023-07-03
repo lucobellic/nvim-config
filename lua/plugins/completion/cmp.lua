@@ -5,17 +5,8 @@ local has_words_before = function()
 end
 
 -- Setup nvim-cmp.
-local lspkind = require('lspkind')
-lspkind.init({
-  symbol_map = {
-    Copilot = "",
-  },
-})
-
 local luasnip = require('luasnip')
 local cmp = require('cmp')
-local types = require('cmp.types')
-local autocomplete = true
 
 local safely_select = cmp.mapping({
   i = function(fallback)
@@ -30,8 +21,6 @@ local safely_select = cmp.mapping({
 })
 
 local tab_confirm_mapping = {
-  ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-  ['<C-f>'] = cmp.mapping.scroll_docs(4),
   ['<C-Space>'] = cmp.mapping.complete(),
   ['<C-e>'] = cmp.mapping.abort(),
   ['<cr>'] = safely_select,
@@ -116,25 +105,12 @@ local tab_selection_mapping = {
   end, { "i", "s" }),
 }
 
-cmp.setup({
-  experimental = {
+return function(_, opts)
+  opts.experimental = {
     native_menu = false,
     ghost_text = { hl_group = 'Comment' }
-  },
-  snippet = {
-    expand = function(args)
-      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-      luasnip.lsp_expand(args.body) -- For `luasnip` users.
-      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-    end,
-  },
-  completion = {
-    autocomplete = autocomplete and {
-      types.cmp.TriggerEvent.TextChanged,
-    }
-  },
-  window = {
+  }
+  opts.window = {
     completion = {
       border = 'rounded',
       winhighlight = 'CursorLine:PmenuSel,Search:None',
@@ -147,22 +123,20 @@ cmp.setup({
       border = 'rounded',
       winhighlight = 'CursorLine:PmenuSel,Search:None',
     },
-  },
-  mapping = cmp.mapping.preset.insert(
-  -- tab_selection_mapping
-    tab_confirm_mapping
-  ),
-  sources = {
+  }
+
+  opts.mapping = cmp.mapping.preset.insert(tab_confirm_mapping)
+  vim.tbl_extend('force', opts.sources, {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'buffer' },
-    { name = 'copilot' },
     { name = "nvim_lsp_signature_help" },
     { name = "path" },
-  },
-  formatting = {
+  })
+
+  opts.formatting = {
     format = function(entry, vim_item)
-      return lspkind.cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
+      return require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
     end
-  },
-})
+  }
+end

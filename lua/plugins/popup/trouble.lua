@@ -9,7 +9,7 @@ trouble.setup {
   fold_open = "",   -- icon used for open folds
   fold_closed = "", -- icon used for closed folds
   action_keys = {
-                       -- key mappings for actions in the trouble list
+    -- key mappings for actions in the trouble list
     -- map to {} to remove a mapping, for example:
     -- close = {},
     close = "q",                            -- close the list
@@ -44,14 +44,4 @@ trouble.setup {
     other = "﫠"
   },
   use_diagnostic_signs = true -- enabling this will use the signs defined in your lsp client
-}
-
-local trouble_provider = require("trouble.providers.telescope")
-require('telescope').setup {
-  defaults = {
-    mappings = {
-      i = { ["<c-t>"] = trouble_provider.open_with_trouble },
-      n = { ["<c-t>"] = trouble_provider.open_with_trouble },
-    },
-  },
 }

@@ -1,49 +1,41 @@
 local lsp_plugins = {
   {
     'folke/neodev.nvim',
-    event = "VeryLazy",
-    config = function()
-      -- Enable type checking for nvim-dap-ui to get type checking, documentation and autocompletion for all API functions.
-      require('neodev').setup({
-        library = {
-          plugins = { 'nvim-dap-ui', 'neotest' },
-          types = true
-        },
-      })
-    end
+    opts =
+    {
+      library = {
+        plugins = { 'nvim-dap-ui', 'neotest' },
+        types = true
+      },
+    }
   },
   {
     'williamboman/mason.nvim',
-    event = 'VeryLazy',
-    config = function()
-      require('mason').setup({
-        PATH = 'prepend',
-        ui = {
-          border = 'rounded',
-          width = 0.8,
-          height = 0.8
-        }
-      })
-    end
+    opts = {
+      PATH = 'prepend',
+      ui = {
+        border = 'rounded',
+        width = 0.8,
+        height = 0.8
+      }
+    }
   },
   {
     'williamboman/mason-lspconfig.nvim',
     event = 'VeryLazy',
-    config = function()
-      require('mason-lspconfig').setup {
-        ensure_installed = {
-          'jsonls',
-          'vimls',
-          'cmake',
-          'lua_ls',
-          'rust_analyzer',
-          'pylsp',
-          'pyright',
-          'clangd',
-        },
-        automatic_installation = true,
-      }
-    end
+    opts = {
+      ensure_installed = {
+        'jsonls',
+        'vimls',
+        'cmake',
+        'lua_ls',
+        'rust_analyzer',
+        'pylsp',
+        'pyright',
+        'clangd',
+      },
+      automatic_installation = true,
+    }
   },
   {
     'glepnir/lspsaga.nvim',
@@ -74,28 +66,33 @@ local lsp_plugins = {
   },
   {
     'jose-elias-alvarez/null-ls.nvim',
-    event = 'VeryLazy',
     dependencies = {
       'davidmh/cspell.nvim',
-      'neovim/nvim-lspconfig'
     },
-    config = function()
-      require('plugins.lsp.config.null-ls')
-    end
+    opts = require('plugins.lsp.config.null-ls')
   },
   {
     'neovim/nvim-lspconfig',
-    event = 'VeryLazy',
-    dependencies = {
-      'folke/neodev.nvim',
-      'lsp_lines',
-      'hrsh7th/nvim-cmp'
+    opts = {
+      -- Enable nvim-ufo capabilities
+      capabilities = {
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true,
+          },
+        },
+      },
+      inlay_hints = {
+        enabled = true,
+      },
+      servers = {
+        clangd = require('plugins.lsp.config.clangd'),
+        pylsp = require('plugins.lsp.config.pylsp')
+      },
+      diagnostics = require('plugins.lsp.config.misc')
     },
-    config = function()
-      require('plugins.lsp.config.servers')
-      require('plugins.lsp.config.misc')
-      require('plugins.lsp.config.clangd')
-    end
+    init = require('plugins.lsp.config.keymaps')
   },
 
   -- Code documentation

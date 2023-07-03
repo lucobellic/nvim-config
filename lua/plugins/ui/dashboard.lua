@@ -111,12 +111,16 @@ local configs = {
 }
 
 return {
-  theme = theme,
-  preview = {
-    command = 'cat | lolcat -F 0.3',
-    file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
-    file_width = 70,
-    file_height = 10,
+  'nvimdev/dashboard-nvim',
+  event = 'VimEnter',
+  opts = {
+    theme = theme,
+    preview = {
+      command = 'cat | lolcat -F 0.3',
+      file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
+      file_width = 70,
+      file_height = 10,
+    },
+    config = configs[theme],
   },
-  config = configs[theme],
 }
