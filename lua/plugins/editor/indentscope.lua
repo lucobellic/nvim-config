@@ -2,9 +2,10 @@ return {
   draw = {
     -- Delay (in ms) between event and start of drawing scope indicator
     delay = 50,
-    animation = require('mini.indentscope').gen_animation.quadratic(
-      { easing = 'in-out', duration = 10, unit = 'step' }
-    )
+    -- animation = require('mini.indentscope').gen_animation.quadratic(
+    --   { easing = 'in-out', duration = 10, unit = 'step' }
+    -- )
+    animation = require('mini.indentscope').gen_animation.none()
   },
   -- Options which control scope computation
   options = {
