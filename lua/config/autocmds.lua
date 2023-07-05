@@ -124,9 +124,9 @@ vim.api.nvim_create_autocmd({ 'BufEnter' }, {
 vim.g.transparent_colorscheme = false
 local toggle_transparency = function()
   if vim.g.transparent_colorscheme then
-    vim.cmd("colorscheme ayubleak")
-  else
     vim.cmd("colorscheme ayugloom")
+  else
+    vim.cmd("colorscheme ayubleak")
   end
   vim.g.transparent_colorscheme = not vim.g.transparent_colorscheme
 end
