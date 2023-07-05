@@ -31,23 +31,6 @@ vim.keymap.set("n", "<leader>uh", function() vim.lsp.buf.inlay_hint(0, nil) end,
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 vim.api.nvim_set_keymap('n', '<c-s>', ':w<cr>', opts)
 
--- ChatGPT
-
-if wk_ok then
-  wk.register({
-    ["<leader>c"] = {
-      name = "complete",
-      e = { function() require('chatgpt').edit_with_instructions() end, "ChatGPT edit with instructions" },
-    }
-  }, { mode = "v" })
-
-  wk.register({
-    ["<leader>c"] = {
-      g = { ":ChatGPT<cr>", "ChatGPT" }
-    }
-  }, { mode = "n" })
-end
-
 -- Git
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)

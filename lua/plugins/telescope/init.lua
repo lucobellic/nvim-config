@@ -170,6 +170,10 @@ return {
   {
     'jackMort/ChatGPT.nvim',
     event = 'VeryLazy',
+    keys = {
+      { "<leader>ce", function() require('chatgpt').edit_with_instructions() end, desc = "ChatGPT edit with instructions" },
+      { "<leader>cg", ":ChatGPT<cr>",                                             desc = "ChatGPT" }
+    },
     opts = {
       chat = {
         keymaps = {
