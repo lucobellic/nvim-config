@@ -89,16 +89,7 @@ local editor_plugins = {
       vim.g.matchup_matchparen_offscreen = {}
     end
   },
-
-  -- Yank
-  {
-    'gbprod/yanky.nvim',
-    event = "VeryLazy",
-    dependencies = { 'kkharji/sqlite.lua' },
-    config = function()
-      require('plugins.editor.yanky')
-    end
-  },
+  require('plugins.editor.yanky'),
 }
 
 return editor_plugins

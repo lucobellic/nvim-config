@@ -4,10 +4,6 @@
 
 local opts = { silent = true, noremap = true }
 
--- paste over currently selected text without yanking it
-vim.api.nvim_set_keymap('v', 'p', 'p :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
-vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
-
 local wk_ok, wk = pcall(require, 'which-key')
 
 if wk_ok then
