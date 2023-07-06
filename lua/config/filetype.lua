@@ -6,5 +6,7 @@ vim.filetype.add({
   pattern = {
     ['.*%.ezi'] = 'ezi',
     ['.*%.launch'] = 'python',
+    ['.*%.cu'] = 'cpp',
+    ['.*%.cuh'] = 'cpp',
   }
 })
