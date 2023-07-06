@@ -77,6 +77,8 @@ return {
       { '<leader>oo', ':ObsidianOpen<cr>',        desc = 'Obsidian Open' },
       { '<leader>of', ':ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
       { '<leader>os', ':ObsidianSearch<cr>',      desc = 'Obsidian Find Files' },
+      { '<leader>ot', ':ObsidianToday<cr>',       desc = 'Obsidian Today' },
+      { '<leader>oy', ':ObsidianYesterday<cr>',   desc = 'Obsidian Yesterday' },
     },
     config = function(_, opts)
       require("obsidian").setup(opts)
