@@ -71,11 +71,9 @@ local lsp_plugins = {
     },
     opts = require('plugins.lsp.config.null-ls')
   },
+  require('plugins.lsp.navbuddy'),
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      require('plugins.lsp.navbuddy')
-    },
     opts = {
       -- Enable nvim-ufo capabilities
       capabilities = {
