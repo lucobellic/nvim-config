@@ -91,12 +91,7 @@ local ui_plugins = {
       })
     end
   },
-
-  {
-    'b0o/incline.nvim',
-    event = 'VeryLazy',
-    config = function() require('plugins.ui.incline') end
-  },
+  require('plugins.ui.incline'),
 
   -- Colors
   require('plugins.ui.treesitter'),

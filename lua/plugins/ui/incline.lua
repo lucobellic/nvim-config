@@ -36,22 +36,34 @@ local function get_git_diff(props)
   return labels
 end
 
-require('incline').setup({
-  debounce_threshold = {
-    falling = 500,
-    rising = 200
-  },
-  render = function(props)
-    local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
-    local ft_icon, ft_color = require("nvim-web-devicons").get_icon_color(filename)
-    local modified = vim.api.nvim_buf_get_option(props.buf, "modified") and "bold,italic" or "bold"
+return
+{
+  'b0o/incline.nvim',
+  event = 'VeryLazy',
+  keys = { { '<leader>uo', function() require('incline').toggle() end, desc = 'Toggle incline' } },
+  opts = {
+    debounce_threshold = {
+      falling = 500,
+      rising = 200
+    },
+    window = {
+      zindex = 1,
+    },
+    hide = {
+      cursorline = true,
+    },
+    render = function(props)
+      local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
+      local ft_icon, ft_color = require("nvim-web-devicons").get_icon_color(filename)
+      local modified = vim.api.nvim_buf_get_option(props.buf, "modified") and "bold,italic" or "bold"
 
-    local buffer = {
-      { get_diagnostic_label(props) },
-      { get_git_diff(props) },
-      { ft_icon,                    guifg = ft_color }, { " " },
-      { filename, gui = modified },
-    }
-    return buffer
-  end
-})
+      local buffer = {
+        { get_diagnostic_label(props) },
+        { get_git_diff(props) },
+        { ft_icon,                    guifg = ft_color }, { " " },
+        { filename, gui = modified },
+      }
+      return buffer
+    end
+  }
+}
