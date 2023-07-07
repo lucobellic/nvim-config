@@ -36,24 +36,17 @@ return {
       }
     },
   },
-  {
-    'mfussenegger/nvim-dap-python',
-    event = "VeryLazy",
-    config = function() require('plugins.dap.python') end
-  },
 
   -- Tests
   {
     'nvim-neotest/neotest',
     dependencies = {
       'nvim-neotest/neotest-plenary',
-      'nvim-neotest/neotest-python',
       'nvim-neotest/neotest-vim-test'
     },
     opts = {
       adapters = {
         'neotest-plenary',
-        'neotest-python',
         'neotest-vim-test',
       }
     },
