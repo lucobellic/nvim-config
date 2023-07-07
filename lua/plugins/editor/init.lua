@@ -1,10 +1,6 @@
 local editor_plugins = {
+  require('plugins.editor.zenmode'),
   {
-    'folke/zen-mode.nvim',
-    event = "VeryLazy",
-    config = function()
-      require('plugins.editor.zenmode')
-    end
   },
   {
     'junegunn/limelight.vim',
