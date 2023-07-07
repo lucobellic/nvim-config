@@ -239,23 +239,6 @@ if wk_ok then
   end
 end
 
--- Git
-if wk_ok then
-  local diffview_mapping = {
-    ["<leader>"] = {
-      g = {
-        name = "git",
-        g = { ':DiffviewOpen<cr>', 'Diffview Open' },
-        q = { ':DiffviewClose<cr>', 'Diffview Close' },
-        f = { ':DiffviewFileHistory --follow %<cr>', 'Diffview File History' },
-        d = { ':DiffviewOpen origin/develop...HEAD<cr>', 'Diffview origin/develop...HEAD' },
-      }
-    },
-    silent = true
-  }
-  wk.register(diffview_mapping, { silent = true, mode = 'n' })
-  wk.register(diffview_mapping, { silent = true, mode = 'v' })
-end
 vim.keymap.set('n', '<C-b>', '<cmd>:Neotree toggle reveal_force_cwd<cr>', opts)
 
 -- search current word
@@ -365,4 +348,3 @@ if wk_ok then
   wk.register(visual_refactoring, { mode = 'v', noremap = true, silent = true, expr = false })
   wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
 end
-

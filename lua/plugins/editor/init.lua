@@ -20,12 +20,7 @@ local editor_plugins = {
     'echasnovski/mini.indentscope',
     opts = require('plugins.editor.indentscope')
   },
-  {
-    'sindrets/diffview.nvim',
-    event = "VeryLazy",
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() require('plugins.editor.diffview') end
-  },
+  require('plugins.editor.diffview'),
   {
     'kevinhwang91/nvim-ufo',
     event = 'VeryLazy',
