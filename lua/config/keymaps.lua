@@ -2,6 +2,7 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+local util = require("lazyvim.util")
 local opts = { silent = true, noremap = true }
 
 local wk_ok, wk = pcall(require, 'which-key')
@@ -21,8 +22,16 @@ vim.keymap.set(
 )
 
 -- Toggle
-vim.keymap.set("n", "<leader>uh", function() vim.lsp.buf.inlay_hint(0, nil) end, { desc = "Toggle Inlay Hints" })
-
+vim.keymap.set("n", "<leader>ub", ':Gitsigns toggle_current_line_blame<cr>', { desc = "Toggle Line Blame" })
+vim.keymap.del('n', '<leader>ud')
+wk.register({
+  ['<leader>ud'] = {
+    name = 'Toggle Diagnostics',
+    d = { util.toggle_diagnostics, 'Toggle Diagnostics' },
+    t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
+    l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
+  }
+})
 
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 vim.api.nvim_set_keymap('n', '<c-s>', ':w<cr>', opts)
@@ -152,55 +161,9 @@ if wk_ok then
   })
 end
 
--- Trouble
-if wk_ok then
-  wk.register({
-    ["<leader>"] = {
-      t = {
-        name = 'trouble',
-        c = { ':TroubleClose<cr>', 'Trouble close' },
-        d = { ':Trouble document_diagnostics<cr>', 'Trouble diagnostics' },
-        f = { ':TodoTelescope<cr>', 'Todo telescope' },
-        l = {
-          name = 'lsp',
-          d = { ':Trouble lsp_definitions<cr>', 'Trouble lsp definitions' },
-          i = { ':Trouble lsp_implementations<cr>', 'Trouble lsp implementations' },
-          r = { ':Trouble lsp_references<cr>', 'Trouble lsp references' },
-          t = { ':Trouble lsp_type_definitions<cr>', 'Trouble lsp type definitions' }
-        },
-        q = { ':Trouble quickfix<cr>', 'Trouble quickfix' },
-        r = { ':TroubleRefresh<cr>', 'Trouble refresh' },
-        t = { ':Trouble todo<cr>', 'Trouble todo' },
-      }
-    }
-  }, opts)
-end
-
-
--- Diagnostics
-if wk_ok then
-  wk.register({
-    ["<leader>"] = {
-      d = {
-        t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle virtual text' },
-        l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle virtual lines' },
-      }
-    }
-  }, opts)
-end
-
-
 -- Floaterm
 vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle<cr>', opts)
 vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', opts)
--- if wk_ok then
---   wk.register({
---     ["g;"] = {
---       ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit($1/$2) --name=lazygit lazygit<cr>',
---       'Lazygit'
---     }
---   })
--- end
 
 -- Hop
 if wk_ok then
