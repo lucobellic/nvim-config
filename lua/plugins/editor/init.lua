@@ -3,12 +3,6 @@ local editor_plugins = {
   {
   },
   {
-    'junegunn/limelight.vim',
-    event = "VeryLazy",
-    config = function() require('plugins.editor.limelight') end
-  }, -- Highlight paragraph
-
-  {
     'lukas-reineke/indent-blankline.nvim',
     opts = require('plugins.editor.indent-blankline')
   },

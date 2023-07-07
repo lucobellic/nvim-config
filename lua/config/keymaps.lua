@@ -143,9 +143,6 @@ vim.api.nvim_set_keymap('n', '<Space>bl', ':BufferOrderByLanguage<cr>', opts)
 -- Outline
 vim.api.nvim_set_keymap('n', '<Space>go', ':SymbolsOutline<cr>', opts)
 
--- Limelight
-vim.api.nvim_set_keymap('n', '<A-z>', ':LimelightToggle<cr>', opts)
-
 -- Tab navigation
 if wk_ok then
   wk.register({
