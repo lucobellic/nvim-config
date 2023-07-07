@@ -143,22 +143,4 @@ for name, icon in pairs(require("lazyvim.config").icons.diagnostics) do
   end
 end
 
--- TODO: Move to appropriate configuration file
--- Setup ui and icons
-local dap_icons = {
-  Stopped = { ' ', 'DiagnosticWarn', 'DapStoppedLine' }, --  
-  Breakpoint = { ' ', 'DiagnosticError' },             -- 󰧞  
-  BreakpointCondition = { '󱗜 ', 'DiagnosticError' },   --  󰬸 󱡓 󰻂 󱗜
-  BreakpointRejected = { ' ', 'DiagnosticError' },     --  󰀨 
-  LogPoint = '.>',
-}
-
 vim.api.nvim_set_hl(0, 'DapStoppedLine', { default = true, link = 'Visual' })
-
-for name, sign in pairs(dap_icons) do
-  sign = type(sign) == 'table' and sign or { sign }
-  vim.fn.sign_define(
-    'Dap' .. name,
-    { text = sign[1], texthl = sign[2] or 'DiagnosticInfo' }
-  )
-end

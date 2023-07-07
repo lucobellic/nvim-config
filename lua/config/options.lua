@@ -15,12 +15,13 @@ vim.o.showbreak = '↪'
 vim.o.backup = false
 vim.o.writebackup = false
 vim.o.swapfile = false
+vim.o.pumblend = 0
 
 vim.opt.listchars = {
-  tab = '>-',
+  tab = ' ',
   trail = '·',
-  extends = '⟩',
-  precedes = '⟨'
+  extends = '',
+  precedes = ''
 }
 
 vim.opt.fillchars = {
@@ -36,10 +37,10 @@ vim.opt.fillchars = {
   vertleft = '┤',
   vertright = '├',
   verthoriz = '┼',
-  fold = ' ',
+  fold = '',
   foldsep = ' ',
-  foldopen = '▾',
-  foldclose = '▸',
+  foldopen = '',
+  foldclose = '',
 }
 
 -- Fold configuration

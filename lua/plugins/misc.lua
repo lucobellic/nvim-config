@@ -1,4 +1,24 @@
 return {
+
+  {
+    'nvim-tree/nvim-web-devicons',
+    opts = {
+      override_by_extension = {
+        ['cuh'] = {
+          color = "#70DF55",
+          cterm_color = "2",
+          icon = "",
+          name = "Cuda"
+        },
+        ['cu'] = {
+          color = "#70DF55",
+          cterm_color = "2",
+          icon = "",
+          name = "Cuda"
+        },
+      }
+    }
+  },
   {
     'nvim-lua/plenary.nvim',
     config = function()
@@ -7,9 +27,9 @@ return {
   },
 
   -- Other
-  { 'moll/vim-bbye',       event = 'VeryLazy' },     -- Close buffer and window
-  { 'xolox/vim-misc',      event = 'VeryLazy' },
-  { 'honza/vim-snippets',  event = 'VeryLazy' },
+  { 'moll/vim-bbye',      event = 'VeryLazy' }, -- Close buffer and window
+  { 'xolox/vim-misc',     event = 'VeryLazy' },
+  { 'honza/vim-snippets', event = 'VeryLazy' },
 
   -- Visualize Markdown as mindmaps
   {
