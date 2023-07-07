@@ -14,7 +14,7 @@ require('lspsaga').setup({
   symbol_in_winbar = {
     enable = true,
     separator = ' -> ',
-    show_file = true,
+    show_file = false,
   },
   rename = {
     in_select = false

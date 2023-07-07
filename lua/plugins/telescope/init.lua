@@ -29,8 +29,7 @@ return {
       {
         '<leader>FF',
         ':<C-u>:Files<cr>',
-        desc =
-        'Find All File'
+        desc = 'Find All File'
       },
       {
         '<leader>FL',
@@ -51,8 +50,7 @@ return {
         function()
           require('telescope.builtin').buffers()
         end,
-        desc =
-        'Find Buffer'
+        desc = 'Find Buffer'
       },
       {
         '<leader>fi',
@@ -75,79 +73,65 @@ return {
       { '<leader>fr',  function() require('telescope.builtin').oldfiles() end,   desc = 'Find Recent File' },
       {
         '<leader>fw',
-        function() require('telescope.builtin').grep_string({ default_text = vim.fn.expand('<cword>') }) end,
+        function() require('telescope.builtin').grep_string() end,
+        mode = { 'n', 'v' },
         desc = 'Find Word'
-      },
-      {
-        '<leader>fy',
-        function() require('telescope').extensions.yank_history.yank_history() end,
-        desc = 'Yank History'
       },
       {
         '<leader>fs',
         '<cmd>PersistenceLoadSession<cr>',
-        desc =
-        'Load session'
+        desc = 'Load session'
       },
 
       -- LSP
       {
         '<leader>flr',
         function() require('telescope.builtin').lsp_references() end,
-        desc =
-        'Find References'
+        desc = 'Find References'
       },
       {
         '<leader>fld',
         function() require('telescope.builtin').lsp_definitions() end,
-        desc =
-        'Find Definitions'
+        desc = 'Find Definitions'
       },
       {
         '<leader>fli',
         function() require('telescope.builtin').lsp_implementations() end,
-        desc =
-        'Find Implementations'
+        desc = 'Find Implementations'
       },
 
       -- Symbols
       {
         '<leader>flss',
         function() require('telescope.builtin').lsp_document_symbols() end,
-        desc =
-        'Find Document Symbols'
+        desc = 'Find Document Symbols'
       },
       {
         '<leader>flsd',
         function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
-        desc =
-        'Find Workspace Symbols'
+        desc = 'Find Workspace Symbols'
       },
       {
         '<leader>flsw',
         function() require('telescope.builtin').lsp_workspace_symbols() end,
-        desc =
-        'Find Dynamic Workspace Symbols'
+        desc = 'Find Dynamic Workspace Symbols'
       },
       {
         '<leader>flt',
         function() require('telescope.builtin').lsp_type_definitions() end,
-        desc =
-        'Find Type Definitions'
+        desc = 'Find Type Definitions'
       },
 
       -- Calls
       {
         '<leader>flci',
         function() require('telescope.builtin').lsp_incoming_calls() end,
-        desc =
-        'Find Incoming Calls'
+        desc = 'Find Incoming Calls'
       },
       {
         '<leader>flco',
         function() require('telescope.builtin').lsp_outgoing_calls() end,
-        desc =
-        'Find Outgoing Calls'
+        desc = 'Find Outgoing Calls'
       },
     },
     opts = require('plugins.telescope.telescope'),
@@ -170,6 +154,10 @@ return {
   {
     'jackMort/ChatGPT.nvim',
     event = 'VeryLazy',
+    keys = {
+      { "<leader>ce", function() require('chatgpt').edit_with_instructions() end, desc = "ChatGPT edit with instructions" },
+      { "<leader>cg", ":ChatGPT<cr>",                                             desc = "ChatGPT" }
+    },
     opts = {
       chat = {
         keymaps = {

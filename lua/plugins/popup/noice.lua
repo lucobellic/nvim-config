@@ -4,7 +4,16 @@ local cmdline = {
   view = "cmdline_popup",
   opts = {},
   format = {
-    conceal = false -- This will hide the text in the cmdline that matches the pattern.
+    cmdline = { pattern = "^:", icon = " ", title = " Command ", lang = "vim" },
+    search_down = { kind = "search", pattern = "^/", icon = "  ", lang = "regex" },
+    search_up = { kind = "search", pattern = "^%?", icon = "  ", lang = "regex" },
+    replace = { pattern = { "^:%s*s/", "^:%s*%%s/" }, icon = " ", lang = "regex" },
+    range_replace = { pattern = "^:%s*'<,'>s/", icon = "  ", title = " Range Replace ", lang = "regex" },
+    range = { pattern = "^:%s*'<,'>", icon = "  ", lang = "regex" },
+    shell = { pattern = "^:%s*!", icon = " ", lang = "bash" },
+    lua = { pattern = { "^:%s*lua%s+", "^:%s*lua%s*=%s*", "^:%s*=%s*" }, icon = "", lang = "lua" },
+    help = { pattern = "^:%s*he?l?p?%s+", icon = " " },
+    file = { pattern = "^:%s*e", icon = " " },
   }
 }
 
@@ -35,7 +44,7 @@ local lsp = {
     ["cmp.entry.get_documentation"] = true,
   },
   progress = {
-    enabled = true
+    enabled = false
   },
   message = {
     enabled = false,

@@ -66,6 +66,7 @@ local popup_plugins = {
   }, -- Floating terminal
 
   require('plugins.popup.toggleterm'),
+  require('plugins.popup.trouble'),
 }
 
 return popup_plugins

@@ -47,7 +47,7 @@ return {
             display_name = "  Git " -- string | nil
           },
         },
-        truncation_character = '…',            -- string
+        truncation_character = '',            -- string
         tabs_min_width = nil,                    -- int | nil
         tabs_max_width = nil,                    -- int | nil
         padding = 0,                             -- int | { left: int, right: int }
@@ -57,10 +57,10 @@ return {
       default_component_configs = {
         align_diagnostics = {
           symbols = {
-            hint = '', -- '',
-            info = '󰳦', -- '',
-            warn = '󰳦', --'', '',
-            error = '󰅝', -- '',
+            hint = '',
+            info = ' ',
+            warn = ' ',
+            error = ' ',
           },
           highlights = {
             hint = "DiagnosticSignHint",
@@ -87,16 +87,16 @@ return {
           expander_highlight = "NeoTreeExpander",
         },
         icon = {
-          folder_closed = "",
-          folder_open = "",
-          folder_empty = "ﰊ",
+          folder_closed = " ",
+          folder_open = " ",
+          folder_empty = " ",
           -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
           -- then these will never be used.
-          default = "*",
+          default = " ",
           highlight = "NeoTreeFileIcon"
         },
         modified = {
-          symbol = "",
+          symbol = " ",
           highlight = "GitSignsChange",
         },
         name = {
@@ -231,11 +231,10 @@ return {
                 {
                   "align_git_changes",
                   symbols = {
-                    -- Change type
-                    added    = "",
-                    deleted  = "",
-                    modified = "",
-                    renamed  = "",
+                    added    = " ",
+                    deleted  = " ",
+                    modified = " ",
+                    renamed  = " ",
                   },
                   zindex = 10,
                   align = "right"
@@ -243,12 +242,11 @@ return {
                 {
                   "align_git_status",
                   symbols = {
-                    -- Status type
-                    untracked = "󱍯",
-                    ignored   = "",
-                    unstaged  = "󱍫",
-                    staged    = "󱍨",
-                    conflict  = " ",
+                    untracked = " ",
+                    ignored   = " ",
+                    unstaged  = " ",
+                    staged    = " ",
+                    conflict  = " ",
                   },
                   zindex  = 10,
                   align   = "right"

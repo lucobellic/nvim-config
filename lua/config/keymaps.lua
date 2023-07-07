@@ -2,11 +2,8 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
+local util = require("lazyvim.util")
 local opts = { silent = true, noremap = true }
-
--- paste over currently selected text without yanking it
-vim.api.nvim_set_keymap('v', 'p', 'p :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
-vim.api.nvim_set_keymap('v', 'P', 'P :let @"=@0 | let @*=@0 | let @+=@0<cr>', opts)
 
 local wk_ok, wk = pcall(require, 'which-key')
 
@@ -25,28 +22,19 @@ vim.keymap.set(
 )
 
 -- Toggle
-vim.keymap.set("n", "<leader>uh", function() vim.lsp.buf.inlay_hint(0, nil) end, { desc = "Toggle Inlay Hints" })
-
+vim.keymap.set("n", "<leader>ub", ':Gitsigns toggle_current_line_blame<cr>', { desc = "Toggle Line Blame" })
+vim.keymap.del('n', '<leader>ud')
+wk.register({
+  ['<leader>ud'] = {
+    name = 'Toggle Diagnostics',
+    d = { util.toggle_diagnostics, 'Toggle Diagnostics' },
+    t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
+    l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
+  }
+})
 
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 vim.api.nvim_set_keymap('n', '<c-s>', ':w<cr>', opts)
-
--- ChatGPT
-
-if wk_ok then
-  wk.register({
-    ["<leader>c"] = {
-      name = "complete",
-      e = { function() require('chatgpt').edit_with_instructions() end, "ChatGPT edit with instructions" },
-    }
-  }, { mode = "v" })
-
-  wk.register({
-    ["<leader>c"] = {
-      g = { ":ChatGPT<cr>", "ChatGPT" }
-    }
-  }, { mode = "n" })
-end
 
 -- Git
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
@@ -173,55 +161,9 @@ if wk_ok then
   })
 end
 
--- Trouble
-if wk_ok then
-  wk.register({
-    ["<leader>"] = {
-      t = {
-        name = 'trouble',
-        c = { ':TroubleClose<cr>', 'Trouble close' },
-        d = { ':Trouble document_diagnostics<cr>', 'Trouble diagnostics' },
-        f = { ':TodoTelescope<cr>', 'Todo telescope' },
-        l = {
-          name = 'lsp',
-          d = { ':Trouble lsp_definitions<cr>', 'Trouble lsp definitions' },
-          i = { ':Trouble lsp_implementations<cr>', 'Trouble lsp implementations' },
-          r = { ':Trouble lsp_references<cr>', 'Trouble lsp references' },
-          t = { ':Trouble lsp_type_definitions<cr>', 'Trouble lsp type definitions' }
-        },
-        q = { ':Trouble quickfix<cr>', 'Trouble quickfix' },
-        r = { ':TroubleRefresh<cr>', 'Trouble refresh' },
-        t = { ':Trouble todo<cr>', 'Trouble todo' },
-      }
-    }
-  }, opts)
-end
-
-
--- Diagnostics
-if wk_ok then
-  wk.register({
-    ["<leader>"] = {
-      d = {
-        t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle virtual text' },
-        l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle virtual lines' },
-      }
-    }
-  }, opts)
-end
-
-
 -- Floaterm
 vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle<cr>', opts)
 vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', opts)
--- if wk_ok then
---   wk.register({
---     ["g;"] = {
---       ':<C-u>FloatermNew --height=0.8 --width=0.8 --title=lazygit($1/$2) --name=lazygit lazygit<cr>',
---       'Lazygit'
---     }
---   })
--- end
 
 -- Hop
 if wk_ok then
@@ -260,23 +202,6 @@ if wk_ok then
   end
 end
 
--- Git
-if wk_ok then
-  local diffview_mapping = {
-    ["<leader>"] = {
-      g = {
-        name = "git",
-        g = { ':DiffviewOpen<cr>', 'Diffview Open' },
-        q = { ':DiffviewClose<cr>', 'Diffview Close' },
-        f = { ':DiffviewFileHistory --follow %<cr>', 'Diffview File History' },
-        d = { ':DiffviewOpen origin/develop...HEAD<cr>', 'Diffview origin/develop...HEAD' },
-      }
-    },
-    silent = true
-  }
-  wk.register(diffview_mapping, { silent = true, mode = 'n' })
-  wk.register(diffview_mapping, { silent = true, mode = 'v' })
-end
 vim.keymap.set('n', '<C-b>', '<cmd>:Neotree toggle reveal_force_cwd<cr>', opts)
 
 -- search current word
@@ -386,4 +311,3 @@ if wk_ok then
   wk.register(visual_refactoring, { mode = 'v', noremap = true, silent = true, expr = false })
   wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
 end
-

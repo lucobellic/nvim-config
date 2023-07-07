@@ -20,12 +20,7 @@ local editor_plugins = {
     'echasnovski/mini.indentscope',
     opts = require('plugins.editor.indentscope')
   },
-  {
-    'sindrets/diffview.nvim',
-    event = "VeryLazy",
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function() require('plugins.editor.diffview') end
-  },
+  require('plugins.editor.diffview'),
   {
     'kevinhwang91/nvim-ufo',
     event = 'VeryLazy',
@@ -89,16 +84,7 @@ local editor_plugins = {
       vim.g.matchup_matchparen_offscreen = {}
     end
   },
-
-  -- Yank
-  {
-    'gbprod/yanky.nvim',
-    event = "VeryLazy",
-    dependencies = { 'kkharji/sqlite.lua' },
-    config = function()
-      require('plugins.editor.yanky')
-    end
-  },
+  require('plugins.editor.yanky'),
 }
 
 return editor_plugins

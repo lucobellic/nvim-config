@@ -1,13 +1,13 @@
 local separator = '▏'
 
 local function get_diagnostic_label(props)
-  local icons = { error = '', warn = '', info = '', hint = '', }
+  local icons = require('lazyvim.config').icons.diagnostics
   local label = {}
 
   for severity, icon in pairs(icons) do
     local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
     if n > 0 then
-      table.insert(label, { icon .. ' ' .. n .. ' ', group = 'DiagnosticSign' .. severity })
+      table.insert(label, { icon .. n .. ' ', group = 'DiagnosticSign' .. severity })
     end
   end
   if #label > 0 then
@@ -17,14 +17,15 @@ local function get_diagnostic_label(props)
 end
 
 local function get_git_diff(props)
-  local icons = { removed = "", changed = "", added = "" }
+  local git_icons = require('lazyvim.config').icons.git
+  local icons = { removed = git_icons.removed, changed = git_icons.modified, added = git_icons.modified }
   local hightligh = { removed = 'GitSignsDelete', changed = "GitSignsChange", added = 'GitSignsAdd' }
   local labels = {}
   local signs = vim.api.nvim_buf_get_var(props.buf, "gitsigns_status_dict")
   for name, icon in pairs(icons) do
     if tonumber(signs[name]) and signs[name] > 0 then
       table.insert(labels, {
-        icon .. " " .. signs[name] .. " ",
+        icon .. signs[name] .. " ",
         group = hightligh[name]
       })
     end
