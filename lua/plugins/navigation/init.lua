@@ -8,8 +8,8 @@ return {
     end
   },
 
-  { 'ggandor/leap.nvim', enabled = true },
-  { 'ggandor/flit.nvim', enabled = true },
+  { 'ggandor/leap.nvim', enabled = false },
+  { 'ggandor/flit.nvim', enabled = false },
   {
     'phaazon/hop.nvim',
     event = 'VeryLazy',
