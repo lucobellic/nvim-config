@@ -15,13 +15,8 @@ local ui_plugins = {
   },
 
   { 'nvim-lualine/lualine.nvim', enabled = false },
-  {
-    'lucobellic/galaxyline.nvim',
-    enabled = true,
-    event = 'VeryLazy',
-    branch = 'personal',
-    config = function() require('plugins.ui.galaxyline') end,
-  },
+  -- require('plugins.ui.lualine'),
+  require('plugins.ui.galaxyline'),
 
   -- Start screen
   { 'goolord/alpha-nvim', enabled = false },
