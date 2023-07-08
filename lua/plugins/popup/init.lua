@@ -54,17 +54,7 @@ local popup_plugins = {
 
   require('plugins.popup.notify'),
   require('plugins.popup.noice'),
-
-  {
-    'lucobellic/vim-floaterm',
-    event = 'VeryLazy',
-    branch = 'personal',
-    dependencies = { 'MunifTanjim/nui.nvim' },
-    config = function()
-      require('plugins.popup.floaterm')
-    end
-  }, -- Floating terminal
-
+  require('plugins.popup.floaterm'),
   require('plugins.popup.toggleterm'),
   require('plugins.popup.trouble'),
 }

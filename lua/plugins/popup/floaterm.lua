@@ -15,16 +15,27 @@ local function floaterm_toogle(params)
   end
 end
 
-vim.api.nvim_create_user_command('ToggleTool', floaterm_toogle, { nargs = 1, count = 1 })
-vim.api.nvim_set_keymap('n', '<leader>er', ':ToggleTool ranger<cr>', { desc = 'Ranger', noremap = true, silent = true })
+return {
+  'lucobellic/vim-floaterm',
+  event = 'VeryLazy',
+  branch = 'personal',
+  dependencies = { 'MunifTanjim/nui.nvim' },
+  keys = {
+    { '<leader>er', ':ToggleTool ranger<cr>',         desc = 'Ranger' },
+    { '<leader>gg', ':ToggleTool lazygit<cr>',        desc = 'Lazygit' },
+    { '<leader>gG', ':ToggleTool lazygit<cr>',        desc = 'Lazygit' },
+    { '<F7>',       ':FloatermToggle<cr>',            mode = 'n',      desc = 'Toggle Floaterm' },
+    { '<F7>',       '<C-\\><C-n>:FloatermToggle<cr>', mode = 't',      desc = 'Toggle Floaterm' },
+  },
+  init = function()
+    vim.g.floaterm_shell = vim.o.shell
+    vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
+    vim.g.floaterm_autohide = 1
+    vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
+    vim.g.floaterm_autoinsert = true
+    vim.g.floaterm_titleposition = 'center'
+    vim.g.floaterm_title = 'Terminal $1/$2'
 
-vim.g.floaterm_shell = vim.o.shell
-
-vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
-vim.g.floaterm_autohide = 1
--- vim.g.floaterm_borderchars = '       ' -- (top, right, bottom, left, topleft, topright, botright, botleft)
-vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
--- vim.g.floaterm_borderchars = '─│─│┌┐┘└'
-vim.g.floaterm_autoinsert = true
-vim.g.floaterm_titleposition = 'center'
-vim.g.floaterm_title = 'Terminal $1/$2'
+    vim.api.nvim_create_user_command('ToggleTool', floaterm_toogle, { nargs = 1, count = 1 })
+  end
+}

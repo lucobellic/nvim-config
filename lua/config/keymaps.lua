@@ -155,10 +155,6 @@ if wk_ok then
   })
 end
 
--- Floaterm
-vim.api.nvim_set_keymap('n', '<F7>', ':FloatermToggle<cr>', opts)
-vim.api.nvim_set_keymap('t', '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', opts)
-
 -- Hop
 if wk_ok then
   local hop_mapping = {
