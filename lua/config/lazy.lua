@@ -27,8 +27,17 @@ require('lazy').setup({
     { import = 'lazyvim.plugins.extras.ui.mini-animate' },
     { import = 'lazyvim.plugins.extras.formatting.prettier' },
     { import = 'lazyvim.plugins.extras.coding.copilot' },
-    { import = 'plugins' },
+
+    { import = 'plugins.completion' },
+    { import = 'plugins.dap' },
+    { import = 'plugins.editor' },
     { import = 'plugins.lsp' },
+    { import = 'plugins.navigation' },
+    { import = 'plugins.notes' },
+    { import = 'plugins.popup' },
+    { import = 'plugins.telescope' },
+    { import = 'plugins.theme' },
+    { import = 'plugins.ui' },
   },
   defaults = {
     lazy = false,

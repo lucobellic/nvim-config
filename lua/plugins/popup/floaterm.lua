@@ -22,8 +22,7 @@ return {
   dependencies = { 'MunifTanjim/nui.nvim' },
   keys = {
     { '<leader>er', ':ToggleTool ranger<cr>',         desc = 'Ranger' },
-    { '<leader>gg', ':ToggleTool lazygit<cr>',        desc = 'Lazygit' },
-    { '<leader>gG', ':ToggleTool lazygit<cr>',        desc = 'Lazygit' },
+    { '<leader>g;', ':ToggleTool lazygit<cr>',        desc = 'Lazygit' },
     { '<F7>',       ':FloatermToggle<cr>',            mode = 'n',      desc = 'Toggle Floaterm' },
     { '<F7>',       '<C-\\><C-n>:FloatermToggle<cr>', mode = 't',      desc = 'Toggle Floaterm' },
   },

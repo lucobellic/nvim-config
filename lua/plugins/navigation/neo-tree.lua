@@ -29,6 +29,9 @@ return {
       { '<leader>ee', '<leader>fe', desc = 'Explorer NeoTree (root dir)', remap = true },
       { '<leader>eE', '<leader>fE', desc = 'Explorer NeoTree (cwd)',      remap = true },
     },
+    init = function()
+      vim.g.neo_tree_remove_legacy_commands = 0
+    end,
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = "rounded",

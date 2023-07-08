@@ -5,6 +5,11 @@
 local util = require("lazyvim.util")
 local opts = { silent = true, noremap = true }
 
+-- Removed default keymaps
+vim.keymap.del('n', '<leader>ud')
+vim.keymap.del('n', '<leader>gg')
+vim.keymap.del('n', '<leader>gG')
+
 local wk_ok, wk = pcall(require, 'which-key')
 
 if wk_ok then
@@ -23,7 +28,6 @@ vim.keymap.set(
 
 -- Toggle
 vim.keymap.set("n", "<leader>ub", ':Gitsigns toggle_current_line_blame<cr>', { desc = "Toggle Line Blame" })
-vim.keymap.del('n', '<leader>ud')
 wk.register({
   ['<leader>ud'] = {
     name = 'Toggle Diagnostics',
@@ -34,13 +38,11 @@ wk.register({
 })
 
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
-vim.api.nvim_set_keymap('n', '<c-s>', ':w<cr>', opts)
 
 -- Git
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
 vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
 
-vim.api.nvim_set_keymap('n', '<esc>', '<cmd>nohl<cr><esc>', opts)
 vim.api.nvim_set_keymap('c', '<esc>', '<C-c>', opts)
 vim.api.nvim_set_keymap('t', '<esc>', '<C-\\><C-n>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
@@ -229,7 +231,6 @@ if wk_ok then
   wk.register({
     ['<leader>q'] = {
       name = 'session',
-      a    = { ':qa!<cr>', 'Quit all' },
       -- restore the session for the current directory
       r    = { ':lua require("persistence").load()<cr>', 'Restore session' },
       -- restore the last session

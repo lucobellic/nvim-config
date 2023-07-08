@@ -1,17 +1,22 @@
-vim.g.fzf_layout = {
-  window = {
-    width= 0.6,
-    height= 0.5,
-    relative=false,
-    yoffset= 0.0,
-    border='none',
-    highlight='Comment'
- }
-}
+return {
+  'junegunn/fzf.vim',
+  dependencies = { 'junegunn/fzf' },
+  event = 'VeryLazy',
+  init = function()
+    vim.g.fzf_layout = {
+      window = {
+        width = 0.6,
+        height = 0.5,
+        relative = false,
+        yoffset = 0.0,
+        border = 'none',
+        highlight = 'Comment'
+      }
+    }
 
-vim.g.fzf_preview_window = {'down:50%:hidden:noborder', 'ctrl-/'}
+    vim.g.fzf_preview_window = { 'down:50%:hidden:noborder', 'ctrl-/' }
 
-vim.cmd [[
+    vim.cmd [[
 
 let $FZF_DEFAULT_COMMAND = 'rg --smart-case --no-ignore --ignore-exclude --files --hidden --follow'
 
@@ -65,3 +70,5 @@ let g:fzf_colors =
       \ 'header':  ['fg', 'Normal'] }
 
 ]]
+  end
+}
