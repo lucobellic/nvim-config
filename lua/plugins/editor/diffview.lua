@@ -28,12 +28,11 @@ return {
       '<leader>gdd',
       ':DiffviewOpen origin/develop...HEAD<cr>',
       mode = { 'n', 'v' },
-      desc =
-      'Diffview origin/develop...HEAD',
+      desc = 'Diffview origin/develop...HEAD',
       silent = true
     },
   },
-  otps = {
+  opts = {
     diff_binaries = false,   -- Show diffs for binaries
     enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
     signs = {
