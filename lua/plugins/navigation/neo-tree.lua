@@ -24,8 +24,10 @@ return {
       'MunifTanjim/nui.nvim',
     },
     keys = {
-      { '<leader>e', false },
-      { '<leader>E', false },
+      { '<leader>e',  false },
+      { '<leader>E',  false },
+      { '<leader>ee', '<leader>fe', desc = 'Explorer NeoTree (root dir)', remap = true },
+      { '<leader>eE', '<leader>fE', desc = 'Explorer NeoTree (cwd)',      remap = true },
     },
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab

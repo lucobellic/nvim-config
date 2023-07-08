@@ -16,8 +16,7 @@ local function floaterm_toogle(params)
 end
 
 vim.api.nvim_create_user_command('ToggleTool', floaterm_toogle, { nargs = 1, count = 1 })
-vim.api.nvim_set_keymap('n', '<leader>g;', ':ToggleTool lazygit<cr>', { noremap = true, silent = true })
-vim.api.nvim_set_keymap('n', '<leader>er', ':ToggleTool ranger<cr>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<leader>er', ':ToggleTool ranger<cr>', { desc = 'Ranger', noremap = true, silent = true })
 
 vim.g.floaterm_shell = vim.o.shell
 
