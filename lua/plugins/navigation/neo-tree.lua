@@ -62,8 +62,11 @@ return {
       default_component_configs = {
         align_diagnostics = {
           symbols = {
-            hint = '',
-            info = ' ',
+            -- hint = '',
+            -- info = ' ',
+            -- Disable info and hint severity visualizations
+            hint = ' ',
+            info = '  ',
             warn = ' ',
             error = ' ',
           },
