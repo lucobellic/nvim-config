@@ -28,6 +28,18 @@ return {
       { '<leader>E',  false },
       { '<leader>ee', '<leader>fe', desc = 'Explorer NeoTree (root dir)', remap = true },
       { '<leader>eE', '<leader>fE', desc = 'Explorer NeoTree (cwd)',      remap = true },
+      {
+        '<c-b>',
+        function()
+          require("neo-tree.command").execute({
+            action = 'show',
+            toggle = true,
+            dir = vim.loop.cwd(),
+          })
+        end,
+        desc = 'Explorer NeoTree (root_dir)',
+        remap = true
+      },
     },
     init = function()
       vim.g.neo_tree_remove_legacy_commands = 0
@@ -40,7 +52,7 @@ return {
       sort_case_insensitive = true,    -- used when sorting files and directories in the tree
       sort_function = nil,             -- use a custom function for sorting files and directories in the tree
       source_selector = {
-        winbar = true,                 -- toggle to show selector on winbar
+        winbar = false,                -- toggle to show selector on winbar
         statusline = false,            -- toggle to show selector on statusline
         sources = {                    -- table
           {
@@ -193,6 +205,7 @@ return {
       },
       nesting_rules = {},
       filesystem = {
+        bind_to_cwd = true,
         components = {
           align_git_changes = function(config, node, state)
             return { align(components.git_status(config, node, state)[1]) }
