@@ -1,31 +1,42 @@
 return {
   'petertriho/nvim-scrollbar',
   event = 'BufEnter',
-  dependencies = 'lewis6991/gitsigns.nvim',
+  dependencies = {
+    'lewis6991/gitsigns.nvim',
+    {
+      'kevinhwang91/nvim-hlslens',
+      opts = {
+        override_lens = function() end,
+        build_position_cb = function(plist, _, _, _)
+          require('scrollbar.handlers.search').handler.show(plist.start_pos)
+        end,
+      }
+    }
+  },
   opts = {
     show = true,
-    show_in_active_only = true,
+    show_in_active_only = false,
     set_highlights = true,
     handle = {
-      text = " ",
+      text = ' ',
       hide_if_all_visible = true
     },
     marks = {
       Cursor = {
-        text = "█", -- ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
+        text = '', -- ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
         priority = 0,
       },
       Search = {
-        text = { '│', '│' },
-        priority = 0,
+        text = { '─', '─' },
+        priority = 1,
       },
       Error = {
         text = { '│', '│' },
-        priority = 1,
+        priority = 2,
       },
       Warn = {
         text = { '│', '│' },
-        priority = 2,
+        priority = 3,
       },
       Info = {
         text = { ' ', ' ' },
@@ -53,26 +64,28 @@ return {
       },
     },
     excluded_buftypes = {
-      -- "terminal",
+      -- 'terminal',
     },
     excluded_filetypes = {
-      "",
-      "TelescopePrompt",
-      "chatgpt",
-      "cmp_docs",
-      "cmp_menu",
-      "incline",
-      "neo-tree",
-      "notify",
-      "prompt",
-      "floaterm",
+      '',
+      'TelescopePrompt',
+      'chatgpt',
+      'cmp_docs',
+      'cmp_menu',
+      'incline',
+      'neo-tree',
+      'notify',
+      'prompt',
+      'floaterm',
+      'dashboard',
+      'Navbuddy'
     },
     handlers = {
-      cursor = false,
+      cursor = true,
       diagnostic = true,
       gitsigns = false,
       handle = true,
-      search = false,
+      search = true,
       ale = false,
     }
   },
@@ -109,11 +122,19 @@ return {
       return lines
     end
 
-    local add_git_signs = function(bufnr)
+    local function add_git_signs(bufnr)
       local nb_lines = vim.api.nvim_buf_line_count(bufnr)
       return get_gitsign_lines(bufnr, nb_lines)
     end
 
     require('scrollbar.handlers').register('git', add_git_signs)
+
+    -- Hide search scrollbar when leaving search mode
+    vim.api.nvim_create_autocmd({ 'CmdlineLeave' }, {
+      pattern = { '*' },
+      callback = function()
+        require('scrollbar.handlers.search').handler.hide()
+      end
+    })
   end
 }
