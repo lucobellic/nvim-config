@@ -1,13 +1,9 @@
-local Path = require("plenary.path")
-
-local mason_clangd_path = Path:new(vim.fn.stdpath("data")):joinpath("mason", "bin", "clangd"):absolute()
-
--- TODO: set it in clangd.setup
-vim.cmd([[map <silent> <M-o> :ClangdSwitchSourceHeader <CR>]])
-
 return {
+  keys = {
+    { "<M-o>", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+  },
   cmd = {
-    mason_clangd_path,
+    "clangd",
     "--background-index",
     "--background-index-priority=background",
     "--all-scopes-completion",
@@ -16,7 +12,7 @@ return {
     "--enable-config",
     "--header-insertion=iwyu",
     "--all-scopes-completion",
-    "--compile-commands-dir=/home/rosuser/build",
+    "--compile-commands-dir=../build",
     "-j",
     "2",
   },

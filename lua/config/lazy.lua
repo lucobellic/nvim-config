@@ -15,6 +15,8 @@ require('lazy').setup({
   spec = {
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
     { import = 'lazyvim.plugins.extras.coding.yanky' },
+
+    { import = 'lazyvim.plugins.extras.lang.clangd' },
     { import = 'lazyvim.plugins.extras.lang.rust' },
     { import = 'lazyvim.plugins.extras.lang.python' },
     -- { import = 'lazyvim.plugins.extras.lang.typescript' },
