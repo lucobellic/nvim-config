@@ -3,7 +3,7 @@ return {
   event = 'VeryLazy',
   branch = 'personal',
   config = function()
-    local gl = require("galaxyline")
+    local gl = require('galaxyline')
     local gls = gl.section
 
     local fileinfo = require('galaxyline.provider_fileinfo')
@@ -14,23 +14,23 @@ return {
     local controls = require('dapui.controls')
 
     local colors = {
-      bg = "Normal",
-      line_bg = "CursorLine",
-      fg = "Normal",
-      accent = "#FF8F40",
-      fg_green = "#C2D9RC",
-      yellow = "#A3BE8C",
-      cyan = "#39BAE6",
-      darkblue = "#61afef",
-      green = "#BBE67E",
-      orange = "#F29668",
-      purple = "#252930",
-      magenta = "#C678DD",
-      blue = "#39BAE6",
-      red = "#F07178",
-      lightbg = "#3C4048",
-      nord = "#81A1C1",
-      greenYel = "#EBCB8B"
+      bg = 'Normal',
+      line_bg = 'CursorLine',
+      fg = 'Normal',
+      accent = '#FF8F40',
+      fg_green = '#C2D9RC',
+      yellow = '#A3BE8C',
+      cyan = '#39BAE6',
+      darkblue = '#61afef',
+      green = '#BBE67E',
+      orange = '#F29668',
+      purple = '#252930',
+      magenta = '#C678DD',
+      blue = '#39BAE6',
+      red = '#F07178',
+      lightbg = '#3C4048',
+      nord = '#81A1C1',
+      greenYel = '#EBCB8B'
     }
 
     local mode_color = function()
@@ -40,7 +40,7 @@ return {
         t = colors.nord,
         c = colors.accent,
         V = colors.greenYel,
-        [""] = colors.greenYel,
+        [''] = colors.greenYel,
         v = colors.greenYel,
         R = colors.magenta,
         r = colors.magenta
@@ -55,13 +55,13 @@ return {
       return color
     end
 
-    vim.api.nvim_set_hl(0, "GalaxySpace", { link = 'Normal' })
+    vim.api.nvim_set_hl(0, 'GalaxySpace', { link = 'Normal' })
 
     local lsp_client = {
       ShowLspClient = {
         provider = function()
           vim.api.nvim_command('hi GalaxyShowLspClient guifg=' .. mode_color())
-          return lspclient.get_lsp_client()
+          return lspclient.get_lsp_client() .. ' '
         end,
         condition = function()
           local tbl = { ['dashboard'] = true, [''] = true }
@@ -71,19 +71,19 @@ return {
           return true
         end,
         icon = '   ',
-        separator = ""
+        separator = ' '
       }
     }
 
     local git_branch = {
       GitBranch = {
-        icon = " ",
+        icon = ' ',
         provider = function()
           vim.api.nvim_command('hi GalaxyGitBranch guifg=' .. mode_color())
           local branch = vcs.get_git_branch()
           return branch and branch .. ' ' or nil
         end,
-        separator = ""
+        separator = ' '
       }
     }
 
@@ -91,11 +91,12 @@ return {
       {
         Space = {
           provider = function()
-            return " "
+            return ' '
           end,
         },
       },
       git_branch,
+      lsp_client,
     }
 
     gls.mid =
@@ -106,7 +107,7 @@ return {
             vim.api.nvim_command('hi GalaxyViMode guifg=#0F131A guibg=' .. mode_color())
             return ' ' .. os.date('%H:%M') .. ' '
           end,
-          separator = "  ",
+          separator = '  ',
         }
       }
     }
@@ -116,32 +117,48 @@ return {
         NoiceMode = {
           provider = function()
             vim.api.nvim_command('hi GalaxyNoiceMode guifg=' .. mode_color())
-            if package.loaded["noice"] and require("noice").api.status.mode.has() then
-              return require("noice").api.status.mode.get() .. " "
+            if package.loaded['noice'] and require('noice').api.status.mode.has() then
+              return require('noice').api.status.mode.get() .. ' '
             else
-              return ""
+              return ''
             end
           end,
-          separator = " "
+          separator = ' '
         }
       },
-      lsp_client,
+      {
+        Search = {
+          provider = function()
+            vim.api.nvim_command('hi GalaxySearch guifg=' .. mode_color())
+            local result = vim.fn.searchcount()
+            if not result.incomplete == 1 then -- timed out
+              return string.format('%7s', '?/??')
+            elseif result.total <= 0 then
+              return ''
+            end
+            local total   = result.total < 100 and result.total or '+99'
+            local current = result.current < 100 and result.current or '+99'
+            return string.format('%7s', current .. '/' .. total)
+          end,
+          separator = ' ',
+        }
+      },
       {
         LineInfo = {
           provider = function()
             vim.api.nvim_command('hi GalaxyLineInfo guifg=' .. mode_color())
-            return string.format("%3d", vim.fn.col('.'))
+            return string.format('%3d', vim.fn.col('.'))
           end,
-          separator = " "
+          separator = ' '
         }
       },
       {
         PerCent = {
           provider = function()
             vim.api.nvim_command('hi GalaxyPerCent guifg=' .. mode_color())
-            return fileinfo.current_line_percent()
+            return string.format('%5s', fileinfo.current_line_percent())
           end,
-          separator = " ",
+          separator = ' ',
         }
       }
     }
