@@ -38,6 +38,7 @@ wk.register({
 })
 
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
+vim.keymap.set('n', '<leader>qa', '<leader>qq', { remap = true, desc = 'Quit all' })
 
 -- Git
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
@@ -194,7 +195,7 @@ if wk_ok then
   end
 end
 
-vim.keymap.set('n', '<C-b>', '<cmd>:Neotree toggle reveal_force_cwd<cr>', opts)
+vim.keymap.set('n', '<C-b>', '<cmd>Neotree toggle reveal_force_cwd<cr>', opts)
 
 -- search current word
 vim.keymap.set({ "n" }, "<leader>sw", "<cmd>lua require('spectre').open_visual({select_word=true})<CR>")
