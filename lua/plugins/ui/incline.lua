@@ -18,7 +18,7 @@ end
 
 local function get_git_diff(props)
   local git_icons = require('lazyvim.config').icons.git
-  local icons = { removed = git_icons.removed, changed = git_icons.modified, added = git_icons.modified }
+  local icons = { removed = git_icons.removed, changed = git_icons.modified, added = git_icons.added }
   local hightligh = { removed = 'GitSignsDelete', changed = "GitSignsChange", added = 'GitSignsAdd' }
   local labels = {}
   local signs = vim.api.nvim_buf_get_var(props.buf, "gitsigns_status_dict")
