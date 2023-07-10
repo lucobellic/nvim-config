@@ -34,10 +34,6 @@ wk.register({
 vim.api.nvim_set_keymap('n', '<leader>a', '<cmd>silent %y+<cr>', opts)
 vim.keymap.set('n', '<leader>qa', '<leader>qq', { remap = true, desc = 'Quit all' })
 
--- Git
-vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Git commit<cr>', opts)
-vim.api.nvim_set_keymap('n', '<leader>ga', '<cmd>Git commit --amend<cr>', opts)
-
 vim.api.nvim_set_keymap('c', '<esc>', '<C-c>', opts)
 vim.api.nvim_set_keymap('t', '<esc>', '<C-\\><C-n>', opts)
 vim.api.nvim_set_keymap('n', '<leader>w', '<C-w>', { noremap = false })
