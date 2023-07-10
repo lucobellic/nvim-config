@@ -12,12 +12,6 @@ vim.keymap.del('n', '<leader>gG')
 
 local wk_ok, wk = pcall(require, 'which-key')
 
-if wk_ok then
-  wk.register({
-    ['<leader>y'] = { ':YankyRingHistory<cr>', 'Yank History' },
-  })
-end
-
 -- NOTE: Set <c-f> keymap once again due to configuration issue
 vim.keymap.set(
   'n',
