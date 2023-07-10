@@ -18,7 +18,7 @@ return function()
 
 	keys[#keys + 1] = { "<leader>rf", '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' }
 
-	keys[#keys + 1] = { "<leader>cf", '<cmd>lua require("plugins.lsp.util.fixcurrent")()<CR>' }
+	keys[#keys + 1] = { "<leader>cf", '<cmd>lua require("util.lsp.fixcurrent")()<CR>' }
 
 	keys[#keys + 1] = {
 		"<leader>ca",
