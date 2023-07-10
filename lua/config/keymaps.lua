@@ -73,9 +73,6 @@ vim.api.nvim_set_keymap('t', '<Esc>', '(&filetype == "fzf") ? "<Esc>" : "<C-\\><
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
 vim.api.nvim_set_keymap('v', '/', '"hy/<C-r>h', { silent = false, noremap = true })
 
--- Outline
-vim.api.nvim_set_keymap('n', '<Space>go', ':SymbolsOutline<cr>', opts)
-
 -- Tab navigation
 if wk_ok then
   wk.register({
