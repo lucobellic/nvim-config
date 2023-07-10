@@ -171,28 +171,4 @@ if wk_ok then
       },
     }
   }
-
-  local normal_refactoring = {
-    ['<leader>r'] = {
-      -- Extract block doesn't need visual mode
-      b = {
-        b = {
-          [[ <Cmd>lua require('refactoring').refactor('Extract Block')<CR>]],
-          'Extract Block'
-        },
-        f = {
-          [[ <Cmd>lua require('refactoring').refactor('Extract Block To File')<CR>]],
-          'Extract Block To File'
-        }
-      },
-      -- Inline variable can also pick up the identifier currently under the cursor without visual mode
-      i = {
-        [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
-        'Inline Variable'
-      }
-    }
-  }
-
-  wk.register(visual_refactoring, { mode = 'v', noremap = true, silent = true, expr = false })
-  wk.register(normal_refactoring, { mode = 'n', noremap = true, silent = true, expr = false })
-end
+})
