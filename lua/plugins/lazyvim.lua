@@ -2,12 +2,15 @@ return {
   'LazyVim/LazyVim',
   opts = {
     colorscheme = 'ayugloom',
+    default = {
+      keymaps = false,
+    },
     icons = {
       dap = {
         Stopped = { ' ', 'DiagnosticWarn', 'DapStoppedLine' }, --  
-        Breakpoint = { '', 'DiagnosticError' },               -- 󰧞   
+        Breakpoint = { '', 'DiagnosticError' },              -- 󰧞   
         BreakpointCondition = { '', 'DiagnosticWarn' },
-        BreakpointRejected = {'', 'Comment' },
+        BreakpointRejected = { '', 'Comment' },
         LogPoint = ".>",
       },
       diagnostics = {

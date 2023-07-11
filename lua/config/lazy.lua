@@ -30,6 +30,7 @@ require('lazy').setup({
     { import = 'lazyvim.plugins.extras.formatting.prettier' },
     { import = 'lazyvim.plugins.extras.coding.copilot' },
 
+    { import = 'plugins' },
     { import = 'plugins.completion' },
     { import = 'plugins.dap' },
     { import = 'plugins.editor' },
