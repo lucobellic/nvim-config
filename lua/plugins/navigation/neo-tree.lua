@@ -28,18 +28,6 @@ return {
       { '<leader>E',  false },
       { '<leader>ee', '<leader>fe', desc = 'Explorer NeoTree (root dir)', remap = true },
       { '<leader>eE', '<leader>fE', desc = 'Explorer NeoTree (cwd)',      remap = true },
-      {
-        '<c-b>',
-        function()
-          require("neo-tree.command").execute({
-            action = 'show',
-            toggle = true,
-            dir = vim.loop.cwd(),
-          })
-        end,
-        desc = 'Explorer NeoTree (root_dir)',
-        remap = true
-      },
     },
     init = function()
       vim.g.neo_tree_remove_legacy_commands = 0

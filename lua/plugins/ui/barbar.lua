@@ -20,8 +20,10 @@ return {
     { '<C-0>',      ':BufferLast<cr>',             desc = 'Buffer Last' },
     { '<C-q>',      ':BufferClose<cr>',            desc = 'Buffer Close' },
     { '<C-/>',      ':BufferPick<cr>',             desc = 'Buffer Pick' },
-    { '<leader>bd', ':BufferOrderByDirectory<cr>', desc = 'Buffer Order By Directory' },
+    { '<leader>bd', ':BufferClose<cr>',            desc = 'Buffer Close' },
+    { '<leader>bf', ':BufferOrderByDirectory<cr>', desc = 'Buffer Order By Directory' },
     { '<leader>bl', ':BufferOrderByLanguage<cr>',  desc = 'Buffer Order By Language' },
+    { '<leader>bp', ':BufferPin<cr>',              desc = 'Buffer Order By Language' },
   },
   opts = {
     -- Enable/disable animations
