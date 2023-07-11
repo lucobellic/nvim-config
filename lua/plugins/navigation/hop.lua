@@ -1,6 +1,7 @@
 return {
   'phaazon/hop.nvim',
   event = 'VeryLazy',
+  enabled = false,
   branch = 'v2',
   keys = {
     {
