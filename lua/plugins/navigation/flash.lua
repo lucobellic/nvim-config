@@ -3,7 +3,7 @@ local Flash = require("flash")
 ---@param opts Flash.Format
 local function format(opts)
   -- always show first and second label
-    return {
+  return {
     { opts.match.label1, "FlashMatch" },
     { opts.match.label2, "FlashLabel" },
   }
@@ -111,5 +111,10 @@ return {
         desc = 'Flash Word',
       },
     }
-  end
+  end,
+  opts = {
+    jump = { autojump = true },
+    modes = { search = { highlight = { backdrop = true } } },
+    prompt = { enabled = false, },
+  }
 }
