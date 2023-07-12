@@ -33,10 +33,28 @@ return {
       'MunifTanjim/nui.nvim',
     },
     keys = {
-      { '<leader>e',  false },
-      { '<leader>E',  false },
-      { '<leader>ee', '<leader>fe', desc = 'Explorer NeoTree (root dir)', remap = true },
-      { '<leader>eE', '<leader>fE', desc = 'Explorer NeoTree (cwd)',      remap = true },
+      { '<leader>e', false },
+      { '<leader>E', false },
+      {
+        '<leader>ee',
+        '<leader>fe',
+        desc = 'Explorer NeoTree (root dir)',
+        remap = true
+      },
+      {
+        '<leader>eE',
+        '<leader>fE',
+        desc = 'Explorer NeoTree (cwd)',
+        remap = true
+      },
+      {
+        '<leader>ef',
+        function()
+          require('neo-tree.command').execute({ action = 'focus', source = 'filesystem', reveal = 'true' })
+        end,
+        desc = 'Focus Current File',
+        remap = true
+      },
     },
     init = function()
       vim.g.neo_tree_remove_legacy_commands = 0
@@ -46,19 +64,19 @@ return {
       popup_border_style = "rounded",
       enable_git_status = true,
       enable_diagnostics = true,
-      sort_case_insensitive = true,    -- used when sorting files and directories in the tree
-      sort_function = nil,             -- use a custom function for sorting files and directories in the tree
+      sort_case_insensitive = true,     -- used when sorting files and directories in the tree
+      sort_function = nil,              -- use a custom function for sorting files and directories in the tree
       source_selector = {
-        winbar = false,                -- toggle to show selector on winbar
-        statusline = false,            -- toggle to show selector on statusline
-        sources = {                    -- table
+        winbar = true,                  -- toggle to show selector on winbar
+        statusline = false,             -- toggle to show selector on statusline
+        sources = {                     -- table
           {
-            source = "filesystem",     -- string
-            display_name = "  Files " -- string | nil
+            source = "filesystem",      -- string
+            display_name = "   Files " -- string | nil
           },
           {
-            source = "git_status",   -- string
-            display_name = "  Git " -- string | nil
+            source = "document_symbols",  -- string
+            display_name = "   Symbols " -- string | nil
           },
         },
         truncation_character = '',            -- string
@@ -118,7 +136,7 @@ return {
         },
         name = {
           trailing_slash = false,
-          use_git_status_colors = false,
+          use_git_status_colors = true,
           highlight = "NeoTreeFileName",
         },
         align_git_status = {
@@ -246,17 +264,17 @@ return {
               content = {
                 { "name",              zindex = 10 },
                 { "align_diagnostics", zindex = 10, align = "right" },
-                {
-                  "align_git_changes",
-                  symbols = {
-                    added    = " ",
-                    deleted  = " ",
-                    modified = " ",
-                    renamed  = " ",
-                  },
-                  zindex = 10,
-                  align = "right"
-                },
+                -- {
+                --   "align_git_changes",
+                --   symbols = {
+                --     added    = " ",
+                --     deleted  = " ",
+                --     modified = " ",
+                --     renamed  = " ",
+                --   },
+                --   zindex = 10,
+                --   align = "right"
+                -- },
                 {
                   "align_git_status",
                   symbols = {
@@ -296,7 +314,7 @@ return {
             --".null-ls_*",
           },
         },
-        follow_current_file = true,             -- This will find and focus the file in the active buffer every
+        follow_current_file = false,            -- This will find and focus the file in the active buffer every
         -- time the current file is changed while the tree is open.
         group_empty_dirs = false,               -- when true, empty folders will be grouped together
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
