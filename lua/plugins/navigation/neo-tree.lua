@@ -16,6 +16,15 @@ end
 
 return {
   {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      defaults = {
+        ['<leader>e'] = { name = '+explorer' },
+      },
+    },
+  },
+  {
     'nvim-neo-tree/neo-tree.nvim',
     branch = 'v2.x',
     dependencies = {
