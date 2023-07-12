@@ -3,21 +3,21 @@ local Flash = require("flash")
 ---@param opts Flash.Format
 local function format(opts)
   -- always show first and second label
-  return {
+    return {
     { opts.match.label1, "FlashMatch" },
     { opts.match.label2, "FlashLabel" },
   }
 end
 
-local function jump_word()
+local function jump_word(multi_window)
   require('flash').jump({
-    search = { mode = "search" },
+    search = { mode = "search", multi_window = multi_window },
     label = { after = false, before = { 0, 0 }, uppercase = false, format = format },
     pattern = [[\<]],
     action = function(match, state)
       state:hide()
       Flash.jump({
-        search = { max_length = 0 },
+        search = { max_length = 0, multi_window = multi_window },
         highlight = { matches = false },
         label = { format = format },
         matcher = function(win)
@@ -44,17 +44,18 @@ local function jump_word()
   })
 end
 
-local function jump_word_begin()
+local function jump_word_begin(multi_window)
   require("flash").jump({
     search = {
       mode = function(str)
         return "\\<" .. str
       end,
+      multi_window = multi_window
     },
   })
 end
 
-local function jump_select_word()
+local function jump_select_word(multi_window)
   require("flash").jump({
     pattern = ".", -- initialize pattern with any char
     search = {
@@ -66,15 +67,20 @@ local function jump_select_word()
         -- return word pattern and proper skip pattern
         return ([[\v<%s\w*>]]):format(pattern), ([[\v<%s]]):format(pattern)
       end,
+      multi_window = multi_window
     },
     -- select the range
     jump = { pos = "range" },
   })
 end
 
-local function jump_line()
+local function jump_line(multi_window)
   require("flash").jump({
-    search = { mode = "search", max_length = 0 },
+    search = {
+      mode = "search",
+      max_length = 0,
+      multi_window = multi_window
+    },
     label = { after = { 0, 0 } },
     pattern = "^"
   })
@@ -82,22 +88,28 @@ end
 
 return {
   'folke/flash.nvim',
-  keys = {
-    {
-      '<leader>k',
-      function() require("flash").jump() end,
-      desc = 'Flash Range'
-    },
-    {
-      '<leader>j',
-      jump_word,
-      desc = 'Flash Word',
-    },
-    {
-      '<leader>l',
-      jump_line,
-      desc = 'Flash Line'
+  keys = function()
+    return {
+      {
+        '<leader>k',
+        function() require("flash").jump({ search = { multi_window = false } }) end,
+        desc = 'Flash Range'
+      },
+      {
+        '<leader>K',
+        function() require("flash").jump() end,
+        desc = 'Flash Range'
+      },
+      {
+        '<leader>j',
+        function() jump_word(false) end,
+        desc = 'Flash Word',
+      },
+      {
+        '<leader>J',
+        function() jump_word(true) end,
+        desc = 'Flash Word',
+      },
     }
-
-  }
+  end
 }
