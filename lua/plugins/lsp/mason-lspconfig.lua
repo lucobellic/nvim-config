@@ -7,10 +7,8 @@ return {
       'cmake',
       'lua_ls',
       'rust_analyzer',
-      'pylsp',
-      'pyright',
       'clangd',
     },
-    automatic_installation = true,
+    automatic_installation = false,
   }
 }

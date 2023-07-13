@@ -1,23 +1,22 @@
 return {
   "neovim/nvim-lspconfig",
-  opts = {
+  opts = function(_, opts)
     -- Automatically format on save
-    autoformat = false,
+    opts.autoformat = false
+    opts.inlay_hints = { enabled = true }
+
     -- Enable nvim-ufo capabilities
-    capabilities = {
+    opts.capabilities = vim.tbl_deep_extend('force', opts.capabilities or {}, {
       textDocument = {
         foldingRange = {
           dynamicRegistration = false,
           lineFoldingOnly = true,
         },
       },
-    },
-    inlay_hints = {
-      enabled = true,
-    },
-    servers = {
+    })
+
+    opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
       clangd = require('util.lsp.servers.clangd'),
-      pylsp = require('util.lsp.servers.pylsp'),
       lua_ls = {
         Lua = {
           workspace = {
@@ -25,8 +24,11 @@ return {
           },
         },
       },
-    },
-    diagnostics = {
+    })
+
+    opts.servers.pyright = nil
+
+    opts.diagnostics = vim.tbl_deep_extend('force', opts.diagnostics or {}, {
       virtual_text = false,
       virtual_lines = false,
       signs = true,
@@ -34,7 +36,7 @@ return {
       update_in_insert = false,
       severity_sort = true,
       float = { source = true, header = {} },
-    },
-  },
+    })
+  end,
   init = require("util.lsp.keymaps"),
 }
