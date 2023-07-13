@@ -15,7 +15,7 @@ return {
   },
   opts = {
     show = true,
-    show_in_active_only = false,
+    show_in_active_only = true,
     set_highlights = true,
     handle = {
       text = ' ',
@@ -68,17 +68,25 @@ return {
     },
     excluded_filetypes = {
       '',
+      'Navbuddy',
+      'Outline',
       'TelescopePrompt',
       'chatgpt',
       'cmp_docs',
       'cmp_menu',
+      'dap-repl',
+      'dapui_breakpoints',
+      'dapui_console',
+      'dapui_scopes',
+      'dapui_stacks',
+      'dapui_watches',
+      'dashboard',
+      'floaterm',
+      'toggleterm',
       'incline',
       'neo-tree',
       'notify',
       'prompt',
-      'floaterm',
-      'dashboard',
-      'Navbuddy'
     },
     handlers = {
       cursor = true,
