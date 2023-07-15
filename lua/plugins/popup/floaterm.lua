@@ -15,6 +15,81 @@ local function floaterm_toogle(params)
   end
 end
 
+--- Function to override the floaterm#window#open function
+---@param bufnr number
+---@param config any @floaterm configuration
+---@return number winid
+local function open_popup(bufnr, config)
+  local highlights = {
+    'TelescopePromptTitle',
+    'TelescopeResultsTitle',
+    'TelescopePreviewTitle',
+  }
+
+  --- Get popup highlight string with title highlight based on index value
+  --- Find the first digit as index from the provided string
+  ---@param index string
+  ---@return string
+  local function get_highlight(index)
+    local term_index = tonumber(index:match('%d') or '1') - 1
+    local highlight_index = (term_index % #highlights) + 1
+    local highlight = highlights[highlight_index]
+    return ("Normal:Normal,FloatBorder:FloatBorder,FloatTitle:%s"):format(highlight)
+  end
+
+  --- Extract title and index from floaterm title
+  ---@param title string @Title provided by floaterm, expected format: "Title 1/2"
+  ---@return {title:string, index:string}
+  local function extract_title_and_index(title)
+    local tokens = title.gmatch(title, "[^%s]+")
+    return { title = tokens() or '', index = tokens() or '' }
+  end
+
+
+  local parsed_title = extract_title_and_index(config.title)
+
+  local Popup = require("nui.popup")
+  local NuiText = require("nui.text")
+
+  local popup = Popup({
+    position = "50%",
+    bufnr = bufnr,
+    size = {
+      width = config.width,
+      height = config.height,
+    },
+    enter = true,
+    focusable = true,
+    zindex = 50,
+    relative = "editor",
+    border = {
+      padding = {
+        top = 0,
+        bottom = 0,
+        left = 0,
+        right = 0,
+      },
+      style = "rounded",
+      text = {
+        top = ' ' .. parsed_title.title .. ' ',
+        top_align = "center",
+        bottom = NuiText(' ' .. parsed_title.index .. ' ', "TelescopePromptCounter"),
+        bottom_align = "right",
+      },
+    },
+    buf_options = {
+      modifiable = true,
+      readonly = false,
+    },
+    win_options = {
+      winhighlight = get_highlight(parsed_title.index),
+    },
+  })
+
+  popup:mount()
+  return popup.winid
+end
+
 return {
   'lucobellic/vim-floaterm',
   event = 'VeryLazy',
@@ -29,12 +104,12 @@ return {
   init = function()
     vim.g.floaterm_shell = vim.o.shell
     vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
-    vim.g.floaterm_autohide = 1
+    vim.g.floaterm_autohide = 2
     vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
     vim.g.floaterm_autoinsert = true
     vim.g.floaterm_titleposition = 'center'
     vim.g.floaterm_title = 'Terminal $1/$2'
-
+    vim.g.floaterm_openoverride = open_popup
     vim.api.nvim_create_user_command('ToggleTool', floaterm_toogle, { nargs = 1, count = 1 })
-  end
+  end,
 }
