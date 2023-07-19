@@ -40,6 +40,8 @@ return {
       },
     },
     keys = {
+      { '<leader>gc', false },
+      { '<leader>gs', false },
       {
         '<leader>FF',
         ':<C-u>:FzfLua files<cr>',
@@ -73,18 +75,19 @@ return {
         end,
         desc = 'Find Emoji'
       },
-      { '<leader>fc',  function() require('telescope.builtin').commands() end,   desc = 'Find Commands' },
-      { '<leader>ff',  function() require('telescope.builtin').find_files() end, desc = 'Find Files' },
-      { '<C-p>',       function() require('telescope.builtin').find_files() end, desc = 'Find Files' },
-      { '<leader>fF',  ':<C-u>:FzfLua files<cr>',                                desc = 'Find All File' },
-      { '<leader>fgs', function() require('telescope.builtin').git_status() end, desc = 'Git Status' },
-      { '<leader>fk',  function() require('telescope.builtin').keymaps() end,    desc = 'Find Keymaps' },
-      { '<leader>fm',  function() require('telescope.builtin').marks() end,      desc = 'Find Marks' },
+      { '<leader>fc',  function() require('telescope.builtin').commands() end,    desc = 'Find Commands' },
+      { '<leader>ff',  function() require('telescope.builtin').find_files() end,  desc = 'Find Files' },
+      { '<C-p>',       function() require('telescope.builtin').find_files() end,  desc = 'Find Files' },
+      { '<leader>fF',  ':<C-u>:FzfLua files<cr>',                                 desc = 'Find All File' },
+      { '<leader>fgs', function() require('telescope.builtin').git_status() end,  desc = 'Git Status' },
+      { '<leader>fgc', function() require('telescope.builtin').git_commits() end, desc = 'Git Commits' },
+      { '<leader>fk',  function() require('telescope.builtin').keymaps() end,     desc = 'Find Keymaps' },
+      { '<leader>fm',  function() require('telescope.builtin').marks() end,       desc = 'Find Marks' },
 
       -- Obsidian
-      { '<leader>fof', ':ObsidianQuickSwitch<cr>',                               desc = 'Obsidian Find Files' },
-      { '<leader>fow', ':ObsidianSearch<cr>',                                    desc = 'Obsidian Search' },
-      { '<leader>fr',  function() require('telescope.builtin').oldfiles() end,   desc = 'Find Recent File' },
+      { '<leader>fof', ':ObsidianQuickSwitch<cr>',                                desc = 'Obsidian Find Files' },
+      { '<leader>fow', ':ObsidianSearch<cr>',                                     desc = 'Obsidian Search' },
+      { '<leader>fr',  function() require('telescope.builtin').oldfiles() end,    desc = 'Find Recent File' },
       {
         '<leader>fw',
         function() require('telescope.builtin').grep_string() end,
