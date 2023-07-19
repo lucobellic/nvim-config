@@ -42,8 +42,8 @@ return {
     keys = {
       {
         '<leader>FF',
-        ':<C-u>:Files<cr>',
-        desc = 'Find All File'
+        ':<C-u>:FzfLua files<cr>',
+        desc = 'Find All Files'
       },
       {
         '<leader>FL',
@@ -76,7 +76,7 @@ return {
       { '<leader>fc',  function() require('telescope.builtin').commands() end,   desc = 'Find Commands' },
       { '<leader>ff',  function() require('telescope.builtin').find_files() end, desc = 'Find Files' },
       { '<C-p>',       function() require('telescope.builtin').find_files() end, desc = 'Find Files' },
-      { '<leader>fF',  ':<C-u>:Files<cr>',                                       desc = 'Find All File' },
+      { '<leader>fF',  ':<C-u>:FzfLua files<cr>',                                desc = 'Find All File' },
       { '<leader>fgs', function() require('telescope.builtin').git_status() end, desc = 'Git Status' },
       { '<leader>fk',  function() require('telescope.builtin').keymaps() end,    desc = 'Find Keymaps' },
       { '<leader>fm',  function() require('telescope.builtin').marks() end,      desc = 'Find Marks' },
