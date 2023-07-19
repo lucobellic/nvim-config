@@ -8,7 +8,8 @@ vim.o.laststatus = 3
 -- To prevent this, set `splitkeep` to either `screen` or `topline`.
 vim.o.splitkeep = 'screen'
 
-vim.o.number = false
+vim.o.number = true
+vim.o.relativenumber = false
 
 vim.o.showbreak = '↪'
 
@@ -39,8 +40,8 @@ vim.opt.fillchars = {
   verthoriz = '┼',
   fold = '',
   foldsep = ' ',
-  foldopen = '',
-  foldclose = '',
+  foldopen = '',
+  foldclose = '',
 }
 
 -- Fold configuration
