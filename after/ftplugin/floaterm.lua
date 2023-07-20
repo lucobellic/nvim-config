@@ -29,8 +29,8 @@ end
 local function close_current_floaterm()
   local buffer = vim.api.nvim_call_function('floaterm#buflist#curr', {})
   if buffer > 0 then
-    vim.api.nvim_call_function('floaterm#terminal#kill', { buffer })
     vim.api.nvim_call_function('floaterm#prev', {})
+    vim.api.nvim_call_function('floaterm#terminal#kill', { buffer })
   else
     vim.notify('No floaterm to close', vim.log.levels.WARN)
   end
