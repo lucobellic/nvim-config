@@ -1,9 +1,12 @@
 return {
-  'glepnir/lspsaga.nvim',
+  'nvimdev/lspsaga.nvim',
   event = 'VeryLazy',
   dependencies = {
     { 'nvim-tree/nvim-web-devicons' },
     { 'nvim-treesitter/nvim-treesitter' }
+  },
+  keys = {
+    { '<leader>go', ':Lspsaga outline<cr>', desc = 'Symbols Outline' }
   },
   opts = {
     diagnostic = {
@@ -16,7 +19,7 @@ return {
       keys = {
         jump = '<Enter>',
         expand_collapse = nil
-      }
+      },
     },
     symbol_in_winbar = {
       enable = true,
@@ -29,9 +32,12 @@ return {
     ui = {
       theme = 'round',
       border = 'rounded',
-      winblend = 0,
+      winblend = vim.o.pumblend,
+      lines = { '', '', '', '', '' },
+      expand = '',
+      collapse = '',
       colors = {
-        --float window normal bakcground color
+        --float window normal background color
         normal_bg = '#0B0E14',
         --title background color
         title_bg = '#0D1017',
