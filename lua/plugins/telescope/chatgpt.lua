@@ -8,7 +8,7 @@ return {
   opts = {
     chat = {
       keymaps = {
-        close = { "<C-c>", "q" },
+        close = { "<C-c>", "<C-q>"},
         yank_last = "<C-y>",
         yank_last_code = "<C-k>",
         scroll_up = "<C-u>",
