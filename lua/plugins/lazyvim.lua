@@ -2,7 +2,7 @@ return {
   'LazyVim/LazyVim',
   opts = {
     colorscheme = 'ayugloom',
-    default = {
+    defaults = {
       keymaps = false,
     },
     icons = {
@@ -61,6 +61,6 @@ return {
         Value = " ",
         Variable = " ",
       },
-    }
+    },
   },
 }
