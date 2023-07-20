@@ -14,7 +14,7 @@ return {
     wilder.set_option('pipeline', {
       wilder.branch(
         {
-          wilder.check(function(_, x) return x == '' end),
+          wilder.check(function(ctx, x) return x == '' and vim.fn.getcmdtype() == ':' end),
           wilder.history(),
         },
         wilder.cmdline_pipeline({
@@ -24,7 +24,7 @@ return {
           fuzzy = 2,
           fuzzy_filter = wilder.lua_fzy_filter(),
         }),
-        wilder.vim_search_pipeline()
+        wilder.search_pipeline()
       )
     })
 
@@ -54,6 +54,7 @@ return {
         max_width = '30%',
         margin = 6,              -- 5 stick to noice cmdline with 1 margin and without border
         min_height = 0,          -- set to the same as 'max_height' for a fixed height window
+        max_height = 10,
         prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
         reverse = 0,             -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
         pumblend = vim.o.pumblend,
