@@ -18,28 +18,30 @@ return {
         ':DiffviewOpen<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview Open',
-        silent = true
       },
       {
         '<leader>gdq',
         ':DiffviewClose<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview Close',
-        silent = true
       },
       {
         '<leader>gdf',
         ":0,$DiffviewFileHistory --follow<cr>",
         mode = { 'n' },
         desc = 'Diffview File History',
-        silent = true
+      },
+      {
+        '<leader>gdf',
+        ":DiffviewFileHistory<cr>",
+        mode = { 'v' },
+        desc = 'Diffview File History',
       },
       {
         '<leader>gdd',
         ':DiffviewOpen origin/develop...HEAD<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview origin/develop...HEAD',
-        silent = true
       },
     },
     opts = {
