@@ -19,11 +19,11 @@ return {
     set_highlights = true,
     handle = {
       text = ' ',
-      hide_if_all_visible = true
+      hide_if_all_visible = false
     },
     marks = {
       Cursor = {
-        text = '', -- ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
+        text = '', --  ┠ ┡ ┢ ┣ ┤ ┥ ┦ ┧ ┨ ┩ ┪ ┫ ┼ ╀ ╁ ╂ ╃ ╄ ╅ ╆ ╇ ╈ ╉ ╊ ╋
         priority = 0,
       },
       Search = {
@@ -82,14 +82,16 @@ return {
       'dapui_watches',
       'dashboard',
       'floaterm',
-      'toggleterm',
+      'fzf',
       'incline',
       'neo-tree',
       'notify',
       'prompt',
+      'sagaoutline',
+      'toggleterm',
     },
     handlers = {
-      cursor = true,
+      cursor = false,
       diagnostic = true,
       gitsigns = false,
       handle = true,
