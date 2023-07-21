@@ -10,7 +10,8 @@ return {
       preview_title = 'TelescopePreviewTitle',
     },
     files = {
-      rg_opts = '--line-number --smart-case --no-ignore --ignore-exclude --files --hidden --follow'
+      cmd = 'rg --line-number --smart-case --no-ignore --no-ignore-exclude --files --hidden --follow',
+      rg_opts = '--line-number --smart-case --no-ignore --no-ignore-exclude --files --hidden --follow'
     },
   }
 }
