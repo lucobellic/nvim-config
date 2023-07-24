@@ -15,17 +15,15 @@ return {
     -- { '<A-K>',     function(...) require('smart-splits').swap_buf_up(...) end,       desc = 'Swap buffer up' },
     -- { '<A-L>',     function(...) require('smart-splits').swap_buf_right(...) end,    desc = 'Swap buffer right' },
   },
-  config = function()
-    require('smart-splits').setup({
-      -- Ignored filetypes (only while resizing)
-      ignored_filetypes = {
-        'nofile',
-        'quickfix',
-        'prompt',
-      },
-      -- Ignored buffer types (only while resizing)
-      ignored_buftypes = { 'NvimTree', 'neo-tree' },
-      smart_splits = {},
-    })
-  end
+  opts = {
+    -- Ignored filetypes (only while resizing)
+    ignored_filetypes = {
+      'nofile',
+      'quickfix',
+      'prompt',
+    },
+    -- Ignored buffer types (only while resizing)
+    ignored_buftypes = { 'NvimTree', 'neo-tree' },
+    smart_splits = {},
+  }
 }
