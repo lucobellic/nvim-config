@@ -39,13 +39,13 @@ return {
           if vim.wo.diff then return '>H' end
           vim.schedule(function() gs.next_hunk() end)
           return '<Ignore>'
-        end, { expr = true })
+        end, { repeatable = true })
 
         map('n', '<H', function()
           if vim.wo.diff then return '<H' end
           vim.schedule(function() gs.prev_hunk() end)
           return '<Ignore>'
-        end, { expr = true })
+        end, { repeatable = true })
 
         -- Actions
         map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })

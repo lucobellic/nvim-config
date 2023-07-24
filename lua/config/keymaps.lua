@@ -163,18 +163,18 @@ vim.keymap.set(
 )
 
 -- Remap smart-splits to use range
-map('n', '<C-left>', require('smart-splits').resize_left, { desc = 'Resize left' })
-map('n', '<C-down>', require('smart-splits').resize_down, { desc = 'Resize down' })
-map('n', '<C-up>', require('smart-splits').resize_up, { desc = 'Resize up' })
-map('n', '<C-right>', require('smart-splits').resize_right, { desc = 'Resize right' })
+map('n', '<C-left>', require('smart-splits').resize_left, { repeatable = true, desc = 'Resize left' })
+map('n', '<C-down>', require('smart-splits').resize_down, { repeatable = true, desc = 'Resize down' })
+map('n', '<C-up>', require('smart-splits').resize_up, { repeatable = true, desc = 'Resize up' })
+map('n', '<C-right>', require('smart-splits').resize_right, { repeatable = true, desc = 'Resize right' })
 
 map('n', '<leader>a', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
 
 -- Spelling
-map('n', '>S', ']s', { desc = 'Next Spelling' })
-map('n', '>s', ']s', { desc = 'Next Spelling' })
-map('n', '<S', '[s', { desc = 'Prev Spelling' })
-map('n', '<s', '[s', { desc = 'Prev Spelling' })
+map('n', '>S', ']s', { repeatable = true, desc = 'Next Spelling' })
+map('n', '>s', ']s', { repeatable = true, desc = 'Next Spelling' })
+map('n', '<S', '[s', { repeatable = true, desc = 'Prev Spelling' })
+map('n', '<s', '[s', { repeatable = true, desc = 'Prev Spelling' })
 
 -- Copilot
 wk.register({ ['<leader>cp'] = { ':Copilot panel<cr>', 'Copilot Panel' } })
