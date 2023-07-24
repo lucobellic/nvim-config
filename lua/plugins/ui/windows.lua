@@ -15,6 +15,7 @@ return {
       ignore = {
         buftype = { 'quickfix', 'nofile', 'neo-tree' },
         filetype = {
+          'DiffviewFiles',
           'NvimTree',
           'neo-tree',
           'undotree',

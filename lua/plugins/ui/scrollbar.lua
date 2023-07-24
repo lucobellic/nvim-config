@@ -68,6 +68,7 @@ return {
     },
     excluded_filetypes = {
       '',
+      'DiffviewFiles',
       'Navbuddy',
       'Outline',
       'TelescopePrompt',
@@ -83,6 +84,7 @@ return {
       'dashboard',
       'floaterm',
       'fzf',
+      'gitcommit',
       'incline',
       'neo-tree',
       'notify',
