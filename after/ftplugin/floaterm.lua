@@ -1,6 +1,5 @@
 local opts = { silent = true, noremap = true }
 
-vim.api.nvim_buf_set_keymap(0, 'n', 'q', ':FloatermHide<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 'n', '<esc>', ':FloatermHide<CR><esc>', opts)
 
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', ':FloatermNext<CR>', opts)

@@ -39,6 +39,9 @@ map('n', '<leader>wv', '<C-w>v', { desc = 'Split window vertically' })
 map('n', '<leader>wx', '<C-w>x', { desc = 'Swap current with next' })
 map('n', '<leader>wt', '<C-w>T', { desc = 'Break out into a next tab' })
 map('n', '<leader>wT', '<C-w>T', { desc = 'Break out into a next tab' })
+map('n', '<leader>ww', '<C-w>p', { desc = 'Other window', remap = true })
+map('n', '<leader>wd', '<C-w>c', { desc = 'Delete window', remap = true })
+map('n', '<leader>w=', '<C-w>=', { desc = 'Equal high and wide', remap = true })
 
 
 -- Move Lines
@@ -82,6 +85,9 @@ map("i", ";", ";<c-g>u")
 -- save file
 map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
 
+--keywordprg
+map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
+
 -- better indenting
 map("v", "<", "<gv")
 map("v", ">", ">gv")
@@ -98,12 +104,7 @@ map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 map("n", "<leader>uf", require("lazyvim.plugins.lsp.format").toggle, { desc = "Toggle format on Save" })
 map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle Spelling" })
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle Word Wrap" })
-map("n",
-  "<leader>ul", function()
-  Util.toggle("relativenumber", true)
-  Util.toggle("number")
-end, { desc = "Toggle Line Numbers" })
-map("n", "<leader>ud", Util.toggle_diagnostics, { desc = "Toggle Diagnostics" })
+map("n", "<leader>ul", function() Util.toggle_number() end, { desc = "Toggle Line Numbers" })
 
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map("n", "<leader>uc", function() Util.toggle("conceallevel", false, { 0, conceallevel }) end,
@@ -113,6 +114,7 @@ if vim.lsp.inlay_hint then
 end
 
 wk.register({ ['<leader>ut'] = { ':TransparencyToggle<cr>', 'Toggle Transparency' } })
+-- map("n", "<leader>ud", Util.toggle_diagnostics, { desc = "Toggle Diagnostics" })
 wk.register({
   ['<leader>ud'] = {
     name = 'Toggle Diagnostics',
@@ -138,28 +140,16 @@ map("t", "<S-down>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })
 map("t", "<S-up>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
 map("t", "<S-right>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
 
--- windows
-map("n", "<leader>ww", "<C-W>p", { desc = "Other window", remap = true })
-map("n", "<leader>wd", "<C-W>c", { desc = "Delete window", remap = true })
-
 -- tabs
-map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Last Tab" })
-map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "First Tab" })
-map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New Tab" })
-map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next Tab" })
-map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close Tab" })
-map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous Tab" })
 map('n', '<C-k>', ':tabnext<cr>', { desc = 'Tab Next' })
 map('n', '<C-j>', ':tabprev<cr>', { desc = 'Tab Prev' })
 map('n', 'gn', ':tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gq', ':tabclose<cr>', { desc = 'Tab Close' })
 
 -- NOTE: Set <c-f> keymap once again due to configuration issue
-vim.keymap.set(
-  'n',
-  '<C-f>',
+vim.keymap.set({ 'n' }, '<C-f>',
   function() require('telescope').extensions.live_grep_args.live_grep_args() end,
-  { desc = 'Search Workspace' }
+  { remap = true, desc = 'Search Workspace' }
 )
 
 -- Remap smart-splits to use range
