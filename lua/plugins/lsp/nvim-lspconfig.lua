@@ -16,7 +16,7 @@ return {
     })
 
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
-      clangd = require('util.lsp.servers.clangd'),
+      clangd = require('plugins.lsp.util.servers.clangd'),
       lua_ls = {
         Lua = {
           workspace = {
@@ -24,6 +24,7 @@ return {
           },
         },
       },
+      pylsp = require('plugins.lsp.util.servers.pylsp'),
     })
 
     opts.servers.pyright = nil
@@ -38,5 +39,5 @@ return {
       float = { source = true, header = {} },
     })
   end,
-  init = require("util.lsp.keymaps"),
+  init = require("plugins.lsp.util.keymaps"),
 }

@@ -7,7 +7,7 @@ return {
 					enabled = true,
 				},
 				flake8 = {
-					enabled = true,
+					enabled = false,
 				},
 				pylint = {
 					enabled = false,
@@ -20,7 +20,7 @@ return {
 				},
 				pycodestyle = {
 					maxLineLength = 100,
-					enabled = true,
+					enabled = false,
 				},
 			},
 		},
