@@ -119,12 +119,12 @@ return {
       end
     }
   },
-  opts = function(_, opts)
-    opts.experimental = {
+  opts = {
+    experimental = {
       native_menu = false,
       ghost_text = { hl_group = 'Comment' }
-    }
-    opts.window = {
+    },
+    window = {
       completion = {
         border = 'rounded',
         winhighlight = 'CursorLine:PmenuSel,Search:None',
@@ -137,21 +137,22 @@ return {
         border = 'rounded',
         winhighlight = 'CursorLine:PmenuSel,Search:None',
       },
-    }
+    },
 
-    opts.mapping = cmp.mapping.preset.insert(tab_confirm_mapping)
-    vim.tbl_extend('force', opts.sources, {
-      { name = 'nvim_lsp' },
-      { name = 'luasnip' },
-      { name = 'buffer' },
-      { name = "nvim_lsp_signature_help" },
-      { name = "path" },
-    })
-
-    opts.formatting = {
+    mapping = cmp.mapping.preset.insert(tab_confirm_mapping),
+    -- vim.tbl_extend('force', opts.sources, {
+    sources = {
+      { name = 'copilot',                 group_index = 1 },
+      { name = 'nvim_lsp',                group_index = 1 },
+      { name = 'luasnip',                 group_index = 1 },
+      { name = 'buffer',                  group_index = 1 },
+      { name = 'path',                    group_index = 1 },
+      { name = 'nvim_lsp_signature_help', group_index = 2 },
+    },
+    formatting = {
       format = function(entry, vim_item)
         return require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
       end
     }
-  end
+  }
 }
