@@ -73,21 +73,39 @@ return {
         mode = { 'n', 'v' },
       },
       {
-        '<leader>m',
+        '<leader>l',
         function() label2_jump(false, '^') end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
-        '<leader>M',
+        "<leader>L",
         function() label2_jump(true, '^') end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
-      }
+      },
+      {
+        "<c-s>",
+        mode = { "c" },
+        require("flash").toggle,
+        desc = "Toggle Flash Search"
+      },
+      {
+        "r",
+        mode = "o",
+        require("flash").remote,
+        desc = "Remote Flash"
+      },
+      {
+        "R",
+        mode = { "o", "x" },
+        require("flash").treesitter_search,
+        desc = "Treesitter Search"
+      },
     }
   end,
   opts = {
-    jump = { autojump = true },
+    jump = { autojump = false },
     modes = { search = { highlight = { backdrop = true } } },
     prompt = { enabled = false, },
   }
