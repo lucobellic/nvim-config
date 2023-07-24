@@ -21,9 +21,9 @@ return {
       },
       {
         '<leader>gdq',
-        ':DiffviewClose<cr>',
-        mode = { 'n', 'v' },
-        desc = 'Diffview Close',
+        ':diffoff<cr>',
+        mode = { 'n' },
+        desc = 'diffoff',
       },
       {
         '<leader>gdf',
@@ -42,6 +42,18 @@ return {
         ':DiffviewOpen origin/develop...HEAD<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview origin/develop...HEAD',
+      },
+      {
+        '<leader>gdw',
+        ':windo diffthis<cr>',
+        mode = { 'n' },
+        desc = 'Windo diffthis',
+      },
+      {
+        '<leader>gdo',
+        ':diffthis<cr>',
+        mode = { 'n', 'v' },
+        desc = 'diffthis',
       },
     },
     opts = {
