@@ -116,5 +116,11 @@ return {
     -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
     -- where X is the buffer number. But only a static string is accepted here.
     no_name_title = nil,
+
+    -- Set the filetypes which barbar will offset itself for
+    sidebar_filetypes = {
+      NvimTree = true,
+      ['neo-tree'] = { event = 'BufWipeout' },
+    },
   }
 }
