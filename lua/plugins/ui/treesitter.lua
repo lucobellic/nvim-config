@@ -1,6 +1,32 @@
 return {
   'nvim-treesitter/nvim-treesitter',
-  dependencies = { 'HiPhish/nvim-ts-rainbow2' },
+  dependencies = {
+    {
+      'HiPhish/rainbow-delimiters.nvim',
+      config = function(_, opts)
+        vim.g.rainbow_delimiters = {
+          strategy = {
+            [''] = require('rainbow-delimiters').strategy['global'],
+            vim = require('rainbow-delimiters').strategy['local'],
+          },
+          query = {
+            [''] = 'rainbow-delimiters',
+            lua = 'rainbow-blocks',
+          },
+          highlight = {
+            'TSRainbowYellow',
+            'TSRainbowViolet',
+            'TSRainbowBlue',
+            'TSRainbowOrange',
+            'TSRainbowGreen',
+            'TSRainbowViolet',
+            'TSRainbowCyan',
+            'TSRainbowRed',
+          },
+        }
+      end
+    },
+  },
   opts = {
     ensure_installed = {
       'cmake',
@@ -19,18 +45,5 @@ return {
         -- ["foo.bar"] = "Constant",
       },
     },
-    rainbow = {
-      enable = true,
-      hlgroups = {
-        'TSRainbowYellow',
-        'TSRainbowViolet',
-        'TSRainbowBlue',
-        'TSRainbowOrange',
-        'TSRainbowGreen',
-        'TSRainbowViolet',
-        'TSRainbowCyan',
-        'TSRainbowRed',
-      },
-    }
   }
 }
