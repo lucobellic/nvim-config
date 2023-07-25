@@ -19,6 +19,7 @@ return {
   opts = {
     strategy = {
       'toggleterm',
+      use_shell = true,
       open_on_start = false,
       close_on_exit = false,
       hidden = false,

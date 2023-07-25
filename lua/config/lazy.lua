@@ -36,7 +36,7 @@ require('lazy').setup({
 
     { import = 'plugins' },
     { import = 'plugins.completion' },
-    { import = 'plugins.dap' },
+    { import = 'plugins.code' },
     { import = 'plugins.editor' },
     { import = 'plugins.lsp' },
     { import = 'plugins.navigation' },
