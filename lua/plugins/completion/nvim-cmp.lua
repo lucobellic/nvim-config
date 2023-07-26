@@ -25,15 +25,6 @@ local tab_confirm_mapping = {
   ['<C-e>'] = cmp.mapping.abort(),
   ['<cr>'] = safely_select,
 
-  ['<esc>'] = cmp.mapping(function(fallback)
-    if cmp.visible() then
-      cmp.abort()
-      vim.api.nvim_input('<esc>')
-    else
-      fallback()
-    end
-  end, { 'i', 'c' }),
-
   ["<Tab>"] = cmp.mapping.confirm({
     behavior = cmp.ConfirmBehavior.Insert,
     select = true,
@@ -71,18 +62,6 @@ local tab_selection_mapping = {
   ['<C-Space>'] = cmp.mapping.complete(),
   ['<C-e>'] = cmp.mapping.abort(),
   ['<cr>'] = safely_select,
-
-  ['<esc>'] = cmp.mapping(function(fallback)
-    if cmp.visible() then
-      if cmp.confirm({ select = false }) then
-        vim.api.nvim_input('<esc>')
-      else
-        fallback()
-      end
-    else
-      fallback()
-    end
-  end, { 'i', 'c' }),
 
   ["<Tab>"] = cmp.mapping(function(fallback)
     if cmp.visible() and has_words_before() then
