@@ -31,9 +31,7 @@ return {
   event = 'VeryLazy',
   keys = {
     { '<leader>uP', ':ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
-    { '<leader>P',  ':ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
     { '<leader>up', ':ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
-    { '<leader>p',  ':ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
   },
   opts = {
     start_in_insert = false,
