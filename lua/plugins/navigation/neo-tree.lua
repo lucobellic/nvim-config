@@ -64,27 +64,29 @@ return {
       popup_border_style = "rounded",
       enable_git_status = true,
       enable_diagnostics = true,
-      sort_case_insensitive = true,     -- used when sorting files and directories in the tree
-      sort_function = nil,              -- use a custom function for sorting files and directories in the tree
+      sort_case_insensitive = true, -- used when sorting files and directories in the tree
+      sort_function = nil,          -- use a custom function for sorting files and directories in the tree
+      use_popups_for_input = false, -- use vim.ui.input instead
+      show_scrolled_off_parent_node = true,
       source_selector = {
-        winbar = true,                  -- toggle to show selector on winbar
-        statusline = false,             -- toggle to show selector on statusline
-        sources = {                     -- table
+        winbar = true, -- toggle to show selector on winbar
+        statusline = false, -- toggle to show selector on statusline
+        sources = { -- table
           {
-            source = "filesystem",      -- string
+            source = "filesystem", -- string
             display_name = "   Files " -- string | nil
           },
           {
-            source = "document_symbols",  -- string
+            source = "document_symbols", -- string
             display_name = "   Symbols " -- string | nil
           },
         },
-        truncation_character = '',            -- string
-        tabs_min_width = nil,                    -- int | nil
-        tabs_max_width = nil,                    -- int | nil
-        padding = 0,                             -- int | { left: int, right: int }
+        truncation_character = '', -- string
+        tabs_min_width = nil, -- int | nil
+        tabs_max_width = nil, -- int | nil
+        padding = 0, -- int | { left: int, right: int }
         separator = { left = ' ', right = ' ' }, -- string | { left: string, right: string, override: string | nil }
-        separator_active = nil,                  -- string | { left: string, right: string, override: string | nil } | nil
+        separator_active = nil, -- string | { left: string, right: string, override: string | nil } | nil
       },
       default_component_configs = {
         align_diagnostics = {
@@ -315,7 +317,10 @@ return {
             --".null-ls_*",
           },
         },
-        follow_current_file = false,            -- This will find and focus the file in the active buffer every
+        follow_current_file = {
+          enabled = false,        -- This will find and focus the file in the active buffer every time
+          leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+        },
         -- time the current file is changed while the tree is open.
         group_empty_dirs = false,               -- when true, empty folders will be grouped together
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
@@ -342,19 +347,6 @@ return {
             [">G"] = "next_git_modified",
           }
         }
-      },
-      buffers = {
-        follow_current_file = true, -- This will find and focus the file in the active buffer every
-        -- time the current file is changed while the tree is open.
-        group_empty_dirs = true,    -- when true, empty folders will be grouped together
-        show_unloaded = true,
-        window = {
-          mappings = {
-            ["bd"] = "buffer_delete",
-            ["<bs>"] = "navigate_up",
-            ["."] = "set_root",
-          }
-        },
       },
       git_status = {
         window = {
