@@ -49,6 +49,19 @@ return {
     config = function(_, opts)
       require('obsidian').setup(opts)
 
+      local function toggle_current_task()
+        -- Get name of the current branch
+        local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
+        local task = branch:match("(%w+%-%d+)")
+        if task and task ~= '' then
+          vim.cmd('ObsidianNew ' .. task)
+        else
+          vim.notify('Unable to create note ' .. task, vim.log.levels.WARN)
+        end
+      end
+      vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
+      vim.keymap.set('n', '<leader>on', ':ObsidianTask<CR>', { noremap = true, silent = true })
+
       -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
       -- see also: 'follow_url_func' config option above.
       -- TODO: Set this keymap only with ob
