@@ -39,7 +39,6 @@ return {
     },
     highlight = {
       enable = true,
-      disable = { 'c', 'cpp', 'rust', 'lua' }, -- disable highlight supported by lsp
       custom_captures = {
         -- Highlight the @foo.bar capture group with the "Identifier" highlight group.
         -- ["foo.bar"] = "Constant",
