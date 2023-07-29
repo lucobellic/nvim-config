@@ -1,6 +1,7 @@
 return {
   'romgrk/barbar.nvim',
   event = 'User BufEnterExceptDashboard',
+  enabled = false,
   dependencies = { 'folke/persistence.nvim' },
   keys = {
     { '<C-h>',      ':BufferPrevious<cr>',         desc = 'Buffer Previous' },
