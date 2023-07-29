@@ -13,6 +13,9 @@ return {
       }
     }
   },
+  keys = {
+    {'<leader>uS', ':ScrollbarToggle<cr>', desc = 'Toggle Scrollbar'},
+  },
   opts = {
     show = true,
     show_in_active_only = true,
@@ -64,7 +67,8 @@ return {
       },
     },
     excluded_buftypes = {
-      -- 'terminal',
+      'terminal',
+      'nofile'
     },
     excluded_filetypes = {
       '',
