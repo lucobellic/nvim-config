@@ -129,3 +129,11 @@ for name, icon in pairs(require("lazyvim.config").icons.diagnostics) do
 end
 
 vim.api.nvim_set_hl(0, 'DapStoppedLine', { default = true, link = 'Visual' })
+
+-- Always focus on buffer after tab change
+vim.api.nvim_create_autocmd({ 'TabEnter' }, {
+  pattern = { '*' },
+  callback = function()
+    require('util.tabpages').focus_first_listed_buffer()
+  end
+})

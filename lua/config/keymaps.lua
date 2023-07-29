@@ -145,8 +145,16 @@ map("t", "<S-right>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
 -- tabs
 map('n', '<C-k>', ':tabnext<cr>', { desc = 'Tab Next' })
 map('n', '<C-j>', ':tabprev<cr>', { desc = 'Tab Prev' })
+map('n', '<C-t>', ':tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gn', ':tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gq', ':tabclose<cr>', { desc = 'Tab Close' })
+map('n', '<tab>j',
+  function() require('util.tabpages').move_in_tab('prev') end,
+  { desc = 'Buffer Move Prev Tab', repeatable = true })
+map('n', '<tab>k',
+  function() require('util.tabpages').move_in_tab('next') end,
+  { desc = 'Buffer Move Next Tab', repeatable = true })
+
 
 -- NOTE: Set <c-f> keymap once again due to configuration issue
 vim.keymap.set({ 'n' }, '<C-f>',
