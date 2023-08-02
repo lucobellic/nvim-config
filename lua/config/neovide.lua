@@ -1,17 +1,55 @@
 if vim.g.neovide then
-  vim.cmd [[ set guifont=DMMono\ Nerd\ Font\ Mono:h11 ]]
+  vim.o.guifont = 'DMMono Nerd Font:h11'
   vim.g.neovide_cursor_animation_length = 0.1
   vim.g.neovide_cursor_trail_size = 0.2
-  vim.g.neovide_scroll_animation_length = 0
+  vim.g.neovide_scroll_animation_length = 0.5
+
+  vim.g.neovide_transparency = 1.0
+  vim.g.neovide_transparency_point = 1.0
+
+  -- Disable mini.animate with neovide
+  vim.g.minianimate_disable = true
 
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_fullscreen = false
   function _G.toggle_full_screen()
     vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
   end
-  -- Disable mini.animate with neovide
-  vim.g.minianimate_disable = true
+
+  -- Colors
+
+  -- black
+  vim.g.terminal_color_0  = '#0b0e14'
+  vim.g.terminal_color_8  = '#0b0e14'
+
+  -- red
+  vim.g.terminal_color_1  = '#f26d78'
+  vim.g.terminal_color_9  = '#f26d78'
+
+  -- green
+  vim.g.terminal_color_2  = '#aad94c'
+  vim.g.terminal_color_10 = '#aad94c'
+
+  -- yellow
+  vim.g.terminal_color_3  = '#ffb454'
+  vim.g.terminal_color_11 = '#ffb454'
+
+  -- blue
+  vim.g.terminal_color_4  = '#39bae6'
+  vim.g.terminal_color_12 = '#39bae6'
+
+  -- magenta
+  vim.g.terminal_color_5  = '#d2a6ff'
+  vim.g.terminal_color_13 = '#d2a6ff'
+
+  -- cyan
+  vim.g.terminal_color_6  = '#73b8ff'
+  vim.g.terminal_color_14 = '#73b8ff'
+
+  -- white
+  vim.g.terminal_color_7  = '#bfbdb6'
+  vim.g.terminal_color_15 = '#bfbdb6'
+
 
   vim.api.nvim_set_keymap('n', '<F11>', ':lua toggle_full_screen()<cr>', { silent = true })
 end
-
