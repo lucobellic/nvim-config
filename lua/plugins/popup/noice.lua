@@ -33,7 +33,18 @@ local cmdline_popup_view = {
   filter_options = {},
 }
 
-local views = { cmdline_popup = cmdline_popup_view }
+local views = {
+  cmdline_popup = cmdline_popup_view,
+  mini = {
+    position = { row = -1, col = 0 },
+    size = {
+      width = "20%",
+      height = 3,
+      align = "message-left",
+    },
+    reverse = true
+  },
+}
 
 
 local lsp = {
@@ -47,7 +58,7 @@ local lsp = {
     enabled = false
   },
   message = {
-    enabled = false,
+    enabled = true,
     view = "notify"
   },
   hover = {
@@ -70,7 +81,6 @@ local filter_skip = {
       { event = "msg_show", kind = "lua_error",                               find = "bdelete" },
       { event = "msg_show", kind = "lua_error",                               find = "inlay_hint" },
       { event = "msg_show", kind = "",                                        find = "lnum" },
-      { event = "msg_show", kind = "",                                        find = "line" },
       { event = "notify",   kind = "warn",                                    find = "Unsupported input type" },
       { event = "msg_show", kind = "",                                        find = "query" },
       { event = "msg_show", kind = "lua_error",                               find = "Autocommands" },
@@ -146,7 +156,7 @@ return {
     },
     format = {
       spinner = {
-        name = "font_progress_bar",
+        name = "growHorizontal",
       }
     },
     commands = {
