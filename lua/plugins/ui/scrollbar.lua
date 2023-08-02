@@ -14,7 +14,7 @@ return {
     }
   },
   keys = {
-    {'<leader>uS', ':ScrollbarToggle<cr>', desc = 'Toggle Scrollbar'},
+    {'<leader>uH', ':ScrollbarToggle<cr>', desc = 'Toggle Scrollbar'},
   },
   opts = {
     show = true,
