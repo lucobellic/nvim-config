@@ -37,11 +37,12 @@ require('lazy').setup({
     { import = 'lazyvim.plugins.extras.coding.copilot' },
 
     { import = 'plugins' },
-    { import = 'plugins.completion' },
     { import = 'plugins.code' },
+    { import = 'plugins.completion' },
     { import = 'plugins.editor' },
     { import = 'plugins.lsp' },
     { import = 'plugins.navigation' },
+    { import = 'plugins.misc' },
     { import = 'plugins.notes' },
     { import = 'plugins.popup' },
     { import = 'plugins.telescope' },
