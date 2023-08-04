@@ -1,32 +1,11 @@
-local persistence_config = require('persistence.config')
-
-local banner = {
-  "",
-  "",
-  "                                                                   ",
-  "      ███████████           █████      ██                    ",
-  "     ███████████             █████                            ",
-  "     ████████████████ ███████████ ███   ███████    ",
-  "    ████████████████ ████████████ █████ ██████████████  ",
-  "   █████████████████████████████ █████ █████ ████ █████  ",
-  " ██████████████████████████████████ █████ █████ ████ █████ ",
-  "██████  ███ █████████████████ ████ █████ █████ ████ ██████",
-  "██████   ██  ███████████████   ██ █████████████████",
-  "██████   ██  ███████████████   ██ █████████████████",
-  "                                                                     ",
-  "",
-}
-
 local function load_session(path)
   local pattern = "/"
   if vim.fn.has("win32") == 1 then
     pattern = "[\\:]"
   end
   local name = path:gsub(pattern, "%%")
-  local session = persistence_config.options.dir .. name .. ".vim"
-  if session and vim.fn.filereadable(session) ~= 0 then
-    vim.cmd("silent! source " .. vim.fn.fnameescape(session))
-  end
+  local session = require('persistence.config').options.dir .. name .. ".vim"
+  require('util.persistence').load_session(session)
 end
 
 -- local theme = 'doom'
