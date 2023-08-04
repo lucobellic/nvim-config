@@ -9,7 +9,7 @@ return {
     opts.capabilities = vim.tbl_deep_extend('force', opts.capabilities or {}, {
       textDocument = {
         foldingRange = {
-          dynamicRegistration = false,
+          dynamicRegistration = true,
           lineFoldingOnly = true,
         },
       },
@@ -25,6 +25,7 @@ return {
         },
       },
       pylsp = require('plugins.lsp.util.servers.pylsp'),
+      ansiblels = {},
     })
 
     opts.servers.pyright = nil

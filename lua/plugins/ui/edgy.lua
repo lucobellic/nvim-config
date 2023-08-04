@@ -2,7 +2,9 @@
 return {
   'folke/edgy.nvim',
   event = 'VeryLazy',
+  enabled = false,
   opts = {
+    close_when_all_hidden = false,
     icons = {
       closed = '',
       open = '',

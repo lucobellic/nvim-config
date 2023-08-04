@@ -39,6 +39,7 @@ return {
       },
       {
         'nvim-telescope/telescope-smart-history.nvim',
+        dependencies = { "kkharji/sqlite.lua" },
         config = function()
           require('telescope').load_extension('smart_history')
         end
@@ -182,7 +183,7 @@ return {
           },
         },
         history = {
-          path = "~/.local/share/nvim/telescope_history.sqlite3",
+          path = vim.fn.stdpath('data') .. '/telescope_history.sqlite3',
           limit = 100,
         },
         vimgrep_arguments = {

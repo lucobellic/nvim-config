@@ -43,12 +43,12 @@ return {
         style = 'none'
       },
       offsets = {
-        {
-          filetype = "neo-tree",
-          text = "File Explorer",
-          text_align = "center",
-          separator = false,
-        }
+        -- {
+        --   filetype = "neo-tree",
+        --   text = "File Explorer",
+        --   text_align = "center",
+        --   separator = false,
+        -- }
       },
       diagnostics = false,
       diagnostics_update_in_insert = false,

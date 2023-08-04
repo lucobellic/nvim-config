@@ -15,6 +15,7 @@ return {
 			require("null-ls").builtins.diagnostics.rstcheck,
 			require("null-ls").builtins.diagnostics.markdownlint,
 			require("null-ls").builtins.formatting.prettier,
+      -- require("null-ls").builtins.diagnostics.ansiblelint,
 			require("cspell").diagnostics.with({ config = cspell_config }),
 			require("cspell").code_actions.with({ config = cspell_config }),
 		})
