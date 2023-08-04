@@ -1,5 +1,6 @@
 return {
   'lukas-reineke/indent-blankline.nvim',
+  enabled = false,
   opts = {
     use_treesitter = true,
     use_treesitter_scope = true,

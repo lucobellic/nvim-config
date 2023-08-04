@@ -6,14 +6,16 @@ return {
       delay = 50,
       -- animation = require('mini.indentscope').gen_animation.quadratic(
       --   { easing = 'in-out', duration = 10, unit = 'step' }
-      -- )
-      animation = require('mini.indentscope').gen_animation.none()
+      -- ),
+      animation = require('mini.indentscope').gen_animation.none(),
+      -- Symbol priority. Increase to display on top of more symbols.
+      priority = 5,
     },
     -- Options which control scope computation
     options = {
       -- Type of scope's border: which line(s) with smaller indent to
       -- categorize as border. Can be one of: 'both', 'top', 'bottom', 'none'.
-      border = 'top',
+      border = 'both',
 
       -- Whether to use cursor column when computing reference indent.
       -- Useful to see incremental scopes with horizontal cursor movements.
