@@ -26,8 +26,14 @@ return {
         desc = 'diffoff',
       },
       {
-        '<leader>gdf',
+        '<leader>gdF',
         ":0,$DiffviewFileHistory --follow<cr>",
+        mode = { 'n' },
+        desc = 'Diffview Range File History',
+      },
+      {
+        '<leader>gdf',
+        ":DiffviewFileHistory --follow %<cr>",
         mode = { 'n' },
         desc = 'Diffview File History',
       },
