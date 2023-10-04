@@ -44,6 +44,9 @@ return
   opts = {
     window = {
       zindex = 1,
+      margin = {
+        horizontal = {left = 0 , right = 2}, -- shift for scrollbar
+      },
     },
     hide = {
       cursorline = true,
