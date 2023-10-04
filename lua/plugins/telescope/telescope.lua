@@ -16,6 +16,7 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     dependencies = {
+      { 'BurntSushi/ripgrep' },
       { 'folke/trouble.nvim' },
       {
         'nvim-telescope/telescope-live-grep-args.nvim',
@@ -24,6 +25,12 @@ return {
         end
       },
       { 'nvim-telescope/telescope-symbols.nvim' },
+      {
+        'prochri/telescope-all-recent.nvim',
+        config = function()
+          require('telescope-all-recent').setup{}
+        end
+      },
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
@@ -39,7 +46,7 @@ return {
       },
       {
         'nvim-telescope/telescope-smart-history.nvim',
-        dependencies = { "kkharji/sqlite.lua" },
+        dependencies = { 'kkharji/sqlite.lua' },
         config = function()
           require('telescope').load_extension('smart_history')
         end
