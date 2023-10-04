@@ -57,6 +57,12 @@ return {
           require('telescope').load_extension('lazy')
         end
       },
+      {
+        'aaronhallaert/advanced-git-search.nvim',
+        config = function()
+          require('telescope').load_extension('advanced_git_search')
+        end
+      }
     },
     keys = {
       { '<leader>gc', false },
