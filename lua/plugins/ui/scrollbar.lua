@@ -1,6 +1,7 @@
 return {
   'petertriho/nvim-scrollbar',
   event = 'BufEnter',
+  enabled = false,
   dependencies = {
     'lewis6991/gitsigns.nvim',
     {

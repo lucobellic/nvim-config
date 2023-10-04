@@ -57,12 +57,10 @@ return {
       },
       -- callback where you can add custom code when the Zen window opens
       on_open = function(win)
-        vim.cmd('ScrollbarHide')
         require('incline').disable()
       end,
       -- callback where you can add custom code when the Zen window closes
       on_close = function()
-        vim.cmd('ScrollbarShow')
         require('incline').enable()
       end,
     }
