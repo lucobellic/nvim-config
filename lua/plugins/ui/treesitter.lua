@@ -44,5 +44,21 @@ return {
         -- ["foo.bar"] = "Constant",
       },
     },
+    textobjects = {
+      select = {
+        enabled = true,
+      },
+      move = {
+      enable = true,
+        goto_next_start = {
+          [">f"] = "@function.outer",
+          [">F"] = "@function.outer",
+        },
+        goto_previous_start = {
+          ["<f"] = "@function.outer",
+          ["<F"] = "@function.outer",
+        },
+      }
+    }
   }
 }
