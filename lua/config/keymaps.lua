@@ -148,12 +148,6 @@ map('n', '<C-j>', '<cmd>tabprev<cr>', { desc = 'Tab Prev' })
 map('n', '<C-t>', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gn', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gq', '<cmd>tabclose<cr>', { desc = 'Tab Close' })
-map('n', '<tab>j',
-  function() require('util.tabpages').move_in_tab('prev') end,
-  { desc = 'Buffer Move Prev Tab', repeatable = true })
-map('n', '<tab>k',
-  function() require('util.tabpages').move_in_tab('next') end,
-  { desc = 'Buffer Move Next Tab', repeatable = true })
 
 
 -- NOTE: Set <c-f> keymap once again due to configuration issue
