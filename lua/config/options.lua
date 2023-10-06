@@ -19,6 +19,8 @@ vim.o.swapfile = false
 vim.o.pumblend = 20
 vim.o.winblend = 20
 
+vim.go.incsearch = false
+
 vim.opt.listchars = {
   tab = ' ',
   trail = '·',
