@@ -1,16 +1,12 @@
 return {
   'shellRaining/hlchunk.nvim',
+  enabled = false,
   event = { 'UIEnter' },
   opts = {
     chunk = {
       enable = false, -- prefer mini-indent-scope for current scope highlight
       use_treesitter = false,
       notify = false, -- notify if some situation(like disable chunk mod double time)
-      exclude_filetypes = {
-        aerial = true,
-        dashboard = true,
-        sagaoutline = true,
-      },
       support_filetypes = {
         '*',
       },

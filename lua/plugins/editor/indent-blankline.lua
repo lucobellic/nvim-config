@@ -1,25 +1,37 @@
+local highlight = {
+  'TSRainbowYellow',
+  'TSRainbowViolet',
+  'TSRainbowBlue',
+  'TSRainbowOrange',
+  'TSRainbowGreen',
+  'TSRainbowViolet',
+  'TSRainbowCyan',
+  'TSRainbowRed',
+}
+
 return {
   'lukas-reineke/indent-blankline.nvim',
-  enabled = false,
+  enabled = true,
+  main = 'ibl',
   opts = {
-    use_treesitter = true,
-    use_treesitter_scope = true,
-    show_current_context = false,
-    show_current_context_start = false,
-    char = '▏',
-    char_blankline = ' ',
-    space_char_blankline = ' ',
-    show_first_indent_level = true,
-    show_trailing_blankline_indent = true,
-    show_current_context_start_on_current_line = true,
-    filetype_exclude = {
-      'dashboard',
-      'lspinfo',
-      'packer',
-      'checkhealth',
-      'help',
-      'man',
-      '',
-    }
-  }
+    indent = {
+      char = '▏',
+      highlight = 'IndentBlankLineChar'
+    },
+    scope = {
+      enabled = true,
+      show_start = false,
+      show_end = false,
+      injected_languages = false,
+      highlight = highlight,
+      include = {
+        node_type = {
+          lua = { "return_statement", "table_constructor" },
+          python = { "if_statement", "for_statement", "while_statement", "with_statement" },
+        },
+        -- Make every node type valid. Note that this can lead to some weird behavior
+        -- node_type = { ["*"] = { "*" } },
+      }
+    },
+  },
 }

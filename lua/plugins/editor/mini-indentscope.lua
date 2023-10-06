@@ -1,5 +1,6 @@
 return {
   'echasnovski/mini.indentscope',
+  enabled = false,
   opts = {
     draw = {
       -- Delay (in ms) between event and start of drawing scope indicator
@@ -9,7 +10,7 @@ return {
       -- ),
       animation = require('mini.indentscope').gen_animation.none(),
       -- Symbol priority. Increase to display on top of more symbols.
-      priority = 5,
+      priority = 1024,
     },
     -- Options which control scope computation
     options = {
