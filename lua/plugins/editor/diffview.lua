@@ -39,7 +39,7 @@ return {
       },
       {
         '<leader>gdf',
-        ":DiffviewFileHistory<cr>",
+        ":DiffviewFileHistory --follow<cr>",
         mode = { 'v' },
         desc = 'Diffview File History',
       },
@@ -62,15 +62,26 @@ return {
         desc = 'diffthis',
       },
     },
-    opts = {
-      diff_binaries = false,   -- Show diffs for binaries
-      enhanced_diff_hl = true, -- See ':h diffview-config-enhanced_diff_hl'
-      signs = {
+    opts = function (_, opts)
+      opts.diff_binaries = false   -- Show diffs for binaries
+      opts.enhanced_diff_hl = true -- See ':h diffview-config-enhanced_diff_hl'
+      opts.signs = vim.tbl_extend('force', opts.signs or {}, {
         fold_closed = "",
         fold_open = "",
         done = "",
-      },
-      view = { merge_tool = { layout = 'diff3_mixed' } }
-    }
+      })
+      opts.view = vim.tbl_extend('force', opts.view or {}, { merge_tool = { layout = 'diff3_mixed' } })
+
+      opts.keymaps = vim.tbl_extend('force', opts.keymaps or {}, {
+        file_history_panel = {
+          {
+            "n",
+            "<C-g>",
+            require('diffview.actions').open_in_diffview,
+            { desc = "Open the entry under the cursor in a diffview" }
+          }
+        },
+      })
+    end
   }
 }
