@@ -9,6 +9,16 @@ return {
         require('dap.ext.vscode').json_decode = require 'json5'.parse
       end
     },
+    {
+      'mfussenegger/nvim-dap-python',
+      config = function()
+        local path = require("mason-registry").get_package("debugpy"):get_install_path()
+        require("dap-python").setup(path .. "/venv/bin/python", {
+          include_configs = true,
+          console = 'integratedTerminal',
+        })
+      end
+    }
   },
   keys = {
     { '<leader>dq', require('dap').terminate,         repeatable = true, desc = 'Terminate' },
