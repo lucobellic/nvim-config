@@ -49,16 +49,16 @@ return {
   keys = function()
     return {
       {
-        '<leader>k',
+        's',
         function() require("flash").jump({ search = { multi_window = false } }) end,
         desc = 'Flash Range',
         mode = { 'n', 'v' },
       },
       {
-        '<leader>K',
+        'S',
         function() require("flash").jump() end,
         desc = 'Flash Range',
-        mode = { 'n', 'v' },
+        mode = { 'n' },
       },
       {
         '<leader>j',
