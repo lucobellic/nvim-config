@@ -39,16 +39,16 @@ return {
       -- https://github.com/Vinzent03/obsidian-advanced-uri
       use_advanced_uri = true,
 
-      -- Optional, set to true to force ':ObsidianOpen' to bring the app to the foreground.
+      -- Optional, set to true to force '<cmd>ObsidianOpen' to bring the app to the foreground.
       open_app_foreground = true,
       finder = 'telescope.nvim',
     },
     keys = {
-      { '<leader>oo', ':ObsidianOpen<cr>',        desc = 'Obsidian Open' },
-      { '<leader>of', ':ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>os', ':ObsidianSearch<cr>',      desc = 'Obsidian Find Files' },
-      { '<leader>ot', ':ObsidianToday<cr>',       desc = 'Obsidian Today' },
-      { '<leader>oy', ':ObsidianYesterday<cr>',   desc = 'Obsidian Yesterday' },
+      { '<leader>oo', '<cmd>ObsidianOpen<cr>',        desc = 'Obsidian Open' },
+      { '<leader>of', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>os', '<cmd>ObsidianSearch<cr>',      desc = 'Obsidian Find Files' },
+      { '<leader>ot', '<cmd>ObsidianToday<cr>',       desc = 'Obsidian Today' },
+      { '<leader>oy', '<cmd>ObsidianYesterday<cr>',   desc = 'Obsidian Yesterday' },
     },
     config = function(_, opts)
       require('obsidian').setup(opts)
@@ -64,7 +64,7 @@ return {
         end
       end
       vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
-      vim.keymap.set('n', '<leader>on', ':ObsidianTask<CR>', { noremap = true, silent = true })
+      vim.keymap.set('n', '<leader>on', '<cmd>ObsidianTask<CR>', { noremap = true, silent = true })
 
       -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
       -- see also: 'follow_url_func' config option above.

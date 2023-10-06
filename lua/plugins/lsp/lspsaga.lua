@@ -6,7 +6,7 @@ return {
     { 'nvim-treesitter/nvim-treesitter' }
   },
   keys = {
-    { '<leader>go', ':Lspsaga outline<cr>', desc = 'Symbols Outline' }
+    { '<leader>go', '<cmd>Lspsaga outline<cr>', desc = 'Symbols Outline' }
   },
   opts = {
     diagnostic = {

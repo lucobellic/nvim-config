@@ -12,9 +12,9 @@ return {
   'stevearc/overseer.nvim',
   event = 'VeryLazy',
   keys = {
-    { '<leader>xr', ':OverseerRun<cr>',    desc = 'Overseer Run' },
-    { '<leader>xi', ':OverseerInfo<cr>',   desc = 'Overseer Info' },
-    { '<leader>xo', ':OverseerToggle<cr>', desc = 'Overseer Toggle' },
+    { '<leader>xr', '<cmd>OverseerRun<cr>',    desc = 'Overseer Run' },
+    { '<leader>xi', '<cmd>OverseerInfo<cr>',   desc = 'Overseer Info' },
+    { '<leader>xo', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
   },
   opts = {
     strategy = {

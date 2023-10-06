@@ -104,8 +104,8 @@ return {
       { '<leader>fm',  function() require('telescope.builtin').marks() end,       desc = 'Find Marks' },
 
       -- Obsidian
-      { '<leader>fof', ':ObsidianQuickSwitch<cr>',                                desc = 'Obsidian Find Files' },
-      { '<leader>fow', ':ObsidianSearch<cr>',                                     desc = 'Obsidian Search' },
+      { '<leader>fof', '<cmd>ObsidianQuickSwitch<cr>',                                desc = 'Obsidian Find Files' },
+      { '<leader>fow', '<cmd>ObsidianSearch<cr>',                                     desc = 'Obsidian Search' },
       { '<leader>fr',  function() require('telescope.builtin').oldfiles() end,    desc = 'Find Recent File' },
       {
         '<leader>fw',

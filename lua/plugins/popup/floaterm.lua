@@ -96,9 +96,9 @@ return {
   branch = 'personal',
   dependencies = { 'MunifTanjim/nui.nvim' },
   keys = {
-    { '<leader>er', ':ToggleTool ranger<cr>',         desc = 'Ranger' },
-    { '<leader>g;', ':ToggleTool lazygit<cr>',        desc = 'Lazygit' },
-    { '<F7>',       ':FloatermToggle<cr>',            mode = 'n',      desc = 'Toggle Floaterm' },
+    { '<leader>er', '<cmd>ToggleTool ranger<cr>',         desc = 'Ranger' },
+    { '<leader>g;', '<cmd>ToggleTool lazygit<cr>',        desc = 'Lazygit' },
+    { '<F7>',       '<cmd>FloatermToggle<cr>',            mode = 'n',      desc = 'Toggle Floaterm' },
     { '<F7>',       '<C-\\><C-n>:FloatermToggle<cr>', mode = 't',      desc = 'Toggle Floaterm' },
   },
   init = function()

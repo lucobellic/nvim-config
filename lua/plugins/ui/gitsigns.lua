@@ -66,7 +66,7 @@ return {
         map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = 'Diff This (cached)' })
 
         -- Text object
-        map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
+        map({ 'o', 'x' }, 'ih', '<cmd><C-U>Gitsigns select_hunk<CR>')
       end,
 
       watch_gitdir            = {

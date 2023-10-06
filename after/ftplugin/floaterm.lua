@@ -1,15 +1,15 @@
 local opts = { silent = true, noremap = true }
 
-vim.api.nvim_buf_set_keymap(0, 'n', 'q', ':FloatermHide<CR><esc>', opts)
-vim.api.nvim_buf_set_keymap(0, 'n', '<esc>', ':FloatermHide<CR><esc>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', 'q', '<cmd>FloatermHide<CR><esc>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<esc>', '<cmd>FloatermHide<CR><esc>', opts)
 
-vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', ':FloatermNext<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', '<cmd>FloatermNext<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
 
-vim.api.nvim_buf_set_keymap(0, 'n', '<C-h>', ':FloatermPrev<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<C-h>', '<cmd>FloatermPrev<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
 
-vim.api.nvim_buf_set_keymap(0, 'n', '<C-t>', ':FloatermNew<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<C-t>', '<cmd>FloatermNew<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts)
 
 vim.wo.spell = false
@@ -52,6 +52,6 @@ vim.api.nvim_create_user_command(
   { desc = 'Close current floaterm' }
 )
 
-vim.api.nvim_buf_set_keymap(0, 'n', 'gf', ':OpenInNormalWindow<cr>', { noremap = true, silent = true })
-vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', ':FloatermCloseCurrent<cr>', { noremap = true, silent = true })
+vim.api.nvim_buf_set_keymap(0, 'n', 'gf', '<cmd>OpenInNormalWindow<cr>', { noremap = true, silent = true })
+vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermCloseCurrent<cr>', { noremap = true, silent = true })

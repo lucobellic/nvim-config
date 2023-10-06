@@ -51,5 +51,5 @@ if vim.g.neovide then
   vim.g.terminal_color_15 = '#bfbdb6'
 
 
-  vim.api.nvim_set_keymap('n', '<F11>', ':lua toggle_full_screen()<cr>', { silent = true })
+  vim.api.nvim_set_keymap('n', '<F11>', '<cmd>lua toggle_full_screen()<cr>', { silent = true })
 end

@@ -30,8 +30,8 @@ return {
   'akinsho/toggleterm.nvim',
   event = 'VeryLazy',
   keys = {
-    { '<leader>uP', ':ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
-    { '<leader>up', ':ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
+    { '<leader>uP', '<cmd>ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
+    { '<leader>up', '<cmd>ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
   },
   opts = {
     start_in_insert = false,

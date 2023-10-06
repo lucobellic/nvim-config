@@ -15,56 +15,56 @@ return {
     keys = {
       {
         '<leader>gdg',
-        ':DiffviewOpen<cr>',
+        '<cmd>DiffviewOpen<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview Open',
       },
       {
         '<leader>gdq',
-        ':diffoff<cr>',
+        '<cmd>diffoff<cr>',
         mode = { 'n' },
         desc = 'diffoff',
       },
       {
         '<leader>gdF',
-        ":0,$DiffviewFileHistory --follow<cr>",
+        "<cmd>0,$DiffviewFileHistory --follow<cr>",
         mode = { 'n' },
         desc = 'Diffview Range File History',
       },
       {
         '<leader>gdf',
-        ":DiffviewFileHistory --follow %<cr>",
+        "<cmd>DiffviewFileHistory --follow %<cr>",
         mode = { 'n' },
         desc = 'Diffview File History',
       },
       {
         '<leader>gdf',
-        ":DiffviewFileHistory --follow<cr>",
+        "<cmd>DiffviewFileHistory --follow<cr>",
         mode = { 'v' },
         desc = 'Diffview File History',
       },
       {
         '<leader>gdd',
-        ':DiffviewOpen origin/develop...HEAD<cr>',
+        '<cmd>DiffviewOpen origin/develop...HEAD<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview origin/develop...HEAD',
       },
       {
         '<leader>gdw',
-        ':windo diffthis<cr>',
+        '<cmd>windo diffthis<cr>',
         mode = { 'n' },
         desc = 'Windo diffthis',
       },
       {
         '<leader>gdo',
-        ':diffthis<cr>',
+        '<cmd>diffthis<cr>',
         mode = { 'n', 'v' },
         desc = 'diffthis',
       },
     },
     opts = function (_, opts)
       opts.diff_binaries = false   -- Show diffs for binaries
-      opts.enhanced_diff_hl = true -- See ':h diffview-config-enhanced_diff_hl'
+      opts.enhanced_diff_hl = true -- See '<cmd>h diffview-config-enhanced_diff_hl'
       opts.signs = vim.tbl_extend('force', opts.signs or {}, {
         fold_closed = "",
         fold_open = "",

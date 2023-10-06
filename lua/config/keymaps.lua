@@ -106,7 +106,7 @@ map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle Spe
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle Word Wrap" })
 map("n", "<leader>ul", function() Util.toggle_number() end, { desc = "Toggle Line Numbers" })
 map("n", "<leader>ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, { desc = "Toggle Mini Animate" })
-map('n', '<leader>uS', ':ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
+map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map("n", "<leader>uc", function() Util.toggle("conceallevel", false, { 0, conceallevel }) end,
@@ -115,14 +115,14 @@ if vim.lsp.inlay_hint then
   map("n", "<leader>uh", function() vim.lsp.inlay_hint(0, nil) end, { desc = "Toggle Inlay Hints" })
 end
 
-wk.register({ ['<leader>ut'] = { ':TransparencyToggle<cr>', 'Toggle Transparency' } })
+wk.register({ ['<leader>ut'] = { '<cmd>TransparencyToggle<cr>', 'Toggle Transparency' } })
 -- map("n", "<leader>ud", Util.toggle_diagnostics, { desc = "Toggle Diagnostics" })
 wk.register({
   ['<leader>ud'] = {
     name = 'Toggle Diagnostics',
     d = { Util.toggle_diagnostics, 'Toggle Diagnostics' },
-    t = { ':ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
-    l = { ':ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
+    t = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
+    l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
   }
 })
 
@@ -143,11 +143,11 @@ map("t", "<S-up>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
 map("t", "<S-right>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
 
 -- tabs
-map('n', '<C-k>', ':tabnext<cr>', { desc = 'Tab Next' })
-map('n', '<C-j>', ':tabprev<cr>', { desc = 'Tab Prev' })
-map('n', '<C-t>', ':tabnew<cr>', { desc = 'Tab New' })
-map('n', 'gn', ':tabnew<cr>', { desc = 'Tab New' })
-map('n', 'gq', ':tabclose<cr>', { desc = 'Tab Close' })
+map('n', '<C-k>', '<cmd>tabnext<cr>', { desc = 'Tab Next' })
+map('n', '<C-j>', '<cmd>tabprev<cr>', { desc = 'Tab Prev' })
+map('n', '<C-t>', '<cmd>tabnew<cr>', { desc = 'Tab New' })
+map('n', 'gn', '<cmd>tabnew<cr>', { desc = 'Tab New' })
+map('n', 'gq', '<cmd>tabclose<cr>', { desc = 'Tab Close' })
 map('n', '<tab>j',
   function() require('util.tabpages').move_in_tab('prev') end,
   { desc = 'Buffer Move Prev Tab', repeatable = true })
@@ -177,4 +177,4 @@ map('n', '<S', '[s', { repeatable = true, desc = 'Prev Spelling' })
 map('n', '<s', '[s', { repeatable = true, desc = 'Prev Spelling' })
 
 -- Copilot
-wk.register({ ['<leader>cp'] = { ':Copilot panel<cr>', 'Copilot Panel' } })
+wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
