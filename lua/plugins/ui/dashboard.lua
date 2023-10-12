@@ -90,7 +90,7 @@ local configs = {
 }
 
 return {
-  'nvimdev/dashboard-nvim',
+  'glepnir/dashboard-nvim',
   event = 'VimEnter',
   opts = {
     theme = theme,

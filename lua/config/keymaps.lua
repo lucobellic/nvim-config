@@ -101,10 +101,10 @@ map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 -- stylua: ignore start
 
 -- toggle options
-map("n", "<leader>uf", require("lazyvim.plugins.lsp.format").toggle, { desc = "Toggle format on Save" })
+map("n", "<leader>uf", require("lazyvim.util.format").toggle, { desc = "Toggle format on Save" })
 map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle Spelling" })
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle Word Wrap" })
-map("n", "<leader>ul", function() Util.toggle_number() end, { desc = "Toggle Line Numbers" })
+map("n", "<leader>ul", function() Util.toggle.number() end, { desc = "Toggle Line Numbers" })
 map("n", "<leader>ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, { desc = "Toggle Mini Animate" })
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
@@ -120,7 +120,7 @@ wk.register({ ['<leader>ut'] = { '<cmd>TransparencyToggle<cr>', 'Toggle Transpar
 wk.register({
   ['<leader>ud'] = {
     name = 'Toggle Diagnostics',
-    d = { Util.toggle_diagnostics, 'Toggle Diagnostics' },
+    d = { Util.toggle.diagnostics, 'Toggle Diagnostics' },
     t = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
     l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
   }

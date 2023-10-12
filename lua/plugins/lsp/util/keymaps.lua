@@ -1,6 +1,7 @@
 return function()
   local format = function()
-    require("lazyvim.plugins.lsp.format").format({ force = true })
+    require("lazyvim.util.format").format({ force = true })
+    -- vim.lsp.buf.format()
   end
   local keys = require("lazyvim.plugins.lsp.keymaps").get()
 
