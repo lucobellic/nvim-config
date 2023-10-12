@@ -2,7 +2,6 @@ return {
   "neovim/nvim-lspconfig",
   opts = function(_, opts)
     -- Automatically format on save
-    opts.autoformat = false
     opts.inlay_hints = { enabled = true }
 
     -- Enable nvim-ufo capabilities
