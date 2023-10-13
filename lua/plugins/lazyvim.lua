@@ -2,9 +2,6 @@ return {
   'LazyVim/LazyVim',
   opts = {
     colorscheme = 'ayugloom',
-    defaults = {
-      keymaps = false,
-    },
     icons = {
       dap = {
         Stopped = { ' ', 'DiagnosticWarn', 'DapStoppedLine' }, --  
