@@ -22,9 +22,9 @@ return {
     right = {
       {
         title = ' ',
-        ft = "sagaoutline",
+        ft = "aerial",
         pinned = true,
-        open = "Lspsaga outline",
+        open = "AerialToggle",
       },
       {
         title = ' ',

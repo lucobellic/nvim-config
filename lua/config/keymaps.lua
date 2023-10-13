@@ -130,3 +130,6 @@ map('n', '<s', '[s', { repeatable = true, desc = 'Prev Spelling' })
 
 -- Copilot
 wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
+
+-- aerial
+map('n', '<leader>co', function() require('aerial').toggle({focus = false}) end, { desc = 'Aerial Toggle' })
