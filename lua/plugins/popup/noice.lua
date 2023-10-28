@@ -44,6 +44,10 @@ local views = {
     },
     reverse = true
   },
+  notify = {
+    replace = true,
+    merge = false,
+  }
 }
 
 
@@ -127,6 +131,7 @@ return {
   keys = {
     { '<c-f>', false },
     { '<c-p>', false },
+    { '<leader>snn', function() require('telescope').extensions.notify.notify() end, desc = 'Find Notifications' },
   },
   opts = {
     cmdline = cmdline,
@@ -136,7 +141,7 @@ return {
     presets = {
       bottom_search = { enabled = false },        -- use a classic bottom cmdline for search
       command_palette = { enabled = false },      -- position the cmdline and popupmenu together
-      long_message_to_split = { enabled = true }, -- long messages will be sent to a split
+      long_message_to_split = { enabled = false }, -- long messages will be sent to a split
       inc_rename = false,                         -- enables an input dialog for inc-rename.nvim
       lsp_doc_border = true,                      -- add a border to hover docs and signature help
     },
