@@ -1,13 +1,17 @@
 return {
-  'folke/persistence.nvim',
+  'lucobellic/persistence.nvim',
+  branch = 'personal',
   keys = {
     { '<leader>qr', function() require("persistence").load() end,                desc = 'Restore session' },
     { '<leader>ql', function() require("persistence").load({ last = true }) end, desc = 'Load last session' },
     { '<leader>qd', function() require("persistence").stop() end,                desc = 'Stop session' },
-    { '<leader>qs', '<cmd>PersistenceLoadSession<cr>',                               desc = 'Load session' },
+    { '<leader>qs',  function() require("persistence").save() end,               desc = 'Save session' },
   },
   opts = {
-    options = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp" },
-    pre_save = function() vim.api.nvim_exec_autocmds('User', { pattern = 'SessionSavePre' }) end
+    options = { "buffers", "curdir", "tabpages", "winpos", "folds",  "winsize", "help", "globals", "skiprtp" },
+    pre_save = function()
+      vim.cmd('tabmove 0')
+      vim.cmd('ScopeSaveState')
+    end
   }
 }

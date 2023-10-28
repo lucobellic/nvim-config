@@ -21,8 +21,23 @@ end
 ---Load session from file
 ---@param session_file string
 function M.load_session(session_file)
+  -- Skip current session loading
+  local current = require('persistence').get_current();
+  if vim.bo.filetype ~= 'dashboard' and current == session_file then
+    return
+  end
+
   if session_file and vim.fn.filereadable(session_file) ~= 0 then
+    -- Save current session before loading a new one
+    if vim.bo.filetype ~= 'dashboard' then
+      require('persistence.config').options.pre_save()
+      require('persistence').save()
+    end
+
+    vim.cmd("tabdo Neotree close")
+    vim.cmd("silent! %bd!")
     vim.cmd("silent! source " .. vim.fn.fnameescape(session_file))
+    vim.cmd("ScopeLoadState")
   end
 end
 
