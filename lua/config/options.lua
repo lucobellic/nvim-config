@@ -67,3 +67,8 @@ vim.o.foldtext = 'v:lua.custom_fold_text()'
 vim.o.guicursor = "n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:blinkon0-Cursor/lCursor"
 
 vim.g.lion_squeeze_spaces = true
+
+vim.opt.numberwidth = 1
+if vim.fn.has("nvim-0.9.0") == 1 then
+  vim.opt.statuscolumn = [[%!v:lua.require'util.statuscolumn'.get()]]
+end
