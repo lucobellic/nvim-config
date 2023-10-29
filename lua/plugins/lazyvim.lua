@@ -4,8 +4,8 @@ return {
     colorscheme = 'ayugloom',
     icons = {
       dap = {
-        Stopped = { ' ', 'DiagnosticWarn', 'DapStoppedLine' }, --  
-        Breakpoint = { '', 'DiagnosticError' },              -- 󰧞   
+        Stopped = { ' ', 'String', 'DapStoppedLine' }, --  
+        Breakpoint = { '', 'DiagnosticError' },        -- 󰧞   
         BreakpointCondition = { '', 'DiagnosticWarn' },
         BreakpointRejected = { '', 'Comment' },
         LogPoint = ".>",
