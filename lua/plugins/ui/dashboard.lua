@@ -81,6 +81,7 @@ local configs = {
       action = load_session,
     },
     shortcut = doom_shortcut,
+    footer = {},
   },
   doom = {
     -- header = {},
@@ -90,7 +91,7 @@ local configs = {
 }
 
 return {
-  'glepnir/dashboard-nvim',
+  'nvimdev/dashboard-nvim',
   event = 'VimEnter',
   opts = {
     theme = theme,
