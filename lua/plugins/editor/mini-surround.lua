@@ -1,7 +1,13 @@
 return {
   'echasnovski/mini.surround',
   keys = {
-    {'S', "<cmd><c-u>lua MiniSurround.add('visual')<cr>",  mode = {'v'}, silent = true, desc = 'Surround'}
+    {
+      'S',
+      ":<c-u>lua require('mini.surround').add('visual')<cr>",
+      mode = { 'v' },
+      silent = true,
+      desc = 'Surround',
+    },
   },
   opts = {
     mappings = {
