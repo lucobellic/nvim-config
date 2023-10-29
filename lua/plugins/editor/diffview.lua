@@ -39,7 +39,7 @@ return {
       },
       {
         '<leader>gdf',
-        "<cmd>DiffviewFileHistory --follow<cr>",
+        ":DiffviewFileHistory<cr>",
         mode = { 'v' },
         desc = 'Diffview File History',
       },
