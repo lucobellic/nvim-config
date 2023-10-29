@@ -18,8 +18,8 @@ vim.o.showbreak = '↪'
 vim.o.backup = false
 vim.o.writebackup = false
 vim.o.swapfile = false
-vim.o.pumblend = 20
-vim.o.winblend = 20
+vim.o.pumblend = 0
+vim.o.winblend = 0
 
 vim.go.incsearch = false
 
