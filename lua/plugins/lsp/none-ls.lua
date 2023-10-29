@@ -6,6 +6,7 @@ local cspell_config = {
 
 return {
   'nvimtools/none-ls.nvim',
+  enabled = false,
   dependencies = { 'davidmh/cspell.nvim' },
   opts = function(_, opts)
     local nls = require('null-ls')
