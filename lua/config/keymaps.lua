@@ -137,3 +137,5 @@ wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
 
 -- aerial
 map('n', '<leader>co', function() require('aerial').toggle({focus = false}) end, { desc = 'Aerial Toggle' })
+
+require('util.commands').create_command_from_keymaps()
