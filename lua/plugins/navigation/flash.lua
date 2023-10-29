@@ -139,7 +139,14 @@ return {
   end,
   opts = {
     jump = { autojump = false },
-    modes = { search = { highlight = { backdrop = true } } },
+    modes = {
+      search = {
+        enabled = false,
+        highlight = {
+          backdrop = true
+        }
+      }
+    },
     prompt = { enabled = false, },
   }
 }
