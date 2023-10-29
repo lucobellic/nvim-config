@@ -15,20 +15,10 @@ return function()
 
   keys[#keys + 1] = { "<leader>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>" }
   keys[#keys + 1] = { "<leader>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>" }
-  keys[#keys + 1] = { "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" }
 
   keys[#keys + 1] = { "<leader>rf", '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' }
 
   keys[#keys + 1] = { "<leader>cf", require("plugins.lsp.util.fixcurrent"), repeatable = true }
-
-  keys[#keys + 1] = {
-    "<leader>ca",
-    "<cmd>Lspsaga code_action<CR>",
-    desc = "Code Action",
-    mode = { "n", "v" },
-    has = "codeAction",
-  }
-
   -- Format
   keys[#keys + 1] = { "<leader>=", format, desc = "Format Document", has = "documentFormatting" }
   keys[#keys + 1] = { "<leader>=", format, desc = "Format Range", mode = "v", has = "documentRangeFormatting" }
@@ -39,7 +29,7 @@ return function()
 
   -- Jump to previous or next diagnostic
   keys[#keys + 1] = {
-    "<C",
+    "<D",
     function()
       require("lspsaga.diagnostic"):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } })
     end,
@@ -47,7 +37,7 @@ return function()
   }
 
   keys[#keys + 1] = {
-    ">C",
+    ">D",
     function()
       require("lspsaga.diagnostic"):goto_next({ severity = { min = vim.diagnostic.severity.HINT } })
     end,
