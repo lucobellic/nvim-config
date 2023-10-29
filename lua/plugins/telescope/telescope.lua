@@ -65,10 +65,12 @@ return {
       }
     },
     keys = {
-      { '<leader>gc', false },
-      { '<leader>gs', false },
+      { '<leader>gc',       false },
+      { '<leader>gs',       false },
+      { '<leader>fF',       false },
+      { '<leader><leader>', false },
       {
-        '<leader>FL',
+        '<leader>fL',
         function()
           require('telescope').extensions.live_grep_args.live_grep_args()
         end,
@@ -191,6 +193,8 @@ return {
           n = {
             ['<c-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
             ['<C-n>'] = require('telescope.actions').select_tab,
+            ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
+            ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
             ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
           },
