@@ -1,7 +1,9 @@
 return {
   'lucobellic/galaxyline.nvim',
+  enabled = false,
   event = 'VeryLazy',
   branch = 'personal',
+  dependencies = {'linrongbin16/lsp-progress.nvim'},
   config = function()
     local gl = require('galaxyline')
     local gls = gl.section
