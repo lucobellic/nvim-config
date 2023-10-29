@@ -23,8 +23,8 @@ return {
     },
     symbol_in_winbar = {
       enable = true,
-      separator = ' -> ',
-      show_file = false,
+      separator = '   ',
+      show_file = true,
     },
     rename = {
       in_select = false
@@ -46,5 +46,8 @@ return {
     code_action = {
       num_shortcut = true
     }
-  }
+  },
+  init = function()
+    require('lspsaga.lspkind').kind[302][2] = '   '
+  end
 }
