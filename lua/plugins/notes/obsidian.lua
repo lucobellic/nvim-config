@@ -49,13 +49,17 @@ return {
       { '<leader>os', '<cmd>ObsidianSearch<cr>',      desc = 'Obsidian Find Files' },
       { '<leader>ot', '<cmd>ObsidianToday<cr>',       desc = 'Obsidian Today' },
       { '<leader>oy', '<cmd>ObsidianYesterday<cr>',   desc = 'Obsidian Yesterday' },
+      { '<leader>on', '<cmd>ObsidianTask<CR>',        desc = 'Obsidian Task' },
     },
     config = function(_, opts)
       require('obsidian').setup(opts)
 
+      --- Create a new note with the name of the current task
       local function toggle_current_task()
         -- Get name of the current branch
         local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
+
+        -- Get the task based on regex
         local task = branch:match("(%w+%-%d+)")
         if task and task ~= '' then
           vim.cmd('ObsidianNew ' .. task)
@@ -64,7 +68,6 @@ return {
         end
       end
       vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
-      vim.keymap.set('n', '<leader>on', '<cmd>ObsidianTask<CR>', { noremap = true, silent = true })
 
       -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
       -- see also: 'follow_url_func' config option above.
