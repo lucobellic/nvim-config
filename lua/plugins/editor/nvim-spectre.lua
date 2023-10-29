@@ -7,5 +7,5 @@ return {
       replace = 'Substitute',
     },
     result_padding = '▏  ',
-  }
+  },
 }

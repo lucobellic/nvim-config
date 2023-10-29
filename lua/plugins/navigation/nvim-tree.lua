@@ -16,26 +16,26 @@ return {
       mappings = {
         custom_only = false,
         list = {
-          { key = 'u',                 action = 'dir_up' },
-          { key = 'l',                 action = 'edit',           action_cb = edit_or_open },
-          { key = 'L',                 action = 'vsplit_preview', action_cb = vsplit_preview },
-          { key = 'h',                 action = 'close_node' },
-          { key = '<CR>',              action = 'cd',             action_cb = cd },
-          { key = { 'E', 'zr', 'zR' }, action = 'expand_all',     action_cb = expand_all },
-          { key = { 'H', 'zm', 'zM' }, action = 'collapse_all',   action_cb = collapse_all },
+          { key = 'u', action = 'dir_up' },
+          { key = 'l', action = 'edit', action_cb = edit_or_open },
+          { key = 'L', action = 'vsplit_preview', action_cb = vsplit_preview },
+          { key = 'h', action = 'close_node' },
+          { key = '<CR>', action = 'cd', action_cb = cd },
+          { key = { 'E', 'zr', 'zR' }, action = 'expand_all', action_cb = expand_all },
+          { key = { 'H', 'zm', 'zM' }, action = 'collapse_all', action_cb = collapse_all },
         },
       },
     },
     git = {
-      enable = false -- disable for performances reasons
+      enable = false, -- disable for performances reasons
     },
     actions = {
       open_file = {
-        quit_on_open = false
-      }
+        quit_on_open = false,
+      },
     },
     renderer = {
-      root_folder_label = ":t:r",
+      root_folder_label = ':t:r',
       group_empty = true,
       indent_markers = {
         enable = false,
@@ -52,10 +52,10 @@ return {
       dotfiles = false,
     },
     diagnostics = {
-      enable = true
+      enable = true,
     },
     update_focused_file = {
-      enable = true
-    }
-  }
+      enable = true,
+    },
+  },
 }

@@ -11,14 +11,12 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
   -- Add custom repeatable option
   if opts.repeatable then
     opts.repeatable = nil
-    return keymap_set(mode, lhs,
-      function(...)
-        rhs(...)
-        vim.fn['repeat#set'](vim.api.nvim_replace_termcodes(lhs, true, false, true))
-      end,
-      opts)
+    return keymap_set(mode, lhs, function(...)
+      rhs(...)
+      vim.fn['repeat#set'](vim.api.nvim_replace_termcodes(lhs, true, false, true))
+    end, opts)
   end
   return keymap_set(mode, lhs, rhs, opts)
 end
 
-require("config.lazy")
+require('config.lazy')

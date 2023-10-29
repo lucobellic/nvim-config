@@ -1,12 +1,14 @@
 local has_words_before = function()
-  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
+  if vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt' then
+    return false
+  end
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match('^%s*$') == nil
 end
 
 -- Setup nvim-cmp.
-local luasnip = require('luasnip')
 local cmp = require('cmp')
+local luasnip = require('luasnip')
 
 local safely_select = cmp.mapping({
   i = function(fallback)
@@ -25,11 +27,11 @@ local tab_confirm_mapping = {
   ['<C-e>'] = cmp.mapping.abort(),
   ['<cr>'] = safely_select,
 
-  ["<Tab>"] = cmp.mapping.confirm({
+  ['<Tab>'] = cmp.mapping.confirm({
     behavior = cmp.ConfirmBehavior.Insert,
     select = true,
   }),
-  ["<S-Tab>"] = cmp.mapping.confirm({
+  ['<S-Tab>'] = cmp.mapping.confirm({
     behavior = cmp.ConfirmBehavior.Insert,
     select = true,
   }),
@@ -45,7 +47,7 @@ local tab_confirm_mapping = {
       else
         cmp.confirm({
           behavior = cmp.ConfirmBehavior.Insert,
-          select = true
+          select = true,
         })
       end
     else
@@ -63,7 +65,7 @@ local tab_selection_mapping = {
   ['<C-e>'] = cmp.mapping.abort(),
   ['<cr>'] = safely_select,
 
-  ["<Tab>"] = cmp.mapping(function(fallback)
+  ['<Tab>'] = cmp.mapping(function(fallback)
     if cmp.visible() and has_words_before() then
       cmp.select_next_item()
     elseif luasnip.expand_or_jumpable() then
@@ -71,9 +73,9 @@ local tab_selection_mapping = {
     else
       fallback()
     end
-  end, { "i", "s" }),
+  end, { 'i', 's' }),
 
-  ["<S-Tab>"] = cmp.mapping(function(fallback)
+  ['<S-Tab>'] = cmp.mapping(function(fallback)
     if cmp.visible() and has_words_before() then
       cmp.select_prev_item()
     elseif luasnip.jumpable(-1) then
@@ -81,7 +83,7 @@ local tab_selection_mapping = {
     else
       fallback()
     end
-  end, { "i", "s" }),
+  end, { 'i', 's' }),
 }
 
 return {
@@ -92,16 +94,16 @@ return {
       config = function()
         require('lspkind').init({
           symbol_map = {
-            Copilot = "",
+            Copilot = '',
           },
         })
-      end
-    }
+      end,
+    },
   },
   opts = {
     experimental = {
       native_menu = false,
-      ghost_text = { hl_group = 'Comment' }
+      ghost_text = { hl_group = 'Comment' },
     },
     window = {
       completion = {
@@ -121,17 +123,17 @@ return {
     mapping = cmp.mapping.preset.insert(tab_confirm_mapping),
     -- vim.tbl_extend('force', opts.sources, {
     sources = {
-      { name = 'copilot',                 group_index = 1 },
-      { name = 'nvim_lsp',                group_index = 1 },
-      { name = 'luasnip',                 group_index = 2 },
-      { name = 'buffer',                  group_index = 2 },
-      { name = 'path',                    group_index = 2 },
+      { name = 'copilot', group_index = 1 },
+      { name = 'nvim_lsp', group_index = 1 },
+      { name = 'luasnip', group_index = 2 },
+      { name = 'buffer', group_index = 2 },
+      { name = 'path', group_index = 2 },
       { name = 'nvim_lsp_signature_help', group_index = 3 },
     },
     formatting = {
       format = function(entry, vim_item)
         return require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
-      end
-    }
-  }
+      end,
+    },
+  },
 }

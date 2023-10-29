@@ -1,10 +1,10 @@
 local function load_session(path)
-  local pattern = "/"
-  if vim.fn.has("win32") == 1 then
-    pattern = "[\\:]"
+  local pattern = '/'
+  if vim.fn.has('win32') == 1 then
+    pattern = '[\\:]'
   end
-  local name = path:gsub(pattern, "%%")
-  local session = require('persistence.config').options.dir .. name .. ".vim"
+  local name = path:gsub(pattern, '%%')
+  local session = require('persistence.config').options.dir .. name .. '.vim'
   require('util.persistence').load_session(session)
 end
 
@@ -46,7 +46,7 @@ local shortcut = {
     desc = '󰊳 Update',
     group = '@property',
     action = 'Lazy update',
-    key = 'u'
+    key = 'u',
   },
   {
     desc = ' Files',
@@ -97,7 +97,7 @@ return {
     theme = theme,
     preview = {
       command = 'cat | lolcat -F 0.3',
-      file_path = vim.fn.stdpath("config") .. '/lua/plugins/ui/header.cat',
+      file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
       file_width = 70,
       file_height = 10,
     },

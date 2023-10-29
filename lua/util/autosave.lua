@@ -1,8 +1,6 @@
-
 ---@class AutosaveUtil
 ---@field private autocmd_save_id number
 local M = {}
-
 
 function M.create_autosave_autocmd()
   return vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
@@ -26,18 +24,14 @@ end
 function M.setup()
   M.autocmd_save_id = M.create_autosave_autocmd()
 
-  vim.api.nvim_create_user_command(
-    'ToggleAutoSave',
-    function()
-      if M.autocmd_save_id ~= 0 then
-        vim.api.nvim_del_autocmd(M.autocmd_save_id)
-        M.autocmd_save_id = 0
-      else
-        M.autocmd_save_id = M.create_autosave_autocmd()
-      end
-    end,
-    { desc = 'Toggle Auto Save' }
-  )
+  vim.api.nvim_create_user_command('ToggleAutoSave', function()
+    if M.autocmd_save_id ~= 0 then
+      vim.api.nvim_del_autocmd(M.autocmd_save_id)
+      M.autocmd_save_id = 0
+    else
+      M.autocmd_save_id = M.create_autosave_autocmd()
+    end
+  end, { desc = 'Toggle Auto Save' })
 end
 
 return M

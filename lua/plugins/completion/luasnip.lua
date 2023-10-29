@@ -9,5 +9,5 @@ return {
     require('luasnip').filetype_extend('c', { 'cdoc' })
     require('luasnip').filetype_extend('cpp', { 'cppdoc' })
     require('luasnip.loaders.from_vscode').lazy_load()
-  end
+  end,
 }

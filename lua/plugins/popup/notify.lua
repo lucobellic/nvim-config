@@ -1,7 +1,7 @@
 return {
   'rcarriga/nvim-notify',
   opts = {
-    background_colour = "NotifyBackground",
+    background_colour = 'NotifyBackground',
     fps = 30,
     level = 2,
     minimum_width = 60,
@@ -10,6 +10,6 @@ return {
     render = 'wrapped-compact', -- 'default', 'minimal', 'simple', 'compact', 'wrapped-compact'
     stages = require('util.notify.limited_slide'),
     timeout = 1000,
-    top_down = false
-  }
+    top_down = false,
+  },
 }

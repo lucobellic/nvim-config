@@ -1,6 +1,6 @@
 local cspell_config = {
   find_json = function(cwd)
-    return vim.fn.stdpath("config") .. "/spell/cspell.json"
+    return vim.fn.stdpath('config') .. '/spell/cspell.json'
   end,
 }
 

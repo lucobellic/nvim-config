@@ -1,1 +1,1 @@
-  return { 'RRethy/vim-illuminate', enabled = false }
+return { 'RRethy/vim-illuminate', enabled = false }

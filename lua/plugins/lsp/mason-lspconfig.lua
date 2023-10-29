@@ -10,5 +10,5 @@ return {
       'clangd',
     },
     automatic_installation = false,
-  }
+  },
 }

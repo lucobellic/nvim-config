@@ -3,10 +3,10 @@ return {
   event = 'VeryLazy',
   dependencies = {
     { 'nvim-tree/nvim-web-devicons' },
-    { 'nvim-treesitter/nvim-treesitter' }
+    { 'nvim-treesitter/nvim-treesitter' },
   },
   keys = {
-    { '<leader>go', '<cmd>Lspsaga outline<cr>', desc = 'Symbols Outline' }
+    { '<leader>go', '<cmd>Lspsaga outline<cr>', desc = 'Symbols Outline' },
   },
   opts = {
     diagnostic = {
@@ -18,7 +18,7 @@ return {
       auto_preview = false,
       keys = {
         jump = '<Enter>',
-        expand_collapse = nil
+        expand_collapse = nil,
       },
     },
     symbol_in_winbar = {
@@ -27,7 +27,7 @@ return {
       show_file = true,
     },
     rename = {
-      in_select = false
+      in_select = false,
     },
     ui = {
       theme = 'round',
@@ -41,13 +41,13 @@ return {
         normal_bg = '#0B0E14',
         --title background color
         title_bg = '#0D1017',
-      }
+      },
     },
     code_action = {
-      num_shortcut = true
-    }
+      num_shortcut = true,
+    },
   },
   init = function()
     require('lspsaga.lspkind').kind[302][2] = '   '
-  end
+  end,
 }

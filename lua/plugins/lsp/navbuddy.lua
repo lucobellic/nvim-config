@@ -6,19 +6,21 @@ return {
   keys = {
     {
       '<leader>sl',
-      function() require('nvim-navbuddy').open() end,
-      desc = 'Navbuddy'
-    }
+      function()
+        require('nvim-navbuddy').open()
+      end,
+      desc = 'Navbuddy',
+    },
   },
   opts = {
-    window = { size = "80%" },
-    lsp = { auto_attach = true }
+    window = { size = '80%' },
+    lsp = { auto_attach = true },
   },
   config = function(_, opts)
     require('nvim-navbuddy').setup(opts)
     -- TODO: Find a proper way to do this with Lush
     -- Current Lush solution only provide `cleared` as result
-    vim.cmd [[
+    vim.cmd([[
           hi link NavbuddyArray         @punctuation
           hi link NavbuddyBoolean       @boolean
           hi link NavbuddyClass         @lsp.type.class
@@ -44,6 +46,6 @@ return {
           hi link NavbuddyStruct        @lsp.type.struct
           hi link NavbuddyTypeParameter @lsp.type.typeParameter
           hi link NavbuddyVariable      @variable
-        ]]
-  end
+        ]])
+  end,
 }

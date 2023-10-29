@@ -82,7 +82,6 @@ function M.move_in_tab(direction)
     vim.cmd(direction == tab_direction.prev and 'tabprevious' or 'tabnext')
   end
 
-
   -- Re-enable the buffer and focus it
   vim.api.nvim_buf_set_option(buffer_to_move, 'buflisted', true)
   vim.api.nvim_set_current_buf(buffer_to_move)

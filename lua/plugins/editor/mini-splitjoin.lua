@@ -1,6 +1,6 @@
 return {
   'echasnovski/mini.splitjoin',
-  event = "VeryLazy",
+  event = 'VeryLazy',
   config = function()
     require('mini.splitjoin').setup({
       mappings = {
@@ -9,5 +9,5 @@ return {
         join = '',
       },
     })
-  end
+  end,
 }

@@ -3,7 +3,7 @@ return {
   enabled = false,
   event = 'VeryLazy',
   branch = 'personal',
-  dependencies = {'linrongbin16/lsp-progress.nvim'},
+  dependencies = { 'linrongbin16/lsp-progress.nvim' },
   config = function()
     local gl = require('galaxyline')
     local gls = gl.section
@@ -32,7 +32,7 @@ return {
       red = '#F07178',
       lightbg = '#3C4048',
       nord = '#81A1C1',
-      greenYel = '#EBCB8B'
+      greenYel = '#EBCB8B',
     }
 
     local mode_color = function()
@@ -45,7 +45,7 @@ return {
         [''] = colors.greenYel,
         v = colors.greenYel,
         R = colors.magenta,
-        r = colors.magenta
+        r = colors.magenta,
       }
 
       local color = mode_colors[vim.fn.mode()]
@@ -73,8 +73,8 @@ return {
           return true
         end,
         icon = '   ',
-        separator = ' '
-      }
+        separator = ' ',
+      },
     }
 
     local git_branch = {
@@ -85,8 +85,8 @@ return {
           local branch = vcs.get_git_branch()
           return branch and branch .. ' ' or nil
         end,
-        separator = ' '
-      }
+        separator = ' ',
+      },
     }
 
     gls.left = {
@@ -101,8 +101,7 @@ return {
       lsp_client,
     }
 
-    gls.mid =
-    {
+    gls.mid = {
       {
         ViMode = {
           provider = function()
@@ -110,8 +109,8 @@ return {
             return ' ' .. os.date('%H:%M') .. ' '
           end,
           separator = '  ',
-        }
-      }
+        },
+      },
     }
 
     gls.right = {
@@ -125,8 +124,8 @@ return {
               return ''
             end
           end,
-          separator = ' '
-        }
+          separator = ' ',
+        },
       },
       {
         Search = {
@@ -138,12 +137,12 @@ return {
             elseif result.total <= 0 then
               return ''
             end
-            local total   = result.total < 100 and result.total or '+99'
+            local total = result.total < 100 and result.total or '+99'
             local current = result.current < 100 and result.current or '+99'
             return string.format('%7s', current .. '/' .. total)
           end,
           separator = ' ',
-        }
+        },
       },
       {
         LineInfo = {
@@ -151,8 +150,8 @@ return {
             vim.api.nvim_command('hi GalaxyLineInfo guifg=' .. mode_color())
             return string.format('%3d', vim.fn.col('.'))
           end,
-          separator = ' '
-        }
+          separator = ' ',
+        },
       },
       {
         PerCent = {
@@ -161,8 +160,8 @@ return {
             return string.format('%5s', fileinfo.current_line_percent())
           end,
           separator = ' ',
-        }
-      }
+        },
+      },
     }
-  end
+  end,
 }

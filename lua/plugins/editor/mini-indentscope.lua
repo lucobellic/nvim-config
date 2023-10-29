@@ -37,5 +37,5 @@ return {
     -- symbol = '▍',
     -- symbol = '▎',
     symbol = '▏',
-  }
+  },
 }

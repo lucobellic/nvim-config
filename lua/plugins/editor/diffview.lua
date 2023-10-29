@@ -4,13 +4,13 @@ return {
     optional = true,
     opts = {
       defaults = {
-        ['<leader>gd'] = { name = '+diffview' }
+        ['<leader>gd'] = { name = '+diffview' },
       },
     },
   },
   {
     'sindrets/diffview.nvim',
-    event = "VeryLazy",
+    event = 'VeryLazy',
     dependencies = { 'nvim-lua/plenary.nvim' },
     keys = {
       {
@@ -27,19 +27,19 @@ return {
       },
       {
         '<leader>gdF',
-        "<cmd>0,$DiffviewFileHistory --follow<cr>",
+        '<cmd>0,$DiffviewFileHistory --follow<cr>',
         mode = { 'n' },
         desc = 'Diffview Range File History',
       },
       {
         '<leader>gdf',
-        "<cmd>DiffviewFileHistory --follow %<cr>",
+        '<cmd>DiffviewFileHistory --follow %<cr>',
         mode = { 'n' },
         desc = 'Diffview File History',
       },
       {
         '<leader>gdf',
-        ":DiffviewFileHistory<cr>",
+        ':DiffviewFileHistory<cr>',
         mode = { 'v' },
         desc = 'Diffview File History',
       },
@@ -62,26 +62,26 @@ return {
         desc = 'diffthis',
       },
     },
-    opts = function (_, opts)
-      opts.diff_binaries = false   -- Show diffs for binaries
+    opts = function(_, opts)
+      opts.diff_binaries = false -- Show diffs for binaries
       opts.enhanced_diff_hl = true -- See '<cmd>h diffview-config-enhanced_diff_hl'
       opts.signs = vim.tbl_extend('force', opts.signs or {}, {
-        fold_closed = "",
-        fold_open = "",
-        done = "",
+        fold_closed = '',
+        fold_open = '',
+        done = '',
       })
       opts.view = vim.tbl_extend('force', opts.view or {}, { merge_tool = { layout = 'diff3_mixed' } })
 
       opts.keymaps = vim.tbl_extend('force', opts.keymaps or {}, {
         file_history_panel = {
           {
-            "n",
-            "<C-g>",
+            'n',
+            '<C-g>',
             require('diffview.actions').open_in_diffview,
-            { desc = "Open the entry under the cursor in a diffview" }
-          }
+            { desc = 'Open the entry under the cursor in a diffview' },
+          },
         },
       })
-    end
-  }
+    end,
+  },
 }

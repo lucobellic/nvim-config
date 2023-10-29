@@ -20,7 +20,7 @@ return {
         right_arrow = '─',
       },
       -- style = { '#4d5566' },
-      style = { '#ffcc66' }
+      style = { '#ffcc66' },
     },
 
     indent = {
@@ -33,5 +33,5 @@ return {
 
     line_num = { enable = false },
     blank = { enable = false },
-  }
+  },
 }

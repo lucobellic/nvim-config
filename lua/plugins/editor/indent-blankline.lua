@@ -16,7 +16,7 @@ return {
     indent = {
       char = '▏',
       tab_char = '▏',
-      highlight = 'IndentBlankLineChar'
+      highlight = 'IndentBlankLineChar',
     },
     scope = {
       enabled = true,
@@ -26,12 +26,12 @@ return {
       highlight = highlight,
       include = {
         node_type = {
-          lua = { "return_statement", "table_constructor" },
-          python = { "if_statement", "for_statement", "while_statement", "with_statement" },
+          lua = { 'return_statement', 'table_constructor' },
+          python = { 'if_statement', 'for_statement', 'while_statement', 'with_statement' },
         },
         -- Make every node type valid. Note that this can lead to some weird behavior
         -- node_type = { ["*"] = { "*" } },
-      }
+      },
     },
   },
 }

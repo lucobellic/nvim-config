@@ -10,15 +10,15 @@ return {
         ft_ignore = {
           'Outline',
           'sagaoutline',
-        }
+        },
       },
       config = function()
         local builtin = require('statuscol.builtin')
         require('statuscol').setup({
           relculright = true,
           segments = {
-            { text = { builtin.lnumfunc },      click = 'v:lua.ScLa' },
-            { text = { '%s' },                  click = 'v:lua.ScSa' },
+            { text = { builtin.lnumfunc }, click = 'v:lua.ScLa' },
+            { text = { '%s' }, click = 'v:lua.ScSa' },
             { text = { builtin.foldfunc, ' ' }, click = 'v:lua.ScFa' },
           },
         })
@@ -26,8 +26,18 @@ return {
     },
   },
   keys = {
-    { 'zR', function() require('ufo').openAllFolds() end },
-    { 'zM', function() require('ufo').closeAllFolds() end },
+    {
+      'zR',
+      function()
+        require('ufo').openAllFolds()
+      end,
+    },
+    {
+      'zM',
+      function()
+        require('ufo').closeAllFolds()
+      end,
+    },
   },
   opts = {},
 }

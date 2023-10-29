@@ -44,12 +44,12 @@ return {
       finder = 'telescope.nvim',
     },
     keys = {
-      { '<leader>oo', '<cmd>ObsidianOpen<cr>',        desc = 'Obsidian Open' },
+      { '<leader>oo', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
       { '<leader>of', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>os', '<cmd>ObsidianSearch<cr>',      desc = 'Obsidian Find Files' },
-      { '<leader>ot', '<cmd>ObsidianToday<cr>',       desc = 'Obsidian Today' },
-      { '<leader>oy', '<cmd>ObsidianYesterday<cr>',   desc = 'Obsidian Yesterday' },
-      { '<leader>on', '<cmd>ObsidianTask<CR>',        desc = 'Obsidian Task' },
+      { '<leader>os', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>ot', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
+      { '<leader>oy', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
+      { '<leader>on', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
     },
     config = function(_, opts)
       require('obsidian').setup(opts)
@@ -60,7 +60,7 @@ return {
         local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
 
         -- Get the task based on regex
-        local task = branch:match("(%w+%-%d+)")
+        local task = branch:match('(%w+%-%d+)')
         if task and task ~= '' then
           vim.cmd('ObsidianNew ' .. task)
         else
@@ -80,5 +80,5 @@ return {
       --   end
       -- end, { noremap = false, expr = true })
     end,
-  }
+  },
 }

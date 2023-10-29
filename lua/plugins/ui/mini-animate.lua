@@ -4,5 +4,5 @@ return {
     cursor = {
       enable = false,
     },
-  }
+  },
 }

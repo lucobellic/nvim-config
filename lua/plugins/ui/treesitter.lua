@@ -24,7 +24,7 @@ return {
             'TSRainbowRed',
           },
         }
-      end
+      end,
     },
   },
   opts = {
@@ -49,16 +49,16 @@ return {
         enabled = true,
       },
       move = {
-      enable = true,
+        enable = true,
         goto_next_start = {
-          [">f"] = "@function.outer",
-          [">F"] = "@function.outer",
+          ['>f'] = '@function.outer',
+          ['>F'] = '@function.outer',
         },
         goto_previous_start = {
-          ["<f"] = "@function.outer",
-          ["<F"] = "@function.outer",
+          ['<f'] = '@function.outer',
+          ['<F'] = '@function.outer',
         },
-      }
-    }
-  }
+      },
+    },
+  },
 }

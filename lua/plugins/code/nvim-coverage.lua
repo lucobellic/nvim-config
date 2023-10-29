@@ -8,9 +8,9 @@ return {
     require('coverage').setup({
       lang = {
         cpp = {
-          coverage_file = './.coverage/lcov.info'
-        }
-      }
+          coverage_file = './.coverage/lcov.info',
+        },
+      },
     })
   end,
 }

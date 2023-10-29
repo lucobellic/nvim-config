@@ -19,14 +19,14 @@ end
 local function get_git_diff(props)
   local git_icons = require('lazyvim.config').icons.git
   local icons = { removed = git_icons.removed, changed = git_icons.modified, added = git_icons.added }
-  local highlight = { removed = 'GitSignsDelete', changed = "GitSignsChange", added = 'GitSignsAdd' }
+  local highlight = { removed = 'GitSignsDelete', changed = 'GitSignsChange', added = 'GitSignsAdd' }
   local labels = {}
-  local signs = vim.api.nvim_buf_get_var(props.buf, "gitsigns_status_dict")
+  local signs = vim.api.nvim_buf_get_var(props.buf, 'gitsigns_status_dict')
   for name, icon in pairs(icons) do
     if tonumber(signs[name]) and signs[name] > 0 then
       table.insert(labels, {
-        icon .. signs[name] .. " ",
-        group = highlight[name]
+        icon .. signs[name] .. ' ',
+        group = highlight[name],
       })
     end
   end
@@ -36,16 +36,21 @@ local function get_git_diff(props)
   return labels
 end
 
-return
-{
+return {
   'b0o/incline.nvim',
   event = 'VeryLazy',
-  keys = { { '<leader>uo', function() require('incline').toggle() end, desc = 'Toggle incline' } },
+  keys = { {
+    '<leader>uo',
+    function()
+      require('incline').toggle()
+    end,
+    desc = 'Toggle incline',
+  } },
   opts = {
     window = {
       zindex = 1,
       margin = {
-        horizontal = {left = 0 , right = 2}, -- shift for scrollbar
+        horizontal = { left = 0, right = 2 }, -- shift for scrollbar
       },
     },
     hide = {
@@ -53,15 +58,16 @@ return
     },
     render = function(props)
       local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
-      local ft_icon, ft_color = require("nvim-web-devicons").get_icon_color(filename)
-      local modified = vim.api.nvim_buf_get_option(props.buf, "modified") and "italic" or ""
+      local ft_icon, ft_color = require('nvim-web-devicons').get_icon_color(filename)
+      local modified = vim.api.nvim_buf_get_option(props.buf, 'modified') and 'italic' or ''
       local buffer = {
         { get_diagnostic_label(props) },
         { get_git_diff(props) },
-        { ft_icon,                    guifg = ft_color }, { " " },
+        { ft_icon, guifg = ft_color },
+        { ' ' },
         { filename, gui = modified },
       }
       return buffer
-    end
-  }
+    end,
+  },
 }

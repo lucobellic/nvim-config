@@ -3,8 +3,20 @@ return {
   'folke/edgy.nvim',
   event = 'VeryLazy',
   keys = {
-    { '<leader>wl', function() require('edgy').toggle('right') end, desc = 'Edgy Close Right' },
-    { '<leader>wh', function() require('edgy').toggle('left') end,  desc = 'Edgy Close Left' }
+    {
+      '<leader>wl',
+      function()
+        require('edgy').toggle('right')
+      end,
+      desc = 'Edgy Close Right',
+    },
+    {
+      '<leader>wh',
+      function()
+        require('edgy').toggle('left')
+      end,
+      desc = 'Edgy Close Left',
+    },
   },
   opts = {
     close_when_all_hidden = false,
@@ -14,27 +26,27 @@ return {
     },
     keys = {
       -- increase width
-      ["<c-left>"] = function(win)
-        win:resize("width", 5)
+      ['<c-left>'] = function(win)
+        win:resize('width', 5)
       end,
       -- decrease width
-      ["<c-right>"] = function(win)
-        win:resize("width", -5)
+      ['<c-right>'] = function(win)
+        win:resize('width', -5)
       end,
     },
     right = {
       {
         title = ' ',
-        ft = "aerial",
+        ft = 'aerial',
         pinned = true,
-        open = "AerialToggle",
+        open = 'AerialToggle',
       },
       {
         title = ' ',
         ft = 'OverseerList',
         pinned = true,
         open = 'OverseerOpen',
-      }
+      },
     },
     left = {
       -- {
@@ -50,10 +62,10 @@ return {
     animate = {
       cps = 300,
       spinner = {
-        frames = { "", "", "", "", "", "" },
+        frames = { '', '', '', '', '', '' },
       },
     },
-  }
+  },
 }
 -- return {
 --   'folke/edgy.nvim',

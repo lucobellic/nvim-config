@@ -5,16 +5,16 @@ local M = {}
 function M.get()
   local win = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(win)
-  local is_file = vim.bo[buf].buftype == ""
-  local show_signs = vim.wo[win].signcolumn ~= "no"
+  local is_file = vim.bo[buf].buftype == ''
+  local show_signs = vim.wo[win].signcolumn ~= 'no'
 
-  local components = { "", "", "" } -- left, middle, right
+  local components = { '', '', '' } -- left, middle, right
 
   if show_signs then
     ---@type Sign?,Sign?,Sign?
     local left, right, fold
     for _, s in ipairs(Ui.get_signs(buf, vim.v.lnum)) do
-      if s.name and s.name:find("GitSign") then
+      if s.name and s.name:find('GitSign') then
         right = s
       else
         left = s
@@ -25,7 +25,7 @@ function M.get()
     end
     vim.api.nvim_win_call(win, function()
       if vim.fn.foldclosed(vim.v.lnum) >= 0 then
-        fold = { text = vim.opt.fillchars:get().foldclose or "", texthl = "Folded" }
+        fold = { text = vim.opt.fillchars:get().foldclose or '', texthl = 'Folded' }
       end
     end)
 
@@ -36,9 +36,9 @@ function M.get()
     components[1] = left_icon
 
     -- Right: fold icon or git sign (only if file)
-    local right_icon = Ui.icon(fold or right):gsub("%s+", "")
+    local right_icon = Ui.icon(fold or right):gsub('%s+', '')
     right_icon = right_icon == '' and ' ' or right_icon
-    components[3] = is_file and right_icon or ""
+    components[3] = is_file and right_icon or ''
   end
 
   -- Numbers in Neovim are weird
@@ -47,14 +47,14 @@ function M.get()
   local is_relnum = vim.wo[win].relativenumber
   if (is_num or is_relnum) and vim.v.virtnum == 0 then
     if vim.v.relnum == 0 then
-      components[2] = is_num and "%l" or "%r" -- the current line
+      components[2] = is_num and '%l' or '%r' -- the current line
     else
-      components[2] = is_relnum and "%r" or "%l" -- other lines
+      components[2] = is_relnum and '%r' or '%l' -- other lines
     end
-    components[2] = "%=" .. components[2] .. " " -- right align
+    components[2] = '%=' .. components[2] .. ' ' -- right align
   end
 
-  local statusline = table.concat(components, "")
+  local statusline = table.concat(components, '')
   return statusline
 end
 

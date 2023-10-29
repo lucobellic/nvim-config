@@ -3,7 +3,7 @@ return {
   event = 'VeryLazy',
   dependencies = {
     'anuvyklack/middleclass',
-    'anuvyklack/animation.nvim'
+    'anuvyklack/animation.nvim',
   },
   init = function()
     vim.o.winwidth = 10
@@ -24,15 +24,15 @@ return {
           'dapui_scopes',
           'dapui_breakpoints',
           'dapui_stacks',
-          'dapui_watches'
+          'dapui_watches',
         },
       },
       animation = {
         enable = false,
         duration = 500,
         fps = 60,
-        easing = 'in_out_sine'
-      }
+        easing = 'in_out_sine',
+      },
     })
-  end
+  end,
 }

@@ -1,4 +1,4 @@
-local components = require("neo-tree.sources.common.components")
+local components = require('neo-tree.sources.common.components')
 
 local function align(res)
   return (res and res.text) and res or { text = '  ' }
@@ -9,7 +9,7 @@ local function get_telescope_options(state)
   local path = node:get_id()
   -- if path is a file then get the directory
   if vim.fn.isdirectory(path) == 0 then
-    path = vim.fn.fnamemodify(path, ":h")
+    path = vim.fn.fnamemodify(path, ':h')
   end
   return { search_dirs = { path } }
 end
@@ -39,13 +39,13 @@ return {
         '<leader>ee',
         '<leader>fe',
         desc = 'Explorer NeoTree (root dir)',
-        remap = true
+        remap = true,
       },
       {
         '<leader>eE',
         '<leader>fE',
         desc = 'Explorer NeoTree (cwd)',
-        remap = true
+        remap = true,
       },
       {
         '<leader>ef',
@@ -53,7 +53,7 @@ return {
           require('neo-tree.command').execute({ action = 'focus', source = 'filesystem', reveal = 'true' })
         end,
         desc = 'Focus Current File',
-        remap = true
+        remap = true,
       },
     },
     init = function()
@@ -61,11 +61,11 @@ return {
     end,
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
-      popup_border_style = "rounded",
+      popup_border_style = 'rounded',
       enable_git_status = true,
       enable_diagnostics = true,
       sort_case_insensitive = true, -- used when sorting files and directories in the tree
-      sort_function = nil,          -- use a custom function for sorting files and directories in the tree
+      sort_function = nil, -- use a custom function for sorting files and directories in the tree
       use_popups_for_input = false, -- use vim.ui.input instead
       show_scrolled_off_parent_node = true,
       source_selector = {
@@ -73,9 +73,9 @@ return {
         statusline = false, -- toggle to show selector on statusline
         sources = { -- table
           {
-            source = "filesystem", -- string
-          display_name = "   Files " -- string | nil
-          }
+            source = 'filesystem', -- string
+            display_name = '   Files ', -- string | nil
+          },
         },
         truncation_character = '', -- string
         tabs_min_width = nil, -- int | nil
@@ -96,10 +96,10 @@ return {
             error = ' ',
           },
           highlights = {
-            hint = "DiagnosticSignHint",
-            info = "DiagnosticSignInfo",
-            warn = "DiagnosticSignWarn",
-            error = "DiagnosticSignError",
+            hint = 'DiagnosticSignHint',
+            info = 'DiagnosticSignInfo',
+            warn = 'DiagnosticSignWarn',
+            error = 'DiagnosticSignError',
           },
         },
         container = {
@@ -110,108 +110,108 @@ return {
           padding = 1, -- extra padding on left hand side
           -- indent guides
           with_markers = false,
-          indent_marker = "│",
-          last_indent_marker = "└",
-          highlight = "NeoTreeIndentMarker",
+          indent_marker = '│',
+          last_indent_marker = '└',
+          highlight = 'NeoTreeIndentMarker',
           -- expander config, needed for nesting files
           with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
-          expander_collapsed = "",
-          expander_expanded = "",
-          expander_highlight = "NeoTreeExpander",
+          expander_collapsed = '',
+          expander_expanded = '',
+          expander_highlight = 'NeoTreeExpander',
         },
         icon = {
-          folder_closed = " ",
-          folder_open = " ",
-          folder_empty = " ",
+          folder_closed = ' ',
+          folder_open = ' ',
+          folder_empty = ' ',
           -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
           -- then these will never be used.
-          default = "",
-          highlight = "NeoTreeFileIcon"
+          default = '',
+          highlight = 'NeoTreeFileIcon',
         },
         modified = {
-          symbol = " ",
-          highlight = "GitSignsChange",
+          symbol = ' ',
+          highlight = 'GitSignsChange',
         },
         name = {
           trailing_slash = false,
           use_git_status_colors = true,
-          highlight = "NeoTreeFileName",
+          highlight = 'NeoTreeFileName',
         },
         align_git_status = {
           symbols = {
             -- Change type
-            added     = "",
-            modified  = "",
-            deleted   = "",
-            renamed   = "",
+            added = '',
+            modified = '',
+            deleted = '',
+            renamed = '',
             -- Status type
-            untracked = "",
-            ignored   = "",
-            unstaged  = "",
-            staged    = "",
-            conflict  = "",
-          }
+            untracked = '',
+            ignored = '',
+            unstaged = '',
+            staged = '',
+            conflict = '',
+          },
         },
       },
       window = {
-        position = "left",
+        position = 'left',
         width = 40,
         mapping_options = {
           noremap = true,
           nowait = true,
         },
         mappings = {
-          ["/"] = "none",
-          ["<2-LeftMouse>"] = "open",
-          ["<cr>"] = "open",
-          ["l"] = "open",
-          ["<esc>"] = "revert_preview",
+          ['/'] = 'none',
+          ['<2-LeftMouse>'] = 'open',
+          ['<cr>'] = 'open',
+          ['l'] = 'open',
+          ['<esc>'] = 'revert_preview',
           --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
-          ["P"] = { "toggle_preview", config = { use_float = true } },
-          ["S"] = "open_split",
-          ["s"] = "open_vsplit",
+          ['P'] = { 'toggle_preview', config = { use_float = true } },
+          ['S'] = 'open_split',
+          ['s'] = 'open_vsplit',
           -- ["S"] = "split_with_window_picker",
           -- ["s"] = "vsplit_with_window_picker",
-          ["t"] = "open_tabnew",
+          ['t'] = 'open_tabnew',
           -- ["<cr>"] = "open_drop",
           -- ["t"] = "open_tab_drop",
-          ["w"] = "open_with_window_picker",
-          ["C"] = "close_node",
-          ["h"] = "close_node",
-          ["z"] = "none",
+          ['w'] = 'open_with_window_picker',
+          ['C'] = 'close_node',
+          ['h'] = 'close_node',
+          ['z'] = 'none',
           -- ["z"] = "close_all_nodes",
           --["Z"] = "expand_all_nodes",
-          ["a"] = {
-            "add",
+          ['a'] = {
+            'add',
             -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
             -- some commands may take optional config options, see `:h neo-tree-mappings` for details
             config = {
-              show_path = "none" -- "none", "relative", "absolute"
-            }
+              show_path = 'none', -- "none", "relative", "absolute"
+            },
           },
-          ["A"] = "add_directory", -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
-          ["d"] = "delete",
-          ["r"] = "rename",
-          ["y"] = "copy_to_clipboard",
-          ["x"] = "cut_to_clipboard",
-          ["p"] = "paste_from_clipboard",
-          ["c"] = "copy", -- takes text input for destination, also accepts the optional config.show_path option like "add":
+          ['A'] = 'add_directory', -- also accepts the optional config.show_path option like "add". this also supports BASH style brace expansion.
+          ['d'] = 'delete',
+          ['r'] = 'rename',
+          ['y'] = 'copy_to_clipboard',
+          ['x'] = 'cut_to_clipboard',
+          ['p'] = 'paste_from_clipboard',
+          ['c'] = 'copy', -- takes text input for destination, also accepts the optional config.show_path option like "add":
           -- ["c"] = {
           --  "copy",
           --  config = {
           --    show_path = "none" -- "none", "relative", "absolute"
           --  }
           --}
-          ["m"] = "move", -- takes text input for destination, also accepts the optional config.show_path option like "add".
-          ["q"] = "close_window",
-          ["<c-q>"] = "close_window",
-          ["R"] = "refresh",
-          ["?"] = "show_help",
-          ["<"] = "none", -- "prev_source",
-          [">"] = "none", -- "next_source",
-          ["["] = "prev_source",
-          ["]"] = "next_source",
-        }
+          ['m'] = 'move', -- takes text input for destination, also accepts the optional config.show_path option like "add".
+          ['q'] = 'close_window',
+          ['<c-q>'] = 'close_window',
+          ['R'] = 'refresh',
+          ['?'] = 'show_help',
+          ['<'] = 'none', -- "prev_source",
+          ['>'] = 'none', -- "next_source",
+          ['['] = 'prev_source',
+          [']'] = 'next_source',
+        },
       },
       nesting_rules = {},
       filesystem = {
@@ -225,40 +225,40 @@ return {
           end,
           align_diagnostics = function(config, node, state)
             return align(components.diagnostics(config, node, state))
-          end
+          end,
         },
         renderers = {
           directory = {
             {
-              "indent",
+              'indent',
               with_markers = false,
               indent_size = 1,
             },
-            { "icon" },
-            { "current_filter" },
+            { 'icon' },
+            { 'current_filter' },
             {
-              "container",
-              width = "100%",
+              'container',
+              width = '100%',
               right_padding = 0,
               content = {
-                { "name", zindex = 10 }
-              }
-            }
+                { 'name', zindex = 10 },
+              },
+            },
           },
           file = {
             {
-              "indent",
+              'indent',
               with_markers = false,
               indent_size = 1,
             },
-            { "icon" },
+            { 'icon' },
             {
-              "container",
-              width = "100%",
+              'container',
+              width = '100%',
               right_padding = 0,
               content = {
-                { "name",              zindex = 10 },
-                { "align_diagnostics", zindex = 10, align = "right" },
+                { 'name', zindex = 10 },
+                { 'align_diagnostics', zindex = 10, align = 'right' },
                 -- {
                 --   "align_git_changes",
                 --   symbols = {
@@ -271,16 +271,16 @@ return {
                 --   align = "right"
                 -- },
                 {
-                  "align_git_status",
+                  'align_git_status',
                   symbols = {
-                    untracked = " ",
-                    ignored   = " ",
-                    unstaged  = " ",
-                    staged    = " ",
-                    conflict  = " ",
+                    untracked = ' ',
+                    ignored = ' ',
+                    unstaged = ' ',
+                    staged = ' ',
+                    conflict = ' ',
                   },
-                  zindex  = 10,
-                  align   = "right"
+                  zindex = 10,
+                  align = 'right',
                 },
               },
             },
@@ -310,12 +310,12 @@ return {
           },
         },
         follow_current_file = {
-          enabled = false,        -- This will find and focus the file in the active buffer every time
+          enabled = false, -- This will find and focus the file in the active buffer every time
           leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
         -- time the current file is changed while the tree is open.
-        group_empty_dirs = false,               -- when true, empty folders will be grouped together
-        hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
+        group_empty_dirs = false, -- when true, empty folders will be grouped together
+        hijack_netrw_behavior = 'open_default', -- netrw disabled, opening a directory opens neo-tree
         -- in whatever position is specified in window.position
         -- "open_current",  -- netrw disabled, opening a directory opens within the
         -- window like netrw would, regardless of window.position
@@ -324,35 +324,35 @@ return {
         -- instead of relying on nvim autocmd events.
         window = {
           mappings = {
-            ["<C-p>"] = "telescope_find",
-            ["<C-f>"] = "telescope_grep",
-            ["<bs>"] = "navigate_up",
-            ["."] = "set_root",
-            ["H"] = "toggle_hidden",
-            ["F"] = "fuzzy_finder",
-            ["D"] = "fuzzy_finder_directory",
-            ["f"] = "filter_on_submit",
-            ["<c-x>"] = "clear_filter",
-            ["<g"] = "prev_git_modified",
-            ["<G"] = "prev_git_modified",
-            [">g"] = "next_git_modified",
-            [">G"] = "next_git_modified",
-          }
-        }
+            ['<C-p>'] = 'telescope_find',
+            ['<C-f>'] = 'telescope_grep',
+            ['<bs>'] = 'navigate_up',
+            ['.'] = 'set_root',
+            ['H'] = 'toggle_hidden',
+            ['F'] = 'fuzzy_finder',
+            ['D'] = 'fuzzy_finder_directory',
+            ['f'] = 'filter_on_submit',
+            ['<c-x>'] = 'clear_filter',
+            ['<g'] = 'prev_git_modified',
+            ['<G'] = 'prev_git_modified',
+            ['>g'] = 'next_git_modified',
+            ['>G'] = 'next_git_modified',
+          },
+        },
       },
       git_status = {
         window = {
-          position = "float",
+          position = 'float',
           mappings = {
             -- ["A"]  = "git_add_all",
-            ["gu"] = "git_unstage_file",
-            ["ga"] = "git_add_file",
-            ["gr"] = "git_revert_file",
-            ["gc"] = "git_commit",
-            ["gp"] = "git_push",
-            ["gg"] = "git_commit_and_push",
-          }
-        }
+            ['gu'] = 'git_unstage_file',
+            ['ga'] = 'git_add_file',
+            ['gr'] = 'git_revert_file',
+            ['gc'] = 'git_commit',
+            ['gp'] = 'git_push',
+            ['gg'] = 'git_commit_and_push',
+          },
+        },
       },
       commands = {
         telescope_find = function(state)
@@ -361,7 +361,7 @@ return {
         telescope_grep = function(state)
           require('telescope.builtin').live_grep(get_telescope_options(state))
         end,
-      }
-    }
-  }
+      },
+    },
+  },
 }

@@ -1,5 +1,5 @@
 return {
-  "neovim/nvim-lspconfig",
+  'neovim/nvim-lspconfig',
   opts = function(_, opts)
     -- Automatically format on save
     opts.inlay_hints = { enabled = true }
@@ -39,5 +39,5 @@ return {
       float = { source = true, header = {} },
     })
   end,
-  init = require("plugins.lsp.util.keymaps"),
+  init = require('plugins.lsp.util.keymaps'),
 }

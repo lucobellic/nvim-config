@@ -16,7 +16,7 @@ return {
     },
     files = {
       cmd = 'rg --line-number --smart-case --no-ignore --no-ignore-exclude --files --hidden --follow',
-      rg_opts = '--line-number --smart-case --no-ignore --no-ignore-exclude --files --hidden --follow'
+      rg_opts = '--line-number --smart-case --no-ignore --no-ignore-exclude --files --hidden --follow',
     },
-  }
+  },
 }

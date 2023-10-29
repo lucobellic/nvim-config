@@ -1,8 +1,8 @@
 return {
-  "stevearc/conform.nvim",
+  'stevearc/conform.nvim',
   opts = {
     formatters_by_ft = {
-      cpp = {"clang_format"}
-    }
-  }
+      cpp = { 'clang_format' },
+    },
+  },
 }

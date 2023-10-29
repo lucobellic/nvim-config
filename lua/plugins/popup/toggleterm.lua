@@ -7,7 +7,9 @@ vim.api.nvim_create_user_command('ToggleTermSplit', split_terminal_right, {})
 local function shutdown_currrent_term()
   local terminal = require('toggleterm.terminal')
   local term = terminal.get(terminal.get_focused_id())
-  if term then term:shutdown() end
+  if term then
+    term:shutdown()
+  end
 end
 vim.api.nvim_create_user_command('ToggleTermShutdown', shutdown_currrent_term, {})
 
@@ -19,8 +21,8 @@ function _G.set_terminal_keymaps()
   vim.keymap.set({ 't', 'n' }, '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
   vim.keymap.set({ 't', 'n' }, '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
   vim.keymap.set({ 't', 'n' }, '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-  vim.keymap.set({ 't', 'n' }, '<C-q>', "<cmd>ToggleTermShutdown<cr>", opts)
-  vim.keymap.set({ 't', 'n' }, "<C-t>", "<cmd>ToggleTermSplit<cr>", opts)
+  vim.keymap.set({ 't', 'n' }, '<C-q>', '<cmd>ToggleTermShutdown<cr>', opts)
+  vim.keymap.set({ 't', 'n' }, '<C-t>', '<cmd>ToggleTermSplit<cr>', opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
@@ -31,7 +33,7 @@ return {
   event = 'VeryLazy',
   keys = {
     { '<leader>uP', '<cmd>ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
-    { '<leader>up', '<cmd>ToggleTerm<cr>',          desc = 'Toggle Toggleterm' },
+    { '<leader>up', '<cmd>ToggleTerm<cr>', desc = 'Toggle Toggleterm' },
   },
   opts = {
     start_in_insert = false,
@@ -41,7 +43,7 @@ return {
       enabled = true,
       name_formatter = function(term) --  term: Terminal
         return term.id
-      end
+      end,
     },
-  }
+  },
 }

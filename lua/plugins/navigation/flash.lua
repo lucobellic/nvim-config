@@ -1,12 +1,12 @@
-local Flash = require("flash")
-local flash_search = require("flash.search")
+local Flash = require('flash')
+local flash_search = require('flash.search')
 
 ---@param opts Flash.Format
 local function format(opts)
   -- always show first and second label
   return {
-    { opts.match.label1, "FlashMatch" },
-    { opts.match.label2, "FlashLabel" },
+    { opts.match.label1, 'FlashMatch' },
+    { opts.match.label2, 'FlashLabel' },
   }
 end
 
@@ -20,7 +20,7 @@ end
 
 local function label2_jump(multi_window, pattern)
   Flash.jump({
-    search = { mode = "search", multi_window = multi_window },
+    search = { mode = 'search', multi_window = multi_window },
     label = { after = false, before = { 0, 0 }, uppercase = false, format = format },
     pattern = pattern,
     action = function(match, state)
@@ -43,7 +43,7 @@ local function label2_jump(multi_window, pattern)
       })
     end,
     matcher = function(win, _state, _opts)
-      local Search = require("flash.search")
+      local Search = require('flash.search')
       local search = Search.new(win, _state)
       local matches = {} ---@type Flash.Match[]
       local folds = {} ---@type table<number, boolean>
@@ -83,57 +83,69 @@ return {
     return {
       {
         's',
-        function() require("flash").jump({ search = { multi_window = false } }) end,
+        function()
+          require('flash').jump({ search = { multi_window = false } })
+        end,
         desc = 'Flash Range',
         mode = { 'n', 'v' },
       },
       {
         'S',
-        function() require("flash").jump() end,
+        function()
+          require('flash').jump()
+        end,
         desc = 'Flash Range',
         mode = { 'n' },
       },
       {
         '<leader>j',
-        function() label2_jump(false, [[\<]]) end,
+        function()
+          label2_jump(false, [[\<]])
+        end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
         '<leader>J',
-        function() label2_jump(true, [[\<]]) end,
+        function()
+          label2_jump(true, [[\<]])
+        end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
         '<leader>l',
-        function() label2_jump(false, '^') end,
+        function()
+          label2_jump(false, '^')
+        end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
-        "<leader>L",
-        function() label2_jump(true, '^') end,
+        '<leader>L',
+        function()
+          label2_jump(true, '^')
+        end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
-        "<c-s>",
-        mode = { "c" },
-        require("flash").toggle,
-        desc = "Toggle Flash Search"
+        '<c-s>',
+        mode = { 'c' },
+        require('flash').toggle,
+        desc = 'Toggle Flash Search',
       },
       {
-        "r",
-        mode = "o",
-        require("flash").remote,
-        desc = "Remote Flash"
+        'r',
+        mode = 'o',
+        require('flash').remote,
+        desc = 'Remote Flash',
       },
       {
-        "R",
-        mode = { "o", "x" },
-        require("flash").treesitter_search,
-        desc = "Treesitter Search"
+        'R',
+        mode = { 'o', 'x' },
+        require('flash').treesitter_search,
+        desc = 'Treesitter Search',
       },
     }
   end,
@@ -143,10 +155,10 @@ return {
       search = {
         enabled = false,
         highlight = {
-          backdrop = true
-        }
-      }
+          backdrop = true,
+        },
+      },
     },
-    prompt = { enabled = false, },
-  }
+    prompt = { enabled = false },
+  },
 }

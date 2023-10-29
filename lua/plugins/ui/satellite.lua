@@ -3,7 +3,7 @@ return {
   event = 'BufEnter',
   opts = {
     current_only = true,
-    excluded_filetypes = {'OverseerList'},
+    excluded_filetypes = { 'OverseerList' },
     handlers = {
       cursor = {
         enable = true,
@@ -11,7 +11,7 @@ return {
       },
       search = {
         enable = true,
-        priority = 55 -- Below cursor and above diagnostic
+        priority = 55, -- Below cursor and above diagnostic
       },
       diagnostic = {
         enable = true,
@@ -29,12 +29,12 @@ return {
       marks = {
         enable = false,
         show_builtins = false, -- shows the builtin marks like [ ] < >
-        key = 'm'
+        key = 'm',
       },
       quickfix = {
         enable = false,
         signs = { '│', '│', '│' },
-      }
-    }
-  }
+      },
+    },
+  },
 }
