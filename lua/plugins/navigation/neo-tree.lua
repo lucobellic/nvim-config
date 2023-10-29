@@ -74,12 +74,8 @@ return {
         sources = { -- table
           {
             source = "filesystem", -- string
-            display_name = "   Files " -- string | nil
-          },
-          {
-            source = "document_symbols", -- string
-            display_name = "   Symbols " -- string | nil
-          },
+          display_name = "   Files " -- string | nil
+          }
         },
         truncation_character = '', -- string
         tabs_min_width = nil, -- int | nil
