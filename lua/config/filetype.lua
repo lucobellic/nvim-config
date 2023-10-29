@@ -10,5 +10,7 @@ vim.filetype.add({
     ['.*%.cuh'] = 'cpp',
     ['.*%.ansible'] = 'yaml.ansible',
     ['.*%.ansible%.yaml'] = 'yaml.ansible',
+    ['.*%.gitignore'] = 'gitignore',
+    ['.*%.gitconfig'] = 'gitconfig',
   }
 })
