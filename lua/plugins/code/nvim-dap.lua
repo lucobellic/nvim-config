@@ -19,6 +19,12 @@ return {
         })
       end,
     },
+    {
+      'rcarriga/nvim-dap-ui',
+      keys = {
+        { '<leader>de', require('dapui').eval, repeatable = true, desc = 'Step Over' },
+      },
+    },
   },
   keys = {
     { '<leader>dq', require('dap').terminate, repeatable = true, desc = 'Terminate' },
