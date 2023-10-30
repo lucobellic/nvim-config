@@ -63,6 +63,21 @@ return {
           require('telescope').load_extension('advanced_git_search')
         end,
       },
+      {
+        'debugloop/telescope-undo.nvim',
+        keys = {
+          {
+            '<leader>uu',
+            function()
+              require('telescope').extensions.undo.undo()
+            end,
+            desc = 'Telescope Undo Tree',
+          },
+        },
+        config = function()
+          require('telescope').load_extension('undo')
+        end,
+      },
     },
     keys = {
       { '<leader>gc', false },
