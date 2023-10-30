@@ -78,6 +78,49 @@ return {
           require('telescope').load_extension('undo')
         end,
       },
+      {
+        'nvim-telescope/telescope-dap.nvim',
+        keys = {
+          {
+            '<leader>dfc',
+            function()
+              require('telescope').extensions.dap.commands({})
+            end,
+            desc = 'Dap Find Commands',
+          },
+          {
+            '<leader>dfs',
+            function()
+              require('telescope').extensions.dap.configurations({})
+            end,
+            desc = 'Dap Find Configurations',
+          },
+          {
+            '<leader>dfb',
+            function()
+              require('telescope').extensions.dap.list_breakpoints({})
+            end,
+            desc = 'Dap Find Breakpoints',
+          },
+          {
+            '<leader>dfv',
+            function()
+              require('telescope').extensions.dap.variables({})
+            end,
+            desc = 'Dap Find Variables',
+          },
+          {
+            '<leader>dff',
+            function()
+              require('telescope').extensions.dap.frames({})
+            end,
+            desc = 'Dap Find Frames',
+          },
+        },
+        config = function()
+          require('telescope').load_extension('dap')
+        end,
+      },
     },
     keys = {
       { '<leader>gc', false },
