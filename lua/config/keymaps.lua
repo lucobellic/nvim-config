@@ -87,8 +87,8 @@ wk.register({ ['<leader>ut'] = { '<cmd>TransparencyToggle<cr>', 'Toggle Transpar
 wk.register({
   ['<leader>ud'] = {
     name = 'Toggle Diagnostics',
-    d = { Util.toggle.diagnostics, 'Toggle Diagnostics' },
-    t = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
+    t = { Util.toggle.diagnostics, 'Toggle Diagnostics' },
+    d = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
     l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
   }
 })
