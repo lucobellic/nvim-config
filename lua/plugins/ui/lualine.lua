@@ -86,7 +86,7 @@ return {
         {
           'lsp_progress',
           display_components = { 'lsp_client_name', 'spinner' },
-          spinner_symbols = { '', '', '', '', '', '' },
+          spinner_symbols = { '', '', '', '' },
           colors = {
             use = false,
           },
