@@ -81,8 +81,7 @@ return {
         },
       },
       lualine_c = {},
-      lualine_x = {},
-      lualine_y = {
+      lualine_x = {
         {
           'lsp_progress',
           display_components = { 'lsp_client_name', 'spinner' },
@@ -90,6 +89,14 @@ return {
           colors = {
             use = false,
           },
+        },
+      },
+      lualine_y = {
+        {
+          'searchcount',
+          separator = '',
+          maxcount = 999,
+          timeout = 500,
         },
         {
           'progress',
