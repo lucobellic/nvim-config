@@ -38,6 +38,8 @@ return {
       severity_sort = true,
       float = { source = true, header = {} },
     })
+
+    require('lspconfig.ui.windows').default_options.border = 'rounded'
   end,
   init = require('plugins.lsp.util.keymaps'),
 }
