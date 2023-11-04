@@ -1,4 +1,4 @@
-local symbol = '🭰' -- '▕', '┃', '┆', '┇', '┊', '┋', '🭰','🭱', '🭲','🭳','🭴','🭵'
+local symbol = '│'
 
 return {
   {
@@ -19,6 +19,7 @@ return {
         delete = { text = symbol },
         topdelete = { text = symbol },
         changedelete = { text = symbol },
+        untracked    = { text = '┆' },
       },
 
       signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
