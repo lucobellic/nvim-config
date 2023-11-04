@@ -15,6 +15,7 @@ return {
     { '<leader>xr', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
     { '<leader>xi', '<cmd>OverseerInfo<cr>', desc = 'Overseer Info' },
     { '<leader>xo', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
+    { '<leader>xa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
   },
   opts = {
     strategy = {
