@@ -24,7 +24,6 @@ return {
           require('telescope').load_extension('live_grep_args')
         end,
       },
-      { 'nvim-telescope/telescope-symbols.nvim' },
       {
         'prochri/telescope-all-recent.nvim',
         config = function()
@@ -151,7 +150,7 @@ return {
       {
         '<leader>fi',
         function()
-          require('telescope.builtin').symbols({ source = { 'emoji', 'kaomoji', 'gitmoji' } })
+          require('telescope.builtin').symbols({ source = { 'gitmoji' } })
         end,
         desc = 'Find Emoji',
       },
