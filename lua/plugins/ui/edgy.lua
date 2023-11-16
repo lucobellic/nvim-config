@@ -60,6 +60,7 @@ return {
       -- },
     },
     animate = {
+      enabled = not vim.g.neovide,
       cps = 300,
       spinner = {
         frames = { '', '', '', '', '', '' },
