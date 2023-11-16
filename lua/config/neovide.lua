@@ -2,7 +2,7 @@ if vim.g.neovide then
   vim.o.guifont = 'DMMono Nerd Font:h11'
   vim.g.neovide_cursor_animation_length = 0.1
   vim.g.neovide_cursor_trail_size = 0.2
-  vim.g.neovide_scroll_animation_length = 0.5
+  vim.g.neovide_scroll_animation_length = 0
 
   vim.g.neovide_transparency = 1.0
   vim.g.neovide_transparency_point = 1.0

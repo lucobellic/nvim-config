@@ -2,7 +2,7 @@ local Ui = require('lazyvim.util').ui
 
 local M = {}
 
-function M.get()
+function M.personal_statusline()
   local win = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(win)
   local is_file = vim.bo[buf].buftype == ''
@@ -56,6 +56,10 @@ function M.get()
 
   local statusline = table.concat(components, '')
   return statusline
+end
+
+function M.get()
+  return Ui.statuscolumn()
 end
 
 return M

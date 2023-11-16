@@ -5,5 +5,8 @@ return {
     cursor = {
       enable = false,
     },
+    scroll = {
+      enable = false,
+    },
   },
 }
