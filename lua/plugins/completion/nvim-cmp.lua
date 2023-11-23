@@ -6,6 +6,24 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match('^%s*$') == nil
 end
 
+local function escape_lua_pattern(s)
+  return s:gsub('.', {
+    ['^'] = '%^',
+    ['$'] = '%$',
+    ['('] = '%(',
+    [')'] = '%)',
+    ['%'] = '%%',
+    ['.'] = '%.',
+    ['['] = '%[',
+    [']'] = '%]',
+    ['*'] = '%*',
+    ['+'] = '%+',
+    ['-'] = '%-',
+    ['?'] = '%?',
+    ['\0'] = '%z',
+  })
+end
+
 -- Setup nvim-cmp.
 local cmp = require('cmp')
 local luasnip = require('luasnip')
@@ -40,9 +58,8 @@ local tab_confirm_mapping = {
       local active_entry = cmp.get_active_entry() or cmp.get_entries()[1]
       if active_entry then
         local current_line = vim.fn.trim(vim.api.nvim_get_current_line(), ' ', 1)
-        local suggestion = active_entry.cache.entries.get_word
-        -- TODO: Find an alternative to gsub to handle special characters
-        local next_word = suggestion:gsub('^' .. current_line, ''):match('^%s*%S+%s?')
+        local suggestion = active_entry.cache.entries.get_word ---@type string
+        local next_word = suggestion:gsub(escape_lua_pattern(current_line), ''):match('^%s*%S+%s?')
         vim.api.nvim_put({ next_word }, '', true, true)
       else
         cmp.confirm({
