@@ -77,6 +77,7 @@ return {
         map('n', '<leader>ub', gs.toggle_current_line_blame, { desc = 'Toggle Line Blame' })
         map('n', '<leader>hd', gs.diffthis, { desc = 'Diff This' })
         map('n', '<leader>hD', function() gs.diffthis('~') end, { desc = 'Diff This (cached)' })
+        map('n', '<leader>hl', '<cmd>Gitsigns setloclist<cr>', { desc = 'Diff To Loc List' })
 
         -- Text object
         map({ 'o', 'x' }, 'ih', '<cmd><C-U>Gitsigns select_hunk<CR>')
