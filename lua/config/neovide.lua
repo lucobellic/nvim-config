@@ -14,9 +14,7 @@ if vim.g.neovide then
 
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_fullscreen = false
-  function _G.toggle_full_screen()
-    vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen
-  end
+  function _G.toggle_full_screen() vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen end
 
   -- Colors
 
@@ -71,5 +69,13 @@ if vim.g.neovide then
     desc = 'Decrease font size',
   })
 
-  vim.api.nvim_set_keymap('n', '<F11>', '<cmd>lua toggle_full_screen()<cr>', { silent = true })
+  vim.keymap.set('n', '<F11>', '<cmd>lua toggle_full_screen()<cr>', { silent = true })
+  vim.keymap.set({ 'n', 'v' }, '<C-S-V>', '"+P') -- Paste normal mode
+  vim.keymap.set('v', '<C-S-V>', '"+P') -- Paste visual mode
+  vim.keymap.set('c', '<C-S-V>', '<C-R>+') -- Paste command mode
+  vim.keymap.set('i', '<C-S-V>', '<ESC>l"+Pli') -- Paste insert mode
+
+  -- Allow clipboard copy paste in neovim
+  vim.keymap.set('', '<C-S-V>', '+p<CR>', { noremap = true, silent = true })
+  vim.keymap.set({ '!', 't', 'v' }, '<C-S-V>', '<C-R>+', { noremap = true, silent = true })
 end
