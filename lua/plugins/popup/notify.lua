@@ -1,5 +1,6 @@
 return {
   'rcarriga/nvim-notify',
+  enabled = not vim.g.started_by_firenvim,
   opts = {
     background_colour = 'NotifyBackground',
     fps = 30,

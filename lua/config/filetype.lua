@@ -12,5 +12,7 @@ vim.filetype.add({
     ['.*%.ansible%.yaml'] = 'yaml.ansible',
     ['.*%.gitignore'] = 'gitignore',
     ['.*%.gitconfig'] = 'gitconfig',
+    ['gitlab.*%.txt'] = 'markdown',
+    ['github.*%.txt'] = 'markdown',
   }
 })

@@ -126,6 +126,7 @@ spinners.font_spinner = {
 
 return {
   'folke/noice.nvim',
+  enabled = not vim.g.started_by_firenvim,
   keys = {
     { '<c-f>', false },
     { '<c-p>', false },

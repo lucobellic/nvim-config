@@ -1,6 +1,7 @@
 return {
   'jackMort/ChatGPT.nvim',
   event = 'VeryLazy',
+  enabled = not vim.g.started_by_firenvim,
   keys = {
     {
       '<leader>ce',
