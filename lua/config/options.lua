@@ -4,6 +4,7 @@
 
 vim.g.autoformat = false
 
+vim.o.conceallevel = 2
 vim.o.laststatus = 3
 
 -- Default splitting will cause your main splits to jump when opening an edgebar.
