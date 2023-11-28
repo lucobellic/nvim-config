@@ -1,7 +1,3 @@
-require('config.filetype')
-require('config.neovide')
-require('config.shell')
-
 -- make all keymaps silent by default
 local keymap_set = vim.keymap.set
 ---@diagnostic disable-next-line: duplicate-set-field
@@ -19,4 +15,7 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
   return keymap_set(mode, lhs, rhs, opts)
 end
 
+require('config.filetype')
+require('config.neovide')
+require('config.shell')
 require('config.lazy')
