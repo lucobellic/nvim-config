@@ -37,6 +37,11 @@ local ayu_gloom_theme = {
     b = { fg = colors.blue },
     c = { fg = colors.blue },
   },
+  terminal = {
+    a = { bg = colors.purple, fg = colors.black, gui = 'italic' },
+    b = { fg = colors.purple },
+    c = { fg = colors.purple },
+  },
   inactive = {
     a = { fg = colors.darkblue, gui = 'italic' },
     b = { fg = colors.inactive },
@@ -109,9 +114,7 @@ return {
         },
       },
       lualine_z = {
-        function()
-          return os.date('%R')
-        end,
+        function() return os.date('%R') end,
       },
     },
   },
