@@ -68,13 +68,15 @@ return {
       sort_function = nil, -- use a custom function for sorting files and directories in the tree
       use_popups_for_input = false, -- use vim.ui.input instead
       show_scrolled_off_parent_node = true,
+      resize_timer_interval = -1,
+      auto_clean_after_session_restore = true,
       source_selector = {
         winbar = true, -- toggle to show selector on winbar
         statusline = false, -- toggle to show selector on statusline
         sources = { -- table
           {
             source = 'filesystem', -- string
-            display_name = '   Files ', -- string | nil
+            display_name = '', -- string | nil
           },
         },
         truncation_character = '', -- string
@@ -309,7 +311,9 @@ return {
             --".null-ls_*",
           },
         },
-        follow_current_file = false,
+        follow_current_file = {
+          enabled = false,
+        },
         group_empty_dirs = false, -- when true, empty folders will be grouped together
         hijack_netrw_behavior = 'open_default', -- netrw disabled, opening a directory opens neo-tree
         -- in whatever position is specified in window.position
