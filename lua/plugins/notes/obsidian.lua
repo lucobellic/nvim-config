@@ -27,13 +27,14 @@ return {
       },
       disable_frontmatter = true,
 
-      note_id_func = function(title)
-        return title
-      end,
+      note_id_func = function(title) return title end,
 
       mappings = {
         -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-        -- ["gf"] = require("obsidian.mapping").gf_passthrough(),
+        ['gf'] = {
+          action = function() return require('obsidian').util.gf_passthrough() end,
+          opts = { noremap = false, expr = true, buffer = true },
+        },
       },
       -- Optional, set to true if you use the Obsidian Advanced URI plugin.
       -- https://github.com/Vinzent03/obsidian-advanced-uri
@@ -42,6 +43,17 @@ return {
       -- Optional, set to true to force '<cmd>ObsidianOpen' to bring the app to the foreground.
       open_app_foreground = true,
       finder = 'telescope.nvim',
+
+      ui = {
+        enabled = true,
+        checkboxes = {
+          [' '] = { char = ' ', hl_group = 'DiagnosticInfo' },
+          ['x'] = { char = ' ', hl_group = 'DiagnosticOk' },
+          ['/'] = { char = ' ', hl_group = 'DiagnosticWarn' },
+          ['%-'] = { char = ' ', hl_group = 'DiagnosticError' },
+          ['%?'] = { char = ' ', hl_group = 'DiagnosticWarn' },
+        },
+      },
     },
     keys = {
       { '<leader>oo', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
@@ -68,17 +80,6 @@ return {
         end
       end
       vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
-
-      -- Optional, override the 'gf' keymap to utilize Obsidian's search functionality.
-      -- see also: 'follow_url_func' config option above.
-      -- TODO: Set this keymap only with ob
-      -- vim.keymap.set('n', 'gf', function()
-      --   if require('obsidian').util.cursor_on_markdown_link() then
-      --     return '<cmd>ObsidianFollowLink<CR>'
-      --   else
-      --     return 'gf'
-      --   end
-      -- end, { noremap = false, expr = true })
     end,
   },
 }
