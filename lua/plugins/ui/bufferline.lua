@@ -1,7 +1,16 @@
 return {
   'akinsho/bufferline.nvim',
   dependencies = {
-    'echasnovski/mini.bufremove',
+    { 'echasnovski/mini.bufremove' },
+    {
+      'folke/which-key.nvim',
+      optional = true,
+      opts = {
+        defaults = {
+          ['<leader>bc'] = { name = '+close' },
+        },
+      },
+    },
   },
   keys = {
     { '<S-h>', false },
@@ -26,11 +35,14 @@ return {
     { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
     {
       '<C-q>',
-      function()
-        require('mini.bufremove').delete(0, false)
-      end,
+      function() require('mini.bufremove').delete(0, false) end,
       desc = 'Delete Buffer',
     },
+    { '<leader>bco', '<cmd>BufferLineCloseOthers<cr>', desc = 'Buffer Line Close Others' },
+    { '<leader>bch', '<cmd>BufferLineCloseLeft<cr>', desc = 'Buffer Line Close Left' },
+    { '<leader>bcl', '<cmd>BufferLineCloseRight<cr>', desc = 'Buffer Line Close Right' },
+    { '<leader>bcp', '<cmd>BufferLinePickClose<cr>', desc = 'Buffer Line Pick Close' },
+    { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
   },
   opts = {
     options = {
@@ -58,6 +70,11 @@ return {
       },
       diagnostics = false,
       diagnostics_update_in_insert = false,
+      groups = {
+        items = {
+          require('bufferline.groups').builtin.pinned:with({ icon = '󱂺' }),
+        },
+      },
     },
   },
 }
