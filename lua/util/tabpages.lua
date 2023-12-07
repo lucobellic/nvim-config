@@ -9,19 +9,19 @@ local tab_direction = {
   prev = 'prev',
 }
 
----Get all `buflisted` buffers
+--- Get all `buflisted` buffers
 ---@return number[] listed_buffers
 function M.nvim_list_buflisted()
   local listed_buffers = {}
   for _, buffer in pairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_get_option(buffer, 'buflisted') then
+    if vim.api.nvim_get_option_value('buflisted', { buf = buffer }) then
       table.insert(listed_buffers, buffer)
     end
   end
   return listed_buffers
 end
 
----Focus to the window with the first `buflisted` buffer in the current tab if any
+--- Focus to the window with the first `buflisted` buffer in the current tab if any
 function M.focus_first_listed_buffer()
   local listed_buffers = M.nvim_list_buflisted()
   local windows = vim.api.nvim_tabpage_list_wins(0)
@@ -47,10 +47,12 @@ function M.find_first_different(list, item)
   end
 end
 
----Move current buffer to the next or previous tabpage.
----Create a new tabpage if there is only one tabpage.
----@param direction tab_direction
-function M.move_in_tab(direction)
+--- Move current buffer to the next or previous tabpage.
+--- Create a new tabpage if there is only one tabpage.
+---@param direction tab_direction tabpage direction
+---@param focus? Optional<boolean> focus buffer after moving it
+function M.move_buffer_to_tab(direction, focus)
+  focus = focus or false
   local buffer_to_move = vim.api.nvim_get_current_buf()
   local nb_tabpages = #vim.api.nvim_list_tabpages()
   local listed_buffers = M.nvim_list_buflisted()
@@ -62,7 +64,7 @@ function M.move_in_tab(direction)
   end
 
   -- Hide buffer from the buffer line
-  vim.api.nvim_buf_set_option(buffer_to_move, 'buflisted', false)
+  vim.api.nvim_set_option_value('buflisted', false, { buf = buffer_to_move })
 
   -- Select the next buffer as active if any
   local next_buffer = M.find_first_different(listed_buffers, buffer_to_move)
@@ -82,9 +84,13 @@ function M.move_in_tab(direction)
     vim.cmd(direction == tab_direction.prev and 'tabprevious' or 'tabnext')
   end
 
-  -- Re-enable the buffer and focus it
-  vim.api.nvim_buf_set_option(buffer_to_move, 'buflisted', true)
-  vim.api.nvim_set_current_buf(buffer_to_move)
+  -- Re-enable the buffer
+  vim.api.nvim_set_option_value('buflisted', true, { buf = buffer_to_move })
+
+  -- Focus buffer after moving it
+  if focus then
+    vim.api.nvim_set_current_buf(buffer_to_move)
+  end
 end
 
 return M

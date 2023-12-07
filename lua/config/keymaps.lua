@@ -111,6 +111,10 @@ map('n', '<C-t>', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gn', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gq', '<cmd>tabclose<cr>', { desc = 'Tab Close' })
 
+local tabpages = require('util.tabpages')
+map('n', '<A-j>', function() tabpages.move_buffer_to_tab('prev', true) end)
+map('n', '<A-k>', function() tabpages.move_buffer_to_tab('next', true) end)
+
 
 -- NOTE: Set <c-f> keymap once again due to configuration issue
 vim.keymap.set({ 'n' }, '<C-f>',
