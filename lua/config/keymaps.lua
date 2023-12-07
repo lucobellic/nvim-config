@@ -123,10 +123,10 @@ vim.keymap.set({ 'n' }, '<C-f>',
 )
 
 -- Remap smart-splits to use range
-map('n', '<C-left>', require('smart-splits').resize_left, { repeatable = true, desc = 'Resize left' })
-map('n', '<C-down>', require('smart-splits').resize_down, { repeatable = true, desc = 'Resize down' })
-map('n', '<C-up>', require('smart-splits').resize_up, { repeatable = true, desc = 'Resize up' })
-map('n', '<C-right>', require('smart-splits').resize_right, { repeatable = true, desc = 'Resize right' })
+map('n', '<C-left>', function() require('smart-splits').resize_left() end, { repeatable = true, desc = 'Resize left' })
+map('n', '<C-down>', function() require('smart-splits').resize_down() end, { repeatable = true, desc = 'Resize down' })
+map('n', '<C-up>', function() require('smart-splits').resize_up() end, { repeatable = true, desc = 'Resize up' })
+map('n', '<C-right>', function() require('smart-splits').resize_right() end, { repeatable = true, desc = 'Resize right' })
 
 map('n', '<leader>a', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
 
