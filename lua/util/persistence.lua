@@ -34,7 +34,7 @@ function M.load_session(session_file)
       require('persistence').save()
     end
 
-    vim.cmd('tabdo Neotree close')
+    -- vim.cmd('tabdo Neotree close')
     vim.cmd('silent! %bd!')
     vim.cmd('silent! source ' .. vim.fn.fnameescape(session_file))
     vim.cmd('ScopeLoadState')

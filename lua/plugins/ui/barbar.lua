@@ -1,8 +1,17 @@
 return {
   'romgrk/barbar.nvim',
   event = 'User BufEnterExceptDashboard',
-  enabled = false,
-  dependencies = { 'folke/persistence.nvim' },
+  dependencies = {
+    {
+      'folke/which-key.nvim',
+      optional = true,
+      opts = {
+        defaults = {
+          ['<leader>bc'] = { name = '+close' },
+        },
+      },
+    },
+  },
   keys = {
     { '<C-h>', '<cmd>BufferPrevious<cr>', desc = 'Buffer Previous' },
     { '<C-l>', '<cmd>BufferNext<cr>', desc = 'Buffer Next' },
@@ -25,6 +34,9 @@ return {
     { '<leader>bf', '<cmd>BufferOrderByDirectory<cr>', desc = 'Buffer Order By Directory' },
     { '<leader>bl', '<cmd>BufferOrderByLanguage<cr>', desc = 'Buffer Order By Language' },
     { '<leader>bp', '<cmd>BufferPin<cr>', desc = 'Buffer Order By Language' },
+    { '<leader>bco', '<cmd>BufferCloseAllButCurrent<cr>', desc = 'Buffer Close All But Current' },
+    { '<leader>bch', '<cmd>BufferCloseBuffersLeft<cr>', desc = 'Buffer Close Buffers Left' },
+    { '<leader>bcl', '<cmd>BufferCloseBuffersRight<cr>', desc = 'Buffer Close Buffers Right' },
   },
   opts = {
     -- Enable/disable animations
