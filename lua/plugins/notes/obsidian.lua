@@ -47,11 +47,11 @@ return {
       ui = {
         enabled = true,
         checkboxes = {
-          [' '] = { char = ' ', hl_group = 'DiagnosticInfo' },
-          ['x'] = { char = ' ', hl_group = 'DiagnosticOk' },
-          ['/'] = { char = ' ', hl_group = 'DiagnosticWarn' },
-          ['%-'] = { char = ' ', hl_group = 'DiagnosticError' },
-          ['%?'] = { char = ' ', hl_group = 'DiagnosticWarn' },
+          [' '] = { char = '󱍫', hl_group = 'DiagnosticInfo' },
+          ['x'] = { char = '󱍧', hl_group = 'DiagnosticOk' },
+          ['/'] = { char = '󱍬', hl_group = 'DiagnosticWarn' },
+          ['%-'] = { char = '󱍮', hl_group = 'DiagnosticError' },
+          ['%?'] = { char = '󱍥', hl_group = 'DiagnosticWarn' },
         },
       },
     },
@@ -72,11 +72,11 @@ return {
         local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
 
         -- Get the task based on regex
-        local task = branch:match('(%w+%-%d+)')
-        if task and task ~= '' then
+        local task = branch and branch:match('(%w+%-%d+)') or ''
+        if task ~= '' then
           vim.cmd('ObsidianNew ' .. task)
         else
-          vim.notify('Unable to create note ' .. task, vim.log.levels.WARN)
+          vim.notify('Unable to create note', vim.log.levels.WARN, { title = 'obsidian.nvim' })
         end
       end
       vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
