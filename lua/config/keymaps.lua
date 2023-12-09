@@ -143,4 +143,10 @@ map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 -- aerial
 map('n', '<leader>co', function() require('aerial').toggle({focus = false}) end, { desc = 'Aerial Toggle' })
 
+-- jupytext
+local jupytext = require('util.jupytext')
+map('n', '<leader>ns', function() jupytext:sync() end, { desc = 'Jupytext Sync' })
+map('n', '<leader>np', function() jupytext:pair() end, { desc = 'Jupytext Pair' })
+
+-- Create command from keymaps
 require('util.commands').create_command_from_keymaps()
