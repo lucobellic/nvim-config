@@ -143,9 +143,6 @@ map('n', '<s', '[s', { repeatable = true, desc = 'Prev Spelling' })
 wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
 map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 
--- aerial
-map('n', '<leader>co', function() require('aerial').toggle({focus = false}) end, { desc = 'Aerial Toggle' })
-
 -- jupytext
 local jupytext = require('util.jupytext')
 map('n', '<leader>ns', function() jupytext:sync() end, { desc = 'Jupytext Sync' })

@@ -36,10 +36,10 @@ return {
     },
     right = {
       {
-        title = ' ',
-        ft = 'aerial',
+        title = '  saga',
+        ft = 'sagaoutline',
         pinned = true,
-        open = 'AerialToggle',
+        open = 'SymbolsOutline',
       },
       {
         title = ' ',
