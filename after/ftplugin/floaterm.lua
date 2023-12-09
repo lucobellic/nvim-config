@@ -40,6 +40,25 @@ local function close_current_floaterm()
   end
 end
 
+--- Update current floaterm dimension
+---@param key string 'height' or 'width'
+---@param offset float offset to apply to the dimension in range [0, 1]
+local function add_dimension_offset(key, offset)
+  local buffer = vim.api.nvim_win_get_buf(0)
+  local dim_var = vim.api.nvim_buf_get_var(buffer, 'floaterm_' .. key)
+  local dim = dim_var[false] --I don't get this, but whatever
+  local new_dim = dim + offset
+  if new_dim <= 1 and new_dim >= 0.1 then
+    vim.api.nvim_call_function('floaterm#config#set', { buffer, key, new_dim })
+  end
+end
+
+local function refresh_floaterm()
+  local buffer = vim.api.nvim_win_get_buf(0)
+  vim.api.nvim_call_function('floaterm#window#hide', { buffer })
+  vim.api.nvim_call_function('floaterm#terminal#open_existing', { buffer })
+end
+
 vim.api.nvim_create_user_command(
   'OpenInNormalWindow',
   open_in_normal_window,
@@ -51,3 +70,15 @@ vim.api.nvim_create_user_command('FloatermCloseCurrent', close_current_floaterm,
 vim.api.nvim_buf_set_keymap(0, 'n', 'gf', '<cmd>OpenInNormalWindow<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermCloseCurrent<cr>', { noremap = true, silent = true })
+
+vim.keymap.set({ 'n', 't' }, '<C-down>', function()
+  add_dimension_offset('height', -0.1)
+  add_dimension_offset('width', -0.1)
+  refresh_floaterm()
+end, { noremap = true, silent = true, buffer = true })
+
+vim.keymap.set({ 'n', 't' }, '<C-up>', function()
+  add_dimension_offset('height', 0.1)
+  add_dimension_offset('width', 0.1)
+  refresh_floaterm()
+end, { noremap = true, silent = true, buffer = true })
