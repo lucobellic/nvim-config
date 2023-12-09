@@ -6,7 +6,6 @@ local highlight = {
   'TSRainbowGreen',
   'TSRainbowViolet',
   'TSRainbowCyan',
-  'TSRainbowRed',
 }
 
 return {

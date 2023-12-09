@@ -21,7 +21,6 @@ return {
             'TSRainbowGreen',
             'TSRainbowViolet',
             'TSRainbowCyan',
-            'TSRainbowRed',
           },
         }
       end,
