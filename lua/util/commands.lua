@@ -14,6 +14,9 @@ local function command_title_case(str)
     :gsub('%s+', '')
 end
 
+--- Create command from keymaps
+--- Iterate over all keymaps and create command for description
+--- only if command does not already exist
 function M.create_command_from_keymaps()
   local keymaps = vim.api.nvim_get_keymap('n')
   for _, value in ipairs(keymaps or {}) do

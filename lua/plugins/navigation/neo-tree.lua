@@ -1,8 +1,6 @@
 local components = require('neo-tree.sources.common.components')
 
-local function align(res)
-  return (res and res.text) and res or { text = '  ' }
-end
+local function align(res) return (res and res.text) and res or { text = '  ' } end
 
 local function get_telescope_options(state)
   local node = state.tree:get_node()
@@ -26,7 +24,7 @@ return {
   },
   {
     'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
+    branch = 'v3.x',
     dependencies = {
       'nvim-telescope/telescope.nvim',
       'nvim-lua/plenary.nvim',
@@ -49,16 +47,12 @@ return {
       },
       {
         '<leader>ef',
-        function()
-          require('neo-tree.command').execute({ action = 'focus', source = 'filesystem', reveal = 'true' })
-        end,
+        function() require('neo-tree.command').execute({ action = 'focus', source = 'filesystem', reveal = 'true' }) end,
         desc = 'Focus Current File',
         remap = true,
       },
     },
-    init = function()
-      vim.g.neo_tree_remove_legacy_commands = 0
-    end,
+    init = function() vim.g.neo_tree_remove_legacy_commands = 0 end,
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = 'rounded',
@@ -67,8 +61,8 @@ return {
       sort_case_insensitive = true, -- used when sorting files and directories in the tree
       sort_function = nil, -- use a custom function for sorting files and directories in the tree
       use_popups_for_input = false, -- use vim.ui.input instead
+      enable_opened_markers = false,
       show_scrolled_off_parent_node = true,
-      resize_timer_interval = -1,
       auto_clean_after_session_restore = true,
       source_selector = {
         winbar = true, -- toggle to show selector on winbar
@@ -225,9 +219,7 @@ return {
           align_git_status = function(config, node, state)
             return { align(components.git_status(config, node, state)[1]) }
           end,
-          align_diagnostics = function(config, node, state)
-            return align(components.diagnostics(config, node, state))
-          end,
+          align_diagnostics = function(config, node, state) return align(components.diagnostics(config, node, state)) end,
         },
         renderers = {
           directory = {
@@ -312,7 +304,9 @@ return {
           },
         },
         follow_current_file = {
-          enabled = false,
+          enabled = true, -- This will find and focus the file in the active buffer every time
+          --               -- the current file is changed while the tree is open.
+          leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
         group_empty_dirs = false, -- when true, empty folders will be grouped together
         hijack_netrw_behavior = 'open_default', -- netrw disabled, opening a directory opens neo-tree
@@ -355,12 +349,8 @@ return {
         },
       },
       commands = {
-        telescope_find = function(state)
-          require('telescope.builtin').find_files(get_telescope_options(state))
-        end,
-        telescope_grep = function(state)
-          require('telescope.builtin').live_grep(get_telescope_options(state))
-        end,
+        telescope_find = function(state) require('telescope.builtin').find_files(get_telescope_options(state)) end,
+        telescope_grep = function(state) require('telescope.builtin').live_grep(get_telescope_options(state)) end,
       },
     },
   },

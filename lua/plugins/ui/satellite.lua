@@ -3,7 +3,7 @@ return {
   event = 'BufEnter',
   opts = {
     current_only = true,
-    excluded_filetypes = { 'OverseerList' },
+    excluded_filetypes = { 'OverseerList', '', 'chatgpt-input', '' },
     handlers = {
       cursor = {
         enable = true,

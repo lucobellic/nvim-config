@@ -2,28 +2,28 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-local wk = require("which-key")
-local Util = require("lazyvim.util")
+local Util = require('lazyvim.util')
+local wk = require('which-key')
 
 local function map(mode, lhs, rhs, opts)
-	local keys = require("lazy.core.handler").handlers.keys
-	---@cast keys LazyKeysHandler
-	-- do not create the keymap if a lazy keys handler exists
-	if not keys.active[keys.parse({ lhs, mode = mode }).id] then
-		opts = opts or {}
-		opts.silent = opts.silent ~= false
-		if opts.remap and not vim.g.vscode then
-			opts.remap = nil
-		end
-		vim.keymap.set(mode, lhs, rhs, opts)
-	end
+  local keys = require('lazy.core.handler').handlers.keys
+  ---@cast keys LazyKeysHandler
+  -- do not create the keymap if a lazy keys handler exists
+  if not keys.active[keys.parse({ lhs, mode = mode }).id] then
+    opts = opts or {}
+    opts.silent = opts.silent ~= false
+    if opts.remap and not vim.g.vscode then
+      opts.remap = nil
+    end
+    vim.keymap.set(mode, lhs, rhs, opts)
+  end
 end
 
 -- Move to window using the <ctrl-shift> hjkl keys
-map("n", "<S-left>", "<C-w>h", { desc = "Go to left window", remap = true })
-map("n", "<S-down>", "<C-w>j", { desc = "Go to lower window", remap = true })
-map("n", "<S-up>", "<C-w>k", { desc = "Go to upper window", remap = true })
-map("n", "<S-right>", "<C-w>l", { desc = "Go to right window", remap = true })
+map('n', '<S-left>', '<C-w>h', { desc = 'Go to left window', remap = true })
+map('n', '<S-down>', '<C-w>j', { desc = 'Go to lower window', remap = true })
+map('n', '<S-up>', '<C-w>k', { desc = 'Go to upper window', remap = true })
+map('n', '<S-right>', '<C-w>l', { desc = 'Go to right window', remap = true })
 
 map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
 map('n', '<leader>wq', '<C-w>c', { desc = 'Delete window' })
@@ -40,16 +40,19 @@ map('n', '<leader>wd', '<C-w>c', { desc = 'Delete window', remap = true })
 map('n', '<leader>w=', '<C-w>=', { desc = 'Equal high and wide', remap = true })
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
-map("v", "/", '"hy/<C-r>h', { desc = "Search word" })
-map({ "n", "x" }, "gw", "*N", { desc = "Search word under cursor" })
+map('v', '/', '"hy/<C-r>h', { desc = 'Search word' })
+map({ 'n', 'x' }, 'gw', '*N', { desc = 'Search word under cursor' })
 
 -- save file
-map({ "i", "v", "n", "s" }, "<C-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
+map({ 'i', 'v', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
 -- Search and replace word under cursor
 -- map('v', 'r', '"hy/<C-r>h', { desc = 'Search word' })
-map("n", "<leader>rw", function()
-	return ":%s/" .. vim.fn.expand("<cword>") .. "//g<left><left>"
-end, { desc = "Replace word under cursor", expr = true })
+map(
+  'n',
+  '<leader>rw',
+  function() return ':%s/' .. vim.fn.expand('<cword>') .. '//g<left><left>' end,
+  { desc = 'Replace word under cursor', expr = true }
+)
 
 -- stylua: ignore start
 -- diagnostics

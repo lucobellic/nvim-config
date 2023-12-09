@@ -19,8 +19,8 @@ vim.b.minianimate_disable = true
 
 --- Open file path under cursor in a normal window from floaterm
 local function open_in_normal_window()
-  local file = vim.fn.findfile(vim.fn.expand("<cfile>"))
-  if file ~= "" and vim.fn.has_key(vim.api.nvim_win_get_config(vim.fn.win_getid()), "anchor") then
+  local file = vim.fn.findfile(vim.fn.expand('<cfile>'))
+  if file ~= '' and vim.fn.has_key(vim.api.nvim_win_get_config(vim.fn.win_getid()), 'anchor') then
     vim.fn.execute('FloatermHide')
     vim.fn.execute('e ' .. file)
   end
@@ -46,11 +46,7 @@ vim.api.nvim_create_user_command(
   { desc = 'Open file in normal window from floating terminal' }
 )
 
-vim.api.nvim_create_user_command(
-  'FloatermCloseCurrent',
-  close_current_floaterm,
-  { desc = 'Close current floaterm' }
-)
+vim.api.nvim_create_user_command('FloatermCloseCurrent', close_current_floaterm, { desc = 'Close current floaterm' })
 
 vim.api.nvim_buf_set_keymap(0, 'n', 'gf', '<cmd>OpenInNormalWindow<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', { noremap = true, silent = true })
