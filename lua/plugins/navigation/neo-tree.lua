@@ -56,12 +56,17 @@ return {
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = 'rounded',
-      enable_git_status = true,
-      enable_diagnostics = true,
+
+      -- Disable all file system notifications
+      -- until https://github.com/nvim-neo-tree/neo-tree.nvim/issues/1025 is fixed
+      enable_git_status = false,
+      enable_diagnostics = false,
+      enable_opened_markers = false,
+      enable_modified_markers = false,
+
       sort_case_insensitive = true, -- used when sorting files and directories in the tree
       sort_function = nil, -- use a custom function for sorting files and directories in the tree
       use_popups_for_input = false, -- use vim.ui.input instead
-      enable_opened_markers = false,
       show_scrolled_off_parent_node = true,
       auto_clean_after_session_restore = true,
       source_selector = {
