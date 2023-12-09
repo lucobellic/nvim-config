@@ -1,38 +1,16 @@
 return {
-  'nvim-tree/nvim-tree',
+  'nvim-tree/nvim-tree.lua',
   enabled = false,
   event = 'BufEnter',
-
   opts = {
-    sort_by = 'case_sensitive',
     disable_netrw = true,
     hijack_netrw = true,
-    sync_root_with_cwd = true,
+    sort = {
+      sorter = 'case_sensitive',
+    },
     view = {
-      adaptive_size = false,
-      side = 'left',
       width = 40,
-      hide_root_folder = false,
-      mappings = {
-        custom_only = false,
-        list = {
-          { key = 'u', action = 'dir_up' },
-          { key = 'l', action = 'edit', action_cb = edit_or_open },
-          { key = 'L', action = 'vsplit_preview', action_cb = vsplit_preview },
-          { key = 'h', action = 'close_node' },
-          { key = '<CR>', action = 'cd', action_cb = cd },
-          { key = { 'E', 'zr', 'zR' }, action = 'expand_all', action_cb = expand_all },
-          { key = { 'H', 'zm', 'zM' }, action = 'collapse_all', action_cb = collapse_all },
-        },
-      },
-    },
-    git = {
-      enable = false, -- disable for performances reasons
-    },
-    actions = {
-      open_file = {
-        quit_on_open = false,
-      },
+      side = 'left',
     },
     renderer = {
       root_folder_label = ':t:r',
@@ -42,20 +20,46 @@ return {
         inline_arrows = true,
       },
       icons = {
-        webdev_colors = true,
-        show = {
-          folder_arrow = false,
+        web_devicons = {
+          file = {
+            enable = true,
+            color = true,
+          },
+          folder = {
+            enable = false,
+            color = true,
+          },
+        },
+        git_placement = 'signcolumn',
+        glyphs = {
+          default = '',
+          symlink = '',
+          bookmark = '󰆤',
+          modified = '●',
+          folder = {
+            arrow_closed = '',
+            arrow_open = '',
+            default = '',
+            open = '',
+            empty = '',
+            empty_open = '',
+            symlink = '',
+            symlink_open = '',
+          },
+          git = {
+            unstaged = '',
+            staged = '',
+            unmerged = '',
+            renamed = '➜',
+            untracked = '',
+            deleted = '',
+            ignored = '',
+          },
         },
       },
     },
     filters = {
       dotfiles = false,
-    },
-    diagnostics = {
-      enable = true,
-    },
-    update_focused_file = {
-      enable = true,
     },
   },
 }
