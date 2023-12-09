@@ -4,7 +4,7 @@ local function floaterm_toogle(params)
   local bufnr = vim.api.nvim_call_function('floaterm#terminal#get_bufnr', { tool_name })
   if bufnr == -1 then
     local format =
-      string.format('--height=0.8 --width=0.8 --title=%s\\ $1/$2 --name=%s %s', tool_title, tool_name, tool_name)
+      string.format('--height=0.9 --width=0.9 --title=%s\\ $1/$2 --name=%s %s', tool_title, tool_name, tool_name)
     vim.api.nvim_call_function('floaterm#run', { 'new', tool_name, { 'v', 0, 0, 0 }, format })
   else
     vim.api.nvim_call_function('floaterm#toggle', { 0, bufnr, '' })
