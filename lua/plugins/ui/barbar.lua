@@ -1,6 +1,8 @@
 return {
   'romgrk/barbar.nvim',
   event = 'User BufEnterExceptDashboard',
+  -- Disable barbar due to bad performances with scope and tabpage
+  enabled = false,
   dependencies = {
     {
       'folke/which-key.nvim',
