@@ -37,7 +37,7 @@ vim.api.nvim_create_user_command(
   'ToggleDiagnosticVirtualText',
   function()
     vim.diagnostic.config({
-      virtual_text = not vim.diagnostic.config().virtual_text
+      virtual_text = not vim.diagnostic.config().virtual_text,
     })
   end,
   { desc = 'Toggle diagnostic virtual text' }
@@ -47,7 +47,7 @@ vim.api.nvim_create_user_command(
   'ToggleDiagnosticVirtualLines',
   function()
     vim.diagnostic.config({
-      virtual_lines = not vim.diagnostic.config().virtual_lines
+      virtual_lines = not vim.diagnostic.config().virtual_lines,
     })
   end,
   { desc = 'Toggle diagnostic virtual lines' }
@@ -57,7 +57,6 @@ vim.api.nvim_create_autocmd({ 'Filetype' }, {
   pattern = { 'dashboard', 'lspsagaoutline' },
   callback = function() vim.b.miniindentscope_disable = true end,
 })
-
 
 -- Load session from persistence
 local persistence_util = require('util.persistence')
@@ -79,18 +78,18 @@ vim.api.nvim_create_autocmd({ 'BufEnter' }, {
 vim.g.transparent_colorscheme = false
 local toggle_transparency = function()
   if vim.g.transparent_colorscheme then
-    vim.cmd("colorscheme ayugloom")
+    vim.cmd('colorscheme ayugloom')
   else
-    vim.cmd("colorscheme ayubleak")
+    vim.cmd('colorscheme ayubleak')
   end
   vim.g.transparent_colorscheme = not vim.g.transparent_colorscheme
 end
-vim.api.nvim_create_user_command("TransparencyToggle", toggle_transparency, {})
+vim.api.nvim_create_user_command('TransparencyToggle', toggle_transparency, {})
 
 -- Override diagnostic signs to set line color and remove
 -- TODO: Move to appropriate configuration file
-for name, icon in pairs(require("lazyvim.config").icons.diagnostics) do
-  local hl = "DiagnosticSign" .. name
+for name, icon in pairs(require('lazyvim.config').icons.diagnostics) do
+  local hl = 'DiagnosticSign' .. name
   if name == 'Hint' or name == 'Info' then
     vim.fn.sign_define(hl, { text = '', texthl = hl, numhl = '' })
   else
@@ -103,7 +102,5 @@ vim.api.nvim_set_hl(0, 'DapStoppedLine', { default = true, link = 'Visual' })
 -- Always focus on buffer after tab change
 vim.api.nvim_create_autocmd({ 'TabEnter' }, {
   pattern = { '*' },
-  callback = function()
-    require('util.tabpages').focus_first_listed_buffer()
-  end
+  callback = function() require('util.tabpages').focus_first_listed_buffer() end,
 })
