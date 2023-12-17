@@ -1,3 +1,15 @@
+--- Check if a buffer is pinned
+---@param buf any
+local function is_pinned(buf)
+  for _, e in ipairs(require('bufferline').get_elements().elements or {}) do
+    if e.id == buf.bufnr then
+      return require('bufferline.groups')._is_pinned(e)
+    end
+  end
+
+  return false
+end
+
 return {
   'akinsho/bufferline.nvim',
   dependencies = {
@@ -47,11 +59,19 @@ return {
   opts = {
     options = {
       themable = true,
+
       show_buffer_close_icons = false,
       show_close_icon = false,
       show_tab_indicators = true,
-      modified_icon = '',
       always_show_bufferline = true,
+
+      modified_icon = '',
+      truncate_names = false,
+      name_formatter = function(buf)
+        local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
+        return is_pinned(buf) and '' or short_name
+      end,
+      tab_size = 0,
 
       -- separator_style = "slant" | "slope" | "thick" | "thin" | { 'any', 'any' },
       -- separator_style = {'', ''},
@@ -70,11 +90,13 @@ return {
       },
       diagnostics = false,
       diagnostics_update_in_insert = false,
+      diagnostics_indicator = nil,
       groups = {
         items = {
           require('bufferline.groups').builtin.pinned:with({ icon = '󱂺' }),
         },
       },
+      hover = { enabled = false },
     },
   },
 }
