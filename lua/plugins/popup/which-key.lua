@@ -23,7 +23,7 @@ return {
       group = '', -- symbol prepended to a group
     },
     window = {
-      border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+      border = { '─', '─', '─', '', '─', '─', '─', '' },
       position = 'bottom', -- bottom, top
       margin = { 0, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
       padding = { 1, 5, 0, 5 }, -- extra window padding [top, right, bottom, left]
@@ -37,6 +37,5 @@ return {
       v = { 'j', 'k' },
       n = { '<', '>' },
     },
-
   },
 }
