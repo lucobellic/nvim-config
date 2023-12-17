@@ -16,7 +16,16 @@ vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter', 'WinEnter' }, {
 })
 vim.api.nvim_create_autocmd({ 'WinLeave' }, {
   pattern = '*',
-  command = 'setlocal nocursorline',
+  callback = function(ev)
+    local current_filetype = vim.api.nvim_get_option_value('filetype', { buf = ev.buf }):lower()
+    local ignored_list = { 'neo-tree', 'outline' }
+    for _, ft_ignored in ipairs(ignored_list) do
+      if ft_ignored == current_filetype then
+        return
+      end
+    end
+    vim.cmd('setlocal nocursorline')
+  end,
   desc = 'Hide cursorline when leaving window',
 })
 
