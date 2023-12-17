@@ -29,6 +29,7 @@ return {
       'nvim-telescope/telescope.nvim',
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
+      'nvim-tree/nvim-web-devicons',
     },
     keys = {
       { '<leader>e', false },
@@ -111,8 +112,8 @@ return {
           padding = 1, -- extra padding on left hand side
           -- indent guides
           with_markers = false,
-          indent_marker = '│',
-          last_indent_marker = '└',
+          indent_marker = ' ',
+          last_indent_marker = ' ',
           highlight = 'NeoTreeIndentMarker',
           -- expander config, needed for nesting files
           with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
@@ -168,7 +169,7 @@ return {
           ['l'] = 'open',
           ['<esc>'] = 'revert_preview',
           --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
-          ['P'] = { 'toggle_preview', config = { use_float = true } },
+          ['P'] = { 'toggle_preview', config = { use_float = false } },
           ['S'] = 'open_split',
           ['s'] = 'open_vsplit',
           -- ["S"] = "split_with_window_picker",
@@ -230,8 +231,10 @@ return {
           directory = {
             {
               'indent',
-              with_markers = false,
-              indent_size = 1,
+              with_markers = true,
+              indent_size = 2,
+              indent_marker = '│',
+              last_indent_marker = '╰',
             },
             { 'icon' },
             { 'current_filter' },
@@ -247,8 +250,10 @@ return {
           file = {
             {
               'indent',
-              with_markers = false,
-              indent_size = 1,
+              with_markers = true,
+              indent_size = 2,
+              indent_marker = '│',
+              last_indent_marker = '╰',
             },
             { 'icon' },
             {
