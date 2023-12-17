@@ -96,6 +96,8 @@ wk.register({
   }
 })
 
+map('n', '<leader>uW', '<cmd>WindowsToggleAutowidth<cr>', { desc = 'Windows Toggle Autowidth' })
+
 -- quit
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 map('n', '<leader>qa', "<cmd>qa<cr>", { desc = "Quit all" })
