@@ -5,9 +5,6 @@ return {
     { 'nvim-tree/nvim-web-devicons' },
     { 'nvim-treesitter/nvim-treesitter' },
   },
-  keys = {
-    { '<leader>go', '<cmd>Lspsaga outline<cr>', desc = 'Symbols Outline' },
-  },
   opts = {
     diagnostic = {
       on_insert = false,
