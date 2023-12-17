@@ -59,6 +59,11 @@ return {
       theme = ayu_gloom_theme,
       component_separators = '╱',
       section_separators = { left = '', right = '' },
+      refresh = {
+        statusline = 200,
+        tabline = 200,
+        winbar = 200,
+      },
     },
     sections = {
       lualine_a = { { 'branch', icon = '' } },
@@ -90,6 +95,7 @@ return {
         {
           'lsp_progress',
           display_components = { 'lsp_client_name', 'spinner' },
+          timer = { progress_enddelay = 200, spinner = 200, lsp_client_name_enddelay = 200 },
           spinner_symbols = { '', '', '', '' },
           colors = {
             use = false,
