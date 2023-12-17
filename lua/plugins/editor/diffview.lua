@@ -45,7 +45,7 @@ return {
       },
       {
         '<leader>gdd',
-        '<cmd>DiffviewOpen origin/develop...HEAD<cr>',
+        '<cmd>DiffviewOpen --imply-local origin/develop...HEAD<cr>',
         mode = { 'n', 'v' },
         desc = 'Diffview origin/develop...HEAD',
       },
@@ -73,6 +73,9 @@ return {
       opts.view = vim.tbl_extend('force', opts.view or {}, { merge_tool = { layout = 'diff3_mixed' } })
 
       opts.keymaps = vim.tbl_extend('force', opts.keymaps or {}, {
+        view = {
+          ['<leader>b'] = false,
+        },
         file_history_panel = {
           {
             'n',
