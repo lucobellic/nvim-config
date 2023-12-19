@@ -10,7 +10,16 @@ return {
   },
   {
     'sindrets/diffview.nvim',
-    event = 'VeryLazy',
+    cmd = {
+      'DiffviewLog',
+      'DiffviewOpen',
+      'DiffviewClose',
+      'DiffviewToggleFiles',
+      'DiffviewFocusFiles',
+      'DiffviewFileHistory',
+      'DiffviewRangeFileHistory',
+      'DiffviewOriginDevelopHead',
+    },
     dependencies = { 'nvim-lua/plenary.nvim' },
     keys = {
       {
