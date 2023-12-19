@@ -5,7 +5,7 @@
 vim.api.nvim_create_autocmd({ 'FileType' }, {
   pattern = { 'cpp' },
   command = 'setlocal commentstring=//\\ %s',
-  desc = 'Set // as defalut comment string for c++',
+  desc = 'Set // as default comment string for c++',
 })
 
 -- Display cursorline only in focused window
@@ -86,7 +86,7 @@ local toggle_transparency = function()
 end
 vim.api.nvim_create_user_command('TransparencyToggle', toggle_transparency, {})
 
--- Override diagnostic signs to set line color and remove
+-- Override diagnostic signs to set line color and remove icon
 -- TODO: Move to appropriate configuration file
 for name, icon in pairs(require('lazyvim.config').icons.diagnostics) do
   local hl = 'DiagnosticSign' .. name
