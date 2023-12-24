@@ -1,5 +1,6 @@
 return {
-  'harrisoncramer/gitlab.nvim',
+  'lucobellic/gitlab.nvim',
+  branch = 'personal',
   event = 'VeryLazy',
   dependencies = {
     'MunifTanjim/nui.nvim',
@@ -60,10 +61,23 @@ return {
       unresolved = '󱍮',
       toggle_node = 'l',
     },
+    discussion_sign_and_diagnostic = {
+      skip_resolved_discussion = true,
+    },
+    popup = { -- The popup for comment creation, editing, and replying
+      exit = '<Esc>',
+      perform_action = '<c-cr>', -- Once in normal mode, does action (like saving comment or editing description, etc)
+      perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
+    },
     discussion_sign = {
       text = '󱍫',
       culhl = 'DiagnosticInfo',
       texthl = 'DiagnosticInfo',
+      helper_signs = {
+        start = '┌',
+        mid = '│',
+        ['end'] = '└',
+      },
     },
   },
 }
