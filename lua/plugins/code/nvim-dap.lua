@@ -5,12 +5,18 @@ return {
     {
       'Joakker/lua-json5',
       build = './install.sh', -- require rust cargo to build
-      config = function()
-        require('dap.ext.vscode').json_decode = require('json5').parse
-      end,
+      config = function() require('dap.ext.vscode').json_decode = require('json5').parse end,
     },
     {
       'mfussenegger/nvim-dap-python',
+      keys = {
+        {
+          '<leader>dPu',
+          function() require('dap-python').setup('python', { include_configs = true, console = 'integratedTerminal' }) end,
+          desc = 'Update Environment',
+          ft = 'python',
+        },
+      },
       config = function()
         local path = require('mason-registry').get_package('debugpy'):get_install_path()
         require('dap-python').setup(path .. '/venv/bin/python', {
@@ -42,9 +48,7 @@ return {
     { '<F10>', require('dap').step_over, repeatable = true, desc = 'Step Over' },
     {
       '<leader>dx',
-      function()
-        require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'c', 'cpp' } })
-      end,
+      function() require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'c', 'cpp' } }) end,
       desc = 'Load launch.json',
     },
   },
