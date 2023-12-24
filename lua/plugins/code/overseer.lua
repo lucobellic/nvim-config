@@ -8,10 +8,46 @@ vim.api.nvim_create_user_command('OverseerRestartLast', function()
   end
 end, {})
 
+local python_problem_matcher = {
+  owner = 'python',
+  pattern = {
+    regexp = '^(.*):(\\d+):(\\d+):\\s+(\\w+):\\s+(.*)$',
+    file = 1,
+    line = 2,
+    column = 3,
+    severity = 4,
+    message = 5,
+  },
+  fileLocation = { 'relative', '${cwd}' },
+}
+
 local problem_matcher_mapping = {
   gcc = '$gcc',
-  reach = '$gcc',
+  python = python_problem_matcher,
+  pytest = python_problem_matcher,
 }
+
+---Get problem matcher from command
+---@param cmd string
+---@return string|table|nil problem_matcher
+local function get_problem_match(cmd)
+  local first_word = cmd:match('^%S+')
+
+  local problem_matcher = problem_matcher_mapping[first_word]
+
+  if problem_matcher == nil then
+    if first_word:match('reach') then
+      -- Check if 'pytest' is present in the cmd string
+      if cmd:match('pytest') or cmd:match('conf-test') then
+        problem_matcher = problem_matcher_mapping.pytest
+      end
+      if cmd:match('build') then
+        problem_matcher = problem_matcher_mapping.gcc
+      end
+    end
+  end
+  return problem_matcher
+end
 
 vim.api.nvim_create_user_command('OverseerFromTerminal', function()
   -- Use last line of the terminal buffer
@@ -20,14 +56,13 @@ vim.api.nvim_create_user_command('OverseerFromTerminal', function()
   cmd = cmd:gsub('^%S+%s*', '')
   cmd = cmd:gsub('%s*%S+$', '')
 
-  -- Find problem matcher form the first word of the command
-  local first_word = cmd:match('^%S+')
   local problem_matcher_component = {}
-  local problem_matcher = problem_matcher_mapping[first_word]
+  local problem_matcher = get_problem_match(cmd)
   if problem_matcher then
-    problem_matcher_component = { 'on_output_parse', problem_matcher }
+    problem_matcher_component = { 'on_output_parse', problem_matcher = problem_matcher }
   end
-  require('overseer').new_task({ cmd = cmd, components = { { 'default', problem_matcher_component } } }):start()
+  vim.notify('Start: ' .. cmd, vim.log.levels.INFO, { title = 'Overseer' })
+  require('overseer').new_task({ cmd = cmd, components = {problem_matcher_component, 'default'} }):start()
 end, {})
 
 return {
