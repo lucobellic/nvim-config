@@ -53,6 +53,7 @@ return {
   'nvim-lualine/lualine.nvim',
   dependencies = {
     'arkav/lualine-lsp-progress',
+    'AndreM222/copilot-lualine',
   },
   opts = {
     options = {
@@ -92,6 +93,7 @@ return {
       },
       lualine_c = {},
       lualine_x = {
+        { 'copilot' },
         {
           'lsp_progress',
           display_components = { 'lsp_client_name', 'spinner' },
