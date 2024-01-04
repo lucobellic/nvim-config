@@ -15,6 +15,7 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
   return keymap_set(mode, lhs, rhs, opts)
 end
 
+require('config.diagnostic')
 require('config.filetype')
 require('config.neovide')
 require('config.shell')
