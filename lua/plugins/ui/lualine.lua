@@ -58,7 +58,7 @@ return {
   opts = {
     options = {
       theme = ayu_gloom_theme,
-      component_separators = '╱',
+      component_separators = ' ',
       section_separators = { left = '', right = '' },
       refresh = {
         statusline = 200,
@@ -71,13 +71,13 @@ return {
       lualine_b = {
         -- stylua: ignore
         {
-          function() return require("noice").api.status.mode.get() end,
-          cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
+          function() return require('noice').api.status.mode.get() end,
+          cond = function() return package.loaded['noice'] and require('noice').api.status.mode.has() end,
         },
         -- stylua: ignore
         {
-          function() return "  " .. require("dap").status() end,
-          cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
+          function() return '  ' .. require('dap').status() end,
+          cond = function() return package.loaded['dap'] and require('dap').status() ~= '' end,
         },
         {
           'overseer',
@@ -97,8 +97,15 @@ return {
         {
           'lsp_progress',
           display_components = { 'lsp_client_name', 'spinner' },
-          timer = { progress_enddelay = 200, spinner = 200, lsp_client_name_enddelay = 200 },
+          timer = {
+            progress_enddelay = 200,
+            spinner = 200,
+            lsp_client_name_enddelay = 200,
+          },
           spinner_symbols = { '', '', '', '' },
+          separators = {
+            lsp_client_name = { pre = '', post = '' },
+          },
           colors = {
             use = false,
           },
