@@ -52,7 +52,7 @@ local ayu_gloom_theme = {
 return {
   'nvim-lualine/lualine.nvim',
   dependencies = {
-    'arkav/lualine-lsp-progress',
+    'WhoIsSethDaniel/lualine-lsp-progress.nvim',
     'AndreM222/copilot-lualine',
   },
   opts = {
