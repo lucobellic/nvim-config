@@ -13,14 +13,24 @@ local function shutdown_currrent_term()
 end
 vim.api.nvim_create_user_command('ToggleTermShutdown', shutdown_currrent_term, {})
 
+local function term_focus_offset(offset)
+  local terminal = require('toggleterm.terminal')
+  local current_id = terminal.get_focused_id()
+  local term = terminal.get(current_id + offset)
+  if term then
+    if term:is_open() then
+      term:focus()
+    else
+      term:open()
+    end
+  end
+end
+
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  -- TODO: Add shift + arrow mapping to change form terminals in insert mode
   vim.keymap.set({ 't' }, '<esc>', [[<C-\><C-n>]], opts)
-  vim.keymap.set({ 't', 'n' }, '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set({ 't', 'n' }, '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set({ 't', 'n' }, '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set({ 't', 'n' }, '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set({ 't', 'n' }, '<C-h>', function() term_focus_offset(-1) end, opts)
+  vim.keymap.set({ 't', 'n' }, '<C-l>', function() term_focus_offset(1) end, opts)
   vim.keymap.set({ 't', 'n' }, '<C-q>', '<cmd>ToggleTermShutdown<cr>', opts)
   vim.keymap.set({ 't', 'n' }, '<C-t>', '<cmd>ToggleTermSplit<cr>', opts)
 end
