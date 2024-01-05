@@ -148,8 +148,9 @@ return {
       { name = 'nvim_lsp_signature_help', group_index = 3 },
     },
     formatting = {
-      format = function(entry, vim_item)
-        return require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
+      format = function(entry, item)
+        item.menu = ''
+        return require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, item)
       end,
     },
   },
