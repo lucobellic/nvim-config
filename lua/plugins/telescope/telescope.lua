@@ -349,7 +349,6 @@ return {
           '--column',
           '--smart-case',
         },
-        show_line = false,
         prompt_title = false,
         results_title = false,
         preview_title = true,
@@ -360,8 +359,8 @@ return {
         initial_mode = 'insert',
         selection_strategy = 'reset',
         sorting_strategy = 'ascending',
-        -- layout_strategy = "horizontal",
-        layout_strategy = 'vertical',
+        file_sorter = require('telescope.sorters').get_fuzzy_file,
+        layout_strategy = 'vertical', -- horizontal
         layout_config = {
           horizontal = {
             width = 0.8,
