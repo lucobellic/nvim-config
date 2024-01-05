@@ -4,10 +4,14 @@ vim.api.nvim_buf_set_keymap(0, 'n', 'q', '<cmd>FloatermHide<CR><esc>', opts)
 vim.api.nvim_buf_set_keymap(0, 'n', '<esc>', '<cmd>FloatermHide<CR><esc>', opts)
 
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-l>', '<cmd>FloatermNext<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<S-right>', '<cmd>FloatermNext<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 't', '<S-right>', '<C-\\><C-n>:FloatermNext<CR>', opts)
 
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-h>', '<cmd>FloatermPrev<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 'n', '<S-left>', '<cmd>FloatermPrev<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-h>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
+vim.api.nvim_buf_set_keymap(0, 't', '<S-left>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
 
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-t>', '<cmd>FloatermNew<CR>', opts)
 vim.api.nvim_buf_set_keymap(0, 't', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts)
