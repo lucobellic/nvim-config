@@ -28,5 +28,13 @@ return {
         name = 'Launch',
       },
     },
+    override_by_filename = {
+      ['cmakelists.txt'] = {
+        icon = '',
+        color = '#6d8086',
+        cterm_color = '66',
+        name = 'CMakeLists',
+      },
+    },
   },
 }
