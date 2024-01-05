@@ -83,7 +83,7 @@ return {
 
       opts.keymaps = vim.tbl_extend('force', opts.keymaps or {}, {
         view = {
-          ['<leader>b'] = false,
+          ['<leader>wh'] = require('diffview.actions').toggle_files,
         },
         file_history_panel = {
           {
