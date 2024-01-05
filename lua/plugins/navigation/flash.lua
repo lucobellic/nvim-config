@@ -1,5 +1,4 @@
 local Flash = require('flash')
-local flash_search = require('flash.search')
 
 ---@param opts Flash.Format
 local function format(opts)
@@ -31,9 +30,7 @@ local function label2_jump(multi_window, pattern)
         label = { format = format },
         matcher = function(win)
           -- limit matches to the current label
-          return vim.tbl_filter(function(m)
-            return m.label == match.label and m.win == win
-          end, state.results)
+          return vim.tbl_filter(function(m) return m.label == match.label and m.win == win end, state.results)
         end,
         labeler = function(matches)
           for _, m in ipairs(matches) do
@@ -83,49 +80,37 @@ return {
     return {
       {
         's',
-        function()
-          require('flash').jump({ search = { multi_window = false } })
-        end,
+        function() require('flash').jump({ search = { multi_window = false } }) end,
         desc = 'Flash Range',
         mode = { 'n', 'v' },
       },
       {
         'S',
-        function()
-          require('flash').jump()
-        end,
+        function() require('flash').jump() end,
         desc = 'Flash Range',
         mode = { 'n' },
       },
       {
         '<leader>j',
-        function()
-          label2_jump(false, [[\<]])
-        end,
+        function() label2_jump(false, [[\<]]) end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
         '<leader>J',
-        function()
-          label2_jump(true, [[\<]])
-        end,
+        function() label2_jump(true, [[\<]]) end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
         '<leader>l',
-        function()
-          label2_jump(false, '^')
-        end,
+        function() label2_jump(false, '^') end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
       {
         '<leader>L',
-        function()
-          label2_jump(true, '^')
-        end,
+        function() label2_jump(true, '^') end,
         desc = 'Flash Word',
         mode = { 'n', 'v' },
       },
