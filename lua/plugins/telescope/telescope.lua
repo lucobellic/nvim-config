@@ -20,105 +20,75 @@ return {
       { 'folke/trouble.nvim' },
       {
         'nvim-telescope/telescope-live-grep-args.nvim',
-        config = function()
-          require('telescope').load_extension('live_grep_args')
-        end,
+        config = function() require('telescope').load_extension('live_grep_args') end,
       },
       {
         'prochri/telescope-all-recent.nvim',
-        config = function()
-          require('telescope-all-recent').setup({})
-        end,
+        config = function() require('telescope-all-recent').setup({}) end,
       },
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
-        config = function()
-          require('telescope').load_extension('fzf')
-        end,
+        config = function() require('telescope').load_extension('fzf') end,
       },
       {
         'nvim-telescope/telescope-file-browser.nvim',
-        config = function()
-          require('telescope').load_extension('file_browser')
-        end,
+        config = function() require('telescope').load_extension('file_browser') end,
       },
       {
         'nvim-telescope/telescope-smart-history.nvim',
         dependencies = { 'kkharji/sqlite.lua' },
-        config = function()
-          require('telescope').load_extension('smart_history')
-        end,
+        config = function() require('telescope').load_extension('smart_history') end,
       },
       {
         'tsakirist/telescope-lazy.nvim',
-        config = function()
-          require('telescope').load_extension('lazy')
-        end,
+        config = function() require('telescope').load_extension('lazy') end,
       },
       {
         'aaronhallaert/advanced-git-search.nvim',
-        config = function()
-          require('telescope').load_extension('advanced_git_search')
-        end,
+        config = function() require('telescope').load_extension('advanced_git_search') end,
       },
       {
         'debugloop/telescope-undo.nvim',
         keys = {
           {
             '<leader>uu',
-            function()
-              require('telescope').extensions.undo.undo()
-            end,
+            function() require('telescope').extensions.undo.undo() end,
             desc = 'Telescope Undo Tree',
           },
         },
-        config = function()
-          require('telescope').load_extension('undo')
-        end,
+        config = function() require('telescope').load_extension('undo') end,
       },
       {
         'nvim-telescope/telescope-dap.nvim',
         keys = {
           {
             '<leader>fdc',
-            function()
-              require('telescope').extensions.dap.commands({})
-            end,
+            function() require('telescope').extensions.dap.commands({}) end,
             desc = 'Dap Find Commands',
           },
           {
             '<leader>fds',
-            function()
-              require('telescope').extensions.dap.configurations({})
-            end,
+            function() require('telescope').extensions.dap.configurations({}) end,
             desc = 'Dap Find Configurations',
           },
           {
             '<leader>fdb',
-            function()
-              require('telescope').extensions.dap.list_breakpoints({})
-            end,
+            function() require('telescope').extensions.dap.list_breakpoints({}) end,
             desc = 'Dap Find Breakpoints',
           },
           {
             '<leader>fdv',
-            function()
-              require('telescope').extensions.dap.variables({})
-            end,
+            function() require('telescope').extensions.dap.variables({}) end,
             desc = 'Dap Find Variables',
           },
           {
             '<leader>fdf',
-            function()
-              require('telescope').extensions.dap.frames({})
-            end,
+            function() require('telescope').extensions.dap.frames({}) end,
             desc = 'Dap Find Frames',
           },
         },
-        config = function()
-          require('telescope').load_extension('dap')
-        end,
+        config = function() require('telescope').load_extension('dap') end,
       },
     },
     keys = {
@@ -128,79 +98,57 @@ return {
       { '<leader><leader>', false },
       {
         '<leader>fL',
-        function()
-          require('telescope').extensions.live_grep_args.live_grep_args()
-        end,
+        function() require('telescope').extensions.live_grep_args.live_grep_args() end,
         desc = 'Search Workspace',
       },
       {
         '<C-f>',
-        function()
-          require('telescope').extensions.live_grep_args.live_grep_args()
-        end,
+        function() require('telescope').extensions.live_grep_args.live_grep_args() end,
         desc = 'Search Workspace',
       },
       {
         '<leader>fb',
-        function()
-          require('telescope.builtin').buffers()
-        end,
+        function() require('telescope.builtin').buffers() end,
         desc = 'Find Buffer',
       },
       {
         '<leader>fi',
-        function()
-          require('telescope.builtin').symbols({ source = { 'gitmoji' } })
-        end,
+        function() require('telescope.builtin').symbols({ source = { 'gitmoji' } }) end,
         desc = 'Find Emoji',
       },
       {
         '<leader>fc',
-        function()
-          require('telescope.builtin').commands()
-        end,
+        function() require('telescope.builtin').commands() end,
         desc = 'Find Commands',
       },
       {
         '<leader>ff',
-        function()
-          require('telescope.builtin').find_files()
-        end,
+        function() require('telescope.builtin').find_files() end,
         desc = 'Find Files',
       },
       {
         '<C-p>',
-        function()
-          require('telescope.builtin').find_files()
-        end,
+        function() require('telescope.builtin').find_files() end,
         desc = 'Find Files',
       },
       {
         '<leader>fgs',
-        function()
-          require('telescope.builtin').git_status()
-        end,
+        function() require('telescope.builtin').git_status() end,
         desc = 'Git Status',
       },
       {
         '<leader>fgc',
-        function()
-          require('telescope.builtin').git_commits()
-        end,
+        function() require('telescope.builtin').git_commits() end,
         desc = 'Git Commits',
       },
       {
         '<leader>fk',
-        function()
-          require('telescope.builtin').keymaps()
-        end,
+        function() require('telescope.builtin').keymaps() end,
         desc = 'Find Keymaps',
       },
       {
         '<leader>fm',
-        function()
-          require('telescope.builtin').marks()
-        end,
+        function() require('telescope.builtin').marks() end,
         desc = 'Find Marks',
       },
 
@@ -209,16 +157,12 @@ return {
       { '<leader>fow', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Search' },
       {
         '<leader>fr',
-        function()
-          require('telescope.builtin').oldfiles()
-        end,
+        function() require('telescope.builtin').oldfiles() end,
         desc = 'Find Recent File',
       },
       {
         '<leader>fw',
-        function()
-          require('telescope.builtin').grep_string()
-        end,
+        function() require('telescope.builtin').grep_string() end,
         mode = { 'n', 'v' },
         desc = 'Find Word',
       },
@@ -231,69 +175,51 @@ return {
       -- LSP
       {
         '<leader>flr',
-        function()
-          require('telescope.builtin').lsp_references()
-        end,
+        function() require('telescope.builtin').lsp_references() end,
         desc = 'Find References',
       },
       {
         '<leader>fld',
-        function()
-          require('telescope.builtin').lsp_definitions()
-        end,
+        function() require('telescope.builtin').lsp_definitions() end,
         desc = 'Find Definitions',
       },
       {
         '<leader>fli',
-        function()
-          require('telescope.builtin').lsp_implementations()
-        end,
+        function() require('telescope.builtin').lsp_implementations() end,
         desc = 'Find Implementations',
       },
 
       -- Symbols
       {
         '<leader>flss',
-        function()
-          require('telescope.builtin').lsp_document_symbols()
-        end,
+        function() require('telescope.builtin').lsp_document_symbols() end,
         desc = 'Find Document Symbols',
       },
       {
         '<leader>flsd',
-        function()
-          require('telescope.builtin').lsp_dynamic_workspace_symbols()
-        end,
+        function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
         desc = 'Find Workspace Symbols',
       },
       {
         '<leader>flsw',
-        function()
-          require('telescope.builtin').lsp_workspace_symbols()
-        end,
+        function() require('telescope.builtin').lsp_workspace_symbols() end,
         desc = 'Find Dynamic Workspace Symbols',
       },
       {
         '<leader>flt',
-        function()
-          require('telescope.builtin').lsp_type_definitions()
-        end,
+        function() require('telescope.builtin').lsp_type_definitions() end,
         desc = 'Find Type Definitions',
       },
 
       -- Calls
       {
         '<leader>flci',
-        function()
-          require('telescope.builtin').lsp_incoming_calls()
-        end,
+        function() require('telescope.builtin').lsp_incoming_calls() end,
         desc = 'Find Incoming Calls',
       },
       {
         '<leader>flco',
-        function()
-          require('telescope.builtin').lsp_outgoing_calls()
-        end,
+        function() require('telescope.builtin').lsp_outgoing_calls() end,
         desc = 'Find Outgoing Calls',
       },
     },
@@ -301,16 +227,10 @@ return {
       defaults = {
         mappings = {
           i = {
-            ['<c-t>'] = function(...)
-              require('trouble.providers.telescope').smart_open_with_trouble(...)
-            end,
+            ['<c-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
             ['<esc>'] = require('telescope.actions').close,
-            ['<C-k>'] = function()
-              require('telescope-live-grep-args.actions').quote_prompt()
-            end,
-            ['<C-g>'] = function()
-              require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' })
-            end,
+            ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
+            ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
             ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
@@ -322,16 +242,10 @@ return {
             ['<S-down>'] = require('telescope.actions').cycle_history_next,
           },
           n = {
-            ['<c-t>'] = function(...)
-              require('trouble.providers.telescope').smart_open_with_trouble(...)
-            end,
+            ['<c-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
             ['<C-n>'] = require('telescope.actions').select_tab,
-            ['<C-k>'] = function()
-              require('telescope-live-grep-args.actions').quote_prompt()
-            end,
-            ['<C-g>'] = function()
-              require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' })
-            end,
+            ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
+            ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
             ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
           },
