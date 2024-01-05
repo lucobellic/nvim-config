@@ -1,4 +1,4 @@
-local separator = '▏'
+local separator_char = '│'
 
 local function get_diagnostic_label(props)
   local icons = require('lazyvim.config').icons.diagnostics
@@ -9,9 +9,6 @@ local function get_diagnostic_label(props)
     if n > 0 then
       table.insert(label, { icon .. n .. ' ', group = 'DiagnosticSign' .. severity })
     end
-  end
-  if #label > 0 then
-    table.insert(label, { separator, group = 'NonText' })
   end
   return label
 end
@@ -30,22 +27,19 @@ local function get_git_diff(props)
       })
     end
   end
-  if #labels > 0 then
-    table.insert(labels, { separator, group = 'NonText' })
-  end
   return labels
 end
 
 return {
   'b0o/incline.nvim',
   event = 'VeryLazy',
-  keys = { {
-    '<leader>uo',
-    function()
-      require('incline').toggle()
-    end,
-    desc = 'Toggle incline',
-  } },
+  keys = {
+    {
+      '<leader>uo',
+      function() require('incline').toggle() end,
+      desc = 'Toggle incline',
+    },
+  },
   opts = {
     window = {
       zindex = 1,
@@ -57,15 +51,13 @@ return {
       cursorline = true,
     },
     render = function(props)
-      local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ':t')
-      local ft_icon, ft_color = require('nvim-web-devicons').get_icon_color(filename)
-      local modified = vim.api.nvim_buf_get_option(props.buf, 'modified') and 'italic' or ''
+      local diagnostics = get_diagnostic_label(props)
+      local diffs = get_git_diff(props)
+      local separator = (#diagnostics > 0 and #diffs > 0) and { separator_char .. ' ', group = 'NonText' } or ''
       local buffer = {
-        { get_diagnostic_label(props) },
-        { get_git_diff(props) },
-        { ft_icon, guifg = ft_color },
-        { ' ' },
-        { filename, gui = modified },
+        { diagnostics },
+        { separator },
+        { diffs },
       }
       return buffer
     end,
