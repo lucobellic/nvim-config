@@ -79,5 +79,10 @@ return {
         ['end'] = '└',
       },
     },
+    discussion_diagnostic = {
+      display_opts = {
+        underline = false,
+      },
+    },
   },
 }
