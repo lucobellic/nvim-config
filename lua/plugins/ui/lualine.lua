@@ -93,9 +93,9 @@ return {
       },
       lualine_c = {},
       lualine_x = {
-        { 'copilot' },
         {
           'lsp_progress',
+          hide = { 'null-ls', 'ltex' },
           display_components = { 'lsp_client_name', 'spinner' },
           timer = {
             progress_enddelay = 200,
@@ -110,6 +110,7 @@ return {
             use = false,
           },
         },
+        { 'copilot' },
       },
       lualine_y = {
         {
