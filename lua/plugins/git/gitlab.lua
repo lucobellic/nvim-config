@@ -84,5 +84,10 @@ return {
         underline = false,
       },
     },
+    pipeline = {
+      failed = '',
+      canceled = '',
+      success = '',
+    },
   },
 }
