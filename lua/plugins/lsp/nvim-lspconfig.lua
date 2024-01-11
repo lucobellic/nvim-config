@@ -17,9 +17,18 @@ return {
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
       clangd = require('plugins.lsp.util.servers.clangd'),
       lua_ls = {
-        Lua = {
-          workspace = {
-            checkThirdParty = true,
+        settings = {
+          Lua = {
+            hint = {
+              enable = true,
+              setType = true,
+            },
+            workspace = {
+              checkThirdParty = false,
+            },
+            completion = {
+              callSnippet = 'Replace',
+            },
           },
         },
       },
