@@ -47,7 +47,7 @@ return {
       edit_with_instructions = {
         diff = true,
         keymaps = {
-          close = { '<C-c>', '<C-q>' },
+          close = '<C-q>',
           cycle_windows = '<Tab>',
         },
       },
@@ -55,7 +55,7 @@ return {
         border_left_sign = '',
         border_right_sign = '',
         keymaps = {
-          close = { '<C-c>', '<C-q>' },
+          close = '<C-q>',
           cycle_windows = '<Tab>',
         },
       },
