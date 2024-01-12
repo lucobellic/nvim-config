@@ -14,6 +14,7 @@ return {
   'akinsho/bufferline.nvim',
   dependencies = {
     { 'echasnovski/mini.bufremove' },
+    { 'lucobellic/edgy-group.nvim' },
     {
       'folke/which-key.nvim',
       optional = true,
@@ -57,7 +58,6 @@ return {
     { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
   },
   opts = function()
-    local edgy_groups = require('util.edgy.init')
     local right_edgebar = require('edgy.config').layout.right
     return {
       options = {
@@ -102,6 +102,7 @@ return {
         hover = { enabled = false },
         custom_areas = {
           right = function()
+            local edgy_groups = require('edgy-group')
             local result = {}
             if right_edgebar.visible ~= 0 then
               for i, group in ipairs(edgy_groups.groups) do
