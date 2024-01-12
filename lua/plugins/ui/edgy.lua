@@ -20,6 +20,7 @@ return {
   },
   opts = {
     close_when_all_hidden = false,
+    exit_when_last = false,
     icons = {
       closed = '',
       open = '',
@@ -38,13 +39,13 @@ return {
       {
         title = '  outline',
         ft = 'Outline',
-        pinned = true,
+        pinned = false,
         open = 'OutlineOpen'
       },
       {
-        title = ' ',
+        title = '  overseer',
         ft = 'OverseerList',
-        pinned = true,
+        pinned = false,
         open = 'OverseerOpen',
       },
     },

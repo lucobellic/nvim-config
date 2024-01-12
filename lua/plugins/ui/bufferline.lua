@@ -56,47 +56,71 @@ return {
     { '<leader>bcp', '<cmd>BufferLinePickClose<cr>', desc = 'Buffer Line Pick Close' },
     { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
   },
-  opts = {
-    options = {
-      themable = true,
+  opts = function()
+    local edgy_groups = require('util.edgy.init')
+    local right_edgebar = require('edgy.config').layout.right
+    return {
+      options = {
+        themable = true,
 
-      show_buffer_close_icons = false,
-      show_close_icon = false,
-      show_tab_indicators = true,
-      always_show_bufferline = true,
+        show_buffer_close_icons = false,
+        show_close_icon = false,
+        show_tab_indicators = true,
+        always_show_bufferline = true,
 
-      modified_icon = '',
-      truncate_names = false,
-      name_formatter = function(buf)
-        local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
-        return is_pinned(buf) and '' or short_name
-      end,
-      tab_size = 0,
+        modified_icon = '',
+        truncate_names = false,
+        name_formatter = function(buf)
+          local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
+          return is_pinned(buf) and '' or short_name
+        end,
+        tab_size = 0,
 
-      -- separator_style = "slant" | "slope" | "thick" | "thin" | { 'any', 'any' },
-      -- separator_style = {'', ''},
-      separator_style = 'slope',
-      indicator = {
-        icon = '▎',
-        style = 'none',
-      },
-      offsets = {
-        -- {
-        --   filetype = "neo-tree",
-        --   text = "File Explorer",
-        --   text_align = "center",
-        --   separator = false,
-        -- }
-      },
-      diagnostics = false,
-      diagnostics_update_in_insert = false,
-      diagnostics_indicator = nil,
-      groups = {
-        items = {
-          require('bufferline.groups').builtin.pinned:with({ icon = '󱂺' }),
+        -- separator_style = "slant" | "slope" | "thick" | "thin" | { 'any', 'any' },
+        -- separator_style = {'', ''},
+        separator_style = 'slope',
+        indicator = {
+          icon = '▎',
+          style = 'none',
+        },
+        offsets = {
+          -- {
+          --   filetype = "neo-tree",
+          --   text = "File Explorer",
+          --   text_align = "center",
+          --   separator = false,
+          -- }
+        },
+        diagnostics = false,
+        diagnostics_update_in_insert = false,
+        diagnostics_indicator = nil,
+        groups = {
+          items = {
+            require('bufferline.groups').builtin.pinned:with({ icon = '󱂺' }),
+          },
+        },
+        hover = { enabled = false },
+        custom_areas = {
+          right = function()
+            local result = {}
+            if right_edgebar.visible ~= 0 then
+              for i, group in ipairs(edgy_groups.groups) do
+                local title = ' ' .. group.title .. '  '
+                if edgy_groups.current_group_index['right'] == i then
+                  table.insert(result, { text = '', fg = '#111d2c', bg = 'none' })
+                  table.insert(result, { text = title, fg = '#57c1ff', bg = '#111d2c' })
+                  table.insert(result, { text = '', fg = '#111d2c', bg = 'none' })
+                else
+                  table.insert(result, { text = ' ', fg = 'none', bg = 'none' })
+                  table.insert(result, { text = title, fg = '#4d5566', bg = 'none' })
+                  table.insert(result, { text = ' ', fg = 'none', bg = 'none' })
+                end
+              end
+            end
+            return result
+          end,
         },
       },
-      hover = { enabled = false },
-    },
-  },
+    }
+  end,
 }
