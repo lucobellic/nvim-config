@@ -16,6 +16,33 @@ return {
 
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
       clangd = require('plugins.lsp.util.servers.clangd'),
+      tsserver = {
+        single_file_support = false,
+        settings = {
+          typescript = {
+            inlayHints = {
+              includeInlayParameterNameHints = 'literal',
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+            },
+          },
+          javascript = {
+            inlayHints = {
+              includeInlayParameterNameHints = 'all',
+              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayVariableTypeHints = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayEnumMemberValueHints = true,
+            },
+          },
+        },
+      },
       lua_ls = {
         settings = {
           Lua = {
