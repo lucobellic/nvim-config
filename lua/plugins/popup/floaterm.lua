@@ -1,4 +1,4 @@
-local function floaterm_toogle(params)
+local function floaterm_toggle(params)
   local tool_name = params.args
   local tool_title = tool_name:gsub('^%l', string.upper)
   local bufnr = vim.api.nvim_call_function('floaterm#terminal#get_bufnr', { tool_name })
@@ -91,8 +91,8 @@ return {
   branch = 'personal',
   dependencies = { 'MunifTanjim/nui.nvim' },
   keys = {
-    { '<leader>er', '<cmd>ToggleTool ranger<cr>', desc = 'Ranger' },
-    { '<leader>g;', '<cmd>ToggleTool lazygit<cr>', desc = 'Lazygit' },
+    { '<leader>er', '<cmd>FloatermToggleTool ranger<cr>', desc = 'Ranger' },
+    { '<leader>g;', '<cmd>FloatermToggleTool lazygit<cr>', desc = 'Lazygit' },
     { '<F7>', '<cmd>FloatermToggle<cr>', mode = 'n', desc = 'Toggle Floaterm' },
     { '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', mode = 't', desc = 'Toggle Floaterm' },
   },
@@ -105,6 +105,6 @@ return {
     vim.g.floaterm_titleposition = 'center'
     vim.g.floaterm_title = 'Terminal $1/$2'
     vim.g.floaterm_openoverride = open_popup
-    vim.api.nvim_create_user_command('ToggleTool', floaterm_toogle, { nargs = 1, count = 1 })
+    vim.api.nvim_create_user_command('FloatermToggleTool', floaterm_toggle, { nargs = 1, count = 1 })
   end,
 }
