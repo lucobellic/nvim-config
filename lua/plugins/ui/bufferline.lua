@@ -10,6 +10,28 @@ local function is_pinned(buf)
   return false
 end
 
+local function get_edgy_group_icons(position)
+  local edgy_group = require('edgy-group')
+  local edgebar = require('edgy.config').layout[position]
+  local result = {}
+  if edgebar and edgebar.visible ~= 0 then
+    local groups = vim.tbl_filter(function(group) return group.pos == position end, edgy_group.groups)
+    for i, group in ipairs(groups) do
+      local title = ' ' .. group.icon .. '  '
+      if edgy_group.current_group_index[position] == i then
+        table.insert(result, { text = '', link = 'BufferLineTabSeparatorSelected' })
+        table.insert(result, { text = title, link = 'BufferLineTabSelected' })
+        table.insert(result, { text = '', link = 'BufferLineSeparatorSelected' })
+      else
+        table.insert(result, { text = '', link = 'BufferLineTabSeparator' })
+        table.insert(result, { text = title, link = 'BufferLineTab' })
+        table.insert(result, { text = '', link = 'BufferLineTabSeparator' })
+      end
+    end
+  end
+  return result
+end
+
 return {
   'akinsho/bufferline.nvim',
   dependencies = {
@@ -58,7 +80,6 @@ return {
     { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
   },
   opts = function()
-    local right_edgebar = require('edgy.config').layout.right
     return {
       options = {
         themable = true,
@@ -101,25 +122,8 @@ return {
         },
         hover = { enabled = false },
         custom_areas = {
-          right = function()
-            local edgy_groups = require('edgy-group')
-            local result = {}
-            if right_edgebar.visible ~= 0 then
-              for i, group in ipairs(edgy_groups.groups) do
-                local title = ' ' .. group.title .. '  '
-                if edgy_groups.current_group_index['right'] == i then
-                  table.insert(result, { text = '', fg = '#111d2c', bg = 'none' })
-                  table.insert(result, { text = title, fg = '#57c1ff', bg = '#111d2c' })
-                  table.insert(result, { text = '', fg = '#111d2c', bg = 'none' })
-                else
-                  table.insert(result, { text = ' ', fg = 'none', bg = 'none' })
-                  table.insert(result, { text = title, fg = '#4d5566', bg = 'none' })
-                  table.insert(result, { text = ' ', fg = 'none', bg = 'none' })
-                end
-              end
-            end
-            return result
-          end,
+          left = function() return get_edgy_group_icons('left') end,
+          right = function() return get_edgy_group_icons('right') end,
         },
       },
     }

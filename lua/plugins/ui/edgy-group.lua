@@ -4,13 +4,13 @@ return {
   keys = {
     {
       '<leader>el',
-      function() vim.cmd('EdgyGroupNext right') end,
+      function() require('edgy-group').open_group('right', 1) end,
       desc = 'Edgy Group Next Right',
       repeatable = true,
     },
     {
       '<leader>eh',
-      function() vim.cmd('EdgyGroupPrev right') end,
+      function() require('edgy-group').open_group('right', -1) end,
       desc = 'Edgy Group Prev Right',
       repeatable = true,
     },
@@ -18,8 +18,8 @@ return {
   opts = {
     hide = true,
     groups = {
-      { title = '', pos = 'right', filetypes = { 'Outline' } },
-      { title = '', pos = 'right', filetypes = { 'OverseerList' } },
+      { icon = '', pos = 'right', titles = { 'outline' } },
+      { icon = '', pos = 'right', titles = { 'overseer' } },
     },
   },
   dev = true,

@@ -37,13 +37,13 @@ return {
     },
     right = {
       {
-        title = '  outline',
+        title = 'outline',
         ft = 'Outline',
         pinned = false,
         open = 'OutlineOpen'
       },
       {
-        title = '  overseer',
+        title = 'overseer',
         ft = 'OverseerList',
         pinned = false,
         open = 'OverseerOpen',
