@@ -22,10 +22,10 @@ return {
         'nvim-telescope/telescope-live-grep-args.nvim',
         config = function() require('telescope').load_extension('live_grep_args') end,
       },
-      {
-        'prochri/telescope-all-recent.nvim',
-        config = function() require('telescope-all-recent').setup({}) end,
-      },
+      -- {
+      --   'prochri/telescope-all-recent.nvim',
+      --   config = function() require('telescope-all-recent').setup({}) end,
+      -- },
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
@@ -273,7 +273,6 @@ return {
         initial_mode = 'insert',
         selection_strategy = 'reset',
         sorting_strategy = 'ascending',
-        file_sorter = require('telescope.sorters').get_fuzzy_file,
         layout_strategy = 'vertical', -- horizontal
         layout_config = {
           horizontal = {
@@ -298,6 +297,15 @@ return {
         color_devicons = true,
         -- use_less = true,
         set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
+      },
+      extensions = {
+        fzf = {
+          fuzzy = true, -- false will only do exact matching
+          override_generic_sorter = true, -- override the generic sorter
+          override_file_sorter = true, -- override the file sorter
+          case_mode = 'smart_case', -- or "ignore_case" or "respect_case"
+          -- the default case_mode is "smart_case"
+        },
       },
     },
   },
