@@ -5,17 +5,18 @@ return {
   keys = {
     {
       '<leader>wl',
-      function()
-        require('edgy').toggle('right')
-      end,
+      function() require('edgy').toggle('right') end,
       desc = 'Edgy Close Right',
     },
     {
       '<leader>wh',
-      function()
-        require('edgy').toggle('left')
-      end,
+      function() require('edgy').toggle('left') end,
       desc = 'Edgy Close Left',
+    },
+    {
+      '<leader>wj',
+      function() require('edgy').toggle('bottom') end,
+      desc = 'Edgy Close Bottom',
     },
   },
   opts = {
@@ -27,25 +28,22 @@ return {
     },
     keys = {
       -- increase width
-      ['<c-left>'] = function(win)
-        win:resize('width', 5)
-      end,
+      ['<c-left>'] = function(win) win:resize('width', 5) end,
       -- decrease width
-      ['<c-right>'] = function(win)
-        win:resize('width', -5)
-      end,
+      ['<c-right>'] = function(win) win:resize('width', -5) end,
+    },
+    wo = {
+      winbar = false,
     },
     right = {
       {
         title = 'outline',
         ft = 'Outline',
-        pinned = false,
-        open = 'OutlineOpen'
+        open = 'OutlineOpen',
       },
       {
         title = 'overseer',
         ft = 'OverseerList',
-        pinned = false,
         open = 'OverseerOpen',
       },
     },
@@ -53,12 +51,30 @@ return {
       -- {
       --   title = "Neo-Tree",
       --   ft = "neo-tree",
-      --   pinned = true,
+      --
       --   filter = function(buf)
       --     return vim.b[buf].neo_tree_source == "filesystem"
       --   end,
       --   size = { height = 0.5 },
       -- },
+    },
+    bottom = {
+      {
+        title = 'toggleterm',
+        ft = 'toggleterm',
+        open = 'ToggleTermToggleAll',
+      },
+      {
+        title = 'trouble',
+        ft = 'Trouble',
+        open = 'Trouble',
+      },
+      {
+        title = 'spectre',
+        ft = 'spectre_panel',
+        size = { height = 0.4 },
+        open = 'Spectre',
+      },
     },
     animate = {
       enabled = not vim.g.neovide,
