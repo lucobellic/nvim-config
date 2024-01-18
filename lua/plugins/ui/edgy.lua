@@ -20,6 +20,7 @@ return {
     },
   },
   opts = {
+    options = { bottom = { size = 0.25 } },
     close_when_all_hidden = false,
     exit_when_last = false,
     icons = {
@@ -72,7 +73,6 @@ return {
       {
         title = 'spectre',
         ft = 'spectre_panel',
-        size = { height = 0.4 },
         open = 'Spectre',
       },
     },
