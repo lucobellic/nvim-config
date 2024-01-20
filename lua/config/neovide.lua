@@ -1,14 +1,17 @@
 if vim.g.neovide then
   local font_family = 'DMMono Nerd Font'
   local font_size = 11
-  vim.o.guifont = font_family .. ':h' .. font_size
+  vim.g.guifont = font_family .. ':h' .. font_size
   vim.g.neovide_cursor_animation_length = 0.1
   vim.g.neovide_cursor_trail_size = 0.2
   vim.g.neovide_scroll_animation_length = 0.2
   vim.g.neovide_hide_mouse_when_typing = true
 
-  -- vim.g.neovide_transparency = 0.85
-  -- vim.g.neovide_transparency_point = 1.0
+  vim.g.neovide_transparency = 0.85
+  vim.g.neovide_window_blurred = true
+  vim.g.neovide_floating_blur = true
+  vim.g.neovide_floating_blur_amount_x = 5.0
+  vim.g.neovide_floating_blur_amount_y = 5.0
 
   -- Disable mini.animate with neovide
   vim.g.minianimate_disable = true
@@ -53,9 +56,6 @@ if vim.g.neovide then
 
   -- Shadow
   vim.g.neovide_floating_shadow = false
-  vim.g.neovide_floating_z_height = 20
-  vim.g.neovide_light_angle_degrees = 45
-  vim.g.neovide_light_radius = 5
 
   ---@param delta number
   local function change_font(delta)

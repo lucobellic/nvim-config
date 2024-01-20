@@ -55,7 +55,7 @@ local function open_popup(bufnr, config)
     },
     enter = true,
     focusable = true,
-    zindex = 50,
+    zindex = 20,
     relative = 'editor',
     border = {
       padding = {
@@ -77,6 +77,7 @@ local function open_popup(bufnr, config)
       readonly = false,
     },
     win_options = {
+      winblend = vim.o.winblend,
       winhighlight = get_highlight(parsed_title.index),
     },
   })

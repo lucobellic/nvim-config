@@ -3,6 +3,7 @@ return {
   event = 'BufEnter',
   opts = {
     current_only = true,
+    winblend = vim.o.winblend,
     excluded_filetypes = { 'OverseerList', '', 'chatgpt-input', '' },
     handlers = {
       cursor = {
