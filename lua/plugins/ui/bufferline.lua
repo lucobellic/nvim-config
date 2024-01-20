@@ -10,24 +10,14 @@ local function is_pinned(buf)
   return false
 end
 
+---@param position Edgy.Pos
 local function get_edgy_group_icons(position)
-  local edgy_group = require('edgy-group')
-  local edgebar = require('edgy.config').layout[position]
   local result = {}
-  if edgebar and edgebar.visible ~= 0 then
-    local groups = vim.tbl_filter(function(group) return group.pos == position end, edgy_group.groups)
-    for i, group in ipairs(groups) do
-      local title = ' ' .. group.icon .. '  '
-      if edgy_group.current_group_index[position] == i then
-        table.insert(result, { text = '', link = 'BufferLineTabSeparatorSelected' })
-        table.insert(result, { text = title, link = 'BufferLineTabSelected' })
-        table.insert(result, { text = '', link = 'BufferLineSeparatorSelected' })
-      else
-        table.insert(result, { text = '', link = 'BufferLineTabSeparator' })
-        table.insert(result, { text = title, link = 'BufferLineTab' })
-        table.insert(result, { text = '', link = 'BufferLineTabSeparator' })
-      end
-    end
+  local statusline = require('edgy-group.stl.statusline').get_statusline(position)
+  for _, item in ipairs(statusline) do
+    table.insert(result, { text = ' ', link = 'Normal' })
+    table.insert(result, { text = item })
+    table.insert(result, { text = ' ', link = 'Normal' })
   end
   return result
 end
@@ -96,12 +86,9 @@ return {
           return is_pinned(buf) and '' or short_name
         end,
         tab_size = 0,
-
-        -- separator_style = "slant" | "slope" | "thick" | "thin" | { 'any', 'any' },
-        -- separator_style = {'', ''},
-        separator_style = 'slope',
+        separator_style = { '', '' },
         indicator = {
-          icon = '▎',
+          icon = '',
           style = 'none',
         },
         offsets = {
@@ -122,7 +109,6 @@ return {
         },
         hover = { enabled = false },
         custom_areas = {
-          left = function() return get_edgy_group_icons('left') end,
           right = function() return get_edgy_group_icons('right') end,
         },
       },

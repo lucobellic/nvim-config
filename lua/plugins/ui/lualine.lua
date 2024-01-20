@@ -94,38 +94,7 @@ return {
       lualine_c = {
         '%=',
         {
-          function()
-            local groups = require('edgy-group').before_selected('bottom')
-            return table.concat(vim.tbl_map(function(group) return group.icon end, groups), ' ')
-          end,
-          cond = function()
-            local edgebar = require('edgy.config').layout['bottom']
-            return edgebar and edgebar.visible ~= 0
-          end,
-          color = 'BufferLineTab',
-        },
-        {
-          function()
-            local selected = require('edgy-group').selected('bottom')
-            return selected and selected.icon or ''
-          end,
-          cond = function()
-            local edgebar = require('edgy.config').layout['bottom']
-            return edgebar and edgebar.visible ~= 0
-          end,
-          color = 'Identifier',
-          separator = { left = '', right = '' },
-        },
-        {
-          function()
-            local groups = require('edgy-group').after_selected('bottom')
-            return table.concat(vim.tbl_map(function(group) return group.icon end, groups), ' ')
-          end,
-          cond = function()
-            local edgebar = require('edgy.config').layout['bottom']
-            return edgebar and edgebar.visible ~= 0
-          end,
-          color = 'BufferLineTab',
+          function() return table.concat(require('edgy-group.stl.statusline').get_statusline('bottom')) end,
         },
       },
       lualine_x = {

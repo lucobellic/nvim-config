@@ -6,17 +6,17 @@ return {
     {
       '<leader>wl',
       function() require('edgy').toggle('right') end,
-      desc = 'Edgy Close Right',
+      desc = 'Edgy Toggle Right',
     },
     {
       '<leader>wh',
       function() require('edgy').toggle('left') end,
-      desc = 'Edgy Close Left',
+      desc = 'Edgy Toggle Left',
     },
     {
       '<leader>wj',
       function() require('edgy').toggle('bottom') end,
-      desc = 'Edgy Close Bottom',
+      desc = 'Edgy Toggle Bottom',
     },
   },
   opts = {
@@ -28,10 +28,10 @@ return {
       open = '',
     },
     keys = {
-      -- increase width
       ['<c-left>'] = function(win) win:resize('width', 5) end,
-      -- decrease width
+      ['<c-up>'] = function(win) win:resize('height', 5) end,
       ['<c-right>'] = function(win) win:resize('width', -5) end,
+      ['<c-down>'] = function(win) win:resize('height', -5) end,
     },
     wo = {
       winbar = false,
@@ -39,11 +39,13 @@ return {
     right = {
       {
         title = 'outline',
+        pinned = true,
         ft = 'Outline',
         open = 'OutlineOpen',
       },
       {
         title = 'overseer',
+        pinned = true,
         ft = 'OverseerList',
         open = 'OverseerOpen',
       },

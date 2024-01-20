@@ -51,12 +51,20 @@ return {
         },
         bottom = {
           { icon = '', titles = { 'toggleterm' } },
-          { icon = '', pos = 'bottom', titles = { 'trouble' } },
-          { icon = '', pos = 'bottom', titles = { 'spectre' } },
+          { icon = '', titles = { 'trouble' } },
+          { icon = '', titles = { 'spectre' } },
         },
         -- { icon = '', pos = 'left', titles = { 'Neo-Tree', 'Neo-Tree Buffers' } },
         -- { icon = '', pos = 'left', titles = { 'Neo-Tree Git' } },
         -- { icon = '', pos = 'left', titles = { 'Outline' } },
+      },
+      statusline = {
+        clickable = true,
+        colored = true,
+        colors = {
+          active = 'Identifier',
+          inactive = 'Directory',
+        },
       },
     },
     dev = true,
