@@ -86,7 +86,7 @@ end
 map("n", "<leader>ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, { desc = "Toggle Mini Animate" })
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
-wk.register({ ['<leader>ut'] = { '<cmd>TransparencyToggle<cr>', 'Toggle Transparency' } })
+wk.register({ ['<leader>uz'] = { '<cmd>TransparencyToggle<cr>', 'Transparency Toggle' } })
 wk.register({
   ['<leader>ud'] = {
     name = 'Toggle Diagnostics',
@@ -152,3 +152,5 @@ map('n', '<leader>np', function() jupytext:pair() end, { desc = 'Jupytext Pair' 
 
 -- Create command from keymaps
 require('util.commands').create_command_from_keymaps()
+
+-- Folds
