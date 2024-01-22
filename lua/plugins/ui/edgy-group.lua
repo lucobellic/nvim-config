@@ -4,7 +4,7 @@ return {
     optional = true,
     opts = {
       defaults = {
-        ['<leader>eg'] = { name = 'edgy-group' },
+        ['<leader>.'] = { name = 'edgy-group' },
       },
     },
   },
@@ -38,25 +38,51 @@ return {
         repeatable = true,
       },
       {
-        '<leader>egs',
+        '<leader>..',
         '<cmd>EdgyGroupSelect<cr>',
         desc = 'Edgy Group Select',
+      },
+      {
+        '<leader>.o',
+        function() require('edgy-group').open_group_index('right', 1) end,
+        desc = 'Open Outline And Oversser',
+      },
+      {
+        '<leader>.g',
+        function() require('edgy-group').open_group_index('right', 2) end,
+        desc = 'Open ChatGPT',
+      },
+      {
+        '<leader>.p',
+        function() require('edgy-group').open_group_index('bottom', 1) end,
+        desc = 'Open Toggleterm',
+      },
+      {
+        '<leader>.t',
+        function() require('edgy-group').open_group_index('bottom', 2) end,
+        desc = 'Open Trouble',
+      },
+      {
+        '<leader>.s',
+        function() require('edgy-group').open_group_index('bottom', 3) end,
+        desc = 'Open Spectre',
       },
     },
     opts = {
       groups = {
         right = {
-          { icon = '', titles = { 'outline' } },
-          { icon = '', titles = { 'overseer' } },
+          { icon = '', titles = { 'outline', 'overseer' } },
+          { icon = '', titles = { 'chatgpt' } },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm' } },
           { icon = '', titles = { 'trouble' } },
           { icon = '', titles = { 'spectre' } },
         },
-        -- { icon = '', pos = 'left', titles = { 'Neo-Tree', 'Neo-Tree Buffers' } },
-        -- { icon = '', pos = 'left', titles = { 'Neo-Tree Git' } },
-        -- { icon = '', pos = 'left', titles = { 'Outline' } },
+        -- left = {
+        --   { icon = '', titles = { 'Neo-Tree Filesystem', 'Neo-Tree Buffers' } },
+        --   { icon = '', titles = { 'Neo-Tree Git' } },
+        -- },
       },
       statusline = {
         clickable = true,

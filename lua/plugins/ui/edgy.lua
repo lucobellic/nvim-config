@@ -38,28 +38,46 @@ return {
     },
     right = {
       {
+        title = 'chatgpt',
+        ft = 'markdown',
+        filter = function(buf, win) return vim.bo[buf].buftype == 'prompt' end,
+        open = 'GpChatToggle',
+        size = { width = 0.25 },
+      },
+      {
         title = 'outline',
-        pinned = true,
         ft = 'Outline',
         open = 'OutlineOpen',
       },
       {
         title = 'overseer',
-        pinned = true,
         ft = 'OverseerList',
         open = 'OverseerOpen',
+        size = { height = 0.15 },
       },
     },
     left = {
-      -- {
-      --   title = "Neo-Tree",
-      --   ft = "neo-tree",
-      --
-      --   filter = function(buf)
-      --     return vim.b[buf].neo_tree_source == "filesystem"
-      --   end,
-      --   size = { height = 0.5 },
-      -- },
+      --   {
+      --     title = 'Neo-Tree Filesystem',
+      --     ft = 'neo-tree',
+      --     filter = function(buf) return vim.b[buf].neo_tree_source == 'filesystem' end,
+      --     pinned = true,
+      --     open = 'Neotree position=top filesystem',
+      --   },
+      --   {
+      --     title = 'Neo-Tree Buffers',
+      --     ft = 'neo-tree',
+      --     filter = function(buf) return vim.b[buf].neo_tree_source == 'buffers' end,
+      --     pinned = true,
+      --     open = 'Neotree position=left buffers',
+      --   },
+      --   {
+      --     title = 'Neo-Tree Git',
+      --     ft = 'neo-tree',
+      --     filter = function(buf) return vim.b[buf].neo_tree_source == 'git_status' end,
+      --     pinned = true,
+      --     open = 'Neotree position=left git_status',
+      --   },
     },
     bottom = {
       {
