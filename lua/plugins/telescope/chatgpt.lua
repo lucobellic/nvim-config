@@ -13,7 +13,7 @@ return {
     event = 'VeryLazy',
     enabled = not vim.g.started_by_firenvim,
     keys = {
-      { '<leader>cg', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },
+      -- { '<leader>cg', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },
       { '<leader>ccc', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },
       { '<leader>cct', '<cmd>ChatGPTRun translate<CR>', desc = 'ChatGPT Translate', mode = { 'n', 'v' } },
       { '<leader>cck', '<cmd>ChatGPTRun keywords<CR>', desc = 'ChatGPT Keywords', mode = { 'n', 'v' } },

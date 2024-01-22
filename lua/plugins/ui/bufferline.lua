@@ -109,8 +109,14 @@ return {
         },
         hover = { enabled = false },
         custom_areas = {
+          -- left = function() return get_edgy_group_icons('left') end,
           right = function() return get_edgy_group_icons('right') end,
         },
+        custom_filter = function(buf, buf_nums)
+          -- Don't show gp.nvim buffers with filename: 2024-01-21.16-05-02.538
+          local is_gp = vim.bo[buf].filetype == 'markdown' and require('util.util').is_gp_file(vim.fn.bufname(buf))
+          return not is_gp
+        end,
       },
     }
   end,
