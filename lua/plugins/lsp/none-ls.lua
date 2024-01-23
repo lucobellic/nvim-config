@@ -10,6 +10,7 @@ return {
     local nls = require('null-ls')
     opts.fallback_severity = vim.diagnostic.severity.INFO
     table.insert(opts.sources, nls.builtins.formatting.prettierd)
+    table.insert(opts.sources, nls.builtins.formatting.ruff)
     -- table.insert(opts.sources, nls.builtins.completion.spell)
     -- table.insert(opts.sources, nls.builtins.formatting.codespell)
 

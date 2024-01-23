@@ -49,6 +49,7 @@ return {
             hint = {
               enable = true,
               setType = true,
+              arrayIndex = 'Disable',
             },
             workspace = {
               checkThirdParty = false,
@@ -60,6 +61,7 @@ return {
         },
       },
       pylsp = require('plugins.lsp.util.servers.pylsp'),
+      ruff_lsp = {},
       ansiblels = {},
     })
 
