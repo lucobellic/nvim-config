@@ -1,7 +1,7 @@
 local diagnostic_virtual_text = {
   spacing = 1,
   source = 'if_many',
-  prefix = '●',
+  prefix = ' ',
 }
 
 -- Diagnostic toggle
