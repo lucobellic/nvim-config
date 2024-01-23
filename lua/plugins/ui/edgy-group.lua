@@ -4,7 +4,8 @@ return {
     optional = true,
     opts = {
       defaults = {
-        ['<leader>.'] = { name = 'edgy-group' },
+        ['<leader>a'] = { name = 'edgy-group' },
+        ['<leader>at'] = { name = 'neotest' },
       },
     },
   },
@@ -38,46 +39,52 @@ return {
         repeatable = true,
       },
       {
-        '<leader>..',
+        '<leader>aa',
         '<cmd>EdgyGroupSelect<cr>',
         desc = 'Edgy Group Select',
       },
       {
-        '<leader>.o',
+        '<leader>ao',
         function() require('edgy-group').open_group_index('right', 1) end,
-        desc = 'Open Outline And Oversser',
+        desc = 'Open Outline And Overseer',
       },
       {
-        '<leader>.g',
+        '<leader>ats',
         function() require('edgy-group').open_group_index('right', 2) end,
+        desc = 'Open NeoTest Summary',
+      },
+      {
+        '<leader>ag',
+        function() require('edgy-group').open_group_index('right', 3) end,
         desc = 'Open ChatGPT',
       },
       {
-        '<leader>.p',
+        '<leader>ap',
         function() require('edgy-group').open_group_index('bottom', 1) end,
         desc = 'Open Toggleterm',
       },
       {
-        '<leader>.t',
+        '<leader>ax',
         function() require('edgy-group').open_group_index('bottom', 2) end,
         desc = 'Open Trouble',
       },
       {
-        '<leader>.s',
+        '<leader>ato',
         function() require('edgy-group').open_group_index('bottom', 3) end,
-        desc = 'Open Spectre',
+        desc = 'Open Neotest Panel',
       },
     },
     opts = {
       groups = {
         right = {
           { icon = '', titles = { 'outline', 'overseer' } },
+          { icon = '󰙨', titles = { 'neotest-summary' } },
           { icon = '', titles = { 'chatgpt' } },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm' } },
           { icon = '', titles = { 'trouble' } },
-          { icon = '', titles = { 'spectre' } },
+          { icon = '󰙨', titles = { 'neotest-panel' } },
         },
         -- left = {
         --   { icon = '', titles = { 'Neo-Tree Filesystem', 'Neo-Tree Buffers' } },

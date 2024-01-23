@@ -133,7 +133,7 @@ map('n', '<C-down>', function() require('smart-splits').resize_down() end, { rep
 map('n', '<C-up>', function() require('smart-splits').resize_up() end, { repeatable = true, desc = 'Resize up' })
 map('n', '<C-right>', function() require('smart-splits').resize_right() end, { repeatable = true, desc = 'Resize right' })
 
-map('n', '<leader>a', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
+map('n', '<leader>A', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
 
 -- Spelling
 map('n', '>S', ']s', { repeatable = true, desc = 'Next Spelling' })
