@@ -55,6 +55,12 @@ return {
         open = 'OverseerOpen',
         size = { height = 0.15 },
       },
+      {
+        title = 'neotest-summary',
+        ft = 'neotest-summary',
+        open = 'Neotest summary',
+        size = { width = 0.15 },
+      },
     },
     left = {
       --   {
@@ -91,9 +97,10 @@ return {
         open = 'Trouble',
       },
       {
-        title = 'spectre',
-        ft = 'spectre_panel',
-        open = 'Spectre',
+        title = 'neotest-panel',
+        ft = 'neotest-output-panel',
+        size = { height = 0.25 },
+        open = 'Neotest output-panel',
       },
     },
     animate = {
