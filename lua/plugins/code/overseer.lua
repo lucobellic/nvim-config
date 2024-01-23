@@ -62,34 +62,49 @@ vim.api.nvim_create_user_command('OverseerFromTerminal', function()
     problem_matcher_component = { 'on_output_parse', problem_matcher = problem_matcher }
   end
   vim.notify('Start: ' .. cmd, vim.log.levels.INFO, { title = 'Overseer' })
-  require('overseer').new_task({ cmd = cmd, components = {problem_matcher_component, 'default'} }):start()
+  require('overseer').new_task({ cmd = cmd, components = { problem_matcher_component, 'default' } }):start()
 end, {})
 
 return {
-  'stevearc/overseer.nvim',
-  event = 'VeryLazy',
-  keys = {
-    { '<leader>xr', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
-    { '<leader>xi', '<cmd>OverseerInfo<cr>', desc = 'Overseer Info' },
-    { '<leader>xo', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
-    { '<leader>xa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
-    { '<leader>xs', '<cmd>OverseerFromTerminal<cr>', desc = 'Overseer From Terminal' },
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      defaults = {
+        ['<leader>o'] = { name = 'overseer/obsidian' },
+      },
+    },
   },
-  opts = {
-    strategy = {
-      'toggleterm',
-      use_shell = true,
-      open_on_start = false,
-      close_on_exit = false,
-      hidden = false,
-      quit_on_exit = 'never',
+  {
+    'stevearc/overseer.nvim',
+    event = 'VeryLazy',
+    keys = {
+      { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
+      { '<leader>oi', '<cmd>OverseerInfo<cr>', desc = 'Overseer Info' },
+      { '<leader>ot', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
+      { '<leader>oa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
+      { '<leader>ox', '<cmd>OverseerFromTerminal<cr>', desc = 'Overseer From Terminal' },
     },
-    task_list = {
-      direction = 'right',
-    },
-    form = {
-      win_opts = {
-        winblend = vim.o.pumblend,
+    opts = {
+      bindings = {
+        ['<C-j>'] = 'NextTask',
+        ['<C-k>'] = 'PrevTask',
+      },
+      strategy = {
+        'toggleterm',
+        use_shell = true,
+        open_on_start = false,
+        close_on_exit = false,
+        hidden = false,
+        quit_on_exit = 'never',
+      },
+      task_list = {
+        direction = 'right',
+      },
+      form = {
+        win_opts = {
+          winblend = vim.o.pumblend,
+        },
       },
     },
   },

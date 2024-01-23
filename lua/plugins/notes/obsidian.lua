@@ -4,7 +4,7 @@ return {
     optional = true,
     opts = {
       defaults = {
-        ['<leader>o'] = { name = '+obsidian' },
+        ['<leader>oo'] = { name = 'obsidian' },
       },
     },
   },
@@ -56,12 +56,12 @@ return {
       },
     },
     keys = {
-      { '<leader>oo', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
-      { '<leader>of', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>os', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>ot', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
-      { '<leader>oy', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
-      { '<leader>on', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
+      { '<leader>ooo', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
+      { '<leader>oof', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>oos', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>oot', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
+      { '<leader>ooy', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
+      { '<leader>oon', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
     },
     config = function(_, opts)
       require('obsidian').setup(opts)
