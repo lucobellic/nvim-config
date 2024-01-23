@@ -7,7 +7,7 @@ return {
     level = 2,
     minimum_width = 60,
     max_width = 60,
-    max_height = 5,
+    max_height = 8,
     render = 'wrapped-compact', -- 'default', 'minimal', 'simple', 'compact', 'wrapped-compact'
     stages = require('util.notify.limited_slide'),
     timeout = 1000,

@@ -13,7 +13,7 @@ local cmdline = {
     shell = { pattern = '^:%s*!', icon = ' ', lang = 'bash' },
     lua = { pattern = { '^:%s*lua%s+', '^:%s*lua%s*=%s*', '^:%s*=%s*' }, icon = '', lang = 'lua' },
     help = { pattern = '^:%s*he?l?p?%s+', icon = ' ' },
-    file = { pattern = '^:%s*e', icon = ' ' },
+    file = { pattern = '^:%s*e ', icon = ' ' },
   },
 }
 
