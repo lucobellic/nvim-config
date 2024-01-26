@@ -70,7 +70,7 @@ return {
       perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
     },
     discussion_sign = {
-      text = '󱍫',
+      text = '',
       culhl = 'DiagnosticInfo',
       texthl = 'DiagnosticInfo',
       helper_signs = {
