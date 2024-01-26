@@ -35,6 +35,7 @@ return {
     },
     wo = {
       winbar = false,
+      spell = false,
     },
     right = {
       {

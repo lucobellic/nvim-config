@@ -39,57 +39,25 @@ return {
         repeatable = true,
       },
       {
-        '<leader>aa',
-        '<cmd>EdgyGroupSelect<cr>',
-        desc = 'Edgy Group Select',
-      },
-      {
-        '<leader>ao',
-        function() require('edgy-group').open_group_index('right', 1) end,
-        desc = 'Open Outline And Overseer',
-      },
-      {
-        '<leader>ats',
-        function() require('edgy-group').open_group_index('right', 2) end,
-        desc = 'Open NeoTest Summary',
-      },
-      {
-        '<leader>ag',
-        function() require('edgy-group').open_group_index('right', 3) end,
-        desc = 'Open ChatGPT',
-      },
-      {
-        '<leader>ap',
-        function() require('edgy-group').open_group_index('bottom', 1) end,
-        desc = 'Open Toggleterm',
-      },
-      {
-        '<leader>ax',
-        function() require('edgy-group').open_group_index('bottom', 2) end,
-        desc = 'Open Trouble',
-      },
-      {
-        '<leader>ato',
-        function() require('edgy-group').open_group_index('bottom', 3) end,
-        desc = 'Open Neotest Panel',
+        '<c-;>',
+        function()
+          require('edgy-group.stl.statusline').pick(function() require('lualine').refresh() end)
+        end,
+        desc = 'Edgy Group Pick',
       },
     },
     opts = {
       groups = {
         right = {
-          { icon = '', titles = { 'outline', 'overseer' } },
-          { icon = '󰙨', titles = { 'neotest-summary' } },
-          { icon = '', titles = { 'chatgpt' } },
+          { icon = '', titles = { 'outline', 'overseer' }, pick_key = 'o' },
+          { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 's' },
+          { icon = '', titles = { 'chatgpt' }, pick_key = 'g' },
         },
         bottom = {
-          { icon = '', titles = { 'toggleterm' } },
-          { icon = '', titles = { 'trouble' } },
-          { icon = '󰙨', titles = { 'neotest-panel' } },
+          { icon = '', titles = { 'toggleterm' }, pick_key = 'p' },
+          { icon = '', titles = { 'trouble' }, pick_key = 'x' },
+          { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },
         },
-        -- left = {
-        --   { icon = '', titles = { 'Neo-Tree Filesystem', 'Neo-Tree Buffers' } },
-        --   { icon = '', titles = { 'Neo-Tree Git' } },
-        -- },
       },
       statusline = {
         clickable = true,
@@ -97,6 +65,8 @@ return {
         colors = {
           active = 'Identifier',
           inactive = 'Directory',
+          pick_active = 'FlashMatch',
+          pick_inactive = 'FlashLabel',
         },
       },
     },
