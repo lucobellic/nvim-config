@@ -90,7 +90,14 @@ return {
       {
         title = 'toggleterm',
         ft = 'toggleterm',
-        open = 'ToggleTermToggleAll',
+        open = function()
+          -- Create a terminal if none exist, otherwise toggle all terminals
+          if #require('toggleterm.terminal').get_all(true) > 1 then
+            require('toggleterm').toggle_all()
+          else
+            require('toggleterm').toggle()
+          end
+        end,
       },
       {
         title = 'trouble',
