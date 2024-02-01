@@ -109,7 +109,7 @@ return {
         },
         hover = { enabled = false },
         custom_areas = {
-          -- left = function() return get_edgy_group_icons('left') end,
+          left = function() return get_edgy_group_icons('left') end,
           right = function() return get_edgy_group_icons('right') end,
         },
         custom_filter = function(buf, buf_nums)

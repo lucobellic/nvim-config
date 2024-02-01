@@ -48,6 +48,9 @@ return {
     },
     opts = {
       groups = {
+        left = {
+          { icon = '', titles = { 'Neo-Tree Filesystem' }, pick_key = 'e' },
+        },
         right = {
           { icon = '', titles = { 'outline', 'overseer' }, pick_key = 'o' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 's' },

@@ -64,13 +64,12 @@ return {
       },
     },
     left = {
-      --   {
-      --     title = 'Neo-Tree Filesystem',
-      --     ft = 'neo-tree',
-      --     filter = function(buf) return vim.b[buf].neo_tree_source == 'filesystem' end,
-      --     pinned = true,
-      --     open = 'Neotree position=top filesystem',
-      --   },
+      {
+        title = 'Neo-Tree Filesystem',
+        ft = 'neo-tree',
+        filter = function(buf) return vim.b[buf].neo_tree_source == 'filesystem' end,
+        open = 'Neotree position=left filesystem',
+      },
       --   {
       --     title = 'Neo-Tree Buffers',
       --     ft = 'neo-tree',
