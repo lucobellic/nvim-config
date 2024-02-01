@@ -23,7 +23,9 @@ local function get_edgy_group_icons(position)
 end
 
 return {
-  'akinsho/bufferline.nvim',
+  'lucobellic/bufferline.nvim',
+  branch = 'bugfix/tabpages-support-table-style',
+  name = 'bufferline.nvim',
   dependencies = {
     { 'echasnovski/mini.bufremove' },
     { 'lucobellic/edgy-group.nvim' },
