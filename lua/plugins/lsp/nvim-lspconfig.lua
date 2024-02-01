@@ -16,52 +16,10 @@ return {
 
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
       clangd = require('plugins.lsp.util.servers.clangd'),
-      tsserver = {
-        single_file_support = false,
-        settings = {
-          typescript = {
-            inlayHints = {
-              includeInlayParameterNameHints = 'literal',
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-          javascript = {
-            inlayHints = {
-              includeInlayParameterNameHints = 'all',
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayVariableTypeHints = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayEnumMemberValueHints = true,
-            },
-          },
-        },
-      },
-      lua_ls = {
-        settings = {
-          Lua = {
-            hint = {
-              enable = true,
-              setType = true,
-              arrayIndex = 'Disable',
-            },
-            workspace = {
-              checkThirdParty = false,
-            },
-            completion = {
-              callSnippet = 'Replace',
-            },
-          },
-        },
-      },
+      tsserver = require('plugins.lsp.util.servers.tsserver'),
+      lua_ls = require('plugins.lsp.util.servers.lua_ls'),
       pylsp = require('plugins.lsp.util.servers.pylsp'),
-      ruff_lsp = {},
+      ruff_lsp = require('plugins.lsp.util.servers.ruff_lsp'),
       ansiblels = {},
     })
 
