@@ -95,6 +95,7 @@ return {
       { '<leader>gc', false },
       { '<leader>gs', false },
       { '<leader>fF', false },
+      { '<c-/>', false },
       { '<leader><leader>', false },
       {
         '<leader>fL',

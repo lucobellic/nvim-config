@@ -31,7 +31,7 @@ return {
     { '<C-9>', '<cmd>BufferGoto 9<cr>', desc = 'Buffer 9' },
     { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
     { '<C-q>', '<cmd>BufferClose<cr>', desc = 'Buffer Close' },
-    { '<C-/>', '<cmd>BufferPick<cr>', desc = 'Buffer Pick' },
+    { '<c-/>', '<cmd>BufferPick<cr>', desc = 'Buffer Pick' },
     { '<leader>bd', '<cmd>BufferClose<cr>', desc = 'Buffer Close' },
     { '<leader>bf', '<cmd>BufferOrderByDirectory<cr>', desc = 'Buffer Order By Directory' },
     { '<leader>bl', '<cmd>BufferOrderByLanguage<cr>', desc = 'Buffer Order By Language' },

@@ -103,6 +103,7 @@ map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 map('n', '<leader>qa', "<cmd>qa<cr>", { desc = "Quit all" })
 
 -- Terminal Mappings
+map("n", "<c-/>", '')
 map("t", "<esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
 map("t", "<S-left>", "<cmd>wincmd h<cr>", { desc = "Go to left window" })
 map("t", "<S-down>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })

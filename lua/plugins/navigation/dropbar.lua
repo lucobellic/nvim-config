@@ -6,7 +6,7 @@ return {
   },
   keys = {
     {
-      '<c-.>',
+      '<leader>.',
       function() require('dropbar.api').pick() end,
       desc = 'Pick Dropbar Item',
     },
