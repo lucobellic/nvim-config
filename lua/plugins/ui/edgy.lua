@@ -48,12 +48,12 @@ return {
       {
         title = 'outline',
         ft = 'Outline',
-        open = 'OutlineOpen',
+        open = function() require('outline').toggle_outline() end,
       },
       {
         title = 'overseer',
         ft = 'OverseerList',
-        open = 'OverseerOpen',
+        open = 'OverseerToggle',
         size = { height = 0.15 },
       },
       {
@@ -62,28 +62,6 @@ return {
         open = 'Neotest summary',
         size = { width = 0.15 },
       },
-    },
-    left = {
-      {
-        title = 'Neo-Tree Filesystem',
-        ft = 'neo-tree',
-        filter = function(buf) return vim.b[buf].neo_tree_source == 'filesystem' end,
-        open = 'Neotree position=left filesystem',
-      },
-      --   {
-      --     title = 'Neo-Tree Buffers',
-      --     ft = 'neo-tree',
-      --     filter = function(buf) return vim.b[buf].neo_tree_source == 'buffers' end,
-      --     pinned = true,
-      --     open = 'Neotree position=left buffers',
-      --   },
-      --   {
-      --     title = 'Neo-Tree Git',
-      --     ft = 'neo-tree',
-      --     filter = function(buf) return vim.b[buf].neo_tree_source == 'git_status' end,
-      --     pinned = true,
-      --     open = 'Neotree position=left git_status',
-      --   },
     },
     bottom = {
       {
@@ -101,7 +79,7 @@ return {
       {
         title = 'trouble',
         ft = 'Trouble',
-        open = 'Trouble',
+        open = 'TroubleToggle',
       },
       {
         title = 'neotest-panel',
