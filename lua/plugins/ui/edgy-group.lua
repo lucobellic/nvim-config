@@ -11,6 +11,7 @@ return {
   },
   {
     'lucobellic/edgy-group.nvim',
+    enabled = not vim.g.started_by_firenvim,
     dependencies = { 'folke/edgy.nvim' },
     event = 'VeryLazy',
     keys = {

@@ -1,5 +1,6 @@
 return {
   'robitx/gp.nvim',
+  enabled = not vim.g.started_by_firenvim,
   event = 'VeryLazy',
   keys = {
     { '<leader>cg', '<cmd>GpChatToggle<cr>', desc = 'Gp Chat Toggle' },

@@ -1,6 +1,7 @@
 -- vim.opt_local.winbar = '0, 0'
 return {
   'folke/edgy.nvim',
+  enabled = not vim.g.started_by_firenvim,
   event = 'VeryLazy',
   keys = {
     {
