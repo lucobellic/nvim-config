@@ -32,6 +32,13 @@ local function get_git_diff(props)
   return labels
 end
 
+local function get_toggleterm_id(props)
+  local id = vim.fn.bufname(props.buf):sub(-1)
+  return { { id, group = props.focused and 'Identifier' or 'FloatBorder' } }
+end
+
+local function is_toggleterm(bufnr) return vim.bo[bufnr].filetype == 'toggleterm' end
+
 return {
   'b0o/incline.nvim',
   event = 'VeryLazy',
@@ -53,7 +60,15 @@ return {
     hide = {
       cursorline = true,
     },
+    ignore = {
+      buftypes = function(bufnr, buftype) return buftype ~= '' and not is_toggleterm(bufnr) end,
+      unlisted_buffers = false,
+    },
     render = function(props)
+      if is_toggleterm(props.buf) then
+        return get_toggleterm_id(props)
+      end
+
       local diagnostics = get_diagnostic_label(props)
       local diffs = get_git_diff(props)
       local separator = (#diagnostics > 0 and #diffs > 0) and { separator_char .. ' ', group = 'NonText' } or ''

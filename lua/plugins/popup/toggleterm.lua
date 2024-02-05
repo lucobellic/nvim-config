@@ -51,7 +51,7 @@ return {
     close_on_exit = true,
     shade_terminals = false,
     winbar = {
-      enabled = true,
+      enabled = false,
       name_formatter = function(term) --  term: Terminal
         return term.id
       end,
