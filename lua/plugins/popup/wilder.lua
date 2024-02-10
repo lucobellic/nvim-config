@@ -56,53 +56,55 @@ return {
       gradient[i] = wilder.make_hl('WilderGradient' .. i, 'Pmenu', { { a = 1 }, { a = 1 }, { foreground = fg } })
     end
 
-    wilder.set_option(
-      'renderer',
-      wilder.popupmenu_renderer(wilder.popupmenu_palette_theme({
-        -- border = {
-        --   ' ', ' ', ' ',
-        --   ' ',      ' ',
-        --   ' ', ' ', ' ',
-        -- },
-        border = {
-          '╭',
-          '─',
-          '╮',
-          '│',
-          '│',
-          '╰',
-          '─',
-          '╯',
-        },
-        max_width = '30%',
-        margin = 6, -- 5 stick to noice cmdline with 1 margin and without border
-        min_height = 0, -- set to the same as 'max_height' for a fixed height window
-        max_height = 10,
-        prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
-        reverse = 0, -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
-        pumblend = vim.o.pumblend,
-        -- empty_message = 'Test',
-        highlights = {
-          default = 'NormalFloat',
-          border = 'FloatBorder',
-          gradient = gradient, -- must be set
-          -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
-        },
-        highlighter = wilder.highlighter_with_gradient({
-          -- wilder.basic_highlighter(),
-          wilder.lua_fzy_highlighter(),
-        }),
-        left = { ' ', wilder.popupmenu_devicons() },
-        right = {
-          ' ',
-          wilder.popupmenu_scrollbar({
-            thumb_char = ' ',
-            thumb_hl = 'Visual',
-            scrollbar_char = ' ',
-            scrollbar_hl = 'NONE',
+    if not vim.g.started_by_firenvim then
+      wilder.set_option(
+        'renderer',
+        wilder.popupmenu_renderer(wilder.popupmenu_palette_theme({
+          -- border = {
+          --   ' ', ' ', ' ',
+          --   ' ',      ' ',
+          --   ' ', ' ', ' ',
+          -- },
+          border = {
+            '╭',
+            '─',
+            '╮',
+            '│',
+            '│',
+            '╰',
+            '─',
+            '╯',
+          },
+          max_width = '30%',
+          margin = 6, -- 5 stick to noice cmdline with 1 margin and without border
+          min_height = 0, -- set to the same as 'max_height' for a fixed height window
+          max_height = 10,
+          prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt
+          reverse = 0, -- set to 1 to reverse the order of the list, use in combination with 'prompt_position'
+          pumblend = vim.o.pumblend,
+          -- empty_message = 'Test',
+          highlights = {
+            default = 'NormalFloat',
+            border = 'FloatBorder',
+            gradient = gradient, -- must be set
+            -- selected_gradient key can be set to apply gradient highlighting for the selected candidate.
+          },
+          highlighter = wilder.highlighter_with_gradient({
+            -- wilder.basic_highlighter(),
+            wilder.lua_fzy_highlighter(),
           }),
-        },
-      }))
-    )
+          left = { ' ', wilder.popupmenu_devicons() },
+          right = {
+            ' ',
+            wilder.popupmenu_scrollbar({
+              thumb_char = ' ',
+              thumb_hl = 'Visual',
+              scrollbar_char = ' ',
+              scrollbar_hl = 'NONE',
+            }),
+          },
+        }))
+      )
+    end
   end,
 }
