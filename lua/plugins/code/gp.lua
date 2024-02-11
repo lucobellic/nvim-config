@@ -3,7 +3,7 @@ return {
   enabled = not vim.g.started_by_firenvim,
   event = 'VeryLazy',
   keys = {
-    { '<leader>cg', '<cmd>GpChatToggle<cr>', desc = 'Gp Chat Toggle' },
+    { '<leader>cgg', '<cmd>GpChatToggle<cr>', desc = 'Gp Chat Toggle' },
   },
   opts = {
     agents = {
@@ -22,7 +22,11 @@ return {
     openai_api_key = os.getenv('OPENAI_API_KEY'),
     chat_user_prefix = ' ',
     chat_assistant_prefix = { ' ', '[{{agent}}]' },
-    command_prompt_prefix_template = "  {{agent}} ~ ",
+    command_prompt_prefix_template = '  {{agent}} ~ ',
     chat_prompt_buf_type = true,
+    chat_shortcut_respond = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgr' },
+    chat_shortcut_delete = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgd' },
+    chat_shortcut_stop = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgs' },
+    chat_shortcut_new = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgn' },
   },
 }
