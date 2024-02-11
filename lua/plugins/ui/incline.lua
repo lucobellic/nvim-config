@@ -34,10 +34,19 @@ end
 
 local function get_toggleterm_id(props)
   local id = vim.fn.bufname(props.buf):sub(-1)
-  return { { id, group = props.focused and 'Identifier' or 'FloatBorder' } }
+  return { { id, group = props.focused and 'Title' or 'FloatBorder' } }
 end
 
 local function is_toggleterm(bufnr) return vim.bo[bufnr].filetype == 'toggleterm' end
+
+local edgy_filetypes = { 'neotest-panel', 'noice', 'Trouble', 'OverseerList', 'Outline' }
+local edgy_titles = { ['neotest-panel'] = 'neotest', noice = 'noice', Trouble = 'trouble', OverseerList = 'overseer', Outline = 'outline' }
+local function is_edgy_group(props) return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) end
+
+local function get_title(props)
+  local title = edgy_titles[vim.bo[props.buf].filetype]
+  return { { title, group = props.focused and 'Title' or 'FloatBorder' } }
+end
 
 return {
   'b0o/incline.nvim',
@@ -51,7 +60,7 @@ return {
   },
   opts = {
     window = {
-      zindex = 1,
+      zindex = 30,
       margin = {
         vertical = { top = vim.o.laststatus == 3 and 0 or 1, bottom = 0 }, -- shift to overlap window borders
         horizontal = { left = 0, right = 2 }, -- shift for scrollbar
@@ -61,12 +70,16 @@ return {
       cursorline = true,
     },
     ignore = {
-      buftypes = function(bufnr, buftype) return buftype ~= '' and not is_toggleterm(bufnr) end,
+      buftypes = {},
       unlisted_buffers = false,
     },
     render = function(props)
       if is_toggleterm(props.buf) then
         return get_toggleterm_id(props)
+      end
+
+      if is_edgy_group(props) then
+        return get_title(props)
       end
 
       local diagnostics = get_diagnostic_label(props)
