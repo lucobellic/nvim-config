@@ -54,7 +54,7 @@ return {
       {
         title = 'overseer',
         ft = 'OverseerList',
-        open = 'OverseerToggle',
+        open = 'OverseerToggle! right',
         size = { height = 0.15 },
       },
       {
