@@ -9,6 +9,7 @@ return {
     outline_window = {
       -- Automatically scroll to the location in code when navigating outline window.
       auto_jump = false,
+      focus_on_open = false,
     },
     outline_items = {
       -- Show extra details with the symbols (lsp dependent) as virtual next
