@@ -1,6 +1,7 @@
 return {
-  'https://git.sr.ht/~whynothugo/lsp_lines.nvim',
+  'git@github.com:lucobellic/lsp_lines.nvim.git',
   name = 'lsp_lines',
+  branch = 'personal',
   event = 'VeryLazy',
   config = function()
     require('lsp_lines').setup()
