@@ -22,5 +22,7 @@ return {
     openai_api_key = os.getenv('OPENAI_API_KEY'),
     chat_user_prefix = ' ',
     chat_assistant_prefix = { ' ', '[{{agent}}]' },
+    command_prompt_prefix_template = "  {{agent}} ~ ",
+    chat_prompt_buf_type = true,
   },
 }
