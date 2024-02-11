@@ -26,7 +26,6 @@ end
 
 -- Setup nvim-cmp.
 local cmp = require('cmp')
-local luasnip = require('luasnip')
 
 local safely_select = cmp.mapping({
   i = function(fallback)
