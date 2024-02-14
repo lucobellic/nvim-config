@@ -61,6 +61,19 @@ local Git = {
   hl = primary_highlight,
 }
 
+local Dap = {
+  condition = function()
+    local session = require('dap').session()
+    return session ~= nil
+  end,
+  init = function(self)
+    self.text = '  ' .. require('dap').status()
+    left_components_length = left_components_length + vim.api.nvim_eval_statusline(self.text, {}).width
+  end,
+  provider = function(self) return self.text end,
+  hl = primary_highlight,
+}
+
 local MacroRec = {
   condition = function() return vim.fn.reg_recording() ~= '' and vim.o.cmdheight == 0 end,
   init = function(self)
@@ -158,26 +171,18 @@ local Copilot = {
   condition = function()
     return not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
   end,
-  provider = get_copilot_icons,
+  provider = function() return get_copilot_icons() .. ' ' end,
   hl = secondary_highlight,
 }
 
-local LSPActive = {
-    condition = conditions.lsp_attached,
-    update = {'LspAttach', 'LspDetach'},
-
-    -- You can keep it simple,
-    -- provider = " [LSP]",
-
-    -- Or complicate things a bit and get the servers names
-    provider  = function()
-        local names = {}
-        for i, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
-            table.insert(names, server.name)
-        end
-        return " [" .. table.concat(names, " ") .. "]"
-    end,
-    hl = { fg = "green", bold = true },
+local LspProgress = {
+  provider = function() return require('lsp-progress').progress() .. ' ' end,
+  update = {
+    'User',
+    pattern = 'LspProgressStatusUpdated',
+    callback = vim.schedule_wrap(function() vim.cmd('redrawstatus') end),
+  },
+  hl = secondary_highlight,
 }
 
 local SearchCount = {
@@ -192,11 +197,24 @@ local SearchCount = {
     local search = self.search
     return string.format('[%d/%d]', search.current, math.min(search.total, search.maxcount))
   end,
+  hl = secondary_highlight,
 }
 
-local Left = { ViMode, Git, MacroRec }
+local Ruler = {
+  -- %l = current line number
+  -- %c = column number
+  provider = '%3l:%-3c ',
+  hl = secondary_highlight,
+}
+
+local Date = {
+  provider = function() return '  ' .. os.date('%Hh%M') .. ' ' end,
+  hl = primary_highlight,
+}
+
+local Left = { ViMode, Git, MacroRec, Dap }
 local Center = { Edgy }
 local Align = { provider = '%=' }
-local Right = { Overseer, Copilot, SearchCount }
+local Right = { Overseer, LspProgress, Copilot, SearchCount, Ruler, Date }
 
 return { Left, Center, Align, Right }
