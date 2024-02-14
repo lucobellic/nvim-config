@@ -24,9 +24,9 @@ return {
     chat_assistant_prefix = { ' ', '[{{agent}}]' },
     command_prompt_prefix_template = '  {{agent}} ~ ',
     chat_prompt_buf_type = true,
-    chat_shortcut_respond = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgr' },
-    chat_shortcut_delete = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgd' },
-    chat_shortcut_stop = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgs' },
-    chat_shortcut_new = { modes = { 'n', 'i', 'v', 'x' }, shortcut = '<leader>cgn' },
+    chat_shortcut_respond = { modes = { 'n', 'v', 'x' }, shortcut = '<leader>cgr' },
+    chat_shortcut_delete = { modes = { 'n', 'v', 'x' }, shortcut = '<leader>cgd' },
+    chat_shortcut_stop = { modes = { 'n', 'v', 'x' }, shortcut = '<leader>cgs' },
+    chat_shortcut_new = { modes = { 'n', 'v', 'x' }, shortcut = '<leader>cgn' },
   },
 }
