@@ -51,6 +51,7 @@ local ayu_gloom_theme = {
 
 return {
   'nvim-lualine/lualine.nvim',
+  enabled = false,
   dependencies = {
     'WhoIsSethDaniel/lualine-lsp-progress.nvim',
     'AndreM222/copilot-lualine',
@@ -59,7 +60,7 @@ return {
     options = {
       theme = ayu_gloom_theme,
       component_separators = ' ',
-      section_separators = { left = '', right = '' },
+      section_separators = { left = ' ', right = ' ' },
       refresh = {
         statusline = 200,
         tabline = 200,

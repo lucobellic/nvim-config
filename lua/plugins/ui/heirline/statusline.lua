@@ -1,8 +1,11 @@
 local conditions = require('heirline.conditions')
+local utils = require('heirline.utils')
 local colors = require('plugins.ui.heirline.colors').colors
+local copilot_api = require('copilot.api')
+local copilot_client = require('copilot.client')
 
-local mode_colors = {
-  n = { fg = colors.darkgray },
+local primary_mode_colors = {
+  n = { fg = colors.dark_gray },
   i = { bg = colors.green, fg = colors.black },
   v = { bg = colors.orange, fg = colors.black },
   V = { bg = colors.orange, fg = colors.black },
@@ -17,7 +20,24 @@ local mode_colors = {
   t = { bg = colors.purple, fg = colors.black },
 }
 
-local highlight = function() return mode_colors[vim.fn.mode(1):sub(1, 1)] end
+local secondary_mode_colors = {
+  n = { fg = colors.dark_gray },
+  i = { fg = colors.green, bg = colors.black },
+  v = { fg = colors.orange, bg = colors.black },
+  V = { fg = colors.orange, bg = colors.black },
+  ['\22'] = { fg = colors.orange, bg = colors.black },
+  c = { fg = colors.blue, bg = colors.black },
+  s = { fg = colors.purple, bg = colors.black },
+  S = { fg = colors.purple, bg = colors.black },
+  ['\19'] = { fg = colors.purple, bg = colors.black },
+  R = { fg = colors.red, bg = colors.black },
+  r = { fg = colors.red, bg = colors.black },
+  ['!'] = { fg = colors.blue, bg = colors.black },
+  t = { fg = colors.purple, bg = colors.black },
+}
+
+local primary_highlight = function() return primary_mode_colors[vim.fn.mode(1):sub(1, 1)] end
+local secondary_highlight = function() return secondary_mode_colors[vim.fn.mode(1):sub(1, 1)] end
 
 local left_components_length = 0
 
@@ -26,25 +46,36 @@ local left_components_length = 0
 local ViMode = {
   init = function() left_components_length = 4 end,
   provider = function() return '   ' end,
-  hl = highlight,
+  hl = primary_highlight,
 }
 
 local Git = {
+  condition = conditions.is_git_repo,
   init = function(self)
+    ---@diagnostic disable-next-line: undefined-field
     self.status_dict = vim.b.gitsigns_status_dict
     self.text = ' ' .. self.status_dict.head .. ' '
     left_components_length = left_components_length + vim.api.nvim_eval_statusline(self.text, {}).width
   end,
-  condition = conditions.is_git_repo,
   provider = function(self) return self.text end,
-  hl = highlight,
+  hl = primary_highlight,
+}
+
+local MacroRec = {
+  condition = function() return vim.fn.reg_recording() ~= '' and vim.o.cmdheight == 0 end,
+  init = function(self)
+    self.text = ' ' .. vim.fn.reg_recording()
+    left_components_length = left_components_length + vim.api.nvim_eval_statusline(self.text, {}).width
+  end,
+  provider = function(self) return self.text end,
+  hl = { fg = colors.orange, italic = true },
 }
 
 ------------------------------------ Center -------------------------------------
 
 local Edgy = {
   init = function(self)
-    local mid_screen = math.floor(vim.api.nvim_get_option('columns') / 2)
+    local mid_screen = math.floor(vim.api.nvim_get_option_value('columns', {}) / 2)
     local mid_section = table.concat(require('edgy-group.stl.statusline').get_statusline('bottom'))
     local mid_width = math.floor(vim.api.nvim_eval_statusline(mid_section, {}).width / 2)
     local nb_spaces = mid_screen - left_components_length - mid_width
@@ -56,19 +87,71 @@ local Edgy = {
 
 ------------------------------------ Right -------------------------------------
 
+local Spacer = { provider = ' ' }
+local function rpad(child)
+  return {
+    condition = child.condition,
+    child,
+    Spacer,
+  }
+end
+
+local function OverseerTasksForStatus(status)
+  return {
+    condition = function(self) return self.tasks[status] end,
+    provider = function(self) return string.format('%s%d', self.symbols[status], #self.tasks[status]) end,
+    hl = function()
+      return {
+        fg = utils.get_highlight(string.format('Overseer%s', status)).fg,
+      }
+    end,
+  }
+end
+
+local Overseer = {
+  condition = function() return package.loaded.overseer end,
+  init = function(self)
+    local tasks = require('overseer.task_list').list_tasks({ unique = true })
+    local tasks_by_status = require('overseer.util').tbl_group_by(tasks, 'status')
+    self.tasks = tasks_by_status
+  end,
+  static = {
+    symbols = {
+      ['FAILURE'] = ' ',
+      ['CANCELED'] = ' ',
+      ['SUCCESS'] = ' ',
+      ['RUNNING'] = ' ',
+    },
+  },
+
+  rpad(OverseerTasksForStatus('CANCELED')),
+  rpad(OverseerTasksForStatus('RUNNING')),
+  rpad(OverseerTasksForStatus('SUCCESS')),
+  rpad(OverseerTasksForStatus('FAILURE')),
+}
+
 local copilot_icons = {
   Normal = ' ',
-  InProgress = ' ',
-  disabled = ' ',
+  Disabled = ' ',
   Warning = ' ',
-  unknown = ' ',
+  Unknown = ' ',
 }
+
+local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+local spinner_index = 1
+local function get_spinner()
+  spinner_index = spinner_index % #spinner + 1
+  return spinner[spinner_index]
+end
 
 local function get_copilot_icons()
   if copilot_client.is_disabled() then
-    return copilot_icons.disabled
+    return copilot_icons.Disabled
   end
-  return copilot_icons[copilot_api.status.data.status] or copilot_icons.unknown
+  if copilot_api.status.data.status == 'InProgress' then
+    return get_spinner()
+  end
+  return copilot_icons[copilot_api.status.data.status] or copilot_icons.Unknown
 end
 
 local Copilot = {
@@ -76,6 +159,25 @@ local Copilot = {
     return not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
   end,
   provider = get_copilot_icons,
+  hl = secondary_highlight,
+}
+
+local LSPActive = {
+    condition = conditions.lsp_attached,
+    update = {'LspAttach', 'LspDetach'},
+
+    -- You can keep it simple,
+    -- provider = " [LSP]",
+
+    -- Or complicate things a bit and get the servers names
+    provider  = function()
+        local names = {}
+        for i, server in pairs(vim.lsp.get_active_clients({ bufnr = 0 })) do
+            table.insert(names, server.name)
+        end
+        return " [" .. table.concat(names, " ") .. "]"
+    end,
+    hl = { fg = "green", bold = true },
 }
 
 local SearchCount = {
@@ -90,12 +192,11 @@ local SearchCount = {
     local search = self.search
     return string.format('[%d/%d]', search.current, math.min(search.total, search.maxcount))
   end,
-  hl = highlight,
 }
 
-local Left = { { ViMode }, { Git } }
+local Left = { ViMode, Git, MacroRec }
 local Center = { Edgy }
 local Align = { provider = '%=' }
-local Right = { Copilot, SearchCount }
+local Right = { Overseer, Copilot, SearchCount }
 
 return { Left, Center, Align, Right }
