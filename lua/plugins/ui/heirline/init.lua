@@ -33,7 +33,11 @@ return {
         end,
         format = function(client_messages)
           local client_names = {}
-          for _, client in ipairs(vim.lsp.get_clients()) do
+          local clients = vim.tbl_filter(
+            function(client) return vim.lsp.buf_is_attached(0, client.id) end,
+            vim.lsp.get_clients({ buffer = 0 })
+          )
+          for _, client in ipairs(clients) do
             if client and client.name ~= '' then
               local spinner = get_client_spinner(client_messages, client.name)
               table.insert(client_names, spinner .. ' ' .. client.name)
