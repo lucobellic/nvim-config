@@ -119,6 +119,16 @@ vim.keymap.set({ 'n' }, '<C-f>',
   { remap = true, desc = 'Search Workspace' }
 )
 
+-- Inlay hints
+local function toggle_inlay_hints()
+  local is_enabled = vim.lsp.inlay_hint.is_enabled()
+  vim.lsp.inlay_hint.enable(0, not is_enabled)
+  local text = (not is_enabled and 'Enabled' or 'Disabled') .. ' inlay hints'
+  local level = not is_enabled and vim.log.levels.INFO or vim.log.levels.WARN
+  vim.notify(text, level, { title = 'Options' })
+end
+map('n', '<leader>uh', toggle_inlay_hints, { repeatable = true, desc = 'Toggle Inlay Hints' })
+
 -- Remap smart-splits to use range
 map('n', '<C-left>', function() require('smart-splits').resize_left() end, { repeatable = true, desc = 'Resize left' })
 map('n', '<C-down>', function() require('smart-splits').resize_down() end, { repeatable = true, desc = 'Resize down' })
