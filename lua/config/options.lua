@@ -19,8 +19,8 @@ vim.o.showbreak = '↪'
 vim.o.backup = false
 vim.o.writebackup = false
 vim.o.swapfile = false
-vim.o.pumblend = 0
-vim.o.winblend = 0
+vim.o.pumblend = vim.g.neovide and 100 or 0
+vim.o.winblend = vim.g.neovide and 100 or 0
 
 vim.go.incsearch = false
 
@@ -64,6 +64,7 @@ function _G.custom_fold_text()
 end
 
 vim.o.foldtext = 'v:lua.custom_fold_text()'
+vim.o.virtualedit = 'block'
 
 local blinking = vim.g.neovide and 'blinkon0' or 'blinkwait300-blinkon200-blinkoff150'
 vim.o.guicursor = 'n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:' .. blinking .. '-Cursor/lCursor'
