@@ -1,4 +1,7 @@
 return {
   'nvim-treesitter/nvim-treesitter-context',
-  opts = { enable = false },
+  opts = {
+    line_numbers = true,
+    separator = '·',
+  },
 }

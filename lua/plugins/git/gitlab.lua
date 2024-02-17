@@ -1,5 +1,6 @@
 return {
   'lucobellic/gitlab.nvim',
+  enabled = false and not vim.g.started_by_firenvim,
   branch = 'personal',
   event = 'VeryLazy',
   dependencies = {

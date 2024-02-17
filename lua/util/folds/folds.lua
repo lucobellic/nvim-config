@@ -9,6 +9,8 @@ function M.h()
   vim.api.nvim_feedkeys(key, 'n', false)
 end
 
-function M.setup() vim.keymap.set('n', 'h', M.h, { noremap = true }) end
+function M.setup()
+  -- vim.keymap.set('n', 'h', M.h, { noremap = true })
+end
 
 return M
