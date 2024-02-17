@@ -277,13 +277,13 @@ return {
         layout_strategy = 'vertical', -- horizontal
         layout_config = {
           horizontal = {
-            width = 0.8,
+            width = 0.9,
             prompt_position = 'top',
             mirror = false,
-            preview_width = 0.6,
+            preview_width = 0.55,
           },
           vertical = {
-            width = 0.8,
+            width = 0.9,
             height_padding = 0,
             preview_height = 0.70,
             mirror = true,
