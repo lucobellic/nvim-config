@@ -88,12 +88,6 @@ return {
         size = { height = 0.25 },
         open = 'Neotest output-panel',
       },
-      {
-        title = 'noice',
-        ft = 'noice',
-        filter = function(buf, win) return vim.api.nvim_win_get_config(win).relative == '' end,
-        open = 'Noice',
-      },
     },
     animate = {
       enabled = not vim.g.neovide,
