@@ -3,7 +3,7 @@
 -- Add any additional keymaps here
 
 local Util = require('lazyvim.util')
-local wk = require('which-key')
+local wk_ok, wk = pcall(require, 'which-key')
 
 local function map(mode, lhs, rhs, opts)
   local keys = require('lazy.core.handler').handlers.keys
@@ -18,12 +18,6 @@ local function map(mode, lhs, rhs, opts)
     vim.keymap.set(mode, lhs, rhs, opts)
   end
 end
-
--- Move to window using the <ctrl-shift> hjkl keys
-map('n', '<S-left>', '<C-w>h', { desc = 'Go to left window', remap = true })
-map('n', '<S-down>', '<C-w>j', { desc = 'Go to lower window', remap = true })
-map('n', '<S-up>', '<C-w>k', { desc = 'Go to upper window', remap = true })
-map('n', '<S-right>', '<C-w>l', { desc = 'Go to right window', remap = true })
 
 map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
 map('n', '<leader>wq', '<C-w>c', { desc = 'Delete window' })
@@ -86,6 +80,7 @@ end
 map("n", "<leader>ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, { desc = "Toggle Mini Animate" })
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
+if wk_ok then
 wk.register({ ['<leader>uz'] = { '<cmd>TransparencyToggle<cr>', 'Transparency Toggle' } })
 wk.register({
   ['<leader>ud'] = {
@@ -95,6 +90,7 @@ wk.register({
     l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
   }
 })
+end
 
 map('n', '<leader>uW', '<cmd>WindowsToggleAutowidth<cr>', { desc = 'Windows Toggle Autowidth' })
 
@@ -103,16 +99,11 @@ map("n", "<leader>qq", "<cmd>qa!<cr>", { desc = "Quit all" })
 map('n', '<leader>qa', "<cmd>qa!<cr>", { desc = "Quit all" })
 
 -- Terminal Mappings
-map("n", "<c-/>", '')
 map("t", "<esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
-map("t", "<S-left>", "<cmd>wincmd h<cr>", { desc = "Go to left window" })
-map("t", "<S-down>", "<cmd>wincmd j<cr>", { desc = "Go to lower window" })
-map("t", "<S-up>", "<cmd>wincmd k<cr>", { desc = "Go to upper window" })
-map("t", "<S-right>", "<cmd>wincmd l<cr>", { desc = "Go to right window" })
 
 -- tabs
-map('n', '<C-k>', '<cmd>tabnext<cr>', { desc = 'Tab Next' })
-map('n', '<C-j>', '<cmd>tabprev<cr>', { desc = 'Tab Prev' })
+map('n', '<S-up>', '<cmd>tabnext<cr>', { desc = 'Tab Next' })
+map('n', '<S-down>', '<cmd>tabprev<cr>', { desc = 'Tab Prev' })
 map('n', '<C-t>', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gn', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gq', '<cmd>tabclose<cr>', { desc = 'Tab Close' })
@@ -143,7 +134,9 @@ map('n', '<S', '[s', { repeatable = true, desc = 'Prev Spelling' })
 map('n', '<s', '[s', { repeatable = true, desc = 'Prev Spelling' })
 
 -- Copilot
-wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
+if wk_ok then
+  wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
+end
 map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 
 -- jupytext
