@@ -4,12 +4,18 @@ return {
   opts = {
     -- Ignored filetypes (only while resizing)
     ignored_filetypes = {
+      'NvimTree',
+      'neo-tree',
+      'OverseerList',
+      'Outline'
+    },
+    -- Ignored buffer types (only while resizing)
+    ignored_buftypes = {
       'nofile',
       'quickfix',
       'prompt',
     },
-    -- Ignored buffer types (only while resizing)
-    ignored_buftypes = { 'NvimTree', 'neo-tree' },
+
     smart_splits = {},
   },
 }
