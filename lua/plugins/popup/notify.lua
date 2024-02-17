@@ -1,5 +1,7 @@
 return {
-  'rcarriga/nvim-notify',
+  -- 'rcarriga/nvim-notify',
+  'ls-devs/nvim-notify',
+  branch = 'fix/fix_index_value',
   enabled = not vim.g.started_by_firenvim,
   opts = {
     background_colour = 'NotifyBackground',
