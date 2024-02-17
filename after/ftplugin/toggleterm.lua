@@ -19,7 +19,5 @@ end
 
 local opts = { buffer = 0 }
 vim.keymap.set({ 't' }, '<esc>', [[<C-\><C-n>]], opts)
-vim.keymap.set({ 't', 'n' }, '<C-h>', function() term_focus_offset(-1) end, opts)
-vim.keymap.set({ 't', 'n' }, '<C-l>', function() term_focus_offset(1) end, opts)
 vim.keymap.set({ 't', 'n' }, '<C-q>', '<cmd>ToggleTermShutdown<cr>', opts)
 vim.keymap.set({ 't', 'n' }, '<C-t>', '<cmd>ToggleTermSplit<cr>', opts)
