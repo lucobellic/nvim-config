@@ -1,3 +1,6 @@
+local lsp_icons = require('plugins.ui.heirline.lsp_icons')
+local ignored_clients = { 'copilot' }
+
 ---@param client_messages {name: string, body: string}[]
 ---@param client_name string
 ---@return string
@@ -38,9 +41,10 @@ return {
             vim.lsp.get_clients({ buffer = 0 })
           )
           for _, client in ipairs(clients) do
-            if client and client.name ~= '' then
+            if client and not vim.tbl_contains(ignored_clients, client.name) then
               local spinner = get_client_spinner(client_messages, client.name)
-              table.insert(client_names, spinner .. ' ' .. client.name)
+              local client_icon = lsp_icons[client.name] or client.name
+              table.insert(client_names, spinner .. ' ' .. client_icon)
             end
           end
           return table.concat(client_names, ' ')
