@@ -40,7 +40,8 @@ end
 local function is_toggleterm(bufnr) return vim.bo[bufnr].filetype == 'toggleterm' end
 
 local edgy_filetypes = {
-  'neotest-panel',
+  'neotest-output-panel',
+  'neotest-summary',
   'noice',
   'Trouble',
   'OverseerList',
@@ -48,7 +49,8 @@ local edgy_filetypes = {
 }
 
 local edgy_titles = {
-  ['neotest-panel'] = 'neotest',
+  ['neotest-output-panel'] = 'neotest',
+  ['neotest-summary'] = 'neotest',
   noice = 'noice',
   Trouble = 'trouble',
   OverseerList = 'overseer',
