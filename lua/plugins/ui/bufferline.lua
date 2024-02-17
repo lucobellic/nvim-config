@@ -15,7 +15,6 @@ local function get_edgy_group_icons(position)
   local result = {}
   local statusline = require('edgy-group.stl.statusline').get_statusline(position)
   for _, item in ipairs(statusline) do
-    table.insert(result, { text = ' ', link = 'Normal' })
     table.insert(result, { text = item })
     table.insert(result, { text = ' ', link = 'Normal' })
   end
@@ -40,10 +39,6 @@ return {
     },
   },
   keys = {
-    { '<S-h>', false },
-    { '<S-l>', false },
-    { '<C-h>', '<cmd>BufferLineCyclePrev<cr>', desc = 'Buffer Previous' },
-    { '<C-l>', '<cmd>BufferLineCycleNext<cr>', desc = 'Buffer Next' },
     { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
     { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
