@@ -86,10 +86,6 @@ return {
       { '<leader>ox', '<cmd>OverseerFromTerminal<cr>', desc = 'Overseer From Terminal' },
     },
     opts = {
-      bindings = {
-        ['<C-j>'] = 'NextTask',
-        ['<C-k>'] = 'PrevTask',
-      },
       strategy = {
         'toggleterm',
         use_shell = true,
@@ -100,6 +96,12 @@ return {
       },
       task_list = {
         direction = 'right',
+        bindings = {
+          ['<C-h>'] = '<C-w>h',
+          ['<C-j>'] = '<C-w>j',
+          ['<C-k>'] = '<C-w>k',
+          ['<C-l>'] = '<C-w>l',
+        },
       },
       form = {
         win_opts = {

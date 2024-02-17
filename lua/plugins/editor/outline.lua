@@ -6,6 +6,10 @@ return {
     { '<leader>go', '<cmd>Outline<CR>', desc = 'Toggle outline' },
   },
   opts = {
+    keymaps = {
+      down_and_jump = nil,
+      up_and_jump = nil,
+    },
     outline_window = {
       -- Automatically scroll to the location in code when navigating outline window.
       auto_jump = false,
