@@ -36,8 +36,13 @@ local secondary_mode_colors = {
   t = { fg = colors.purple, bg = colors.black },
 }
 
-local primary_highlight = function() return primary_mode_colors[vim.fn.mode(1):sub(1, 1)] end
-local secondary_highlight = function() return secondary_mode_colors[vim.fn.mode(1):sub(1, 1)] end
+local function get_mode()
+  local mode = vim.fn.mode(1) or 'n'
+  return mode:sub(1, 1)
+end
+
+local primary_highlight = function() return primary_mode_colors[get_mode()] end
+local secondary_highlight = function() return secondary_mode_colors[get_mode()] end
 
 local left_components_length = 0
 
@@ -55,6 +60,10 @@ local Git = {
     ---@diagnostic disable-next-line: undefined-field
     self.status_dict = vim.b.gitsigns_status_dict
     self.text = ' ' .. self.status_dict.head .. ' '
+    -- Truncate text if it's too long more than 20 characters
+    if #self.text > 20 then
+      self.text = string.sub(self.text, 1, 20) .. '...'
+    end
     left_components_length = left_components_length + vim.api.nvim_eval_statusline(self.text, {}).width
   end,
   provider = function(self) return self.text end,
@@ -171,7 +180,7 @@ local Copilot = {
   condition = function()
     return not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
   end,
-  provider = function() return get_copilot_icons() .. ' ' end,
+  provider = function() return ' ' .. get_copilot_icons() .. ' ' end,
   hl = secondary_highlight,
 }
 
@@ -195,7 +204,7 @@ local SearchCount = {
   end,
   provider = function(self)
     local search = self.search
-    return string.format('[%d/%d]', search.current, math.min(search.total, search.maxcount))
+    return string.format('[%d/%d] ', search.current, math.min(search.total, search.maxcount))
   end,
   hl = secondary_highlight,
 }
