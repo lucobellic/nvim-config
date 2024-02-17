@@ -6,7 +6,7 @@ return {
       ['cuh'] = {
         color = '#70DF55',
         cterm_color = '2',
-        icon = '',
+        icon = '',
         name = 'CudaHeader',
       },
       ['cu'] = {
@@ -38,3 +38,4 @@ return {
     },
   },
 }
+
