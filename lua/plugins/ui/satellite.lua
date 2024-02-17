@@ -1,6 +1,7 @@
 return {
   'lewis6991/satellite.nvim',
   event = 'BufEnter',
+  enabled = vim.fn.has('nvim-0.10') == 1,
   opts = {
     current_only = true,
     winblend = vim.o.winblend,
