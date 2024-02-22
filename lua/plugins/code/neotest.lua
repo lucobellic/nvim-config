@@ -4,16 +4,11 @@ return {
     'nvim-neotest/neotest-plenary',
     'nvim-neotest/neotest-vim-test',
     'nvim-neotest/neotest-python',
+    { 'rouge8/neotest-rust', enabled = false }, -- disable neotest-rust in favor of rustaceanvim
+    'mrcjkb/rustaceanvim',
   },
   opts = {
-    adapters = {
-      'neotest-plenary',
-      'neotest-vim-test',
-      ['neotest-python'] = {
-        runner = 'pytest',
-        python = '/usr/bin/python',
-      },
-    },
+    adapters = {},
     status = {
       enabled = true,
       virtual_text = true,
@@ -40,4 +35,20 @@ return {
       watching = '',
     },
   },
+  config = function(_, opts)
+    opts.adapters = {
+      require('neotest-plenary'),
+      require('neotest-vim-test'),
+      require('neotest-python')({
+        runner = 'pytest',
+        python = '/usr/bin/python',
+        pytest_discover_instances = true, -- experimental
+      }),
+      require('rustaceanvim.neotest'),
+    }
+    opts.consumers = {
+      overseer = require('neotest.consumers.overseer'),
+    }
+    require('neotest').setup(opts)
+  end,
 }
