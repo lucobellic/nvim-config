@@ -9,7 +9,8 @@ return {
     },
   },
   {
-    'sindrets/diffview.nvim',
+    -- use personal branch until https://github.com/sindrets/diffview.nvim/pull/463
+    'lucobellic/diffview.nvim',
     cmd = {
       'DiffviewLog',
       'DiffviewOpen',
