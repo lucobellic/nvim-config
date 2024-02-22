@@ -46,6 +46,15 @@ local edgy_filetypes = {
   'Trouble',
   'OverseerList',
   'Outline',
+  'ogpt-popup',
+  'ogpt-parameters-window',
+  'ogpt-template',
+  'ogpt-sessions',
+  'ogpt-system-window',
+  'ogpt-window',
+  'ogpt-selection',
+  'ogpt-instruction',
+  'ogt-input',
 }
 
 local edgy_titles = {
@@ -55,6 +64,15 @@ local edgy_titles = {
   Trouble = 'trouble',
   OverseerList = 'overseer',
   Outline = 'outline',
+  ['ogpt-popup'] = 'ogpt-popup',
+  ['ogpt-parameters-window'] = 'ogpt-parameters-window',
+  ['ogpt-template'] = 'ogpt-template',
+  ['ogpt-sessions'] = 'ogpt-sessions',
+  ['ogpt-system-window'] = 'ogpt-system-window',
+  ['ogpt-window'] = 'ogpt-window',
+  ['ogpt-selection'] = 'ogpt-selection',
+  ['ogpt-instruction'] = 'ogpt-instruction',
+  ['ogt-input'] = 'ogt-input',
 }
 local function is_edgy_group(props) return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) end
 
@@ -82,7 +100,7 @@ return {
       },
     },
     hide = {
-      cursorline = true,
+      cursorline = false,
     },
     ignore = {
       buftypes = {},
