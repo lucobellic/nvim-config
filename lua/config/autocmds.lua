@@ -9,11 +9,14 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
 })
 
 -- Display cursorline only in focused window
-vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter', 'WinEnter' }, {
+vim.api.nvim_create_autocmd({ 'WinEnter' }, {
   pattern = '*',
-  command = 'setlocal cursorline',
+  callback = function(ev)
+    vim.api.nvim_set_option_value('cursorline', true, { win = ev.win })
+  end,
   desc = 'Display cursorline only in focused window',
 })
+
 vim.api.nvim_create_autocmd({ 'WinLeave' }, {
   pattern = '*',
   callback = function(ev)
@@ -24,7 +27,7 @@ vim.api.nvim_create_autocmd({ 'WinLeave' }, {
         return
       end
     end
-    vim.cmd('setlocal nocursorline')
+    vim.api.nvim_set_option_value('cursorline', false, { win = ev.win })
   end,
   desc = 'Hide cursorline when leaving window',
 })
