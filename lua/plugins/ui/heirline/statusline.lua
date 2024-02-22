@@ -171,7 +171,7 @@ local function get_copilot_icons()
     return copilot_icons.Disabled
   end
   if copilot_api.status.data.status == 'InProgress' then
-    return get_spinner()
+    return ' ' .. get_spinner()
   end
   return copilot_icons[copilot_api.status.data.status] or copilot_icons.Unknown
 end
