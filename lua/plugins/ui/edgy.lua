@@ -42,9 +42,13 @@ return {
       {
         title = 'chatgpt',
         ft = 'markdown',
-        filter = function(buf, win) return vim.bo[buf].buftype == 'prompt' end,
+        filter = function(buf, win)
+          local is_not_floating = vim.api.nvim_win_get_config(win).relative == ''
+          local is_prompt = vim.bo[buf].buftype == 'prompt'
+          return is_prompt and is_not_floating
+        end,
         open = 'GpChatToggle',
-        size = { width = 0.25 },
+        size = { width = 0.40 },
       },
       {
         title = 'outline',
@@ -90,7 +94,7 @@ return {
       },
     },
     animate = {
-      enabled = not vim.g.neovide,
+      enabled = false,
       cps = 300,
       spinner = {
         frames = { '', '', '', '', '', '' },
