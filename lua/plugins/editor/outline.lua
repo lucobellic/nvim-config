@@ -7,8 +7,8 @@ return {
   },
   opts = {
     keymaps = {
-      down_and_jump = nil,
-      up_and_jump = nil,
+      up_and_jump = '<C-p>',
+      down_and_jump = '<C-n>',
     },
     outline_window = {
       -- Automatically scroll to the location in code when navigating outline window.
