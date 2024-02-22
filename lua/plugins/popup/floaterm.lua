@@ -55,7 +55,7 @@ local function open_popup(bufnr, config)
     },
     enter = true,
     focusable = true,
-    zindex = 20,
+    zindex = 50,
     relative = 'editor',
     border = {
       padding = {
