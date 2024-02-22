@@ -1,44 +1,10 @@
 return {
   {
-    'folke/which-key.nvim',
-    optional = true,
-    opts = {
-      defaults = {
-        ['<leader>a'] = { name = 'edgy-group' },
-        ['<leader>at'] = { name = 'neotest' },
-      },
-    },
-  },
-  {
     'lucobellic/edgy-group.nvim',
     enabled = not vim.g.started_by_firenvim,
     dependencies = { 'folke/edgy.nvim' },
     event = 'VeryLazy',
     keys = {
-      {
-        '<leader>el',
-        function() require('edgy-group').open_group_offset('right', 1) end,
-        desc = 'Edgy Group Next Right',
-        repeatable = true,
-      },
-      {
-        '<leader>eh',
-        function() require('edgy-group').open_group_offset('right', -1) end,
-        desc = 'Edgy Group Prev Right',
-        repeatable = true,
-      },
-      {
-        '<leader>ek',
-        function() require('edgy-group').open_group_offset('bottom', 1) end,
-        desc = 'Edgy Group Next Bottom',
-        repeatable = true,
-      },
-      {
-        '<leader>ej',
-        function() require('edgy-group').open_group_offset('bottom', -1) end,
-        desc = 'Edgy Group Prev Bottom',
-        repeatable = true,
-      },
       {
         '<leader>;',
         function()
@@ -73,9 +39,10 @@ return {
         colors = {
           active = 'Identifier',
           inactive = 'Directory',
-          pick_active = 'FlashMatch',
+          pick_active = 'FlashLabel',
           pick_inactive = 'FlashLabel',
         },
+        pick_key_pose = 'right_separator',
       },
     },
     dev = true,
