@@ -8,14 +8,14 @@ return {
       {
         '<leader>;',
         function()
-          require('edgy-group.stl.statusline').pick(function() require('lualine').refresh() end)
+          require('edgy-group.stl').pick(function() require('lualine').refresh() end)
         end,
         desc = 'Edgy Group Pick',
       },
       {
         '<c-;>',
         function()
-          require('edgy-group.stl.statusline').pick(function() require('lualine').refresh() end)
+          require('edgy-group.stl').pick(function() require('lualine').refresh() end)
         end,
         desc = 'Edgy Group Pick',
       },

@@ -13,7 +13,7 @@ end
 ---@param position Edgy.Pos
 local function get_edgy_group_icons(position)
   local result = {}
-  local statusline = require('edgy-group.stl.statusline').get_statusline(position)
+  local statusline = require('edgy-group.stl').get_statusline(position)
   for _, item in ipairs(statusline) do
     table.insert(result, { text = item })
     table.insert(result, { text = ' ', link = 'Normal' })

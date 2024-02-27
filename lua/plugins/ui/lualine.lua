@@ -95,7 +95,7 @@ return {
       lualine_c = {
         '%=',
         {
-          function() return table.concat(require('edgy-group.stl.statusline').get_statusline('bottom')) end,
+          function() return table.concat(require('edgy-group.stl').get_statusline('bottom')) end,
         },
       },
       lualine_x = {
