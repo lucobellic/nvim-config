@@ -7,6 +7,7 @@ return {
     { 'rouge8/neotest-rust', enabled = false }, -- disable neotest-rust in favor of rustaceanvim
     'mrcjkb/rustaceanvim',
   },
+  cmd = { 'Neotest' },
   opts = {
     adapters = {},
     status = {
