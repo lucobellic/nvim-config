@@ -4,21 +4,21 @@ return {
     -- TODO: Auto fill from filetype
     override_by_extension = {
       ['cuh'] = {
+        icon = '',
         color = '#70DF55',
         cterm_color = '2',
-        icon = '',
         name = 'CudaHeader',
       },
       ['cu'] = {
+        icon = '',
         color = '#70DF55',
         cterm_color = '2',
-        icon = '',
         name = 'Cuda',
       },
       ['ipp'] = {
-        cterm_color = 74,
-        color = '#519aba',
         icon = '',
+        color = '#519aba',
+        cterm_color = 74,
         name = 'Ipp',
       },
       ['launch'] = {
@@ -26,6 +26,12 @@ return {
         color = '#ffbc03',
         cterm_color = 214,
         name = 'Launch',
+      },
+      ['qmd'] = {
+        icon = '󰠮',
+        color = '#ffbc03',
+        cterm_color = 214,
+        name = 'Quarto',
       },
     },
     override_by_filename = {
@@ -35,7 +41,17 @@ return {
         cterm_color = '66',
         name = 'CMakeLists',
       },
+      ['Dockerfile'] = {
+        icon = '󰡨',
+        color = '#458ee6',
+        name = 'Dockerfile',
+      },
+      ['Jenkinsfile'] = {
+        icon = '',
+        color = '#519aba',
+        cterm_color = 74,
+        name = 'Jenkinsfile'
+      }
     },
   },
 }
-
