@@ -1,6 +1,5 @@
 return {
   'rcarriga/nvim-notify',
-  branch = 'fix/fix_index_value',
   enabled = not vim.g.started_by_firenvim,
   opts = {
     background_colour = 'NotifyBackground',
@@ -10,8 +9,11 @@ return {
     max_width = 60,
     max_height = 8,
     render = 'wrapped-compact', -- 'default', 'minimal', 'simple', 'compact', 'wrapped-compact'
-    stages = require('util.notify.limited_slide'),
     timeout = 1000,
     top_down = false,
   },
+  config = function(_, opts)
+    opts.stages = require('util.notify.limited_slide')
+    require('notify').setup(opts)
+  end,
 }
