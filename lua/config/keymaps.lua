@@ -92,7 +92,13 @@ wk.register({
 })
 end
 
-map('n', '<leader>uW', '<cmd>WindowsToggleAutowidth<cr>', { desc = 'Windows Toggle Autowidth' })
+map('n', '<leader>uW', function()
+  require('windows.autowidth').toggle()
+  local is_enabled = require('windows.config').autowidth.enable
+  local text = is_enabled and 'Enabled' or 'Disabled'
+  local level = is_enabled and vim.log.levels.INFO or vim.log.levels.WARN
+  vim.notify(text .. ' autowidth', level, { title = 'Options' })
+end, { repeatable = true, desc = 'Windows Toggle Autowidth' })
 
 -- quit
 map("n", "<leader>qq", "<cmd>qa!<cr>", { desc = "Quit all" })
