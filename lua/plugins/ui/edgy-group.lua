@@ -25,7 +25,21 @@ return {
         right = {
           { icon = '', titles = { 'outline', 'overseer' }, pick_key = 'o' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
-          { icon = '', titles = { 'chatgpt' }, pick_key = 'g' },
+          {
+            icon = '',
+            titles = {
+              'OGPT Popup',
+              'OGPT Parameters',
+              'OGPT Template',
+              'OGPT Sessions',
+              'OGPT System Input',
+              'OGPT',
+              'OGPT Selection',
+              'OGPT Instruction',
+              'OGPT Chat',
+            },
+            pick_key = 'g',
+          },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm' }, pick_key = 'p' },
