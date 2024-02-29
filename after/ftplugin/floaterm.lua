@@ -51,10 +51,8 @@ local function add_dimension_offset(key, offset)
   local buffer = vim.api.nvim_win_get_buf(0)
   local dim_var = vim.api.nvim_buf_get_var(buffer, 'floaterm_' .. key)
   local dim = dim_var[false] --I don't get this, but whatever
-  local new_dim = dim + offset
-  if new_dim <= 1 and new_dim >= 0.1 then
-    vim.api.nvim_call_function('floaterm#config#set', { buffer, key, new_dim })
-  end
+  local new_dim = math.max(math.min(dim + offset, 0.999), 0.1)
+  vim.api.nvim_call_function('floaterm#config#set', { buffer, key, new_dim })
 end
 
 local function refresh_floaterm()
@@ -74,6 +72,9 @@ vim.api.nvim_create_user_command('FloatermCloseCurrent', close_current_floaterm,
 vim.api.nvim_buf_set_keymap(0, 'n', 'gf', '<cmd>OpenInNormalWindow<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermCloseCurrent<cr>', { noremap = true, silent = true })
+
+vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', '', { noremap = true })
+vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', '', { noremap = true })
 
 vim.keymap.set({ 'n', 't' }, '<C-down>', function()
   add_dimension_offset('height', -0.1)
