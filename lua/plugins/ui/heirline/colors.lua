@@ -13,4 +13,6 @@ M.colors = {
   orange = '#FFB454',
 }
 
+function M.setup_colors() return M.colors end
+
 return M

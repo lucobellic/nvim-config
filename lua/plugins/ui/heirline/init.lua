@@ -61,5 +61,13 @@ return {
     }
     local opts = vim.tbl_deep_extend('force', heirline_opts, default_opts) or {}
     require('heirline').setup(opts)
+
+    vim.api.nvim_create_augroup('Heirline', { clear = true })
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      callback = function()
+        require('heirline.utils').on_colorscheme(require('plugins.ui.heirline.colors').setup_colors())
+      end,
+      group = 'Heirline',
+    })
   end,
 }
