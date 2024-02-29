@@ -37,6 +37,7 @@ return {
       { '<leader>oi', '<cmd>OverseerInfo<cr>', desc = 'Overseer Info' },
       { '<leader>ot', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
       { '<leader>oa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
+      { '<leader>ol', '<cmd>OverseerTaskAction<cr>', desc = 'Overseer Task Action' },
       { '<leader>ox', '<cmd>OverseerFromTerminal<cr>', desc = 'Overseer From Terminal' },
     },
     opts = {
