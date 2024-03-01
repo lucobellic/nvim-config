@@ -22,18 +22,18 @@ local primary_mode_colors = {
 
 local secondary_mode_colors = {
   n = { fg = colors.dark_gray },
-  i = { fg = colors.green, bg = colors.black },
-  v = { fg = colors.orange, bg = colors.black },
-  V = { fg = colors.orange, bg = colors.black },
-  ['\22'] = { fg = colors.orange, bg = colors.black },
-  c = { fg = colors.blue, bg = colors.black },
-  s = { fg = colors.purple, bg = colors.black },
-  S = { fg = colors.purple, bg = colors.black },
-  ['\19'] = { fg = colors.purple, bg = colors.black },
-  R = { fg = colors.red, bg = colors.black },
-  r = { fg = colors.red, bg = colors.black },
-  ['!'] = { fg = colors.blue, bg = colors.black },
-  t = { fg = colors.purple, bg = colors.black },
+  i = { fg = colors.green },
+  v = { fg = colors.orange },
+  V = { fg = colors.orange },
+  ['\22'] = { fg = colors.orange },
+  c = { fg = colors.blue },
+  s = { fg = colors.purple },
+  S = { fg = colors.purple },
+  ['\19'] = { fg = colors.purple },
+  R = { fg = colors.red },
+  r = { fg = colors.red },
+  ['!'] = { fg = colors.blue },
+  t = { fg = colors.purple },
 }
 
 local function get_mode()
@@ -105,6 +105,7 @@ local Edgy = {
     self.text = left_padding .. mid_section
   end,
   provider = function(self) return self.text end,
+  hl = { bg = 'none' },
 }
 
 ------------------------------------ Right -------------------------------------
@@ -223,7 +224,7 @@ local Date = {
 
 local Left = { ViMode, Git, MacroRec, Dap }
 local Center = { Edgy }
-local Align = { provider = '%=' }
+local Align = { provider = '%=', hl = { bg = 'none' } }
 local Right = { Overseer, LspProgress, Copilot, SearchCount, Ruler, Date }
 
 return { Left, Center, Align, Right }
