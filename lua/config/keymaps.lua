@@ -92,6 +92,20 @@ wk.register({
 })
 end
 
+-- Toggle completion
+map('n', '<leader>ue', function()
+  local cmp = require('cmp')
+  local current_setting = cmp.get_config().completion.autocomplete
+  if current_setting and #current_setting > 0 then
+    cmp.setup({ completion = { autocomplete = false } })
+    vim.notify('Disabled auto completion', vim.log.levels.WARN, { title = 'Options' })
+  else
+    cmp.setup({ completion = { autocomplete = { cmp.TriggerEvent.TextChanged } } })
+    vim.notify('Enabled auto completion', vim.log.levels.INFO, { title = 'Options' })
+  end
+end, { desc = 'Toggle Auto Completion' })
+
+-- Toggle auto width
 map('n', '<leader>uW', function()
   require('windows.autowidth').toggle()
   local is_enabled = require('windows.config').autowidth.enable
