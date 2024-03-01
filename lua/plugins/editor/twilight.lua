@@ -6,6 +6,7 @@ return {
       inactive = true,
     },
   },
+  cmd = { 'Twilight' },
   keys = {
     { '<A-z>', '<cmd>Twilight<cr>', desc = 'Twilight' },
     { '<leader>za', '<cmd>Twilight<cr>', desc = 'Twilight' },

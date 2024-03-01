@@ -74,6 +74,7 @@ local tab_confirm_mapping = {
 
 return {
   'hrsh7th/nvim-cmp',
+  event = { 'InsertEnter' },
   dependencies = {
     {
       'onsails/lspkind.nvim',

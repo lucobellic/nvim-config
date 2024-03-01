@@ -1,6 +1,6 @@
 return {
   'andythigpen/nvim-coverage',
-  event = 'VeryLazy',
+  cmd = { 'Coverage', 'CoverageShow', 'CoverageToggle' },
   dependencies = 'nvim-lua/plenary.nvim',
   -- Optional: needed for PHP when using the cobertura parser
   -- rocks = { 'lua-xmlreader' },

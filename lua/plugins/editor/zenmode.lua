@@ -10,7 +10,7 @@ return {
   },
   {
     'folke/zen-mode.nvim',
-    event = 'VeryLazy',
+    cmd = { 'ZenMode' },
     keys = {
       { '<leader>zz', '<cmd>ZenMode<cr>', desc = 'ZenMode' },
       { '<C-z>', '<cmd>ZenMode<cr>', desc = 'ZenMode' },
@@ -57,13 +57,9 @@ return {
         },
       },
       -- callback where you can add custom code when the Zen window opens
-      on_open = function(win)
-        require('incline').disable()
-      end,
+      on_open = function(win) require('incline').disable() end,
       -- callback where you can add custom code when the Zen window closes
-      on_close = function()
-        require('incline').enable()
-      end,
+      on_close = function() require('incline').enable() end,
     },
   },
 }

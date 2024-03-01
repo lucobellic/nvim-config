@@ -1,7 +1,7 @@
 return {
   'ibhagwan/fzf-lua',
-  event = 'BufWinEnter',
   dependencies = { 'nvim-tree/nvim-web-devicons', optional = true },
+  cmd = { 'FzfLua' },
   keys = {
     { '<leader>fF', '<cmd>FzfLua files<cr>', desc = 'Find All Files' },
     { '<leader>sG', '<cmd>FzfLua live_grep<cr>', desc = 'Grep' },

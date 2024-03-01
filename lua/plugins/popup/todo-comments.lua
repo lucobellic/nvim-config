@@ -1,5 +1,6 @@
 return {
   'folke/todo-comments.nvim',
+  cmd = { 'TodoTrouble', 'TodoTelescope', 'TodoQuickFix', 'TodoLocList', 'TodoFixFixme', 'TodoFixFixmeTrouble' },
   opts = {
     signs = false,
     sign_priority = 8, -- sign priority

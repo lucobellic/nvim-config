@@ -83,7 +83,7 @@ end
 
 return {
   'b0o/incline.nvim',
-  event = 'VeryLazy',
+  event = 'BufEnter',
   keys = {
     {
       '<leader>uo',

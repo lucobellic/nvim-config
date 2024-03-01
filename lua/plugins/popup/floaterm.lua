@@ -88,8 +88,8 @@ end
 
 return {
   'lucobellic/vim-floaterm',
-  event = 'VeryLazy',
   branch = 'personal',
+  cmd = { 'FloatermToggle', 'FloatermNew', 'FloatermNext', 'FloatermPrev' },
   dependencies = { 'MunifTanjim/nui.nvim' },
   keys = {
     { '<leader>er', '<cmd>FloatermToggleTool ranger<cr>', desc = 'Ranger' },

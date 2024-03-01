@@ -10,8 +10,8 @@ return {
   },
   {
     'jackMort/ChatGPT.nvim',
-    event = 'VeryLazy',
     enabled = not vim.g.started_by_firenvim,
+    cmd = { 'ChatGPT', 'ChatGPTRun' },
     keys = {
       -- { '<leader>cg', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },
       { '<leader>ccc', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },

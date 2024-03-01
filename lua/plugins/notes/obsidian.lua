@@ -10,7 +10,6 @@ return {
   },
   {
     'epwalsh/obsidian.nvim',
-    event = 'VeryLazy',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'hrsh7th/nvim-cmp',
@@ -54,6 +53,14 @@ return {
           ['%?'] = { char = '󱍥', hl_group = 'DiagnosticWarn' },
         },
       },
+    },
+    cmd = {
+      'ObsidianOpen',
+      'ObsidianQuickSwitch',
+      'ObsidianSearch',
+      'ObsidianToday',
+      'ObsidianYesterday',
+      'ObsidianTask',
     },
     keys = {
       { '<leader>ooo', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },

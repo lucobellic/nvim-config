@@ -41,7 +41,7 @@ vim.api.nvim_create_user_command('ToggleTermShutdown', shutdown_current_term, {}
 
 return {
   'akinsho/toggleterm.nvim',
-  event = 'VeryLazy',
+  cmd = { 'ToggleTerm', 'ToggleTermToggleAll' },
   keys = {
     { '<leader>uP', '<cmd>ToggleTermToggleAll<cr>', desc = 'Toggle All Toggleterm' },
     { '<leader>up', '<cmd>ToggleTerm<cr>', desc = 'Toggle Toggleterm' },

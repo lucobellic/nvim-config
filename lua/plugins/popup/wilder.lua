@@ -1,7 +1,6 @@
 return {
   'lucobellic/wilder.nvim',
   dependencies = { 'romgrk/fzy-lua-native' },
-  event = 'VeryLazy',
   branch = 'personal',
   config = function()
     local wilder = require('wilder')
