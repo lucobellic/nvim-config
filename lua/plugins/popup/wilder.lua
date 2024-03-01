@@ -75,7 +75,7 @@ return {
             '─',
             '╯',
           },
-          max_width = '30%',
+          max_width = '50%',
           margin = 6, -- 5 stick to noice cmdline with 1 margin and without border
           min_height = 0, -- set to the same as 'max_height' for a fixed height window
           max_height = 10,

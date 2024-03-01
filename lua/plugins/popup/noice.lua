@@ -23,7 +23,7 @@ local cmdline_popup_view = {
     col = '50%',
   },
   size = {
-    width = '28%',
+    width = '48%',
     height = 'auto',
   },
   border = {
