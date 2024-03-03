@@ -43,7 +43,8 @@ return {
         },
         bottom = {
           { icon = '', titles = { 'toggleterm' }, pick_key = 'p' },
-          { icon = '', titles = { 'trouble' }, pick_key = 'x' },
+          { icon = '', titles = { 'noice' }, pick_key = 'n' },
+          { icon = '', titles = { 'trouble' }, pick_key = 'x' },
           { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },
         },
       },

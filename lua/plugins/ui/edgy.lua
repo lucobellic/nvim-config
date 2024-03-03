@@ -141,6 +141,16 @@ return {
         open = 'TroubleToggle',
       },
       {
+        title = 'noice',
+        ft = 'noice',
+        filter = function(buf, win)
+          local is_not_floating = vim.api.nvim_win_get_config(win).relative == ''
+          local is_no_file = vim.bo[buf].buftype == 'nofile'
+          return is_no_file and is_not_floating
+        end,
+        open = 'Noice',
+      },
+      {
         title = 'neotest-panel',
         ft = 'neotest-output-panel',
         size = { height = 0.25 },
