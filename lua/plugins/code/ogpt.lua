@@ -8,9 +8,15 @@ return {
     },
     cmd = { 'OGPT', 'OGPTRun' },
     opts = {
-      default_provider = 'gemini',
+      default_provider = 'openai',
+      providers = {
+        openai = {
+          enabled = true,
+          model = 'gpt-4-turbo-preview',
+        },
+      },
       edgy = true,
-      single_window = true,
+      single_window = false, -- setting to true doesn't work
       popup = {
         win_options = {
           wrap = true,
@@ -18,10 +24,10 @@ return {
       },
       popup_layout = {
         default = 'center',
-        center = {
-          width = 10,
-          height = 10,
-        },
+      },
+      chat = {
+        question_sign = '',
+        answer_sign = '',
       },
     },
   },
