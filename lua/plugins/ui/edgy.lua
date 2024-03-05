@@ -81,7 +81,7 @@ return {
         open = '',
       },
       {
-        title = 'OGPT Sesssions',
+        title = 'OGPT Sessions',
         ft = 'ogpt-sessions',
         size = { height = 6 },
         wo = { wrap = true },
