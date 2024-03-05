@@ -46,7 +46,6 @@ local comp = {
         -- Extract command in one line a display it in the notification
         ---@diagnostic disable-next-line: param-type-mismatch
         local command_line = type(task.cmd) == 'string' and task.cmd or table.concat(task.cmd, ' ') or ''
-        vim.notify('Start ' .. command_line, vim.log.levels.INFO, { title = 'Overseer' })
 
         local pm = user_util.get_problem_matcher(command_line, params)
         if pm then

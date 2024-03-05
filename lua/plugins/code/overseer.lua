@@ -30,7 +30,9 @@ return {
     },
   },
   {
-    'stevearc/overseer.nvim',
+    -- 'stevearc/overseer.nvim',
+    'lucobellic/overseer.nvim',
+    branch = 'feature/rustc-problem-matcher ',
     cmd = { 'OverseerRun', 'OverseerInfo', 'OverseerToggle', 'OverseerFromTerminal' },
     keys = {
       { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
@@ -67,17 +69,19 @@ return {
       component_aliases = {
         default = {
           { 'display_duration', detail_level = 2 },
-          'user.on_output_parse',
-          'on_output_quickfix',
+          'user.on_output_parse', -- parse with problem matcher
+          'on_output_quickfix', -- parse errorformat
           'on_exit_set_status',
           'on_complete_notify',
           { 'on_result_diagnostics', remove_on_restart = true, underline = false },
           'on_result_diagnostics_quickfix',
+          {'unique'}
         },
         default_vscode = {
           'default',
         },
       },
     },
+    dev = true,
   },
 }

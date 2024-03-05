@@ -27,11 +27,15 @@ M.python_problem_matcher = {
 ---@field problem_matcher table problem matcher
 local command_problem_matcher = {
   {
-    regexp = '[cmake|reach].*build',
+    regexp = '\\(cmake\\|reach\\).*build',
     problem_matcher = matcher.resolve_problem_matcher('$gcc'),
   },
   {
-    regexp = '[py|conf-test]',
+    regexp = 'cargo.*build',
+    problem_matcher = matcher.resolve_problem_matcher('$rustc'),
+  },
+  {
+    regexp = '\\(py\\|conf-test\\)',
     problem_matcher = M.python_problem_matcher,
   },
 }
@@ -41,7 +45,7 @@ local command_problem_matcher = {
 function M.get_problem_matcher_from_cmd(cmd)
   if cmd ~= nil then
     for _, cmd_matcher in ipairs(command_problem_matcher) do
-      if cmd:match(cmd_matcher.regexp) then
+      if vim.fn.matchstr(cmd, cmd_matcher.regexp) ~= '' then
         return cmd_matcher.problem_matcher
       end
     end
