@@ -54,7 +54,7 @@ local edgy_filetypes = {
   'ogpt-window',
   'ogpt-selection',
   'ogpt-instruction',
-  'ogt-input',
+  'ogpt-input',
 }
 
 local edgy_titles = {
@@ -72,7 +72,7 @@ local edgy_titles = {
   ['ogpt-window'] = 'ogpt-window',
   ['ogpt-selection'] = 'ogpt-selection',
   ['ogpt-instruction'] = 'ogpt-instruction',
-  ['ogt-input'] = 'ogt-input',
+  ['ogpt-input'] = 'ogpt-input',
 }
 local function is_edgy_group(props) return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) end
 
