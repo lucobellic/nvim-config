@@ -104,6 +104,7 @@ return {
     },
     ignore = {
       buftypes = {},
+      filetypes = { 'neo-tree' },
       unlisted_buffers = false,
     },
     render = function(props)
