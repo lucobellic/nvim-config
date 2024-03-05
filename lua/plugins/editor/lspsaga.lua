@@ -44,7 +44,4 @@ return {
       num_shortcut = true,
     },
   },
-  init = function()
-    require('lspsaga.lspkind').kind[302][2] = '   '
-  end,
 }
