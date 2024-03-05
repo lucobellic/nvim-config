@@ -32,6 +32,20 @@ return {
         -- node_type = { ["*"] = { "*" } },
       },
     },
+    exclude = {
+      filetypes = {
+        '',
+        'TelescopePrompt',
+        'TelescopeResults',
+        'checkhealth',
+        'git',
+        'gitcommit',
+        'help',
+        'lspinfo',
+        'man',
+        'packer',
+      },
+    },
   },
   config = function(_, opts)
     local hooks = require('ibl.hooks')
