@@ -18,7 +18,6 @@ return {
   enabled = true,
   event = 'UIEnter',
   dependencies = {
-    'stevearc/overseer.nvim',
     {
       'linrongbin16/lsp-progress.nvim',
       opts = {
