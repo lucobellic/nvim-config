@@ -1,9 +1,5 @@
 return {
   'hedyhli/outline.nvim',
-  cmd = { 'Outline', 'OutlineOpen' },
-  keys = {
-    { '<leader>go', '<cmd>Outline<CR>', desc = 'Toggle outline' },
-  },
   opts = {
     keymaps = {
       up_and_jump = '<C-p>',

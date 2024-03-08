@@ -19,7 +19,6 @@ return {
       lua_ls = require('plugins.lsp.util.servers.lua_ls'),
       pylsp = require('plugins.lsp.util.servers.pylsp'),
       ruff_lsp = require('plugins.lsp.util.servers.ruff_lsp'),
-      rust_analyzer = require('plugins.lsp.util.servers.rust_analyzer'),
       ansiblels = {},
     })
 
