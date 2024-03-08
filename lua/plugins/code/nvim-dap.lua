@@ -31,6 +31,10 @@ return {
         { '<leader>de', require('dapui').eval, repeatable = true, desc = 'Step Over' },
       },
     },
+    {
+      'theHamsta/nvim-dap-virtual-text',
+      opts = { virt_text_pos = 'eol' },
+    },
   },
   keys = {
     { '<leader>dq', require('dap').terminate, repeatable = true, desc = 'Terminate' },

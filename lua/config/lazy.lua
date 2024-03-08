@@ -16,6 +16,7 @@ require("lazy").setup({
     { import = 'plugins.completion' },
     { import = 'plugins.editor' },
     { import = 'plugins.git' },
+    { import = 'plugins.lang' },
     { import = 'plugins.lsp' },
     { import = 'plugins.misc' },
     { import = 'plugins.navigation' },

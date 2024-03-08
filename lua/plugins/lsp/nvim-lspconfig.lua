@@ -14,7 +14,6 @@ return {
     })
 
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
-      clangd = require('plugins.lsp.util.servers.clangd'),
       tsserver = require('plugins.lsp.util.servers.tsserver'),
       lua_ls = require('plugins.lsp.util.servers.lua_ls'),
       pylsp = require('plugins.lsp.util.servers.pylsp'),
