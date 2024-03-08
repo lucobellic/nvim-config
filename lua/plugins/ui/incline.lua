@@ -1,4 +1,6 @@
-local separator_char = '│'
+local separator_char = '-'
+local unfocused = 'NonText'
+local focused = 'Identifier'
 
 local function get_diagnostic_label(props)
   local icons = require('lazyvim.config').icons.diagnostics
@@ -7,7 +9,7 @@ local function get_diagnostic_label(props)
   for severity, icon in pairs(icons) do
     local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
     if n > 0 then
-      table.insert(label, { icon .. n .. ' ', group = 'DiagnosticSign' .. severity })
+      table.insert(label, { icon .. n .. ' ', group = props.focused and 'DiagnosticSign' .. severity or unfocused })
     end
   end
   return label
@@ -24,7 +26,7 @@ local function get_git_diff(props)
       if tonumber(signs[name]) and signs[name] > 0 then
         table.insert(labels, {
           icon .. signs[name] .. ' ',
-          group = highlight[name],
+          group = props.focused and highlight[name] or unfocused,
         })
       end
     end
@@ -104,7 +106,7 @@ return {
     },
     ignore = {
       buftypes = {},
-      filetypes = { 'neo-tree' },
+      filetypes = { 'neo-tree', 'dashboard' },
       unlisted_buffers = false,
     },
     render = function(props)
@@ -117,17 +119,20 @@ return {
       end
 
       local filename = vim.fn.fnamemodify(vim.fn.bufname(props.buf), ':t')
-      local filetype_icon, color = require('nvim-web-devicons').get_icon_color(filename)
+      local filetype_icon, filetype_color = require('nvim-web-devicons').get_icon_color(filename)
       local diagnostics = get_diagnostic_label(props)
       local diffs = get_git_diff(props)
 
-      local separator = (#diagnostics > 0 and #diffs > 0) and { separator_char .. ' ', group = 'FloatBorder' } or ''
-      local icon = props.focused and { filetype_icon, guifg = color } or { filetype_icon, group = 'Directory' }
-      local filename_separator = (#diagnostics > 0 or #diffs > 0) and { ' --- ', group = 'FloatBorder' } or ''
+      local color = props.focused and focused or unfocused
+      local icon = props.focused and { filetype_icon, guifg = filetype_color } or { filetype_icon, group = unfocused }
+      local separator = (#diagnostics > 0 and #diffs > 0) and { separator_char .. ' ', group = color } or ''
+      local filename_separator = (#diagnostics > 0 or #diffs > 0) and { ' ' .. separator_char .. ' ', group = color }
+        or ''
+
       local buffer = {
         icon,
-        { ' ' },
-        { filename, group = props.focused and 'Identifier' or 'Directory' },
+        { filetype_icon and ' ' or '' },
+        { filename, group = color },
         filename_separator,
         { diagnostics },
         { separator },
