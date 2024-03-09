@@ -11,6 +11,7 @@ return {
   {
     -- use personal branch until https://github.com/sindrets/diffview.nvim/pull/463
     'lucobellic/diffview.nvim',
+    branch = 'personal',
     cmd = {
       'DiffviewLog',
       'DiffviewOpen',
@@ -73,28 +74,37 @@ return {
       },
     },
     opts = function(_, opts)
-      opts.diff_binaries = false -- Show diffs for binaries
-      opts.enhanced_diff_hl = true -- See '<cmd>h diffview-config-enhanced_diff_hl'
-      opts.signs = vim.tbl_extend('force', opts.signs or {}, {
-        fold_closed = '',
-        fold_open = '',
-        done = '',
-      })
-      opts.view = vim.tbl_extend('force', opts.view or {}, { merge_tool = { layout = 'diff3_mixed' } })
-
-      opts.keymaps = vim.tbl_extend('force', opts.keymaps or {}, {
-        view = {
-          ['<leader>wh'] = require('diffview.actions').toggle_files,
+      opts = vim.tbl_deep_extend('force', opts, {
+        diff_binaries = false, -- Show diffs for binaries
+        icons = { -- Only applies when use_icons is true.
+          folder_closed = '',
+          folder_open = '',
         },
-        file_history_panel = {
-          {
-            'n',
-            '<C-g>',
-            require('diffview.actions').open_in_diffview,
-            { desc = 'Open the entry under the cursor in a diffview' },
+        signs = {
+          fold_closed = '',
+          fold_open = '',
+          done = '',
+        },
+        view = {
+          merge_tool = {
+            layout = 'diff3_mixed',
+          },
+        },
+        keymaps = {
+          view = {
+            ['<leader>wh'] = require('diffview.actions').toggle_files,
+          },
+          file_history_panel = {
+            {
+              'n',
+              '<C-g>',
+              require('diffview.actions').open_in_diffview,
+              { desc = 'Open the entry under the cursor in a diffview' },
+            },
           },
         },
       })
+      return opts
     end,
   },
 }
