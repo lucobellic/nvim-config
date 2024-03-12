@@ -23,7 +23,12 @@ return {
         },
       },
       popup_layout = {
-        default = 'center',
+        default = 'right',
+        zindex = 1,
+        right = {
+          width = '0.5%',
+          width_parameters_open = '0.5%',
+        },
       },
       chat = {
         question_sign = '',
