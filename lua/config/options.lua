@@ -31,6 +31,13 @@ vim.opt.listchars = {
   precedes = '',
 }
 
+vim.opt.diffopt = {
+  'internal',
+  'filler',
+  'closeoff',
+  'iwhiteall'
+}
+
 vim.opt.fillchars = {
   diff = '╱',
   eob = ' ',
