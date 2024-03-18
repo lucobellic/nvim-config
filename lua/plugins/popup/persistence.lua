@@ -1,3 +1,5 @@
+local util = require('util.persistence')
+
 return {
   'lucobellic/persistence.nvim',
   branch = 'personal',
@@ -25,9 +27,6 @@ return {
   },
   opts = {
     options = { 'buffers', 'curdir', 'tabpages', 'winpos', 'folds', 'winsize', 'help', 'globals', 'skiprtp' },
-    pre_save = function()
-      vim.cmd('tabmove 0')
-      vim.cmd('ScopeSaveState')
-    end,
+    pre_save = util.pre_save,
   },
 }
