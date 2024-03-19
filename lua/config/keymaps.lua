@@ -61,25 +61,30 @@ if enable_diagnostics_keymaps then
     end
   end
 
-  map("n", ">d", diagnostic_goto(true), { desc = "Next Diagnostic" })
-  map("n", "<d", diagnostic_goto(false), { desc = "Prev Diagnostic" })
-  map("n", ">e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
-  map("n", "<e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-  map("n", ">w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
-  map("n", "<w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+  map('n', '>d', diagnostic_goto(true), { desc = 'Next Diagnostic' })
+  map('n', '<d', diagnostic_goto(false), { desc = 'Prev Diagnostic' })
+  map('n', '>e', diagnostic_goto(true, 'ERROR'), { desc = 'Next Error' })
+  map('n', '<e', diagnostic_goto(false, 'ERROR'), { desc = 'Prev Error' })
+  map('n', '>w', diagnostic_goto(true, 'WARN'), { desc = 'Next Warning' })
+  map('n', '<w', diagnostic_goto(false, 'WARN'), { desc = 'Prev Warning' })
 
-  map("n", ">D", diagnostic_goto(true), { desc = "Next Diagnostic" })
-  map("n", "<D", diagnostic_goto(false), { desc = "Prev Diagnostic" })
-  map("n", ">E", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
-  map("n", "<E", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
-  map("n", ">W", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
-  map("n", "<W", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+  map('n', '>D', diagnostic_goto(true), { desc = 'Next Diagnostic' })
+  map('n', '<D', diagnostic_goto(false), { desc = 'Prev Diagnostic' })
+  map('n', '>E', diagnostic_goto(true, 'ERROR'), { desc = 'Next Error' })
+  map('n', '<E', diagnostic_goto(false, 'ERROR'), { desc = 'Prev Error' })
+  map('n', '>W', diagnostic_goto(true, 'WARN'), { desc = 'Next Warning' })
+  map('n', '<W', diagnostic_goto(false, 'WARN'), { desc = 'Prev Warning' })
 end
 
 map({ 'n', 'v' }, 'c', '<cmd>lua vim.g.change = true<cr>c', { desc = 'Change' })
 
 -- toggle options
-map("n", "<leader>ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, { desc = "Toggle Mini Animate" })
+map(
+  'n',
+  '<leader>ua',
+  function() vim.g.minianimate_disable = not vim.g.minianimate_disable end,
+  { desc = 'Toggle Mini Animate' }
+)
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
 if wk_ok then
@@ -117,17 +122,17 @@ map('n', '<leader>uW', function()
 end, { repeatable = true, desc = 'Windows Toggle Autowidth' })
 
 -- quit
-map("n", "<leader>qq", "<cmd>qa!<cr>", { desc = "Quit all" })
-map('n', '<leader>qa', "<cmd>qa!<cr>", { desc = "Quit all" })
+map('n', '<leader>qq', '<cmd>qa!<cr>', { desc = 'Quit all' })
+map('n', '<leader>qa', '<cmd>qa!<cr>', { desc = 'Quit all' })
 
 -- Terminal Mappings
-map("t", "<esc>", "<c-\\><c-n>", { desc = "Enter Normal Mode" })
+map('t', '<esc>', '<c-\\><c-n>', { desc = 'Enter Normal Mode' })
 
 -- tabs
 map('n', '<S-up>', '<cmd>tabnext<cr>', { desc = 'Tab Next' })
 map('n', '<S-down>', '<cmd>tabprev<cr>', { desc = 'Tab Prev' })
 map('n', '<C-t>', '<cmd>tabnew<cr>', { desc = 'Tab New' })
-map('n', 'gn', '<cmd>tabnew<cr>', { desc = 'Tab New' })
+-- map('n', 'gn', '<cmd>tabnew<cr>', { desc = 'Tab New' })
 map('n', 'gq', '<cmd>tabclose<cr>', { desc = 'Tab Close' })
 
 local tabpages = require('util.tabpages')
