@@ -11,9 +11,7 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
 -- Display cursorline only in focused window
 vim.api.nvim_create_autocmd({ 'WinEnter' }, {
   pattern = '*',
-  callback = function(ev)
-    vim.api.nvim_set_option_value('cursorline', true, { win = ev.win })
-  end,
+  callback = function(ev) vim.api.nvim_set_option_value('cursorline', true, { win = ev.win }) end,
   desc = 'Display cursorline only in focused window',
 })
 
@@ -22,12 +20,9 @@ vim.api.nvim_create_autocmd({ 'WinLeave' }, {
   callback = function(ev)
     local current_filetype = vim.api.nvim_get_option_value('filetype', { buf = ev.buf }):lower()
     local ignored_list = { 'neo-tree', 'outline' }
-    for _, ft_ignored in ipairs(ignored_list) do
-      if ft_ignored == current_filetype then
-        return
-      end
+    if vim.tbl_contains(ignored_list, function(ft) return ft ~= current_filetype end, { predicate = true }) then
+      vim.api.nvim_set_option_value('cursorline', false, { win = ev.win })
     end
-    vim.api.nvim_set_option_value('cursorline', false, { win = ev.win })
   end,
   desc = 'Hide cursorline when leaving window',
 })
@@ -85,4 +80,25 @@ vim.api.nvim_set_hl(0, 'DapStoppedLine', { default = true, link = 'Visual' })
 vim.api.nvim_create_autocmd({ 'TabEnter' }, {
   pattern = { '*' },
   callback = function() require('util.tabpages').focus_first_listed_buffer() end,
+})
+
+-- Repeat change with dot repeat
+local change_text = ''
+
+local function repeat_change()
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('cgn' .. change_text .. '<esc>', true, false, true), 'n', false)
+end
+
+vim.api.nvim_create_user_command('RepeatChange', repeat_change, { desc = 'Repeat last change' })
+
+vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
+  pattern = { '*' },
+  callback = function()
+    if vim.g.change then
+      change_text = vim.fn.getreg('.')
+      vim.fn.setreg('/', vim.fn.getreg('"', 1))
+      vim.g.change = false
+      vim.fn['repeat#set'](vim.api.nvim_replace_termcodes('<cmd>RepeatChange<cr>', true, false, true))
+    end
+  end,
 })

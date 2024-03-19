@@ -76,6 +76,8 @@ if enable_diagnostics_keymaps then
   map("n", "<W", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
 end
 
+map({ 'n', 'v' }, 'c', '<cmd>lua vim.g.change = true<cr>c', { desc = 'Change' })
+
 -- toggle options
 map("n", "<leader>ua", function() vim.g.minianimate_disable = not vim.g.minianimate_disable end, { desc = "Toggle Mini Animate" })
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
