@@ -51,6 +51,17 @@ return {
         size = { width = 0.40 },
       },
       {
+        title = 'copilot-chat',
+        ft = 'markdown',
+        filter = function(buf, win)
+          local is_not_floating = vim.api.nvim_win_get_config(win).relative == ''
+          local filename = vim.fn.fnamemodify(vim.fn.bufname(buf), ':t')
+          return is_not_floating and filename == 'copilot-chat'
+        end,
+        open = 'CopilotChat',
+        size = { width = 0.20 },
+      },
+      {
         title = 'outline',
         ft = 'Outline',
         open = function() require('outline').toggle_outline() end,

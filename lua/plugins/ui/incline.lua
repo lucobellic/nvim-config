@@ -59,6 +59,10 @@ local edgy_filetypes = {
   'ogpt-input',
 }
 
+local edgy_filenames = {
+  'copilot-chat',
+}
+
 local edgy_titles = {
   ['neotest-output-panel'] = 'neotest',
   ['neotest-summary'] = 'neotest',
@@ -76,10 +80,14 @@ local edgy_titles = {
   ['ogpt-instruction'] = 'ogpt-instruction',
   ['ogpt-input'] = 'ogpt-input',
 }
-local function is_edgy_group(props) return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) end
 
-local function get_title(props)
-  local title = ' ' .. edgy_titles[vim.bo[props.buf].filetype] .. ' '
+local function is_edgy_group(props, filename)
+  return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) or vim.tbl_contains(edgy_filenames, filename)
+end
+
+local function get_title(props, filename)
+  local name = edgy_titles[vim.bo[props.buf].filetype] or filename
+  local title = ' ' .. name .. ' '
   return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
 end
 
@@ -110,15 +118,16 @@ return {
       unlisted_buffers = false,
     },
     render = function(props)
+      local filename = vim.fn.fnamemodify(vim.fn.bufname(props.buf), ':t')
+
       if is_toggleterm(props.buf) then
         return get_toggleterm_id(props)
       end
 
-      if is_edgy_group(props) then
-        return get_title(props)
+      if is_edgy_group(props, filename) then
+        return get_title(props, filename)
       end
 
-      local filename = vim.fn.fnamemodify(vim.fn.bufname(props.buf), ':t')
       local filetype_icon, filetype_color = require('nvim-web-devicons').get_icon_color(filename)
       local diagnostics = get_diagnostic_label(props)
       local diffs = get_git_diff(props)
