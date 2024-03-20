@@ -68,12 +68,6 @@ return {
         size = { width = 0.20 },
       },
       {
-        title = 'overseer',
-        ft = 'OverseerList',
-        open = 'OverseerToggle! right',
-        size = { width = 0.20, height = 0.15 },
-      },
-      {
         title = 'neotest-summary',
         ft = 'neotest-summary',
         open = 'Neotest summary',
@@ -146,6 +140,12 @@ return {
             require('toggleterm').toggle()
           end
         end,
+      },
+      {
+        title = 'overseer',
+        ft = 'OverseerList',
+        open = 'OverseerToggle!',
+        size = { width = 0.15 },
       },
       {
         title = 'trouble',

@@ -23,7 +23,7 @@ return {
     opts = {
       groups = {
         right = {
-          { icon = '', titles = { 'outline', 'overseer' }, pick_key = 'o' },
+          { icon = '', titles = { 'outline' }, pick_key = 'o' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
           { icon = '', titles = { 'copilot-chat' }, pick_key = 'c' },
           {
@@ -43,7 +43,7 @@ return {
           },
         },
         bottom = {
-          { icon = '', titles = { 'toggleterm' }, pick_key = 'p' },
+          { icon = '', titles = { 'toggleterm', 'overseer' }, pick_key = 'p' },
           { icon = '', titles = { 'noice' }, pick_key = 'n' },
           { icon = '', titles = { 'trouble' }, pick_key = 'x' },
           { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },
