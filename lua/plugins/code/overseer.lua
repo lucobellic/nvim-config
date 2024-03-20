@@ -19,6 +19,19 @@ vim.api.nvim_create_user_command('OverseerFromTerminal', function()
   require('overseer').new_task({ cmd = cmd }):start()
 end, {})
 
+local function open_first_failed_task()
+  local overseer = require('overseer')
+  local constants = require('overseer.constants')
+  local action_util = require('overseer.action_util')
+  local failed_tasks = overseer.list_tasks({ status = constants.STATUS.FAILURE })
+  if #failed_tasks > 0 then
+    local task = failed_tasks[1] ---@type overseer.Task
+    action_util.run_task_action(task, 'open hsplit')
+  else
+    vim.notify('No failed tasks found', vim.log.levels.WARN, { title = 'Overseer' })
+  end
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -41,6 +54,7 @@ return {
       { '<leader>oa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
       { '<leader>ol', '<cmd>OverseerTaskAction<cr>', desc = 'Overseer Task Action' },
       { '<leader>ox', '<cmd>OverseerFromTerminal<cr>', desc = 'Overseer From Terminal' },
+      { '<leader>op', open_first_failed_task, desc = 'Overseer Open Failed Task' },
     },
     opts = {
       strategy = {
