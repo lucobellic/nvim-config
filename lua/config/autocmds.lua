@@ -34,11 +34,6 @@ require('util.autosave').setup()
 local persistence_util = require('util.persistence')
 vim.api.nvim_create_user_command('PersistenceLoadSession', persistence_util.select_session, {})
 
-vim.api.nvim_create_autocmd({ 'Filetype' }, {
-  pattern = { 'dashboard', 'lspsagaoutline' },
-  callback = function() vim.b.miniindentscope_disable = true end,
-})
-
 -- Define a function to handle the BufEnter event
 local function on_buffer_enter()
   if vim.bo.filetype ~= 'dashboard' then
