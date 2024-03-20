@@ -1,5 +1,9 @@
 return {
   'neovim/nvim-lspconfig',
+  dependencies = {
+    'williamboman/mason-lspconfig.nvim',
+    optional = true,
+  },
   opts = function(_, opts)
     opts.inlay_hints = { enabled = false }
 
@@ -16,12 +20,9 @@ return {
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
       tsserver = require('plugins.lsp.util.servers.tsserver'),
       lua_ls = require('plugins.lsp.util.servers.lua_ls'),
-      pylsp = require('plugins.lsp.util.servers.pylsp'),
       ruff_lsp = require('plugins.lsp.util.servers.ruff_lsp'),
       ansiblels = {},
     })
-
-    opts.servers.pyright = nil
 
     opts.diagnostics = vim.tbl_deep_extend('force', opts.diagnostics or {}, {
       virtual_text = false,
@@ -34,6 +35,7 @@ return {
     })
 
     require('lspconfig.ui.windows').default_options.border = 'rounded'
+    return opts
   end,
   init = require('plugins.lsp.util.keymaps'),
 }
