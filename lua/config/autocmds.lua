@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd({ 'WinLeave' }, {
   callback = function(ev)
     local current_filetype = vim.api.nvim_get_option_value('filetype', { buf = ev.buf }):lower()
     local ignored_list = { 'neo-tree', 'outline' }
-    if vim.tbl_contains(ignored_list, function(ft) return ft ~= current_filetype end, { predicate = true }) then
+    if not vim.tbl_contains(ignored_list, function(ft) return ft == current_filetype end, { predicate = true }) then
       vim.api.nvim_set_option_value('cursorline', false, { win = ev.win })
     end
   end,
@@ -30,14 +30,14 @@ vim.api.nvim_create_autocmd({ 'WinLeave' }, {
 -- Automatic save
 require('util.autosave').setup()
 
+-- Load session from persistence
+local persistence_util = require('util.persistence')
+vim.api.nvim_create_user_command('PersistenceLoadSession', persistence_util.select_session, {})
+
 vim.api.nvim_create_autocmd({ 'Filetype' }, {
   pattern = { 'dashboard', 'lspsagaoutline' },
   callback = function() vim.b.miniindentscope_disable = true end,
 })
-
--- Load session from persistence
-local persistence_util = require('util.persistence')
-vim.api.nvim_create_user_command('PersistenceLoadSession', persistence_util.select_session, {})
 
 -- Define a function to handle the BufEnter event
 local function on_buffer_enter()
