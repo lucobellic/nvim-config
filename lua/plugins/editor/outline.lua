@@ -7,7 +7,7 @@ return {
     },
     outline_window = {
       -- Automatically scroll to the location in code when navigating outline window.
-      auto_jump = false,
+      auto_jump = true,
       focus_on_open = false,
     },
     outline_items = {
@@ -21,7 +21,8 @@ return {
         -- The above two options are respected.
         -- This can be triggered manually through `follow_cursor` lua API,
         -- :OutlineFollow command, or <C-g>.
-        follow = { 'CursorMoved' },
+        follow = {}, -- Too much lag to be used
+
         -- Re-request symbols from the provider.
         -- This can be triggered manually through `refresh_outline` lua API, or
         -- :OutlineRefresh command.
