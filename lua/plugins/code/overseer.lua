@@ -43,9 +43,7 @@ return {
     },
   },
   {
-    -- 'stevearc/overseer.nvim',
-    'lucobellic/overseer.nvim',
-    branch = 'feature/rustc-problem-matcher ',
+    'stevearc/overseer.nvim',
     cmd = { 'OverseerRun', 'OverseerInfo', 'OverseerToggle', 'OverseerFromTerminal' },
     keys = {
       { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
@@ -59,11 +57,12 @@ return {
     opts = {
       strategy = {
         'toggleterm',
-        use_shell = true,
-        open_on_start = false,
+        auto_scroll = false,
         close_on_exit = false,
         hidden = false,
+        open_on_start = false,
         quit_on_exit = 'never',
+        use_shell = true,
       },
       task_list = {
         direction = 'right',
@@ -84,18 +83,17 @@ return {
         default = {
           { 'display_duration', detail_level = 2 },
           'user.on_output_parse', -- parse with problem matcher
-          'on_output_quickfix', -- parse errorformat
-          'on_exit_set_status',
-          'on_complete_notify',
-          { 'on_result_diagnostics', remove_on_restart = true, underline = false },
-          'on_result_diagnostics_quickfix',
-          {'unique'}
+          { 'on_output_quickfix' }, -- parse errorformat
+          'on_exit_set_status', -- set the status based on exit code
+          'on_complete_notify', -- popup notification
+          { 'on_result_diagnostics', remove_on_restart = true, underline = false }, -- display diagnostics
+          'on_result_diagnostics_quickfix', -- send diagnostics to quickfix or loclist
+          { 'unique' },
         },
         default_vscode = {
           'default',
         },
       },
     },
-    dev = true,
   },
 }
