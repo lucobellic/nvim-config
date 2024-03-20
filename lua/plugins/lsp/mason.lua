@@ -1,28 +1,26 @@
 return {
-  'williamboman/mason.nvim',
+  'williamboman/mason-lspconfig.nvim',
   dependencies = {
-    {
-      'williamboman/mason-lspconfig.nvim',
-      event = 'VeryLazy',
-      opts = {
-        ensure_installed = {
-          'jsonls',
-          'vimls',
-          'cmake',
-          'lua_ls',
-          'rust_analyzer',
-        },
-        automatic_installation = false,
+    'williamboman/mason.nvim',
+    cmd = 'Mason',
+    opts = {
+      PATH = 'prepend',
+      ui = {
+        border = 'rounded',
+        width = 0.8,
+        height = 0.8,
       },
     },
   },
-  cmd = 'Mason',
+  event = 'VeryLazy',
   opts = {
-    PATH = 'prepend',
-    ui = {
-      border = 'rounded',
-      width = 0.8,
-      height = 0.8,
+    ensure_installed = {
+      'jsonls',
+      'vimls',
+      'cmake',
+      'lua_ls',
+      'rust_analyzer',
     },
+    automatic_installation = false,
   },
 }
