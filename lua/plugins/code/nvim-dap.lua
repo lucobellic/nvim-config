@@ -27,8 +27,32 @@ return {
     },
     {
       'rcarriga/nvim-dap-ui',
+      opts = {
+        highlight_new_as_changed = true,
+        commented = true,
+      },
       keys = {
         { '<leader>de', require('dapui').eval, repeatable = true, desc = 'Step Over' },
+        {
+          '<leader>dw',
+          function()
+            local word = vim.fn.expand('<cword>')
+            local mode = vim.api.nvim_get_mode().mode
+            if mode == 'v' or mode == 'V' or mode == '\22' then
+              local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
+              local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))
+              if start_row ~= end_row then
+                end_col = #vim.api.nvim_buf_get_lines(0, end_row - 1, end_row, true)[1]
+              end
+              local text = vim.api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
+              word = table.concat(text, '')
+            end
+            require('dapui').elements.watches.add(word)
+          end,
+          repeatable = true,
+          desc = 'Add Expression To Watches',
+          mode = { 'n', 'v' },
+        },
       },
     },
     {
