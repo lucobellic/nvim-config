@@ -61,6 +61,5 @@ return {
         pick_key_pose = 'right_separator',
       },
     },
-    dev = true,
   },
 }
