@@ -11,6 +11,13 @@ return {
     render = 'wrapped-compact', -- 'default', 'minimal', 'simple', 'compact', 'wrapped-compact'
     timeout = 1000,
     top_down = false,
+    icons = {
+      DEBUG = '',
+      ERROR = '',
+      INFO = '',
+      TRACE = '',
+      WARN = '',
+    },
   },
   config = function(_, opts)
     opts.stages = require('util.notify.limited_slide')
