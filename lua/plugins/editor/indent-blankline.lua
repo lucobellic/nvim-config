@@ -1,11 +1,11 @@
 local highlight = {
   'RainbowYellow',
+  'RainbowLightGreen',
   'RainbowViolet',
   'RainbowBlue',
-  'RainbowOrange',
-  'RainbowGreen',
-  'RainbowViolet',
+  'RainbowLightGreen',
   'RainbowCyan',
+  'RainbowViolet',
 }
 
 return {
@@ -15,7 +15,7 @@ return {
     indent = {
       char = '│',
       tab_char = '│',
-      highlight = 'VertSplit',
+      highlight = 'Folded',
     },
     scope = {
       enabled = true,
@@ -55,6 +55,7 @@ return {
       vim.api.nvim_set_hl(0, 'RainbowBlue', { link = 'TSRainbowBlue' })
       vim.api.nvim_set_hl(0, 'RainbowOrange', { link = 'TSRainbowOrange' })
       vim.api.nvim_set_hl(0, 'RainbowGreen', { link = 'TSRainbowGreen' })
+      vim.api.nvim_set_hl(0, 'RainbowLightGreen', { link = 'TSRainbowLightGreen' })
       vim.api.nvim_set_hl(0, 'RainbowViolet', { link = 'TSRainbowViolet' })
       vim.api.nvim_set_hl(0, 'RainbowCyan', { link = 'TSRainbowCyan' })
     end)

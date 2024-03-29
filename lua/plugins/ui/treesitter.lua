@@ -15,12 +15,12 @@ return {
           },
           highlight = {
             'TSRainbowYellow',
+            'TSRainbowLightGreen',
             'TSRainbowViolet',
             'TSRainbowBlue',
-            'TSRainbowOrange',
-            'TSRainbowGreen',
-            'TSRainbowViolet',
+            'TSRainbowLightGreen',
             'TSRainbowCyan',
+            'TSRainbowViolet',
           },
         }
       end,
