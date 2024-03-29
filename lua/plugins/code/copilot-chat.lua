@@ -16,6 +16,7 @@ return {
       { 'nvim-lua/plenary.nvim' },
     },
     opts = {
+      show_help = false,
       window = {
         layout = 'vertical',
       },
@@ -54,10 +55,12 @@ return {
       },
       { '<leader>coe', '<cmd>CopilotChatExplain<CR>', desc = 'CopilotChat Explain', mode = { 'n', 'v' } },
       { '<leader>cot', '<cmd>CopilotChatTests<CR>', desc = 'CopilotChat Tests', mode = { 'n', 'v' } },
-      { '<leader>cof', '<cmd>CopilotChatFix<CR>', desc = 'CopilotChat Explain Code', mode = { 'n', 'v' } },
+      { '<leader>cof', '<cmd>CopilotChatFix<CR>', desc = 'CopilotChat Fix', mode = { 'n', 'v' } },
       { '<leader>cod', '<cmd>CopilotChatDocs<CR>', desc = 'CopilotChat Docs', mode = { 'n', 'v' } },
       { '<leader>coo', '<cmd>CopilotChatOptimize<CR>', desc = 'CopilotChat Optimize', mode = { 'n', 'v' } },
       { '<leader>cos', '<cmd>CopilotChatCommitStaged<CR>', desc = 'CopilotChat Commit Staged', mode = { 'n', 'v' } },
+      { '<leader>cop', '<cmd>CopilotChatPromptActions<CR>', desc = 'CopilotChat Prompt Actions', mode = { 'n', 'v' } },
+      { '<leader>coq', '<cmd>CopilotChatQuickChat<CR>', desc = 'CopilotChat Quick Chat', mode = { 'n', 'v' } },
     },
   },
 }
