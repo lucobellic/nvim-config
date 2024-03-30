@@ -70,6 +70,7 @@ return {
       { '<leader>ooy', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
       { '<leader>oon', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
     },
+    ft = 'markdown',
     config = function(_, opts)
       require('obsidian').setup(opts)
 
