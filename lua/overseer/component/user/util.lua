@@ -31,10 +31,6 @@ local command_problem_matcher = {
     problem_matcher = matcher.resolve_problem_matcher('$gcc'),
   },
   {
-    regexp = 'cargo.*build',
-    problem_matcher = matcher.resolve_problem_matcher('$rustc'),
-  },
-  {
     regexp = '\\(py\\|conf-test\\)',
     problem_matcher = M.python_problem_matcher,
   },
