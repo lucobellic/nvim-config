@@ -22,10 +22,6 @@ return {
         'nvim-telescope/telescope-live-grep-args.nvim',
         config = function() require('telescope').load_extension('live_grep_args') end,
       },
-      -- {
-      --   'prochri/telescope-all-recent.nvim',
-      --   config = function() require('telescope-all-recent').setup({}) end,
-      -- },
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
@@ -99,12 +95,12 @@ return {
       { '<leader><leader>', false },
       {
         '<leader>fL',
-        function() require('telescope').extensions.live_grep_args.live_grep_args() end,
+        function() require('telescope').extensions.live_grep_args.live_grep_args({ layout_strategy = 'vertical' }) end,
         desc = 'Search Workspace',
       },
       {
         '<C-f>',
-        function() require('telescope').extensions.live_grep_args.live_grep_args() end,
+        function() require('telescope').extensions.live_grep_args.live_grep_args({ layout_strategy = 'vertical' }) end,
         desc = 'Search Workspace',
       },
       {
@@ -192,19 +188,20 @@ return {
 
       -- Symbols
       {
-        '<leader>flss',
-        function() require('telescope.builtin').lsp_document_symbols() end,
-        desc = 'Find Document Symbols',
+        '<leader>ss',
+        function() require('telescope.builtin').lsp_document_symbols({ symbol_width = 50 }) end,
+        desc = 'Search Document Symbols',
       },
       {
-        '<leader>flsd',
-        function() require('telescope.builtin').lsp_dynamic_workspace_symbols() end,
-        desc = 'Find Workspace Symbols',
-      },
-      {
-        '<leader>flsw',
-        function() require('telescope.builtin').lsp_workspace_symbols() end,
-        desc = 'Find Dynamic Workspace Symbols',
+        '<leader>sS',
+        function()
+          require('telescope.builtin').lsp_dynamic_workspace_symbols({
+            layout_strategy = 'vertical',
+            fname_width = 100,
+            symbol_width = 50,
+          })
+        end,
+        desc = 'Search Workspace Symbols',
       },
       {
         '<leader>flt',
@@ -230,8 +227,6 @@ return {
           i = {
             ['<c-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
             ['<esc>'] = require('telescope.actions').close,
-            ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
-            ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
             ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
@@ -274,7 +269,7 @@ return {
         initial_mode = 'insert',
         selection_strategy = 'reset',
         sorting_strategy = 'ascending',
-        layout_strategy = 'vertical', -- horizontal
+        layout_strategy = 'horizontal', -- vertical
         layout_config = {
           horizontal = {
             width = 0.9,
