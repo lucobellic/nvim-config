@@ -2,7 +2,7 @@ local Ui = require('lazyvim.util').ui
 
 local M = {}
 
-function M.personal_statusline()
+function M.statuscolumn()
   local win = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(win)
   local is_file = vim.bo[buf].buftype == ''
@@ -14,9 +14,10 @@ function M.personal_statusline()
     ---@type Sign?,Sign?,Sign?
     local left, right, fold
     for _, s in ipairs(Ui.get_signs(buf, vim.v.lnum)) do
-      if s.name and s.name:find('GitSign') then
+      local is_diagnostic = s.name and s.name:find('DiagnosticSign')
+      if s.name and (s.name:find('GitSign') or s.name:find('MiniDiffSign')) then
         right = s
-      else
+      elseif not is_diagnostic then
         left = s
       end
     end
@@ -28,17 +29,11 @@ function M.personal_statusline()
         fold = { text = vim.opt.fillchars:get().foldclose or '', texthl = 'Folded' }
       end
     end)
-
     -- Left: mark or non-git sign
-    local left_icon = Ui.icon(Ui.get_mark(buf, vim.v.lnum) or left)
-    -- local left_icon = Ui.icon(Ui.get_mark(buf, vim.v.lnum) or left):gsub("%s+", "")
-    -- left_icon = left_icon == '' and ' ' or left_icon
-    components[1] = left_icon
-
+    components[1] = Ui.icon(Ui.get_mark(buf, vim.v.lnum) or left)
+    components[1] = components[1] == '' and ' ' or components[1]
     -- Right: fold icon or git sign (only if file)
-    local right_icon = Ui.icon(fold or right):gsub('%s+', '')
-    right_icon = right_icon == '' and ' ' or right_icon
-    components[3] = is_file and right_icon or ''
+    components[3] = is_file and Ui.icon(fold or right) or ''
   end
 
   -- Numbers in Neovim are weird
@@ -54,12 +49,13 @@ function M.personal_statusline()
     components[2] = '%=' .. components[2] .. ' ' -- right align
   end
 
-  local statusline = table.concat(components, '')
-  return statusline
+  if vim.v.virtnum ~= 0 then
+    components[2] = '%= '
+  end
+
+  return table.concat(components, '')
 end
 
-function M.get()
-  return Ui.statuscolumn()
-end
+function M.get() return M.statuscolumn() end
 
 return M
