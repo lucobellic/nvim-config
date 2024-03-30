@@ -40,17 +40,6 @@ return {
     },
     right = {
       {
-        title = 'chatgpt',
-        ft = 'markdown',
-        filter = function(buf, win)
-          local is_not_floating = vim.api.nvim_win_get_config(win).relative == ''
-          local is_prompt = vim.bo[buf].buftype == 'prompt'
-          return is_prompt and is_not_floating
-        end,
-        open = 'GpChatToggle',
-        size = { width = 0.40 },
-      },
-      {
         title = 'copilot-chat',
         ft = 'markdown',
         filter = function(buf, win)
