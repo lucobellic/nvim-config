@@ -2,6 +2,7 @@ return {
   ['null-ls'] = '',
   ansiblels = '󱂚',
   basedpyright = '󰌠',
+  marksman = '',
   clangd = '',
   copilot = '',
   docker_compose_language_service = '',
