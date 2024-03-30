@@ -5,7 +5,6 @@ return {
     -- highlight for Window separator
     hi = {
       link = 'Identifier',
-      -- fg = '#2D6096',
     },
     -- This plugin will not be activated for filetype in the following table.
     no_exec_files = {
@@ -19,6 +18,7 @@ return {
     symbols = { '─', '│', '╭', '╮', '╰', '╯' },
     -- Smooth moving switch
     smooth = false,
+    zindex = 20,
     anchor = {
       left = { height = 1, x = -1, y = -1 },
       right = { height = 1, x = -1, y = 0 },
