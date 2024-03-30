@@ -1,48 +1,85 @@
 return {
   'folke/trouble.nvim',
+  branch = 'dev',
+  keys = {
+    {
+      '<leader>xX',
+      '<cmd>Trouble diagnostics toggle<cr>',
+      desc = 'Diagnostics (Trouble)',
+    },
+    {
+      '<leader>xx',
+      '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+      desc = 'Buffer Diagnostics (Trouble)',
+    },
+    {
+      '<leader>cs',
+      '<cmd>Trouble symbols toggle focus=false<cr>',
+      desc = 'Symbols (Trouble)',
+    },
+    {
+      '<leader>cL',
+      '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+      desc = 'LSP Definitions / references / ... (Trouble)',
+    },
+    {
+      '<leader>xL',
+      '<cmd>Trouble loclist toggle<cr>',
+      desc = 'Location List (Trouble)',
+    },
+    {
+      '<leader>xQ',
+      '<cmd>Trouble qflist toggle<cr>',
+      desc = 'Quickfix List (Trouble)',
+    },
+  },
   opts = {
-    position = 'bottom', -- position of the list can be: bottom, top, left, right
-    height = 10, -- height of the trouble list when position is top or bottom
-    width = 50, -- width of the list when position is left or right
-    icons = true, -- use devicons for filenames
-    mode = 'loclist', -- "lsp_workspace_diagnostics", "lsp_document_diagnostics", "quickfix", "lsp_references", "loclist"
-    fold_open = '', -- icon used for open folds
-    fold_closed = '', -- icon used for closed folds
-    action_keys = {
-      -- key mappings for actions in the trouble list
-      -- map to {} to remove a mapping, for example:
-      -- close = {},
-      close = 'q', -- close the list
-      cancel = '<esc>', -- cancel the preview and get back to your last window / buffer / cursor
-      refresh = 'r', -- manually refresh
-      jump = { '<cr>', '<tab>' }, -- jump to the diagnostic or open / close folds
-      open_split = { '<c-x>' }, -- open buffer in new split
-      open_vsplit = { '<c-v>' }, -- open buffer in new vsplit
-      open_tab = { '<c-t>' }, -- open buffer in new tab
-      jump_close = { 'o' }, -- jump to the diagnostic and close the list
-      toggle_mode = 'm', -- toggle between "workspace" and "document" diagnostics mode
-      toggle_preview = 'P', -- toggle auto_preview
-      hover = 'H', -- opens a small poup with the full multiline message
-      preview = 'p', -- preview the diagnostic location
-      close_folds = { 'zM', 'zm', 'J' }, -- close all folds
-      open_folds = { 'zR', 'zr', 'L' }, -- open all folds
-      toggle_fold = { 'zA', 'za', 'h', 'l' }, -- toggle fold of current file
-      previous = 'k', -- preview item
-      next = 'j', -- next item
+    modes = {
+      lsp_references = {
+        desc = 'LSP References',
+        mode = 'lsp_references',
+        restore = true,
+        focus = false,
+        follow = false,
+      },
+      lsp_definitions = {
+        desc = 'LSP definitions',
+        mode = 'lsp_definitions',
+        restore = true,
+        focus = false,
+        follow = false,
+      },
     },
-    indent_lines = true, -- add an indent guide below the fold icons
-    auto_open = false, -- automatically open the list when you have diagnostics
-    auto_close = false, -- automatically close the list when you have no diagnostics
-    auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-    auto_fold = true, -- automatically fold a file trouble list at creation
-    signs = {
-      -- icons / text used for a diagnostic
-      error = ' ',
-      warning = ' ',
-      hint = ' ',
-      information = ' ',
-      other = ' ',
+    -- Key mappings can be set to the name of a builtin action,
+    -- or you can define your own custom action.
+    ---@type table<string, string|trouble.Action>
+    keys = {
+      ['?'] = 'help',
+      r = 'refresh',
+      R = 'toggle_refresh',
+      q = 'close',
+      o = 'jump_close',
+      ['<esc>'] = 'cancel',
+      ['<cr>'] = 'jump',
+      ['<2-leftmouse>'] = 'jump',
+      ['<c-s>'] = 'jump_split',
+      ['<c-v>'] = 'jump_vsplit',
+      -- go down to next item (accepts count)
+      -- j = "next",
+      ['}'] = 'next',
+      [']]'] = 'next',
+      -- go up to prev item (accepts count)
+      -- k = "prev",
+      ['{'] = 'prev',
+      ['[['] = 'prev',
+      i = 'inspect',
+      p = 'preview',
+      P = 'toggle_preview',
+      l = 'jump',
+      L = 'fold_open_all',
+      h = 'fold_close',
+      H = 'fold_close_all',
     },
-    use_diagnostic_signs = false, -- enabling this will use the signs defined in your lsp client
+    icons = {},
   },
 }

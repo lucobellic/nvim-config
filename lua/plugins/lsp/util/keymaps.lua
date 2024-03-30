@@ -6,12 +6,12 @@ return function()
   local keys = require('lazyvim.plugins.lsp.keymaps').get()
 
   keys[#keys + 1] = { 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>' }
-  keys[#keys + 1] = { 'gd', '<cmd>TroubleToggle lsp_definitions<CR>' }
   keys[#keys + 1] = { 'K', '<cmd>lua vim.lsp.buf.hover()<CR>' }
   keys[#keys + 1] = { 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>' }
   keys[#keys + 1] = { 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>' }
 
-  keys[#keys + 1] = { 'gr', '<cmd>TroubleToggle lsp_references<CR>' }
+  keys[#keys + 1] = { 'gd', '<cmd>Trouble lsp_definitions<CR>' }
+  keys[#keys + 1] = { 'gr', '<cmd>Trouble lsp_references<CR>' }
 
   keys[#keys + 1] = { '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>' }
   keys[#keys + 1] = { '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>' }
