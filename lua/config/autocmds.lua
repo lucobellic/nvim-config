@@ -58,17 +58,6 @@ local toggle_transparency = function()
 end
 vim.api.nvim_create_user_command('TransparencyToggle', toggle_transparency, {})
 
--- Override diagnostic signs to set line color and remove icon
--- TODO: Move to appropriate configuration file
-for name, icon in pairs(require('lazyvim.config').icons.diagnostics) do
-  local hl = 'DiagnosticSign' .. name
-  if name == 'Hint' or name == 'Info' then
-    vim.fn.sign_define(hl, { text = '', texthl = hl, numhl = '' })
-  else
-    vim.fn.sign_define(hl, { text = '', texthl = hl, numhl = hl })
-  end
-end
-
 vim.api.nvim_set_hl(0, 'DapStoppedLine', { default = true, link = 'Visual' })
 
 -- Always focus on buffer after tab change
