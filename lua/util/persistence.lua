@@ -36,27 +36,12 @@ function M.load_session(session_file)
     vim.cmd('silent! %bd!')
     vim.cmd('silent! source ' .. vim.fn.fnameescape(session_file))
     vim.cmd('ScopeLoadState')
-    local ok, overseer = pcall(require, 'overseer')
-    if ok then
-      overseer.load_task_bundle(session_file, { ignore_missing = true, autostart = false })
-    end
   end
 end
 
 function M.pre_save()
   vim.cmd('tabmove 0')
   vim.cmd('ScopeSaveState')
-  local session_file = require('persistence').get_current()
-  local ok, overseer = pcall(require, 'overseer')
-  if ok then
-    overseer.save_task_bundle(
-      session_file,
-      -- Passing nil will use config.opts.save_task_opts. You can call list_tasks() explicitly and
-      -- pass in the results if you want to save specific tasks.
-      nil,
-      { on_conflict = 'overwrite' } -- Overwrite existing bundle, if any
-    )
-  end
 end
 
 ---Use vim.ui.select() to load session from persistence plugin
