@@ -47,6 +47,7 @@ return {
         incline = { enabled = false }, -- disables the incline markers
         gitsigns = { enabled = false }, -- disables git signs
         tmux = { enabled = false }, -- disables the tmux statusline
+        twilight = { enabled = false }, -- disables the twilight plugin
         -- this will change the font size on kitty when in zen mode
         -- to make this work, you need to set the following kitty options:
         -- - allow_remote_control socket-only
@@ -57,9 +58,9 @@ return {
         },
       },
       -- callback where you can add custom code when the Zen window opens
-      on_open = function(win) require('incline').disable() end,
+      -- on_open = function(win) require('incline').disable() end,
       -- callback where you can add custom code when the Zen window closes
-      on_close = function() require('incline').enable() end,
+      -- on_close = function() require('incline').enable() end,
     },
   },
 }
