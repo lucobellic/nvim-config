@@ -73,8 +73,8 @@ vim.api.nvim_buf_set_keymap(0, 'n', 'gf', '<cmd>OpenInNormalWindow<cr>', { norem
 vim.api.nvim_buf_set_keymap(0, 'n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', { noremap = true, silent = true })
 vim.api.nvim_buf_set_keymap(0, 't', '<C-q>', '<C-\\><C-n>:FloatermCloseCurrent<cr>', { noremap = true, silent = true })
 
-vim.api.nvim_buf_set_keymap(0, 't', '<C-j>', '', { noremap = true })
-vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', '', { noremap = true })
+vim.keymap.set('t', '<c-j>', '<c-j>', { buffer = 0, nowait = true })
+vim.keymap.set('t', '<c-k>', '<c-k>', { buffer = 0, nowait = true })
 
 vim.keymap.set({ 'n', 't' }, '<C-down>', function()
   add_dimension_offset('height', -0.1)
