@@ -165,10 +165,14 @@ map('n', '<C-right>', function() require('smart-splits').resize_right() end, { r
 map('n', '<leader>A', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
 
 -- Spelling
-map('n', '>S', ']s', { repeatable = true, desc = 'Next Spelling' })
-map('n', '>s', ']s', { repeatable = true, desc = 'Next Spelling' })
-map('n', '<S', '[s', { repeatable = true, desc = 'Prev Spelling' })
-map('n', '<s', '[s', { repeatable = true, desc = 'Prev Spelling' })
+map('n', '>S', ']s', { desc = 'Next Spelling' })
+map('n', '>s', ']s', { desc = 'Next Spelling' })
+map('n', '<S', '[s', { desc = 'Prev Spelling' })
+map('n', '<s', '[s', { desc = 'Prev Spelling' })
+
+-- Indent
+map('n', '>>', '>>', { desc = 'Increase Indent' })
+map('n', '<<', '<<', { desc = 'Decrease Indent' })
 
 -- Copilot
 if wk_ok then

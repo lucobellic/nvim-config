@@ -53,10 +53,14 @@ return {
         goto_next_start = {
           ['>f'] = '@function.outer',
           ['>F'] = '@function.outer',
+          ['>c'] = '@class.outer',
+          ['>C'] = '@class.outer',
         },
         goto_previous_start = {
           ['<f'] = '@function.outer',
           ['<F'] = '@function.outer',
+          ['<c'] = '@class.outer',
+          ['<C'] = '@class.outer',
         },
       },
     },
