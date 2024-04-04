@@ -1,6 +1,5 @@
 return {
   'zbirenbaum/copilot.lua',
-  enabled = not vim.g.started_by_firenvim,
   opts = {
     filetypes = {
       markdown = true,

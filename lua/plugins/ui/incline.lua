@@ -98,6 +98,7 @@ end
 return {
   'b0o/incline.nvim',
   event = 'BufEnter',
+  enabled = not vim.g.started_by_firenvim,
   keys = {
     {
       '<leader>uo',

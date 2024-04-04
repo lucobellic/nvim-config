@@ -66,8 +66,12 @@ vim.o.foldenable = true
 vim.o.foldtext = 'v:lua.custom_fold_text()'
 vim.o.virtualedit = 'block'
 
-local blinking = vim.g.neovide and 'blinkon0' or 'blinkwait300-blinkon200-blinkoff150'
-vim.o.guicursor = 'n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:' .. blinking .. '-Cursor/lCursor'
+if vim.g.started_by_firenvim then
+  vim.o.guicursor = 'n-v-c:blinkon0'
+else
+  local blinking = vim.g.neovide and 'blinkon0' or 'blinkwait300-blinkon200-blinkoff150'
+  vim.o.guicursor = 'n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:' .. blinking .. '-Cursor/lCursor'
+end
 
 vim.g.lion_squeeze_spaces = true
 
