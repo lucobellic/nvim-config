@@ -1,6 +1,6 @@
 vim.filetype.add({
   filename = {
-    ['.clangd'] = 'toml',
+    ['.clangd'] = 'yaml',
     ['run.test'] = 'python',
   },
   extension = {
@@ -14,6 +14,7 @@ vim.filetype.add({
     gitconfig = 'gitconfig',
     ['gitlab.txt'] = 'markdown',
     ['github.txt'] = 'markdown',
+    rviz = 'yaml',
   },
   pattern = {
     ['gitlab.*%.txt'] = 'markdown',
