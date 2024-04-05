@@ -1,3 +1,11 @@
+local function cycle_layout(prompt_bufnr)
+  local picker = require('telescope.actions.state').get_current_picker(prompt_bufnr)
+  picker.layout_strategy = picker.layout_strategy == 'vertical' and 'horizontal' or 'vertical'
+  picker.layout_config = {}
+  picker.previewer = picker.all_previewers and picker.all_previewers[1] or nil
+  picker:full_layout_update()
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -130,12 +138,12 @@ return {
       },
       {
         '<leader>fgs',
-        function() require('telescope.builtin').git_status() end,
+        function() require('telescope.builtin').git_status({ layout_strategy = 'vertical' }) end,
         desc = 'Git Status',
       },
       {
         '<leader>fgc',
-        function() require('telescope.builtin').git_commits() end,
+        function() require('telescope.builtin').git_commits({ layout_strategy = 'vertical' }) end,
         desc = 'Git Commits',
       },
       {
@@ -145,7 +153,7 @@ return {
       },
       {
         '<leader>fm',
-        function() require('telescope.builtin').marks() end,
+        function() require('telescope.builtin').marks({ layout_strategy = 'vertical' }) end,
         desc = 'Find Marks',
       },
 
@@ -229,7 +237,7 @@ return {
             ['<esc>'] = require('telescope.actions').close,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
-            ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
+            ['<C-j>'] = cycle_layout,
             ['<RightMouse>'] = require('telescope.actions').close,
             ['<LeftMouse>'] = require('telescope.actions').select_default,
             ['<ScrollWheelDown>'] = require('telescope.actions').move_selection_next,
@@ -243,7 +251,7 @@ return {
             ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
             ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
-            ['<C-x>'] = require('telescope.actions.layout').cycle_layout_next,
+            ['<C-j>'] = cycle_layout,
           },
         },
         history = {
@@ -272,10 +280,10 @@ return {
         layout_strategy = 'horizontal', -- vertical
         layout_config = {
           horizontal = {
-            width = 0.9,
+            width = 0.6,
+            height = 0.5,
             prompt_position = 'top',
-            mirror = false,
-            preview_width = 0.55,
+            preview_width = 0, -- disable previewer
           },
           vertical = {
             width = 0.9,
@@ -293,6 +301,17 @@ return {
         color_devicons = true,
         -- use_less = true,
         set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
+      },
+      pickers = {
+        grep_string = {
+          layout_strategy = 'vertical',
+        },
+        help_tags = {
+          layout_strategy = 'vertical',
+        },
+        diagnostics = {
+          layout_strategy = 'vertical',
+        },
       },
       extensions = {
         fzf = {
