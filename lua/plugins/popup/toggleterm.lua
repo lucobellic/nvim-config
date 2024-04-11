@@ -47,9 +47,12 @@ return {
     { '<leader>up', '<cmd>ToggleTerm<cr>', desc = 'Toggle Toggleterm' },
   },
   opts = {
-    start_in_insert = false,
-    close_on_exit = true,
+    auto_scroll = false,
+    close_on_exit = false,
+    persist_mode = false,
+    persist_size = false,
     shade_terminals = false,
+    start_in_insert = false,
     winbar = {
       enabled = false,
       name_formatter = function(term) --  term: Terminal
