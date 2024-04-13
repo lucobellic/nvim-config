@@ -10,7 +10,9 @@ return {
   },
   {
     'jackMort/ChatGPT.nvim',
+    name = 'chatgpt',
     enabled = not vim.g.started_by_firenvim,
+    event = 'VeryLazy',
     cmd = { 'ChatGPT', 'ChatGPTRun' },
     keys = {
       -- { '<leader>cg', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },
@@ -67,8 +69,11 @@ return {
         model = 'gpt-4-1106-preview',
       },
     },
+    config = function(_, opts) require('chatgpt').setup(opts) end,
     dependencies = {
       'MunifTanjim/nui.nvim',
+      'nvim-lua/plenary.nvim',
+      'folke/trouble.nvim',
       'nvim-telescope/telescope.nvim',
     },
   },
