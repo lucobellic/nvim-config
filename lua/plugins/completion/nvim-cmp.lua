@@ -92,6 +92,11 @@ return {
       native_menu = false,
       ghost_text = { hl_group = 'Comment' },
     },
+    view = {
+      entries = {
+        follow_cursor = true,
+      },
+    },
     window = {
       completion = {
         border = 'rounded',
