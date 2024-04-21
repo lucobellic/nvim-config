@@ -7,7 +7,7 @@ return {
       'NvimTree',
       'neo-tree',
       'OverseerList',
-      'Outline'
+      'Outline',
     },
     -- Ignored buffer types (only while resizing)
     ignored_buftypes = {
@@ -15,7 +15,5 @@ return {
       'quickfix',
       'prompt',
     },
-
-    smart_splits = {},
   },
 }
