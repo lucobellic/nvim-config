@@ -22,15 +22,19 @@ local function open_popup(bufnr, config)
     'TelescopePreviewTitle',
   }
 
-  --- Get popup highlight string with title highlight based on index value
-  --- Find the first digit as index from the provided string
-  ---@param index string
-  ---@return string
   local function get_highlight(index)
     local term_index = tonumber(index:match('%d') or '1') - 1
     local highlight_index = (term_index % #highlights) + 1
     local highlight = highlights[highlight_index]
-    return ('Normal:Normal,FloatBorder:FloatBorder,FloatTitle:%s'):format(highlight)
+    return highlight
+  end
+
+  --- Get popup highlight string with title highlight based on index value
+  --- Find the first digit as index from the provided string
+  ---@param index string
+  ---@return string
+  local function get_window_highlight(index)
+    return ('Normal:Normal,FloatBorder:FloatBorder,FloatTitle:%s'):format(get_highlight(index))
   end
 
   --- Extract title and index from floaterm title
@@ -68,8 +72,8 @@ local function open_popup(bufnr, config)
       text = {
         top = ' ' .. parsed_title.title .. ' ',
         top_align = 'center',
-        bottom = NuiText(' ' .. parsed_title.index .. ' ', 'TelescopePromptCounter'),
-        bottom_align = 'right',
+        bottom = NuiText(' ' .. parsed_title.index .. ' ', get_highlight(parsed_title.index)),
+        bottom_align = 'center',
       },
     },
     buf_options = {
@@ -78,7 +82,7 @@ local function open_popup(bufnr, config)
     },
     win_options = {
       winblend = vim.o.winblend,
-      winhighlight = get_highlight(parsed_title.index),
+      winhighlight = get_window_highlight(parsed_title.index),
     },
   })
 
