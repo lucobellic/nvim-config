@@ -98,8 +98,8 @@ return {
     preview = {
       command = 'cat | lolcat -F 0.3',
       file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
-      file_width = 68,
-      file_height = 9,
+      file_width = 72,
+      file_height = 12,
     },
     config = configs[theme],
   },
