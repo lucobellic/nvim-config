@@ -65,6 +65,18 @@ return {
     { '<leader>bcl', '<cmd>BufferLineCloseRight<cr>', desc = 'Buffer Line Close Right' },
     { '<leader>bcp', '<cmd>BufferLinePickClose<cr>', desc = 'Buffer Line Pick Close' },
     { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
+    {
+      '<leader>bcv',
+      function()
+        -- Close all non visible buffers
+        for _, buf in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
+          if vim.fn.bufwinid(buf.bufnr) == -1 then
+            vim.api.nvim_command('bdelete ' .. buf.bufnr)
+          end
+        end
+      end,
+      desc = 'Buffer Line Close Non Visible',
+    },
   },
   opts = function()
     return {
