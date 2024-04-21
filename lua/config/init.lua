@@ -20,3 +20,7 @@ require('config.filetype')
 require('config.neovide')
 require('config.shell')
 require('config.lazy')
+
+if not vim.g.started_by_firenvim then
+  require('util.work.overseer')
+end
