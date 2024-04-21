@@ -16,7 +16,12 @@ return {
       { 'nvim-lua/plenary.nvim' },
     },
     opts = {
-      show_help = false,
+      show_help = true,
+      model = 'gpt-4',
+      question_header = '``` ```', -- Header to use for user questions
+      answer_header = '``` ```', -- Header to use for AI answers
+      error_header = '``` ```', -- Header to use for errors
+      separator = ':', -- Separator to use in chat
       window = {
         layout = 'vertical',
       },
@@ -62,5 +67,12 @@ return {
       { '<leader>cop', '<cmd>CopilotChatPromptActions<CR>', desc = 'CopilotChat Prompt Actions', mode = { 'n', 'v' } },
       { '<leader>coq', '<cmd>CopilotChatQuickChat<CR>', desc = 'CopilotChat Quick Chat', mode = { 'n', 'v' } },
     },
+    config = function(_, opts)
+      require('CopilotChat').setup(opts)
+      vim.api.nvim_create_autocmd('BufEnter', {
+        pattern = 'copilot-*',
+        callback = function() vim.o.number = false end,
+      })
+    end,
   },
 }
