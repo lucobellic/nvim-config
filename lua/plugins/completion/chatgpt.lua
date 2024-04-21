@@ -62,11 +62,11 @@ return {
         },
       },
       openai_params = {
-        model = 'gpt-4-1106-preview',
+        model = 'gpt-4-turbo',
         max_tokens = 3000,
       },
       openai_edit_params = {
-        model = 'gpt-4-1106-preview',
+        model = 'gpt-4-turbo',
       },
     },
     config = function(_, opts) require('chatgpt').setup(opts) end,

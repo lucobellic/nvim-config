@@ -12,7 +12,7 @@ return {
       providers = {
         openai = {
           enabled = true,
-          model = 'gpt-4-turbo-preview',
+          model = 'gpt-4-turbo',
         },
       },
       edgy = true,
