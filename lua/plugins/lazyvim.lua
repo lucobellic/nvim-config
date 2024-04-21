@@ -1,7 +1,7 @@
 return {
   'LazyVim/LazyVim',
   opts = {
-    colorscheme = 'ayugloom',
+    colorscheme = vim.g.neovide and 'ayugloom' or 'ayubleak',
     icons = {
       dap = {
         Stopped = { ' ', 'String', 'DapStoppedLine' }, --  
