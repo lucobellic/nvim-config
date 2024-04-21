@@ -6,16 +6,12 @@ return {
     keys = {
       {
         '<leader>;',
-        function()
-          require('edgy-group.stl').pick(function() require('lualine').refresh() end)
-        end,
+        function() require('edgy-group.stl').pick() end,
         desc = 'Edgy Group Pick',
       },
       {
         '<c-;>',
-        function()
-          require('edgy-group.stl').pick(function() require('lualine').refresh() end)
-        end,
+        function() require('edgy-group.stl').pick() end,
         desc = 'Edgy Group Pick',
       },
     },
