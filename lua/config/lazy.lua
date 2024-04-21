@@ -23,6 +23,7 @@ require('lazy').setup({
     { import = 'plugins.notes' },
     { import = 'plugins.popup' },
     { import = 'plugins.telescope' },
+    { import = 'plugins.terminal' },
     { import = 'plugins.theme' },
     { import = 'plugins.ui' },
   },
