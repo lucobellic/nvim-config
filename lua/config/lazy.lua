@@ -3,11 +3,11 @@ if not vim.loop.fs_stat(lazypath) then
   -- bootstrap lazy.nvim
   -- stylua: ignore
   vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
-  vim.print("Installing lazy.nvim...")
+  vim.print('Installing lazy.nvim...')
 end
 vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
-require("lazy").setup({
+require('lazy').setup({
   spec = {
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
 
@@ -64,7 +64,7 @@ require("lazy").setup({
     -- directory where you store your local plugin projects
     path = '~/Development/personal',
     ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-    patterns = {},   -- For example {'folke'}
+    patterns = {}, -- For example {'folke'}
     fallback = true, -- Fallback to git when local plugin doesn't exist
   },
 })
