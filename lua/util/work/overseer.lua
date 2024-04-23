@@ -68,7 +68,7 @@ local function reach_run(run_args, list_args)
       table.insert(run_args, choice)
       overseer
         .new_task({
-          name = 'Reach ' .. table.concat(list_args, ' '),
+          name = choice,
           cmd = 'reach',
           args = run_args,
           components = { 'default' },
@@ -89,8 +89,8 @@ vim.keymap.set(
   'n',
   '<leader>oes',
   function() reach_run({ 'simu', 'run' }, { 'simu', 'list' }) end,
-  { desc = 'Reach Test' }
+  { desc = 'Reach Simu' }
 )
 
-vim.keymap.set('n', '<leader>oeb', cmake_build, { desc = 'Cmake Build Target' })
+vim.keymap.set('n', '<leader>oeb', cmake_build, { desc = 'Cmake Build Target', repeatable = true })
 vim.keymap.set('n', '<leader>oec', function() cmake_targets = nil end, { desc = 'Cmake Clear Target Cache' })
