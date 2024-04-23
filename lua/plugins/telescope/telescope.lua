@@ -197,7 +197,7 @@ return {
       -- Symbols
       {
         '<leader>ss',
-        function() require('telescope.builtin').lsp_document_symbols({ symbol_width = 50 }) end,
+        function() require('telescope.builtin').lsp_document_symbols({ symbol_width = 100 }) end,
         desc = 'Search Document Symbols',
       },
       {
