@@ -6,14 +6,21 @@ return {
   keys = {
     {
       '<leader>sl',
-      function()
-        require('nvim-navbuddy').open()
-      end,
+      function() require('nvim-navbuddy').open() end,
       desc = 'Navbuddy',
     },
   },
   opts = {
-    window = { size = '80%' },
+    window = {
+      border = 'rounded',
+      size = { width = '90%', height = '30%' },
+      position = { row = '98%', col = '50%' },
+      sections = {
+        right = {
+          preview = 'leaf', -- "leaf", "always" or "never"
+        },
+      },
+    },
     lsp = { auto_attach = true },
   },
   config = function(_, opts)
