@@ -89,6 +89,7 @@ return {
           { 'on_result_diagnostics', remove_on_restart = true, underline = false }, -- display diagnostics
           'on_result_diagnostics_quickfix', -- send diagnostics to quickfix or loclist
           { 'unique' },
+          { 'user.on_complete_close_term', statuses = { 'SUCCESS' }, timeout = 5 },
         },
         default_vscode = {
           'default',
