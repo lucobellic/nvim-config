@@ -91,7 +91,7 @@ return {
     },
     window = {
       completion = {
-        border = 'rounded',
+        border = vim.g.border,
         winhighlight = 'CursorLine:PmenuSel,Search:None',
         scrolloff = 0,
         col_offset = -3,
@@ -99,7 +99,7 @@ return {
         scrollbar = true,
       },
       documentation = {
-        border = 'rounded',
+        border = vim.g.border,
         winhighlight = 'CursorLine:PmenuSel,Search:None',
       },
     },

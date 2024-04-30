@@ -47,7 +47,7 @@ return {
       float = { source = true, header = {} },
     })
 
-    require('lspconfig.ui.windows').default_options.border = 'rounded'
+    require('lspconfig.ui.windows').default_options.border = vim.g.border
     return opts
   end,
   init = require('plugins.lsp.util.keymaps'),

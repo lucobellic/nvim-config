@@ -68,7 +68,7 @@ local function open_popup(bufnr, config)
         left = 0,
         right = 0,
       },
-      style = 'rounded',
+      style = vim.g.border,
       text = {
         top = ' ' .. parsed_title.title .. ' ',
         top_align = 'center',

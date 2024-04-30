@@ -28,7 +28,7 @@ return {
     },
     ui = {
       theme = 'round',
-      border = 'rounded',
+      border = vim.g.border,
       winblend = vim.o.pumblend,
       lines = { '', '', '', '', '' },
       expand = '',

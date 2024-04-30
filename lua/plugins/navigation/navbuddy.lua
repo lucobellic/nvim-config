@@ -14,6 +14,7 @@ return {
     window = {
       border = 'rounded',
       size = { width = '90%', height = '30%' },
+      border = vim.g.border,
       position = { row = '98%', col = '50%' },
       sections = {
         right = {

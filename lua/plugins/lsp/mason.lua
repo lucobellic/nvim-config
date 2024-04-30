@@ -6,7 +6,7 @@ return {
     opts = {
       PATH = 'prepend',
       ui = {
-        border = 'rounded',
+        border = vim.g.border,
         width = 0.8,
         height = 0.8,
       },

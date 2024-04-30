@@ -59,20 +59,14 @@ return {
       wilder.set_option(
         'renderer',
         wilder.popupmenu_renderer(wilder.popupmenu_palette_theme({
-          -- border = {
-          --   ' ', ' ', ' ',
-          --   ' ',      ' ',
-          --   ' ', ' ', ' ',
-          -- },
-          border = {
-            '╭',
-            '─',
-            '╮',
-            '│',
-            '│',
-            '╰',
-            '─',
-            '╯',
+          border = vim.g.border == 'rounded' and {
+            '╭', '─', '╮',
+            '│',      '│',
+            '╰', '─', '╯',
+          } or {
+            ' ', ' ', ' ',
+            ' ',      ' ',
+            ' ', ' ', ' ',
           },
           max_width = '50%',
           margin = 6, -- 5 stick to noice cmdline with 1 margin and without border

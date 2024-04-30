@@ -83,3 +83,8 @@ end
 -- Set python3 host prog to speed up startup
 vim.g.python3_host_prog = '/usr/bin/python3'
 vim.g.lazyvim_python_lsp = 'basedpyright'
+
+-- Set border style
+vim.g.border = vim.g.neovide and { ' ' } or 'rounded'
+vim.g.borderchars = vim.g.neovide and { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' }
+  or { '─', '│', '─', '│', '╭', '╮', '╯', '╰' }

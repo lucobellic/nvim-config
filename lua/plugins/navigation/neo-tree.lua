@@ -56,7 +56,7 @@ return {
     init = function() vim.g.neo_tree_remove_legacy_commands = 0 end,
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
-      popup_border_style = 'rounded',
+      popup_border_style = vim.g.border,
 
       -- Disable all file system notifications
       -- until https://github.com/nvim-neo-tree/neo-tree.nvim/issues/1025 is fixed
