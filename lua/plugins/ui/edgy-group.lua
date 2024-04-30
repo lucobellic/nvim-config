@@ -21,21 +21,6 @@ return {
           { icon = '', titles = { 'outline' }, pick_key = 'o' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
           { icon = '', titles = { 'copilot-chat' }, pick_key = 'c' },
-          {
-            icon = '',
-            titles = {
-              'OGPT Popup',
-              'OGPT Parameters',
-              'OGPT Template',
-              'OGPT Sessions',
-              'OGPT System Input',
-              'OGPT',
-              'OGPT Selection',
-              'OGPT Instruction',
-              'OGPT Chat',
-            },
-            pick_key = 'g',
-          },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },

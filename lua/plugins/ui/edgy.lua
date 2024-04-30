@@ -73,61 +73,7 @@ return {
         ft = 'neotest-summary',
         open = 'Neotest summary',
         size = { width = 0.20 },
-      },
-      {
-        title = 'OGPT Parameters',
-        ft = 'ogpt-parameters-window',
-        size = { height = 0.15 },
-        wo = { wrap = true },
-        open = '',
-      },
-      {
-        title = 'OGPT Template',
-        ft = 'ogpt-template',
-        size = { height = 0.15 },
-        open = '',
-      },
-      {
-        title = 'OGPT Sessions',
-        ft = 'ogpt-sessions',
-        size = { height = 0.15 },
-        wo = { wrap = true },
-        open = '',
-      },
-      {
-        title = 'OGPT System Input',
-        ft = 'ogpt-system-window',
-        size = { height = 0.15 },
-        open = '',
-      },
-      {
-        title = 'OGPT',
-        ft = 'ogpt-window',
-        size = { height = 0.5 },
-        wo = { wrap = true },
-        open = 'OGPT',
-      },
-      {
-        title = 'OGPT Selection',
-        ft = 'ogpt-selection',
-        size = { width = 0.20, height = 0.15 },
-        wo = { wrap = true },
-        open = '',
-      },
-      {
-        title = 'OGPT Instruction',
-        ft = 'ogpt-instruction',
-        size = { width = 0.20, height = 0.15 },
-        wo = { wrap = true },
-        open = '',
-      },
-      {
-        title = 'OGPT Chat',
-        ft = 'ogpt-input',
-        size = { width = 0.20, height = 4 },
-        wo = { wrap = true },
-        open = '',
-      },
+      }
     },
     bottom = {
       {
