@@ -1,13 +1,3 @@
-local function load_session(path)
-  local pattern = '/'
-  if vim.fn.has('win32') == 1 then
-    pattern = '[\\:]'
-  end
-  local name = path:gsub(pattern, '%%')
-  local session = require('persistence.config').options.dir .. name .. '.vim'
-  require('util.persistence').load_session(session)
-end
-
 -- local theme = 'doom'
 local theme = 'hyper'
 local doom_shortcut = {
@@ -68,39 +58,51 @@ local shortcut = {
   },
 }
 
-local configs = {
-  hyper = {
-    week_header = {
-      enable = false,
-    },
-    project = {
-      enable = true,
-      limit = 10,
-      icon = '󰏓',
-      label = '  Recent Projects:',
-      action = load_session,
-    },
-    shortcut = doom_shortcut,
-    footer = {},
-  },
-  doom = {
-    -- header = {},
-    center = doom_shortcut,
-    -- footer = {},
-  },
-}
-
 return {
   'nvimdev/dashboard-nvim',
-  event = 'VimEnter',
-  opts = {
-    theme = theme,
-    preview = {
-      command = 'cat | lolcat -F 0.3',
-      file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
-      file_width = 72,
-      file_height = 12,
-    },
-    config = configs[theme],
-  },
+  event = 'UIEnter',
+  opts = function(_, opts)
+    local function load_session(path)
+      local pattern = '/'
+      if vim.fn.has('win32') == 1 then
+        pattern = '[\\:]'
+      end
+      local name = path:gsub(pattern, '%%')
+      local session = require('persistence.config').options.dir .. name .. '.vim'
+      require('util.persistence').load_session(session)
+    end
+
+    local configs = {
+      hyper = {
+        week_header = {
+          enable = false,
+        },
+        project = {
+          enable = true,
+          limit = 10,
+          icon = '󰏓',
+          label = '  Recent Projects:',
+          action = load_session,
+        },
+        shortcut = doom_shortcut,
+        footer = {},
+      },
+      doom = {
+        -- header = {},
+        center = doom_shortcut,
+        -- footer = {},
+      },
+    }
+
+    return vim.tbl_extend('force', opts, {
+      theme = theme,
+      preview = {
+        command = 'cat | lolcat -F 0.3',
+        file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
+        file_width = 72,
+        file_height = 12,
+      },
+      config = configs[theme],
+    })
+  end,
 }
