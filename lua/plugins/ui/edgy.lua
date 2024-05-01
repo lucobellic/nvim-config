@@ -112,12 +112,6 @@ return {
         open = '',
       },
       {
-        title = 'overseer',
-        ft = 'OverseerList',
-        open = 'OverseerToggle!',
-        size = { width = 0.15 },
-      },
-      {
         title = 'trouble-telescope',
         ft = 'trouble',
         filter = function(_, win)
@@ -195,6 +189,12 @@ return {
         ft = 'neotest-output-panel',
         size = { height = 0.25 },
         open = 'Neotest output-panel',
+      },
+      {
+        title = 'overseer',
+        ft = 'OverseerList',
+        open = 'OverseerToggle!',
+        size = { width = 0.15 },
       },
     },
     animate = {
