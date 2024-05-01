@@ -1,4 +1,6 @@
-return function()
+local M = {}
+
+function M.setup()
   local format = function()
     require('lazyvim.util.format').format({ force = true })
     -- vim.lsp.buf.format()
@@ -71,3 +73,5 @@ return function()
     desc = 'Next Error',
   }
 end
+
+return M

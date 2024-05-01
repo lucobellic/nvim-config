@@ -1,8 +1,32 @@
 return {
   'neovim/nvim-lspconfig',
+  event = 'LazyFile',
   dependencies = {
-    'williamboman/mason-lspconfig.nvim',
-    optional = true,
+    {
+      'williamboman/mason-lspconfig.nvim',
+      dependencies = {
+        'williamboman/mason.nvim',
+        cmd = 'Mason',
+        opts = {
+          PATH = 'prepend',
+          ui = {
+            border = vim.g.border,
+            width = 0.8,
+            height = 0.8,
+          },
+        },
+      },
+      opts = {
+        ensure_installed = {
+          'jsonls',
+          'vimls',
+          'cmake',
+          'lua_ls',
+          'rust_analyzer',
+        },
+        automatic_installation = false,
+      },
+    },
   },
   opts = function(_, opts)
     opts.inlay_hints = { enabled = false }
@@ -39,7 +63,7 @@ return {
           [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
           [vim.diagnostic.severity.INFO] = 'DiagnosticInfo',
           [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
-        }
+        },
       },
       underline = true,
       update_in_insert = false,
@@ -48,7 +72,7 @@ return {
     })
 
     require('lspconfig.ui.windows').default_options.border = vim.g.border
+    require('plugins.lsp.util.keymaps').setup()
     return opts
   end,
-  init = require('plugins.lsp.util.keymaps'),
 }
