@@ -16,7 +16,7 @@ return {
       { 'nvim-lua/plenary.nvim' },
     },
     opts = {
-      show_help = true,
+      show_help = false,
       model = 'gpt-4',
       question_header = '``` ```', -- Header to use for user questions
       answer_header = '``` ```', -- Header to use for AI answers
@@ -26,7 +26,26 @@ return {
         layout = 'vertical',
       },
     },
-    cmd = { 'CopilotChat' },
+    cmd = {
+      'CopilotChat',
+      'CopilotChatOpen',
+      'CopilotChatClose',
+      'CopilotChatToggle',
+      'CopilotChatReset',
+      'CopilotChatSave',
+      'CopilotChatLoad',
+      'CopilotChatDebugInfo',
+      -- Commands from default prompts
+      'CopilotChatExplain',
+      'CopilotChatReview',
+      'CopilotChatFix',
+      'CopilotChatOptimize',
+      'CopilotChatDocs',
+      'CopilotChatTests',
+      'CopilotChatFixDiagnostic',
+      'CopilotChatCommit',
+      'CopilotChatCommitStaged',
+    },
     keys = {
       { '<leader>coc', '<cmd>CopilotChat<CR>', desc = 'Copilot Chat', mode = { 'n', 'v' } },
       -- Quick chat with Copilot

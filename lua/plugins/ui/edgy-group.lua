@@ -2,7 +2,6 @@ return {
   {
     'lucobellic/edgy-group.nvim',
     dependencies = { 'folke/edgy.nvim' },
-    event = 'VeryLazy',
     keys = {
       {
         '<leader>;',
