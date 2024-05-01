@@ -19,9 +19,28 @@ local function term_focus_offset(offset)
   end
 end
 
+local function open_file()
+  local buffers = vim.tbl_filter(
+    function(buffer) return #buffer.windows >= 1 end,
+    vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
+  )
+  local first_window = #buffers > 0 and buffers[1].windows[1] or nil
+
+  local filename = vim.fn.expand(vim.fn.expand('<cfile>'))
+  if vim.fn.filereadable(filename) == 1 then
+    if first_window then
+      vim.api.nvim_set_current_win(first_window)
+    end
+    vim.cmd('edit ' .. filename)
+  else
+    vim.notify('File does not exist: ' .. filename)
+  end
+end
+
 local opts = { buffer = 0 }
 vim.keymap.set({ 't' }, '<esc>', [[<C-\><C-n>]], opts)
 vim.keymap.set({ 't', 'n' }, '<S-h>', function() term_focus_offset(-1) end, opts)
 vim.keymap.set({ 't', 'n' }, '<S-l>', function() term_focus_offset(1) end, opts)
 vim.keymap.set({ 't', 'n' }, '<C-q>', '<cmd>ToggleTermShutdown<cr>', opts)
 vim.keymap.set({ 't', 'n' }, '<C-t>', '<cmd>ToggleTermSplit<cr>', opts)
+vim.keymap.set({ 'n' }, 'gf', function() open_file() end, { buffer = 0 })
