@@ -233,7 +233,7 @@ return {
       defaults = {
         mappings = {
           i = {
-            ['<c-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
+            ['<c-t>'] = function(...) require('trouble.sources.telescope').open(...) end,
             ['<esc>'] = require('telescope.actions').close,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
@@ -246,7 +246,7 @@ return {
             ['<S-down>'] = require('telescope.actions').cycle_history_next,
           },
           n = {
-            ['<c-t>'] = function(...) require('trouble.providers.telescope').smart_open_with_trouble(...) end,
+            ['<c-t>'] = function(...) require('trouble.sources.telescope').open(...) end,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
             ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,

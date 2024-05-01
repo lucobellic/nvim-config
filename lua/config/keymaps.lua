@@ -149,7 +149,7 @@ vim.keymap.set({ 'n' }, '<C-f>',
 -- Inlay hints
 local function toggle_inlay_hints()
   local is_enabled = vim.lsp.inlay_hint.is_enabled()
-  vim.lsp.inlay_hint.enable(0, not is_enabled)
+  vim.lsp.inlay_hint.enable(not is_enabled)
   local text = (not is_enabled and 'Enabled' or 'Disabled') .. ' inlay hints'
   local level = not is_enabled and vim.log.levels.INFO or vim.log.levels.WARN
   vim.notify(text, level, { title = 'Options' })
