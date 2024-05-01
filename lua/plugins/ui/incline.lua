@@ -113,6 +113,12 @@ return {
         vertical = { top = vim.o.laststatus == 3 and 0 or 1, bottom = 0 }, -- shift to overlap window borders
         horizontal = { left = 0, right = 2 }, -- shift for scrollbar
       },
+      overlap = {
+        borders = true,
+        statusline = true,
+        tabline = false,
+        winbar = true,
+      },
     },
     hide = {
       cursorline = false,
