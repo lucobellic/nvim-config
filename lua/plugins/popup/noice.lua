@@ -126,7 +126,8 @@ spinners.font_spinner = {
 
 return {
   'folke/noice.nvim',
-  enabled = not vim.g.started_by_firenvim,
+  -- Disable noice if started by firenvim or profiling
+  enabled = not vim.g.started_by_firenvim and not os.getenv('NVIM_PROFILE'),
   keys = {
     { '<c-f>', false },
     { '<c-p>', false },
