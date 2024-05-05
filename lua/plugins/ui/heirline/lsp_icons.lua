@@ -13,7 +13,7 @@ return {
   neocmake = '',
   pylsp = '󰌠',
   ruff_lsp = '󱔎',
-  rust_analyzer = '󱘗',
+  ['rust-analyzer'] = '󱘗',
   tsserver = '󰛦',
   yamlls = '',
 }
