@@ -50,20 +50,8 @@ vim.opt.fillchars = {
   vertleft = '┤',
   vertright = '├',
   verthoriz = '┼',
-  fold = '',
-  foldsep = ' ',
-  foldopen = '',
-  foldclose = '',
 }
 
--- Fold configuration
-vim.o.foldcolumn = '0'
-vim.o.foldmethod = 'syntax'
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-vim.o.foldenable = true
-
-vim.o.foldtext = 'v:lua.custom_fold_text()'
 vim.o.virtualedit = 'block'
 
 if vim.g.started_by_firenvim then
