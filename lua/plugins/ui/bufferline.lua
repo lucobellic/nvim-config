@@ -60,7 +60,21 @@ return {
       function() require('mini.bufremove').delete(0, false) end,
       desc = 'Delete Buffer',
     },
-    { '<leader>bco', '<cmd>BufferLineCloseOthers<cr>', desc = 'Buffer Line Close Others' },
+    {
+      '<leader>bco',
+      function()
+        local current_buf = vim.fn.bufnr()
+        vim.tbl_map(
+          function(buf) vim.api.nvim_buf_delete(buf.bufnr, { force = true }) end,
+          vim.tbl_filter(
+            function(buf) return not is_pinned(buf) and buf.bufnr ~= current_buf end,
+            vim.fn.getbufinfo({ buflisted = 1 })
+          )
+        )
+        vim.cmd.redrawtabline()
+      end,
+      desc = 'Buffer Line Close Others (Non Pinned)',
+    },
     { '<leader>bch', '<cmd>BufferLineCloseLeft<cr>', desc = 'Buffer Line Close Left' },
     { '<leader>bcl', '<cmd>BufferLineCloseRight<cr>', desc = 'Buffer Line Close Right' },
     { '<leader>bcp', '<cmd>BufferLinePickClose<cr>', desc = 'Buffer Line Pick Close' },
