@@ -12,9 +12,8 @@ return {
   },
   opts = {
     window = {
-      border = 'rounded',
-      size = { width = '90%', height = '30%' },
       border = vim.g.border,
+      size = { width = '100%', height = '20%' },
       position = { row = '98%', col = '50%' },
       sections = {
         right = {
