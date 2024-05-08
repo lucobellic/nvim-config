@@ -40,6 +40,14 @@ return {
           pick_inactive = 'FlashLabel',
         },
         pick_key_pose = 'right_separator',
+        pick_function = function(key)
+          -- Use upper case to focus all element of the selected group while closing other (disable toggle)
+          local toggle = not key:match('%u')
+          local edgy_group = require('edgy-group')
+          for _, group in ipairs(edgy_group.get_groups_by_key(key:lower())) do
+            pcall(edgy_group.open_group_index, group.position, group.index, toggle)
+          end
+        end,
       },
     },
   },
