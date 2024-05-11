@@ -5,7 +5,12 @@ return {
     {
       'Joakker/lua-json5',
       build = './install.sh', -- require rust cargo to build
-      config = function() require('dap.ext.vscode').json_decode = require('json5').parse end,
+      config = function()
+        local ok, json5 = pcall('require', 'json5')
+        if ok then
+          require('dap.ext.vscode').json_decode = require('json5').parse
+        end
+      end,
     },
     {
       'mfussenegger/nvim-dap-python',

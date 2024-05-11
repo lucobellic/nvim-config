@@ -47,6 +47,7 @@ return {
       },
       {
         'nvim-telescope/telescope-smart-history.nvim',
+        enabled = vim.fn.has('sqlite3') and not jit.os == "windows",
         dependencies = { 'kkharji/sqlite.lua' },
         config = function() require('telescope').load_extension('smart_history') end,
       },
