@@ -20,13 +20,15 @@ local function term_focus_offset(offset)
 end
 
 local function open_file()
+  -- Find the first open window with a valid buffer
   local buffers = vim.tbl_filter(
     function(buffer) return #buffer.windows >= 1 end,
     vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
   )
   local first_window = #buffers > 0 and buffers[1].windows[1] or nil
 
-  local filename = vim.fn.expand(vim.fn.expand('<cfile>'))
+  -- Open file under cursor in first valid window or in new window otherwise
+  local filename = vim.fn.findfile(vim.fn.expand('<cfile>'))
   if vim.fn.filereadable(filename) == 1 then
     if first_window then
       vim.api.nvim_set_current_win(first_window)
@@ -37,7 +39,7 @@ local function open_file()
   end
 end
 
-local opts = { buffer = 0 }
+local opts = { buffer = true }
 vim.keymap.set({ 't' }, '<esc>', [[<C-\><C-n>]], opts)
 vim.keymap.set({ 't', 'n' }, '<S-h>', function() term_focus_offset(-1) end, opts)
 vim.keymap.set({ 't', 'n' }, '<S-l>', function() term_focus_offset(1) end, opts)
