@@ -8,6 +8,19 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   desc = 'Set // as default comment string for c++',
 })
 
+-- Terminal option
+vim.api.nvim_create_autocmd({ 'TermOpen' }, {
+  pattern = { '*' },
+  callback = function()
+    vim.b.minianimate_disable = true
+    vim.b.miniindentscope_disable = true
+    vim.opt_local.spell = false
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+  end,
+  desc = 'Set terminal buffer options',
+})
+
 -- Display cursorline only in focused window
 vim.api.nvim_create_autocmd({ 'WinEnter' }, {
   pattern = '*',
@@ -33,18 +46,6 @@ require('util.autosave').setup()
 -- Load session from persistence
 local persistence_util = require('util.persistence')
 vim.api.nvim_create_user_command('PersistenceLoadSession', persistence_util.select_session, {})
-
--- Define a function to handle the BufEnter event
-local function on_buffer_enter()
-  if vim.bo.filetype ~= 'dashboard' then
-    vim.api.nvim_exec_autocmds('User', { pattern = 'BufEnterExceptDashboard' })
-  end
-end
-
-vim.api.nvim_create_autocmd({ 'BufEnter' }, {
-  pattern = { '*' },
-  callback = on_buffer_enter,
-})
 
 -- Switch colorscheme with transparency
 vim.g.transparent_colorscheme = false
