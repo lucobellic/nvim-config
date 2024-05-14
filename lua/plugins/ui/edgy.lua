@@ -1,3 +1,10 @@
+local function incline_safe_refresh()
+  local ok, incline = pcall(require, 'incline')
+  if ok then
+    incline.refresh()
+  end
+end
+
 -- vim.opt_local.winbar = '0, 0'
 return {
   'folke/edgy.nvim',
@@ -5,17 +12,26 @@ return {
   keys = {
     {
       '<leader>wl',
-      function() require('edgy').toggle('right') end,
+      function()
+        require('edgy').toggle('right')
+        incline_safe_refresh()
+      end,
       desc = 'Edgy Toggle Right',
     },
     {
       '<leader>wh',
-      function() require('edgy').toggle('left') end,
+      function()
+        require('edgy').toggle('left')
+        incline_safe_refresh()
+      end,
       desc = 'Edgy Toggle Left',
     },
     {
       '<leader>wj',
-      function() require('edgy').toggle('bottom') end,
+      function()
+        require('edgy').toggle('bottom')
+        incline_safe_refresh()
+      end,
       desc = 'Edgy Toggle Bottom',
     },
   },
@@ -73,14 +89,13 @@ return {
         ft = 'neotest-summary',
         open = 'Neotest summary',
         size = { width = 0.20 },
-      }
+      },
     },
     bottom = {
       {
         title = 'toggleterm',
         ft = 'toggleterm',
         open = function()
-
           local buffers = vim.tbl_filter(
             function(buf) return vim.fn.bufname(buf.bufnr):find('toggleterm') ~= nil end,
             vim.fn.getbufinfo({ buflisted = 0, buftype = 'terminal' })

@@ -1,3 +1,10 @@
+local function incline_safe_refresh()
+  local ok, incline = pcall(require, 'incline')
+  if ok then
+    incline.refresh()
+  end
+end
+
 return {
   {
     'lucobellic/edgy-group.nvim',
@@ -5,12 +12,18 @@ return {
     keys = {
       {
         '<leader>;',
-        function() require('edgy-group.stl').pick() end,
+        function()
+          require('edgy-group.stl').pick()
+          incline_safe_refresh()
+        end,
         desc = 'Edgy Group Pick',
       },
       {
         '<c-;>',
-        function() require('edgy-group.stl').pick() end,
+        function()
+          require('edgy-group.stl').pick()
+          incline_safe_refresh()
+        end,
         desc = 'Edgy Group Pick',
       },
     },
