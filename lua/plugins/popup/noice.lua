@@ -27,7 +27,7 @@ local cmdline_popup_view = {
     height = 'auto',
   },
   border = {
-    style = vim.g.border,
+    style = vim.g.border.style,
     padding = { 0, 1 },
   },
   filter_options = {},

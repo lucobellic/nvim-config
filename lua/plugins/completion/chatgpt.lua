@@ -1,3 +1,5 @@
+local border_style = vim.g.border.style == 'rounded' and 'rounded' or ' '
+
 return {
   {
     'folke/which-key.nvim',
@@ -60,7 +62,15 @@ return {
           close = '<C-q>',
           cycle_windows = '<Tab>',
         },
+        session_window = {
+          border = vim.g.border.style,
+        },
       },
+      popup_window = { border = { style = vim.g.border.style } },
+      system_window = { border = { style = vim.g.border.style } },
+      help_window = { border = { style = vim.g.border.style } },
+      settings_window = { border = { style = vim.g.border.style } },
+      popup_input = { border = { style = vim.g.border.style } },
       openai_params = {
         model = 'gpt-4o',
         max_tokens = 3000,

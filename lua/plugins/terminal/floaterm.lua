@@ -68,7 +68,7 @@ local function open_popup(bufnr, config)
         left = 0,
         right = 0,
       },
-      style = vim.g.border,
+      style = vim.g.border.style,
       text = {
         top = ' ' .. parsed_title.title .. ' ',
         top_align = 'center',
@@ -105,7 +105,7 @@ return {
     vim.g.floaterm_shell = vim.o.shell
     vim.g.floaterm_autoclose = 1 -- Close only if the job exits normally
     vim.g.floaterm_autohide = 2
-    vim.g.floaterm_borderchars = '─│─│╭╮╯╰'
+    vim.g.floaterm_borderchars = vim.g.border.enabled and '─│─│╭╮╯╰' or ' '
     vim.g.floaterm_autoinsert = true
     vim.g.floaterm_titleposition = 'center'
     vim.g.floaterm_title = 'Terminal $1/$2'

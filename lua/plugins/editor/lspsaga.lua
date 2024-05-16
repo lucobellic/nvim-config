@@ -29,7 +29,7 @@ return {
     },
     ui = {
       theme = 'round',
-      border = vim.g.border,
+      border = vim.g.border.style,
       winblend = vim.o.pumblend,
       lines = { '', '', '', '', '' },
       expand = '',

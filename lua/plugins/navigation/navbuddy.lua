@@ -1,3 +1,5 @@
+local border_style = vim.g.border.enabled and { '─', '─', '─', ' ', '─', '─', '─', ' ' } or { ' ' }
+
 return {
   'SmiteshP/nvim-navbuddy',
   dependencies = {
@@ -12,11 +14,21 @@ return {
   },
   opts = {
     window = {
-      border = vim.g.border,
       size = { width = '100%', height = '20%' },
       position = { row = '98%', col = '50%' },
       sections = {
+        left = {
+          border = {
+            style = border_style,
+          },
+        },
+        mid = {
+          border = {
+            style = border_style,
+          },
+        },
         right = {
+          border = border_style,
           preview = 'leaf', -- "leaf", "always" or "never"
         },
       },

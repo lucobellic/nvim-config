@@ -304,7 +304,7 @@ return {
         winblend = vim.o.pumblend,
         preview = { treesitter = { enable = true } },
         -- results_width = 0.8,
-        borderchars = vim.g.borderchars,
+        borderchars = vim.g.border.borderchars,
         color_devicons = true,
         -- use_less = true,
         set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,

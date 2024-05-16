@@ -75,6 +75,7 @@ return {
       },
       templates = { 'builtin', 'user.script' },
       form = {
+        border = vim.g.border.style,
         win_opts = {
           winblend = vim.o.pumblend,
         },

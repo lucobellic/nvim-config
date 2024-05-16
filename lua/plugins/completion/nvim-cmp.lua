@@ -114,7 +114,7 @@ return {
       },
       window = {
         completion = {
-          border = vim.g.border,
+          border = vim.g.border.style,
           winhighlight = 'CursorLine:PmenuSel,Search:None',
           scrolloff = 0,
           col_offset = -3,
@@ -122,7 +122,7 @@ return {
           scrollbar = true,
         },
         documentation = {
-          border = vim.g.border,
+          border = vim.g.border.style,
           winhighlight = 'CursorLine:PmenuSel,Search:None',
         },
       },

@@ -59,7 +59,7 @@ return {
       wilder.set_option(
         'renderer',
         wilder.popupmenu_renderer(wilder.popupmenu_palette_theme({
-          border = vim.g.border == 'rounded' and {
+          border = vim.g.border.style == 'rounded' and {
             '╭', '─', '╮',
             '│',      '│',
             '╰', '─', '╯',

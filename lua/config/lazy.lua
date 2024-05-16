@@ -37,7 +37,7 @@ require('lazy').setup({
     -- version = '*', -- try installing the latest stable version for plugins that support semver
   },
   ui = {
-    border = vim.g.border,
+    border = vim.g.border.style,
   },
   install = { colorscheme = { 'habamax', 'gruvbox', 'ayugloom' } },
   checker = { enabled = false }, -- automatically check for plugin updates

@@ -10,7 +10,7 @@ return {
         opts = {
           PATH = 'prepend',
           ui = {
-            border = vim.g.border,
+            border = vim.g.border.style,
             width = 0.8,
             height = 0.8,
           },
@@ -20,7 +20,7 @@ return {
         ensure_installed = {
           'jsonls',
           'vimls',
-          'cmake',
+          'neocmake',
           'lua_ls',
           'rust_analyzer',
         },
@@ -71,7 +71,7 @@ return {
       float = { source = true, header = {} },
     })
 
-    require('lspconfig.ui.windows').default_options.border = vim.g.border
+    require('lspconfig.ui.windows').default_options.border = vim.g.border.style
     require('plugins.lsp.util.keymaps').setup()
     return opts
   end,

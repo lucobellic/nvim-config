@@ -22,7 +22,7 @@ return {
       height = state.message.height,
       col = vim.opt.columns:get(),
       row = next_row,
-      border = vim.g.border,
+      border = vim.g.border.style,
       style = 'minimal',
       opacity = 0,
     }
