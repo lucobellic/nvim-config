@@ -16,6 +16,22 @@ local function escape_lua_pattern(s)
   })
 end
 
+---@param sources table
+---@param to_insert table { name: string }
+---@return table sources
+local function insert_or_replace(sources, to_insert)
+  for i, source in ipairs(sources) do
+    if source.name == to_insert.name then
+      table.remove(sources, i)
+      table.insert(sources, 1, to_insert)
+      return sources
+    end
+  end
+
+  table.insert(sources, 1, to_insert)
+  return sources
+end
+
 return {
   'hrsh7th/nvim-cmp',
   event = { 'InsertEnter' },
@@ -78,6 +94,14 @@ return {
       end, { 'i', 'c' }),
     }
 
+    opts.sources = opts.sources or {}
+    opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp_signature_help', group_index = 2 })
+    opts.sources = insert_or_replace(opts.sources, { name = 'buffer', group_index = 1 })
+    opts.sources = insert_or_replace(opts.sources, { name = 'path', group_index = 1 })
+    opts.sources = insert_or_replace(opts.sources, { name = 'snippets', group_index = 1 })
+    opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp', group_index = 1 })
+    opts.sources = insert_or_replace(opts.sources, { name = 'copilot', group_index = 1 })
+
     return vim.tbl_deep_extend('force', opts, {
       experimental = {
         native_menu = false,
@@ -103,14 +127,6 @@ return {
         },
       },
       mapping = cmp.mapping.preset.insert(tab_confirm_mapping),
-      sources = {
-        { name = 'copilot', group_index = 2 },
-        { name = 'nvim_lsp', group_index = 2 },
-        -- { name = 'luasnip', group_index = 2 },
-        { name = 'buffer', group_index = 2 },
-        { name = 'path', group_index = 2 },
-        { name = 'nvim_lsp_signature_help', group_index = 3 },
-      },
       formatting = {
         format = function(entry, item)
           item.menu = ''
