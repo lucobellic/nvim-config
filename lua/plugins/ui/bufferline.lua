@@ -25,6 +25,7 @@ return {
   'lucobellic/bufferline.nvim',
   branch = 'bugfix/tabpages-support-table-style',
   name = 'bufferline.nvim',
+  event = 'BufEnter',
   dependencies = {
     { 'echasnovski/mini.bufremove' },
     { 'lucobellic/edgy-group.nvim' },
