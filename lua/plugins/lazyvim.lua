@@ -11,7 +11,7 @@ return {
         LogPoint = '.>',
       },
       diagnostics = {
-        Error = ' ',
+        Error = ' ',
         Warn = ' ',
         Hint = ' ',
         Info = ' ',
