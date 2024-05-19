@@ -156,11 +156,64 @@ local function toggle_inlay_hints()
 end
 map('n', '<leader>uh', toggle_inlay_hints, { repeatable = true, desc = 'Toggle Inlay Hints' })
 
--- Remap smart-splits to use range
-map('n', '<C-left>', function() require('smart-splits').resize_left() end, { repeatable = true, desc = 'Resize left' })
-map('n', '<C-down>', function() require('smart-splits').resize_down() end, { repeatable = true, desc = 'Resize down' })
-map('n', '<C-up>', function() require('smart-splits').resize_up() end, { repeatable = true, desc = 'Resize up' })
-map('n', '<C-right>', function() require('smart-splits').resize_right() end, { repeatable = true, desc = 'Resize right' })
+---@param winnr number Window number (not handle)
+---@return Edgy.Window|nil
+local function get_edgy_window(winnr)
+  local ok, EdgyWindow = pcall(require, 'edgy.window')
+  return ok and EdgyWindow.cache[vim.fn.win_getid(winnr)] or nil
+end
+
+local amount = 5
+
+-- TODO: Handle left edgy window
+map('n', '<c-left>', function()
+  local right_edgy = get_edgy_window(vim.fn.winnr('l'))
+  if right_edgy then
+    right_edgy:resize('width', amount)
+  else
+    require('smart-splits').resize_left()
+  end
+end, {
+  repeatable = true,
+  desc = 'Resize left',
+})
+
+map('n', '<c-right>', function()
+  local right_edgy = get_edgy_window(vim.fn.winnr('l'))
+  if right_edgy then
+    right_edgy:resize('width', -amount)
+  else
+    require('smart-splits').resize_right()
+  end
+end, {
+  repeatable = true,
+  desc = 'Resize right',
+})
+
+map('n', '<c-up>', function()
+  local down_edgy = get_edgy_window(vim.fn.winnr('j'))
+  if down_edgy then
+    down_edgy:resize('height', amount)
+  else
+    require('smart-splits').resize_up()
+  end
+end, {
+  repeatable = true,
+  desc = 'Resize up',
+})
+
+map('n', '<c-down>', function()
+  local down_edgy = get_edgy_window(vim.fn.winnr('j'))
+  if down_edgy then
+    down_edgy:resize('height', -amount)
+  else
+    require('smart-splits').resize_down()
+  end
+end, {
+  repeatable = true,
+  desc = 'Resize up',
+})
+
 
 map('n', '<leader>A', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
 

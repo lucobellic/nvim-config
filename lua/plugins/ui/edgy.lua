@@ -43,12 +43,6 @@ return {
       closed = '',
       open = '',
     },
-    keys = {
-      ['<c-left>'] = function(win) win:resize('width', 5) end,
-      ['<c-up>'] = function(win) win:resize('height', 5) end,
-      ['<c-right>'] = function(win) win:resize('width', -5) end,
-      ['<c-down>'] = function(win) win:resize('height', -5) end,
-    },
     wo = {
       winbar = false,
       spell = false,
