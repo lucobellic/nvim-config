@@ -96,6 +96,11 @@ return {
 
     return vim.tbl_extend('force', opts, {
       theme = theme,
+      hide = {
+        statusline = true,
+        tabline = true,
+        winbar = true,
+      },
       preview = {
         command = 'cat | lolcat -F 0.3',
         file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
