@@ -30,7 +30,7 @@ return {
     opts = {
       groups = {
         right = {
-          { icon = '', titles = { 'outline' }, pick_key = 'o' },
+          { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
           { icon = '', titles = { 'copilot-chat' }, pick_key = 'c' },
         },

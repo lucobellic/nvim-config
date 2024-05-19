@@ -77,6 +77,7 @@ return {
           return win_trouble and win_trouble.mode == 'symbols'
         end,
         open = 'Trouble symbols toggle focus=false win.position=right',
+        size = { width = 0.20 },
       },
       {
         title = 'neotest-summary',

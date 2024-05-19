@@ -1,5 +1,6 @@
 return {
   'hedyhli/outline.nvim',
+  enabled = false, -- Use touble-v3 instead
   opts = {
     keymaps = {
       up_and_jump = '<C-p>',
