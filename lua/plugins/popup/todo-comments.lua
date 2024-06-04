@@ -20,7 +20,7 @@ return {
       TEST = { icon = ' ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
     },
     gui_style = {
-      fg = 'NONE', -- The gui style to use for the fg highlight group.
+      fg = 'italic', -- The gui style to use for the fg highlight group.
       bg = 'NONE', -- The gui style to use for the bg highlight group.
     },
     merge_keywords = true, -- when true, custom keywords will be merged with the defaults
