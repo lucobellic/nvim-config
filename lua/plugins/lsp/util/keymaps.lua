@@ -7,12 +7,7 @@ function M.setup()
   end
   local keys = require('lazyvim.plugins.lsp.keymaps').get()
 
-  keys[#keys + 1] = { 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>' }
-  keys[#keys + 1] = { 'K', '<cmd>lua vim.lsp.buf.hover()<CR>' }
   keys[#keys + 1] = { 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>' }
-  keys[#keys + 1] = { 'gi', require('telescope.builtin').lsp_implementations }
-  keys[#keys + 1] = { 'gd', require('telescope.builtin').lsp_definitions }
-  keys[#keys + 1] = { 'gr', require('telescope.builtin').lsp_references }
 
   keys[#keys + 1] = { '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>' }
   keys[#keys + 1] = { '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>' }
