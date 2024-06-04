@@ -149,11 +149,15 @@ return {
       local filename_separator = (#diagnostics > 0 or #diffs > 0) and { ' ' .. separator_char .. ' ', group = color }
         or ''
 
+      local filename_component =
+        { icon, { filetype_icon and ' ' or '' }, { filename, group = color }, filename_separator }
+
+      if vim.bo[props.buf].buflisted then
+        filename_component = {}
+      end
+
       local buffer = {
-        icon,
-        { filetype_icon and ' ' or '' },
-        { filename, group = color },
-        filename_separator,
+        filename_component,
         { diagnostics },
         { separator },
         { diffs },
