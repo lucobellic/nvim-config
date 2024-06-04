@@ -5,11 +5,11 @@ return {
   opts = {
     current_only = true,
     winblend = vim.o.winblend,
-    excluded_filetypes = { 'OverseerList', '', 'chatgpt-input', '' },
+    excluded_filetypes = { 'OverseerList', 'neo-tree' },
     handlers = {
       cursor = {
-        enable = false,
-        symbols = { '', '' },
+        enable = true,
+        symbols = { '│', '│' },
       },
       search = {
         enable = true,
@@ -34,7 +34,7 @@ return {
         key = 'm',
       },
       quickfix = {
-        enable = false,
+        enable = true,
         signs = { '│', '│', '│' },
       },
     },
