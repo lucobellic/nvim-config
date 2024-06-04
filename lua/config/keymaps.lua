@@ -35,7 +35,6 @@ map('n', '<leader>w=', '<C-w>=', { desc = 'Equal high and wide', remap = true })
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
 map('v', '/', '"hy/<C-r>h', { desc = 'Search word' })
-map({ 'n', 'x' }, 'gw', '*N', { desc = 'Search word under cursor' })
 
 -- save file
 map({ 'i', 'v', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
