@@ -55,12 +55,6 @@ return {
         size = { width = 0.20 },
       },
       {
-        title = 'outline',
-        ft = 'Outline',
-        open = function() require('outline').toggle_outline() end,
-        size = { width = 0.20 },
-      },
-      {
         title = 'trouble-lsp',
         ft = 'trouble',
         filter = function(_, win)
