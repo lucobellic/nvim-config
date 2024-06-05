@@ -33,6 +33,8 @@ return {
     },
   },
   opts = {
+    warn_no_results = false, -- show a warning when there are no results
+    open_no_results = true, -- open the trouble window when there are no results
     modes = {
       lsp_references = {
         desc = 'LSP References',
