@@ -45,6 +45,7 @@ return {
       tsserver = require('plugins.lsp.util.servers.tsserver'),
       lua_ls = require('plugins.lsp.util.servers.lua_ls'),
       ruff_lsp = require('plugins.lsp.util.servers.ruff_lsp'),
+      typos_lsp = { init_options = { diagnosticSeverity = 'Hint' } },
       ansiblels = {},
     })
 

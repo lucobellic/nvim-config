@@ -17,9 +17,9 @@ return {
     -- table.insert(opts.sources, nls.builtins.completion.spell)
     -- table.insert(opts.sources, nls.builtins.formatting.codespell)
 
-    local cspell = require('cspell')
-    table.insert(opts.sources, cspell.diagnostics.with({ filetypes = {}, config = cspell_config }))
-    table.insert(opts.sources, cspell.code_actions.with({ filetypes = {}, config = cspell_config }))
+    -- local cspell = require('cspell')
+    -- table.insert(opts.sources, cspell.diagnostics.with({ filetypes = {}, config = cspell_config }))
+    -- table.insert(opts.sources, cspell.code_actions.with({ filetypes = {}, config = cspell_config }))
     return opts
   end,
 }

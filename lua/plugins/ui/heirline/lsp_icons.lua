@@ -1,8 +1,8 @@
 return {
   ['null-ls'] = '',
+  ['rust-analyzer'] = '󱘗',
   ansiblels = '󱂚',
   basedpyright = '󰌠',
-  marksman = '',
   clangd = '',
   copilot = '',
   docker_compose_language_service = '',
@@ -10,10 +10,11 @@ return {
   gopls = '',
   jsonls = '',
   lua_ls = '󰢱',
+  marksman = '',
   neocmake = '',
   pylsp = '󰌠',
   ruff_lsp = '󱔎',
-  ['rust-analyzer'] = '󱘗',
   tsserver = '󰛦',
+  typos_lsp = '',
   yamlls = '',
 }
