@@ -1,10 +1,8 @@
 return {
   {
-    url = 'git@github.com:lucobellic/ayugloom.nvim.git',
+    'lucobellic/ayugloom.nvim',
     name = 'ayugloom',
     dependencies = 'rktjmp/lush.nvim',
-    dev = true,
-    lazy = true,
     priority = 1000,
   },
   {
