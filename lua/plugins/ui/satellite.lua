@@ -5,7 +5,16 @@ return {
   opts = {
     current_only = true,
     winblend = vim.o.winblend,
-    excluded_filetypes = { 'OverseerList', 'neo-tree' },
+    excluded_filetypes = {
+      'OverseerList',
+      'neo-tree',
+      'telescope',
+      'Telescope',
+      'TelescopePrompt',
+      'TelescopeResults',
+      'TelescopePreview',
+      'chatgpt-input',
+    },
     handlers = {
       cursor = {
         enable = true,
