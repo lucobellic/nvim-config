@@ -1,5 +1,5 @@
 return {
-  'lucobellic/colorful-winsep.nvim',
+  'nvim-zh/colorful-winsep.nvim',
   event = { 'WinEnter' },
   opts = {
     -- highlight for Window separator
