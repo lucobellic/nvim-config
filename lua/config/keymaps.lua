@@ -87,15 +87,16 @@ map(
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
 if wk_ok then
-wk.register({ ['<leader>uz'] = { '<cmd>TransparencyToggle<cr>', 'Transparency Toggle' } })
-wk.register({
-  ['<leader>ud'] = {
-    name = 'Toggle Diagnostics',
-    t = { Util.toggle.diagnostics, 'Toggle Diagnostics' },
-    d = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
-    l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
-  }
-})
+  wk.register({ ['<leader>uz'] = { '<cmd>TransparencyToggle<cr>', 'Transparency Toggle' } })
+  vim.keymap.del({ 'n' }, '<leader>ud')
+  wk.register({
+    ['<leader>ud'] = {
+      name = 'Toggle Diagnostics',
+      t = { Util.toggle.diagnostics, 'Toggle Diagnostics' },
+      d = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
+      l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
+    }
+  })
 end
 
 -- Toggle completion
