@@ -51,6 +51,7 @@ return {
       -- close window
       ['q'] = function(win) win:close() end,
       -- hide window
+      ['<C-q>'] = false,
       ['<c-q>'] = false,
       -- close sidebar
       ['Q'] = function(win) win.view.edgebar:close() end,
