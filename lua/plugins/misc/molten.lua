@@ -1,5 +1,5 @@
 local is_kitty = vim.fn.match(os.getenv('TERM'), 'kitty') ~= -1
-local is_wezterm = os.getenv('TERM_PROGRAM') == 'WezTerm'
+local is_wezterm = true -- os.getenv('TERM_PROGRAM') == 'WezTerm'
 
 local kitty_dependencies = {
   {
@@ -37,9 +37,12 @@ return {
       { '<leader>me', '<cmd>MoltenEvaluateOperator<CR>', desc = 'Molten Evaluate Operator' },
       { '<leader>ml', '<cmd>MoltenEvaluateLine<CR>', desc = 'Molten Evaluate Line' },
       { '<leader>mc', '<cmd>MoltenReevaluateCell<CR>', desc = 'Molten Reevaluate Cell' },
+      { '<leader>md', '<cmd>MoltenDelete<CR>', desc = 'Molten Delete' },
+      { '<leader>mh', '<cmd>MoltenHideOutput<CR>', desc = 'Molten Hide Output' },
+      { '<leader>ms', '<cmd>MoltenEnterOutput<CR>', desc = 'Molten Enter Output' },
       {
         '<leader>mv',
-        '<cmd><C-u>MoltenEvaluateVisual<CR>gv',
+        ':<C-U>MoltenEvaluateVisual<CR>gv',
         mode = 'v',
         desc = 'Molten Evaluate Visual',
       },
@@ -47,7 +50,7 @@ return {
     init = function()
       vim.g.molten_image_provider = image_provider
       vim.g.molten_output_win_border = { '', '-', '', '' }
-      vim.g.molten_virt_text_output = true
+      vim.g.molten_virt_text_output = false
       if vim.g.molten_image_provider == 'wezterm' then
         vim.g.molten_auto_open_output = false
       end
