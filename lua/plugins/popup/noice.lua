@@ -85,6 +85,7 @@ local filter_skip = {
       { event = 'msg_show', kind = 'lua_error', find = 'inlay_hint' },
       { event = 'msg_show', kind = '', find = 'lnum' },
       { event = 'notify', kind = 'warn', find = 'Unsupported input type' },
+      { event = 'notify', kind = 'error', find = 'invalid AST' },
       { event = 'msg_show', kind = '', find = 'query' },
       { event = 'msg_show', kind = 'lua_error', find = 'Autocommands' },
       -- Hide spamming pylsp messages
