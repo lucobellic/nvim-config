@@ -11,7 +11,6 @@ return {
     opts.fallback_severity = vim.diagnostic.severity.INFO
     table.insert(opts.sources, nls.builtins.formatting.prettierd)
     table.insert(opts.sources, nls.builtins.diagnostics.markdownlint_cli2)
-    table.insert(opts.sources, nls.builtins.formatting.prettierd)
     table.insert(opts.sources, nls.builtins.formatting.mdformat)
     -- table.insert(opts.sources, nls.builtins.formatting.ruff)
     -- table.insert(opts.sources, nls.builtins.completion.spell)
