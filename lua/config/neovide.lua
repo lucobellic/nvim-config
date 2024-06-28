@@ -61,7 +61,7 @@ if vim.g.neovide then
   vim.g.terminal_color_15 = '#bfbdb6'
 
   -- Shadow
-  vim.g.neovide_floating_shadow = false
+  vim.g.neovide_floating_shadow = true
   vim.g.neovide_floating_z_height = 10 -- virtual height of floating window
   vim.g.neovide_light_angle_degrees = 45 -- angle from screen normal of the casting light
   vim.g.neovide_light_radius = 5 -- radius of the casting light
