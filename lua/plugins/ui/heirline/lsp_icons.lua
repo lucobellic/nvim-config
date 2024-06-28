@@ -14,6 +14,7 @@ return {
   neocmake = '',
   pylsp = '󰌠',
   ruff_lsp = '󱔎',
+  taplo = '',
   tsserver = '󰛦',
   typos_lsp = '',
   yamlls = '',
