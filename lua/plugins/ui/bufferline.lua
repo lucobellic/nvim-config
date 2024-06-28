@@ -22,9 +22,7 @@ local function get_edgy_group_icons(position)
 end
 
 return {
-  'lucobellic/bufferline.nvim',
-  branch = 'bugfix/tabpages-support-table-style',
-  name = 'bufferline.nvim',
+  'akinsho/bufferline.nvim',
   event = 'BufEnter',
   dependencies = {
     { 'echasnovski/mini.bufremove' },
