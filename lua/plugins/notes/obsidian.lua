@@ -10,6 +10,7 @@ return {
   },
   {
     'epwalsh/obsidian.nvim',
+    enabled = vim.fn.filereadable(vim.fn.expand('~/vault/work')),
     dependencies = {
       'nvim-lua/plenary.nvim',
       'hrsh7th/nvim-cmp',
