@@ -7,7 +7,10 @@ return {
       enable = false,
     },
     scroll = {
-      enable = false,
+      enable = true,
     },
+    resize = {
+      enabled = false,
+    }
   },
 }
