@@ -11,11 +11,14 @@ local highlight = {
 return {
   'lukas-reineke/indent-blankline.nvim',
   main = 'ibl',
+  keys = {
+    { '<leader>uI', '<cmd>IBLToggle<cr>', desc = 'Toggle indent blankline' },
+  },
   opts = {
     indent = {
       char = '│',
       tab_char = '│',
-      highlight = 'Folded',
+      highlight = 'VertSplit',
     },
     scope = {
       enabled = true,
