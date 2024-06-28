@@ -8,7 +8,6 @@ end
 return {
   'gbprod/yanky.nvim',
   keys = {
-    { '<leader>p', false },
     {
       'p',
       function()
@@ -29,12 +28,8 @@ return {
     },
     {
       '<leader>fy',
-      function()
-        require('telescope').extensions.yank_history.yank_history({})
-      end,
+      function() require('telescope').extensions.yank_history.yank_history({}) end,
       desc = 'Open Yank History',
     },
-    { '<leader>=p', false },
-    { '<leader>=P', false },
   },
 }
