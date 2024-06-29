@@ -1,3 +1,11 @@
+local vaults_overrides = {
+  notes_subdir = 'notes',
+  daily_notes = {
+    folder = 'dailies',
+    format = '%d-%m-%Y',
+  },
+}
+
 return {
   {
     'folke/which-key.nvim',
@@ -10,14 +18,25 @@ return {
   },
   {
     'epwalsh/obsidian.nvim',
-    enabled = vim.fn.filereadable(vim.fn.expand('~/vault/work')),
+    enabled = vim.fn.filereadable(vim.fn.expand('~/vaults/work')),
     dependencies = {
       'nvim-lua/plenary.nvim',
       'hrsh7th/nvim-cmp',
       'nvim-telescope/telescope.nvim',
     },
     opts = {
-      dir = '~/vault/work', -- no need to call 'vim.fn.expand' here
+      workspaces = {
+        {
+          name = 'work',
+          path = '~/vaults/work',
+          overrides = vaults_overrides,
+        },
+        {
+          name = 'personal',
+          path = '~/vaults/personal',
+          overrides = vaults_overrides,
+        },
+      },
       notes_subdir = 'notes',
       daily_notes = {
         folder = 'dailies',
@@ -70,6 +89,7 @@ return {
       { '<leader>oot', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
       { '<leader>ooy', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
       { '<leader>oon', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
+      { '<leader>oow', '<cmd>ObsidianWorkspace<CR>', desc = 'Obsidian Workspace' },
     },
     ft = 'markdown',
     config = function(_, opts)
