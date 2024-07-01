@@ -1,0 +1,37 @@
+return {
+  'MagicDuck/grug-far.nvim',
+  opts = {
+    resultsSeparatorLineChar = '-',
+    spinnerStates = { '', '', '', '' },
+    startInInsertMode = false,
+    icons = {
+      resultsStatusReady = ' ',
+      resultsStatusError = ' ',
+      resultsStatusSuccess = ' ',
+      resultsActionMessage = '  ',
+      resultsChangeIndicator = '│',
+
+      historyTitle = '  ',
+    },
+    placeholders = {
+      enabled = false,
+    },
+    disableBufferLineNumbers = true,
+  },
+  keys = {
+    { '<leader>s;', function() require('grug-far').grug_far({}) end, desc = 'GrugFar' },
+    {
+      '<leader>s;',
+      function()
+        require('grug-far').with_visual_selection({
+          prefills = {
+            search = vim.fn.expand('<cword>'),
+            filesFilter = vim.fn.expand('%'),
+          },
+        })
+      end,
+      mode = 'v',
+      desc = 'GrugFar',
+    },
+  },
+}
