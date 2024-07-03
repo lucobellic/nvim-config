@@ -70,6 +70,17 @@ local Git = {
   hl = primary_highlight,
 }
 
+local Molten = {
+  condition = function() return package.loaded.molten end,
+  init = function(self)
+    kernels = require('molten.status').kernels()
+    self.text = kernels ~= '' and '  (' .. kernels .. ') ' or ''
+    left_components_length = left_components_length + vim.api.nvim_eval_statusline(self.text, {}).width
+  end,
+  provider = function(self) return self.text end,
+  hl = secondary_highlight,
+}
+
 local Dap = {
   condition = function()
     local session = require('dap').session()
@@ -222,7 +233,7 @@ local Date = {
   hl = primary_highlight,
 }
 
-local Left = { ViMode, Git, MacroRec, Dap }
+local Left = { ViMode, Git, Dap, Molten, MacroRec }
 local Center = { Edgy }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local Right = { Overseer, LspProgress, Copilot, SearchCount, Ruler, Date }
