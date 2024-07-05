@@ -6,12 +6,6 @@ local function cycle_layout(prompt_bufnr)
   picker:full_layout_update()
 end
 
-local function display_filename_first(_, path)
-  local tail = vim.fs.basename(path)
-  local parent = vim.fs.dirname(path)
-  return parent == '.' and tail or string.format('%s\t\t%s', tail, parent)
-end
-
 return {
   {
     'folke/which-key.nvim',
@@ -106,6 +100,7 @@ return {
       { '<leader>gc', false },
       { '<leader>gs', false },
       { '<leader>fF', false },
+      { '<leader>sl', false },
       { '<c-/>', false },
       { '<leader><leader>', false },
       {
@@ -274,6 +269,7 @@ return {
           '--column',
           '--smart-case',
         },
+        path_display = { "filename_first" },
         prompt_title = false,
         results_title = false,
         preview_title = true,
@@ -310,12 +306,6 @@ return {
         set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
       },
       pickers = {
-        find_files = {
-          path_display = display_filename_first,
-        },
-        git_files = {
-          path_display = display_filename_first,
-        },
         grep_string = {
           layout_strategy = 'vertical',
         },
