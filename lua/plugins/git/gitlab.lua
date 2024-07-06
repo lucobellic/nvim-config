@@ -22,20 +22,22 @@ return {
   },
   keys = {
     { '<leader>glb', function() require('gitlab').choose_merge_request() end, desc = 'Gitlab Choose Merge Request' },
-    { '<leader>glr', function() require('gitlab').review() end, desc = 'Gitlab Review' },
+    { '<leader>glR', function() require('gitlab').review() end, desc = 'Gitlab Review' },
     { '<leader>gls', function() require('gitlab').summary() end, desc = 'Gitlab Summary' },
     { '<leader>glA', function() require('gitlab').approve() end, desc = 'Gitlab Approve' },
-    { '<leader>glR', function() require('gitlab').revoke() end, desc = 'Gitlab Revoke' },
+    { '<leader>glrr', function() require('gitlab').revoke() end, desc = 'Gitlab Revoke' },
     { '<leader>glc', function() require('gitlab').create_comment() end, desc = 'Gitlab Create Comment' },
     {
       '<leader>glc',
       function() require('gitlab').create_multiline_comment() end,
       desc = 'Gitlab Create Multiline Comment',
+      mode = { 'n', 'v' },
     },
     {
       '<leader>glC',
       function() require('gitlab').create_comment_suggestion() end,
       desc = 'Gitlab Create Comment Suggestion',
+      mode = { 'n', 'v' },
     },
     { '<leader>glO', function() require('gitlab').create_mr() end, desc = 'Gitlab Create Mr' },
     {
@@ -75,18 +77,19 @@ return {
       perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
     },
     discussion_sign = {
-      text = '',
-      culhl = 'DiagnosticInfo',
-      texthl = 'DiagnosticInfo',
-      helper_signs = {
-        start = '┌',
-        mid = '│',
-        ['end'] = '└',
+      icons = {
+        comment = '',
+        range = '│',
       },
     },
     discussion_diagnostic = {
       display_opts = {
         underline = false,
+      },
+    },
+    reviewer_settings = {
+      diffview = {
+        imply_local = true,
       },
     },
     pipeline = {
