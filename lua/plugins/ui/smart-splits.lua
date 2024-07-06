@@ -1,5 +1,6 @@
 return {
   'lucobellic/smart-splits.nvim',
+  lazy = false,
   branch = 'feature/edgy-resize',
   keys = {
     -- Navigation
