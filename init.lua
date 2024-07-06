@@ -1,5 +1,3 @@
-vim.g.mapleader = ' '
-
 -- Set border style
 local enable_border = not vim.g.neovide
 vim.g.border = {
