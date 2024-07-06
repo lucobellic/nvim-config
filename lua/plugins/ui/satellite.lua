@@ -14,6 +14,7 @@ return {
       'TelescopeResults',
       'TelescopePreview',
       'chatgpt-input',
+      'cmp'
     },
     handlers = {
       cursor = {
