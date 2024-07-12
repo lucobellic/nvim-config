@@ -16,9 +16,7 @@ function M.statuscolumn()
     for _, s in ipairs(Ui.get_signs(buf, vim.v.lnum)) do
       local is_diagnostic = s.name and s.name:find('DiagnosticSign')
       if s.name and (s.name:find('GitSign')) then
-        if not (s.name:find('Staged')) then
-          right = s
-        end
+        right = s
       elseif not is_diagnostic then
         left = s
       end
