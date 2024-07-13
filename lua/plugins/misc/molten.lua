@@ -41,6 +41,13 @@ end
 
 return {
   {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = {
+      spec = { { '<leader>m', group = 'molten' } },
+    },
+  },
+  {
     'benlubas/molten-nvim',
     dependencies = dependencies,
     build = ':UpdateRemotePlugins',

@@ -11,8 +11,8 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>oo'] = { name = 'obsidian' },
+      spec = {
+        { '<leader>oo', group = 'obsidian' },
       },
     },
   },

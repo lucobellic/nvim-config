@@ -92,5 +92,10 @@ vim.keymap.set(
   { desc = 'Reach Simu' }
 )
 
+local ok, wk = pcall(require, 'which-key')
+if ok then
+  wk.add({ { '<leader>oe', group = 'easymile' } })
+end
+
 vim.keymap.set('n', '<leader>oeb', cmake_build, { desc = 'Cmake Build Target', repeatable = true })
 vim.keymap.set('n', '<leader>oec', function() cmake_targets = nil end, { desc = 'Cmake Clear Target Cache' })

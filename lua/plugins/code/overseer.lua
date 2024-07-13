@@ -37,8 +37,8 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>o'] = { name = 'overseer/obsidian' },
+      spec = {
+        { '<leader>o', name = 'overseer/obsidian' },
       },
     },
   },

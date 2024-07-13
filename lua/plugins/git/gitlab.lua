@@ -12,10 +12,11 @@ return {
       'folke/which-key.nvim',
       optional = true,
       opts = {
-        defaults = {
-          ['<leader>gl'] = { name = 'gitlab' },
-          ['<leader>gla'] = { name = 'assignee' },
-          ['<leader>glr'] = { name = 'reviewer' },
+        spec = {
+          { '<leader>gl', group = 'gitlab' },
+          { '<leader>gla', group = 'assignee' },
+          { '<leader>glr', group = 'reviewer' },
+          { '<leader>gll', group = 'label' },
         },
       },
     },

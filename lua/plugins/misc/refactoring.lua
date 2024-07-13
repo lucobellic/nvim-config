@@ -3,9 +3,9 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>r'] = { name = '+refactor' },
-        ['<leader>rb'] = { name = '+block' },
+      spec = {
+        { '<leader>r', group = 'refactor' },
+        { '<leader>rb', group = 'block' },
       },
     },
   },
