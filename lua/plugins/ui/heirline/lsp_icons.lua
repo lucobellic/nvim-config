@@ -17,5 +17,6 @@ return {
   taplo = '',
   tsserver = '󰛦',
   typos_lsp = '',
+  vtsls = '',
   yamlls = '',
 }
