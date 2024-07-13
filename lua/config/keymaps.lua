@@ -87,15 +87,13 @@ map(
 map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
 if wk_ok then
-  wk.register({ ['<leader>uz'] = { '<cmd>TransparencyToggle<cr>', 'Transparency Toggle' } })
+  wk.add({{ '<leader>uz' , '<cmd>TransparencyToggle<cr>', desc = 'Transparency Toggle' }})
   vim.keymap.del({ 'n' }, '<leader>ud')
-  wk.register({
-    ['<leader>ud'] = {
-      name = 'Toggle Diagnostics',
-      t = { Util.toggle.diagnostics, 'Toggle Diagnostics' },
-      d = { '<cmd>ToggleDiagnosticVirtualText<cr>', 'Toggle Virtual Text' },
-      l = { '<cmd>ToggleDiagnosticVirtualLines<cr>', 'Toggle Virtual Lines' },
-    }
+  wk.add({
+    { "<leader>ud", group = "Toggle Diagnostics" },
+    { "<leader>udd", "<cmd>ToggleDiagnosticVirtualText<cr>", desc = "Toggle Virtual Text" },
+    { "<leader>udl", "<cmd>ToggleDiagnosticVirtualLines<cr>", desc = "Toggle Virtual Lines" },
+    { "<leader>udt", Util.toggle.diagnostics, desc = "Toggle Diagnostics" },
   })
 end
 
@@ -229,12 +227,13 @@ map('n', '<<', '<<', { desc = 'Decrease Indent' })
 
 -- Copilot
 if wk_ok then
-  wk.register({ ['<leader>cp'] = { '<cmd>Copilot panel<cr>', 'Copilot Panel' } })
+  wk.add({ { '<leader>cp', '<cmd>Copilot panel<cr>', desc = 'Copilot Panel' } })
 end
 map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 
 -- jupytext
 local jupytext = require('util.jupytext')
+wk.add({ { '<leader>n', group = 'jupytext' } })
 map('n', '<leader>ns', function() jupytext:sync() end, { desc = 'Jupytext Sync' })
 map('n', '<leader>np', function() jupytext:pair() end, { desc = 'Jupytext Pair' })
 

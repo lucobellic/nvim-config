@@ -31,8 +31,8 @@ return {
       'folke/which-key.nvim',
       optional = true,
       opts = {
-        defaults = {
-          ['<leader>bc'] = { name = '+close' },
+        spec = {
+          { '<leader>bc', group = 'close' },
         },
       },
     },

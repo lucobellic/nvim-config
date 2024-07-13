@@ -5,9 +5,7 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>h'] = { name = '+hunk' },
-      },
+      spec = { { '<leader>h', group = 'hunk' } },
     },
   },
   {

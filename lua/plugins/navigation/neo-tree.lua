@@ -17,8 +17,8 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>e'] = { name = '+explorer' },
+      spec = {
+        { '<leader>e', group = 'explorer' },
       },
     },
   },

@@ -11,13 +11,11 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>F'] = { name = '+file/find' },
-        ['<leader>fg'] = { name = '+git' },
-        ['<leader>fl'] = { name = '+lsp' },
-        ['<leader>flc'] = { name = '+calls' },
-        ['<leader>fls'] = { name = '+symbols' },
-        ['<leader>fo'] = { name = '+obsidian' },
+      spec = {
+        { '<leader>fl', group = 'lsp' },
+        { '<leader>flc', group = 'calls' },
+        { '<leader>fls', group = 'symbols' },
+        { '<leader>fo', group = 'obsidian' },
       },
     },
   },
@@ -41,7 +39,7 @@ return {
       },
       {
         'nvim-telescope/telescope-smart-history.nvim',
-        enabled = vim.fn.has('sqlite3') and not jit.os == "windows",
+        enabled = vim.fn.has('sqlite3') and not jit.os == 'windows',
         dependencies = { 'kkharji/sqlite.lua' },
         config = function() require('telescope').load_extension('smart_history') end,
       },
@@ -139,12 +137,12 @@ return {
         desc = 'Find Files',
       },
       {
-        '<leader>fgs',
+        '<leader>gs',
         function() require('telescope.builtin').git_status({ layout_strategy = 'vertical' }) end,
         desc = 'Git Status',
       },
       {
-        '<leader>fgc',
+        '<leader>gc',
         function() require('telescope.builtin').git_commits({ layout_strategy = 'vertical' }) end,
         desc = 'Git Commits',
       },
@@ -269,7 +267,7 @@ return {
           '--column',
           '--smart-case',
         },
-        path_display = { "filename_first" },
+        path_display = { 'filename_first' },
         prompt_title = false,
         results_title = false,
         preview_title = true,

@@ -3,8 +3,8 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      defaults = {
-        ['<leader>z'] = { name = '+zen' },
+      spec = {
+        { '<leader>z', group = '+zen' },
       },
     },
   },
