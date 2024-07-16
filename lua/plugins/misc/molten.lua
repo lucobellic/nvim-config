@@ -28,15 +28,24 @@ local image_provider = is_kitty and 'image.nvim' or is_wezterm and 'wezterm' or 
 
 local function evaluate_pypercent()
   local pattern = '%%'
+
+  -- Move the cursor to the end of the current line
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line_length = vim.fn.col('$') - 1
+  vim.api.nvim_win_set_cursor(0, { row, line_length })
+
   -- Find first and last line number containing #%%
   -- flags:
   --  - W : no wrap around
   --  - b : backward
   --  - n : do not move the cursor
-  local first = vim.fn.search(pattern, 'Wbn') + 1
+  local first = vim.fn.search(pattern, 'Wcbn')
   local last = vim.fn.search(pattern, 'Wn')
   last = last == 0 and vim.api.nvim_buf_line_count(0) or last - 1
   vim.fn.MoltenEvaluateRange(first, last)
+
+  -- Restore cursor position
+  vim.api.nvim_win_set_cursor(0, { row, col })
 end
 
 return {
@@ -53,11 +62,18 @@ return {
     build = ':UpdateRemotePlugins',
     event = 'Bufenter *.py,*.ipynb',
     keys = {
+      {
+        '<leader>im',
+        function() require('which-key').show({ keys = '<leader>m', loop = true }) end,
+        desc = 'Molten',
+      },
       { '<leader>mi', '<cmd>MoltenInit<CR>', desc = 'Molten Init' },
       { '<leader>me', '<cmd>MoltenEvaluateOperator<CR>', desc = 'Molten Evaluate Operator' },
       { '<leader>mc', '<cmd>MoltenReevaluateCell<CR>', desc = 'Molten Reevaluate Cell' },
       { '<leader>md', '<cmd>MoltenDelete<CR>', desc = 'Molten Delete' },
       { '<leader>mh', '<cmd>MoltenHideOutput<CR>', desc = 'Molten Hide Output' },
+      { '<leader>mn', function() vim.fn.search('%%', 'w') end, desc = 'Molten Next Cell' },
+      { '<leader>mN', function() vim.fn.search('%%', 'wb') end, desc = 'Molten Prev Cell' },
       { '<leader>mo', ':noautocmd MoltenEnterOutput<CR>', desc = 'Molten Enter Output' },
       {
         '<leader>ms',
