@@ -33,7 +33,8 @@ local function insert_or_replace(sources, to_insert)
 end
 
 return {
-  'hrsh7th/nvim-cmp',
+  'llllvvuu/nvim-cmp',
+  branch = 'feat/above',
   event = { 'InsertEnter' },
   dependencies = {
     {
@@ -104,12 +105,25 @@ return {
 
     return vim.tbl_deep_extend('force', opts, {
       experimental = {
-        native_menu = false,
         ghost_text = { hl_group = 'Comment' },
+      },
+      matching = {
+        disallow_fuzzy_matching = false,
+        disallow_fullfuzzy_matching = false,
+        disallow_partial_fuzzy_matching = false,
+        disallow_partial_matching = false,
+        disallow_prefix_unmatching = false,
+        disallow_symbol_nonprefix_matching = true,
       },
       view = {
         entries = {
-          follow_cursor = true,
+          name = 'custom',
+          vertical_positioning = 'above',
+          selection_order = 'near_cursor',
+          follow_cursor = false,
+        },
+        docs = {
+          auto_open = false,
         },
       },
       window = {
