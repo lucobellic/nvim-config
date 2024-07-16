@@ -66,6 +66,7 @@ return {
     },
   },
   keys = {
+    { '<leader>id', function() require('which-key').show({ keys = '<leader>d', loop = true }) end, desc = 'Debug' },
     { '<leader>dq', require('dap').terminate, repeatable = true, desc = 'Terminate' },
     { '<leader>db', require('dap').toggle_breakpoint, repeatable = true, desc = 'Toggle Breakpoint' },
     { '<leader>dc', require('dap').continue, repeatable = true, desc = 'Continue' },
