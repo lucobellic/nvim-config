@@ -21,7 +21,6 @@ return {
     enabled = vim.fn.filereadable(vim.fn.expand('~/vaults/work')),
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'hrsh7th/nvim-cmp',
       'nvim-telescope/telescope.nvim',
     },
     opts = {
