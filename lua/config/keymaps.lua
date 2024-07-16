@@ -19,6 +19,11 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 
+-- Add hydra group
+if wk_ok then
+  wk.add({ { '<leader>i', group = 'hydra' } })
+end
+
 map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
 map('n', '<leader>wq', '<C-w>c', { desc = 'Delete window' })
 map('n', '<leader>w-', '<C-w>_', { desc = 'Max out the width' })
