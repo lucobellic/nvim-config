@@ -2,6 +2,43 @@ local Ui = require('lazyvim.util').ui
 
 local M = {}
 
+---@param sign? Sign
+function M.icon(sign)
+  sign = sign or {}
+  local text = sign.text or ' '
+  return sign.texthl and ('%#' .. sign.texthl .. '#' .. sign.text):gsub('%s*$', '') or text
+end
+
+function M.statuscolumn2()
+  local icon = { text = ' ' }
+  local git = { text = ' ' }
+  local fold = { text = ' ' }
+
+  -- Only show signs in non virtual or wrapped lines with sign column
+  local win = vim.g.statusline_winid
+  local show_signs = vim.wo[win].signcolumn ~= 'no' and vim.v.virtnum == 0
+  if show_signs then
+    local win = vim.g.statusline_winid
+    local buf = vim.api.nvim_win_get_buf(win)
+    for _, s in ipairs(Ui.get_signs(buf, vim.v.lnum)) do
+      if s.name and (s.name:find('GitSign')) then
+        git = s
+      else
+        icon = s
+      end
+    end
+
+    vim.api.nvim_win_call(win, function()
+      if vim.fn.foldclosed(vim.v.lnum) >= 0 then
+        fold = { text = '', texthl = 'folded' }
+      end
+    end)
+    return table.concat({ M.icon(icon), M.icon(git), M.icon(fold)}, '' )
+  end
+
+  return ''
+end
+
 function M.statuscolumn()
   local win = vim.g.statusline_winid
   local buf = vim.api.nvim_win_get_buf(win)
@@ -56,6 +93,6 @@ function M.statuscolumn()
   return table.concat(components, '')
 end
 
-function M.get() return M.statuscolumn() end
+function M.get() return M.statuscolumn2() end
 
 return M

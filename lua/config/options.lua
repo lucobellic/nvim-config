@@ -8,14 +8,15 @@ vim.g.autoformat = false
 
 vim.o.conceallevel = 2
 vim.o.laststatus = 3
+vim.o.signcolumn = 'yes:2'
+vim.o.timeout = false
 
 -- Default splitting will cause your main splits to jump when opening an edgebar.
 -- To prevent this, set `splitkeep` to either `screen` or `topline`.
 vim.o.splitkeep = 'screen'
 
-vim.o.number = true
+vim.o.number = false
 vim.o.relativenumber = false
-
 vim.o.wrap = false
 vim.o.showbreak = '↪'
 
