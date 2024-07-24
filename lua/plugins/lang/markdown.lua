@@ -17,4 +17,31 @@ return {
       },
     },
   },
+  {
+    'MeanderingProgrammer/markdown.nvim',
+    opts = {
+      sign = {
+        enabled = false,
+      },
+      heading = {
+        sign = false,
+        icons = { '󰉫 ', '󰉬 ', '󰉭 ', '󰉮 ', '󰉯 ', '󰉰 ', '󰉴 ' },
+      },
+      bullet = {
+        enabled = false,
+      },
+      checkbox = {
+        unchecked = { icon = '󱍫', highlight = 'DiagnosticInfo' },
+        checked = { icon = '󱍧', highlight = 'DiagnosticOk' },
+        custom = {
+          in_progress = { raw = '[+]', rendered = '󱍬', highlight = 'DiagnosticWarn' },
+          wont_do = { raw = '[/]', rendered = '󱍮', highlight = 'DiagnosticError' },
+          waiting = { raw = '[?]', rendered = '󱍥', highlight = 'DiagnosticWarn' },
+        },
+      },
+      -- code = {
+      --   sign = false,
+      -- },
+    },
+  },
 }
