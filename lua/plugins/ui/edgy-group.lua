@@ -2,6 +2,7 @@ local function incline_safe_refresh()
   local ok, incline = pcall(require, 'incline')
   if ok then
     incline.refresh()
+    vim.defer_fn(function() incline.refresh() end, 400)
   end
 end
 
@@ -12,18 +13,12 @@ return {
     keys = {
       {
         '<leader>;',
-        function()
-          require('edgy-group.stl').pick()
-          incline_safe_refresh()
-        end,
+        function() require('edgy-group.stl').pick() end,
         desc = 'Edgy Group Pick',
       },
       {
         '<c-;>',
-        function()
-          require('edgy-group.stl').pick()
-          incline_safe_refresh()
-        end,
+        function() require('edgy-group.stl').pick() end,
         desc = 'Edgy Group Pick',
       },
     },
@@ -63,5 +58,13 @@ return {
         end,
       },
     },
+    config = function(_, opts)
+      require('edgy-group').setup(opts)
+      -- Add autocmd to refresh the statusline when the window is opened
+      vim.api.nvim_create_autocmd(
+        { 'WinNew', 'BufNew' },
+        { pattern = { '*' }, callback = function() incline_safe_refresh() end }
+      )
+    end,
   },
 }
