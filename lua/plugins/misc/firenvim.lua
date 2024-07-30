@@ -9,6 +9,7 @@ return {
     vim.fn['firenvim#install'](0)
   end,
   config = function()
+    vim.o.guifont = 'DMMono Nerd Font:h10'
     vim.g.firenvim_config = {
       globalSettings = {
         alt = 'all',
