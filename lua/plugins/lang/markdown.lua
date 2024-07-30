@@ -7,10 +7,6 @@ return {
     'OXY2DEV/markview.nvim',
     enabled = false, -- Too buggy and slow to be usable
     opts = {
-      -- Do not work
-      -- headings = {
-      --   shift_width = 0,
-      -- },
       checkboxes = {
         checked = { text = '󱍧', hl = 'DiagnosticOk' },
         unchecked = { text = '󱍫', hl = 'DiagnosticInfo' },
@@ -22,13 +18,18 @@ return {
     opts = {
       sign = {
         enabled = false,
+        exclude = {
+          buftypes = { 'nofile' },
+        },
       },
       heading = {
         sign = false,
         icons = { '󰉫 ', '󰉬 ', '󰉭 ', '󰉮 ', '󰉯 ', '󰉰 ', '󰉴 ' },
       },
       bullet = {
-        enabled = false,
+        enabled = true,
+        icons = { '•' },
+        highlight = 'DiagnosticInfo',
       },
       checkbox = {
         unchecked = { icon = '󱍫', highlight = 'DiagnosticInfo' },
@@ -39,9 +40,9 @@ return {
           waiting = { raw = '[?]', rendered = '󱍥', highlight = 'DiagnosticWarn' },
         },
       },
-      -- code = {
-      --   sign = false,
-      -- },
+      exclude = {
+        buftypes = { 'nofile' },
+      },
     },
   },
 }
