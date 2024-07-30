@@ -43,10 +43,6 @@ vim.api.nvim_create_autocmd({ 'WinLeave' }, {
 -- Automatic save
 require('util.autosave').setup()
 
--- Load session from persistence
-local persistence_util = require('util.persistence')
-vim.api.nvim_create_user_command('PersistenceLoadSession', persistence_util.select_session, {})
-
 -- Switch colorscheme with transparency
 vim.g.transparent_colorscheme = false
 local toggle_transparency = function()
