@@ -41,7 +41,7 @@ local comp = {
           1000 * opts.timeout,
           vim.schedule_wrap(function()
             local bufnr = task:get_bufnr()
-            if bufnr and vim.api.nvim_buf_is_valid(bufnr) then
+            if bufnr and vim.api.nvim_buf_is_valid(bufnr) and bufnr ~= vim.api.nvim_get_current_buf() then
               vim.api.nvim_buf_delete(bufnr, { force = true })
               self.timer:close()
               self.timer = nil
