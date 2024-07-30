@@ -22,7 +22,7 @@ return {
       enable = true,
       hide_keyword = true,
       separator = '   ',
-      show_file = true,
+      show_file = false,
     },
     rename = {
       in_select = false,
