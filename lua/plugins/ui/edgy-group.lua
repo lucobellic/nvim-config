@@ -2,6 +2,7 @@ local function incline_safe_refresh()
   local ok, incline = pcall(require, 'incline')
   if ok then
     incline.refresh()
+    vim.defer_fn(function() incline.refresh() end, 200)
     vim.defer_fn(function() incline.refresh() end, 400)
   end
 end
@@ -62,7 +63,7 @@ return {
       require('edgy-group').setup(opts)
       -- Add autocmd to refresh the statusline when the window is opened
       vim.api.nvim_create_autocmd(
-        { 'WinNew', 'BufNew' },
+        { 'WinResized' },
         { pattern = { '*' }, callback = function() incline_safe_refresh() end }
       )
     end,
