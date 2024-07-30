@@ -25,18 +25,6 @@ if wk_ok then
 end
 
 map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
-map('n', '<leader>wq', '<C-w>c', { desc = 'Delete window' })
-map('n', '<leader>w-', '<C-w>_', { desc = 'Max out the width' })
-map('n', '<leader>w|', '<C-w>|', { desc = 'Max out the height' })
-map('n', '<leader>wo', '<C-w>o', { desc = 'Close all other windows' })
-map('n', '<leader>ws', '<C-w>s', { desc = 'Split window' })
-map('n', '<leader>wv', '<C-w>v', { desc = 'Split window vertically' })
-map('n', '<leader>wx', '<C-w>x', { desc = 'Swap current with next' })
-map('n', '<leader>wt', '<C-w>T', { desc = 'Break out into a next tab' })
-map('n', '<leader>wT', '<C-w>T', { desc = 'Break out into a next tab' })
-map('n', '<leader>ww', '<C-w>p', { desc = 'Other window', remap = true })
-map('n', '<leader>wd', '<C-w>c', { desc = 'Delete window', remap = true })
-map('n', '<leader>w=', '<C-w>=', { desc = 'Equal high and wide', remap = true })
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
 map('v', '/', '"hy/<C-r>h', { desc = 'Search word' })
@@ -92,9 +80,8 @@ map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
 if wk_ok then
   wk.add({{ '<leader>uz' , '<cmd>TransparencyToggle<cr>', desc = 'Transparency Toggle' }})
-  vim.keymap.del({ 'n' }, '<leader>ud')
   wk.add({
-    { "<leader>ud", group = "Toggle Diagnostics" },
+    { "<leader>ud", group = "Diagnostics" },
     { "<leader>udd", "<cmd>ToggleDiagnosticVirtualText<cr>", desc = "Toggle Virtual Text" },
     { "<leader>udl", "<cmd>ToggleDiagnosticVirtualLines<cr>", desc = "Toggle Virtual Lines" },
     { "<leader>udt", Util.toggle.diagnostics, desc = "Toggle Diagnostics" },
