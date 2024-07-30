@@ -47,13 +47,13 @@ return {
       },
       {
         '<leader>gdf',
-        '<cmd>DiffviewFileHistory --follow %<cr>',
+        '<cmd>DiffviewFileHistory --no-merges --follow %<cr>',
         mode = { 'n' },
         desc = 'Diffview File History',
       },
       {
         '<leader>gdf',
-        ':DiffviewFileHistory<cr>',
+        ':DiffviewFileHistory --no-merges --follow<cr>',
         mode = { 'v' },
         desc = 'Diffview File History',
       },
@@ -104,6 +104,7 @@ return {
               require('diffview.actions').open_in_diffview,
               { desc = 'Open the entry under the cursor in a diffview' },
             },
+            -- Fixup commit under cursor
             {
               'n',
               '<C-s>',
@@ -122,14 +123,14 @@ return {
                     local nio = require('nio')
                     local path = file.absolute_path
                     nio.run(function()
-                      nio.process.run({ cmd = 'git', args = { 'stash', '--keep-index' } }).result()
+                      nio.process.run({ cmd = 'git', args = { 'stash', '--keep-index' } }).result(true)
                       nio.process
                         .run({
                           cmd = 'git',
                           args = { 'commit', '--fixup=' .. item.commit.hash, '--', path },
                         })
-                        .result()
-                      nio.process.run({ cmd = 'git', args = { 'stash', 'pop', '--index' } }).result()
+                        .result(true)
+                      nio.process.run({ cmd = 'git', args = { 'stash', 'pop', '--index' } }).result(true)
                       vim.notify('Fixup ' .. item.commit.hash, vim.log.levels.INFO)
                     end)
                   end
