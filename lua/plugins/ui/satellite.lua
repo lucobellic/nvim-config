@@ -14,7 +14,7 @@ return {
       'TelescopeResults',
       'TelescopePreview',
       'chatgpt-input',
-      'cmp'
+      'cmp',
     },
     handlers = {
       cursor = {
@@ -27,7 +27,7 @@ return {
       },
       diagnostic = {
         enable = true,
-        signs = { '│', '│', '│' },
+        signs = { '┊', '┊', '┊' },
         min_severity = vim.diagnostic.severity.WARN,
       },
       gitsigns = {
@@ -44,7 +44,7 @@ return {
         key = 'm',
       },
       quickfix = {
-        enable = true,
+        enable = false,
         signs = { '│', '│', '│' },
       },
     },
