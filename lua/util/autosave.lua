@@ -5,15 +5,17 @@ local M = {}
 function M.create_autosave_autocmd()
   return vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
     pattern = '*',
-    callback = function(ev)
+    callback = function()
       local markdown = vim.bo.filetype == 'markdown' -- markdown file may contains 2 spaces at eol
       local modified = vim.bo.modifiable and vim.bo.modified
       local not_popup = vim.fn.pumvisible() == 0 -- or vim.api.nvim_win_get_config(0).zindex
-      if not markdown and modified and not_popup then
+      if modified and not_popup then
         -- Save and restore cursor position
         local cursor = vim.api.nvim_win_get_cursor(0)
         -- Remove trailing whitespace
-        vim.cmd('silent! %s/\\s\\+$//e')
+        if not markdown then
+          vim.cmd('silent! %s/\\s\\+$//e')
+        end
         vim.cmd('silent! write')
         vim.api.nvim_win_set_cursor(0, cursor)
       end
