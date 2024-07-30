@@ -1,6 +1,11 @@
+local function get_next_layout(current_layout)
+  local layouts = { horizontal = 'center', center = 'vertical', vertical = 'horizontal' }
+  return layouts[current_layout]
+end
+
 local function cycle_layout(prompt_bufnr)
   local picker = require('telescope.actions.state').get_current_picker(prompt_bufnr)
-  picker.layout_strategy = picker.layout_strategy == 'vertical' and 'horizontal' or 'vertical'
+  picker.layout_strategy = get_next_layout(picker.layout_strategy)
   picker.layout_config = {}
   picker.previewer = picker.all_previewers and picker.all_previewers[1] or nil
   picker:full_layout_update()
@@ -278,13 +283,18 @@ return {
         initial_mode = 'insert',
         selection_strategy = 'reset',
         sorting_strategy = 'ascending',
-        layout_strategy = 'horizontal', -- vertical
+        layout_strategy = 'center',
         layout_config = {
           horizontal = {
+            width = 0.9,
+            preview_width = 0.65,
+            prompt_position = 'top',
+          },
+          center = {
             width = 0.6,
             height = 0.5,
             prompt_position = 'top',
-            preview_width = 0, -- disable previewer
+            preview_cutoff = 999, -- disable previewer
           },
           vertical = {
             width = 0.9,
