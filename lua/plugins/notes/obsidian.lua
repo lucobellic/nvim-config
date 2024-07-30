@@ -63,7 +63,7 @@ return {
       finder = 'telescope.nvim',
 
       ui = {
-        enabled = true,
+        enable = false, -- Prefer usage of mardown.nvim
         checkboxes = {
           [' '] = { char = '󱍫', hl_group = 'DiagnosticInfo' },
           ['x'] = { char = '󱍧', hl_group = 'DiagnosticOk' },
