@@ -2,30 +2,32 @@
 local theme = 'hyper'
 local doom_shortcut = {
   {
-    icon = '󰊳 ',
-    icon_hl = '@property',
-    desc = 'Update',
-    desc_hl = '@property',
-    group = '@property',
+    desc = ' Update',
+    group = 'Label',
     action = 'Lazy update',
     key = 'u',
-    key_hl = '@property',
   },
   {
-    desc = ' Files',
-    group = 'Label',
-    action = 'Telescope find_files',
-    key = 'f',
-  },
-  {
-    desc = ' Sessions',
-    group = 'DiagnosticHint',
+    desc = ' Sessions',
+    group = '@property',
     action = 'PersistenceLoadSession',
     key = 's',
   },
   {
-    desc = ' Recent',
+    desc = ' Last Session',
     group = 'Number',
+    action = 'PersistenceLoadLast',
+    key = 'l',
+  },
+  {
+    desc = ' Files',
+    group = 'DiagnosticInfo',
+    action = 'Telescope find_files',
+    key = 'f',
+  },
+  {
+    desc = ' Recent',
+    group = '@string',
     action = 'Telescope oldfiles',
     key = 'r',
   },
@@ -60,6 +62,7 @@ local shortcut = {
 
 return {
   'nvimdev/dashboard-nvim',
+  enabled = not vim.g.started_by_firenvim,
   event = 'UIEnter',
   opts = function(_, opts)
     local function load_session(path)
