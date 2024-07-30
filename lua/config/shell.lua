@@ -1,4 +1,6 @@
-if vim.fn.executable('zsh') == 1 then
+if vim.fn.executable('fish') == 1 then
+  vim.o.shell = 'fish'
+elseif vim.fn.executable('zsh') == 1 then
   vim.o.shell = 'zsh'
   vim.o.shellpipe = '|'
   vim.o.shellcmdflag='-c'

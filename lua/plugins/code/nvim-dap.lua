@@ -109,7 +109,7 @@ return {
       },
       fallback = {
         integrated_terminal = {
-          command = 'zsh',
+          command = vim.o.shell,
           args = { '-c' },
         },
       },
