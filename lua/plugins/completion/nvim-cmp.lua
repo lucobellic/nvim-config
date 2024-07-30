@@ -66,7 +66,6 @@ return {
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
       ['<cr>'] = safely_select,
-
       ['<Tab>'] = cmp.mapping.confirm({
         behavior = cmp.ConfirmBehavior.Insert,
         select = true,
@@ -75,6 +74,19 @@ return {
         behavior = cmp.ConfirmBehavior.Insert,
         select = true,
       }),
+      ['<Down>'] = {
+        i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+      },
+      ['<Up>'] = {
+        i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+      },
+      ['<C-n>'] = function()
+        if cmp.visible_docs() then
+          cmp.close_docs()
+        else
+          cmp.open_docs()
+        end
+      end,
       ['<C-l>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           local active_entry = cmp.get_active_entry() or cmp.get_entries()[1]
@@ -93,6 +105,7 @@ return {
           fallback()
         end
       end, { 'i', 'c' }),
+      ['<C-x>'] = cmp.mapping.complete({ config = { sources = cmp.config.sources({ { name = 'cmp_ai' } }) } }),
     }
 
     opts.sources = opts.sources or {}
@@ -120,7 +133,7 @@ return {
           name = 'custom',
           vertical_positioning = 'above',
           selection_order = 'near_cursor',
-          follow_cursor = false,
+          follow_cursor = true,
         },
         docs = {
           auto_open = false,
@@ -144,7 +157,16 @@ return {
       formatting = {
         format = function(entry, item)
           item.menu = ''
-          return require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, item)
+          return require('lspkind').cmp_format({
+            mode = 'symbol_text',
+            maxwidth = 50,
+            -- symbol_map = {
+            --   HF = '',
+            --   OpenAI = '',
+            --   Codestral = '',
+            --   Bard = '',
+            -- },
+          })(entry, item)
         end,
       },
     })
