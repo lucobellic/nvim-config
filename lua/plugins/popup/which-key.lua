@@ -1,8 +1,10 @@
 return {
   'folke/which-key.nvim',
   opts = {
+    delay = 400,
     show_help = false, -- show help message on the command line when the popup is visible
     show_keys = false, -- show the currently pressed key and its label as a message in the command line
+    notify = false,
     layout = {
       spacing = 3, -- spacing between columns
       align = 'center', -- align columns left, center or right
