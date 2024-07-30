@@ -105,10 +105,10 @@ return {
         winbar = true,
       },
       preview = {
-        command = 'cat | lolcat -F 0.3',
+        command = 'cat',
         file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
         file_width = 72,
-        file_height = 12,
+        file_height = 11,
       },
       config = configs[theme],
     })
