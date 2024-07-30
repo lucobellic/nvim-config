@@ -98,7 +98,6 @@ end
 return {
   'b0o/incline.nvim',
   event = 'BufEnter',
-  enabled = not vim.g.started_by_firenvim,
   keys = {
     {
       '<leader>uo',
@@ -107,6 +106,7 @@ return {
     },
   },
   opts = {
+    debounce_threshold = { rising = 50, falling = 50 },
     window = {
       zindex = 30,
       margin = {
