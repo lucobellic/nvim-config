@@ -1,7 +1,17 @@
+local satellite_enabled = true
+local function toggle_satellite()
+  vim.cmd(satellite_enabled and 'SatelliteDisable' or 'SatelliteEnable')
+  satellite_enabled = not satellite_enabled
+  vim.notify((satellite_enabled and 'Enabled' or 'Disabled') .. ' Satellite')
+end
+
 return {
   'lewis6991/satellite.nvim',
   event = 'BufEnter',
   enabled = vim.fn.has('nvim-0.10') == 1,
+  keys = {
+    { '<leader>ut', toggle_satellite, desc = 'Toggle Satellite' },
+  },
   opts = {
     current_only = true,
     winblend = vim.o.winblend,

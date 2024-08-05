@@ -115,6 +115,7 @@ map('n', '<leader>qq', '<cmd>qa!<cr>', { desc = 'Quit all' })
 map('n', '<leader>qa', '<cmd>qa!<cr>', { desc = 'Quit all' })
 
 -- Terminal Mappings
+vim.keymap.del('t', '<esc><esc>')
 map('t', '<esc>', '<c-\\><c-n>', { desc = 'Enter Normal Mode' })
 
 -- tabs
