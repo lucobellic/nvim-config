@@ -3,18 +3,6 @@ return {
   opts = {
     -- TODO: Auto fill from filetype
     override_by_extension = {
-      ['cuh'] = {
-        icon = '',
-        color = '#70DF55',
-        cterm_color = '2',
-        name = 'CudaHeader',
-      },
-      ['cu'] = {
-        icon = '',
-        color = '#70DF55',
-        cterm_color = '2',
-        name = 'Cuda',
-      },
       ['ipp'] = {
         icon = '',
         color = '#519aba',
