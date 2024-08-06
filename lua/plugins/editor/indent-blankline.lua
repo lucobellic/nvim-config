@@ -63,7 +63,6 @@ return {
       vim.api.nvim_set_hl(0, 'RainbowCyan', { link = 'TSRainbowCyan' })
     end)
 
-    vim.g.rainbow_delimiters = { highlight = highlight }
     require('ibl').setup(opts)
     hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
   end,
