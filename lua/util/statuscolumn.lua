@@ -6,7 +6,25 @@ local M = {}
 function M.icon(sign)
   sign = sign or {}
   local text = sign.text or ' '
-  return sign.texthl and ('%#' .. sign.texthl .. '#' .. sign.text):gsub('%s*$', '') or text
+  return sign.texthl and ('%#' .. sign.texthl .. '#' .. sign.text):gsub('%s*$', '') .. '%*' or text
+end
+
+local function get_numbers(win)
+  local lines = '%='
+  -- Numbers in Neovim are weird
+  -- They show when either number or relativenumber is true
+  local is_num = vim.wo[win].number
+  local is_relnum = vim.wo[win].relativenumber
+  if (is_num or is_relnum) and vim.v.virtnum == 0 then
+    if vim.v.relnum == 0 then
+      lines = is_num and '%l' or '%r' -- the current line
+    else
+      lines = is_relnum and '%r' or '%l' -- other lines
+    end
+    lines = '%=' .. lines -- right align
+  end
+
+  return lines
 end
 
 function M.statuscolumn2()
@@ -18,7 +36,6 @@ function M.statuscolumn2()
   local win = vim.g.statusline_winid
   local show_signs = vim.wo[win].signcolumn ~= 'no' and vim.v.virtnum == 0
   if show_signs then
-    local win = vim.g.statusline_winid
     local buf = vim.api.nvim_win_get_buf(win)
     for _, s in ipairs(Ui.get_signs(buf, vim.v.lnum)) do
       if s.name and (s.name:find('GitSign')) then
@@ -33,7 +50,9 @@ function M.statuscolumn2()
         fold = { text = '', texthl = 'folded' }
       end
     end)
-    return table.concat({ M.icon(icon), M.icon(git), M.icon(fold)}, '' )
+
+    local numbers = get_numbers(win)
+    return table.concat({ M.icon(icon), M.icon(git), numbers, M.icon(fold) .. ' ' }, '')
   end
 
   return ''
