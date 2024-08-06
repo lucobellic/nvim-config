@@ -18,7 +18,7 @@ return {
   },
   {
     'epwalsh/obsidian.nvim',
-    enabled = vim.fn.filereadable(vim.fn.expand('~/vaults/work')),
+    enabled = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
