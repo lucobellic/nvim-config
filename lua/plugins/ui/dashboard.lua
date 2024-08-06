@@ -105,7 +105,7 @@ return {
         winbar = true,
       },
       preview = {
-        command = 'cat',
+        command = 'cat | cat',
         file_path = vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
         file_width = 72,
         file_height = 11,
