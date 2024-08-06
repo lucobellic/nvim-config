@@ -47,12 +47,12 @@ function M.statuscolumn2()
 
     vim.api.nvim_win_call(win, function()
       if vim.fn.foldclosed(vim.v.lnum) >= 0 then
-        fold = { text = '', texthl = 'folded' }
+        fold = { text = '', texthl = 'Constant' }
       end
     end)
 
     local numbers = get_numbers(win)
-    return table.concat({ M.icon(icon), M.icon(git), numbers, M.icon(fold) .. ' ' }, '')
+    return table.concat({ M.icon(icon), M.icon(git), numbers, M.icon(fold) .. ' '  }, '')
   end
 
   return ''
