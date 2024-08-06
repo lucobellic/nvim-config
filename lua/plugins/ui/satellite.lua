@@ -28,7 +28,7 @@ return {
     },
     handlers = {
       cursor = {
-        enable = true,
+        enable = false, -- Refresh on CursorMoved is too slow
         symbols = { '│', '│' },
       },
       search = {
