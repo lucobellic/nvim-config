@@ -10,11 +10,14 @@ return {
       resultsStatusSuccess = ' ',
       resultsActionMessage = '  ',
       resultsChangeIndicator = '│',
-
       historyTitle = '  ',
     },
-    placeholders = {
-      enabled = false,
+    engines = {
+      ripgrep = {
+        placeholders = {
+          enabled = false,
+        },
+      },
     },
     disableBufferLineNumbers = true,
   },
