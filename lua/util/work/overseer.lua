@@ -1,8 +1,9 @@
-local Job = require('plenary.job')
-local overseer = require('overseer')
-
+-- TODO: set and test problem matcher (python/cpp) such as tasks.json
 local cmake_targets = nil
+
 local function cmake_build()
+  local Job = require('plenary.job')
+  local overseer = require('overseer')
   if not cmake_targets then
     Job:new({
       command = 'cmake',
@@ -46,6 +47,7 @@ local function cmake_build()
 end
 
 local function get_reach_result(args)
+  local Job = require('plenary.job')
   local results = {}
   Job:new({
     command = 'reach',
@@ -62,6 +64,7 @@ local function get_reach_result(args)
 end
 
 local function reach_run(run_args, list_args)
+  local overseer = require('overseer')
   local results = get_reach_result(list_args)
   vim.ui.select(results, { prompt = 'Select' }, function(choice)
     if choice then
