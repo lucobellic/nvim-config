@@ -27,10 +27,14 @@ vim.api.nvim_create_user_command('ToggleDiagnosticVirtualLines', function()
   if not virtual_lines then
     diagnostic_virtual_lines.only_current_line = true
     vim.diagnostic.config({ virtual_lines = diagnostic_virtual_lines })
-  elseif virtual_lines.only_current_line then
+    vim.notify('Enabled Diagnostic Current Line', vim.log.levels.INFO, { title = 'Diagnostic' })
+    vim.cmd(':e')
+  elseif diagnostic_virtual_lines.only_current_line then
     diagnostic_virtual_lines.only_current_line = false
     vim.diagnostic.config({ virtual_lines = diagnostic_virtual_lines })
+    vim.notify('Enabled Diagnostic Lines', vim.log.levels.INFO, { title = 'Diagnostic' })
   else
     vim.diagnostic.config({ virtual_lines = false })
+    vim.notify('Disabled Diagnostic Lines', vim.log.levels.WARN, { title = 'Diagnostic' })
   end
 end, { desc = 'Toggle diagnostic virtual lines' })
