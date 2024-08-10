@@ -20,7 +20,7 @@ return {
       enable = false,
     },
     cursor = {
-      enable = true,
+      enable = false,
     },
     scroll = {
       enable = true,

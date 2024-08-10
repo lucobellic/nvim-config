@@ -43,7 +43,7 @@ return {
     },
   },
   {
-    'stevearc/overseer.nvim',
+    'lucobellic/overseer.nvim',
     cmd = { 'OverseerRun', 'OverseerInfo', 'OverseerToggle', 'OverseerFromTerminal' },
     keys = {
       { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
@@ -97,5 +97,32 @@ return {
         },
       },
     },
+    config = function(_, opts)
+      local overseer = require('overseer')
+      local task_list = require('overseer.task_list')
+
+      -- Close overseer window when all buffers are closed
+      vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
+        pattern = '*',
+        callback = function(ev)
+          local is_terminal = vim.bo[ev.buf].buftype == 'terminal'
+          local is_toggleterm_buffer = vim.fn.bufname(ev.buf):find('toggleterm')
+          local is_toggleterm_task = is_terminal and is_toggleterm_buffer
+          local is_toggleterm = vim.bo[ev.buf].filetype == 'toggleterm'
+
+          if is_toggleterm or is_toggleterm_task then
+            vim.defer_fn(function()
+              local tasks_with_buffer =
+                task_list.list_tasks({ filter = function(task) return task:get_bufnr() ~= nil end })
+              if #tasks_with_buffer == 0 then
+                overseer.close()
+              end
+            end, 200)
+          end
+        end,
+      })
+
+      overseer.setup(opts)
+    end,
   },
 }
