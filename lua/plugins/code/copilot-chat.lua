@@ -15,6 +15,12 @@ return {
       window = {
         layout = 'vertical',
       },
+      mappings = {
+        reset = {
+          normal = '<C-x>',
+          insert = '<C-x>',
+        },
+      },
     },
     cmd = {
       'CopilotChat',
