@@ -1,6 +1,7 @@
 return {
   'harrisoncramer/gitlab.nvim',
-  enabled = not vim.g.started_by_firenvim,
+  enabled = false,
+  -- enabled = not vim.g.started_by_firenvim,
   event = 'VeryLazy',
   dependencies = {
     'MunifTanjim/nui.nvim',

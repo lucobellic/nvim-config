@@ -1,5 +1,6 @@
 return {
   'andymass/vim-matchup',
+  enabled = false,
   event = 'VeryLazy',
   opts = {},
   config = function()
