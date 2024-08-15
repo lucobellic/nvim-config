@@ -113,6 +113,12 @@ end, { repeatable = true, desc = 'Windows Toggle Autowidth' })
 -- quit
 map('n', '<leader>qq', '<cmd>qa!<cr>', { desc = 'Quit all' })
 map('n', '<leader>qa', '<cmd>qa!<cr>', { desc = 'Quit all' })
+map('n', '<leader>qu', function()
+  vim
+    .iter(vim.api.nvim_list_uis())
+    :filter(function(ui) return ui.chan and not ui.stdout_tty end)
+    :each(function(ui) vim.fn.chanclose(ui.chan) end)
+end, { noremap = true, desc = 'Quit UIs' })
 
 -- Terminal Mappings
 vim.keymap.del('t', '<esc><esc>')
@@ -225,7 +231,9 @@ map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 
 -- jupytext
 local jupytext = require('util.jupytext')
-wk.add({ { '<leader>n', group = 'jupytext' } })
+if wk_ok then
+  wk.add({ { '<leader>n', group = 'jupytext' } })
+end
 map('n', '<leader>ns', function() jupytext:sync() end, { desc = 'Jupytext Sync' })
 map('n', '<leader>np', function() jupytext:pair() end, { desc = 'Jupytext Pair' })
 
