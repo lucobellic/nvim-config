@@ -61,7 +61,7 @@ local shortcut = {
 }
 
 return {
-  'nvimdev/dashboard-nvim',
+  'lucobellic/dashboard-nvim',
   enabled = not vim.g.started_by_firenvim,
   event = 'UIEnter',
   opts = function(_, opts)
