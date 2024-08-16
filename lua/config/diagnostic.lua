@@ -19,7 +19,7 @@ vim.api.nvim_create_user_command(
       virtual_text = not vim.diagnostic.config().virtual_text and diagnostic_virtual_text or false,
     })
   end,
-  { desc = 'Toggle diagnostic virtual text' }
+  { desc = 'Toggle Diagnostic Virtual Text' }
 )
 
 vim.api.nvim_create_user_command('ToggleDiagnosticVirtualLines', function()
@@ -38,3 +38,14 @@ vim.api.nvim_create_user_command('ToggleDiagnosticVirtualLines', function()
     vim.notify('Disabled Diagnostic Lines', vim.log.levels.WARN, { title = 'Diagnostic' })
   end
 end, { desc = 'Toggle diagnostic virtual lines' })
+
+vim.api.nvim_create_user_command('ToggleDiagnostics', function()
+  local diagnostic_enabled = vim.diagnostic.is_enabled()
+  if diagnostic_enabled then
+    vim.diagnostic.enable(false)
+    vim.notify('Disabled Diagnostics', vim.log.levels.WARN, { title = 'Diagnostic' })
+  else
+    vim.diagnostic.enable(true)
+    vim.notify('Enabled Diagnostics', vim.log.levels.INFO, { title = 'Diagnostic' })
+  end
+end, { desc = 'Toggle Diagnostics' })

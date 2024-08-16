@@ -80,11 +80,12 @@ map('n', '<leader>uS', '<cmd>ToggleAutoSave<cr>', { desc = 'Toggle Autosave' })
 
 if wk_ok then
   wk.add({{ '<leader>uz' , '<cmd>TransparencyToggle<cr>', desc = 'Transparency Toggle' }})
+  vim.keymap.del('n', '<leader>ud')
   wk.add({
     { "<leader>ud", group = "Diagnostics" },
     { "<leader>udd", "<cmd>ToggleDiagnosticVirtualText<cr>", desc = "Toggle Virtual Text" },
     { "<leader>udl", "<cmd>ToggleDiagnosticVirtualLines<cr>", desc = "Toggle Virtual Lines" },
-    { "<leader>udt", Util.toggle.diagnostics, desc = "Toggle Diagnostics" },
+    { "<leader>udt", "<cmd>ToggleDiagnostics<cr>", desc = "Toggle Diagnostics" },
   })
 end
 
