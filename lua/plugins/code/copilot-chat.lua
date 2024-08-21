@@ -21,6 +21,11 @@ return {
           insert = '<C-x>',
         },
       },
+      prompts = {
+        Grammar = {
+          prompt = '/COPILOT_INSTRUCTIONS Correct the grammar and spelling of the sentence.',
+        },
+      },
     },
     cmd = {
       'CopilotChat',
@@ -58,6 +63,8 @@ return {
       { '<leader>ac', '<cmd>CopilotChatDocs<CR>', desc = 'Docs (CopilotChat)', mode = { 'n', 'v' } },
       { '<leader>ao', '<cmd>CopilotChatOptimize<CR>', desc = 'Optimize (CopilotChat)', mode = { 'n', 'v' } },
       { '<leader>as', '<cmd>CopilotChatCommitStaged<CR>', desc = 'Commit Staged (CopilotChat)', mode = { 'n', 'v' } },
+      { '<leader>ar', '<cmd>CopilotChatReview<CR>', desc = 'Review (CopilotChat)', mode = { 'n', 'v' } },
+      { '<leader>ag', '<cmd>CopilotChatGrammar<CR>', desc = 'Grammar (CopilotChat)', mode = { 'n', 'v' } },
     },
     config = function(_, opts)
       require('CopilotChat').setup(opts)
