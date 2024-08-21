@@ -39,6 +39,7 @@ return {
       lsp_references = {
         desc = 'LSP References',
         mode = 'lsp_references',
+        title = false,
         restore = true,
         focus = false,
         follow = false,
@@ -46,9 +47,15 @@ return {
       lsp_definitions = {
         desc = 'LSP definitions',
         mode = 'lsp_definitions',
+        title = false,
         restore = true,
         focus = false,
         follow = false,
+      },
+      lsp_document_symbols = {
+        title = false,
+        focus = false,
+        format = '{kind_icon}{symbol.name} {text:Comment} {pos}',
       },
     },
     -- Key mappings can be set to the name of a builtin action,
@@ -76,7 +83,7 @@ return {
       i = 'inspect',
       p = 'preview',
       P = 'toggle_preview',
-      l = 'jump',
+      l = 'fold_open',
       L = 'fold_open_all',
       h = 'fold_close',
       H = 'fold_close_all',
