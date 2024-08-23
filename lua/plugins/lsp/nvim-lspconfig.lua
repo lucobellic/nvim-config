@@ -22,7 +22,6 @@ return {
           'vimls',
           'neocmake',
           'lua_ls',
-          'rust_analyzer',
         },
         automatic_installation = false,
       },
@@ -72,6 +71,7 @@ return {
       severity_sort = true,
       float = { source = true, header = {}, border = vim.g.border.style },
     })
+
 
     require('lspconfig.ui.windows').default_options.border = vim.g.border.style
     require('plugins.lsp.util.keymaps').setup()
