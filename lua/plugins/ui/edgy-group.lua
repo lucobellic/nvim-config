@@ -25,8 +25,12 @@ return {
     },
     opts = {
       groups = {
-        right = {
+        left = {
+          { icon = '', titles = { 'Neo-Tree', 'Neo-Tree Buffers' }, pick_key = 'e' },
           { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
+        },
+        right = {
+          -- { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
           { icon = '', titles = { 'copilot-chat' }, pick_key = 'c' },
         },

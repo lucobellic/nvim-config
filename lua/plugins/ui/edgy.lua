@@ -36,7 +36,10 @@ return {
     },
   },
   opts = {
-    options = { bottom = { size = 0.25 } },
+    options = {
+      bottom = { size = 0.2 },
+      left = { size = 40 },
+    },
     close_when_all_hidden = false,
     exit_when_last = false,
     icons = {
@@ -64,6 +67,24 @@ return {
       -- prev loaded window
       ['<W'] = function(win) win:prev({ pinned = false, focus = true }) end,
     },
+    left = {
+      {
+        title = 'Neo-Tree',
+        ft = 'neo-tree',
+        filter = function(buf) return vim.b[buf].neo_tree_source == 'filesystem' end,
+        size = { height = 0.5 },
+        open = 'Neotree show position=left filesystem',
+      },
+      {
+        title = 'trouble-symbols',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'symbols'
+        end,
+        open = 'Trouble symbols toggle focus=false win.position=left',
+      },
+    },
     right = {
       {
         title = 'copilot-chat',
@@ -79,16 +100,6 @@ return {
           return win_trouble and win_trouble.mode == 'lsp'
         end,
         open = 'Trouble lsp toggle focus=false win.position=right',
-      },
-      {
-        title = 'trouble-symbols',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'symbols'
-        end,
-        open = 'Trouble symbols toggle focus=false win.position=right',
-        size = { width = 0.20 },
       },
       {
         title = 'neotest-summary',
