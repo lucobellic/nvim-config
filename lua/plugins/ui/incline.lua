@@ -59,6 +59,7 @@ local edgy_filetypes = {
   'ogpt-input',
   'trouble',
   'copilot-chat',
+  'codecompanion',
 }
 
 local edgy_titles = {

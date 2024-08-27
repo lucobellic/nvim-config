@@ -9,9 +9,10 @@ return {
     opts = {
       show_help = false,
       model = 'gpt-4o',
+      auto_insert_mode = false,
       question_header = '``` ```', -- Header to use for user questions
       answer_header = '``` ```', -- Header to use for AI answers
-      error_header = '``` ```', -- Header to use for errors Worng
+      error_header = '``` ```', -- Header to use for errors
       window = {
         layout = 'vertical',
       },

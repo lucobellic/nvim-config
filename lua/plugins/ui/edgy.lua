@@ -87,6 +87,12 @@ return {
     },
     right = {
       {
+        title = 'codecompanion',
+        ft = 'codecompanion',
+        open = 'CodeCompanionToggle',
+        size = { width = 0.20 },
+      },
+      {
         title = 'copilot-chat',
         ft = 'copilot-chat',
         open = 'CopilotChat',

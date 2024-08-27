@@ -7,6 +7,10 @@ function M.setup()
   end
   local keys = require('lazyvim.plugins.lsp.keymaps').get()
 
+  -- Remove codelens keymap
+  keys[#keys + 1] = { '<leader>cc', false, mode = { 'n', 'v' } }
+  keys[#keys + 1] = { '<leader>cC', false, mode = { 'n', 'v' } }
+
   keys[#keys + 1] = { 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>' }
 
   keys[#keys + 1] = { '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>' }

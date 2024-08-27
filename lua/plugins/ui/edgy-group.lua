@@ -16,11 +16,13 @@ return {
         '<leader>;',
         function() require('edgy-group.stl').pick() end,
         desc = 'Edgy Group Pick',
+        mode = { 'n', 'v' },
       },
       {
         '<c-;>',
         function() require('edgy-group.stl').pick() end,
         desc = 'Edgy Group Pick',
+        mode = { 'n', 'v' },
       },
     },
     opts = {
@@ -30,9 +32,9 @@ return {
           { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
         },
         right = {
-          -- { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
-          { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
+          { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
           { icon = '', titles = { 'copilot-chat' }, pick_key = 'c' },
+          { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },
