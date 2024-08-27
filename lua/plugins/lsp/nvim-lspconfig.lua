@@ -44,7 +44,6 @@ return {
     opts.servers = vim.tbl_deep_extend('force', opts.servers or {}, {
       tsserver = require('plugins.lsp.util.servers.tsserver'),
       lua_ls = require('plugins.lsp.util.servers.lua_ls'),
-      typos_lsp = { init_options = { diagnosticSeverity = 'Hint' } },
       ansiblels = {},
     })
 
