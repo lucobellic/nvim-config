@@ -235,8 +235,10 @@ local jupytext = require('util.jupytext')
 if wk_ok then
   wk.add({ { '<leader>n', group = 'jupytext' } })
 end
-map('n', '<leader>ns', function() jupytext:sync() end, { desc = 'Jupytext Sync' })
-map('n', '<leader>np', function() jupytext:pair() end, { desc = 'Jupytext Pair' })
+map('n', '<leader>ns', function() jupytext.sync() end, { desc = 'Jupytext Sync' })
+map('n', '<leader>np', function() jupytext.pair() end, { desc = 'Jupytext Pair' })
+map('n', '<leader>nc', function() jupytext.to_notebook() end, { desc = 'Jupytext Convert' })
+map('n', '<leader>nl', function() jupytext.to_paired_notebook() end, { desc = 'Jupytext Link' })
 
 -- Create command from keymaps
 require('util.commands').create_command_from_keymaps()
