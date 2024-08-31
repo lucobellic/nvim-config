@@ -23,8 +23,10 @@ vim.o.showbreak = '↪'
 vim.o.backup = false
 vim.o.writebackup = false
 vim.o.swapfile = false
-vim.o.pumblend = vim.g.neovide and 100 or 0
-vim.o.winblend = vim.g.neovide and 100 or 0
+
+local neovide_multi_grid = os.getenv('NEOVIDE_NO_MULTIGRID') == 'false'
+vim.o.pumblend = neovide_multi_grid and 100 or 0
+vim.o.winblend = neovide_multi_grid and 100 or 0
 
 vim.go.incsearch = false
 
