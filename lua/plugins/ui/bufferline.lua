@@ -134,11 +134,18 @@ return {
           left = function() return get_edgy_group_icons('left') end,
           right = function() return get_edgy_group_icons('right') end,
         },
-        custom_filter = function(buf, buf_nums)
-          -- Don't show gp.nvim buffers with filename: 2024-01-21.16-05-02.538
-          local is_gp = vim.bo[buf].filetype == 'markdown' and require('util.util').is_gp_file(vim.fn.bufname(buf))
-          return not is_gp
-        end,
+      },
+      highlights = {
+        buffer_visible = {
+          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferVisible', link = false }).bg,
+        },
+        buffer_selected = {
+          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferSelected', link = false }).bg,
+        },
+        background = {
+          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBackground', link = false }).bg
+            or vim.api.nvim_get_hl(0, { name = 'Normal', link = false }).bg,
+        },
       },
     }
   end,
