@@ -68,7 +68,7 @@ local lsp = {
     enabled = true,
   },
   signature = {
-    enabled = true,
+    enabled = false,
   },
 }
 
