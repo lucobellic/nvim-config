@@ -27,6 +27,7 @@ return {
     keys = {
       { '<leader>cct', ':CodeCompanionToggle<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Toggle' },
       { '<leader>cc+', ':CodeCompanionAdd<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
+      { '<leader>cca', ':CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Actions' },
       { '<leader>ccc', ':CodeCompanionChat<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Chat' },
       { '<leader>cci', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Open' },
     },
@@ -56,6 +57,9 @@ return {
             })
           end,
         },
+      },
+      display = {
+        inline = { diff = { enabled = false } },
       },
     },
   },
