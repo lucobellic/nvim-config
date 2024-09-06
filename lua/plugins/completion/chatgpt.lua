@@ -13,7 +13,7 @@ return {
   {
     'jackMort/ChatGPT.nvim',
     name = 'chatgpt',
-    enabled = not vim.g.started_by_firenvim,
+    enabled = false,
     event = 'VeryLazy',
     cmd = { 'ChatGPT', 'ChatGPTRun' },
     keys = {

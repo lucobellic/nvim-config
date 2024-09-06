@@ -39,10 +39,16 @@ return {
       },
       strategies = {
         chat = {
-          adapter = 'openai',
+          adapter = 'copilot',
           roles = {
-            llm = ' ', -- The markdown header content for the LLM's responses
+            llm = ' ', -- The markdown header content for the LLM's responses
             user = ' ', -- The markdown header for your questions
+          },
+          inline = {
+            adapter = 'copilot',
+          },
+          agent = {
+            adapter = 'copilot',
           },
         },
         adapters = {

@@ -93,12 +93,6 @@ return {
         size = { width = 0.20 },
       },
       {
-        title = 'copilot-chat',
-        ft = 'copilot-chat',
-        open = 'CopilotChat',
-        size = { width = 0.20 },
-      },
-      {
         title = 'trouble-lsp',
         ft = 'trouble',
         filter = function(_, win)

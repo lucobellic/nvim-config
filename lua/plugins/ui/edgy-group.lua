@@ -32,8 +32,7 @@ return {
           { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
         },
         right = {
-          { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
-          { icon = '', titles = { 'copilot-chat' }, pick_key = 'c' },
+          { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
         },
         bottom = {
