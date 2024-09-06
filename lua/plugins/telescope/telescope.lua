@@ -147,11 +147,6 @@ return {
         desc = 'Git Status',
       },
       {
-        '<leader>gc',
-        function() require('telescope.builtin').git_commits({ layout_strategy = 'vertical' }) end,
-        desc = 'Git Commits',
-      },
-      {
         '<leader>fk',
         function() require('telescope.builtin').keymaps() end,
         desc = 'Find Keymaps',
