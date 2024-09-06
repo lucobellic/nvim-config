@@ -26,7 +26,7 @@ local function cmake_build()
           -- Remove ': phony' from target names
           cmake_targets = vim.tbl_map(function(target) return target:gsub(': phony', '') end, targets)
 
-          vim.notify('Cmake targets cache updated', vim.log.levels.INFO)
+          vim.notify('CMake targets cache updated', vim.log.levels.INFO)
         end
       end,
     }):start()
@@ -100,5 +100,5 @@ if ok then
   wk.add({ { '<leader>oe', group = 'easymile' } })
 end
 
-vim.keymap.set('n', '<leader>oeb', cmake_build, { desc = 'Cmake Build Target', repeatable = true })
-vim.keymap.set('n', '<leader>oec', function() cmake_targets = nil end, { desc = 'Cmake Clear Target Cache' })
+vim.keymap.set('n', '<leader>oeb', cmake_build, { desc = 'CMake Build Target', repeatable = true })
+vim.keymap.set('n', '<leader>oec', function() cmake_targets = nil end, { desc = 'CMake Clear Target Cache' })
