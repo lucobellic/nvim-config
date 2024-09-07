@@ -33,13 +33,13 @@ return {
       before = '', -- 'fg' or 'bg' or empty
       keyword = 'bg', -- 'fg', 'bg', 'wide' or empty. (wide is the same as bg, but will also highlight surrounding characters)
       after = 'fg', -- 'fg' or 'bg' or empty
-      pattern = [[.*<(KEYWORDS)(\(.*\))?\s*:?]], -- pattern or table of patterns, used for highlighting (vim regex)
+      pattern = [[.*<((KEYWORDS)%(\(.{-1,}\))?):?]],
       comments_only = true, -- uses treesitter to match keywords in comments only
       max_line_len = 400, -- ignore lines longer than this
       exclude = {}, -- list of file types to exclude highlighting
     },
     -- list of named colors where we try to extract the guifg from the
-    -- list of hilight groups or use the hex color if hl not found as a fallback
+    -- list of highlight groups or use the hex color if hl not found as a fallback
     colors = {
       error = { 'DiagnosticError' },
       warning = { 'DiagnosticWarn' },
@@ -59,8 +59,7 @@ return {
       },
       -- regex that will be used to match keywords.
       -- don't replace the (KEYWORDS) placeholder
-      pattern = [[\b(KEYWORDS)(\(.*\))?\s*:?]], -- ripgrep regex
-      -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+      pattern = [[\b(KEYWORDS)(\(\w*\))*:?]],
     },
   },
 }
