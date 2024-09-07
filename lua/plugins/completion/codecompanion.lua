@@ -33,8 +33,9 @@ return {
       { '<leader>ae', ':CodeCompanion /explain<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Explain' },
       { '<leader>af', ':CodeCompanion /fix<cr>', mode = { 'v' }, desc = 'Code Companion Fix' },
       { '<leader>ag', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
-      { '<leader>ai', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt'},
+      { '<leader>ai', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
       { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
+      { '<leader>ap', ':CodeCompanion /pr<cr>', mode = { 'n' }, desc = 'Code Companion PR' },
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate test' },
       { '<leader>at', ':CodeCompanionToggle<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Toggle' },
@@ -187,6 +188,31 @@ return {
               opts = {
                 contains_code = true,
               },
+            },
+          },
+        },
+        ['PullRequest'] = {
+          strategy = 'chat',
+          description = 'Generate a Pull Request message description',
+          opts = {
+            index = 13,
+            default_prompt = true,
+            mapping = '<localLeader>cp',
+            slash_cmd = 'pr',
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = 'user',
+              contains_code = true,
+              content = function()
+                return 'You are an expert at writing detailed and clear pull request descriptions.'
+                  .. 'Please create a pull request message following standard convention from the provided diff changes.'
+                  .. 'Ensure the title, description, type of change, checklist, related issues, and additional notes sections are well-structured and informative.'
+                  .. '\n\n```\n'
+                  .. vim.fn.system('git diff HEAD $(git merge-base HEAD main)')
+                  .. '\n```'
+              end,
             },
           },
         },
