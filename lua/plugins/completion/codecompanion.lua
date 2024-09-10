@@ -76,7 +76,7 @@ return {
       display = {
         inline = { diff = { enabled = false } },
       },
-      default_prompts = {
+      pre_defined_prompts = {
         ['Generate a Commit Message for Staged Files'] = {
           strategy = 'chat',
           description = 'staged file commit messages',
