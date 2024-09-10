@@ -15,7 +15,9 @@ return {
   },
   {
     'MeanderingProgrammer/markdown.nvim',
+    ft = { 'markdown', 'codecompanion' },
     opts = {
+      file_types = { 'markdown', 'codecompanion' },
       render_modes = { 'n', 'c', 'i' },
       sign = {
         enabled = false,
@@ -40,9 +42,6 @@ return {
           wont_do = { raw = '[/]', rendered = '󱍮', highlight = 'DiagnosticError' },
           waiting = { raw = '[?]', rendered = '󱍥', highlight = 'DiagnosticWarn' },
         },
-      },
-      exclude = {
-        buftypes = { 'nofile' },
       },
     },
   },
