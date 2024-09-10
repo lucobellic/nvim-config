@@ -165,10 +165,10 @@ local Overseer = {
 }
 
 local copilot_icons = {
-  Normal = ' ',
-  Disabled = ' ',
-  Warning = ' ',
-  Unknown = ' ',
+  Normal = '',
+  Disabled = '',
+  Warning = '',
+  Unknown = '',
 }
 
 local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
@@ -180,19 +180,40 @@ end
 
 local function get_copilot_icons()
   if copilot_client.is_disabled() then
-    return copilot_icons.Disabled
+    return ' ' .. copilot_icons.Disabled
+  elseif copilot_api.status.data.status == 'InProgress' then
+    return get_spinner() .. ' ' .. copilot_icons.Normal
   end
-  if copilot_api.status.data.status == 'InProgress' then
-    return ' ' .. get_spinner()
-  end
-  return copilot_icons[copilot_api.status.data.status] or copilot_icons.Unknown
+  local icon = copilot_icons[copilot_api.status.data.status]
+  return icon and (' ' .. icon) or (' ' .. copilot_icons.Warning)
 end
 
 local Copilot = {
   condition = function()
     return not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
   end,
-  provider = function() return ' ' .. get_copilot_icons() .. ' ' end,
+  provider = function() return get_copilot_icons() .. ' ' end,
+  hl = secondary_highlight,
+}
+
+---@param processing boolean
+local function get_codecompanion_icons(processing) return processing and ' ' .. get_spinner() or '' end
+
+local CodeCompanion = {
+  static = { processing = false },
+  provider = function(self) return ' ' .. get_codecompanion_icons(self.processing) .. ' ' end,
+  update = {
+    'User',
+    pattern = 'CodeCompanionRequest*',
+    callback = function(self, args)
+      if args.match == 'CodeCompanionRequestStarted' then
+        self.processing = true
+      elseif args.match == 'CodeCompanionRequestFinished' then
+        self.processing = false
+      end
+      vim.schedule_wrap(function() vim.cmd('redrawstatus') end)
+    end,
+  },
   hl = secondary_highlight,
 }
 
@@ -225,7 +246,7 @@ local SearchCount = {
 local Ruler = {
   -- %l = current line number
   -- %c = column number
-  provider = '%3l:%-3c ',
+  provider = ' %3l:%-3c ',
   hl = secondary_highlight,
 }
 
@@ -237,6 +258,13 @@ local Date = {
 local Left = { ViMode, Git, Dap, Molten, MacroRec }
 local Center = { Edgy }
 local Align = { provider = '%=', hl = { bg = 'none' } }
-local Right = { Overseer, LspProgress, Copilot, SearchCount, Ruler, Date }
+local Right = {
+  Overseer,
+  LspProgress,
+  Copilot, --[[ CodeCompanion ,]]
+  SearchCount,
+  Ruler,
+  Date,
+}
 
 return { Left, Center, Align, Right }
