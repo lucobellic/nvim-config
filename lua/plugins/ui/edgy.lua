@@ -90,7 +90,7 @@ return {
         title = 'codecompanion',
         ft = 'codecompanion',
         open = 'CodeCompanionToggle',
-        size = { width = 0.20 },
+        size = { width = 0.25 },
       },
       {
         title = 'trouble-lsp',
