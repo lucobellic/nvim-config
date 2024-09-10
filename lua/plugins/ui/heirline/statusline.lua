@@ -197,11 +197,11 @@ local Copilot = {
 }
 
 ---@param processing boolean
-local function get_codecompanion_icons(processing) return processing and ' ' .. get_spinner() or '' end
+local function get_codecompanion_icons(processing) return processing and ' ' .. get_spinner() .. ' ' or ' ' end
 
 local CodeCompanion = {
   static = { processing = false },
-  provider = function(self) return ' ' .. get_codecompanion_icons(self.processing) .. ' ' end,
+  provider = function(self) return get_codecompanion_icons(self.processing) .. ' ' end,
   update = {
     'User',
     pattern = 'CodeCompanionRequest*',
@@ -261,7 +261,8 @@ local Align = { provider = '%=', hl = { bg = 'none' } }
 local Right = {
   Overseer,
   LspProgress,
-  Copilot, --[[ CodeCompanion ,]]
+  Copilot,
+  CodeCompanion,
   SearchCount,
   Ruler,
   Date,
