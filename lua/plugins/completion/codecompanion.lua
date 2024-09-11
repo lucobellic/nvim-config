@@ -62,7 +62,7 @@ return {
       },
       pre_defined_prompts = {
         ['Generate a Commit Message for Staged Files'] = {
-          strategy = 'chat',
+          strategy = 'inline',
           description = 'staged file commit messages',
           opts = {
             index = 10,
