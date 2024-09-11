@@ -42,10 +42,6 @@ return {
     },
     init = function() vim.cmd([[cab cc CodeCompanion]]) end,
     opts = {
-      adapters = {
-        openai = 'openai',
-        copilot = 'copilot',
-      },
       strategies = {
         chat = {
           adapter = 'copilot',
@@ -53,24 +49,12 @@ return {
             llm = ' ', -- The markdown header content for the LLM's responses
             user = ' ', -- The markdown header for your questions
           },
-          inline = {
-            adapter = 'copilot',
-          },
-          agent = {
-            adapter = 'copilot',
-          },
         },
-        adapters = {
-          openai = function()
-            return require('codecompanion.adapters').extend('openai', {
-              schema = {
-                model = {
-                  api_key = 'OPENAI_API_KEY',
-                  default = 'gpt-4o-mini',
-                },
-              },
-            })
-          end,
+        inline = {
+          adapter = 'copilot',
+        },
+        agent = {
+          adapter = 'copilot',
         },
       },
       display = {
