@@ -196,24 +196,28 @@ local Copilot = {
   hl = secondary_highlight,
 }
 
----@param processing boolean
-local function get_codecompanion_icons(processing) return processing and ' ' .. get_spinner() .. ' ' or ' ' end
+local codecompanion_processing = false
+local codecompanion_timer = vim.uv.new_timer()
+
+-- Scheduce redrawstatus every 200ms when code companion request started until finished
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'CodeCompanionRequest*',
+  callback = function(args)
+    if args.match == 'CodeCompanionRequestStarted' then
+      codecompanion_processing = true
+      codecompanion_timer:start(0, 200, vim.schedule_wrap(function() vim.cmd('redrawstatus') end))
+    elseif args.match == 'CodeCompanionRequestFinished' then
+      codecompanion_processing = false
+      codecompanion_timer:stop()
+      vim.schedule_wrap(function() vim.cmd('redrawstatus') end)
+    end
+  end,
+})
+
+local function get_codecompanion_icons() return codecompanion_processing and ' ' .. get_spinner() .. ' ' or ' ' end
 
 local CodeCompanion = {
-  static = { processing = false },
-  provider = function(self) return get_codecompanion_icons(self.processing) .. ' ' end,
-  update = {
-    'User',
-    pattern = 'CodeCompanionRequest*',
-    callback = function(self, args)
-      if args.match == 'CodeCompanionRequestStarted' then
-        self.processing = true
-      elseif args.match == 'CodeCompanionRequestFinished' then
-        self.processing = false
-      end
-      vim.schedule_wrap(function() vim.cmd('redrawstatus') end)
-    end,
-  },
+  provider = function() return get_codecompanion_icons() .. ' ' end,
   hl = secondary_highlight,
 }
 
