@@ -29,6 +29,7 @@ require('lazy').setup({
   },
   ui = {
     border = vim.g.border.style,
+    backdrop = 100,
   },
   install = { colorscheme = { 'habamax', 'gruvbox', 'ayugloom' } },
   checker = { enabled = false }, -- automatically check for plugin updates
