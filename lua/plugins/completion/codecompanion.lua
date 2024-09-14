@@ -150,7 +150,7 @@ return {
                 When asked to optimize code, follow these steps:
                 1. **Analyze the Code**: Understand the functionality and identify potential bottlenecks.
                 2. **Implement the Optimization**: Apply the optimizations including best practices to the code.
-                3. **Shorthen the code**: Remove unnecessary code and refactor the code to be more concise.
+                3. **Shorten the code**: Remove unnecessary code and refactor the code to be more concise.
                 3. **Review the Optimized Code**: Ensure the code is optimized for performance and readability. Ensure the code:
                   - Maintains the original functionality.
                   - Is more efficient in terms of time and space complexity.
@@ -193,8 +193,8 @@ return {
                 return 'You are an expert at writing detailed and clear pull request descriptions.'
                   .. 'Please create a pull request message following standard convention from the provided diff changes.'
                   .. 'Ensure the title, description, type of change, checklist, related issues, and additional notes sections are well-structured and informative.'
-                  .. '\n\n```\n'
-                  .. vim.fn.system('git diff HEAD $(git merge-base HEAD main)')
+                  .. '\n\n```diff\n'
+                  .. vim.fn.system('git diff $(git merge-base HEAD main)...HEAD')
                   .. '\n```'
               end,
             },
