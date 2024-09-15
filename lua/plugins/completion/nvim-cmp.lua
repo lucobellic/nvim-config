@@ -35,6 +35,7 @@ end
 return {
   'llllvvuu/nvim-cmp',
   branch = 'feat/above',
+  -- 'hrsh7th/nvim-cmp',
   event = { 'InsertEnter' },
   dependencies = {
     {
@@ -89,7 +90,7 @@ return {
       end,
       ['<C-l>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
-          local active_entry = cmp.get_active_entry() or cmp.get_entries()[1]
+          local active_entry = cmp.get_selected_entry() or cmp.get_entries()[1]
           if active_entry then
             local current_line = vim.fn.trim(vim.api.nvim_get_current_line(), ' ', 1)
             local suggestion = active_entry.cache.entries.get_word ---@type string
@@ -120,6 +121,10 @@ return {
       experimental = {
         ghost_text = { hl_group = 'Comment' },
       },
+      performance = {
+        debounce = 300,
+        throttle = 300,
+      },
       matching = {
         disallow_fuzzy_matching = false,
         disallow_fullfuzzy_matching = false,
@@ -133,7 +138,7 @@ return {
           name = 'custom',
           vertical_positioning = 'above',
           selection_order = 'near_cursor',
-          follow_cursor = true,
+          follow_cursor = false,
         },
         docs = {
           auto_open = false,
