@@ -57,9 +57,7 @@ return {
           adapter = 'copilot',
         },
       },
-      display = {
-        inline = { diff = { enabled = false } },
-      },
+      display = { diff = { enabled = false } },
       pre_defined_prompts = {
         ['Generate a Commit Message for Staged Files'] = {
           strategy = 'inline',
