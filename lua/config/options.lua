@@ -70,9 +70,6 @@ end
 vim.g.lion_squeeze_spaces = true
 
 vim.opt.numberwidth = 1
-if vim.fn.has('nvim-0.9.0') == 1 then
-  vim.opt.statuscolumn = [[%!v:lua.require'util.statuscolumn'.get()]]
-end
 
 -- Set python3 host prog to speed up startup
 vim.g.python3_host_prog = '/usr/bin/python3'
