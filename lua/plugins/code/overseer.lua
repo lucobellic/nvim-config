@@ -43,7 +43,7 @@ return {
     },
   },
   {
-    'lucobellic/overseer.nvim',
+    'stevearc/overseer.nvim',
     cmd = { 'OverseerRun', 'OverseerInfo', 'OverseerToggle', 'OverseerFromTerminal' },
     keys = {
       { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
