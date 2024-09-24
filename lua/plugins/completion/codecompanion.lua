@@ -37,6 +37,7 @@ return {
       { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
       { '<leader>ap', ':CodeCompanion /pr<cr>', mode = { 'n' }, desc = 'Code Companion PR' },
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
+      { '<leader>as', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate test' },
       { '<leader>at', ':CodeCompanionToggle<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Toggle' },
     },
@@ -194,6 +195,27 @@ return {
                   .. '\n\n```diff\n'
                   .. vim.fn.system('git diff $(git merge-base HEAD main)...HEAD')
                   .. '\n```'
+              end,
+            },
+          },
+        },
+        ['Spell'] = {
+          strategy = 'inline',
+          description = 'Correct grammar and reformulate',
+          opts = {
+            index = 14,
+            default_prompt = true,
+            mapping = '<localLeader>cs',
+            slash_cmd = 'spell',
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = 'user',
+              contains_code = false,
+              content = function(context)
+                local text = require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
+                return 'Correct grammar and reformulate:\n\n' .. text
               end,
             },
           },
