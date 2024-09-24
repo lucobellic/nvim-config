@@ -147,11 +147,6 @@ return {
         desc = 'Git Status',
       },
       {
-        '<leader>fk',
-        function() require('telescope.builtin').keymaps() end,
-        desc = 'Find Keymaps',
-      },
-      {
         '<leader>fm',
         function() require('telescope.builtin').marks({ layout_strategy = 'vertical' }) end,
         desc = 'Find Marks',
