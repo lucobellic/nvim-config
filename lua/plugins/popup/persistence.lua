@@ -1,8 +1,5 @@
-local util = require('util.persistence')
-
 return {
-  'lucobellic/persistence.nvim',
-  branch = 'personal',
+  'folke/persistence.nvim',
   event = 'VeryLazy',
   keys = {
     {
@@ -27,17 +24,26 @@ return {
     },
   },
   opts = {
-    options = { 'buffers', 'curdir', 'tabpages', 'winpos', 'folds', 'winsize', 'help', 'globals', 'skiprtp' },
-    pre_save = util.pre_save,
+    options = {
+      'buffers',
+      'curdir',
+      'tabpages',
+      'winpos',
+      'folds',
+      'winsize',
+      'help',
+      'globals',
+      'skiprtp',
+    },
   },
   config = function(_, opts)
     local persistence = require('persistence')
+    local util = require('util.persistence')
     persistence.setup(opts)
 
     -- Save current directory on exit
-    vim.api.nvim_create_autocmd('VimLeavePre', {
-      callback = function() persistence.save() end,
-    })
+    vim.api.nvim_create_autocmd('VimLeavePre', { callback = function() persistence.save() end })
+    vim.api.nvim_create_autocmd('User', { pattern = 'PersistenceSavePre', callback = function() util.pre_save() end })
 
     -- Load session from persistence
     vim.api.nvim_create_user_command(
