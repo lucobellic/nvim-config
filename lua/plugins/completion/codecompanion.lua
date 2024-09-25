@@ -59,7 +59,7 @@ return {
         },
       },
       display = { diff = { enabled = false } },
-      pre_defined_prompts = {
+      prompt_library = {
         ['Generate a Commit Message for Staged Files'] = {
           strategy = 'inline',
           description = 'staged file commit messages',
