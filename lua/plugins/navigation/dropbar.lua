@@ -1,15 +1,35 @@
+---@return dropbar_t?, number?, dropbar_symbol_t?
+local function get_bar_with_opened_component()
+  local menu = require('dropbar.utils.menu').get_current()
+  if not menu then
+    return nil, nil, nil
+  end
+
+  ---@type dropbar_t | nil
+  local bar = require('dropbar.utils.bar').get({ win = menu:root_win() })
+  if not bar then
+    return nil, nil, nil
+  end
+
+  return bar,
+    vim
+      .iter(ipairs(bar.components))
+      :filter(function(_, component) return component.menu and component.menu.is_opened end)
+      :next()
+end
+
 return {
   'Bekaboo/dropbar.nvim',
-  enabled = false,
+  enabled = true,
   event = 'BufEnter',
   dependencies = {
     'nvim-telescope/telescope-fzf-native.nvim',
   },
   keys = {
     {
-      '<leader>.',
+      '<C-m>',
       function() require('dropbar.api').pick() end,
-      desc = 'Pick Dropbar Item',
+      desc = 'Dropbar Pick Item',
     },
   },
   opts = {
@@ -77,6 +97,24 @@ return {
         ['q'] = '<c-w>q',
         ['<Esc>'] = '<c-w>q',
         ['h'] = '<c-w>q',
+        ['H'] = function()
+          local bar, opened_component_id, opened_component = get_bar_with_opened_component()
+          if bar and opened_component and opened_component_id and opened_component_id > 1 then
+            opened_component.menu:close()
+            opened_component:restore()
+            bar.components[opened_component_id - 1]:on_click()
+            bar:redraw()
+          end
+        end,
+        ['L'] = function()
+          local bar, opened_component_id, opened_component = get_bar_with_opened_component()
+          if bar and opened_component and opened_component_id and opened_component_id < #bar.components then
+            opened_component.menu:close()
+            opened_component:restore()
+            bar.components[opened_component_id + 1]:on_click()
+            bar:redraw()
+          end
+        end,
         ['<BS>'] = '<c-w>q',
         ['<Del>'] = '<c-w>q',
         ['l'] = function()
