@@ -24,17 +24,7 @@ return {
     },
   },
   opts = {
-    options = {
-      'buffers',
-      'curdir',
-      'tabpages',
-      'winpos',
-      'folds',
-      'winsize',
-      'help',
-      'globals',
-      'skiprtp',
-    },
+    branch = false, -- use git branch to save session
   },
   config = function(_, opts)
     local persistence = require('persistence')
