@@ -89,7 +89,7 @@ return {
       {
         title = 'codecompanion',
         ft = 'codecompanion',
-        open = 'CodeCompanionToggle',
+        open = 'CodeCompanionChat toggle',
         size = { width = 0.25 },
       },
       {

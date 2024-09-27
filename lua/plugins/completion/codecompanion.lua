@@ -21,11 +21,9 @@ return {
       'CodeCompanion',
       'CodeCompanionChat',
       'CodeCompanionActions',
-      'CodeCompanionToggle',
       'CodeCompanionAdd',
     },
     keys = {
-      { '<leader>a+', ':CodeCompanionAdd<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
       { '<leader>aa', ':CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Actions' },
       { '<leader>ab', ':CodeCompanion /buffer<cr>', mode = { 'n' }, desc = 'Code Companion Send Buffer To Chat' },
       { '<leader>ac', ':CodeCompanionChat<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Chat' },
@@ -39,7 +37,6 @@ return {
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
       { '<leader>as', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate test' },
-      { '<leader>at', ':CodeCompanionToggle<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Toggle' },
     },
     init = function() vim.cmd([[cab cc CodeCompanion]]) end,
     opts = {
