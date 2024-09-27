@@ -1,3 +1,5 @@
+local adapter = 'copilot'
+-- local adapter = 'openai'
 return {
   {
     'folke/which-key.nvim',
@@ -40,19 +42,23 @@ return {
     },
     init = function() vim.cmd([[cab cc CodeCompanion]]) end,
     opts = {
+      -- opts = { log_level = 'TRACE' },
+      adapters = {
+        copilot_o1 = require('plugins.completion.codecompanion.copilot_o1').get_adapter,
+      },
       strategies = {
         chat = {
-          adapter = 'copilot',
+          adapter = adapter,
           roles = {
             llm = ' ', -- The markdown header content for the LLM's responses
             user = ' ', -- The markdown header for your questions
           },
         },
         inline = {
-          adapter = 'copilot',
+          adapter = adapter,
         },
         agent = {
-          adapter = 'copilot',
+          adapter = adapter,
         },
       },
       display = { diff = { enabled = false } },
