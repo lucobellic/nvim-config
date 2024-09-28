@@ -40,6 +40,16 @@ map(
   { desc = 'Replace word under cursor', expr = true }
 )
 
+-- Remap > to ] and < to [
+map({ 'o', 'v', 'n', 'x' }, '>', ']', { desc = 'Next', remap = true })
+map({ 'o', 'v', 'n', 'x' }, '<', '[', { desc = 'Prev', remap = true })
+
+-- Use tab to indent
+map('n', '<Tab>', '>>', { noremap = true, desc = 'Indent' })
+map('v', '<Tab>', '>', { noremap = true, desc = 'Indent' })
+map('n', '<S-Tab>', '<<', { noremap = true, desc = 'Unindent' })
+map('v', '<S-Tab>', '<', { noremap = true, desc = 'Unindent' })
+
 -- stylua: ignore start
 -- diagnostics
 local enable_diagnostics_keymaps = false
