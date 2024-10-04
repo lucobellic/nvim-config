@@ -7,6 +7,7 @@ end
 
 return {
   'gbprod/yanky.nvim',
+  enabled = not vim.g.started_by_firenvim,
   keys = {
     {
       'p',

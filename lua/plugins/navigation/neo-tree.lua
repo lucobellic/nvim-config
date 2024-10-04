@@ -24,6 +24,7 @@ return {
   },
   {
     'nvim-neo-tree/neo-tree.nvim',
+    enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
     branch = 'v3.x',
     dependencies = {
       'nvim-telescope/telescope.nvim',

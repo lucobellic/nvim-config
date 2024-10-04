@@ -1,5 +1,6 @@
 return {
   'mfussenegger/nvim-dap',
+  enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   dependencies = {
     -- json5 support
     {
