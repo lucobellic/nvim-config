@@ -62,11 +62,6 @@ return {
     build = ':UpdateRemotePlugins',
     event = 'Bufenter *.py,*.ipynb',
     keys = {
-      {
-        '<leader>im',
-        function() require('which-key').show({ keys = '<leader>m', loop = true }) end,
-        desc = 'Molten',
-      },
       { '<leader>mi', '<cmd>MoltenInit<CR>', desc = 'Molten Init' },
       { '<leader>me', '<cmd>MoltenEvaluateOperator<CR>', desc = 'Molten Evaluate Operator' },
       { '<leader>mc', '<cmd>MoltenReevaluateCell<CR>', desc = 'Molten Reevaluate Cell' },
