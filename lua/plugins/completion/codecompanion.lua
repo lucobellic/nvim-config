@@ -12,9 +12,7 @@ return {
     },
   },
   {
-    -- 'olimorris/codecompanion.nvim',
-    'lucobellic/codecompanion.nvim',
-    branch = 'fix/parameter-stream-false',
+    'olimorris/codecompanion.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',

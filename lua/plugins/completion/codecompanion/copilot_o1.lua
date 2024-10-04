@@ -11,7 +11,7 @@ function M.get_adapter()
 
   -- Extend the Copilot adapter with specific parameters and handlers for o1 models
   local adapter = adapters.extend('copilot', {
-    parameters = { stream = false }, -- Stream not supported
+    opts = { stream = false }, -- Stream not supported
     schema = {
       model = {
         default = 'o1-preview',
