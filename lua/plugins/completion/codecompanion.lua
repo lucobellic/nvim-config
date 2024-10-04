@@ -12,7 +12,10 @@ return {
     },
   },
   {
-    'olimorris/codecompanion.nvim',
+    -- 'olimorris/codecompanion.nvim',
+    'lucobellic/codecompanion.nvim',
+    branch = 'hotfix/parsing',
+    enabled = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
