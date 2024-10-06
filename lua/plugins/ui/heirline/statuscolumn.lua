@@ -3,8 +3,8 @@ local M = {}
 ---@param sign? Sign
 function M.icon(sign)
   sign = sign or {}
-  local text = sign.text or ' '
-  return sign.texthl and ('%#' .. sign.texthl .. '#' .. sign.text):gsub('%s*$', '') .. '%*' or text
+  local text = type(sign.text) == 'string' and sign.text or ' '
+  return sign.texthl and ('%#' .. sign.texthl .. '#' .. text):gsub('%s*$', '') .. '%*' or text
 end
 
 local function get_numbers(win)
