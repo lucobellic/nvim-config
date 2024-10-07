@@ -48,6 +48,20 @@ return {
     opts = {
       -- opts = { log_level = 'TRACE' },
       adapters = {
+        copilot = function()
+          return require('codecompanion.adapters').extend('copilot', {
+            opts = { stream = false },
+            schema = {
+              model = {
+                default = 'gpt-4o',
+                choices = {
+                  'gpt-4o',
+                  'gpt-4o-mini',
+                },
+              },
+            },
+          })
+        end,
         copilot_o1 = require('plugins.completion.codecompanion.copilot_o1').get_adapter,
       },
       strategies = {
