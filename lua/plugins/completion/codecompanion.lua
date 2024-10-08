@@ -82,13 +82,13 @@ return {
       display = { diff = { enabled = false } },
       prompt_library = {
         ['Generate a Commit Message for Staged Files'] = {
-          strategy = 'inline',
+          strategy = 'chat',
           description = 'staged file commit messages',
           opts = {
             index = 10,
-            default_prompt = true,
-            mapping = '<localLeader>cg',
-            slash_cmd = 'scommit',
+            is_default = true,
+            is_slash_cmd = true,
+            short_name = 'scommit',
             auto_submit = true,
           },
           prompts = {
@@ -97,7 +97,7 @@ return {
               contains_code = true,
               content = function()
                 return 'You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:'
-                  .. '\n\n```\n'
+                  .. '\n\n```diff\n'
                   .. vim.fn.system('git diff --staged')
                   .. '\n```'
               end,
@@ -109,10 +109,10 @@ return {
           description = 'Add documentation to the selected code',
           opts = {
             index = 11,
-            default_prompt = true,
-            mapping = '<localLeader>cd',
+            is_default = true,
             modes = { 'v' },
-            slash_cmd = 'doc',
+            short_name = 'doc',
+            is_slash_cmd = true,
             auto_submit = true,
             user_prompt = false,
             stop_context_insertion = true,
@@ -155,10 +155,10 @@ return {
           description = 'Refactor the selected code for readability, maintainability and performances',
           opts = {
             index = 12,
-            default_prompt = true,
-            mapping = '<localLeader>cr',
+            is_default = true,
             modes = { 'v' },
-            slash_cmd = 'refactor',
+            short_name = 'refactor',
+            is_slash_cmd = true,
             auto_submit = true,
             user_prompt = false,
             stop_context_insertion = true,
@@ -200,9 +200,9 @@ return {
           description = 'Generate a Pull Request message description',
           opts = {
             index = 13,
-            default_prompt = true,
-            mapping = '<localLeader>cp',
-            slash_cmd = 'pr',
+            is_default = true,
+            short_name = 'pr',
+            is_slash_cmd = true,
             auto_submit = true,
           },
           prompts = {
@@ -225,9 +225,9 @@ return {
           description = 'Correct grammar and reformulate',
           opts = {
             index = 14,
-            default_prompt = true,
-            mapping = '<localLeader>cs',
-            slash_cmd = 'spell',
+            is_default = true,
+            short_name = 'spell',
+            is_slash_cmd = true,
             auto_submit = true,
           },
           prompts = {
