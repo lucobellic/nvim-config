@@ -19,11 +19,6 @@ local function map(mode, lhs, rhs, opts)
   end
 end
 
--- Add hydra group
-if wk_ok then
-  wk.add({ { '<leader>i', group = 'hydra' } })
-end
-
 map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
