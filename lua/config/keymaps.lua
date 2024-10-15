@@ -39,12 +39,6 @@ map(
 map({ 'o', 'v', 'n', 'x' }, '>', ']', { desc = 'Next', remap = true })
 map({ 'o', 'v', 'n', 'x' }, '<', '[', { desc = 'Prev', remap = true })
 
--- Use tab to indent
-map('n', '<Tab>', '>>', { noremap = true, desc = 'Indent' })
-map('v', '<Tab>', '>', { noremap = true, desc = 'Indent' })
-map('n', '<S-Tab>', '<<', { noremap = true, desc = 'Unindent' })
-map('v', '<S-Tab>', '<', { noremap = true, desc = 'Unindent' })
-
 -- stylua: ignore start
 -- diagnostics
 local enable_diagnostics_keymaps = false
@@ -226,8 +220,8 @@ map('n', '<S', '[s', { desc = 'Prev Spelling' })
 map('n', '<s', '[s', { desc = 'Prev Spelling' })
 
 -- Indent
-map('n', '>>', '>>', { desc = 'Increase Indent' })
-map('n', '<<', '<<', { desc = 'Decrease Indent' })
+map({'n', 'v'}, '>>', '>>', { desc = 'Increase Indent' })
+map({'n', 'v'}, '<<', '<<', { desc = 'Decrease Indent' })
 
 -- Copilot
 if wk_ok then
