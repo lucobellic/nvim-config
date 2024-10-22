@@ -74,6 +74,32 @@ return {
             llm = ' ', -- The markdown header content for the LLM's responses
             user = ' ', -- The markdown header for your questions
           },
+          keymaps = {
+            clear = {
+              modes = {
+                n = '<C-x>',
+              },
+              index = 5,
+              callback = 'keymaps.clear',
+              description = 'Clear Chat',
+            },
+            next_chat = {
+              modes = {
+                n = '>',
+              },
+              index = 8,
+              callback = 'keymaps.next_chat',
+              description = 'Next Chat',
+            },
+            previous_chat = {
+              modes = {
+                n = '<',
+              },
+              index = 9,
+              callback = 'keymaps.previous_chat',
+              description = 'Previous Chat',
+            },
+          },
         },
         inline = {
           adapter = adapter,
