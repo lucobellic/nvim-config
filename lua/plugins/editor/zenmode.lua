@@ -1,3 +1,6 @@
+local current_buffer = nil
+local current_filetype = nil
+
 return {
   {
     'folke/which-key.nvim',
@@ -58,9 +61,25 @@ return {
         },
       },
       -- callback where you can add custom code when the Zen window opens
-      -- on_open = function(win) require('incline').disable() end,
+      on_open = function(win)
+        current_buffer = vim.api.nvim_win_get_buf(win)
+        current_filetype = vim.api.nvim_get_option_value('filetype', { buf = current_buffer })
+        -- Change codecompanion to markdown to work with zen-mode
+        if current_filetype == 'codecompanion' then
+          vim.api.nvim_set_option_value('filetype', 'markdown', { buf = current_buffer })
+        elseif current_filetype == 'toggleterm' then
+          vim.api.nvim_set_option_value('filetype', 'terminal', { buf = current_buffer })
+        end
+      end,
       -- callback where you can add custom code when the Zen window closes
-      -- on_close = function() require('incline').enable() end,
+      on_close = function()
+        -- Restore filetype if changed
+        if current_buffer and current_filetype then
+          vim.api.nvim_set_option_value('filetype', current_filetype, { buf = current_buffer })
+          current_buffer = nil
+          current_filetype = nil
+        end
+      end,
     },
   },
 }
