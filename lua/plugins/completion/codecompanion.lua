@@ -53,7 +53,6 @@ return {
       adapters = {
         copilot = function()
           return require('codecompanion.adapters').extend('copilot', {
-            opts = { stream = false },
             schema = {
               model = {
                 default = 'gpt-4o',
