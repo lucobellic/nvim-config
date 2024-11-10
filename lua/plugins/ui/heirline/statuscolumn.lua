@@ -4,6 +4,7 @@ local M = {}
 function M.icon(sign)
   sign = sign or {}
   local text = type(sign.text) == 'string' and sign.text or ' '
+  text = text ~= '' and text or ' '
   return sign.texthl and ('%#' .. sign.texthl .. '#' .. text):gsub('%s*$', '') .. '%*' or text
 end
 
@@ -39,15 +40,15 @@ local statuscolumn = {
     local show_signs = vim.wo[win].signcolumn ~= 'no' and vim.v.virtnum == 0
     if show_signs then
       local buf = vim.api.nvim_win_get_buf(win)
-      vim.iter(self.ui.get_signs(buf, vim.v.lnum)):each(function(sign)
-        if sign.name and (sign.name:find('GitSign')) then
-          if not (sign.name:find('Staged') and git.name) then
-            git = sign
-          end
-        else
-          icon = sign
-        end
-      end)
+      -- vim.iter(self.ui.get_signs(buf, vim.v.lnum)):each(function(sign)
+      --   if sign.name and (sign.name:find('GitSign')) then
+      --     if not (sign.name:find('Staged') and git.name) then
+      --       git = sign
+      --     end
+      --   else
+      --     icon = sign
+      --   end
+      -- end)
 
       vim.api.nvim_win_call(win, function()
         if vim.fn.foldclosed(vim.v.lnum) >= 0 then

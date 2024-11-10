@@ -121,7 +121,6 @@ map('n', '<leader>qu', function()
 end, { noremap = true, desc = 'Quit UIs' })
 
 -- Terminal Mappings
-vim.keymap.del('t', '<esc><esc>')
 map('t', '<esc>', '<c-\\><c-n>', { desc = 'Enter Normal Mode' })
 
 -- tabs
