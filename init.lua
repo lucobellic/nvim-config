@@ -1,5 +1,5 @@
 -- Set border style
-local enable_border = not vim.g.neovide
+local enable_border = true -- not vim.g.neovide
 vim.g.border = {
   enabled = enable_border,
   style = enable_border and 'rounded' or { ' ' },

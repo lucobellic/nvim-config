@@ -14,6 +14,7 @@ if vim.g.neovide then
   vim.g.neovide_floating_blur = false
   vim.g.neovide_floating_blur_amount_x = 5.0
   vim.g.neovide_floating_blur_amount_y = 5.0
+  vim.g.neovide_floating_corner_radius  = 0.5
 
   vim.g.neovide_padding_top = 5
   vim.g.neovide_padding_bottom = 0

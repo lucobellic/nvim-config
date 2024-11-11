@@ -26,6 +26,7 @@ return {
         -- * a percentage of the width / height of the editor when <= 1
         width = 0.6, -- width of the Zen window
         height = 0.9, -- height of the Zen window
+        zindex = 0, -- above all other window
         -- by default, no options are changed for the Zen window
         -- uncomment any of the options below, or add other vim.wo options you want to apply
         options = {

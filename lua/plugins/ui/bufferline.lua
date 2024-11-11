@@ -23,7 +23,7 @@ end
 
 return {
   'akinsho/bufferline.nvim',
-  enabled = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true',
+  enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   event = 'BufEnter',
   dependencies = {
     { 'echasnovski/mini.bufremove' },

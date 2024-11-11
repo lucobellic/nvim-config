@@ -16,6 +16,7 @@ function M.get_adapter()
       model = {
         default = 'o1-preview',
         choices = {
+          'claude-3.5-sonnet',
           'o1-preview',
           'o1-mini',
         },
@@ -40,7 +41,7 @@ function M.get_adapter()
   local unsupported_settings = { 'temperature', 'max_tokens', 'top_p', 'n' }
   vim.iter(unsupported_settings):each(function(setting) adapter.schema[setting] = nil end)
 
-  adapter.name = 'copilot_o1'
+  adapter.name = 'copilot_preview'
   return adapter
 end
 

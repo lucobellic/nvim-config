@@ -1,5 +1,6 @@
 return {
   'rachartier/tiny-inline-diagnostic.nvim',
+  enabled = false, -- Slow due to CursorMoved event without throttle
   event = 'LspAttach',
   keys = {
     {

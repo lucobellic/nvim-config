@@ -2,6 +2,9 @@ vim.filetype.add({
   filename = {
     ['.clangd'] = 'yaml',
     ['run.test'] = 'python',
+    ['clearml.conf'] = 'hocon',
+    ['.gitlab-ci.yml'] = 'yaml.gitlab',
+    ['.gitlab-ci.yaml'] = 'yaml.gitlab',
   },
   extension = {
     ezi = 'ezi',

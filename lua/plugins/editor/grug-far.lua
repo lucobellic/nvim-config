@@ -22,7 +22,7 @@ return {
     disableBufferLineNumbers = true,
   },
   keys = {
-    { '<leader>s;', function() require('grug-far').grug_far({}) end, desc = 'GrugFar' },
+    { '<leader>s;', function() require('grug-far').open({}) end, desc = 'GrugFar' },
     {
       '<leader>s;',
       function()

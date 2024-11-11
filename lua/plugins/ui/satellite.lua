@@ -7,8 +7,8 @@ end
 
 return {
   'lewis6991/satellite.nvim',
+  enabled = not vim.g.started_by_firenvim,
   event = 'BufEnter',
-  enabled = vim.fn.has('nvim-0.10') == 1,
   keys = {
     { '<leader>ut', toggle_satellite, desc = 'Toggle Satellite' },
   },

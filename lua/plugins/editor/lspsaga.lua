@@ -1,5 +1,6 @@
 return {
   'nvimdev/lspsaga.nvim',
+  enabled = not vim.g.started_by_firenvim,
   event = 'LspAttach',
   dependencies = {
     { 'nvim-tree/nvim-web-devicons' },

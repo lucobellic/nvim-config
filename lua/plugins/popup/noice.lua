@@ -134,9 +134,7 @@ return {
     { '<c-p>', false },
     {
       '<leader>snn',
-      function()
-        require('telescope').extensions.notify.notify()
-      end,
+      function() require('telescope').extensions.notify.notify() end,
       desc = 'Find Notifications',
     },
   },
@@ -160,7 +158,7 @@ return {
       view_error = 'notify', -- view for errors
       view_warn = 'notify', -- view for warnings
       view_history = 'messages', -- view for :messages
-      view_search = false, -- view for search count messages. Set to `false` to disable
+      view_search = 'virtualtext', -- view for search count messages. Set to `false` to disable
     },
     notify = {
       enabled = true,

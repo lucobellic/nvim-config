@@ -57,6 +57,7 @@ return {
               model = {
                 default = 'gpt-4o',
                 choices = {
+                  'claude-3.5-sonnet',
                   'gpt-4o',
                   'gpt-4o-mini',
                 },
@@ -64,7 +65,7 @@ return {
             },
           })
         end,
-        copilot_o1 = require('plugins.completion.codecompanion.copilot_o1').get_adapter,
+        copilot_preview = require('plugins.completion.codecompanion.copilot_preview').get_adapter,
       },
       strategies = {
         chat = {
@@ -113,7 +114,7 @@ return {
           strategy = 'chat',
           description = 'staged file commit messages',
           opts = {
-            index = 10,
+            index = 15,
             is_default = true,
             is_slash_cmd = true,
             short_name = 'scommit',
@@ -136,7 +137,7 @@ return {
           strategy = 'inline',
           description = 'Add documentation to the selected code',
           opts = {
-            index = 11,
+            index = 16,
             is_default = true,
             modes = { 'v' },
             short_name = 'doc',
@@ -182,7 +183,7 @@ return {
           strategy = 'chat',
           description = 'Refactor the selected code for readability, maintainability and performances',
           opts = {
-            index = 12,
+            index = 17,
             is_default = true,
             modes = { 'v' },
             short_name = 'refactor',
@@ -227,7 +228,7 @@ return {
           strategy = 'chat',
           description = 'Generate a Pull Request message description',
           opts = {
-            index = 13,
+            index = 18,
             is_default = true,
             short_name = 'pr',
             is_slash_cmd = true,
@@ -252,7 +253,7 @@ return {
           strategy = 'inline',
           description = 'Correct grammar and reformulate',
           opts = {
-            index = 14,
+            index = 19,
             is_default = true,
             short_name = 'spell',
             is_slash_cmd = true,
