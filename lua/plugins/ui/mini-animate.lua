@@ -11,7 +11,7 @@ end
 
 return {
   'echasnovski/mini.animate',
-  enabled = not vim.g.neovide and not vim.g.started_by_firenvim,
+  enabled = false,
   opts = {
     open = {
       enable = false,
