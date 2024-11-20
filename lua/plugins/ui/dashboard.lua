@@ -62,7 +62,8 @@ local shortcut = {
 
 return {
   'lucobellic/dashboard-nvim',
-  enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
+  enabled = false,
+  -- enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   event = 'UIEnter',
   opts = function(_, opts)
     local function load_session(path)
