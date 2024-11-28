@@ -40,7 +40,7 @@ return {
       },
       -- prompt for a refactor to apply when the remap is triggered
       {
-        '<leader>rr',
+        '<leader>rs',
         function() require('refactoring').select_refactor({}) end,
         mode = 'v',
         desc = 'Select Refactor',

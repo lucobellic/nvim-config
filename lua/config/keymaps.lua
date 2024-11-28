@@ -23,17 +23,19 @@ map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
 map('v', '/', '"hy/<C-r>h', { desc = 'Search word' })
-
--- save file
-map({ 'i', 'v', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
--- Search and replace word under cursor
--- map('v', 'r', '"hy/<C-r>h', { desc = 'Search word' })
+map('v', '<leader>rr', function() vim.fn.feedkeys(":s/", 't') end, { desc = 'Replace Visual' })
+map('n', '<leader>rr', function() vim.fn.feedkeys(':%s/', 't') end, { desc = 'Replace' })
 map(
   'n',
   '<leader>rw',
   function() return ':%s/' .. vim.fn.expand('<cword>') .. '//g<left><left>' end,
   { desc = 'Replace word under cursor', expr = true }
 )
+
+-- save file
+map({ 'i', 'v', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+-- Search and replace word under cursor
+-- map('v', 'r', '"hy/<C-r>h', { desc = 'Search word' })
 
 -- Remap > to ] and < to [
 map({ 'o', 'v', 'n', 'x' }, '>', ']', { desc = 'Next', remap = true })
