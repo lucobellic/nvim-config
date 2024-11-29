@@ -33,7 +33,7 @@ map(
 )
 
 -- save file
-map({ 'i', 'v', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
+map({ 'v', 'n' }, '<C-s>', '<cmd>w<cr><esc>', { desc = 'Save file' })
 -- Search and replace word under cursor
 -- map('v', 'r', '"hy/<C-r>h', { desc = 'Search word' })
 

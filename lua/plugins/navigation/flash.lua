@@ -118,19 +118,43 @@ return {
         '<c-s>',
         mode = { 'c' },
         require('flash').toggle,
-        desc = 'Toggle Flash Search',
+        desc = 'Flash Toggle Search',
+      },
+      {
+        '<c-s>',
+        mode = { 'i' },
+        function()
+          require('flash').jump({
+            pattern = '^',
+            search = {
+              mode = 'search',
+              label = { after = { 0, 0 } },
+              pattern = '^',
+              exclude = {
+                function(win) return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'cmp_menu' end,
+              },
+            },
+            action = function(match)
+              local cmp = require('cmp')
+              local active_entry = cmp.get_entries()[match.pos[1]] ---@type cmp.Entry
+              cmp.core:confirm(active_entry, { behavior = cmp.ConfirmBehavior.Replace }, function() end)
+              cmp.close()
+            end,
+          })
+        end,
+        desc = 'Flash Cmp Search',
       },
       {
         'r',
         mode = 'o',
         require('flash').remote,
-        desc = 'Remote Flash',
+        desc = 'Flash Remote',
       },
       {
         'R',
         mode = { 'o', 'x' },
         require('flash').treesitter_search,
-        desc = 'Treesitter Search',
+        desc = 'Flash Treesitter Search',
       },
     }
   end,
