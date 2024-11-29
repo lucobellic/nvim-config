@@ -33,15 +33,6 @@ return {
     },
   },
   opts = {
-    general = {
-      enable = function(buf, win)
-        return not vim.api.nvim_win_get_config(win).zindex
-          and vim.bo[buf].buftype == ''
-          and vim.bo[buf].buftype ~= 'terminal'
-          and vim.api.nvim_buf_get_name(buf) ~= ''
-          and not vim.wo[win].diff
-      end,
-    },
     icons = {
       kinds = {
         symbols = {
@@ -61,6 +52,13 @@ return {
       },
     },
     bar = {
+      enable = function(buf, win)
+        return not vim.api.nvim_win_get_config(win).zindex
+          and vim.bo[buf].buftype == ''
+          and vim.bo[buf].buftype ~= 'terminal'
+          and vim.api.nvim_buf_get_name(buf) ~= ''
+          and not vim.wo[win].diff
+      end,
       pick = {
         pivots = 'asdfghjkl;qwertyuiopzxcvbnm',
       },
