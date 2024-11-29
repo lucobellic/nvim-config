@@ -1,7 +1,10 @@
 return {
   'folke/snacks.nvim',
   opts = {
+    words = { enabled = false },
+    bigfile = { enabled = true },
     notifier = {
+      enabled = true,
       top_down = false,
       width = { min = 60, max = 60 },
       height = { min = 1, max = 8 },
@@ -14,6 +17,7 @@ return {
       },
     },
     dashboard = {
+      enabled = true,
       width = 72,
       autokeys = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       sections = {
@@ -43,7 +47,7 @@ return {
           section = 'terminal',
           icon = ' ',
           title = 'Git Status',
-          enabled = vim.fn.isdirectory('.git') == 1,
+          enabled = vim.fn.isdirectory('.git') == 1 and vim.fn.executable('hub') == 1,
           cmd = 'hub diff --stat -B -M -C',
           height = 8,
           padding = 0,
