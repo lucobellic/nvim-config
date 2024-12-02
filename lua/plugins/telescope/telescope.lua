@@ -229,6 +229,7 @@ return {
         mappings = {
           i = {
             ['<c-t>'] = function(...) require('trouble.sources.telescope').open(...) end,
+            ['<c-l>'] = require('telescope.actions').smart_send_to_loclist,
             ['<esc>'] = require('telescope.actions').close,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-b>'] = require('telescope.actions.layout').toggle_preview,
@@ -242,6 +243,7 @@ return {
           },
           n = {
             ['<c-t>'] = function(...) require('trouble.sources.telescope').open(...) end,
+            ['<c-l>'] = require('telescope.actions').smart_send_to_loclist,
             ['<C-n>'] = require('telescope.actions').select_tab,
             ['<C-k>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
             ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
