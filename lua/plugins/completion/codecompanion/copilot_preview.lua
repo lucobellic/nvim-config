@@ -14,10 +14,10 @@ function M.get_adapter()
     opts = { stream = false }, -- Stream not supported
     schema = {
       model = {
-        default = 'o1-preview',
+        default = 'o1',
         choices = {
           'claude-3.5-sonnet',
-          'o1-preview',
+          'o1',
           'o1-mini',
         },
       },
