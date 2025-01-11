@@ -81,6 +81,12 @@ return {
       ['<Up>'] = {
         i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
       },
+      ['<C-k>'] = {
+        i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+      },
+      ['<C-j>'] = {
+        i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+      },
       ['<C-n>'] = function()
         if cmp.visible_docs() then
           cmp.close_docs()
@@ -116,6 +122,8 @@ return {
     opts.sources = insert_or_replace(opts.sources, { name = 'snippets', group_index = 1 })
     opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp', group_index = 1 })
     opts.sources = insert_or_replace(opts.sources, { name = 'copilot', group_index = 1 })
+
+    opts.mapping = vim.tbl_deep_extend('force', opts.mapping, tab_confirm_mapping)
 
     return vim.tbl_deep_extend('force', opts, {
       experimental = {
@@ -158,7 +166,6 @@ return {
           winhighlight = 'CursorLine:PmenuSel,Search:None',
         },
       },
-      mapping = cmp.mapping.preset.insert(tab_confirm_mapping),
       formatting = {
         format = function(entry, item)
           item.menu = ''
