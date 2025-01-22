@@ -82,6 +82,7 @@ return {
       },
       component_aliases = {
         default = {
+          { 'user.open_on_start_if_visible', direction = 'vertical' }, -- open on start if overseer window is visible/open
           { 'display_duration', detail_level = 2 },
           'user.on_output_parse', -- parse with problem matcher
           { 'on_output_quickfix' }, -- parse errorformat
