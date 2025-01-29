@@ -1,5 +1,23 @@
-local adapter = 'copilot'
--- local adapter = 'openai'
+local chat_adapter = 'copilot'
+local agent_adapter = 'copilot'
+local inline_adapter = 'copilot'
+
+local function no_system_prompt_handler()
+  return {
+    ---Handler to remove system prompt from messages
+    ---@param self CodeCompanion.Adapter
+    ---@param messages table
+    form_messages = function(self, messages)
+      return {
+        messages = vim
+          .iter(messages)
+          :filter(function(message) return not (message.role and message.role == 'system') end)
+          :totable(),
+      }
+    end,
+  }
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -12,16 +30,16 @@ return {
     },
   },
   {
-    -- 'olimorris/codecompanion.nvim',
-    'lucobellic/codecompanion.nvim',
-    branch = 'hotfix/parsing',
+    'olimorris/codecompanion.nvim',
     enabled = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
       'nvim-telescope/telescope.nvim', -- Optional
       'stevearc/dressing.nvim', -- Optional: Improves the default Neovim UI
+      'echasnovski/mini.pick', -- Optional: mini_pick provider
     },
+    -- event = 'VeryLazy',
     cmd = {
       'CodeCompanion',
       'CodeCompanionChat',
@@ -31,14 +49,21 @@ return {
     keys = {
       { '<leader>a+', ':CodeCompanionChat Add<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
       { '<leader>aa', ':CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Actions' },
-      { '<leader>ab', ':CodeCompanion /buffer<cr>', mode = { 'n' }, desc = 'Code Companion Buffer' },
+      { '<leader>ab', ':CodeCompanion /buffer<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Buffer' },
       { '<leader>ac', ':CodeCompanionChat<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Chat' },
       { '<leader>ad', ':CodeCompanion /doc<cr>', mode = { 'v' }, desc = 'Code Companion Documentation' },
       { '<leader>ae', ':CodeCompanion /explain<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Explain' },
       { '<leader>af', ':CodeCompanion /fix<cr>', mode = { 'v' }, desc = 'Code Companion Fix' },
       { '<leader>ag', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
       { '<leader>ai', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
+      { '<leader>ai', ':CodeCompanion /buffer<cr>', mode = { 'n' }, desc = 'Code Companion Inline Prompt' },
       { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
+      {
+        '<leader>an',
+        function() require('codecompanion').chat() end,
+        mode = { 'n' },
+        desc = 'Code Companion New Chat',
+      },
       { '<leader>ap', ':CodeCompanion /pr<cr>', mode = { 'n' }, desc = 'Code Companion PR' },
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
       { '<leader>as', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
@@ -49,27 +74,45 @@ return {
       vim.cmd([[cab ccc CodeCompanionChat]])
     end,
     opts = {
-      -- opts = { log_level = 'TRACE' },
+      log_level = 'DEBUG',
       adapters = {
         copilot = function()
           return require('codecompanion.adapters').extend('copilot', {
             schema = {
               model = {
-                default = 'gpt-4o',
+                default = 'claude-3.5-sonnet',
                 choices = {
+                  ['o1'] = { handler = no_system_prompt_handler() },
+                  ['o1-mini'] = { handler = no_system_prompt_handler() },
                   'claude-3.5-sonnet',
                   'gpt-4o',
                   'gpt-4o-mini',
                 },
               },
+              max_tokens = {
+                default = 8192,
+              },
             },
           })
         end,
         copilot_preview = require('plugins.completion.codecompanion.copilot_preview').get_adapter,
+        ollama = function()
+          return require('codecompanion.adapters').extend('ollama', {
+            schema = {
+              model = {
+                default = 'deepseek-coder-v2',
+                choices = {
+                  'deepseek-coder-v2',
+                  'deepseek-r1',
+                },
+              },
+            },
+          })
+        end,
       },
       strategies = {
         chat = {
-          adapter = adapter,
+          adapter = chat_adapter,
           roles = {
             llm = ' ', -- The markdown header content for the LLM's responses
             user = ' ', -- The markdown header for your questions
@@ -85,7 +128,7 @@ return {
             },
             next_chat = {
               modes = {
-                n = '>',
+                n = '>>',
               },
               index = 8,
               callback = 'keymaps.next_chat',
@@ -93,29 +136,62 @@ return {
             },
             previous_chat = {
               modes = {
-                n = '<',
+                n = '<<',
               },
               index = 9,
               callback = 'keymaps.previous_chat',
               description = 'Previous Chat',
             },
           },
+          slash_commands = {
+            ['buffer'] = {
+              opts = {
+                provider = 'telescope',
+              },
+            },
+            ['file'] = {
+              opts = {
+                provider = 'telescope',
+              },
+            },
+            ['terminals'] = {
+              callback = function() return 'Custom context or data' end,
+              description = 'Insert terminal output',
+              opts = {
+                provider = 'telescope',
+              },
+            },
+          },
         },
         inline = {
-          adapter = adapter,
+          adapter = inline_adapter,
         },
         agent = {
-          adapter = adapter,
+          adapter = agent_adapter,
         },
       },
-      display = { diff = { enabled = false } },
+      display = {
+        diff = { enabled = false },
+        chat = {
+          show_header_separator = false,
+          show_settings = false,
+        },
+        action_palette = { provider = 'telescope' },
+      },
       prompt_library = {
+        -- Prefer buffer selection in chat instead of inline
+        ['Buffer selection'] = {
+          strategy = 'chat',
+          opts = {
+            auto_submit = false,
+          },
+        },
         ['Generate a Commit Message for Staged Files'] = {
           strategy = 'chat',
           description = 'staged file commit messages',
           opts = {
             index = 15,
-            is_default = true,
+            is_default = false,
             is_slash_cmd = true,
             short_name = 'scommit',
             auto_submit = true,
@@ -138,7 +214,7 @@ return {
           description = 'Add documentation to the selected code',
           opts = {
             index = 16,
-            is_default = true,
+            is_default = false,
             modes = { 'v' },
             short_name = 'doc',
             is_slash_cmd = true,
@@ -184,7 +260,7 @@ return {
           description = 'Refactor the selected code for readability, maintainability and performances',
           opts = {
             index = 17,
-            is_default = true,
+            is_default = false,
             modes = { 'v' },
             short_name = 'refactor',
             is_slash_cmd = true,
@@ -229,7 +305,7 @@ return {
           description = 'Generate a Pull Request message description',
           opts = {
             index = 18,
-            is_default = true,
+            is_default = false,
             short_name = 'pr',
             is_slash_cmd = true,
             auto_submit = true,
@@ -244,6 +320,7 @@ return {
                   .. 'Ensure the title, description, type of change, checklist, related issues, and additional notes sections are well-structured and informative.'
                   .. '\n\n```diff\n'
                   .. vim.fn.system('git diff $(git merge-base HEAD main)...HEAD')
+                  .. vim.fn.system('git diff $(git merge-base HEAD develop)...HEAD')
                   .. '\n```'
               end,
             },
@@ -254,7 +331,7 @@ return {
           description = 'Correct grammar and reformulate',
           opts = {
             index = 19,
-            is_default = true,
+            is_default = false,
             short_name = 'spell',
             is_slash_cmd = true,
             auto_submit = true,
@@ -272,5 +349,58 @@ return {
         },
       },
     },
+    config = function(_, opts)
+      require('codecompanion').setup(opts)
+
+      -- create a folder to store our chats
+      local Path = require('plenary.path')
+      local data_path = vim.fn.stdpath('data')
+      local save_folder = Path:new(data_path, 'cc_saves')
+      if not save_folder:exists() then
+        save_folder:mkdir({ parents = true })
+      end
+
+      -- telescope picker for our saved chats
+      vim.api.nvim_create_user_command('CodeCompanionLoad', function()
+        local t_builtin = require('telescope.builtin')
+        local t_actions = require('telescope.actions')
+        local t_action_state = require('telescope.actions.state')
+
+        local function start_picker()
+          t_builtin.find_files({
+            prompt_title = 'Saved CodeCompanion Chats | <c-d>: delete',
+            cwd = save_folder:absolute(),
+            attach_mappings = function(_, map)
+              map('i', '<c-d>', function(prompt_bufnr)
+                local selection = t_action_state.get_selected_entry()
+                local filepath = selection.path or selection.filename
+                os.remove(filepath)
+                t_actions.close(prompt_bufnr)
+                start_picker()
+              end)
+              return true
+            end,
+          })
+        end
+        start_picker()
+      end, {})
+
+      -- save current chat, `CodeCompanionSave foo bar baz` will save as 'foo-bar-baz.md'
+      vim.api.nvim_create_user_command('CodeCompanionSave', function(opts)
+        local codecompanion = require('codecompanion')
+        local success, chat = pcall(function() return codecompanion.buf_get_chat(0) end)
+        if not success or chat == nil then
+          vim.notify('CodeCompanionSave should only be called from CodeCompanion chat buffers', vim.log.levels.ERROR)
+          return
+        end
+        if #opts.fargs == 0 then
+          vim.notify('CodeCompanionSave requires at least 1 arg to make a file name', vim.log.levels.ERROR)
+        end
+        local save_name = table.concat(opts.fargs, '-') .. '.md'
+        local save_path = Path:new(save_folder, save_name)
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        save_path:write(table.concat(lines, '\n'), 'w')
+      end, { nargs = '*' })
+    end,
   },
 }
