@@ -41,6 +41,8 @@ end
 
 local function is_toggleterm(bufnr) return vim.bo[bufnr].filetype == 'toggleterm' end
 
+local function is_codecompanion(bufnr) return vim.bo[bufnr].filetype == 'codecompanion' end
+
 local edgy_filetypes = {
   'neotest-output-panel',
   'neotest-summary',
@@ -48,18 +50,8 @@ local edgy_filetypes = {
   'Trouble',
   'OverseerList',
   'Outline',
-  'ogpt-popup',
-  'ogpt-parameters-window',
-  'ogpt-template',
-  'ogpt-sessions',
-  'ogpt-system-window',
-  'ogpt-window',
-  'ogpt-selection',
-  'ogpt-instruction',
-  'ogpt-input',
   'trouble',
   'copilot-chat',
-  'codecompanion',
 }
 
 local edgy_titles = {
@@ -69,15 +61,6 @@ local edgy_titles = {
   Trouble = 'trouble',
   OverseerList = 'overseer',
   Outline = 'outline',
-  ['ogpt-popup'] = 'ogpt-popup',
-  ['ogpt-parameters-window'] = 'ogpt-parameters-window',
-  ['ogpt-template'] = 'ogpt-template',
-  ['ogpt-sessions'] = 'ogpt-sessions',
-  ['ogpt-system-window'] = 'ogpt-system-window',
-  ['ogpt-window'] = 'ogpt-window',
-  ['ogpt-selection'] = 'ogpt-selection',
-  ['ogpt-instruction'] = 'ogpt-instruction',
-  ['ogpt-input'] = 'ogpt-input',
 }
 
 local function is_edgy_group(props, filename) return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) end
@@ -93,6 +76,28 @@ local function get_title(props, filename)
   local name = edgy_titles[filetype] or filetype or filename
   name = filetype == 'trouble' and get_trouble_name(props) or name
   local title = ' ' .. name .. ' '
+  return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
+end
+
+local function get_codecompanion_title(props)
+  local title = ' codecompanion '
+  local codecompanion = require('codecompanion')
+
+  --- @type CodeCompanion.Chat[]
+  local loaded_chats = codecompanion.buf_get_chat()
+
+  if #loaded_chats > 1 then
+    -- Get relative number of the current chat in the list of loaded chats
+    local enumerated_current_chat = vim
+      .iter(ipairs(loaded_chats))
+      :filter(function(_, chat_table) return chat_table.chat.bufnr == props.buf end)
+      :nth(1)
+
+    if enumerated_current_chat ~= nil then
+      title = title .. enumerated_current_chat .. '/' .. #loaded_chats .. ' '
+    end
+  end
+
   return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
 end
 
@@ -138,6 +143,10 @@ return {
 
       if is_edgy_group(props, filename) then
         return get_title(props, filename)
+      end
+
+      if is_codecompanion(props.buf) then
+        return get_codecompanion_title(props)
       end
 
       local filetype_icon, filetype_color = require('nvim-web-devicons').get_icon_color(filename)
