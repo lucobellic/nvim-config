@@ -86,15 +86,21 @@ local function get_codecompanion_title(props)
   --- @type CodeCompanion.Chat[]
   local loaded_chats = codecompanion.buf_get_chat()
 
-  if #loaded_chats > 1 then
-    -- Get relative number of the current chat in the list of loaded chats
-    local enumerated_current_chat = vim
-      .iter(ipairs(loaded_chats))
-      :filter(function(_, chat_table) return chat_table.chat.bufnr == props.buf end)
-      :nth(1)
+  --- @type number?, { chat: CodeCompanion.Chat? }?
+  local current_chat_index, current_chat = vim
+    .iter(ipairs(loaded_chats))
+    :filter(function(_, chat_table) return chat_table.chat.bufnr == props.buf end)
+    :nth(1)
 
-    if enumerated_current_chat ~= nil then
-      title = title .. enumerated_current_chat .. '/' .. #loaded_chats .. ' '
+  if current_chat and current_chat.chat then
+    local model = current_chat.chat.settings and current_chat.chat.settings['model']
+    local adapter_name = current_chat.chat.adapter.name
+    title = model and ' ' .. adapter_name .. ': ' .. model .. ' ' or adapter_name
+  end
+
+  if #loaded_chats > 1 then
+    if current_chat_index ~= nil then
+      title = title .. current_chat_index .. '/' .. #loaded_chats .. ' '
     end
   end
 
