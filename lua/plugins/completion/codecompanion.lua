@@ -18,6 +18,16 @@ local function no_system_prompt_handler()
   }
 end
 
+---@param branch string
+local function get_changed_files(branch)
+  local output = vim.fn.system('git diff --name-only ' .. branch .. ' | xargs -I {} realpath {}')
+  local files = {}
+  for line in output:gmatch('([^\r\n]+)') do
+    table.insert(files, line)
+  end
+  return files
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -343,6 +353,41 @@ return {
               content = function(context)
                 local text = require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
                 return 'Correct grammar and reformulate:\n\n' .. text
+              end,
+            },
+          },
+        },
+        ['Bug Finder'] = {
+          strategy = 'chat',
+          description = 'Find potential bugs from the provided diff changes',
+          opts = {
+            index = 20,
+            is_default = false,
+            short_name = 'bugs',
+            is_slash_cmd = true,
+            auto_submit = true,
+          },
+          prompts = {
+            {
+              role = 'user',
+              contains_code = true,
+              content = function()
+                local question = '<question>\n'
+                  .. 'Check if there is any bugs that have been introduced from the provided diff changes.\n'
+                  .. 'Perform a complete analysis and do not stop at first issue found.\n'
+                  .. '</question>'
+
+                local branch = '$(git merge-base HEAD develop)...HEAD'
+                local diff = '\n\n```diff\n' .. vim.fn.system('git diff ' .. branch) .. '\n```\n'
+
+                local included_files = get_changed_files(branch)
+                local file_path_test = '\nThe list of the modified files are:\n'
+                  .. '\n<files>\n'
+                  .. table.concat(included_files, '\n')
+                  .. '\n</files>\n'
+
+                -- use @files tool to enable LLM to read files with changes
+                return '@files\n' .. question .. diff .. file_path_test
               end,
             },
           },
