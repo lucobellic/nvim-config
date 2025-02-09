@@ -70,7 +70,7 @@ return {
             ' ', ' ', ' ',
           },
           max_width = '50%',
-          margin = 6, -- 5 stick to noice cmdline with 1 margin and without border
+          margin = 2, -- 4 stick to noice cmdline with 1 margin and without border
           min_height = 0, -- set to the same as 'max_height' for a fixed height window
           max_height = 10,
           prompt_position = 'top', -- 'top' or 'bottom' to set the location of the prompt

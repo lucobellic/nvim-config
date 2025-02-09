@@ -19,7 +19,7 @@ local cmdline = {
 
 local cmdline_popup_view = {
   position = {
-    row = 3,
+    row = 0,
     col = '50%',
   },
   size = {
