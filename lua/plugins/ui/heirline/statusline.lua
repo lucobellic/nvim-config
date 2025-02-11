@@ -1,8 +1,8 @@
 local conditions = require('heirline.conditions')
 local utils = require('heirline.utils')
 local colors = require('plugins.ui.heirline.colors').colors
-local copilot_api = require('copilot.api')
-local copilot_client = require('copilot.client')
+local copilot_api_ok, copilot_api = pcall(require, 'copilot.api')
+local copilot_client_ok, copilot_client = pcall(require, 'copilot.client')
 
 local primary_mode_colors = {
   n = { fg = colors.dark_gray },
@@ -179,18 +179,19 @@ local function get_spinner()
 end
 
 local function get_copilot_icons()
-  if copilot_client.is_disabled() then
+  if copilot_client_ok and copilot_client.is_disabled() then
     return ' ' .. copilot_icons.Disabled
-  elseif copilot_api.status.data.status == 'InProgress' then
+  elseif copilot_api_ok and copilot_api.status.data.status == 'InProgress' then
     return get_spinner() .. ' ' .. copilot_icons.Normal
   end
-  local icon = copilot_icons[copilot_api.status.data.status]
+  local icon = copilot_api_ok and copilot_icons[copilot_api.status.data.status]
   return icon and (' ' .. icon) or (' ' .. copilot_icons.Warning)
 end
 
 local Copilot = {
   condition = function()
-    return not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
+    local ok, copilot_client = pcall(require, 'copilot.client')
+    return ok and not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
   end,
   provider = function() return get_copilot_icons() .. ' ' end,
   hl = secondary_highlight,

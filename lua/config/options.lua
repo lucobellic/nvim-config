@@ -6,6 +6,9 @@ vim.g.maplocalleader = ','
 
 vim.g.autoformat = false
 
+vim.g.ai_cmp = true
+vim.g.copilot = true
+
 vim.o.conceallevel = 2
 vim.o.laststatus = 3
 vim.o.signcolumn = 'yes:2'

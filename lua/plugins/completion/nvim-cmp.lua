@@ -121,14 +121,17 @@ return {
     opts.sources = insert_or_replace(opts.sources, { name = 'path', group_index = 1 })
     opts.sources = insert_or_replace(opts.sources, { name = 'snippets', group_index = 1 })
     opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp', group_index = 1 })
-    opts.sources = insert_or_replace(opts.sources, { name = 'copilot', group_index = 1 })
+    if vim.g.ai_cmp and vim.g.copilot then
+      opts.sources = insert_or_replace(opts.sources, { name = 'copilot', group_index = 1 })
+    end
 
     opts.mapping = vim.tbl_deep_extend('force', opts.mapping, tab_confirm_mapping)
 
+    -- Disable ghost test when copilot suggestion is in use
+    local use_copilot_suggestion = vim.g.copilot and not vim.g.ai_cmp
+    opts.experimental.ghost_text = use_copilot_suggestion and false or { hl_group = 'Comment' }
+
     return vim.tbl_deep_extend('force', opts, {
-      experimental = {
-        ghost_text = { hl_group = 'Comment' },
-      },
       performance = {
         debounce = 300,
         throttle = 300,
