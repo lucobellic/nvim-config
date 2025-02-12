@@ -1,3 +1,5 @@
+local conditions = require('heirline.conditions')
+
 local M = {}
 
 ---@param sign? Sign
@@ -71,12 +73,12 @@ local statuscolumn = {
   static = {
     ui = require('lazyvim.util').ui,
   },
+  condition = conditions.is_active,
   provider = function(self)
     local icon = { text = ' ' }
     local git = { text = ' ' }
     local fold = { text = ' ' }
 
-    -- Only show signs in non virtual or wrapped lines with sign column
     local win = vim.api.nvim_get_current_win()
     local show_signs = vim.wo[win].signcolumn ~= 'no' and vim.v.virtnum == 0
     if show_signs then
