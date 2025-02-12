@@ -30,6 +30,11 @@ return {
         left = {
           { icon = '', titles = { 'Neo-Tree', 'Neo-Tree Buffers' }, pick_key = 'e' },
           { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
+          {
+            icon = '',
+            titles = { 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_watches' },
+            pick_key = 'd',
+          },
         },
         right = {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
@@ -42,6 +47,7 @@ return {
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-lsp-definitions' }, pick_key = 'r' },
           { icon = '', titles = { 'noice' }, pick_key = 'n' },
           { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },
+          { icon = '', titles = { 'dap-repl', 'dapui_console' }, pick_key = 'd' },
         },
       },
       statusline = {

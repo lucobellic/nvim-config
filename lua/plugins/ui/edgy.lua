@@ -84,6 +84,10 @@ return {
         end,
         open = 'Trouble symbols toggle focus=false win.position=left',
       },
+      { title = 'dapui_scopes', ft = 'dapui_scopes' },
+      { title = 'dapui_breakpoints', ft = 'dapui_breakpoints' },
+      { title = 'dapui_stacks', ft = 'dapui_stacks' },
+      { title = 'dapui_watches', ft = 'dapui_watches' },
     },
     right = {
       {
@@ -228,6 +232,8 @@ return {
         open = 'OverseerToggle!',
         size = { width = 0.15 },
       },
+      { title = 'dap-repl', ft = 'dap-repl' },
+      { title = 'dapui_console', ft = 'dapui_console', open = require('dapui').toggle },
     },
     animate = {
       enabled = false,
