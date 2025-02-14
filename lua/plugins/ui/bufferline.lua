@@ -21,6 +21,44 @@ local function get_edgy_group_icons(position)
   return result
 end
 
+local icon_hl_cache = {}
+
+---Set the icon highlight color only for selected buffers
+---@param state bufferline.Visibility
+---@param base_hl string
+---@return string
+local function set_icon_highlight(state, _, base_hl)
+  local colors = require('bufferline.colors')
+  local base_name = 'BufferLine' .. base_hl
+  local state_props = {
+    [1] = { base_name, { link = 'BufferLineBuffer', hl_group = base_name } },
+    [2] = {
+      base_name .. 'Inactive',
+      { link = 'BufferLineBufferVisible', hl_group = base_name .. 'Inactive' },
+    },
+    [3] = {
+      base_name .. 'Selected',
+      {
+        fg = colors.get_color({ name = base_hl, attribute = 'fg' }),
+        ctermfg = colors.get_color({ name = base_hl, attribute = 'fg', cterm = true }),
+        bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferSelected', link = false }).bg,
+        ctermbg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferSelected', link = false }).ctermbg,
+        hl_group = base_name .. 'Selected',
+      },
+    },
+  }
+
+  local icon_hl, highlight = table.unpack(state_props[state])
+
+  if icon_hl_cache[icon_hl] then
+    return icon_hl
+  end
+
+  require('bufferline.highlights').set(icon_hl, highlight)
+  icon_hl_cache[icon_hl] = true
+  return icon_hl
+end
+
 return {
   'akinsho/bufferline.nvim',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
@@ -96,7 +134,7 @@ return {
     return {
       options = {
         themable = true,
-
+        -- color_icons = false,
         show_buffer_close_icons = false,
         show_close_icon = false,
         show_tab_indicators = true,
@@ -149,5 +187,9 @@ return {
         },
       },
     }
+  end,
+  config = function(_, opts)
+    require('bufferline.highlights').set_icon_highlight = set_icon_highlight
+    require('bufferline').setup(opts)
   end,
 }
