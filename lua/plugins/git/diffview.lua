@@ -78,6 +78,7 @@ return {
     },
     opts = function(_, opts)
       opts = vim.tbl_deep_extend('force', opts, {
+        enhanced_diff_hl = true,
         diff_binaries = false, -- Show diffs for binaries
         icons = { -- Only applies when use_icons is true.
           folder_closed = '',
