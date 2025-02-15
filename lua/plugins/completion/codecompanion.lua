@@ -90,7 +90,8 @@ return {
           return require('codecompanion.adapters').extend('copilot', {
             schema = {
               model = {
-                default = 'claude-3.5-sonnet',
+                -- default = 'claude-3.5-sonnet',
+                default = 'o3-mini-2025-01-31',
                 choices = {
                   ['o1'] = { handler = no_system_prompt_handler() },
                   ['o1-mini'] = { handler = no_system_prompt_handler() },
@@ -165,7 +166,7 @@ return {
               },
             },
             ['terminals'] = {
-              callback = function() return 'Custom context or data' end,
+              callback = function() return vim.print('Custom context or data') end,
               description = 'Insert terminal output',
               opts = {
                 provider = 'telescope',
@@ -381,13 +382,23 @@ return {
                 local diff = '\n\n```diff\n' .. vim.fn.system('git diff ' .. branch) .. '\n```\n'
 
                 local included_files = get_changed_files(branch)
-                local file_path_test = '\nThe list of the modified files are:\n'
-                  .. '\n<files>\n'
-                  .. table.concat(included_files, '\n')
-                  .. '\n</files>\n'
+                --- @type CodeCompanion.Chat
+                local current_chat = require('codecompanion').buf_get_chat(vim.api.nvim_get_current_buf())
 
-                -- use @files tool to enable LLM to read files with changes
-                return '@files\n' .. question .. diff .. file_path_test
+                vim
+                  .iter(included_files)
+                  :filter(function(path) return not path:find('Not a valid object name') end)
+                  :each(
+                    function(path)
+                      current_chat.references:add({
+                        id = vim.fn.fnamemodify(path, ':t'),
+                        path = path,
+                        source = 'codecompanion.strategies.chat.slash_commands.bugs',
+                      })
+                    end
+                  )
+
+                return question .. diff
               end,
             },
           },
