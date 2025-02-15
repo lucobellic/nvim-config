@@ -33,13 +33,18 @@ return {
           { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'g' },
           {
             icon = '',
-            titles = { 'dapui_scopes', 'dapui_breakpoints', 'dapui_stacks', 'dapui_watches' },
+            titles = { 'dapui_scopes', 'dapui_watches' },
             pick_key = 'd',
           },
         },
         right = {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
+          {
+            icon = '',
+            titles = { 'dapui_stacks', 'dapui_breakpoints' },
+            pick_key = 'd',
+          },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },

@@ -5,10 +5,15 @@ local function incline_safe_refresh()
   end
 end
 
--- vim.opt_local.winbar = '0, 0'
+local function extend(dst, src)
+  local src_opts = src.opts or {}
+  for _, pos in ipairs({ 'top', 'bottom', 'left', 'right' }) do
+    vim.list_extend(dst[pos], src_opts[pos] or {})
+  end
+end
+
 return {
   'folke/edgy.nvim',
-  event = 'VeryLazy',
   keys = {
     {
       '<leader>wl',
@@ -67,6 +72,7 @@ return {
       -- prev loaded window
       ['<W'] = function(win) win:prev({ pinned = false, focus = true }) end,
     },
+    top = {},
     left = {
       {
         title = 'Neo-Tree',
@@ -83,19 +89,6 @@ return {
           require('diffview.actions').toggle_files()
         end,
       },
-      {
-        title = 'trouble-symbols',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'symbols'
-        end,
-        open = 'Trouble symbols toggle focus=false win.position=left',
-      },
-      { title = 'dapui_scopes', ft = 'dapui_scopes' },
-      { title = 'dapui_breakpoints', ft = 'dapui_breakpoints' },
-      { title = 'dapui_stacks', ft = 'dapui_stacks' },
-      { title = 'dapui_watches', ft = 'dapui_watches' },
     },
     right = {
       {
@@ -104,124 +97,8 @@ return {
         open = 'CodeCompanionChat toggle',
         size = { width = 0.25 },
       },
-      {
-        title = 'trouble-lsp',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'lsp'
-        end,
-        open = 'Trouble lsp toggle focus=false win.position=right',
-      },
-      {
-        title = 'neotest-summary',
-        ft = 'neotest-summary',
-        open = 'Neotest summary',
-        size = { width = 0.20 },
-      },
     },
     bottom = {
-      {
-        title = 'toggleterm',
-        ft = 'toggleterm',
-        open = function()
-          local buffers = vim.tbl_filter(
-            function(buf) return vim.fn.bufname(buf.bufnr):find('toggleterm') ~= nil end,
-            vim.fn.getbufinfo({ buflisted = 0, buftype = 'terminal' })
-          )
-
-          local toggleterm_open = #require('toggleterm.terminal').get_all(true) > 1
-          local terminal_open = toggleterm_open or #buffers > 0
-
-          -- Create a terminal if none exist, otherwise toggle all terminals
-          if terminal_open then
-            -- Toggle all terminal buffers with name containing 'toggleterm'
-            vim.tbl_map(function(buf) vim.cmd('sbuffer ' .. buf.bufnr) end, buffers)
-            if toggleterm_open then
-              require('toggleterm').toggle_all()
-            end
-          else
-            require('toggleterm').toggle()
-          end
-        end,
-      },
-      {
-        title = 'toggleterm-tasks',
-        ft = '',
-        filter = function(buf)
-          local is_term = vim.bo[buf].buftype == 'terminal'
-          local is_toggleterm = vim.fn.bufname(buf):find('toggleterm')
-          return is_term and is_toggleterm
-        end,
-        open = '',
-      },
-      {
-        title = 'trouble-telescope',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'telescope'
-        end,
-        open = 'Trouble telescope toggle',
-      },
-      {
-        title = 'trouble-lsp-definitions',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'lsp_definitions'
-        end,
-        open = 'Trouble lsp_definitions toggle restore=true',
-      },
-      {
-        title = 'trouble-lsp-references',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'lsp_references'
-        end,
-        open = 'Trouble lsp_references toggle restore=true',
-      },
-      {
-        title = 'trouble-diagnostics',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'diagnostics'
-        end,
-        open = 'Trouble diagnostics toggle filter.buf=0',
-      },
-      {
-        title = 'trouble-qflist',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and (win_trouble.mode == 'qflist' or win_trouble.mode == 'quickfix')
-        end,
-        open = 'Trouble qflist toggle',
-      },
-      {
-        title = 'trouble-loclist',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'loclist'
-        end,
-        open = 'Trouble loclist toggle',
-      },
-      {
-        title = 'trouble-todo',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'todo'
-        end,
-        open = 'Trouble loclist toggle',
-      },
-      {
-        title = 'quickfix',
-        ft = 'qf',
-      },
       {
         title = 'noice',
         ft = 'noice',
@@ -232,26 +109,7 @@ return {
         end,
         open = 'Noice',
       },
-      {
-        title = 'neotest-panel',
-        ft = 'neotest-output-panel',
-        size = { height = 0.25 },
-        open = 'Neotest output-panel',
-      },
-      {
-        title = 'overseer',
-        ft = 'OverseerList',
-        open = 'OverseerToggle!',
-        size = { width = 0.15 },
-      },
-      { title = 'dap-repl', ft = 'dap-repl' },
-      {
-        title = 'dapui_console',
-        ft = 'dapui_console',
-        open = function()
-          vim.schedule(function() require('dapui').open() end)
-        end,
-      },
+
     },
     animate = {
       enabled = false,
@@ -261,4 +119,11 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    extend(opts, require('plugins.ui.edgy.edgy-term'))
+    extend(opts, require('plugins.ui.edgy.edgy-trouble'))
+    extend(opts, require('plugins.ui.edgy.edgy-test'))
+    extend(opts, require('plugins.ui.edgy.edgy-dap'))
+    require('edgy').setup(opts)
+  end,
 }
