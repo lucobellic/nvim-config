@@ -137,7 +137,7 @@ return {
     },
     ignore = {
       buftypes = {},
-      filetypes = { 'neo-tree', 'dashboard' },
+      filetypes = { 'neo-tree', 'dashboard', 'snacks_dashboard' },
       unlisted_buffers = false,
     },
     render = function(props)
@@ -165,8 +165,12 @@ return {
       local filename_separator = (#diagnostics > 0 or #diffs > 0) and { ' ' .. separator_char .. ' ', group = color }
         or ''
 
-      local filename_component =
-        { icon, { filetype_icon and ' ' or '' }, { filename, group = color }, filename_separator }
+      local filename_component = {
+        icon,
+        { filetype_icon and ' ' or '' },
+        { ' ' .. filename .. ' ', group = props.focused and 'FloatTitle' or 'Title' },
+        filename_separator,
+      }
 
       if vim.bo[props.buf].buflisted then
         filename_component = {}
