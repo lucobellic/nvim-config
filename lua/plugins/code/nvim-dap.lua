@@ -49,6 +49,50 @@ return {
       opts = {
         highlight_new_as_changed = true,
         commented = true,
+        layouts = {
+          {
+            elements = {
+              {
+                id = 'scopes',
+                size = 0.25,
+              },
+              {
+                id = 'watches',
+                size = 0.25,
+              },
+            },
+            position = 'left',
+            size = 40,
+          },
+          {
+            elements = {
+              {
+                id = 'stacks',
+                size = 0.25,
+              },
+              {
+                id = 'breakpoints',
+                size = 0.25,
+              },
+            },
+            position = 'right',
+            size = 40,
+          },
+          {
+            elements = {
+              {
+                id = 'repl',
+                size = 0.5,
+              },
+              {
+                id = 'console',
+                size = 0.5,
+              },
+            },
+            position = 'bottom',
+            size = 10,
+          },
+        },
       },
       keys = {
         { '<leader>de', require('dapui').eval, repeatable = true, desc = 'Step Over' },
