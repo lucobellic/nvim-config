@@ -30,6 +30,10 @@ return {
       { 'BurntSushi/ripgrep' },
       { 'folke/trouble.nvim' },
       {
+        'nvim-telescope/telescope-ui-select.nvim',
+        config = function() require('telescope').load_extension('ui-select') end,
+      },
+      {
         'nvim-telescope/telescope-live-grep-args.nvim',
         config = function() require('telescope').load_extension('live_grep_args') end,
       },
@@ -124,7 +128,7 @@ return {
       {
         '<leader>fi',
         function() require('telescope.builtin').symbols({ source = { 'gitmoji' } }) end,
-        desc = 'Find Emoji',
+        desc = 'Find Gitmoji',
       },
       {
         '<leader>fc',
@@ -245,8 +249,6 @@ return {
           n = {
             ['<c-t>'] = function(...) require('trouble.sources.telescope').open(...) end,
             ['<c-l>'] = require('telescope.actions').smart_send_to_loclist,
-            -- ['<C-p>'] = function() require('telescope-live-grep-args.actions').quote_prompt() end,
-            -- ['<C-g>'] = function() require('telescope-live-grep-args.actions').quote_prompt({ postfix = ' --iglob ' }) end,
             ['<C-p>'] = require('telescope.actions.layout').toggle_preview,
             ['<C-k>'] = require('telescope.actions').move_selection_previous,
             ['<C-j>'] = require('telescope.actions').move_selection_next,
