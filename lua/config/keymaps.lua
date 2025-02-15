@@ -1,8 +1,6 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
-
-local Util = require('lazyvim.util')
 local wk_ok, wk = pcall(require, 'which-key')
 
 local function map(mode, lhs, rhs, opts)
@@ -23,7 +21,7 @@ map('c', '<esc>', '<C-c>', { desc = 'Exit insert mode' })
 
 -- vim.api.nvim_set_keymap('v', '<leader>fw', "\"sy:Telescope live_grep default_text=<C-r>=substitute(substitute(escape(substitute(@s, '\\', '\\\\\\', 'g'), ' '), '\n', '', 'g'), '/', '\\/', 'g')\"<cr><cr>", opts)
 map('v', '/', '"hy/<C-r>h', { desc = 'Search word' })
-map('v', '<leader>rr', function() vim.fn.feedkeys(":s/", 't') end, { desc = 'Replace Visual' })
+map('v', '<leader>rr', function() vim.fn.feedkeys(':s/', 't') end, { desc = 'Replace Visual' })
 map('n', '<leader>rr', function() vim.fn.feedkeys(':%s/', 't') end, { desc = 'Replace' })
 map(
   'n',
@@ -88,7 +86,9 @@ if wk_ok then
     { "<leader>udl", "<cmd>ToggleDiagnosticVirtualLines<cr>", desc = "Toggle Virtual Lines" },
     { "<leader>udt", "<cmd>ToggleDiagnostics<cr>", desc = "Toggle Diagnostics" },
   })
+  map('n', '<leader>ul', function() vim.o.number = not vim.o.number end, { desc = 'Toggle line numbers' })
 end
+
 
 -- Toggle completion
 map('n', '<leader>ue', function()
@@ -233,12 +233,16 @@ map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 -- jupytext
 local jupytext = require('util.jupytext')
 if wk_ok then
-  wk.add({ { '<leader>n', group = 'jupytext' } })
+  wk.add({ { '<leader>n', group = 'notes' } })
+  wk.add({ { '<leader>nj', group = 'jupytext' } })
 end
-map('n', '<leader>ns', function() jupytext.sync() end, { desc = 'Jupytext Sync' })
-map('n', '<leader>np', function() jupytext.pair() end, { desc = 'Jupytext Pair' })
-map('n', '<leader>nc', function() jupytext.to_notebook() end, { desc = 'Jupytext Convert' })
-map('n', '<leader>nl', function() jupytext.to_paired_notebook() end, { desc = 'Jupytext Link' })
+map('n', '<leader>njs', function() jupytext.sync() end, { desc = 'Jupytext Sync' })
+map('n', '<leader>njp', function() jupytext.pair() end, { desc = 'Jupytext Pair' })
+map('n', '<leader>njc', function() jupytext.to_notebook() end, { desc = 'Jupytext Convert' })
+map('n', '<leader>njl', function() jupytext.to_paired_notebook() end, { desc = 'Jupytext Link' })
+
+vim.keymap.del('n', '<leader>gl')
+vim.keymap.del('n', '<leader>n')
 
 -- Create command from keymaps
 require('util.commands').create_command_from_keymaps()
