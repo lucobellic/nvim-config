@@ -38,7 +38,7 @@ return {
     optional = true,
     opts = {
       spec = {
-        { '<leader>o', name = 'overseer/obsidian' },
+        { '<leader>o', name = 'overseer' },
       },
     },
   },
@@ -85,12 +85,13 @@ return {
           { 'user.open_on_start_if_visible', direction = 'vertical' }, -- open on start if overseer window is visible/open
           { 'display_duration', detail_level = 2 },
           'user.on_output_parse', -- parse with problem matcher
-          { 'on_output_quickfix' }, -- parse errorformat
+          -- Disabled due to unexpected external terminal resize
+          -- { 'on_output_quickfix', tail = false }, -- parse errorformat
           'on_exit_set_status', -- set the status based on exit code
           'on_complete_notify', -- popup notification
-          { 'on_result_diagnostics', remove_on_restart = true, underline = false }, -- display diagnostics
+          { 'on_result_diagnostics', remove_on_restart = true, underline = true }, -- display diagnostics
           'on_result_diagnostics_quickfix', -- send diagnostics to quickfix or loclist
-          { 'unique' },
+          'unique',
           { 'user.on_complete_close_term', statuses = { 'SUCCESS' }, timeout = 5 },
         },
         default_vscode = {
