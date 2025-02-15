@@ -41,9 +41,6 @@ return {
         final_child_indent = ' ',
         watching = '',
       },
-      consumers = {
-        overseer = require('neotest.consumers.overseer'),
-      },
     })
     return opts
   end,
