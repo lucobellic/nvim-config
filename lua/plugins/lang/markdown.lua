@@ -80,6 +80,7 @@ return {
         highlight = 'DiagnosticInfo',
       },
       checkbox = {
+        enabled = true,
         unchecked = { icon = '󱍫', highlight = 'DiagnosticInfo' },
         checked = { icon = '󱍧', highlight = 'DiagnosticOk' },
         custom = {

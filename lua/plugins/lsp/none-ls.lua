@@ -9,9 +9,9 @@ return {
   opts = function(_, opts)
     local nls = require('null-ls')
     opts.fallback_severity = vim.diagnostic.severity.HINT
-    -- table.insert(opts.sources, nls.builtins.formatting.prettierd)
-    -- table.insert(opts.sources, nls.builtins.formatting.mdformat)
-    -- table.insert(opts.sources, nls.builtins.formatting.nixpkgs_fmt)
+    table.insert(opts.sources, nls.builtins.formatting.prettierd)
+    table.insert(opts.sources, nls.builtins.formatting.mdformat)
+    table.insert(opts.sources, nls.builtins.formatting.nixpkgs_fmt)
     table.insert(opts.sources, nls.builtins.diagnostics.markdownlint_cli2)
     table.insert(opts.sources, nls.builtins.code_actions.statix)
     local cspell = require('cspell')

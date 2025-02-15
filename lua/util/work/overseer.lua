@@ -38,7 +38,7 @@ local function cmake_build()
             name = 'CMake build ' .. choice,
             cmd = 'cmake',
             args = { '--build', '../build', '-j', '6', '--target', choice },
-            components = { 'default' },
+            components = { 'default', 'default_vscode' },
           })
           :start()
       end

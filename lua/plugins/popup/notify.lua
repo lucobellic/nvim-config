@@ -5,8 +5,8 @@ return {
     background_colour = 'NotifyBackground',
     fps = 30,
     level = 2,
-    minimum_width = 60,
-    max_width = 60,
+    minimum_width = 80,
+    max_width = 80,
     max_height = 8,
     render = 'wrapped-compact', -- 'default', 'minimal', 'simple', 'compact', 'wrapped-compact'
     timeout = 1000,

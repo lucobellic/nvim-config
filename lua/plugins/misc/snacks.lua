@@ -2,8 +2,8 @@ return {
   'folke/snacks.nvim',
   keys = {
     { '<leader>..', function() require('snacks').scratch() end, desc = 'Scratch Toggle Buffer' },
-    { '<leader>f.', function() require('snacks').scratch.select() end, desc = 'Scratch Select  Buffer' },
-    { '<leader>ps', function() require('snacks').profiler.scratch() end, desc = 'Scratch Profiler Bufer' },
+    { '<leader>f.', function() require('snacks').scratch.select() end, desc = 'Scratch Select Buffer' },
+    { '<leader>ps', function() require('snacks').profiler.scratch() end, desc = 'Scratch Profiler Buffer' },
   },
   opts = function()
     local snacks = require('snacks')
@@ -12,16 +12,16 @@ return {
     return {
       words = { enabled = false },
       bigfile = { enabled = true },
-      scratch = { enabled = true },
+      scratch = { enabled = false },
       profiler = {
         pick = {
           picker = 'telescope',
         },
       },
       notifier = {
-        enabled = true,
+        enabled = false,
         top_down = false,
-        width = { min = 60, max = 60 },
+        width = { min = 80, max = 80 },
         height = { min = 1, max = 8 },
         icons = {
           error = ' ',
@@ -32,7 +32,7 @@ return {
         },
       },
       dashboard = {
-        enabled = true,
+        enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
         width = 72,
         autokeys = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         sections = {

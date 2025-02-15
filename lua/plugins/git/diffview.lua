@@ -95,9 +95,6 @@ return {
           },
         },
         keymaps = {
-          view = {
-            ['<leader>wh'] = require('diffview.actions').toggle_files,
-          },
           file_history_panel = {
             {
               'n',

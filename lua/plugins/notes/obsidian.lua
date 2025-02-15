@@ -8,15 +8,6 @@ local vaults_overrides = {
 
 return {
   {
-    'folke/which-key.nvim',
-    optional = true,
-    opts = {
-      spec = {
-        { '<leader>oo', group = 'obsidian' },
-      },
-    },
-  },
-  {
     'epwalsh/obsidian.nvim',
     enabled = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
     dependencies = {
@@ -82,13 +73,12 @@ return {
       'ObsidianTask',
     },
     keys = {
-      { '<leader>ooo', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
-      { '<leader>oof', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>oos', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>oot', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
-      { '<leader>ooy', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
-      { '<leader>oon', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
-      { '<leader>oow', '<cmd>ObsidianWorkspace<CR>', desc = 'Obsidian Workspace' },
+      { '<leader>no', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
+      { '<leader>nf', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>nt', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
+      { '<leader>ny', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
+      { '<leader>nn', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
+      { '<leader>nw', '<cmd>ObsidianWorkspace<CR>', desc = 'Obsidian Workspace' },
     },
     ft = 'markdown',
     config = function(_, opts)

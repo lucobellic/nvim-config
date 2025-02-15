@@ -76,6 +76,14 @@ return {
         open = 'Neotree show position=left filesystem',
       },
       {
+        title = 'diffview-file-panel',
+        ft = 'DiffviewFiles',
+        open = function()
+          -- TODO: open diffview if not yet open and focus it
+          require('diffview.actions').toggle_files()
+        end,
+      },
+      {
         title = 'trouble-symbols',
         ft = 'trouble',
         filter = function(_, win)
@@ -188,7 +196,7 @@ return {
         ft = 'trouble',
         filter = function(_, win)
           local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'qflist'
+          return win_trouble and (win_trouble.mode == 'qflist' or win_trouble.mode == 'quickfix')
         end,
         open = 'Trouble qflist toggle',
       },
@@ -209,6 +217,10 @@ return {
           return win_trouble and win_trouble.mode == 'todo'
         end,
         open = 'Trouble loclist toggle',
+      },
+      {
+        title = 'quickfix',
+        ft = 'qf',
       },
       {
         title = 'noice',
@@ -233,7 +245,13 @@ return {
         size = { width = 0.15 },
       },
       { title = 'dap-repl', ft = 'dap-repl' },
-      { title = 'dapui_console', ft = 'dapui_console', open = require('dapui').toggle },
+      {
+        title = 'dapui_console',
+        ft = 'dapui_console',
+        open = function()
+          vim.schedule(function() require('dapui').open() end)
+        end,
+      },
     },
     animate = {
       enabled = false,

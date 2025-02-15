@@ -20,10 +20,10 @@ return {
       },
     },
     symbol_in_winbar = {
-      enable = false,
+      enable = true,
       hide_keyword = true,
       separator = '   ',
-      show_file = false,
+      show_file = true,
     },
     rename = {
       in_select = false,

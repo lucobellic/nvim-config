@@ -1,8 +1,6 @@
 return {
   'harrisoncramer/gitlab.nvim',
-  enabled = false,
-  -- enabled = not vim.g.started_by_firenvim,
-  event = 'VeryLazy',
+  enabled = not vim.g.started_by_firenvim and vim.env.INSIDE_DOCKER ~= nil,
   dependencies = {
     'MunifTanjim/nui.nvim',
     'nvim-lua/plenary.nvim',
@@ -23,6 +21,7 @@ return {
     },
   },
   keys = {
+    { '<leader>gl', false },
     { '<leader>glb', function() require('gitlab').choose_merge_request() end, desc = 'Gitlab Choose Merge Request' },
     { '<leader>glR', function() require('gitlab').review() end, desc = 'Gitlab Review' },
     { '<leader>gls', function() require('gitlab').summary() end, desc = 'Gitlab Summary' },
@@ -73,12 +72,14 @@ return {
     discussion_sign_and_diagnostic = {
       skip_resolved_discussion = true,
     },
-    popup = { -- The popup for comment creation, editing, and replying
-      exit = '<Esc>',
-      perform_action = '<c-cr>', -- Once in normal mode, does action (like saving comment or editing description, etc)
-      perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
+    keymap = {
+      popup = { -- The popup for comment creation, editing, and replying
+        exit = '<Esc>',
+        perform_action = '<c-cr>', -- Once in normal mode, does action (like saving comment or editing description, etc)
+        perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
+      },
     },
-    discussion_sign = {
+    discussion_signs = {
       icons = {
         comment = '',
         range = '│',
