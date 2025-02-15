@@ -7,7 +7,7 @@ return {
       'Joakker/lua-json5',
       build = './install.sh', -- require rust cargo to build
       config = function()
-        local ok, json5 = pcall('require', 'json5')
+        local ok, _ = pcall(require, 'json5')
         if ok then
           require('dap.ext.vscode').json_decode = require('json5').parse
         end
@@ -34,12 +34,14 @@ return {
     {
       'rcarriga/cmp-dap',
       config = function()
-        local cmp = require('cmp')
-        cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {
-          sources = {
-            { name = 'dap' },
-          },
-        })
+        local ok, cmp = pcall(require, 'cmp')
+        if ok then
+          cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {
+            sources = {
+              { name = 'dap' },
+            },
+          })
+        end
       end,
     },
     {
