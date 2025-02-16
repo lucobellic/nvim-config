@@ -1,5 +1,3 @@
-local components = require('neo-tree.sources.common.components')
-
 local function align(res) return (res and res.text) and res or { text = '  ' } end
 
 local function get_telescope_options(state)
@@ -219,12 +217,17 @@ return {
         bind_to_cwd = true,
         components = {
           align_git_changes = function(config, node, state)
+            local components = require('neo-tree.sources.common.components')
             return { align(components.git_status(config, node, state)[1]) }
           end,
           align_git_status = function(config, node, state)
+            local components = require('neo-tree.sources.common.components')
             return { align(components.git_status(config, node, state)[1]) }
           end,
-          align_diagnostics = function(config, node, state) return align(components.diagnostics(config, node, state)) end,
+          align_diagnostics = function(config, node, state)
+            local components = require('neo-tree.sources.common.components')
+            return align(components.diagnostics(config, node, state))
+          end,
         },
         renderers = {
           directory = {
