@@ -95,7 +95,7 @@ return {
         },
       },
       keys = {
-        { '<leader>de', require('dapui').eval, repeatable = true, desc = 'Step Over' },
+        { '<leader>de', function() require('dapui').eval() end, repeatable = true, desc = 'Step Over' },
         {
           '<leader>dw',
           function()
@@ -124,22 +124,24 @@ return {
     },
   },
   keys = {
-    { '<leader>dq', require('dap').terminate, repeatable = true, desc = 'Terminate' },
-    { '<leader>db', require('dap').toggle_breakpoint, repeatable = true, desc = 'Toggle Breakpoint' },
-    { '<leader>dc', require('dap').continue, repeatable = true, desc = 'Continue' },
-    { '<F5>', require('dap').continue, repeatable = true, desc = 'Continue' },
-    { '<leader>dC', require('dap').run_to_cursor, repeatable = true, desc = 'Run to Cursor' },
-    { '<leader>di', require('dap').step_into, repeatable = true, desc = 'Step Into' },
-    { '<F11>', require('dap').step_into, repeatable = true, desc = 'Step Into' },
-    { '<leader>dj', require('dap').down, repeatable = true, desc = 'Down' },
-    { '<leader>dk', require('dap').up, repeatable = true, desc = 'Up' },
-    { '<leader>do', require('dap').step_out, repeatable = true, desc = 'Step Out' },
-    { '<F12>', require('dap').step_out, repeatable = true, desc = 'Step Out' },
-    { '<leader>dO', require('dap').step_over, repeatable = true, desc = 'Step Over' },
-    { '<F10>', require('dap').step_over, repeatable = true, desc = 'Step Over' },
+    { '<leader>dq', function() require('dap').terminate() end, repeatable = true, desc = 'Terminate' },
+    { '<leader>db', function() require('dap').toggle_breakpoint() end, repeatable = true, desc = 'Toggle Breakpoint' },
+    { '<leader>dc', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
+    { '<F5>', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
+    { '<leader>dC', function() require('dap').run_to_cursor() end, repeatable = true, desc = 'Run to Cursor' },
+    { '<leader>di', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },
+    { '<F11>', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },
+    { '<leader>dj', function() require('dap').down() end, repeatable = true, desc = 'Down' },
+    { '<leader>dk', function() require('dap').up() end, repeatable = true, desc = 'Up' },
+    { '<leader>do', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
+    { '<F12>', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
+    { '<leader>dO', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
+    { '<F10>', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
     {
       '<leader>dx',
-      function() require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'c', 'cpp' } }) end,
+      function()
+        (function() require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'c', 'cpp' } }) end)()
+      end,
       desc = 'Load launch.json',
     },
   },

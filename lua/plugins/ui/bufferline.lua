@@ -48,7 +48,9 @@ local function set_icon_highlight(state, _, base_hl)
     },
   }
 
-  local icon_hl, highlight = table.unpack(state_props[state])
+  local props = state_props[state] or state_props[1]
+  local icon_hl = props[1]
+  local highlight = props[2]
 
   if icon_hl_cache[icon_hl] then
     return icon_hl

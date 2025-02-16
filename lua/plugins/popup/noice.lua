@@ -99,32 +99,6 @@ local filter_skip = {
   opts = { stop = true, skip = true },
 }
 
-local spinners = require('noice.util.spinners').spinners
-
--- Custom spinners
--- add programming font progress bar and spinner
--- such as fira code https://github.com/tonsky/FiraCode#whats-in-the-box
-spinners.font_progress_bar = {
-  frames = {
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-    '',
-  },
-  interval = 100,
-}
-
-spinners.font_spinner = {
-  frames = { '', '', '', '', '', '' },
-  interval = 100,
-}
-
 return {
   'folke/noice.nvim',
   -- Disable noice if started by firenvim or profiling
@@ -177,4 +151,32 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require('noice').setup(opts)
+    local spinners = require('noice.util.spinners').spinners
+
+    -- Custom spinners
+    -- add programming font progress bar and spinner
+    -- such as fira code https://github.com/tonsky/FiraCode#whats-in-the-box
+    spinners.font_progress_bar = {
+      frames = {
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+      },
+      interval = 100,
+    }
+
+    spinners.font_spinner = {
+      frames = { '', '', '', '', '', '' },
+      interval = 100,
+    }
+  end
 }
