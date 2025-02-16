@@ -6,8 +6,12 @@ vim.g.maplocalleader = ','
 
 vim.g.autoformat = false
 
-vim.g.ai_cmp = true
-vim.g.copilot = true
+-- Use ai compiletion with nvim-cmp or prefer virtual text suggestions
+vim.g.ai_cmp = false
+
+---@type 'copilot'|'supermaven'|false
+vim.g.suggestions = 'copilot'
+-- vim.g.suggestions = false
 
 vim.o.conceallevel = 2
 vim.o.laststatus = 3

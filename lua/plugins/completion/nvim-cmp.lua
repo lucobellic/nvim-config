@@ -1,21 +1,3 @@
-local function escape_lua_pattern(s)
-  return s:gsub('.', {
-    ['^'] = '%^',
-    ['$'] = '%$',
-    ['('] = '%(',
-    [')'] = '%)',
-    ['%'] = '%%',
-    ['.'] = '%.',
-    ['['] = '%[',
-    [']'] = '%]',
-    ['*'] = '%*',
-    ['+'] = '%+',
-    ['-'] = '%-',
-    ['?'] = '%?',
-    ['\0'] = '%z',
-  })
-end
-
 ---@param sources table
 ---@param to_insert table { name: string }
 ---@return table sources
@@ -53,7 +35,7 @@ return {
     local cmp = require('cmp')
     local safely_select = cmp.mapping({
       i = function(fallback)
-        if cmp.visible() and cmp.get_active_entry() then
+        if cmp.visible() --[[ and cmp.get_active_entry() ]] then
           cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
         else
           fallback()
@@ -67,14 +49,14 @@ return {
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-e>'] = cmp.mapping.abort(),
       ['<cr>'] = safely_select,
-      ['<Tab>'] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      }),
-      ['<S-Tab>'] = cmp.mapping.confirm({
-        behavior = cmp.ConfirmBehavior.Insert,
-        select = true,
-      }),
+      -- ['<Tab>'] = cmp.mapping.confirm({
+      --   behavior = cmp.ConfirmBehavior.Insert,
+      --   select = true,
+      -- }),
+      -- ['<S-Tab>'] = cmp.mapping.confirm({
+      --   behavior = cmp.ConfirmBehavior.Insert,
+      --   select = true,
+      -- }),
       ['<Down>'] = {
         i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
       },
@@ -87,33 +69,16 @@ return {
       ['<C-j>'] = {
         i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
       },
-      ['<C-n>'] = function()
+      ['<C-g>'] = function()
         if cmp.visible_docs() then
           cmp.close_docs()
         else
           cmp.open_docs()
         end
       end,
-      ['<C-l>'] = cmp.mapping(function(fallback)
-        if cmp.visible() then
-          local active_entry = cmp.get_selected_entry() or cmp.get_entries()[1]
-          if active_entry then
-            local current_line = vim.fn.trim(vim.api.nvim_get_current_line(), ' ', 1)
-            local suggestion = active_entry.cache.entries.get_word ---@type string
-            local next_word = suggestion:gsub(escape_lua_pattern(current_line), ''):match('^%s*%S+%s?')
-            vim.api.nvim_put({ next_word }, '', true, true)
-          else
-            cmp.confirm({
-              behavior = cmp.ConfirmBehavior.Insert,
-              select = true,
-            })
-          end
-        else
-          fallback()
-        end
-      end, { 'i', 'c' }),
       ['<C-x>'] = cmp.mapping.complete({ config = { sources = cmp.config.sources({ { name = 'cmp_ai' } }) } }),
     }
+    opts.mapping = vim.tbl_deep_extend('force', opts.mapping, tab_confirm_mapping)
 
     opts.sources = opts.sources or {}
     opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp_signature_help', group_index = 2 })
@@ -121,15 +86,13 @@ return {
     opts.sources = insert_or_replace(opts.sources, { name = 'path', group_index = 1 })
     opts.sources = insert_or_replace(opts.sources, { name = 'snippets', group_index = 1 })
     opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp', group_index = 1 })
-    if vim.g.ai_cmp and vim.g.copilot then
-      opts.sources = insert_or_replace(opts.sources, { name = 'copilot', group_index = 1 })
+
+    if vim.g.suggestions == 'copilot' and vim.g.ai_cmp then
+      opts.sources = insert_or_replace(opts.sources, { name = 'copilot', keyword_length = 0, group_index = 1 })
     end
 
-    opts.mapping = vim.tbl_deep_extend('force', opts.mapping, tab_confirm_mapping)
-
-    -- Disable ghost test when copilot suggestion is in use
-    local use_copilot_suggestion = vim.g.copilot and not vim.g.ai_cmp
-    opts.experimental.ghost_text = use_copilot_suggestion and false or { hl_group = 'Comment' }
+    -- Enable ghost text if ai completion is integrated to cmp or if no ai suggestions is enabled
+    opts.experimental.ghost_text = (vim.g.ai_cmp or vim.g.suggestions == false) and { hl_group = 'Comment' } or false
 
     return vim.tbl_deep_extend('force', opts, {
       performance = {

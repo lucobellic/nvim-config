@@ -228,7 +228,6 @@ map({'n', 'v'}, '<<', '<<', { desc = 'Decrease Indent' })
 if wk_ok then
   wk.add({ { '<leader>cp', '<cmd>Copilot panel<cr>', desc = 'Copilot Panel' } })
 end
-map('i', '<C-l>', '') -- Remove ^L insertion with ctrl-l in insert mode
 
 -- jupytext
 local jupytext = require('util.jupytext')
