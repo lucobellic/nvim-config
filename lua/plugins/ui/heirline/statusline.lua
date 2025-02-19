@@ -83,8 +83,8 @@ local Molten = {
 
 local Dap = {
   condition = function()
-    local session = require('dap').session()
-    return session ~= nil
+    local ok, dap = pcall(require, 'dap')
+    return ok and dap.session() ~= nil
   end,
   init = function(self)
     self.text = '  ' .. require('dap').status()

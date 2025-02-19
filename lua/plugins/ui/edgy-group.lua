@@ -49,7 +49,7 @@ return {
         bottom = {
           { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },
           { icon = '', titles = { 'trouble-diagnostics', 'trouble-qflist' }, pick_key = 'x' },
-          { icon = '', titles = { 'trouble-telescope' }, pick_key = 's' },
+          { icon = '', titles = { 'trouble-snacks' }, pick_key = 's' },
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-lsp-definitions' }, pick_key = 'r' },
           { icon = '', titles = { 'noice' }, pick_key = 'n' },
           { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },

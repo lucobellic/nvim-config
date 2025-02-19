@@ -32,6 +32,15 @@ return {
         open = 'Trouble telescope toggle',
       },
       {
+        title = 'trouble-snacks',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'snacks_files'
+        end,
+        open = 'Trouble snacks_files toggle',
+      },
+      {
         title = 'trouble-lsp-definitions',
         ft = 'trouble',
         filter = function(_, win)

@@ -136,13 +136,6 @@ local tabpages = require('util.tabpages')
 map('n', '<A-j>', function() tabpages.move_buffer_to_tab('prev', true) end)
 map('n', '<A-k>', function() tabpages.move_buffer_to_tab('next', true) end)
 
-
--- NOTE: Set <c-f> keymap once again due to configuration issue
-vim.keymap.set({ 'n' }, '<C-f>',
-  function() require('telescope').extensions.live_grep_args.live_grep_args() end,
-  { remap = true, desc = 'Search Workspace' }
-)
-
 -- Inlay hints
 local function toggle_inlay_hints()
   local is_enabled = vim.lsp.inlay_hint.is_enabled()
