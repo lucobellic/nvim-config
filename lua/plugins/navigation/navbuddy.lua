@@ -15,7 +15,7 @@ return {
   opts = {
     window = {
       size = { width = '100%', height = '20%' },
-      position = { row = '98%', col = '50%' },
+      position = { row = '99%', col = '50%' },
       sections = {
         left = {
           border = {

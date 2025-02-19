@@ -45,9 +45,6 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
-      'nvim-telescope/telescope.nvim', -- Optional
-      'stevearc/dressing.nvim', -- Optional: Improves the default Neovim UI
-      'echasnovski/mini.pick', -- Optional: mini_pick provider
     },
     -- event = 'VeryLazy',
     cmd = {
@@ -157,19 +154,19 @@ return {
           slash_commands = {
             ['buffer'] = {
               opts = {
-                provider = 'telescope',
+                provider = 'snacks',
               },
             },
             ['file'] = {
               opts = {
-                provider = 'telescope',
+                provider = 'snacks',
               },
             },
             ['terminals'] = {
               callback = function() return vim.print('Custom context or data') end,
               description = 'Insert terminal output',
               opts = {
-                provider = 'telescope',
+                provider = 'snacks',
               },
             },
           },
@@ -187,7 +184,7 @@ return {
           show_header_separator = false,
           show_settings = false,
         },
-        action_palette = { provider = 'telescope' },
+        action_palette = { provider = 'snacks' },
       },
       prompt_library = {
         -- Prefer buffer selection in chat instead of inline

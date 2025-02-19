@@ -22,6 +22,7 @@ require('lazy').setup({
     { import = 'plugins.navigation' },
     { import = 'plugins.notes' },
     { import = 'plugins.popup' },
+    { import = 'plugins.snacks' },
     { import = 'plugins.telescope' },
     { import = 'plugins.terminal' },
     { import = 'plugins.theme' },

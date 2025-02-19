@@ -7,7 +7,6 @@ return {
         ft = 'trouble',
         filter = function(_, win)
           local win_trouble = vim.w[win].trouble
-          vim.print(win_trouble.mode)
           return win_trouble and win_trouble.mode == 'symbols'
         end,
         open = 'Trouble symbols toggle focus=false win.position=left',
@@ -33,6 +32,15 @@ return {
           return win_trouble and win_trouble.mode == 'telescope'
         end,
         open = 'Trouble telescope toggle',
+      },
+      {
+        title = 'trouble-snacks',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'snacks_files'
+        end,
+        open = 'Trouble snacks_files toggle',
       },
       {
         title = 'trouble-lsp-definitions',

@@ -13,11 +13,6 @@ return {
       words = { enabled = false },
       bigfile = { enabled = true },
       scratch = { enabled = false },
-      profiler = {
-        pick = {
-          picker = 'telescope',
-        },
-      },
       notifier = {
         enabled = false,
         top_down = false,
