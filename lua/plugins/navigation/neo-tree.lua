@@ -1,15 +1,5 @@
 local function align(res) return (res and res.text) and res or { text = '  ' } end
 
-local function get_telescope_options(state)
-  local node = state.tree:get_node()
-  local path = node:get_id()
-  -- if path is a file then get the directory
-  if vim.fn.isdirectory(path) == 0 then
-    path = vim.fn.fnamemodify(path, ':h')
-  end
-  return { search_dirs = { path } }
-end
-
 return {
   {
     'folke/which-key.nvim',
@@ -330,8 +320,8 @@ return {
         -- instead of relying on nvim autocmd events.
         window = {
           mappings = {
-            ['<C-p>'] = 'telescope_find',
-            ['<C-f>'] = 'telescope_grep',
+            ['<C-p>'] = 'snacks_find',
+            ['<C-f>'] = 'snacks_grep',
             ['<bs>'] = 'navigate_up',
             ['.'] = 'set_root',
             ['H'] = 'toggle_hidden',
@@ -361,8 +351,16 @@ return {
         },
       },
       commands = {
-        telescope_find = function(state) require('telescope.builtin').find_files(get_telescope_options(state)) end,
-        telescope_grep = function(state) require('telescope.builtin').live_grep(get_telescope_options(state)) end,
+        snacks_grep = function(state)
+          ---@type neotree.SymbolNode
+          local node = state.tree:get_node()
+          Snacks.picker.grep({ layout = 'telescope_preview', dirs = { node.path } })
+        end,
+        snacks_find = function(state)
+          ---@type neotree.SymbolNode
+          local node = state.tree:get_node()
+          Snacks.picker.files({ cwd = node.path })
+        end,
       },
     },
   },

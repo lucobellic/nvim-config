@@ -26,6 +26,7 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim',
+    enabled = false,
     dependencies = {
       { 'BurntSushi/ripgrep' },
       { 'folke/trouble.nvim' },
