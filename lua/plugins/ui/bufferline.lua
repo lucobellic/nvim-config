@@ -135,6 +135,15 @@ return {
   opts = function()
     return {
       options = {
+        custom_filter = function(buf_number)
+          if
+            vim.bo[buf_number].filetype == 'codecompanion'
+            or vim.fn.bufname(buf_number):sub(0, 15) == '[CodeCompanion]'
+          then
+            return false
+          end
+          return true
+        end,
         themable = true,
         -- color_icons = false,
         show_buffer_close_icons = false,
