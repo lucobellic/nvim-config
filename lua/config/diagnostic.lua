@@ -5,53 +5,57 @@ local diagnostic_virtual_text = {
   prefix = '',
 }
 
-local diagnostic_virtual_text_line = vim.tbl_extend('force', diagnostic_virtual_text, {
+local diagnostic_current_virtual_text = vim.tbl_extend('force', diagnostic_virtual_text, {
   current_line = true,
 })
 
 local diagnostic_virtual_lines = {
   severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
-  highlight_whole_line = false,
-  current_line = true,
-  only_current_line = true,
 }
+
+local diagnostic_current_virtual_lines = vim.tbl_extend('force', diagnostic_virtual_text, {
+  current_line = true,
+})
+
 
 -- Diagnostic toggle
 vim.api.nvim_create_user_command('ToggleDiagnosticVirtualText', function()
   if not vim.diagnostic.config().virtual_text then
     vim.diagnostic.config({
-      virtual_text = diagnostic_virtual_text_line,
+      virtual_text = diagnostic_current_virtual_text,
     })
-    vim.notify('Enabled Diagnostic Line', vim.log.levels.INFO, { title = 'Diagnostic' })
+    vim.notify('Enabled Diagnostic Current Vitrtual Text', vim.log.levels.INFO, { title = 'Diagnostic' })
   elseif vim.diagnostic.config().virtual_text['current_line'] then
     vim.diagnostic.config({
       virtual_text = diagnostic_virtual_text,
     })
-    vim.notify('Enabled Diagnostic Lines', vim.log.levels.INFO, { title = 'Diagnostic' })
+    vim.notify('Enabled Diagnostic Virtual Text', vim.log.levels.INFO, { title = 'Diagnostic' })
   else
     vim.diagnostic.config({
       virtual_text = false,
     })
-    vim.notify('Disabled Diagnostics Lines', vim.log.levels.WARN, { title = 'Diagnostic' })
+    vim.notify('Disabled Diagnostics Virtual Text', vim.log.levels.WARN, { title = 'Diagnostic' })
   end
 end, { desc = 'Toggle Diagnostic Virtual Text' })
 
 vim.api.nvim_create_user_command('ToggleDiagnosticVirtualLines', function()
-  local virtual_lines = vim.diagnostic.config().virtual_lines
-  if not virtual_lines then
-    diagnostic_virtual_lines.only_current_line = true
-    vim.diagnostic.config({ virtual_lines = diagnostic_virtual_lines })
-    vim.notify('Enabled Diagnostic Line', vim.log.levels.INFO, { title = 'Diagnostic' })
-    vim.cmd(':e')
-  elseif diagnostic_virtual_lines.only_current_line then
-    diagnostic_virtual_lines.only_current_line = false
-    vim.diagnostic.config({ virtual_lines = diagnostic_virtual_lines })
+  if not vim.diagnostic.config().virtual_lines then
+    vim.diagnostic.config({
+      virtual_lines = diagnostic_current_virtual_lines,
+    })
+    vim.notify('Enabled Diagnostic Current Lines', vim.log.levels.INFO, { title = 'Diagnostic' })
+  elseif vim.diagnostic.config().virtual_lines['current_line'] then
+    vim.diagnostic.config({
+      virtual_lines = diagnostic_virtual_lines,
+    })
     vim.notify('Enabled Diagnostic Lines', vim.log.levels.INFO, { title = 'Diagnostic' })
   else
-    vim.diagnostic.config({ virtual_lines = false })
-    vim.notify('Disabled Diagnostic Lines', vim.log.levels.WARN, { title = 'Diagnostic' })
+    vim.diagnostic.config({
+      virtual_lines = false,
+    })
+    vim.notify('Disabled Diagnostics Lines', vim.log.levels.WARN, { title = 'Diagnostic' })
   end
-end, { desc = 'Toggle diagnostic virtual lines' })
+end, { desc = 'Toggle Diagnostic Line' })
 
 vim.api.nvim_create_user_command('ToggleDiagnostics', function()
   local diagnostic_enabled = vim.diagnostic.is_enabled()
