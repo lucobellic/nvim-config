@@ -30,13 +30,22 @@ return {
     {
       'zr',
       function() shift_fold(vim.v.count == 0 and 1 or vim.v.count) end,
-      { repeatable = true, desc = 'Fold less' },
+      repeatable = true,
+      desc = 'Fold less',
     },
     {
       'zm',
       function() shift_fold(-(vim.v.count == 0 and 1 or vim.v.count)) end,
-      { repeatable = true, desc = 'Fold more' },
+      repeatable = true,
+      desc = 'Fold more',
     },
   },
-  opts = {},
+  opts = {
+    fold_virt_text_handler = function(virtual_text, lnum, end_lnum, width, truncate, ctx)
+      local default_virtual_text =
+        require('ufo.decorator').defaultVirtTextHandler(virtual_text, lnum, end_lnum, width, truncate, ctx)
+      table.insert(default_virtual_text, #default_virtual_text, { '  ', 'Normal' })
+      return default_virtual_text
+    end,
+  },
 }
