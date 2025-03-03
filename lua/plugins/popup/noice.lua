@@ -66,6 +66,12 @@ local lsp = {
   },
   hover = {
     enabled = true,
+    ---@type NoiceViewOptions
+    opts = {
+      buf_options = {
+        filetype = 'markdown',
+      },
+    },
   },
   signature = {
     enabled = false,
@@ -178,5 +184,5 @@ return {
       frames = { '', '', '', '', '', '' },
       interval = 100,
     }
-  end
+  end,
 }
