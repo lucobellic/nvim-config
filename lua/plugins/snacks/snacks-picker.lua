@@ -21,7 +21,6 @@ local preferred = {
 }
 
 ---@type snacks.picker.layout.Config
----@diagnostic disable-next-line: missing-fields
 local telescope_no_preview = {
   preset = 'telescope',
   previewer = false,
@@ -44,6 +43,7 @@ local telescope_no_preview = {
   },
 }
 
+---@type snacks.picker.layout.Config
 local telescope_preview = {
   preset = 'telescope_no_preview',
   layout = {
@@ -68,6 +68,7 @@ local telescope_preview = {
   },
 }
 
+---@type snacks.picker.layout.Config
 local telescope_vertical = {
   preset = 'telescope_preview',
   layout = {
@@ -104,9 +105,15 @@ return {
     { '<c-f>', function() Snacks.picker.grep({ layout = 'telescope_preview' }) end, desc = 'Find Files' },
   },
   opts = {
+    ---@type snacks.picker.Config
     picker = {
       enabled = true,
       prompt = '',
+      formatters = {
+        file = {
+          truncate = 100,
+        },
+      },
       layouts = {
         telescope_no_preview = telescope_no_preview,
         telescope_preview = telescope_preview,
