@@ -34,7 +34,7 @@ local telescope_no_preview = {
     border = 'none',
     {
       box = 'vertical',
-      border = 'rounded',
+      border = vim.g.border.style,
       title = '{title} {live} {flags}',
       title_pos = 'center',
       { win = 'input', height = 1, border = 'bottom' },
@@ -52,7 +52,7 @@ local telescope_preview = {
     height = 0.9,
     {
       box = 'vertical',
-      border = 'rounded',
+      border = vim.g.border.style,
       title = '{title} {live} {flags}',
       title_pos = 'center',
       { win = 'input', height = 1, border = 'bottom' },
@@ -77,13 +77,13 @@ local telescope_vertical = {
     height = 0.9,
     {
       box = 'vertical',
-      border = 'rounded',
+      border = vim.g.border.style,
       title = '{title} {live} {flags}',
       title_pos = 'center',
       { win = 'input', height = 1, border = 'bottom' },
       { win = 'list', title = ' Results ', title_pos = 'center', border = 'none' },
     },
-    { win = 'preview', width = 0.65, title = '{preview:Preview}', title_pos = 'center', border = 'rounded' },
+    { win = 'preview', width = 0.65, title = '{preview:Preview}', title_pos = 'center', border = vim.g.border.style },
   },
 }
 

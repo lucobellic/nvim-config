@@ -8,7 +8,7 @@ return {
       above_cursor = {
         backdrop = false,
         position = 'float',
-        border = 'rounded',
+        border = vim.g.border.style,
         title_pos = 'left',
         height = 1,
         noautocmd = true,
