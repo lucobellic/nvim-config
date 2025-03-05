@@ -6,12 +6,15 @@ return {
   enabled = true,
   lazy = false,
   keys = {
-    {'<leader>uM', '<cmd>Neominimap toggle<CR>', desc = 'Toggle minimap'},
+    { '<leader>uM', '<cmd>Neominimap toggle<CR>', desc = 'Toggle minimap' },
   },
   init = function()
     vim.g.neominimap = {
       auto_enable = false,
       layout = 'split',
+      split = {
+        fix_width = true,
+      },
       float = {
         window_border = 'none',
       },
@@ -20,5 +23,11 @@ return {
         mode = 'sign',
       },
     }
+  end,
+  config = function()
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'FoldChanged',
+      callback = function() require('neominimap').refresh({}, {}) end,
+    })
   end,
 }
