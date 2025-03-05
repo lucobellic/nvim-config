@@ -1,6 +1,5 @@
 ---@module 'snacks.picker'
 
-local idx = 1
 local preferred = {
   'telescope_no_preview',
   'telescope_preview',
@@ -89,20 +88,28 @@ local telescope_vertical = {
 
 ---@param picker snacks.Picker
 local function set_next_preferred_layout(picker)
-  idx = idx % #preferred + 1
-  picker:set_layout(preferred[idx])
+  local layout_name = picker.resolved_layout and picker.resolved_layout.preset
+  if layout_name then
+    local idx = vim.iter(preferred):enumerate():filter(function(_, v) return v == layout_name end):next()
+    idx = idx % #preferred + 1
+    picker:set_layout(preferred[idx])
+  end
 end
 
 local function set_prev_preferred_layout(picker)
-  idx = idx == 1 and #preferred or idx - 1
-  picker:set_layout(preferred[idx])
+  local layout_name = picker.resolved_layout and picker.resolved_layout.preset
+  if layout_name then
+    local idx = vim.iter(preferred):enumerate():filter(function(_, v) return v == layout_name end):next()
+    idx = idx == 1 and #preferred or idx - 1
+    picker:set_layout(preferred[idx])
+  end
 end
 
 return {
   'folke/snacks.nvim',
   keys = {
     { '<c-p>', function() Snacks.picker.files() end, desc = 'Find Files' },
-    { '<c-f>', function() Snacks.picker.grep({ layout = 'telescope_preview' }) end, desc = 'Find Files' },
+    { '<c-f>', function() Snacks.picker.grep() end, desc = 'Find Files' },
   },
   opts = {
     ---@type snacks.picker.Config
@@ -112,6 +119,14 @@ return {
       formatters = {
         file = {
           truncate = 100,
+        },
+      },
+      sources = {
+        grep_word = {
+          layout = { preset = 'telescope_preview' },
+        },
+        grep = {
+          layout = { preset = 'telescope_preview' },
         },
       },
       layouts = {
