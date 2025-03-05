@@ -17,6 +17,7 @@ return {
       'neo-tree',
       'OverseerList',
       'Outline',
+      'neominimap'
     },
     -- Ignored buffer types (only while resizing)
     ignored_buftypes = {

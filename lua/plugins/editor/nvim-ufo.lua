@@ -1,8 +1,14 @@
 -- return the max fold level of the buffer (for now doing the opposite and folding incrementally is unbounded)
 -- Also jarring if you start folding incrementally after opening all folds
 local function max_level()
-  -- return vim.wo.foldlevel -- find a way for this to return max fold level
-  return 0
+  return vim.wo.foldlevel -- find a way for this to return max fold level
+  -- return 0
+end
+
+local function sendFoldEvent()
+  vim.api.nvim_exec_autocmds('User', {
+    pattern = 'FoldChanged',
+  })
 end
 
 ---Set the fold level to the provided value and store it locally to the buffer
@@ -25,17 +31,39 @@ return {
   event = 'VeryLazy',
   dependencies = { 'kevinhwang91/promise-async' },
   keys = {
-    { 'zR', function() require('ufo').openAllFolds() end, { desc = 'Open all folds' } },
-    { 'zM', function() set_fold(0) end, { desc = 'Close all folds' } },
+    {
+      'zR',
+      function()
+        require('ufo').openAllFolds()
+        sendFoldEvent()
+      end,
+      { desc = 'Open all folds' },
+    },
+    {
+      'zM',
+      function()
+        set_fold(0)
+        sendFoldEvent()
+      end,
+      { desc = 'Close all folds' },
+    },
+
     {
       'zr',
-      function() shift_fold(vim.v.count == 0 and 1 or vim.v.count) end,
+      function()
+        shift_fold(vim.v.count == 0 and 1 or vim.v.count)
+        sendFoldEvent()
+      end,
       repeatable = true,
       desc = 'Fold less',
     },
     {
       'zm',
-      function() shift_fold(-(vim.v.count == 0 and 1 or vim.v.count)) end,
+      function()
+        shift_fold(-(vim.v.count == 0 and 1 or vim.v.count))
+
+        sendFoldEvent()
+      end,
       repeatable = true,
       desc = 'Fold more',
     },
