@@ -56,15 +56,15 @@ return {
     keys = {
       { '<leader>a+', ':CodeCompanionChat Add<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
       { '<leader>aa', ':CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Actions' },
-      { '<leader>ab', ':CodeCompanion /buffer<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Buffer' },
+      -- { '<leader>ab', ':CodeCompanion /buffer<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Buffer' },
       { '<leader>ac', ':CodeCompanionChat<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Chat' },
       { '<leader>ad', ':CodeCompanion /doc<cr>', mode = { 'v' }, desc = 'Code Companion Documentation' },
       { '<leader>ae', ':CodeCompanion /explain<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Explain' },
       { '<leader>af', ':CodeCompanion /fix<cr>', mode = { 'v' }, desc = 'Code Companion Fix' },
       { '<leader>ag', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
       { '<leader>ai', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
-      { '<leader>ai', ':CodeCompanion /buffer<cr>', mode = { 'n' }, desc = 'Code Companion Inline Prompt' },
-      { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
+      -- { '<leader>ai', ':CodeCompanion /buffer<cr>', mode = { 'n' }, desc = 'Code Companion Inline Prompt' },
+      -- { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
       {
         '<leader>an',
         function() require('codecompanion').chat() end,
@@ -81,24 +81,13 @@ return {
       vim.cmd([[cab ccc CodeCompanionChat]])
     end,
     opts = {
-      log_level = 'DEBUG',
+      system_prompt = function() return '' end,
       adapters = {
         copilot = function()
           return require('codecompanion.adapters').extend('copilot', {
             schema = {
               model = {
-                -- default = 'claude-3.5-sonnet',
-                default = 'o3-mini-2025-01-31',
-                choices = {
-                  ['o1'] = { handler = no_system_prompt_handler() },
-                  ['o1-mini'] = { handler = no_system_prompt_handler() },
-                  'claude-3.5-sonnet',
-                  'gpt-4o',
-                  'gpt-4o-mini',
-                },
-              },
-              max_tokens = {
-                default = 8192,
+                default = 'claude-3.7-sonnet',
               },
             },
           })
@@ -121,10 +110,10 @@ return {
       strategies = {
         chat = {
           adapter = chat_adapter,
-          roles = {
-            llm = ' ', -- The markdown header content for the LLM's responses
-            user = ' ', -- The markdown header for your questions
-          },
+          -- roles = {
+          --   llm = ' ', -- The markdown header content for the LLM's responses
+          --   user = ' ', -- The markdown header for your questions
+          -- },
           keymaps = {
             clear = {
               modes = {
@@ -162,8 +151,45 @@ return {
                 provider = 'snacks',
               },
             },
-            ['terminals'] = {
-              callback = function() return vim.print('Custom context or data') end,
+            ['terminal'] = {
+              ---@param chat CodeCompanion.Chat
+              callback = function(chat)
+                Snacks.picker.buffers({
+                  title = 'Terminals',
+                  hidden = true,
+                  actions = {
+                    ---@param picker snacks.Picker
+                    add_to_chat = function(picker)
+                      picker:close()
+                      local items = picker:selected({ fallback = true })
+                      vim.iter(items):each(function(item)
+                        local id = '<buf>' .. chat.references:make_id_from_buf(item.buf) .. '</buf>'
+                        local lines = vim.api.nvim_buf_get_lines(item.buf, 0, -1, false)
+                        local content = table.concat(lines, '\n')
+
+                        chat:add_message({
+                          role = 'user',
+                          content = 'Terminal content from buffer '
+                            .. item.buf
+                            .. ' ('
+                            .. item.file
+                            .. '):\n'
+                            .. content,
+                        }, { reference = id, visible = false })
+
+                        chat.references:add({
+                          bufnr = item.buf,
+                          id = id,
+                          path = item.file,
+                          source = '',
+                        })
+                      end)
+                    end,
+                  },
+                  win = { input = { keys = { ['<CR>'] = { 'add_to_chat', mode = { 'i', 'n' } } } } },
+                  filter = { filter = function(item) return vim.bo[item.buf].buftype == 'terminal' end },
+                })
+              end,
               description = 'Insert terminal output',
               opts = {
                 provider = 'snacks',
@@ -184,7 +210,7 @@ return {
           show_header_separator = false,
           show_settings = false,
         },
-        action_palette = { provider = 'snacks' },
+        action_palette = { provider = 'default' },
       },
       prompt_library = {
         -- Prefer buffer selection in chat instead of inline
@@ -414,46 +440,46 @@ return {
       end
 
       -- telescope picker for our saved chats
-      vim.api.nvim_create_user_command('CodeCompanionLoad', function()
-        local t_builtin = require('telescope.builtin')
-        local t_actions = require('telescope.actions')
-        local t_action_state = require('telescope.actions.state')
-
-        local function start_picker()
-          t_builtin.find_files({
-            prompt_title = 'Saved CodeCompanion Chats | <c-d>: delete',
-            cwd = save_folder:absolute(),
-            attach_mappings = function(_, map)
-              map('i', '<c-d>', function(prompt_bufnr)
-                local selection = t_action_state.get_selected_entry()
-                local filepath = selection.path or selection.filename
-                os.remove(filepath)
-                t_actions.close(prompt_bufnr)
-                start_picker()
-              end)
-              return true
-            end,
-          })
-        end
-        start_picker()
-      end, {})
-
-      -- save current chat, `CodeCompanionSave foo bar baz` will save as 'foo-bar-baz.md'
-      vim.api.nvim_create_user_command('CodeCompanionSave', function(opts)
-        local codecompanion = require('codecompanion')
-        local success, chat = pcall(function() return codecompanion.buf_get_chat(0) end)
-        if not success or chat == nil then
-          vim.notify('CodeCompanionSave should only be called from CodeCompanion chat buffers', vim.log.levels.ERROR)
-          return
-        end
-        if #opts.fargs == 0 then
-          vim.notify('CodeCompanionSave requires at least 1 arg to make a file name', vim.log.levels.ERROR)
-        end
-        local save_name = table.concat(opts.fargs, '-') .. '.md'
-        local save_path = Path:new(save_folder, save_name)
-        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-        save_path:write(table.concat(lines, '\n'), 'w')
-      end, { nargs = '*' })
+      --   vim.api.nvim_create_user_command('CodeCompanionLoad', function()
+      --     local t_builtin = require('telescope.builtin')
+      --     local t_actions = require('telescope.actions')
+      --     local t_action_state = require('telescope.actions.state')
+      --
+      --     local function start_picker()
+      --       t_builtin.find_files({
+      --         prompt_title = 'Saved CodeCompanion Chats | <c-d>: delete',
+      --         cwd = save_folder:absolute(),
+      --         attach_mappings = function(_, map)
+      --           map('i', '<c-d>', function(prompt_bufnr)
+      --             local selection = t_action_state.get_selected_entry()
+      --             local filepath = selection.path or selection.filename
+      --             os.remove(filepath)
+      --             t_actions.close(prompt_bufnr)
+      --             start_picker()
+      --           end)
+      --           return true
+      --         end,
+      --       })
+      --     end
+      --     start_picker()
+      --   end, {})
+      --
+      --   -- save current chat, `CodeCompanionSave foo bar baz` will save as 'foo-bar-baz.md'
+      --   vim.api.nvim_create_user_command('CodeCompanionSave', function(opts)
+      --     local codecompanion = require('codecompanion')
+      --     local success, chat = pcall(function() return codecompanion.buf_get_chat(0) end)
+      --     if not success or chat == nil then
+      --       vim.notify('CodeCompanionSave should only be called from CodeCompanion chat buffers', vim.log.levels.ERROR)
+      --       return
+      --     end
+      --     if #opts.fargs == 0 then
+      --       vim.notify('CodeCompanionSave requires at least 1 arg to make a file name', vim.log.levels.ERROR)
+      --     end
+      --     local save_name = table.concat(opts.fargs, '-') .. '.md'
+      --     local save_path = Path:new(save_folder, save_name)
+      --     local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+      --     save_path:write(table.concat(lines, '\n'), 'w')
+      --   end, { nargs = '*' })
     end,
   },
 }
