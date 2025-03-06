@@ -1,8 +1,8 @@
-vim.opt_local.spell = false
+vim.wo.spell = false
 vim.b.minianimate_disable = true
 vim.b.miniindentscope_disable = true
-vim.opt_local.number = false
-vim.opt_local.relativenumber = false
+vim.wo.number = false
+vim.wo.relativenumber = false
 
 local function term_focus_offset(offset)
   local terminal = require('toggleterm.terminal')
@@ -39,10 +39,19 @@ local function open_file()
   end
 end
 
-local opts = { buffer = true }
-vim.keymap.set({ 't' }, '<esc>', [[<C-\><C-n>]], opts)
-vim.keymap.set({ 't', 'n' }, '<S-h>', function() term_focus_offset(-1) end, opts)
-vim.keymap.set({ 't', 'n' }, '<S-l>', function() term_focus_offset(1) end, opts)
-vim.keymap.set({ 't', 'n' }, '<C-q>', '<cmd>ToggleTermShutdown<cr>', opts)
-vim.keymap.set({ 't', 'n' }, '<C-t>', '<cmd>ToggleTermSplit<cr>', opts)
-vim.keymap.set({ 'n' }, 'gf', function() open_file() end, { buffer = 0 })
+local close_term = function()
+  local terminal = require('toggleterm.terminal')
+  local current_id = terminal.get_focused_id()
+  if current_id then
+    terminal.get(current_id):shutdown()
+  else
+    vim.api.nvim_buf_delete(0, { force = true })
+  end
+end
+
+vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], { buffer = true })
+vim.keymap.set('n', '<S-h>', function() term_focus_offset(-1) end, { buffer = true, desc = 'Focus previous terminal' })
+vim.keymap.set('n', '<S-l>', function() term_focus_offset(1) end, { buffer = true, desc = 'Focus next terminal' })
+vim.keymap.set('n', '<C-q>', close_term, { buffer = true, desc = 'Close terminal' })
+vim.keymap.set('n', '<C-t>', '<cmd>ToggleTermSplit<cr>', { buffer = true, desc = 'Open terminal' })
+vim.keymap.set('n', 'gf', function() open_file() end, { buffer = 0 })
