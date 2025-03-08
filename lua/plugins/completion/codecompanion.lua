@@ -2,22 +2,6 @@ local chat_adapter = 'copilot'
 local agent_adapter = 'copilot'
 local inline_adapter = 'copilot'
 
-local function no_system_prompt_handler()
-  return {
-    ---Handler to remove system prompt from messages
-    ---@param self CodeCompanion.Adapter
-    ---@param messages table
-    form_messages = function(self, messages)
-      return {
-        messages = vim
-          .iter(messages)
-          :filter(function(message) return not (message.role and message.role == 'system') end)
-          :totable(),
-      }
-    end,
-  }
-end
-
 ---@param branch string
 local function get_changed_files(branch)
   local output = vim.fn.system('git diff --name-only ' .. branch .. ' | xargs -I {} realpath {}')
@@ -45,6 +29,7 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
+      'ravitemer/mcphub.nvim',
     },
     -- event = 'VeryLazy',
     cmd = {
@@ -399,6 +384,7 @@ return {
                 local question = '<question>\n'
                   .. 'Check if there is any bugs that have been introduced from the provided diff changes.\n'
                   .. 'Perform a complete analysis and do not stop at first issue found.\n'
+                  .. 'If available, provide absolute file path and line number for code snippets.\n'
                   .. '</question>'
 
                 local branch = '$(git merge-base HEAD develop)...HEAD'
@@ -429,6 +415,53 @@ return {
       },
     },
     config = function(_, opts)
+      local ok, vectorcode_integrations = pcall(require, 'vectorcode.integrations')
+      if ok then
+        opts = vim.tbl_extend('force', opts, {
+          strategies = {
+            chat = {
+              slash_commands = {
+                codebase = vectorcode_integrations.codecompanion.chat.make_slash_command(),
+              },
+              tools = {
+                vectorcode = {
+                  description = 'Run VectorCode to retrieve the project context.',
+                  callback = vectorcode_integrations.codecompanion.chat.make_tool(),
+                },
+              },
+            },
+          },
+        })
+      end
+
+      local ok, mcphub_codecompanion = pcall(require, 'mcphub.extensions.codecompanion')
+      if ok then
+        mcphub_codecompanion.output.success = function(self, action, output)
+          local result = output[1]
+          local action_name = action._attr.type
+          self.chat:add_buf_message({
+            role = 'user',
+            content = 'The ' .. action_name .. ' call was successful with the following result\n' .. result,
+          })
+        end
+
+        opts = vim.tbl_extend('force', opts, {
+          strategies = {
+            chat = {
+              tools = {
+                ['mcp'] = {
+                  description = 'Call tools and resources from the MCP Servers',
+                  callback = mcphub_codecompanion,
+                  opts = {
+                    requires_approval = true,
+                  },
+                },
+              },
+            },
+          },
+        })
+      end
+
       require('codecompanion').setup(opts)
 
       -- create a folder to store our chats
