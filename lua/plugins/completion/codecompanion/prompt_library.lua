@@ -58,16 +58,14 @@ return {
         content = [[
                 When asked to add documentation, follow these steps:
                 1. **Identify Key Points**: Carefully read the provided code to understand its functionality.
-                2. **Plan the Documentation**: Describe the key points to be documented in pseudocode, detailing each step.
-                3. **Implement the Documentation**: Write the accompanying documentation in the same file or a separate file.
-                4. **Review the Documentation**: Ensure that the documentation is comprehensive and clear. Ensure the documentation:
+                2. **Review the Documentation**: Ensure the documentation:
                   - Includes necessary explanations.
                   - Helps in understanding the code's functionality.
-                  - Add parameters, return values, and exceptions documentation.
                   - Follows best practices for readability and maintainability.
                   - Is formatted correctly.
 
-                Use Markdown formatting and include the programming language name at the start of the code block.]],
+                For C/C++ code: use Doxygen comments using `\` instead of `@`.
+                For Python code: Use Docstring numpy-notypes format.]],
         opts = {
           visible = false,
         },
@@ -76,7 +74,6 @@ return {
         role = 'user',
         content = function(context)
           local code = require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
-
           return 'Please document the selected code:\n\n```' .. context.filetype .. '\n' .. code .. '\n```\n\n'
         end,
         opts = {
