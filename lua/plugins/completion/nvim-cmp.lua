@@ -35,7 +35,9 @@ return {
     local cmp = require('cmp')
     local safely_select = cmp.mapping({
       i = function(fallback)
-        if cmp.visible() --[[ and cmp.get_active_entry() ]] then
+        if
+          cmp.visible() --[[ and cmp.get_active_entry() ]]
+        then
           cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
         else
           fallback()
@@ -133,18 +135,14 @@ return {
         },
       },
       formatting = {
-        format = function(entry, item)
-          item.menu = ''
-          return require('lspkind').cmp_format({
-            mode = 'symbol_text',
-            maxwidth = 50,
-            -- symbol_map = {
-            --   HF = '',
-            --   OpenAI = '',
-            --   Codestral = '',
-            --   Bard = '',
-            -- },
-          })(entry, item)
+        fields = { 'kind', 'abbr' },
+        format = function(entry, vim_item)
+          local format = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })
+          local kind = format(entry, vim_item)
+          local strings = vim.split(kind.kind, '%s', { trimempty = true })
+          kind.kind = ' ' .. (strings[1] or '') .. ' '
+          -- kind.menu = '    (' .. (strings[2] or '') .. ')'
+          return kind
         end,
       },
     })
