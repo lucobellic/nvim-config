@@ -14,6 +14,19 @@ local function insert_or_replace(sources, to_insert)
   return sources
 end
 
+local debounce_timer = nil
+local function setup_text_changed_debounce(debounce_delay)
+  vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
+    group = vim.api.nvim_create_augroup('TextChangedDebounceGroup', { clear = true }),
+    callback = function()
+      if debounce_timer then
+        vim.fn.timer_stop(debounce_timer)
+      end
+      debounce_timer = vim.fn.timer_start(debounce_delay, function() require('cmp').complete({ reason = 'auto' }) end)
+    end,
+  })
+end
+
 return {
   'llllvvuu/nvim-cmp',
   branch = 'feat/above',
@@ -59,18 +72,10 @@ return {
       --   behavior = cmp.ConfirmBehavior.Insert,
       --   select = true,
       -- }),
-      ['<Down>'] = {
-        i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-      },
-      ['<Up>'] = {
-        i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-      },
-      ['<C-k>'] = {
-        i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-      },
-      ['<C-j>'] = {
-        i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
-      },
+      ['<Down>'] = { i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }) },
+      ['<Up>'] = { i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }) },
+      ['<C-k>'] = { i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }) },
+      ['<C-j>'] = { i = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }) },
       ['<C-g>'] = function()
         if cmp.visible_docs() then
           cmp.close_docs()
@@ -96,7 +101,12 @@ return {
     -- Enable ghost text if ai completion is integrated to cmp or if no ai suggestions is enabled
     opts.experimental.ghost_text = (vim.g.ai_cmp or vim.g.suggestions == false) and { hl_group = 'Comment' } or false
 
+    setup_text_changed_debounce(500)
+
     return vim.tbl_deep_extend('force', opts, {
+      completion = {
+        autocomplete = false, -- Triggered on TextChangedDebounce
+      },
       performance = {
         debounce = 300,
         throttle = 300,
