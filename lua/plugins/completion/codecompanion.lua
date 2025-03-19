@@ -2,7 +2,6 @@ local chat_adapter = 'copilot'
 local agent_adapter = 'copilot'
 local inline_adapter = 'copilot'
 
-
 return {
   {
     'folke/which-key.nvim',
@@ -30,11 +29,10 @@ return {
       'CodeCompanionAdd',
     },
     keys = {
-      { '<leader>a+', ':CodeCompanionChat Add<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
+      { '<leader>ae', ':CodeCompanionChat Add<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
       { '<leader>aa', ':CodeCompanionActions<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Actions' },
       { '<leader>ac', ':CodeCompanionChat<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Chat' },
       { '<leader>ad', ':CodeCompanion /doc<cr>', mode = { 'v' }, desc = 'Code Companion Documentation' },
-      { '<leader>ae', ':CodeCompanion /explain<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Explain' },
       { '<leader>af', ':CodeCompanion /fix<cr>', mode = { 'v' }, desc = 'Code Companion Fix' },
       { '<leader>ag', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
       { '<leader>ai', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
@@ -65,30 +63,20 @@ return {
           --   user = ' ', -- The markdown header for your questions
           -- },
           keymaps = {
-            clear = {
-              modes = {
-                n = '<C-x>',
-              },
-              index = 5,
-              callback = 'keymaps.clear',
-              description = 'Clear Chat',
-            },
-            next_chat = {
-              modes = {
-                n = '>>',
-              },
-              index = 8,
-              callback = 'keymaps.next_chat',
-              description = 'Next Chat',
-            },
-            previous_chat = {
-              modes = {
-                n = '<<',
-              },
-              index = 9,
-              callback = 'keymaps.previous_chat',
-              description = 'Previous Chat',
-            },
+            clear = { modes = { n = '<C-x>' } },
+            next_chat = { modes = { n = '>>' } },
+            previous_chat = { modes = { n = '<<' } },
+            regenerate = { modes = { n = '<localleader>r' } },
+            stop = { modes = { n = 'q' } },
+            codeblock = { modes = { n = '<localleader>c' } },
+            yank_code = { modes = { n = '<localleader>y' } },
+            pin = { modes = { n = '<localleader>p' } },
+            watch = { modes = { n = '<localleader>w' } },
+            change_adapter = { modes = { n = '<localleader>a' } },
+            fold_code = { modes = { n = '<localleader>f' } },
+            debug = { modes = { n = '<localleader>d' } },
+            system_prompt = { modes = { n = '<localleader>s' } },
+            auto_tool_mode = { modes = { n = '<localleader>ta' } },
           },
           slash_commands = require('plugins.completion.codecompanion.slash_commands'),
         },
