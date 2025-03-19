@@ -35,7 +35,7 @@ end
 
 return {
   'zbirenbaum/copilot.lua',
-  enabled = vim.g.suggestions == 'copilot',
+  enabled = false,
   keys = get_keys(),
   opts = {
     suggestion = {
