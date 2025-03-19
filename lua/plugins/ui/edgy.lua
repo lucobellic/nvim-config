@@ -97,6 +97,15 @@ return {
         open = 'CodeCompanionChat toggle',
         size = { width = 0.25 },
       },
+      { title = 'avante', ft = 'Avante', open = 'AvanteToggle', size = { width = 0.25 } },
+      { title = 'avante-files', ft = 'AvanteFiles' },
+      { title = 'avante-selected-files', ft = 'AvanteSelectedFiles', size = { height = 0.1 } },
+      {
+        title = 'avante-input',
+        ft = 'AvanteInput',
+        filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
+        size = { height = 0.2 },
+      },
     },
     bottom = {
       {
@@ -109,7 +118,6 @@ return {
         end,
         open = 'Noice',
       },
-
     },
     animate = {
       enabled = false,

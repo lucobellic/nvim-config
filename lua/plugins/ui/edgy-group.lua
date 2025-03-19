@@ -39,6 +39,11 @@ return {
         },
         right = {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
+          {
+            icon = '',
+            titles = { 'avante', 'avante-files', 'avante-selected-files', 'avante-input' },
+            pick_key = 'i',
+          },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
           {
             icon = '',

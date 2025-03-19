@@ -40,8 +40,8 @@ local function get_toggleterm_id(props)
 end
 
 local function is_toggleterm(bufnr) return vim.bo[bufnr].filetype == 'toggleterm' end
-
 local function is_codecompanion(bufnr) return vim.bo[bufnr].filetype == 'codecompanion' end
+local function is_avante(bufnr) return vim.bo[bufnr].filetype:sub(0, 6) == 'Avante' end
 
 local edgy_filetypes = {
   'neotest-output-panel',
@@ -107,6 +107,13 @@ local function get_codecompanion_title(props)
   return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
 end
 
+local function get_avante_title(props)
+  -- Parse filetype from CamelCase to snake-case
+  local filetype = vim.bo[props.buf].filetype
+  local title = ' ' .. filetype:gsub('(%u)', function(c) return '-' .. c:lower() end):sub(2) .. ' '
+  return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
+end
+
 return {
   'b0o/incline.nvim',
   event = 'BufEnter',
@@ -137,7 +144,7 @@ return {
     },
     ignore = {
       buftypes = {},
-      filetypes = { 'neo-tree', 'dashboard', 'snacks_dashboard' },
+      filetypes = { 'neo-tree', 'dashboard', 'snacks_dashboard', 'neominimap' },
       unlisted_buffers = false,
     },
     render = function(props)
@@ -153,6 +160,10 @@ return {
 
       if is_codecompanion(props.buf) then
         return get_codecompanion_title(props)
+      end
+
+      if is_avante(props.buf) then
+        return get_avante_title(props)
       end
 
       local filetype_icon, filetype_color = require('nvim-web-devicons').get_icon_color(filename)

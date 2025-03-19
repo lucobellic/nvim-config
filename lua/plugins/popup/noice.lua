@@ -93,6 +93,7 @@ local filter_skip = {
       { event = 'notify', kind = 'warn', find = 'Unsupported input type' },
       { event = 'notify', kind = 'error', find = 'invalid AST' },
       { event = 'notify', kind = 'error', find = 'Failed to set cursor' },
+      { event = 'notify', kind = 'error', find = 'Edgy' },
       { event = 'msg_show', kind = '', find = 'query' },
       { event = 'msg_show', kind = 'lua_error', find = 'Autocommands' },
       -- Hide spamming pylsp messages
