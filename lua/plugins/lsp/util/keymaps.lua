@@ -1,5 +1,21 @@
 local M = {}
 
+function M.setup_vscode()
+  local vscode = require('vscode')
+  vim.keymap.set(
+    'n',
+    'gr',
+    function() vscode.action('references-view.findReferences') end,
+    { desc = 'Find All References' }
+  )
+  vim.keymap.set('n', '>D', function() vscode.action('editor.action.marker.next') end, { desc = 'Next Diagnostic' })
+  vim.keymap.set('n', '>E', function() vscode.action('editor.action.marker.next') end, { desc = 'Next Diagnostic' })
+  vim.keymap.set('n', '>W', function() vscode.action('editor.action.marker.next') end, { desc = 'Next Diagnostic' })
+  vim.keymap.set('n', '<D', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
+  vim.keymap.set('n', '<E', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
+  vim.keymap.set('n', '<W', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
+end
+
 function M.setup()
   local format = function()
     require('lazyvim.util.format').format({ force = true })

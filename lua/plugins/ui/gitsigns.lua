@@ -1,5 +1,51 @@
 local symbol = '│'
 
+if vim.g.vscode then
+  local vscode = require('vscode')
+
+  -- Navigation
+  vim.keymap.set('n', '>h', function() vscode.action('workbench.action.editor.nextChange') end, { desc = 'Next Hunk' })
+  vim.keymap.set('n', '>H', function() vscode.action('workbench.action.editor.nextChange') end, { desc = 'Next Hunk' })
+  vim.keymap.set(
+    'n',
+    '<h',
+    function() vscode.action('workbench.action.editor.previousChange') end,
+    { desc = 'Prev Hunk' }
+  )
+  vim.keymap.set(
+    'n',
+    '<H',
+    function() vscode.action('workbench.action.editor.previousChange') end,
+    { desc = 'Prev Hunk' }
+  )
+
+  -- Staging
+
+  -- NOTE: no keymap to stage current block
+  -- vim.keymap.set('n', '<leader>hs', function() vscode.action('git.diff.stageHunk') end, { desc = 'Stage Block' })
+  vim.keymap.set('v', '<leader>hs', function() vscode.action('git.stageSelectedRanges') end, { desc = 'Stage Hunk' })
+  vim.keymap.set('n', '<leader>hS', function() vscode.action('git.stage') end, { desc = 'Stage All' })
+
+  -- Reset
+  vim.keymap.set(
+    { 'n', 'v' },
+    '<leader>hr',
+    function() vscode.action('git.revertSelectedRanges') end,
+    { desc = 'Reset Hunk' }
+  )
+  vim.keymap.set('n', '<leader>hR', function() vscode.action('git.unstage') end, { desc = 'Reset Buffer' })
+
+  -- Visualization
+  vim.keymap.set('n', '<leader>ub', function() vscode.action('gitlens.toggleReviewMode') end, { desc = 'Line Blame' })
+
+  vim.keymap.set(
+    { 'n', 'v' },
+    '<leader>hv',
+    function() vscode.action('editor.action.dirtydiff.next') end,
+    { desc = 'Preview Hunk' }
+  )
+end
+
 return {
   {
     'folke/which-key.nvim',

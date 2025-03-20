@@ -2,6 +2,22 @@ local chat_adapter = 'copilot'
 local agent_adapter = 'copilot'
 local inline_adapter = 'copilot'
 
+if vim.g.vscode then
+  local vscode = require('vscode')
+  vim.keymap.set(
+    'v',
+    '<leader>ai',
+    function() vscode.action('aipopup.action.modal.generate') end,
+    { desc = 'Cursor Inline Prompt' }
+  )
+  vim.keymap.set(
+    'v',
+    '<leader>ae',
+    function() vscode.action('aichat.insertselectionintochat') end,
+    { desc = 'Cursor Add Selection To Chat' }
+  )
+end
+
 return {
   {
     'folke/which-key.nvim',

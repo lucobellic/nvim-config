@@ -1,3 +1,7 @@
+if vim.g.vscode then
+  require('plugins.lsp.util.keymaps').setup_vscode()
+end
+
 return {
   'neovim/nvim-lspconfig',
   event = 'LazyFile',
