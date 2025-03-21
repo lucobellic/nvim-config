@@ -4,15 +4,21 @@ return {
   event = 'BufEnter',
   keys = {
     {
-      '<C-l>',
+      '<c-l>',
       function() vim.fn['copilot#Next']() end,
       desc = 'Copilot next',
       mode = 'i',
     },
     {
-      '<C-h>',
+      '<c-h>',
       function() vim.fn['copilot#Prev']() end,
       desc = 'Copilot prev',
+      mode = 'i',
+    },
+    {
+      '<a-l>',
+      '<Plug>(copilot-accept-word)',
+      desc = 'Copilot accept word',
       mode = 'i',
     },
   },
@@ -24,10 +30,10 @@ return {
     if vim.env.INSIDE_DOCKER then
       table.insert(vim.g.copilot_workspace_folders, '~/rapidash')
     end
-      end,
+  end,
   config = function()
     if vim.env.INSIDE_DOCKER then
       vim.cmd('Copilot disable')
     end
-  end
+  end,
 }
