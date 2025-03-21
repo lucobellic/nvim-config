@@ -74,19 +74,16 @@ return {
         },
       },
       templates = { 'builtin', 'user.script' },
-      form = {
-        border = vim.g.border.style,
-        win_opts = {
-          winblend = vim.o.pumblend,
-        },
-      },
+      form = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
+      config = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
+      task_win = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
+      help_win = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
       component_aliases = {
         default = {
           { 'user.open_on_start_if_visible', direction = 'vertical' }, -- open on start if overseer window is visible/open
           { 'display_duration', detail_level = 2 },
           'user.on_output_parse', -- parse with problem matcher
-          -- Disabled due to unexpected external terminal resize
-          -- { 'on_output_quickfix', tail = false }, -- parse errorformat
+          { 'on_output_quickfix', tail = false }, -- parse errorformat
           'on_exit_set_status', -- set the status based on exit code
           'on_complete_notify', -- popup notification
           { 'on_result_diagnostics', remove_on_restart = true, underline = true }, -- display diagnostics
@@ -102,6 +99,13 @@ return {
     config = function(_, opts)
       local overseer = require('overseer')
       local task_list = require('overseer.task_list')
+      local util = require("overseer.util")
+
+      -- Override run_in_cwd to prevent fullscreen terminal execution and output flickering
+      util.run_in_cwd = function(cwd, callback)
+        vim.cmd.lcd({ args = { cwd }, mods = { silent = true, noautocmd = true } })
+        callback()
+      end
 
       -- Close overseer window when all buffers are closed
       vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
