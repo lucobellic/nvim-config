@@ -38,6 +38,15 @@ return {
         ft = 'trouble',
         filter = function(_, win)
           local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'snacks'
+        end,
+        open = 'Trouble snacks toggle',
+      },
+      {
+        title = 'trouble-snacks-files',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
           return win_trouble and win_trouble.mode == 'snacks_files'
         end,
         open = 'Trouble snacks_files toggle',
