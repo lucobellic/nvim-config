@@ -85,8 +85,13 @@ return {
         title = 'diffview-file-panel',
         ft = 'DiffviewFiles',
         open = function()
-          -- TODO: open diffview if not yet open and focus it
-          require('diffview.actions').toggle_files()
+          local lib = require('diffview.lib')
+          local current_view = lib.get_current_view()
+          if current_view then
+            require('diffview.actions').toggle_files()
+          else
+            vim.cmd('DiffviewOpen')
+          end
         end,
       },
     },
