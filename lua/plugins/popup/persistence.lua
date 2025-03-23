@@ -3,6 +3,11 @@ return {
   event = 'VeryLazy',
   keys = {
     {
+      '<leader>fs',
+      function() require('util.persistence').select_session() end,
+      desc = 'Find Sessions',
+    },
+    {
       '<leader>qr',
       function() require('persistence').load() end,
       desc = 'Restore session',
