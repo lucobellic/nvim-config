@@ -1,3 +1,5 @@
+---@module "trouble"
+
 return {
   'folke/trouble.nvim',
   keys = {
@@ -36,6 +38,11 @@ return {
     max_items = 500, -- limit number of items that can be displayed per section
     warn_no_results = false, -- show a warning when there are no results
     open_no_results = true, -- open the trouble window when there are no results
+    ---@type trouble.Window.opts
+    preview = {
+      type = 'main',
+      scratch = false,
+    },
     modes = {
       lsp_references = {
         desc = 'LSP References',

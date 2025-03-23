@@ -7,15 +7,14 @@ if vim.g.neovide then
   vim.g.neovide_scroll_animation_length = 0.2
   vim.g.neovide_hide_mouse_when_typing = true
 
-  vim.g.neovide_transparency = 0.75
   vim.g.neovide_opacity = 0.75
   vim.g.neovide_text_background_opacity = 1.0
   vim.g.neovide_normal_opacity = 0.75
 
-  vim.g.neovide_floating_blur = false
+  vim.g.neovide_floating_blur = true
   vim.g.neovide_floating_blur_amount_x = 5.0
   vim.g.neovide_floating_blur_amount_y = 5.0
-  vim.g.neovide_floating_corner_radius  = 0.5
+  vim.g.neovide_floating_corner_radius = 0
 
   vim.g.neovide_padding_top = 5
   vim.g.neovide_padding_bottom = 0
@@ -64,7 +63,7 @@ if vim.g.neovide then
   vim.g.terminal_color_15 = '#bfbdb6'
 
   -- Shadow
-  vim.g.neovide_floating_shadow = true
+  vim.g.neovide_floating_shadow = false
   vim.g.neovide_floating_z_height = 10 -- virtual height of floating window
   vim.g.neovide_light_angle_degrees = 45 -- angle from screen normal of the casting light
   vim.g.neovide_light_radius = 5 -- radius of the casting light

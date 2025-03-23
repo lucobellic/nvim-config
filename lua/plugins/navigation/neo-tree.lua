@@ -92,7 +92,7 @@ return {
           },
         },
         container = {
-          enable_character_fade = true,
+          enable_character_fade = false,
         },
         indent = {
           indent_size = 1,

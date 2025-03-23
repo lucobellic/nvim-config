@@ -195,7 +195,7 @@ return {
             .. 'If available, provide absolute file path and line number for code snippets.\n'
             .. '</question>'
 
-          local branch = '$(git merge-base HEAD develop)...HEAD'
+          local branch = '$(git merge-base HEAD origin/develop)...HEAD'
           local diff = '\n\n```diff\n' .. vim.fn.system('git diff ' .. branch) .. '\n```\n'
 
           local included_files = get_changed_files(branch)

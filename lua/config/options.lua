@@ -45,9 +45,8 @@ vim.o.writebackup = false
 vim.o.swapfile = false
 vim.o.undofile = true
 
-local neovide_multi_grid = os.getenv('NEOVIDE_NO_MULTIGRID') == 'false'
-vim.o.pumblend = neovide_multi_grid and 100 or 0
-vim.o.winblend = neovide_multi_grid and 100 or 0
+vim.o.pumblend = 0
+vim.o.winblend = 0
 
 vim.go.incsearch = false
 

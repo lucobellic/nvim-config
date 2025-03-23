@@ -7,8 +7,9 @@ end
 
 return {
   'gbprod/yanky.nvim',
-  enabled = not vim.g.started_by_firenvim,
+  enabled = not (vim.g.started_by_firenvim or vim.g.neovide),
   keys = {
+    { '<leader>p', false },
     {
       'p',
       function()

@@ -3,13 +3,6 @@ local is_wezterm = true -- os.getenv('TERM_PROGRAM') == 'WezTerm'
 
 local kitty_dependencies = {
   {
-    'vhyrro/luarocks.nvim',
-    priority = 1001, -- this plugin needs to run before anything else
-    opts = {
-      rocks = { 'magick', 'fzy' },
-    },
-  },
-  {
     '3rd/image.nvim',
     dependencies = { 'luarocks.nvim' },
     opts = {
@@ -71,7 +64,7 @@ return {
       { '<leader>mN', function() vim.fn.search('%%', 'wb') end, desc = 'Molten Prev Cell' },
       { '<leader>mo', ':noautocmd MoltenEnterOutput<CR>', desc = 'Molten Enter Output' },
       {
-        '<leader>ms',
+        '<leader>mp',
         function() evaluate_pypercent() end,
         desc = 'Molten Percent',
       },
@@ -85,8 +78,10 @@ return {
     },
     init = function()
       vim.g.molten_image_provider = image_provider
+      vim.g.molten_auto_open_output = false
       vim.g.molten_output_win_border = { '', '-', '', '' }
-      vim.g.molten_virt_text_output = false
+      vim.g.molten_virt_text_output = true
+      vim.g.molten_virt_lines_off_by_1 = true
       if vim.g.molten_image_provider == 'wezterm' then
         vim.g.molten_auto_open_output = false
       end

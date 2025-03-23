@@ -127,7 +127,7 @@ return {
           follow_cursor = false,
         },
         docs = {
-          auto_open = false,
+          auto_open = true,
         },
       },
       window = {

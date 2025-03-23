@@ -94,6 +94,12 @@ return {
             layout = 'diff3_mixed',
           },
         },
+        default_args = {
+          DiffviewOpen = {
+            '--imply-local',
+          },
+          DiffviewFileHistory = {},
+        },
         keymaps = {
           file_history_panel = {
             {

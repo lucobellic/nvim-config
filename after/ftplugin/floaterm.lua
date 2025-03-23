@@ -1,8 +1,3 @@
-if vim.b.did_ftplugin then
-  return
-end
-vim.b.did_ftplugin = 1
-
 --- Open file path under cursor in a normal window from floaterm
 local function open_in_normal_window()
   local file = vim.fn.findfile(vim.fn.expand('<cfile>'))

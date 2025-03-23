@@ -1,6 +1,6 @@
 local chat_adapter = 'copilot'
 local agent_adapter = 'copilot'
-local inline_adapter = 'copilot'
+local inline_adapter = 'copilot_inline'
 
 if vim.g.vscode then
   local vscode = require('vscode')
@@ -37,7 +37,6 @@ return {
       'nvim-treesitter/nvim-treesitter',
       'ravitemer/mcphub.nvim',
     },
-    -- event = 'VeryLazy',
     cmd = {
       'CodeCompanion',
       'CodeCompanionChat',

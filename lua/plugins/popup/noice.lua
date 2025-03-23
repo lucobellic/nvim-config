@@ -19,7 +19,7 @@ local cmdline = {
 
 local cmdline_popup_view = {
   position = {
-    row = 0,
+    row = vim.g.neovide and 1 or 0,
     col = '50%',
   },
   size = {

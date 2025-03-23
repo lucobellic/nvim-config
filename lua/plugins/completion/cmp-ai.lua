@@ -1,6 +1,7 @@
 return {
   'tzachar/cmp-ai',
-  dependencies = 'nvim-lua/plenary.nvim',
+  enabled = false,
+  dependencies = { 'nvim-lua/plenary.nvim' },
   opts = {
     max_lines = 1000,
     provider = 'OpenAI',
