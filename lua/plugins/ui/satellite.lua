@@ -17,14 +17,15 @@ return {
     winblend = vim.o.winblend,
     excluded_filetypes = {
       'OverseerList',
-      'neo-tree',
-      'telescope',
       'Telescope',
+      'TelescopePreview',
       'TelescopePrompt',
       'TelescopeResults',
-      'TelescopePreview',
       'chatgpt-input',
       'cmp',
+      'neo-tree',
+      'telescope',
+      'toggleterm',
     },
     handlers = {
       cursor = {
