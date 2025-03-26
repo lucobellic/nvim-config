@@ -17,7 +17,7 @@ return {
     },
   },
   ['Generate a Commit Message for Staged Files'] = {
-    strategy = 'chat',
+    strategy = 'inline',
     description = 'staged file commit messages',
     opts = {
       index = 15,
@@ -196,23 +196,28 @@ return {
             .. '</question>'
 
           local branch = '$(git merge-base HEAD origin/develop)...HEAD'
-          local diff = '\n\n```diff\n' .. vim.fn.system('git diff ' .. branch) .. '\n```\n'
+          local changes = 'changes.diff'
+          vim.fn.system('git diff --unified=10000 ' .. branch .. ' > ' .. changes)
 
-          local included_files = get_changed_files(branch)
           --- @type CodeCompanion.Chat
-          local current_chat = require('codecompanion').buf_get_chat(vim.api.nvim_get_current_buf())
+          local chat = require('codecompanion').buf_get_chat(vim.api.nvim_get_current_buf())
+          local path = vim.fn.getcwd() .. '/' .. changes
+          local id = '<file>' .. changes .. '</file>'
+          local lines = vim.fn.readfile(path)
+          local content = table.concat(lines, '\n')
 
-          vim.iter(included_files):filter(function(path) return not path:find('Not a valid object name') end):each(
-            function(path)
-              current_chat.references:add({
-                id = vim.fn.fnamemodify(path, ':t'),
-                path = path,
-                source = 'codecompanion.strategies.chat.slash_commands.bugs',
-              })
-            end
-          )
+          chat:add_message({
+            role = 'user',
+            content = 'git diff content from ' .. path .. ':\n' .. content,
+          }, { reference = id, visible = false })
 
-          return question .. diff
+          chat.references:add({
+            id = id,
+            path = path,
+            source = '',
+          })
+
+          return question
         end,
       },
     },
