@@ -1,27 +1,37 @@
 ---@return dropbar_t?, number?, dropbar_symbol_t?
 local function get_bar_with_opened_component()
-  local menu = require('dropbar.utils.menu').get_current()
-  if not menu then
-    return nil, nil, nil
+  require('dropbar')
+  ---@type table<integer, dropbar_menu_t>|nil
+  local menus = require('dropbar.utils.menu').get()
+  local menu = vim.iter(menus):filter(function(menu) return menu.is_opened end):next()
+  local win = menu and menu.prev_win or nil
+
+  ---@type table<integer, table<integer, dropbar_t>>|nil
+  local bars = require('dropbar.utils.bar').get()
+
+  -- From the table of table create only one table where all second id is equal to win
+  local current_bar = nil
+  for _, table_bar in pairs(bars or {}) do
+    for i, bar in pairs(table_bar or {}) do
+      if i == win then
+        current_bar = bar
+        break
+      end
+    end
   end
 
-  ---@type dropbar_t | nil
-  local bar = require('dropbar.utils.bar').get({ win = menu:root_win() })
-  if not bar then
-    return nil, nil, nil
-  end
+  local opened_component_id, opened_component = vim
+    .iter(ipairs(current_bar and current_bar.components or {}))
+    :filter(function(_, component) return component.menu and component.menu.is_opened end)
+    :next()
 
-  return bar,
-    vim
-      .iter(ipairs(bar.components))
-      :filter(function(_, component) return component.menu and component.menu.is_opened end)
-      :next()
+  return current_bar, opened_component_id, opened_component
 end
 
 return {
   'Bekaboo/dropbar.nvim',
-  -- enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
-  enabled = false,
+  vesion = '*',
+  enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   event = 'BufEnter',
   dependencies = {
     'nvim-telescope/telescope-fzf-native.nvim',
@@ -101,7 +111,7 @@ return {
           if bar and opened_component and opened_component_id and opened_component_id > 1 then
             opened_component.menu:close()
             opened_component:restore()
-            bar.components[opened_component_id - 1]:on_click()
+            bar:pick(opened_component_id - 1)
             bar:redraw()
           end
         end,
@@ -110,7 +120,7 @@ return {
           if bar and opened_component and opened_component_id and opened_component_id < #bar.components then
             opened_component.menu:close()
             opened_component:restore()
-            bar.components[opened_component_id + 1]:on_click()
+            bar:pick(opened_component_id + 1)
             bar:redraw()
           end
         end,
@@ -132,6 +142,38 @@ return {
       scrollbar = {
         enable = true,
         background = false, -- When false, only the scrollbar thumb is shown.
+      },
+    },
+    sources = {
+      lsp = {
+        valid_symbols = {
+          'File',
+          'Module',
+          'Namespace',
+          'Package',
+          'Class',
+          'Method',
+          -- 'Property',
+          -- 'Field',
+          -- 'Constructor',
+          'Enum',
+          'Interface',
+          'Function',
+          -- 'Variable',
+          -- 'Constant',
+          -- 'String',
+          -- 'Number',
+          -- 'Boolean',
+          -- 'Array',
+          'Object',
+          -- 'Keyword',
+          -- 'Null',
+          -- 'EnumMember',
+          'Struct',
+          'Event',
+          -- 'Operator',
+          'TypeParameter',
+        },
       },
     },
   },
