@@ -102,6 +102,7 @@ return {
         },
         keymaps = {
           file_history_panel = {
+            { 'n', '<leader>b', false },
             {
               'n',
               '<C-g>',
@@ -142,6 +143,12 @@ return {
               end,
               { desc = 'Fixup current file staged change' },
             },
+          },
+          view = {
+            { 'n', '<leader>b', false },
+          },
+          file_panel = {
+            { 'n', '<leader>b', false },
           },
         },
       })
