@@ -70,14 +70,14 @@ return {
                   -- For Path source, use devicon based on file type otherwise use lspkind
                   local icon = vim.tbl_contains({ 'Path' }, ctx.source_name)
                       and (require('nvim-web-devicons').get_icon(ctx.label) or ctx.kind_icon)
-                    or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
+                      or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
                   return ' ' .. icon .. ' '
                 end,
               },
             },
             columns = {
               { 'kind_icon' },
-              { 'label', 'label_description', gap = 1 },
+              { 'label',    'label_description', gap = 1 },
             },
           },
         },

@@ -37,6 +37,7 @@ end
 return function()
   local params = vim.lsp.util.make_range_params() -- get params for current position
   params.context = {
+
     diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
     only = { 'quickfix' },
   }

@@ -1,7 +1,6 @@
 return {
   {
     'lucobellic/ayugloom.nvim',
-    name = 'ayugloom',
     dependencies = 'rktjmp/lush.nvim',
     priority = 1000,
   },

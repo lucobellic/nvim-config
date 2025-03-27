@@ -1,4 +1,6 @@
 -- Set border style
+vim.g.ai_cmp = false
+vim.g.suggestions = 'copilot'
 vim.g.winborder = 'single'
 local enable_border = true
 vim.g.border = {

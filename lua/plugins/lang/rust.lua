@@ -5,5 +5,4 @@ return {
       float_win_config = { border = vim.g.border.style },
     },
   },
-  config = function() end,
 }

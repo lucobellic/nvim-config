@@ -99,9 +99,9 @@ local function get_codecompanion_title(props)
 
   --- @type number?, { chat: CodeCompanion.Chat? }?
   local current_chat_index, current_chat = vim
-    .iter(ipairs(loaded_chats))
-    :filter(function(_, chat_table) return chat_table.chat.bufnr == props.buf end)
-    :nth(1)
+      .iter(ipairs(loaded_chats))
+      :filter(function(_, chat_table) return chat_table.chat.bufnr == props.buf end)
+      :nth(1)
 
   if current_chat and current_chat.chat then
     local model = current_chat.chat.settings and current_chat.chat.settings['model']
@@ -148,7 +148,7 @@ return {
       zindex = 30,
       margin = {
         vertical = { top = vim.o.laststatus == 3 and 0 or 1, bottom = 0 }, -- shift to overlap window borders
-        horizontal = { left = 0, right = 2 }, -- shift for scrollbar
+        horizontal = { left = 0, right = 2 },                              -- shift for scrollbar
       },
       overlap = {
         borders = true,
@@ -192,12 +192,12 @@ return {
       local icon = props.focused and { filetype_icon, guifg = filetype_color } or { filetype_icon, group = unfocused }
       local separator = (#diagnostics > 0 and #diffs > 0) and { separator_char .. ' ', group = color } or ''
       local filename_separator = (#diagnostics > 0 or #diffs > 0) and { ' ' .. separator_char .. ' ', group = color }
-        or ''
+          or ''
 
       local filename_component = {
         icon,
         { filetype_icon and ' ' or '' },
-        { ' ' .. filename .. ' ', group = props.focused and 'FloatTitle' or 'Title' },
+        { ' ' .. filename .. ' ',     group = props.focused and 'FloatTitle' or 'Title' },
         filename_separator,
       }
 

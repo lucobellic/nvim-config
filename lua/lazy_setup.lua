@@ -1,62 +1,39 @@
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  -- bootstrap lazy.nvim
+local lazypath = vim.env.LAZY or vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+if not (vim.env.LAZY or (vim.uv or vim.loop).fs_stat(lazypath)) then
   -- stylua: ignore
-  vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
-  vim.print('Installing lazy.nvim...')
+  vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable",
+    lazypath })
 end
-vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
+vim.opt.rtp:prepend(lazypath)
+
+if not pcall(require, 'lazy') then
+  -- stylua: ignore
+  vim.api.nvim_echo(
+    { { ("Unable to load lazy from: %s\n"):format(lazypath), "ErrorMsg" }, { "Press any key to exit...", "MoreMsg" } },
+    true, {})
+  vim.fn.getchar()
+  vim.cmd.quit()
+end
 
 require('lazy').setup({
   rocks = { hererocks = true },
   spec = {
-    { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
-
-    -- Extras
-    { import = 'lazyvim.plugins.extras.ai.copilot' },
-
-    { import = 'lazyvim.plugins.extras.coding.blink' },
-    { import = 'lazyvim.plugins.extras.coding.mini-surround' },
-    { import = 'lazyvim.plugins.extras.coding.neogen' },
-    { import = 'lazyvim.plugins.extras.coding.yanky' },
-
-    { import = 'lazyvim.plugins.extras.dap.core' },
-    { import = 'lazyvim.plugins.extras.dap.nlua' },
-
-    { import = 'lazyvim.plugins.extras.editor.dial' },
-    { import = 'lazyvim.plugins.extras.editor.harpoon2' },
-    { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
-
-    { import = 'lazyvim.plugins.extras.formatting.prettier' },
-
-    { import = 'lazyvim.plugins.extras.lang.ansible' },
-    { import = 'lazyvim.plugins.extras.lang.clangd' },
-    { import = 'lazyvim.plugins.extras.lang.cmake' },
-    { import = 'lazyvim.plugins.extras.lang.docker' },
-    { import = 'lazyvim.plugins.extras.lang.git' },
-    { import = 'lazyvim.plugins.extras.lang.json' },
-    { import = 'lazyvim.plugins.extras.lang.markdown' },
-    { import = 'lazyvim.plugins.extras.lang.nix' },
-    { import = 'lazyvim.plugins.extras.lang.python' },
-    { import = 'lazyvim.plugins.extras.lang.rust' },
-    { import = 'lazyvim.plugins.extras.lang.toml' },
-    { import = 'lazyvim.plugins.extras.lang.typescript' },
-    { import = 'lazyvim.plugins.extras.lang.yaml' },
-
-    { import = 'lazyvim.plugins.extras.lsp.neoconf' },
-    { import = 'lazyvim.plugins.extras.lsp.none-ls' },
-
-    { import = 'lazyvim.plugins.extras.test.core' },
-
-    { import = 'lazyvim.plugins.extras.ui.indent-blankline' },
-
-    { import = 'lazyvim.plugins.extras.util.dot' },
-    { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
-    { import = 'lazyvim.plugins.extras.util.octo' },
-
-    { import = 'lazyvim.plugins.extras.vscode' },
-
-    { import = 'plugins' },
+    -- { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
+    {
+      'AstroNvim/AstroNvim',
+      version = '^5',
+      import = 'astronvim.plugins',
+      opts = {                       -- AstroNvim options must be set here with the `import` key
+        mapleader = ' ',             -- This ensures the leader key must be configured before Lazy is set up
+        maplocalleader = ',',        -- This ensures the localleader key must be configured before Lazy is set up
+        icons_enabled = true,        -- Set to false to disable icons (if no Nerd Font is available)
+        pin_plugins = nil,           -- Default will pin plugins when tracking `version` of AstroNvim, set to true/false to override
+        update_notifications = true, -- Enable/disable notification about running `:Lazy update` twice to update pinned plugins
+      },
+    },
+    { import = 'community' },
+    { import = 'config.vscode' },
+    { import = 'plugins.astronvim' },
     { import = 'plugins.code' },
     { import = 'plugins.codecompanion' },
     { import = 'plugins.completion' },
@@ -79,7 +56,7 @@ require('lazy').setup({
     border = vim.g.border.style,
     backdrop = 100,
   },
-  install = { colorscheme = { 'habamax', 'gruvbox', 'ayugloom' } },
+  install = { colorscheme = { 'habamax', 'gruvbox' } },
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = {
     -- automatically check for config file changes and reload the ui
@@ -90,10 +67,31 @@ require('lazy').setup({
     rtp = {
       -- disable some rtp plugins
       disabled_plugins = {
+        '2html_plugin',
+        'bugreport',
+        'compiler',
+        'getscript',
+        'getscriptPlugin',
         'gzip',
-        -- 'matchit',
-        -- 'matchparen',
-        -- 'netrwPlugin',
+        'logipat',
+        'matchit',
+        -- "netrw",
+        -- "netrwFileHandlers",
+        -- "netrwPlugin",
+        -- "netrwSettings",
+        'optwin',
+        'rrhelper',
+        'spellfile_plugin',
+        'synmenu',
+        'syntax',
+        'tar',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'vimball',
+        'vimballPlugin',
+        'zip',
+        'zipPlugin',
         'tarPlugin',
         'tohtml',
         'tutor',
@@ -109,3 +107,5 @@ require('lazy').setup({
     fallback = true, -- Fallback to git when local plugin doesn't exist
   },
 })
+
+require('config')

@@ -28,6 +28,7 @@ return {
   'folke/which-key.nvim',
   event = 'VeryLazy',
   keys = {
+    { '<leader>w', proxy = '<c-w>', group = 'windows'},
 
     ------------------
     -- Text Manipulation

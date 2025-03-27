@@ -8,6 +8,7 @@ return {
   dependencies = { 'davidmh/cspell.nvim' },
   opts_extend = { 'sources' },
   opts = function(_, opts)
+
     local nls = require('null-ls')
     local cspell = require('cspell')
 

@@ -22,7 +22,7 @@ if vim.g.neovide then
   vim.g.neovide_padding_left = 0
 
   -- Disable mini.animate with neovide
-  vim.g.minianimate_disable = true
+  vim.g.minaianimate_disable = true
 
   vim.g.neovide_remember_window_size = true
   vim.g.neovide_fullscreen = false
