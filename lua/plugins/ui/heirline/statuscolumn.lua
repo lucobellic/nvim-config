@@ -70,9 +70,6 @@ local function get_numbers(win)
 end
 
 local statuscolumn = {
-  static = {
-    ui = require('lazyvim.util').ui,
-  },
   condition = conditions.is_active,
   provider = function(self)
     local icon = { text = ' ' }

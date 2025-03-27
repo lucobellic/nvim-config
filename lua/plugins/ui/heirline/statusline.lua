@@ -243,7 +243,7 @@ local SearchCount = {
   provider = function(self)
     return self.search
         and string.format('[%d/%d] ', self.search.current, math.min(self.search.total, self.search.maxcount))
-      or ''
+        or ''
   end,
   hl = secondary_highlight,
 }

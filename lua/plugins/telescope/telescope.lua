@@ -30,10 +30,10 @@ return {
     dependencies = {
       { 'BurntSushi/ripgrep' },
       { 'folke/trouble.nvim' },
-      {
-        'nvim-telescope/telescope-ui-select.nvim',
-        config = function() require('telescope').load_extension('ui-select') end,
-      },
+      -- {
+      --   'nvim-telescope/telescope-ui-select.nvim',
+      --   config = function() require('telescope').load_extension('ui-select') end,
+      -- },
       {
         'nvim-telescope/telescope-live-grep-args.nvim',
         config = function() require('telescope').load_extension('live_grep_args') end,
@@ -61,162 +61,163 @@ return {
         'aaronhallaert/advanced-git-search.nvim',
         config = function() require('telescope').load_extension('advanced_git_search') end,
       },
-      {
-        'debugloop/telescope-undo.nvim',
-        keys = {
-          {
-            '<leader>uu',
-            function() require('telescope').extensions.undo.undo() end,
-            desc = 'Telescope Undo Tree',
-          },
-        },
-        config = function() require('telescope').load_extension('undo') end,
-      },
+      -- {
+      --   'debugloop/telescope-undo.nvim',
+      --   keys = {
+      --     {
+      --       '<leader>uu',
+      --       function() require('telescope').extensions.undo.undo() end,
+      --       desc = 'Telescope Undo Tree',
+      --     },
+      --   },
+      --   config = function() require('telescope').load_extension('undo') end,
+      -- },
       {
         'nvim-telescope/telescope-dap.nvim',
-        keys = {
-          {
-            '<leader>fdc',
-            function() require('telescope').extensions.dap.commands({}) end,
-            desc = 'Dap Find Commands',
-          },
-          {
-            '<leader>fds',
-            function() require('telescope').extensions.dap.configurations({}) end,
-            desc = 'Dap Find Configurations',
-          },
-          {
-            '<leader>fdb',
-            function() require('telescope').extensions.dap.list_breakpoints({}) end,
-            desc = 'Dap Find Breakpoints',
-          },
-          {
-            '<leader>fdv',
-            function() require('telescope').extensions.dap.variables({}) end,
-            desc = 'Dap Find Variables',
-          },
-          {
-            '<leader>fdf',
-            function() require('telescope').extensions.dap.frames({}) end,
-            desc = 'Dap Find Frames',
-          },
-        },
+        enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
+        -- keys = {
+        --   {
+        --     '<leader>fdc',
+        --     function() require('telescope').extensions.dap.commands({}) end,
+        --     desc = 'Dap Find Commands',
+        --   },
+        --   {
+        --     '<leader>fds',
+        --     function() require('telescope').extensions.dap.configurations({}) end,
+        --     desc = 'Dap Find Configurations',
+        --   },
+        --   {
+        --     '<leader>fdb',
+        --     function() require('telescope').extensions.dap.list_breakpoints({}) end,
+        --     desc = 'Dap Find Breakpoints',
+        --   },
+        --   {
+        --     '<leader>fdv',
+        --     function() require('telescope').extensions.dap.variables({}) end,
+        --     desc = 'Dap Find Variables',
+        --   },
+        --   {
+        --     '<leader>fdf',
+        --     function() require('telescope').extensions.dap.frames({}) end,
+        --     desc = 'Dap Find Frames',
+        --   },
+        -- },
         config = function() require('telescope').load_extension('dap') end,
       },
     },
     keys = {
-      { '<leader>gc', false },
-      { '<leader>gs', false },
-      { '<leader>fF', false },
-      { '<leader>sl', false },
-      { '<c-/>', false },
-      { '<leader><leader>', false },
-      {
-        '<leader>fL',
-        function() require('telescope').extensions.live_grep_args.live_grep_args({ layout_strategy = 'vertical' }) end,
-        desc = 'Search Workspace',
-      },
-      {
-        '<C-f>',
-        function() require('telescope').extensions.live_grep_args.live_grep_args({ layout_strategy = 'vertical' }) end,
-        desc = 'Search Workspace',
-      },
-      {
-        '<leader>fb',
-        function() require('telescope.builtin').buffers() end,
-        desc = 'Find Buffer',
-      },
-      {
-        '<leader>fi',
-        function() require('telescope.builtin').symbols({ source = { 'gitmoji' } }) end,
-        desc = 'Find Gitmoji',
-      },
-      {
-        '<leader>fc',
-        function() require('telescope.builtin').commands() end,
-        desc = 'Find Commands',
-      },
-      {
-        '<leader>ff',
-        function() require('telescope.builtin').find_files() end,
-        desc = 'Find Files',
-      },
-      {
-        '<C-p>',
-        function() require('telescope.builtin').find_files() end,
-        desc = 'Find Files',
-      },
-      {
-        '<leader>gs',
-        function() require('telescope.builtin').git_status({ layout_strategy = 'vertical' }) end,
-        desc = 'Git Status',
-      },
-      {
-        '<leader>fm',
-        function() require('telescope.builtin').marks({ layout_strategy = 'vertical' }) end,
-        desc = 'Find Marks',
-      },
-
-      -- Obsidian
-      { '<leader>fof', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>fow', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Search' },
-      {
-        '<leader>fr',
-        function() require('telescope.builtin').oldfiles() end,
-        desc = 'Find Recent File',
-      },
-      {
-        '<leader>fw',
-        function() require('telescope.builtin').grep_string() end,
-        mode = { 'n', 'v' },
-        desc = 'Find Word',
-      },
-      {
-        '<leader>fs',
-        '<cmd>PersistenceLoadSession<cr>',
-        desc = 'Load session',
-      },
-
-      -- LSP
-      {
-        '<leader>flr',
-        function() require('telescope.builtin').lsp_references() end,
-        desc = 'Find References',
-      },
-      {
-        '<leader>fld',
-        function() require('telescope.builtin').lsp_definitions() end,
-        desc = 'Find Definitions',
-      },
-      {
-        '<leader>fli',
-        function() require('telescope.builtin').lsp_implementations() end,
-        desc = 'Find Implementations',
-      },
-
-      -- Symbols
-      {
-        '<leader>ss',
-        function() require('telescope.builtin').lsp_document_symbols({ symbol_width = 100 }) end,
-        desc = 'Search Document Symbols',
-      },
-      {
-        '<leader>sS',
-        function()
-          require('telescope.builtin').lsp_dynamic_workspace_symbols({
-            layout_strategy = 'vertical',
-            fname_width = 100,
-            symbol_width = 50,
-          })
-        end,
-        desc = 'Search Workspace Symbols',
-      },
-      {
-        '<leader>flt',
-        function() require('telescope.builtin').lsp_type_definitions() end,
-        desc = 'Find Type Definitions',
-      },
-
+    --   { '<leader>gc', false },
+    --   { '<leader>gs', false },
+    --   { '<leader>fF', false },
+    --   { '<leader>sl', false },
+    --   { '<c-/>', false },
+    --   { '<leader><leader>', false },
+    --   {
+    --     '<leader>fL',
+    --     function() require('telescope').extensions.live_grep_args.live_grep_args({ layout_strategy = 'vertical' }) end,
+    --     desc = 'Search Workspace',
+    --   },
+    --   {
+    --     '<C-f>',
+    --     function() require('telescope').extensions.live_grep_args.live_grep_args({ layout_strategy = 'vertical' }) end,
+    --     desc = 'Search Workspace',
+    --   },
+    --   {
+    --     '<leader>fb',
+    --     function() require('telescope.builtin').buffers() end,
+    --     desc = 'Find Buffer',
+    --   },
+    --   {
+    --     '<leader>fi',
+    --     function() require('telescope.builtin').symbols({ source = { 'gitmoji' } }) end,
+    --     desc = 'Find Gitmoji',
+    --   },
+    --   {
+    --     '<leader>fc',
+    --     function() require('telescope.builtin').commands() end,
+    --     desc = 'Find Commands',
+    --   },
+    --   {
+    --     '<leader>ff',
+    --     function() require('telescope.builtin').find_files() end,
+    --     desc = 'Find Files',
+    --   },
+    --   {
+    --     '<C-p>',
+    --     function() require('telescope.builtin').find_files() end,
+    --     desc = 'Find Files',
+    --   },
+    --   {
+    --     '<leader>gs',
+    --     function() require('telescope.builtin').git_status({ layout_strategy = 'vertical' }) end,
+    --     desc = 'Git Status',
+    --   },
+    --   {
+    --     '<leader>fm',
+    --     function() require('telescope.builtin').marks({ layout_strategy = 'vertical' }) end,
+    --     desc = 'Find Marks',
+    --   },
+    --
+    --   -- Obsidian
+    --   { '<leader>fof', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
+    --   { '<leader>fow', '<cmd>ObsidianSearch<cr>', desc = 'Obsidian Search' },
+    --   {
+    --     '<leader>fr',
+    --     function() require('telescope.builtin').oldfiles() end,
+    --     desc = 'Find Recent File',
+    --   },
+    --   {
+    --     '<leader>fw',
+    --     function() require('telescope.builtin').grep_string() end,
+    --     mode = { 'n', 'v' },
+    --     desc = 'Find Word',
+    --   },
+    --   {
+    --     '<leader>fs',
+    --     '<cmd>PersistenceLoadSession<cr>',
+    --     desc = 'Load session',
+    --   },
+    --
+    --   -- LSP
+    --   {
+    --     '<leader>flr',
+    --     function() require('telescope.builtin').lsp_references() end,
+    --     desc = 'Find References',
+    --   },
+    --   {
+    --     '<leader>fld',
+    --     function() require('telescope.builtin').lsp_definitions() end,
+    --     desc = 'Find Definitions',
+    --   },
+    --   {
+    --     '<leader>fli',
+    --     function() require('telescope.builtin').lsp_implementations() end,
+    --     desc = 'Find Implementations',
+    --   },
+    --
+    --   -- Symbols
+    --   {
+    --     '<leader>ss',
+    --     function() require('telescope.builtin').lsp_document_symbols({ symbol_width = 100 }) end,
+    --     desc = 'Search Document Symbols',
+    --   },
+    --   {
+    --     '<leader>sS',
+    --     function()
+    --       require('telescope.builtin').lsp_dynamic_workspace_symbols({
+    --         layout_strategy = 'vertical',
+    --         fname_width = 100,
+    --         symbol_width = 50,
+    --       })
+    --     end,
+    --     desc = 'Search Workspace Symbols',
+    --   },
+    --   {
+    --     '<leader>flt',
+    --     function() require('telescope.builtin').lsp_type_definitions() end,
+    --     desc = 'Find Type Definitions',
+    --   },
+    --
       -- Calls
       {
         '<leader>flci',

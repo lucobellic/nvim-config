@@ -65,4 +65,5 @@ return {
       },
     },
   },
+  config = function() end
 }

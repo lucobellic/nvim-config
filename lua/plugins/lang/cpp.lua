@@ -11,6 +11,7 @@ return {
         executor = { enabled = false },
       },
     },
+    config = function() end,
   },
   {
     'p00f/clangd_extensions.nvim',

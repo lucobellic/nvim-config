@@ -65,7 +65,7 @@ local lsp = {
     view = 'notify',
   },
   hover = {
-    enabled = true,
+    enabled = false,
     ---@type NoiceViewOptions
     opts = {
       buf_options = {

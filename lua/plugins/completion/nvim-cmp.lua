@@ -49,7 +49,7 @@ return {
     local safely_select = cmp.mapping({
       i = function(fallback)
         if
-          cmp.visible() --[[ and cmp.get_active_entry() ]]
+            cmp.visible() --[[ and cmp.get_active_entry() ]]
         then
           cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
         else
@@ -85,7 +85,7 @@ return {
       end,
       ['<C-x>'] = cmp.mapping.complete({ config = { sources = cmp.config.sources({ { name = 'cmp_ai' } }) } }),
     }
-    opts.mapping = vim.tbl_deep_extend('force', opts.mapping, tab_confirm_mapping)
+    opts.mapping = vim.tbl_deep_extend('force', opts.mapping or {}, tab_confirm_mapping)
 
     opts.sources = opts.sources or {}
     opts.sources = insert_or_replace(opts.sources, { name = 'nvim_lsp_signature_help', group_index = 2 })
@@ -99,7 +99,9 @@ return {
     end
 
     -- Enable ghost text if ai completion is integrated to cmp or if no ai suggestions is enabled
-    opts.experimental.ghost_text = (vim.g.ai_cmp or vim.g.suggestions == false) and { hl_group = 'Comment' } or false
+    opts.experimental = {
+      ghost_text = (vim.g.ai_cmp or vim.g.suggestions == false) and { hl_group = 'Comment' } or false,
+    }
 
     setup_text_changed_debounce(500)
 

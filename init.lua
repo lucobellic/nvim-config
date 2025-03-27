@@ -1,4 +1,5 @@
 -- Set border style
+-- TODO: update with neovim 0.11 border option
 local enable_border = true -- not vim.g.neovide
 vim.g.border = {
   enabled = enable_border,
@@ -20,6 +21,8 @@ if vim.env.PROF then
     pick = { picker = 'snacks' },
   })
 end
+
+vim.g.suggestions = 'copilot' -- or 'supermaven' or false
 
 require('config')
 require('lazy_setup')
