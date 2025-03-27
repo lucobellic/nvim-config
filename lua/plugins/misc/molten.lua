@@ -4,6 +4,7 @@ local is_wezterm = true -- os.getenv('TERM_PROGRAM') == 'WezTerm'
 local kitty_dependencies = {
   {
     '3rd/image.nvim',
+    enabled = false,
     dependencies = { 'luarocks.nvim' },
     opts = {
       backend = 'kitty',
