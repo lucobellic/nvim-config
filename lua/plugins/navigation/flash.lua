@@ -1,5 +1,3 @@
-local Flash = require('flash')
-
 ---@param opts Flash.Format
 local function format(opts)
   -- always show first and second label
@@ -18,6 +16,7 @@ local function add_fold(match)
 end
 
 local function label2_jump(multi_window, pattern)
+  local Flash = require('flash')
   Flash.jump({
     search = { mode = 'search', multi_window = multi_window },
     label = { after = false, before = { 0, 0 }, uppercase = false, format = format },

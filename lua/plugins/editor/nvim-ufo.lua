@@ -40,6 +40,7 @@ end
 
 return {
   'kevinhwang91/nvim-ufo',
+  enabled = true,
   vscode = false,
   event = 'VeryLazy',
   dependencies = { 'kevinhwang91/promise-async' },
@@ -84,9 +85,10 @@ return {
   opts = {
     fold_virt_text_handler = function(virtual_text, lnum, end_lnum, width, truncate, ctx)
       local default_virtual_text =
-        require('ufo.decorator').defaultVirtTextHandler(virtual_text, lnum, end_lnum, width, truncate, ctx)
+          require('ufo.decorator').defaultVirtTextHandler(virtual_text, lnum, end_lnum, width, truncate, ctx)
       table.insert(default_virtual_text, #default_virtual_text, { '  ', 'Normal' })
       return default_virtual_text
     end,
   },
+  config = function(_, opts) require('ufo').setup(opts) end,
 }

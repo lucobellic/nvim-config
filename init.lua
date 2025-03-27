@@ -1,4 +1,6 @@
 -- Set border style
+vim.g.ai_cmp = false
+vim.g.suggestions = 'copilot'
 vim.g.winborder = 'single'
 local enable_border = true
 vim.g.border = {
@@ -21,6 +23,8 @@ if vim.env.PROF then
     pick = { picker = 'snacks' },
   })
 end
+
+vim.g.suggestions = 'copilot' -- or 'supermaven' or false
 
 require('config')
 require('lazy_setup')

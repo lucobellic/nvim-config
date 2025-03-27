@@ -16,7 +16,11 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
   return keymap_set(mode, lhs, rhs, opts)
 end
 
-require('config.diagnostic')
 require('config.filetype')
 require('config.neovide')
 require('config.shell')
+require('config.vscode')
+require('util.autosave').setup()
+
+-- Using astronvim instead of lazyvim the following includes are required
+-- require('config.autocmds')

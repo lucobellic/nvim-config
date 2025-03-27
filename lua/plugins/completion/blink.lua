@@ -48,22 +48,16 @@ return {
     end
 
     opts = opts or {}
-    opts.completion.menu.draw.treesitter = {}
+    opts.sources = opts.sources or {}
     opts.sources.default = vim
-      .iter(opts.sources.default or {})
-      :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
-      :totable()
-    return vim.tbl_deep_extend('force', opts, {
-      keymap = {
-        preset = vim.g.ai_cmp and 'super-tab' or 'enter',
-        ['<Up>'] = { 'select_prev', 'fallback' },
-        ['<Down>'] = { 'select_next', 'fallback' },
-        ['<C-k>'] = { 'select_prev', 'fallback' },
-        ['<C-j>'] = { 'select_next', 'fallback' },
-        ['<C-l>'] = {},
-        ['<C-h>'] = {},
-      },
+        .iter(opts.sources.default or { 'lsp', 'path' })
+        :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
+        :totable()
+
+    opts = vim.tbl_deep_extend('force', opts, {
+      cmdline = { enabled = false },
       completion = {
+        list = { selection = { preselect = true, auto_insert = false } },
         documentation = { window = { border = vim.g.winborder } },
         menu = {
           auto_show = debounce == nil,
@@ -76,18 +70,31 @@ return {
                   -- For Path source, use devicon based on file type otherwise use lspkind
                   local icon = vim.tbl_contains({ 'Path' }, ctx.source_name)
                       and (require('nvim-web-devicons').get_icon(ctx.label) or ctx.kind_icon)
-                    or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
+                      or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
                   return ' ' .. icon .. ' '
                 end,
               },
             },
             columns = {
               { 'kind_icon' },
-              { 'label', 'label_description', gap = 1 },
+              { 'label',    'label_description', gap = 1 },
             },
           },
         },
       },
     })
+
+    opts.completion.menu.draw.treesitter = {}
+    opts.keymap = {
+      preset = vim.g.ai_cmp and 'super-tab' or 'enter',
+      ['<Up>'] = { 'select_prev', 'fallback' },
+      ['<Down>'] = { 'select_next', 'fallback' },
+      ['<C-k>'] = { 'select_prev', 'fallback' },
+      ['<C-j>'] = { 'select_next', 'fallback' },
+      ['<C-l>'] = {},
+      ['<C-h>'] = {},
+    }
+
+    return opts
   end,
 }

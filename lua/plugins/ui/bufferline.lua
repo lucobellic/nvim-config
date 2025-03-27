@@ -153,6 +153,8 @@ return {
     },
   },
   keys = {
+    { 'H', '<cmd>BufferLineCyclePrev<cr>', desc = 'Buffer Previous' },
+    { 'L', '<cmd>BufferLineCycleNext<cr>', desc = 'Buffer Next' },
     { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
     { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
@@ -237,14 +239,7 @@ return {
           icon = '',
           style = 'none',
         },
-        offsets = {
-          -- {
-          --   filetype = "neo-tree",
-          --   text = "File Explorer",
-          --   text_align = "center",
-          --   separator = false,
-          -- }
-        },
+        offsets = nil,
         diagnostics = false,
         diagnostics_update_in_insert = false,
         diagnostics_indicator = nil,

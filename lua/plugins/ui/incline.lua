@@ -3,7 +3,8 @@ local unfocused = 'NonText'
 local focused = 'Identifier'
 
 local function get_diagnostic_label(props)
-  local icons = require('lazyvim.config').icons.diagnostics
+  -- local icons = require('lazyvim.config').icons.diagnostics
+  local icons = {}
   local label = {}
 
   for severity, icon in pairs(icons) do
@@ -16,7 +17,8 @@ local function get_diagnostic_label(props)
 end
 
 local function get_git_diff(props)
-  local git_icons = require('lazyvim.config').icons.git
+  -- local git_icons = require('lazyvim.config').icons.git
+  local git_icons = {}
   local icons = { removed = git_icons.removed, changed = git_icons.modified, added = git_icons.added }
   local highlight = { removed = 'GitSignsDelete', changed = 'GitSignsChange', added = 'GitSignsAdd' }
   local labels = {}

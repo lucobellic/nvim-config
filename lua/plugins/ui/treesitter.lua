@@ -74,4 +74,5 @@ return {
       move = { enable = true },
     },
   },
+  config = function() end
 }

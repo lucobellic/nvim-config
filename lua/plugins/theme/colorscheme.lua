@@ -1,9 +1,10 @@
 return {
   {
     'lucobellic/ayugloom.nvim',
-    name = 'ayugloom',
     dependencies = 'rktjmp/lush.nvim',
+    dev = true,
     priority = 1000,
+    dev = true,
   },
   {
     'catppuccin/nvim',

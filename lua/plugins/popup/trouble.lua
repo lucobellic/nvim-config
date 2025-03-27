@@ -2,6 +2,7 @@
 
 return {
   'folke/trouble.nvim',
+  cmd = { 'Trouble' },
   keys = {
     {
       '<leader>xX',
@@ -35,9 +36,9 @@ return {
     },
   },
   opts = {
-    max_items = 500, -- limit number of items that can be displayed per section
+    max_items = 500,         -- limit number of items that can be displayed per section
     warn_no_results = false, -- show a warning when there are no results
-    open_no_results = true, -- open the trouble window when there are no results
+    open_no_results = true,  -- open the trouble window when there are no results
     ---@type trouble.Window.opts
     preview = {
       type = 'main',

@@ -65,7 +65,7 @@ local lsp = {
     view = 'notify',
   },
   hover = {
-    enabled = true,
+    enabled = false,
     ---@type NoiceViewOptions
     opts = {
       buf_options = {
@@ -84,24 +84,24 @@ local filter_skip = {
       -- Hide display messages but still show them in :messages
       { event = 'msg_show', kind = { '', 'echo', 'echomsg', 'search_count' }, find = 'written' },
       { event = 'msg_show', kind = { '', 'echo', 'echomsg', 'search_count' }, find = 'yanked' },
-      { event = 'msg_show', kind = 'wmsg', find = 'BOTTOM' },
-      { event = 'notify', kind = 'error', find = 'Neo' },
-      { event = 'msg_show', kind = 'emsg', find = 'Pattern not found' },
-      { event = 'msg_show', kind = 'lua_error', find = 'bdelete' },
-      { event = 'msg_show', kind = 'lua_error', find = 'inlay_hint' },
-      { event = 'msg_show', kind = '', find = 'lnum' },
-      { event = 'notify', kind = 'warn', find = 'Unsupported input type' },
-      { event = 'notify', kind = 'error', find = 'invalid AST' },
-      { event = 'notify', kind = 'error', find = 'Failed to set cursor' },
-      { event = 'notify', kind = 'error', find = 'Edgy' },
-      { event = 'msg_show', kind = '', find = 'query' },
-      { event = 'msg_show', kind = 'lua_error', find = 'Autocommands' },
+      { event = 'msg_show', kind = 'wmsg',                                    find = 'BOTTOM' },
+      { event = 'notify',   kind = 'error',                                   find = 'Neo' },
+      { event = 'msg_show', kind = 'emsg',                                    find = 'Pattern not found' },
+      { event = 'msg_show', kind = 'lua_error',                               find = 'bdelete' },
+      { event = 'msg_show', kind = 'lua_error',                               find = 'inlay_hint' },
+      { event = 'msg_show', kind = '',                                        find = 'lnum' },
+      { event = 'notify',   kind = 'warn',                                    find = 'Unsupported input type' },
+      { event = 'notify',   kind = 'error',                                   find = 'invalid AST' },
+      { event = 'notify',   kind = 'error',                                   find = 'Failed to set cursor' },
+      { event = 'notify',   kind = 'error',                                   find = 'Edgy' },
+      { event = 'msg_show', kind = '',                                        find = 'query' },
+      { event = 'msg_show', kind = 'lua_error',                               find = 'Autocommands' },
       -- Hide spamming pylsp messages
-      { event = 'lsp', find = 'pylsp' },
+      { event = 'lsp',      find = 'pylsp' },
       -- Hide spamming cspell messages
-      { event = 'lsp', find = 'cspell' },
+      { event = 'lsp',      find = 'cspell' },
       -- Hide spamming null-ls messages
-      { event = 'lsp', find = 'diagnostics' },
+      { event = 'lsp',      find = 'diagnostics' },
     },
   },
   opts = { stop = true, skip = true },
@@ -115,6 +115,18 @@ return {
     { '<c-f>', false },
     { '<c-p>', false },
     {
+      '<S-Enter>',
+      function() require('noice').redirect(vim.fn.getcmdline()) end,
+      mode = 'c',
+      desc = 'Redirect Cmdline',
+    },
+    { '<leader>sn',  '',                                             desc = 'noice' },
+    { '<leader>snl', function() require('noice').cmd('last') end,    desc = 'Noice Last Message' },
+    { '<leader>snh', function() require('noice').cmd('history') end, desc = 'Noice History' },
+    { '<leader>sna', function() require('noice').cmd('all') end,     desc = 'Noice All' },
+    { '<leader>snd', function() require('noice').cmd('dismiss') end, desc = 'Dismiss All' },
+    { '<leader>snt', function() require('noice').cmd('pick') end,    desc = 'Noice Picker (Telescope/FzfLua)' },
+    {
       '<leader>snn',
       function() require('telescope').extensions.notify.notify() end,
       desc = 'Find Notifications',
@@ -126,20 +138,20 @@ return {
 
     -- you can enable a preset for easier configuration
     presets = {
-      bottom_search = { enabled = false }, -- use a classic bottom cmdline for search
-      command_palette = { enabled = false }, -- position the cmdline and popupmenu together
+      bottom_search = { enabled = false },         -- use a classic bottom cmdline for search
+      command_palette = { enabled = false },       -- position the cmdline and popupmenu together
       long_message_to_split = { enabled = false }, -- long messages will be sent to a split
-      inc_rename = false, -- enables an input dialog for inc-rename.nvim
-      lsp_doc_border = true, -- add a border to hover docs and signature help
+      inc_rename = false,                          -- enables an input dialog for inc-rename.nvim
+      lsp_doc_border = true,                       -- add a border to hover docs and signature help
     },
     views = views,
     routes = { filter_skip },
     messages = {
-      enabled = true, -- enables the Noice messages UI
-      view = 'notify', -- default view for messages
-      view_error = 'notify', -- view for errors
-      view_warn = 'notify', -- view for warnings
-      view_history = 'messages', -- view for :messages
+      enabled = true,              -- enables the Noice messages UI
+      view = 'notify',             -- default view for messages
+      view_error = 'notify',       -- view for errors
+      view_warn = 'notify',        -- view for warnings
+      view_history = 'messages',   -- view for :messages
       view_search = 'virtualtext', -- view for search count messages. Set to `false` to disable
     },
     notify = {

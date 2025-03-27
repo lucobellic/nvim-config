@@ -1,3 +1,6 @@
+local M = {}
+
+-- Diagnostic configurations
 local diagnostic_virtual_text = {
   spacing = 1,
   source = 'if_many',
@@ -17,9 +20,7 @@ local diagnostic_current_virtual_lines = vim.tbl_extend('force', diagnostic_virt
   current_line = true,
 })
 
-
--- Diagnostic toggle
-vim.api.nvim_create_user_command('ToggleDiagnosticVirtualText', function()
+function M.toggle_diagnostic_virtual_text()
   if not vim.diagnostic.config().virtual_text then
     vim.diagnostic.config({
       virtual_text = diagnostic_current_virtual_text,
@@ -34,11 +35,11 @@ vim.api.nvim_create_user_command('ToggleDiagnosticVirtualText', function()
     vim.diagnostic.config({
       virtual_text = false,
     })
-    vim.notify('Disabled Diagnostics Virtual Text', vim.log.levels.WARN, { title = 'Diagnostic' })
+    vim.notify('Disabled Diagnostic Virtual Text', vim.log.levels.INFO, { title = 'Diagnostic' })
   end
-end, { desc = 'Toggle Diagnostic Virtual Text' })
+end
 
-vim.api.nvim_create_user_command('ToggleDiagnosticVirtualLines', function()
+function M.toggle_diagnostic_virtual_lines()
   if not vim.diagnostic.config().virtual_lines then
     vim.diagnostic.config({
       virtual_lines = diagnostic_current_virtual_lines,
@@ -55,9 +56,9 @@ vim.api.nvim_create_user_command('ToggleDiagnosticVirtualLines', function()
     })
     vim.notify('Disabled Diagnostics Lines', vim.log.levels.WARN, { title = 'Diagnostic' })
   end
-end, { desc = 'Toggle Diagnostic Line' })
+end
 
-vim.api.nvim_create_user_command('ToggleDiagnostics', function()
+function M.toggle_diagnostics()
   local diagnostic_enabled = vim.diagnostic.is_enabled()
   if diagnostic_enabled then
     vim.diagnostic.enable(false)
@@ -66,4 +67,16 @@ vim.api.nvim_create_user_command('ToggleDiagnostics', function()
     vim.diagnostic.enable(true)
     vim.notify('Enabled Diagnostics', vim.log.levels.INFO, { title = 'Diagnostic' })
   end
-end, { desc = 'Toggle Diagnostics' })
+end
+
+function M.repeat_change()
+  if vim.g.change_text then
+    vim.api.nvim_feedkeys(
+      vim.api.nvim_replace_termcodes('cgn' .. vim.g.change_text .. '<esc>', true, false, true),
+      'n',
+      false
+    )
+  end
+end
+
+return M
