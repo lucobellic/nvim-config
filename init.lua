@@ -22,4 +22,5 @@ if vim.env.PROF then
   })
 end
 
+require('lazy_setup')
 require('config')
