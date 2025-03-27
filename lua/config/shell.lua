@@ -1,4 +1,4 @@
-if vim.fn.executable('fish') == 1 then
+if not os.getenv("INSIDE_DOCKER") and vim.fn.executable('fish') == 1 then
   vim.o.shell = 'fish'
   vim.o.shellpipe = '|'
   vim.o.shellcmdflag='-c'
