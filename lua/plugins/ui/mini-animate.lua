@@ -24,7 +24,7 @@ return {
     },
     scroll = {
       enable = true,
-      subscroll = require('mini.animate').gen_subscroll.equal({ predicate = throttle_scroll }),
+      subscroll = function() require('mini.animate').gen_subscroll.equal({ predicate = throttle_scroll }) end,
     },
     resize = {
       enable = false, -- Do not work while holding resize key

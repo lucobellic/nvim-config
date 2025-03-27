@@ -13,9 +13,8 @@ return {
   {
     'nvim-neo-tree/neo-tree.nvim',
     enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
-    branch = 'v3.x',
+    version = '*',
     dependencies = {
-      'nvim-telescope/telescope.nvim',
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
       'nvim-tree/nvim-web-devicons',
@@ -25,15 +24,13 @@ return {
       { '<leader>E', false },
       {
         '<leader>ee',
-        '<leader>fe',
+        '<cmd>Neotree toggle<cr>',
         desc = 'Explorer NeoTree (root dir)',
-        remap = true,
       },
       {
-        '<leader>eE',
-        '<leader>fE',
-        desc = 'Explorer NeoTree (cwd)',
-        remap = true,
+        '<leader>fe',
+        '<cmd>Neotree toggle<cr>',
+        desc = 'Explorer NeoTree (root dir)',
       },
       {
         '<leader>ef',

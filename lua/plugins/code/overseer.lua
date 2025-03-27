@@ -55,6 +55,7 @@ return {
       { '<leader>op', open_first_failed_task, desc = 'Overseer Open Failed Task' },
     },
     opts = {
+      dap = false, -- TODO: add condition to only load if dap is loaded
       strategy = {
         'toggleterm',
         auto_scroll = false,

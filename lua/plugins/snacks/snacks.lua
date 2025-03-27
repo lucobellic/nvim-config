@@ -4,6 +4,7 @@ return {
     { '<leader>..', function() require('snacks').scratch() end, desc = 'Scratch Toggle Buffer' },
     { '<leader>f.', function() require('snacks').scratch.select() end, desc = 'Scratch Select Buffer' },
     { '<leader>ps', function() require('snacks').profiler.scratch() end, desc = 'Scratch Profiler Buffer' },
+    { '<leader>fe', false },
   },
   opts = function()
     local snacks = require('snacks')

@@ -8,6 +8,7 @@ return {
   dependencies = { 'davidmh/cspell.nvim' },
   opts = function(_, opts)
     local nls = require('null-ls')
+    opts.sources = opts.sources or {}
     opts.fallback_severity = vim.diagnostic.severity.HINT
     table.insert(opts.sources, nls.builtins.formatting.prettierd)
     table.insert(opts.sources, nls.builtins.formatting.mdformat)

@@ -163,4 +163,5 @@ return {
       },
     },
   },
+  config = function() end,
 }
