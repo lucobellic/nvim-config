@@ -102,6 +102,9 @@ return {
       end,
     },
     menu = {
+      win_configs = {
+        border = vim.g.winborder,
+      },
       keymaps = {
         ['q'] = '<c-w>q',
         ['<Esc>'] = '<c-w>q',

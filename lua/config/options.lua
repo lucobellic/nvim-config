@@ -13,6 +13,8 @@ vim.g.ai_cmp = false
 vim.g.suggestions = 'copilot'
 -- vim.g.suggestions = false
 
+vim.g.winborder = 'single'
+
 vim.o.conceallevel = 2
 vim.o.laststatus = 3
 vim.o.signcolumn = 'yes:2'
