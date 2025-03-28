@@ -10,17 +10,20 @@ vim.g.border = {
 if vim.env.PROF then
   local snacks = vim.fn.stdpath('data') .. '/lazy/snacks.nvim'
   vim.opt.rtp:append(snacks)
+  ---@diagnostic disable-next-line: missing-fields
   require('snacks.profiler').startup({
-    startup = {
-      event = 'VimEnter', -- stop profiler on this event. Defaults to `VimEnter`
+    startup = { -- stop profiler on this event. Defaults to `VimEnter`
+      -- event = 'VimEnter',
       -- event = "UIEnter",
-      -- event = "VeryLazy",
+      event = 'VeryLazy',
     },
-    pick = {
-      picker = 'telescope',
-    },
+    pick = { picker = 'snacks' },
   })
 end
 
-require('lazy_setup')
 require('config')
+require('lazy_setup')
+
+if not vim.g.started_by_firenvim then
+  require('util.work.overseer')
+end

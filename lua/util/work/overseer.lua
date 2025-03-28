@@ -5,6 +5,7 @@ local function cmake_build()
   local Job = require('plenary.job')
   local overseer = require('overseer')
   if not cmake_targets then
+    ---@diagnostic disable-next-line: missing-fields
     Job:new({
       command = 'cmake',
       args = { '--build', '../build', '--target', 'help' },
@@ -49,6 +50,7 @@ end
 local function get_reach_result(args)
   local Job = require('plenary.job')
   local results = {}
+  ---@diagnostic disable-next-line: missing-fields
   Job:new({
     command = 'reach',
     args = args,

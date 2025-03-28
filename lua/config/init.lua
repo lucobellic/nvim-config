@@ -6,6 +6,7 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
   opts.silent = opts.silent ~= false
   -- Add custom repeatable option
   if opts.repeatable then
+    ---@diagnostic disable-next-line: inject-field
     opts.repeatable = nil
     return keymap_set(mode, lhs, function(...)
       rhs(...)
@@ -19,7 +20,3 @@ require('config.diagnostic')
 require('config.filetype')
 require('config.neovide')
 require('config.shell')
-
-if not vim.g.started_by_firenvim then
-  require('util.work.overseer')
-end
