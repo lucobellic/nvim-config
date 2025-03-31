@@ -152,55 +152,57 @@ local function get_edgy_window(winnr)
 end
 
 local amount = 5
+local smart_splits_ok, smart_splits = pcall(require, 'smart-splits')
+if smart_splits_ok and not vim.g.vscode then
+  -- TODO: Handle left edgy window
+  map('n', '<c-left>', function()
+    local right_edgy = get_edgy_window(vim.fn.winnr('l'))
+    if right_edgy then
+      right_edgy:resize('width', amount)
+    else
+      smart_splits.resize_left()
+    end
+  end, {
+    repeatable = true,
+    desc = 'Resize left',
+  })
 
--- TODO: Handle left edgy window
-map('n', '<c-left>', function()
-  local right_edgy = get_edgy_window(vim.fn.winnr('l'))
-  if right_edgy then
-    right_edgy:resize('width', amount)
-  else
-    require('smart-splits').resize_left()
-  end
-end, {
-  repeatable = true,
-  desc = 'Resize left',
-})
+  map('n', '<c-right>', function()
+    local right_edgy = get_edgy_window(vim.fn.winnr('l'))
+    if right_edgy then
+      right_edgy:resize('width', -amount)
+    else
+      smart_splits.resize_right()
+    end
+  end, {
+    repeatable = true,
+    desc = 'Resize right',
+  })
 
-map('n', '<c-right>', function()
-  local right_edgy = get_edgy_window(vim.fn.winnr('l'))
-  if right_edgy then
-    right_edgy:resize('width', -amount)
-  else
-    require('smart-splits').resize_right()
-  end
-end, {
-  repeatable = true,
-  desc = 'Resize right',
-})
+  map('n', '<c-up>', function()
+    local down_edgy = get_edgy_window(vim.fn.winnr('j'))
+    if down_edgy then
+      down_edgy:resize('height', amount)
+    else
+      smart_splits.resize_up()
+    end
+  end, {
+    repeatable = true,
+    desc = 'Resize up',
+  })
 
-map('n', '<c-up>', function()
-  local down_edgy = get_edgy_window(vim.fn.winnr('j'))
-  if down_edgy then
-    down_edgy:resize('height', amount)
-  else
-    require('smart-splits').resize_up()
-  end
-end, {
-  repeatable = true,
-  desc = 'Resize up',
-})
-
-map('n', '<c-down>', function()
-  local down_edgy = get_edgy_window(vim.fn.winnr('j'))
-  if down_edgy then
-    down_edgy:resize('height', -amount)
-  else
-    require('smart-splits').resize_down()
-  end
-end, {
-  repeatable = true,
-  desc = 'Resize up',
-})
+  map('n', '<c-down>', function()
+    local down_edgy = get_edgy_window(vim.fn.winnr('j'))
+    if down_edgy then
+      down_edgy:resize('height', -amount)
+    else
+      smart_splits.resize_down()
+    end
+  end, {
+    repeatable = true,
+    desc = 'Resize up',
+  })
+end
 
 
 map('n', '<leader>A', '<cmd>silent %y+<cr>', { desc = 'Copy all' })
@@ -236,61 +238,7 @@ vim.keymap.del('n', '<leader>n')
 vim.keymap.del('n', '<leader>ub')
 
 -- VSCode
-if vim.g.vscode then
-  local vscode = require('vscode')
-  vim.notify = vscode.notify
-
-  vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = false, silent = true })
-  vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = false, silent = true })
-
-  -- Format
-  vim.keymap.set('n', '<leader>=', function()
-    vscode.action('editor.action.formatDocument')
-  end, { desc = 'Format document' })
-
-  -- File Explorer
-  vim.keymap.set('n', '<leader>fe', function()
-    vscode.action('workbench.explorer.fileView.focus')
-  end, { desc = 'Focus file explorer' })
-
-  -- Toggle Shortcut
-  vim.keymap.set('n', '<leader>;e', function()
-    vscode.action('workbench.action.toggleSidebarVisibility')
-  end, { desc = 'Toggle sidebar visibility' })
-
-  vim.keymap.set('n', '<leader>;c', function()
-    vscode.action('workbench.panel.composerViewPane2')
-  end, { desc = 'Toggle composer view' })
-
-  vim.keymap.set('n', '<leader>;a', function()
-    vscode.action('workbench.panel.aichat')
-  end, { desc = 'Toggle AI chat' })
-
-  vim.keymap.set('n', '<leader>;p', function()
-    vscode.action('workbench.action.terminal.toggleTerminal')
-  end, { desc = 'Toggle terminal' })
-
-  vim.keymap.set(
-    'n',
-    '<leader>ub',
-    function() vscode.action('gitlens.toggleReviewMode') end,
-    { desc = 'Line Blame' }
-  )
-
-  -- Toggle Bars
-
-  vim.keymap.set('n', '<leader>wl', function()
-    vscode.action('workbench.action.toggleAuxiliaryBar')
-  end, { desc = 'Toggle right bar' })
-
-  vim.keymap.set('n', '<leader>wh', function()
-    vscode.action('workbench.action.toggleSidebarVisibility')
-  end, { desc = 'Toggle left bar' })
-
-  vim.keymap.set('n', '<leader>wj', function()
-    vscode.action('workbench.action.togglePanel')
-  end, { desc = 'Toggle panel' })
-end
+require('config.vscode')
 
 -- Create command from keymaps
 require('util.commands').create_command_from_keymaps()
