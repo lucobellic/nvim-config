@@ -1,3 +1,77 @@
+if vim.g.vscode then
+  local vscode = require('vscode')
+
+  vim.keymap.set(
+    'n',
+    '<leader>bch',
+    function()
+      vscode.eval([[
+        const { activeTabGroup } = vscode.window.tabGroups;
+        const { tabs, activeTab } = activeTabGroup;
+
+        if (activeTab) {
+          tabs.slice(0, tabs.indexOf(activeTab))
+            .filter(tab => !tab.isPinned)
+            .forEach(tab => vscode.window.tabGroups.close(tab));
+        }
+      ]])
+    end,
+    { desc = 'Buffer Line Close Left' }
+  )
+
+  vim.keymap.set(
+    'n',
+    '<leader>bcl',
+    function()
+      vscode.eval([[
+      const { activeTabGroup } = vscode.window.tabGroups;
+      const { tabs, activeTab } = activeTabGroup;
+
+      if (activeTab) {
+        tabs.slice(tabs.indexOf(activeTab) + 1)
+          .filter(tab => !tab.isPinned)
+          .forEach(tab => vscode.window.tabGroups.close(tab));
+      }
+    ]])
+    end,
+    { desc = 'Buffer Line Close Right' }
+  )
+
+  vim.keymap.set(
+    'n',
+    '<leader>bcv',
+    function()
+      vscode.eval([[
+      const { activeTabGroup } = vscode.window.tabGroups;
+      const activeTab = activeTabGroup.activeTab;
+
+      vscode.window.tabGroups.all
+        .flatMap(group => group.tabs)
+        .filter(tab => tab !== activeTab && !tab.isPinned)
+        .forEach(tab => vscode.window.tabGroups.close(tab));
+    ]])
+    end,
+    { desc = 'Buffer Line Close Non Visible' }
+  )
+
+  vim.keymap.set(
+    'n',
+    '<leader>bco',
+    function()
+      vscode.eval([[
+        const { activeTabGroup } = vscode.window.tabGroups;
+        const activeTab = activeTabGroup.activeTab;
+
+        vscode.window.tabGroups.all
+          .flatMap(group => group.tabs)
+          .filter(tab => tab !== activeTab && !tab.isPinned)
+          .forEach(tab => vscode.window.tabGroups.close(tab));
+      ]])
+    end,
+    { desc = 'Buffer Line Close Others (Non Pinned)' }
+  )
+end
+
 --- Check if a buffer is pinned
 ---@param buf any
 local function is_pinned(buf)
