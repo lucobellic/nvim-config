@@ -1,21 +1,19 @@
 ---@return dropbar_t?, number?, dropbar_symbol_t?
 local function get_bar_with_opened_component()
   require('dropbar')
-  ---@type table<integer, dropbar_menu_t>|nil
-  local menus = require('dropbar.utils.menu').get()
-  local menu = vim.iter(menus):filter(function(menu) return menu.is_opened end):next()
-  local win = menu and menu.prev_win or nil
 
   ---@type table<integer, table<integer, dropbar_t>>|nil
   local bars = require('dropbar.utils.bar').get()
 
   -- From the table of table create only one table where all second id is equal to win
   local current_bar = nil
-  for _, table_bar in pairs(bars or {}) do
-    for i, bar in pairs(table_bar or {}) do
-      if i == win then
-        current_bar = bar
-        break
+  for buf, table_bar in pairs(bars or {}) do
+    if buf == vim.g.dropbar_current_buffer then
+      for win, bar in pairs(table_bar or {}) do
+        if win == vim.g.dropbar_current_window then
+          current_bar = bar
+          break
+        end
       end
     end
   end
@@ -39,7 +37,11 @@ return {
   keys = {
     {
       '<C-m>',
-      function() require('dropbar.api').pick() end,
+      function()
+        vim.g.dropbar_current_buffer = vim.api.nvim_get_current_buf()
+        vim.g.dropbar_current_window = vim.api.nvim_get_current_win()
+        require('dropbar.api').pick()
+      end,
       desc = 'Dropbar Pick Item',
     },
   },
