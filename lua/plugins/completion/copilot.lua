@@ -50,11 +50,8 @@ return {
         },
       },
       filetypes = {
-        markdown = true,
-        gitcommit = true,
-        gitrebase = true,
-        hgcommit = true,
-        svn = true,
+        ['*'] = true,
+        ['.'] = true,
       },
       server_opts_overrides = {
         settings = {
@@ -63,6 +60,8 @@ return {
           },
         },
       },
+      copilot_model = 'gpt-4o-copilot',
+      should_attach = function() return true end,
     },
     config = function(_, opts)
       require('copilot').setup(opts)
