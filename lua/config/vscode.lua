@@ -31,15 +31,6 @@ if vim.g.vscode then
 
   vim.keymap.set(
     'n',
-    '<leader>;c',
-    function() vscode.action('workbench.panel.composerViewPane2') end,
-    { desc = 'Toggle composer view' }
-  )
-
-  vim.keymap.set('n', '<leader>;a', function() vscode.action('workbench.panel.aichat') end, { desc = 'Toggle AI chat' })
-
-  vim.keymap.set(
-    'n',
     '<leader>;p',
     function() vscode.action('workbench.action.terminal.toggleTerminal') end,
     { desc = 'Toggle terminal' }
@@ -81,9 +72,7 @@ if vim.g.vscode then
   vim.keymap.set(
     'n',
     '<c-up>',
-    function()
-      vscode.action('workbench.action.increaseViewHeight')
-    end,
+    function() vscode.action('workbench.action.increaseViewHeight') end,
     { desc = 'Increase Window Height' }
   )
   vim.keymap.set(
