@@ -1,4 +1,4 @@
-local conditions = require('heirline.conditions')
+---@alias Sign {name:string, text:string, texthl:string, priority:number}
 
 local M = {}
 
@@ -10,27 +10,12 @@ function M.icon(sign)
   return sign.texthl and ('%#' .. sign.texthl .. '#' .. text):gsub('%s*$', '') .. '%*' or text
 end
 
----@alias Sign {name:string, text:string, texthl:string, priority:number}
--- Returns a list of regular and extmark signs sorted by priority (low to high)
 ---@return Sign[]
 ---@param buf number
 ---@param lnum number
 function M.get_signs(buf, lnum)
-  -- Get regular signs
   ---@type Sign[]
   local signs = {}
-  if vim.fn.has('nvim-0.10') == 0 then
-    -- Only needed for Neovim <0.10
-    -- Newer versions include legacy signs in nvim_buf_get_extmarks
-    for _, sign in ipairs(vim.fn.sign_getplaced(buf, { group = '*', lnum = lnum })[1].signs) do
-      local ret = vim.fn.sign_getdefined(sign.name)[1] --[[@as Sign]]
-      if ret then
-        ret.priority = sign.priority
-        signs[#signs + 1] = ret
-      end
-    end
-  end
-  -- Get extmark signs
   local extmarks = vim.api.nvim_buf_get_extmarks(
     buf,
     -1,
@@ -58,23 +43,15 @@ local function get_numbers(win)
   local is_num = vim.wo[win].number
   local is_relnum = vim.wo[win].relativenumber
   if (is_num or is_relnum) and vim.v.virtnum == 0 then
-    if vim.v.relnum == 0 then
-      lines = is_num and '%l' or '%r' -- the current line
-    else
-      lines = is_relnum and '%r' or '%l' -- other lines
-    end
-    lines = '%=' .. lines -- right align
+    lines = '%=%l' .. lines -- right align
   end
 
   return lines
 end
 
 local statuscolumn = {
-  static = {
-    ui = require('lazyvim.util').ui,
-  },
-  condition = conditions.is_active,
-  provider = function(self)
+  condition = function() return require('heirline.conditions').is_active() end,
+  provider = function()
     local icon = { text = ' ' }
     local git = { text = ' ' }
     local fold = { text = ' ' }

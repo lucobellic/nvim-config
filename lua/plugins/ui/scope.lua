@@ -1,7 +1,8 @@
 return {
-  'tiagovla/scope.nvim',
+  'lucobellic/scope.nvim',
   event = 'VeryLazy',
-  config = function()
-    require('scope').setup({ restore_state = true })
-  end,
+  version = '*',
+  opts = {
+    restore_state = true,
+  },
 }
