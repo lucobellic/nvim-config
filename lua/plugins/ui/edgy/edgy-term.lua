@@ -6,10 +6,10 @@ return {
         title = 'toggleterm',
         ft = 'toggleterm',
         open = function()
-          local buffers = vim.tbl_filter(
-            function(buf) return vim.fn.bufname(buf.bufnr):find('toggleterm') ~= nil end,
-            vim.fn.getbufinfo({ buflisted = 0, buftype = 'terminal' })
-          )
+          local buffers = vim.tbl_filter(function(buf)
+            local bufname = vim.fn.bufname(buf.bufnr)
+            return bufname:find('toggleterm') ~= nil and bufname:find('toggleterm.lua') == nil
+          end, vim.fn.getbufinfo({ buflisted = 0, buftype = 'terminal' }))
 
           local toggleterm_open = #require('toggleterm.terminal').get_all(true) > 1
           local terminal_open = toggleterm_open or #buffers > 0
