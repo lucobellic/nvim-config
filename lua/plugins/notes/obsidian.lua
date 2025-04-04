@@ -32,7 +32,7 @@ return {
         folder = 'dailies',
       },
       completion = {
-        nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
+        nvim_cmp = false, -- if using nvim-cmp, otherwise set to false
       },
       disable_frontmatter = true,
 

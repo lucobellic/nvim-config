@@ -32,6 +32,7 @@ return {
   branch = 'feat/above',
   -- 'hrsh7th/nvim-cmp',
   event = { 'InsertEnter' },
+  enabled = false,
   dependencies = {
     {
       'onsails/lspkind.nvim',

@@ -33,6 +33,7 @@ return {
     },
     {
       'rcarriga/cmp-dap',
+      enabled = false,
       config = function()
         local ok, cmp = pcall(require, 'cmp')
         if ok then

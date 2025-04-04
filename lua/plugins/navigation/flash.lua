@@ -131,14 +131,11 @@ return {
               label = { after = { 0, 0 } },
               pattern = '^',
               exclude = {
-                function(win) return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'cmp_menu' end,
+                function(win) return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'blink-cmp-menu' end,
               },
             },
             action = function(match)
-              local cmp = require('cmp')
-              local active_entry = cmp.get_entries()[match.pos[1]] ---@type cmp.Entry
-              cmp.core:confirm(active_entry, { behavior = cmp.ConfirmBehavior.Replace }, function() end)
-              cmp.close()
+              vim.schedule(function() require('blink.cmp.completion.list').accept({ index = match.pos[1] }) end)
             end,
           })
         end,
