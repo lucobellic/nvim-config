@@ -52,6 +52,6 @@ end
 vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], { buffer = true })
 vim.keymap.set('n', '<S-h>', function() term_focus_offset(-1) end, { buffer = true, desc = 'Focus previous terminal' })
 vim.keymap.set('n', '<S-l>', function() term_focus_offset(1) end, { buffer = true, desc = 'Focus next terminal' })
-vim.keymap.set('n', '<C-q>', close_term, { buffer = true, desc = 'Close terminal' })
+vim.keymap.set('n', '<C-q>', function() close_term() end, { buffer = true, desc = 'Close terminal' })
 vim.keymap.set('n', '<C-t>', '<cmd>ToggleTermSplit<cr>', { buffer = true, desc = 'Open terminal' })
 vim.keymap.set('n', 'gf', function() open_file() end, { buffer = 0 })
