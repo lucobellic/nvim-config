@@ -30,7 +30,7 @@ return {
       { '<leader>ot', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
       { '<leader>oa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
       { '<leader>ol', '<cmd>OverseerTaskAction<cr>', desc = 'Overseer Task Action' },
-      { '<leader>ox', '<cmd>OverseerFromTerminal<cr>', desc = 'Overseer From Terminal' },
+      { '<leader>ox', '<cmd>OverseerFromTerminal<cr>', mode = { 'n', 'v' }, desc = 'Overseer From Terminal' },
       { '<leader>op', open_first_failed_task, desc = 'Overseer Open Failed Task' },
     },
     opts = {
@@ -121,11 +121,21 @@ return {
       end, {})
 
       vim.api.nvim_create_user_command('OverseerFromTerminal', function()
-        -- Use last line of the terminal buffer
-        local cursor_row = vim.api.nvim_win_get_cursor(0)[1]
-        local cmd = vim.api.nvim_buf_get_lines(0, cursor_row - 1, cursor_row, false)[1]
-        cmd = cmd:gsub('^%S+%s*', '') -- remove the first word (terminal icon such as ~)
-        cmd = cmd:gsub('%s*%S+%s*$', '') -- remove the last word
+        local cmd = ''
+
+        -- Check if there is a visual selection
+        local mode = vim.api.nvim_get_mode().mode
+        if mode == 'v' or mode == 'V' or mode == '' then
+          cmd = table.concat(vim.fn.getregion(vim.fn.getpos('v'), vim.fn.getpos('.'), { type = mode }), '\n')
+        end
+
+        -- If no selection, fall back to last line of the terminal buffer
+        if cmd == '' then
+          local cursor_row = vim.api.nvim_win_get_cursor(0)[1]
+          cmd = vim.api.nvim_buf_get_lines(0, cursor_row - 1, cursor_row, false)[1]
+          cmd = cmd:gsub('^%S+%s*', '') -- remove the first word (terminal icon such as ~)
+          cmd = cmd:gsub('%s*%S+%s*$', '') -- remove the last word
+        end
 
         vim.notify('Starting ' .. cmd, vim.log.levels.INFO, { title = 'Overseer' })
         require('overseer').new_task({ cmd = cmd }):start()
