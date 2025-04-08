@@ -126,6 +126,12 @@ return {
             auto_tool_mode = { modes = { n = '<localleader>ta' } },
           },
           slash_commands = require('plugins.completion.codecompanion.slash_commands'),
+          tools = {
+            opts = {
+              auto_submit_errors = true, -- Send any errors to the LLM automatically
+              auto_submit_success = true, -- Send any successful output to the LLM automatically
+            },
+          },
         },
         inline = { adapter = inline_adapter },
         agent = { adapter = agent_adapter },
