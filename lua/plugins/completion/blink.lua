@@ -1,16 +1,22 @@
 local debounce_timer = nil
+
+--- Sets up debounced auto-completion trigger on text changes in insert mode
+--- @param debounce_delay number Delay in milliseconds before triggering completion
 local function setup_text_changed_debounce(debounce_delay)
-  vim.api.nvim_create_autocmd({ 'TextChangedI' }, {
+  vim.api.nvim_create_autocmd('InsertCharPre', {
     group = vim.api.nvim_create_augroup('TextChangedDebounceGroup', { clear = true }),
     callback = function()
+      -- Cancel any existing timer to debounce rapid text changes
       if debounce_timer then
-        vim.fn.timer_stop(debounce_timer)
+        debounce_timer:stop()
       end
-      debounce_timer = vim.fn.timer_start(debounce_delay, function()
-        if vim.api.nvim_get_mode()['mode'] == 'i' then
+      -- Set up a new timer to show completion after the specified delay
+      debounce_timer = vim.defer_fn(function()
+        -- Only show completion if we're still in insert mode
+        if vim.api.nvim_get_mode().mode == 'i' then
           require('blink.cmp').show()
         end
-      end)
+      end, debounce_delay)
     end,
   })
 end
@@ -22,15 +28,17 @@ return {
     setup_text_changed_debounce(300)
     opts = opts or {}
     opts.completion.menu.draw.treesitter = {}
+    opts.sources.default = vim
+      .iter(opts.sources.default or {})
+      :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
+      :totable()
     return vim.tbl_deep_extend('force', opts, {
       keymap = {
+        preset = vim.g.ai_cmp and 'super-tab' or 'enter',
         ['<Up>'] = { 'select_prev', 'fallback' },
         ['<Down>'] = { 'select_next', 'fallback' },
         ['<C-k>'] = { 'select_prev', 'fallback' },
         ['<C-j>'] = { 'select_next', 'fallback' },
-      },
-      sources = {
-        default = { 'lsp', 'path' },
       },
       completion = {
         documentation = { window = { border = vim.g.winborder } },
