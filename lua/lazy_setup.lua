@@ -13,6 +13,8 @@ require('lazy').setup({
     { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
 
     -- Extras
+    { import = 'lazyvim.plugins.extras.ai.copilot' },
+
     { import = 'lazyvim.plugins.extras.coding.blink' },
     { import = 'lazyvim.plugins.extras.coding.mini-surround' },
     { import = 'lazyvim.plugins.extras.coding.neogen' },
