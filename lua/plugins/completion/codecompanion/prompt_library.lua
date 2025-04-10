@@ -162,6 +162,10 @@ return {
       short_name = 'spell',
       is_slash_cmd = true,
       auto_submit = true,
+      adapter = {
+        name = 'copilot',
+        model = 'gpt-4o',
+      },
     },
     prompts = {
       {
