@@ -12,8 +12,11 @@ return {
     snacks.toggle.profiler_highlights():map('<leader>ph')
     return {
       words = { enabled = false },
-      bigfile = { enabled = true },
-      scratch = { enabled = false },
+      ---@type snacks.bigfile.Config
+      bigfile = {
+        enabled = true,
+        notify = false,
+      },
       notifier = {
         enabled = false,
         top_down = false,

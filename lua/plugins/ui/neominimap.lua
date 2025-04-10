@@ -11,7 +11,7 @@ return {
   init = function()
     vim.g.neominimap = {
       auto_enable = false,
-      layout = 'split',
+      layout = 'float',
       split = {
         fix_width = true,
       },

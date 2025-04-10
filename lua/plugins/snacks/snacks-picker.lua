@@ -28,7 +28,7 @@ local telescope_no_preview = {
   layout = {
     box = 'horizontal',
     backdrop = false,
-    width = 0.4,
+    width = 0.5,
     height = 0.5,
     border = 'none',
     {
@@ -110,6 +110,7 @@ return {
   keys = {
     { '<c-p>', function() Snacks.picker.files() end, desc = 'Find Files' },
     { '<c-f>', function() Snacks.picker.grep() end, desc = 'Find Files' },
+    { '<leader>gd', false },
   },
   opts = {
     ---@type snacks.picker.Config
