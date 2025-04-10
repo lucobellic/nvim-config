@@ -1,22 +1,8 @@
----@return dropbar_t?, number?, dropbar_symbol_t?
-local function get_bar_with_opened_component()
-  require('dropbar')
-
-  ---@type table<integer, table<integer, dropbar_t>>|nil
-  local bars = require('dropbar.utils.bar').get()
-
-  -- From the table of table create only one table where all second id is equal to win
-  local current_bar = nil
-  for buf, table_bar in pairs(bars or {}) do
-    if buf == vim.g.dropbar_current_buffer then
-      for win, bar in pairs(table_bar or {}) do
-        if win == vim.g.dropbar_current_window then
-          current_bar = bar
-          break
-        end
-      end
-    end
-  end
+--- @param opts { buf: number, win: number }
+--- @return dropbar_t?, number?, dropbar_symbol_t?
+local function get_bar_with_opened_component(opts)
+  ---@type dropbar_t | nil
+  local current_bar = require('dropbar.utils.bar').get({ buf = opts.buf, win = opts.win })
 
   local opened_component_id, opened_component = vim
     .iter(ipairs(current_bar and current_bar.components or {}))
@@ -187,18 +173,20 @@ return {
         ['<Esc>'] = '<c-w>q',
         ['h'] = '<c-w>q',
         ['H'] = function()
-          local bar, opened_component_id, opened_component = get_bar_with_opened_component()
+          local bar, opened_component_id, opened_component =
+            get_bar_with_opened_component({ buf = vim.g.dropbar_current_buffer, win = vim.g.dropbar_current_window })
           if bar and opened_component and opened_component_id and opened_component_id > 1 then
-            opened_component.menu:close()
+            opened_component.menu:close(false)
             opened_component:restore()
             bar:pick(opened_component_id - 1)
             bar:redraw()
           end
         end,
         ['L'] = function()
-          local bar, opened_component_id, opened_component = get_bar_with_opened_component()
+          local bar, opened_component_id, opened_component =
+            get_bar_with_opened_component({ buf = vim.g.dropbar_current_buffer, win = vim.g.dropbar_current_window })
           if bar and opened_component and opened_component_id and opened_component_id < #bar.components then
-            opened_component.menu:close()
+            opened_component.menu:close(false)
             opened_component:restore()
             bar:pick(opened_component_id + 1)
             bar:redraw()
