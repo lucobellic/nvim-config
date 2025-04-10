@@ -6,7 +6,7 @@ vim.g.maplocalleader = ','
 
 vim.g.autoformat = false
 
--- Use ai compiletion with nvim-cmp or prefer virtual text suggestions
+-- Use ai compiletion with nvim-cmp/blink or prefer virtual text suggestions
 vim.g.ai_cmp = false
 
 ---@type 'copilot'|'supermaven'|false

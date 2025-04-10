@@ -9,7 +9,7 @@ end
 
 -- Enable Copilot keys only if nvim-cmp is not enabled
 local get_keys = function()
-  return not vim.g.ai_cmp
+  local keys = not vim.g.ai_cmp
       and {
         {
           '<Tab>',
@@ -17,20 +17,38 @@ local get_keys = function()
           desc = 'Copilot accept',
           mode = 'i',
         },
-        {
-          '<C-l>',
-          function() suggestion_key_fallback('<C-l>', 'next') end,
-          desc = 'Copilot next',
-          mode = 'i',
-        },
-        {
-          '<C-h>',
-          function() suggestion_key_fallback('<C-h>', 'prev') end,
-          desc = 'Copilot next',
-          mode = 'i',
-        },
       }
     or {}
+
+  return vim.list_extend(keys, {
+    {
+      '<leader>ae',
+      function()
+        local is_disabled = require('copilot.client').is_disabled()
+        if is_disabled then
+          vim.notify('Enabled copilot', vim.log.levels.INFO, { title = 'copilot' })
+          vim.cmd('Copilot enable')
+        else
+          vim.notify('Disabled copilot', vim.log.levels.WARN, { title = 'copilot' })
+          vim.cmd('Copilot disable')
+        end
+      end,
+      mode = { 'n' },
+      desc = 'Copilot enable',
+    },
+    {
+      '<C-l>',
+      function() suggestion_key_fallback('<C-l>', 'next') end,
+      desc = 'Copilot next',
+      mode = 'i',
+    },
+    {
+      '<C-h>',
+      function() suggestion_key_fallback('<C-h>', 'prev') end,
+      desc = 'Copilot next',
+      mode = 'i',
+    },
+  })
 end
 
 return {
@@ -63,10 +81,6 @@ return {
       copilot_model = 'gpt-4o-copilot',
       should_attach = function() return true end,
     },
-    config = function(_, opts)
-      require('copilot').setup(opts)
-      vim.cmd('Copilot disable')
-    end,
   },
   {
     'github/copilot.vim',
