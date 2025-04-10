@@ -18,6 +18,7 @@ vim.filetype.add({
     ['gitlab.txt'] = 'markdown',
     ['github.txt'] = 'markdown',
     rviz = 'yaml',
+    gersemirc = 'yaml',
   },
   pattern = {
     ['gitlab.*%.txt'] = 'markdown',
