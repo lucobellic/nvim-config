@@ -7,7 +7,7 @@ end
 
 return {
   'gbprod/yanky.nvim',
-  enabled = not (vim.g.started_by_firenvim or vim.g.neovide),
+  enabled = false, -- Yanky is too slow
   keys = {
     { '<leader>p', false },
     {

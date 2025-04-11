@@ -1,5 +1,6 @@
 return {
   'mrjones2014/legendary.nvim',
+  enabled = false,
   -- since legendary.nvim handles all your keymaps/commands,
   -- its recommended to load legendary.nvim before other plugins
   priority = 10000,

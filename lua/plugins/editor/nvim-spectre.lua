@@ -1,5 +1,6 @@
 return {
   'nvim-pack/nvim-spectre',
+  enabled = false,
   opts = {
     line_sep_start = '╭─────────────────────────────────────────',
     result_padding = '│  ',
