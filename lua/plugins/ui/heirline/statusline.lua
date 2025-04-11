@@ -269,7 +269,6 @@ local Right = {
   Copilot,
   CodeCompanion,
   SearchCount,
-  Ruler,
   Date,
 }
 
