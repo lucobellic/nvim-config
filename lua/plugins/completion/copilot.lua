@@ -73,9 +73,8 @@ return {
       },
       server_opts_overrides = {
         settings = {
-          advanced = {
-            inlineSuggestCount = 3,
-          },
+          telemetry = { telemetryLevel = 'off' },
+          advanced = { inlineSuggestCount = 3 },
         },
       },
       copilot_model = 'gpt-4o-copilot',
