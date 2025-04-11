@@ -6,17 +6,15 @@ local function setup_text_changed_debounce(debounce_delay)
   vim.api.nvim_create_autocmd('InsertCharPre', {
     group = vim.api.nvim_create_augroup('TextChangedDebounceGroup', { clear = true }),
     callback = function()
-      if vim.v.char == ' ' then
-        if debounce_timer then
-          debounce_timer:stop()
-        end
-        return
-      end
-
       -- Cancel any existing timer to debounce rapid text changes
       if debounce_timer then
         debounce_timer:stop()
       end
+
+      if vim.v.char == ' ' then
+        return
+      end
+
       -- Set up a new timer to show completion after the specified delay
       debounce_timer = vim.defer_fn(function()
         -- Only show completion if we're still in insert mode
@@ -26,12 +24,29 @@ local function setup_text_changed_debounce(debounce_delay)
       end, debounce_delay)
     end,
   })
+
+  -- Stop the timer when leaving insert mode
+  vim.api.nvim_create_autocmd('InsertLeave', {
+    group = vim.api.nvim_create_augroup('StopDebounceTimerGroup', { clear = true }),
+    callback = function()
+      if debounce_timer then
+        debounce_timer:stop()
+      end
+    end,
+  })
 end
+
 return {
   'saghen/blink.cmp',
   dependencies = { 'onsails/lspkind.nvim' },
   opts = function(_, opts)
-    setup_text_changed_debounce(300)
+    ---@type number | nil debounce time in milliseconds or nil to disable
+    local debounce = nil
+
+    if debounce then
+      setup_text_changed_debounce(debounce)
+    end
+
     opts = opts or {}
     opts.completion.menu.draw.treesitter = {}
     opts.sources.default = vim
@@ -51,7 +66,7 @@ return {
       completion = {
         documentation = { window = { border = vim.g.winborder } },
         menu = {
-          auto_show = false,
+          auto_show = debounce == nil,
           direction_priority = { 'n', 's' },
           border = vim.g.winborder,
           draw = {
