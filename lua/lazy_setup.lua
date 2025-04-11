@@ -58,6 +58,7 @@ require('lazy').setup({
 
     { import = 'plugins' },
     { import = 'plugins.code' },
+    { import = 'plugins.codecompanion' },
     { import = 'plugins.completion' },
     { import = 'plugins.editor' },
     { import = 'plugins.git' },
