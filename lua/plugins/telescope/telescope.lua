@@ -24,19 +24,22 @@ return {
     },
   },
   {
+    'tsakirist/telescope-lazy.nvim',
+    cmd = { 'Telescope' },
+    config = function()
+      LazyVim.on_load('telescope.nvim', function() require('telescope').load_extension('lazy') end)
+    end,
+  },
+  {
+    'aaronhallaert/advanced-git-search.nvim',
+    cmd = { 'AdvancedGitSearch' },
+    config = function()
+      LazyVim.on_load('telescope.nvim', function() require('telescope').load_extension('advanced_git_search') end)
+    end,
+  },
+  {
     'nvim-telescope/telescope.nvim',
-    dependencies = {
-      { 'BurntSushi/ripgrep' },
-      { 'folke/trouble.nvim' },
-      {
-        'tsakirist/telescope-lazy.nvim',
-        config = function() require('telescope').load_extension('lazy') end,
-      },
-      {
-        'aaronhallaert/advanced-git-search.nvim',
-        config = function() require('telescope').load_extension('advanced_git_search') end,
-      },
-    },
+    lazy = true,
     keys = {
       { '<leader>gc', false },
       { '<leader>gs', false },

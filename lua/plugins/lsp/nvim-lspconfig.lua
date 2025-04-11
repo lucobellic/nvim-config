@@ -4,7 +4,6 @@ end
 
 return {
   'neovim/nvim-lspconfig',
-  event = 'LazyFile',
   dependencies = {
     {
       'williamboman/mason-lspconfig.nvim',
@@ -74,7 +73,6 @@ return {
       severity_sort = true,
       float = { source = true, header = {}, border = vim.g.border.style },
     })
-
 
     require('lspconfig.ui.windows').default_options.border = vim.g.border.style
     require('plugins.lsp.util.keymaps').setup()

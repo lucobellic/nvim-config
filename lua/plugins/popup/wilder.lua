@@ -2,6 +2,7 @@ return {
   'lucobellic/wilder.nvim',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   dependencies = { 'romgrk/fzy-lua-native' },
+  event = 'CmdlineEnter',
   branch = 'personal',
   config = function()
     local wilder = require('wilder')

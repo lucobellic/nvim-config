@@ -1,18 +1,5 @@
 return {
   {
-    'Civitasv/cmake-tools.nvim',
-    opts = {
-      cmake_executor = {
-        name = 'overseer',
-      },
-      cmake_virtual_text_support = false,
-      cmake_notifications = {
-        runner = { enabled = false },
-        executor = { enabled = false },
-      },
-    },
-  },
-  {
     'p00f/clangd_extensions.nvim',
     opts = {
       extensions = {
