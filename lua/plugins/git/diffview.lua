@@ -77,7 +77,7 @@ return {
       },
     },
     opts = function(_, opts)
-      opts = vim.tbl_deep_extend('force', opts, {
+      return vim.tbl_deep_extend('force', opts, {
         enhanced_diff_hl = true,
         diff_binaries = false, -- Show diffs for binaries
         icons = { -- Only applies when use_icons is true.
@@ -103,6 +103,14 @@ return {
         keymaps = {
           file_history_panel = {
             { 'n', '<leader>b', false },
+            {
+              'n',
+              'gq',
+              function()
+                require('diffview.actions').toggle_files()
+                vim.schedule(function() vim.cmd('tabclose') end)
+              end,
+            },
             {
               'n',
               '<C-g>',
@@ -146,13 +154,28 @@ return {
           },
           view = {
             { 'n', '<leader>b', false },
+            {
+              'n',
+              'gq',
+              function()
+                require('diffview.actions').toggle_files()
+                vim.schedule(function() vim.cmd('tabclose') end)
+              end,
+            },
           },
           file_panel = {
             { 'n', '<leader>b', false },
+            {
+              'n',
+              'gq',
+              function()
+                require('diffview.actions').toggle_files()
+                vim.schedule(function() vim.cmd('tabclose') end)
+              end,
+            },
           },
         },
       })
-      return opts
     end,
   },
 }
