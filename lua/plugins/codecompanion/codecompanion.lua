@@ -1,55 +1,3 @@
-local chat_adapter = 'copilot'
-local agent_adapter = 'copilot'
-local inline_adapter = 'copilot_inline'
-
-if vim.g.vscode then
-  local vscode = require('vscode')
-  local is_cursor = vscode.eval('return vscode.env.appName.includes("Cursor")')
-  if is_cursor then
-    vim.keymap.set(
-      'n',
-      '<leader>;a',
-      function() vscode.action('composerMode.agent') end,
-      { desc = 'Cursor Toggle Chat' }
-    )
-    vim.keymap.set(
-      'v',
-      '<leader>ai',
-      function() vscode.action('aipopup.action.modal.generate') end,
-      { desc = 'Cursor Inline Prompt' }
-    )
-    vim.keymap.set(
-      'v',
-      '<leader>ae',
-      function() vscode.action('aichat.insertselectionintochat') end,
-      { desc = 'Cursor Add Selection To Chat' }
-    )
-  else
-    vim.keymap.set(
-      'n',
-      '<leader>;i',
-      function() vscode.action('workbench.panel.chatEditing') end,
-      { desc = 'Toggle composer view' }
-    )
-    vim.keymap.set(
-      'n',
-      '<leader>;a',
-      function() vscode.action('workbench.panel.chat') end,
-      { desc = 'Copilot Toggle Chat' }
-    )
-    vim.keymap.set(
-      { 'n', 'v' },
-      '<leader>ai',
-      function() vscode.action('inlineChat.start') end,
-      { desc = 'Copilot Inline Prompt' }
-    )
-    vim.keymap.set({ 'n', 'v' }, '<leader>ae', function()
-      -- vscode.action('github.copilot.chat.attachSelection')
-      vscode.action('github.copilot.edits.attachSelection')
-    end, { desc = 'Copilot Add Selection To Chat' })
-  end
-end
-
 return {
   {
     'folke/which-key.nvim',
@@ -101,10 +49,8 @@ return {
     end,
     opts = {
       system_prompt = function() return '' end,
-      adapters = require('plugins.completion.codecompanion.adapters'),
       strategies = {
         chat = {
-          adapter = chat_adapter,
           -- roles = {
           --   llm = ' ', -- The markdown header content for the LLM's responses
           --   user = ' ', -- The markdown header for your questions
@@ -125,7 +71,6 @@ return {
             system_prompt = { modes = { n = '<localleader>s' } },
             auto_tool_mode = { modes = { n = '<localleader>ta' } },
           },
-          slash_commands = require('plugins.completion.codecompanion.slash_commands'),
           tools = {
             opts = {
               auto_submit_errors = true, -- Send any errors to the LLM automatically
@@ -133,8 +78,6 @@ return {
             },
           },
         },
-        inline = { adapter = inline_adapter },
-        agent = { adapter = agent_adapter },
       },
       display = {
         diff = { enabled = false },
@@ -144,7 +87,6 @@ return {
         },
         action_palette = { provider = 'default' },
       },
-      prompt_library = require('plugins.completion.codecompanion.prompt_library'),
     },
     config = function(_, opts)
       -- Configure vectorcode integrations
