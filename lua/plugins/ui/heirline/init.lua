@@ -15,8 +15,7 @@ end
 
 return {
   'rebelot/heirline.nvim',
-  enabled = true,
-  event = 'UIEnter',
+  event = 'LazyFile',
   dependencies = {
     {
       'linrongbin16/lsp-progress.nvim',
