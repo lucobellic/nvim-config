@@ -4,11 +4,11 @@ return {
     colorscheme = vim.g.neovide and 'ayugloom' or 'ayubleak',
     icons = {
       dap = {
-        Stopped             = { '', 'String', 'DapStoppedLine' }, --  
+        Stopped             = { '', 'String', 'DapStoppedLine' }, --  
         Breakpoint          = { '', 'DiagnosticError' },-- 󰧞   
         BreakpointCondition = { '', 'DiagnosticWarn'  },
         BreakpointRejected  = { '', 'Comment'         },
-        LogPoint            = '.>',
+        LogPoint            = '',
       },
       diagnostics = {
         Error = ' ',
