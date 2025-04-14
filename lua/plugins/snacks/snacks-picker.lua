@@ -47,6 +47,7 @@ local telescope_preview = {
   preset = 'telescope_no_preview',
   layout = {
     box = 'horizontal',
+    backdrop = vim.g.neovide == true,
     width = 0.9,
     height = 0.9,
     {
@@ -72,6 +73,7 @@ local telescope_vertical = {
   preset = 'telescope_preview',
   layout = {
     box = 'horizontal',
+    backdrop = vim.g.neovide == true,
     width = 0.9,
     height = 0.9,
     {
