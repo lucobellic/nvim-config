@@ -82,12 +82,14 @@ vim.opt.fillchars = {
 
 vim.o.virtualedit = 'block'
 
-if vim.g.started_by_firenvim then
-  vim.o.guicursor = 'n-v-c:blinkon0'
-else
-  local blinking = vim.g.neovide and 'blinkon0' or 'blinkwait300-blinkon200-blinkoff150'
-  vim.o.guicursor = 'n-v-c:block,i-ci-ve:ver15,r-cr-o:block,a:' .. blinking .. '-Cursor/lCursor'
-end
+vim.opt.guicursor = {
+  't-n:block-Cursor/lCursor',
+  'v:block-CursorVisual',
+  'c:block-CursorOperator',
+  'i-ci-ve:ver15-CursorInsert',
+  'r-cr-o:hor20-CursorOperator',
+  'a:blinkon0',
+}
 
 vim.g.lion_squeeze_spaces = true
 
