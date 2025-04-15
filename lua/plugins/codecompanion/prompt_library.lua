@@ -245,11 +245,11 @@ return {
             contains_code = true,
             content = function()
               return ([[
-            You are in agent mode:
-            Use tools to answer user request using @full_stack_dev
-             - Perform pattern search using `rg --no-heading --line-number --ignore-case`
-             - Find the path of a file using `fd`
-          ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
+                You are in agent mode:
+                Use tools to answer user request using @full_stack_dev
+                  - Prefer `fzf` instead of `grep`
+                  - Prefer `fd` instead of `find`
+              ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
             end,
           },
         },
