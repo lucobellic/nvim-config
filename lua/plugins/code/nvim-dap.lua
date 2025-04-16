@@ -100,17 +100,18 @@ return {
         {
           '<leader>dw',
           function()
-            local word = vim.fn.expand('<cword>')
+            local word = ''
             local mode = vim.api.nvim_get_mode().mode
-            if mode == 'v' or mode == 'V' or mode == '\22' then
-              local _, start_row, start_col, _ = unpack(vim.fn.getpos("'<"))
-              local _, end_row, end_col, _ = unpack(vim.fn.getpos("'>"))
-              if start_row ~= end_row then
-                end_col = #vim.api.nvim_buf_get_lines(0, end_row - 1, end_row, true)[1]
-              end
-              local text = vim.api.nvim_buf_get_text(0, start_row - 1, start_col - 1, end_row - 1, end_col, {})
-              word = table.concat(text, '')
+            if mode == 'v' or mode == 'V' or mode == '' then
+              word = table.concat(vim.fn.getregion(vim.fn.getpos('v'), vim.fn.getpos('.'), { type = mode }), '\n')
             end
+
+            -- Fallback to word under cursor
+            if word == '' then
+              word = vim.fn.expand('<cword>')
+            end
+
+            vim.notify('Adding to watches: ' .. word, vim.log.levels.INFO, { title = 'DAP' })
             require('dapui').elements.watches.add(word)
           end,
           repeatable = true,
@@ -118,6 +119,14 @@ return {
           mode = { 'n', 'v' },
         },
       },
+      config = function(_, opts)
+        local dap = require('dap')
+        local dapui = require('dapui')
+        dapui.setup(opts)
+
+        dap.listeners.before.event_terminated['dapui_config'] = function() end
+        dap.listeners.before.event_exited['dapui_config'] = function() end
+      end,
     },
     {
       'theHamsta/nvim-dap-virtual-text',
