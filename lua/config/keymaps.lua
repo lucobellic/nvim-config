@@ -83,6 +83,7 @@ if wk_ok then
   wk.add({ { "<leader>ud", group = "Diagnostics" } })
   map('n', "<leader>udd", function() vim.cmd("ToggleDiagnosticVirtualText") end, { repeatable = true, desc = "Toggle Virtual Text" })
   map('n', "<leader>udl", function() vim.cmd("ToggleDiagnosticVirtualLines") end, { repeatable = true, desc = "Toggle Virtual Lines" })
+  map('n', "<leader>udu", function() vim.cmd("ToggleDiagnosticsUnderline") end, { repeatable = true,  desc = "Toggle Diagnostics Underline" })
   map('n', "<leader>udt", function() vim.cmd("ToggleDiagnostics") end, { repeatable = true,  desc = "Toggle Diagnostics" })
   map('n', '<leader>ul', function() vim.o.number = not vim.o.number end, { desc = 'Toggle line numbers' })
 end

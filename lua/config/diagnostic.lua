@@ -1,3 +1,4 @@
+--- @type vim.diagnostic.Opts.VirtualText
 local diagnostic_virtual_text = {
   spacing = 1,
   source = 'if_many',
@@ -5,18 +6,20 @@ local diagnostic_virtual_text = {
   prefix = '',
 }
 
+--- @type vim.diagnostic.Opts.VirtualText
 local diagnostic_current_virtual_text = vim.tbl_extend('force', diagnostic_virtual_text, {
   current_line = true,
 })
 
+--- @type vim.diagnostic.Opts.VirtualLines
 local diagnostic_virtual_lines = {
   severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
 }
 
+--- @type vim.diagnostic.Opts.VirtualLines
 local diagnostic_current_virtual_lines = vim.tbl_extend('force', diagnostic_virtual_text, {
   current_line = true,
 })
-
 
 -- Diagnostic toggle
 vim.api.nvim_create_user_command('ToggleDiagnosticVirtualText', function()
@@ -67,3 +70,17 @@ vim.api.nvim_create_user_command('ToggleDiagnostics', function()
     vim.notify('Enabled Diagnostics', vim.log.levels.INFO, { title = 'Diagnostic' })
   end
 end, { desc = 'Toggle Diagnostics' })
+
+vim.api.nvim_create_user_command('ToggleDiagnosticsUnderline', function()
+  if not vim.diagnostic.config().underline then
+    vim.diagnostic.config({
+      underline = true,
+    })
+    vim.notify('Enabled Diagnostics Underline', vim.log.levels.INFO, { title = 'Diagnostic' })
+  else
+    vim.diagnostic.config({
+      underline = false,
+    })
+    vim.notify('Disabled Diagnostics Underline', vim.log.levels.WARN, { title = 'Diagnostic' })
+  end
+end, { desc = 'Toggle Diagnostics Underline' })
