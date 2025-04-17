@@ -12,11 +12,11 @@ return {
     timeout = 1000,
     top_down = false,
     icons = {
-      DEBUG = '',
-      ERROR = '',
-      INFO = '',
-      TRACE = '',
-      WARN = '',
+      DEBUG = ' ',
+      ERROR = ' ',
+      INFO = ' ',
+      TRACE = ' ',
+      WARN = ' ',
     },
   },
   config = function(_, opts)
