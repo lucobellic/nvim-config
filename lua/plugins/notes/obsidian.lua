@@ -8,7 +8,7 @@ local vaults_overrides = {
 
 return {
   {
-    'epwalsh/obsidian.nvim',
+    'obsidian-nvim/obsidian.nvim',
     enabled = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
     dependencies = {
       'nvim-lua/plenary.nvim',
