@@ -5,6 +5,7 @@ return {
       {
         title = 'toggleterm',
         ft = 'toggleterm',
+        filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
         open = function()
           local buffers = vim.tbl_filter(function(buf)
             local bufname = vim.fn.bufname(buf.bufnr)
