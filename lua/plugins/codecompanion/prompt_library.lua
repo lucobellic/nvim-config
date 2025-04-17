@@ -247,8 +247,9 @@ return {
               return ([[
                 You are in agent mode:
                 Use tools to answer user request using @full_stack_dev
-                  - Prefer `fzf` instead of `grep`
-                  - Prefer `fd` instead of `find`
+                  - Use `fzf` instead of `grep`
+                  - Use `fd` instead of `find`
+                Call tools one by one before preparing all steps to call tools.
               ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
             end,
           },
