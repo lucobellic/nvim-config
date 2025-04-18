@@ -1,13 +1,25 @@
 local separator_char = '-'
 local unfocused = 'NonText'
-local focused = 'Identifier'
+local focused = 'Comment'
+
+local icons = {
+  ERROR = ' ',
+  WARN = ' ',
+  HINT = ' ',
+  INFO = ' ',
+}
+
+local git_icons = {
+  added = ' ',
+  modified = ' ',
+  removed = ' ',
+}
 
 local function get_diagnostic_label(props)
-  local icons = require('lazyvim.config').icons.diagnostics
   local label = {}
 
   for severity, icon in pairs(icons) do
-    local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[string.upper(severity)] })
+    local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[severity] })
     if n > 0 then
       table.insert(label, { icon .. n .. ' ', group = props.focused and 'DiagnosticSign' .. severity or unfocused })
     end
@@ -16,7 +28,6 @@ local function get_diagnostic_label(props)
 end
 
 local function get_git_diff(props)
-  local git_icons = require('lazyvim.config').icons.git
   local icons = { removed = git_icons.removed, changed = git_icons.modified, added = git_icons.added }
   local highlight = { removed = 'GitSignsDelete', changed = 'GitSignsChange', added = 'GitSignsAdd' }
   local labels = {}
@@ -120,7 +131,14 @@ return {
   keys = {
     {
       '<leader>uo',
-      function() require('incline').toggle() end,
+      function()
+        if require('incline').is_enabled() then
+          vim.notify('Disabled Incline', vim.log.levels.WARN, { title = 'Incline' })
+        else
+          vim.notify('Enabled Incline', vim.log.levels.INFO, { title = 'Incline' })
+        end
+        require('incline').toggle()
+      end,
       desc = 'Toggle incline',
     },
   },
@@ -196,4 +214,5 @@ return {
       return buffer
     end,
   },
+  config = function(_, opts) require('incline').setup(opts) end,
 }

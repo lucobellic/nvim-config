@@ -6,19 +6,25 @@ return {
   'nvimtools/none-ls.nvim',
   enabled = true,
   dependencies = { 'davidmh/cspell.nvim' },
+  opts_extend = { 'sources' },
   opts = function(_, opts)
     local nls = require('null-ls')
-    opts.sources = opts.sources or {}
-    opts.fallback_severity = vim.diagnostic.severity.HINT
-    table.insert(opts.sources, nls.builtins.formatting.prettierd)
-    table.insert(opts.sources, nls.builtins.formatting.mdformat)
-    table.insert(opts.sources, nls.builtins.formatting.nixpkgs_fmt)
-    table.insert(opts.sources, nls.builtins.diagnostics.markdownlint_cli2)
-    table.insert(opts.sources, nls.builtins.code_actions.statix)
-    table.insert(opts.sources, nls.builtins.formatting.gersemi)
     local cspell = require('cspell')
-    table.insert(opts.sources, cspell.diagnostics.with({ filetypes = {}, config = cspell_config }))
-    table.insert(opts.sources, cspell.code_actions.with({ filetypes = {}, config = cspell_config }))
+
+    opts = vim.tbl_deep_extend('force', opts or {}, {
+      fallback_severity = vim.diagnostic.severity.HINT,
+    })
+
+    vim.list_extend(opts.sources or {}, {
+      nls.builtins.formatting.prettierd,
+      nls.builtins.formatting.mdformat,
+      nls.builtins.formatting.nixpkgs_fmt,
+      nls.builtins.diagnostics.markdownlint_cli2,
+      nls.builtins.code_actions.statix,
+      nls.builtins.formatting.gersemi,
+      cspell.diagnostics.with({ filetypes = {}, config = cspell_config }),
+      cspell.code_actions.with({ filetypes = {}, config = cspell_config }),
+    })
     return opts
   end,
 }

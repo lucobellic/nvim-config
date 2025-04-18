@@ -50,16 +50,14 @@ return {
       },
     },
   },
-  config = function(_, default_opts)
-    local heirline_opts = {
+  config = function()
+    require('heirline').setup({
       statusline = require('plugins.ui.heirline.statusline'),
       statuscolumn = require('plugins.ui.heirline.statuscolumn'),
       opts = {
         colors = require('plugins.ui.heirline.colors').colors,
       },
-    }
-    local opts = vim.tbl_deep_extend('force', heirline_opts, default_opts) or {}
-    require('heirline').setup(opts)
+    })
 
     vim.api.nvim_create_augroup('Heirline', { clear = true })
     vim.api.nvim_create_autocmd('ColorScheme', {

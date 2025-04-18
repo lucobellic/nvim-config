@@ -48,22 +48,16 @@ return {
     end
 
     opts = opts or {}
-    opts.completion.menu.draw.treesitter = {}
+    opts.sources = opts.sources or {}
     opts.sources.default = vim
-      .iter(opts.sources.default or {})
+      .iter(opts.sources.default or { 'lsp', 'path' })
       :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
       :totable()
-    return vim.tbl_deep_extend('force', opts, {
-      keymap = {
-        preset = vim.g.ai_cmp and 'super-tab' or 'enter',
-        ['<Up>'] = { 'select_prev', 'fallback' },
-        ['<Down>'] = { 'select_next', 'fallback' },
-        ['<C-k>'] = { 'select_prev', 'fallback' },
-        ['<C-j>'] = { 'select_next', 'fallback' },
-        ['<C-l>'] = {},
-        ['<C-h>'] = {},
-      },
+
+    opts = vim.tbl_deep_extend('force', opts, {
+      cmdline = { enabled = false },
       completion = {
+        list = { selection = { preselect = true, auto_insert = true } },
         documentation = { window = { border = vim.g.winborder } },
         menu = {
           auto_show = debounce == nil,
@@ -89,5 +83,18 @@ return {
         },
       },
     })
+
+    opts.completion.menu.draw.treesitter = {}
+    opts.keymap = {
+      preset = vim.g.ai_cmp and 'super-tab' or 'enter',
+      ['<Up>'] = { 'select_prev', 'fallback' },
+      ['<Down>'] = { 'select_next', 'fallback' },
+      ['<C-k>'] = { 'select_prev', 'fallback' },
+      ['<C-j>'] = { 'select_next', 'fallback' },
+      ['<C-l>'] = {},
+      ['<C-h>'] = {},
+    }
+
+    return opts
   end,
 }

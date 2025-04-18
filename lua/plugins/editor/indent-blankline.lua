@@ -47,6 +47,7 @@ return {
         'lspinfo',
         'man',
         'packer',
+        'snacks_dashboard',
       },
     },
   },

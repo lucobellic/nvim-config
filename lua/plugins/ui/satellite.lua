@@ -2,7 +2,11 @@ local satellite_enabled = true
 local function toggle_satellite()
   vim.cmd(satellite_enabled and 'SatelliteDisable' or 'SatelliteEnable')
   satellite_enabled = not satellite_enabled
-  vim.notify((satellite_enabled and 'Enabled' or 'Disabled') .. ' Satellite')
+  vim.notify(
+    (satellite_enabled and 'Enabled' or 'Disabled') .. ' Satellite',
+    vim.log.levels.INFO,
+    { title = 'Satellite' }
+  )
 end
 
 return {
