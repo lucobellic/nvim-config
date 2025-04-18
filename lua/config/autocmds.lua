@@ -83,3 +83,6 @@ vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
     end
   end,
 })
+
+-- Create command from keymaps
+require('util.commands').create_command_from_keymaps()

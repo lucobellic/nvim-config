@@ -70,6 +70,7 @@ end, opts)
 vim.keymap.set('n', 'gf', '<cmd>OpenInNormalWindow<cr>', opts)
 vim.keymap.set('n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', opts)
 vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:FloatermCloseCurrent<cr>', opts)
+vim.keymap.set('t', '<esc>', '<C-\\><C-n>', opts)
 
 vim.keymap.set('n', 'q', '<cmd>FloatermHide<CR><esc>', opts)
 vim.keymap.set('n', '<esc>', '<cmd>FloatermHide<CR><esc>', opts)
