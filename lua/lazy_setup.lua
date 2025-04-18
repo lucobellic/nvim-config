@@ -62,6 +62,7 @@ require('lazy').setup({
     { import = 'plugins.completion' },
     { import = 'plugins.editor' },
     { import = 'plugins.git' },
+    { import = 'plugins.keymaps' },
     { import = 'plugins.lang' },
     { import = 'plugins.lsp' },
     { import = 'plugins.misc' },

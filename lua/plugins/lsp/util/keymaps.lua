@@ -46,14 +46,14 @@ function M.setup()
 
   -- Jump to previous or next diagnostic
   keys[#keys + 1] = {
-    '<D',
+    '[d',
     function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
     repeatable = true,
     desc = 'Previous Diagnostic',
   }
 
   keys[#keys + 1] = {
-    '>D',
+    ']d',
     function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
     repeatable = true,
     desc = 'Next Diagnostic',
@@ -61,14 +61,14 @@ function M.setup()
 
   -- Jump to warning or above
   keys[#keys + 1] = {
-    '<W',
+    '[w',
     function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
     repeatable = true,
     desc = 'Previous Warning',
   }
 
   keys[#keys + 1] = {
-    '>W',
+    ']w',
     function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
     repeatable = true,
     desc = 'Next Warning',
@@ -76,14 +76,14 @@ function M.setup()
 
   -- Jump to error
   keys[#keys + 1] = {
-    '<E',
+    '[e',
     function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
     repeatable = true,
     desc = 'Previous Error',
   }
 
   keys[#keys + 1] = {
-    '>E',
+    ']e',
     function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
     repeatable = true,
     desc = 'Next Error',
