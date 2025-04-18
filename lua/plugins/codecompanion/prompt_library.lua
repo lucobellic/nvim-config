@@ -247,9 +247,10 @@ return {
               return ([[
                 You are in agent mode:
                 Use tools to answer user request using @full_stack_dev
-                  - Use `fzf` instead of `grep`
-                  - Use `fd` instead of `find`
+                  - Use `fzf` instead of `grep` to search for patterns in files.
+                  - Use `fd` instead of `find` to locate files or directories.
                 Call tools one by one before preparing all steps to call tools.
+                Check tools usage before using them several times.
               ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
             end,
           },
