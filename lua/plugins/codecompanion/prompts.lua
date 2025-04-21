@@ -11,6 +11,19 @@ end
 return {
   'olimorris/codecompanion.nvim',
   opts = {
+    opts = {
+      system_prompt = function()
+        return ([[
+          Use Markdown formatting in your answers:
+            - Include the programming language name at the start of each Markdown code block.
+            - Avoid including line numbers in code blocks.
+            - Only return code that's directly relevant to the task at hand.
+            - Avoid using H1 and H2 headers in your responses.
+
+          Call tools one by one before preparing all steps to call tools.
+        ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
+      end,
+    },
     prompt_library = {
       -- Prefer buffer selection in chat instead of inline
       ['Buffer selection'] = {

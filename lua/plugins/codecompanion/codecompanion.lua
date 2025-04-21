@@ -49,7 +49,6 @@ return {
       vim.cmd([[cab ccc CodeCompanionChat]])
     end,
     opts = {
-      system_prompt = function() return '' end,
       strategies = {
         chat = {
           keymaps = {
