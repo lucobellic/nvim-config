@@ -35,7 +35,6 @@ function M.setup()
 
   keys[#keys + 1] = { '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' }
 
-  keys[#keys + 1] = { '<leader>cf', require('plugins.lsp.util.fixcurrent'), repeatable = true }
   -- Format
   keys[#keys + 1] = { '<leader>=', format, desc = 'Format Document', has = 'documentFormatting' }
   keys[#keys + 1] = { '<leader>=', format, desc = 'Format Range', mode = 'v', has = 'documentRangeFormatting' }
