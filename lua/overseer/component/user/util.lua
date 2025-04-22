@@ -2,6 +2,22 @@ local matcher = require('overseer.template.vscode.problem_matcher')
 
 local M = {}
 
+M.rst_problem_matcher = {
+  owner = 'rst',
+  fileLocation = 'absolute',
+  pattern = {
+    {
+      -- Match path:line: (SEVERITY/level) Message
+      regexp = '(.+):(\\d+): \\((WARNING|ERROR|INFO)/(\\d+)\\) (.+)',
+      file = 1,
+      line = 2,
+      severity = 3,
+      code = 4,
+      message = 5,
+    },
+  },
+}
+
 M.python_problem_matcher = {
   owner = 'python',
   fileLocation = 'absolute',
@@ -29,6 +45,10 @@ local command_problem_matcher = {
   {
     regexp = '\\(cmake\\|reach\\).*build',
     problem_matcher = matcher.resolve_problem_matcher('$gcc'),
+  },
+  {
+    regexp = '\\(rst\\)',
+    problem_matcher = M.rst_problem_matcher,
   },
   {
     regexp = '\\(py\\|conf-test\\)',
