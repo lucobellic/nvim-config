@@ -18,7 +18,6 @@ vim.g.winborder = 'single'
 vim.o.conceallevel = 2
 vim.o.laststatus = 3
 vim.o.signcolumn = 'yes:2'
-vim.o.timeout = false
 
 vim.opt.sessionoptions = {
   'buffers',
