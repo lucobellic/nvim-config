@@ -5,6 +5,9 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     build = 'npm install -g mcp-hub@latest',
     cmd = { 'MCPHub' },
+    keys = {
+      { '<leader>ah', '<cmd>MCPHub<cr>', mode = { 'n' }, desc = 'Toggle MCPHub' },
+    },
     opts = {
       port = 3000,
       config = vim.fn.expand('~/.config/nvim/.mcp/mcp.json'),
