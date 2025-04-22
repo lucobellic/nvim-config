@@ -1,22 +1,24 @@
 return {
   'mfussenegger/nvim-lint',
-  enabled = false,
   opts = function(_, opts)
-    -- Configure cspell using config file
-    local cspell_args = require('lint.linters.cspell').args
-    local cspell_config_file = vim.fn.stdpath('config') .. '/spell/cspell.json'
-    require('lint.linters.cspell').args = vim.tbl_extend('force', cspell_args, {
+    local lint = require('lint')
+
+    lint.linters.cspell = require('lint.util').wrap(lint.linters.cspell, function(diagnostic)
+      diagnostic.severity = vim.diagnostic.severity.HINT
+      return diagnostic
+    end)
+
+    lint.linters.cspell.args = vim.tbl_extend('force', lint.linters.cspell.args, {
       '--config',
-      cspell_config_file,
+      vim.fn.stdpath('config') .. '/spell/cspell.json',
     })
 
     vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter', 'InsertLeave' }, {
       group = vim.api.nvim_create_augroup('lint', { clear = true }),
       pattern = '*',
-      callback = function()
-        require('lint').try_lint('cspell')
-      end,
+      callback = function() require('lint').try_lint('cspell') end,
       desc = 'Lint cspell',
     })
+    return opts
   end,
 }

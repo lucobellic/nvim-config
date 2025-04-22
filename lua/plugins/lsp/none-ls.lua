@@ -1,10 +1,9 @@
 local cspell_config = {
-  find_json = function(cwd) return vim.fn.stdpath('config') .. '/spell/cspell.json' end,
+  find_json = function() return vim.fn.stdpath('config') .. '/spell/cspell.json' end,
 }
 
 return {
   'nvimtools/none-ls.nvim',
-  enabled = true,
   dependencies = { 'davidmh/cspell.nvim' },
   opts_extend = { 'sources' },
   opts = function(_, opts)
@@ -20,6 +19,7 @@ return {
       nls.builtins.formatting.mdformat,
       nls.builtins.formatting.nixpkgs_fmt,
       nls.builtins.diagnostics.markdownlint_cli2,
+      nls.builtins.diagnostics.rstcheck,
       nls.builtins.code_actions.statix,
       nls.builtins.formatting.gersemi,
       cspell.diagnostics.with({ filetypes = {}, config = cspell_config }),
