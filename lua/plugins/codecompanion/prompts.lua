@@ -20,7 +20,13 @@ return {
             - Only return code that's directly relevant to the task at hand.
             - Avoid using H1 and H2 headers in your responses.
 
-          Call tools one by one before preparing all steps to call tools.
+          You are an assistant with access to tools. Follow these strict guidelines:
+            1. Call only one tool at a time
+            2. Wait for the tool's response before determining your next action
+            3. Do not plan multiple tool calls in advance
+            4. After each tool call, respond to the user with your observations
+            5. Do not group multiple operations into a single tool call
+
         ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
       end,
     },
@@ -259,11 +265,18 @@ return {
             content = function()
               return ([[
                 You are in agent mode:
-                Use tools to answer user request using @full_stack_dev
-                  - Use `fzf` instead of `grep` to search for patterns in files.
-                  - Use `fd` instead of `find` to locate files or directories.
-                Call tools one by one before preparing all steps to call tools.
-                Check tools usage before using them several times.
+                Use tools to answer user request using @cmd_runner
+                - Do NOT use `grep`
+                - Search content and patterns using `fzf`
+                - Do NOT use `find`
+                - Search files with `fd`
+
+               You are an assistant with access to tools. Follow these strict guidelines:
+                 1. Call only one tool at a time
+                 2. Wait for the tool's response before determining your next action
+                 3. Do not plan multiple tool calls in advance
+                 4. After each tool call, respond to the user with your observations
+                 5. Do not group multiple operations into a single tool call
               ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
             end,
           },
