@@ -45,7 +45,13 @@ local get_keys = function()
     {
       '<C-h>',
       function() suggestion_key_fallback('<C-h>', 'prev') end,
-      desc = 'Copilot next',
+      desc = 'Copilot prev',
+      mode = 'i',
+    },
+    {
+      '<A-l>',
+      function() suggestion_key_fallback('<A-l>', 'accept_word') end,
+      desc = 'Copilot accept work',
       mode = 'i',
     },
   })
