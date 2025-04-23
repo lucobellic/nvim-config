@@ -29,9 +29,9 @@ return {
   event = 'VeryLazy',
   keys = {
 
-    ------------------
+    --------------------
     -- Text Manipulation
-    ------------------
+    --------------------
     { mode = 'c', '<esc>', '<C-c>', desc = 'Exit insert mode' },
     { mode = 'v', '/', '"hy/<C-r>h', desc = 'Search word' },
     { mode = 'v', '<leader>rr', function() vim.fn.feedkeys(':s/', 't') end, desc = 'Replace Visual' },
@@ -47,6 +47,25 @@ return {
     { '<leader>A', '<cmd>silent %y+<cr>', desc = 'Copy all' },
     { mode = { 'n', 'v' }, '>>', '>>', remap = false, desc = 'Increase Indent' },
     { mode = { 'n', 'v' }, '<<', '<<', remap = false, desc = 'Decrease Indent' },
+
+    {
+      '<leader>yP',
+      function()
+        local path = vim.fn.expand('%:p')
+        vim.fn.setreg('+', path)
+        vim.notify(path, vim.log.levels.INFO, { title = 'copied' })
+      end,
+      desc = 'Copy absolute file path',
+    },
+    {
+      '<leader>yp',
+      function()
+        local path = vim.fn.expand('%')
+        vim.fn.setreg('+', path)
+        vim.notify(path, vim.log.levels.INFO, { title = 'copied' })
+      end,
+      desc = 'Copy relative file path',
+    },
 
     ------------------
     -- Navigation
