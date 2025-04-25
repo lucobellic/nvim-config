@@ -22,6 +22,22 @@ if vim.env.PROF then
   })
 end
 
+-- Enable OSC 52 inside docker
+if vim.env.INSIDE_DOCKER then
+  vim.g.clipboard = {
+    name = 'OSC 52',
+    copy = {
+      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+    },
+    paste = {
+      ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+      ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+    },
+    cache_enabled = true,
+  }
+end
+
 local keymap_set = vim.keymap.set
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.keymap.set = function(mode, lhs, rhs, opts)
