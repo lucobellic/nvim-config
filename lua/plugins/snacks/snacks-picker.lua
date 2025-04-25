@@ -125,12 +125,10 @@ return {
         },
       },
       sources = {
-        grep_word = {
-          layout = { preset = 'telescope_preview' },
-        },
-        grep = {
-          layout = { preset = 'telescope_preview' },
-        },
+        grep_word = { layout = { preset = 'telescope_preview' } },
+        grep = { layout = { preset = 'telescope_preview' } },
+        lsp_references = { layout = { preset = 'telescope_preview' } },
+        lsp_definitions = { layout = { preset = 'telescope_preview' } },
       },
       layouts = {
         telescope_no_preview = telescope_no_preview,

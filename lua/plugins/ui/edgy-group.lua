@@ -1,3 +1,13 @@
+if vim.g.vscode then
+  local vscode = require('vscode')
+  vim.keymap.set(
+    { 'n' },
+    '<leader>;d',
+    function() vscode.action('workbench.view.debug') end,
+    { repeatable = true, desc = 'Toggle Debug View' }
+  )
+end
+
 local function incline_safe_refresh()
   local ok, incline = pcall(require, 'incline')
   if ok then

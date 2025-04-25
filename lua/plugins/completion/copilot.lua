@@ -115,10 +115,6 @@ return {
       vim.g.copilot_workspace_folders = { '~/.config/nvim' }
       vim.g.copilot_settings = { selectedCompletionModel = 'gpt-4o-copilot' }
       vim.g.copilot_integration_id = 'vscode-chat'
-
-      if vim.env.INSIDE_DOCKER then
-        table.insert(vim.g.copilot_workspace_folders, '~/rapidash')
-      end
     end,
     config = function()
       if vim.env.INSIDE_DOCKER then

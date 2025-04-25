@@ -26,7 +26,7 @@ function M.setup()
   -- Remove codelens keymap
   keys[#keys + 1] = { '<leader>cc', false, mode = { 'n', 'v' } }
   keys[#keys + 1] = { '<leader>cC', false, mode = { 'n', 'v' } }
-  keys[#keys + 1] = { '<c-k>', false, mode = { 'n', 'v' } }
+  keys[#keys + 1] = { '<c-k>', false, mode = { 'n', 'v', 'i' } }
 
   keys[#keys + 1] = { 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>' }
 

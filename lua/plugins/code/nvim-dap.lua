@@ -2,17 +2,6 @@ return {
   'mfussenegger/nvim-dap',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   dependencies = {
-    -- json5 support
-    {
-      'Joakker/lua-json5',
-      build = './install.sh', -- require rust cargo to build
-      config = function()
-        local ok, _ = pcall(require, 'json5')
-        if ok then
-          require('dap.ext.vscode').json_decode = require('json5').parse
-        end
-      end,
-    },
     {
       'mfussenegger/nvim-dap-python',
       keys = {
@@ -55,29 +44,29 @@ return {
             elements = {
               {
                 id = 'scopes',
-                size = 0.25,
+                size = 0.5,
               },
               {
                 id = 'watches',
-                size = 0.25,
+                size = 0.5,
               },
             },
             position = 'left',
-            size = 40,
+            size = 0.2,
           },
           {
             elements = {
               {
                 id = 'stacks',
-                size = 0.25,
+                size = 0.5,
               },
               {
                 id = 'breakpoints',
-                size = 0.25,
+                size = 0.5,
               },
             },
             position = 'right',
-            size = 40,
+            size = 0.2,
           },
           {
             elements = {
@@ -147,30 +136,40 @@ return {
     { '<F12>', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
     { '<leader>dO', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
     { '<F10>', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
-    {
-      '<leader>dx',
-      function()
-        (function() require('dap.ext.vscode').load_launchjs(nil, { cppdbg = { 'c', 'cpp' } }) end)()
-      end,
-      desc = 'Load launch.json',
-    },
   },
-  opts = {
-    defaults = {
-      adapters = {
-        cppdbg = {
-          id = 'cppdbg',
-          name = 'cpp',
-          type = 'executable',
-          command = vim.fn.stdpath('data') .. 'mason/bin/OpenDebugAD7',
+  opts = function(_, opts)
+    local dap = require('dap')
+
+    -- TODO find an adapter for cuda-gdb
+    dap.adapters['cuda-gdb'] = {
+      type = 'executable',
+      name = 'cuda-gdb',
+      command = vim.fn.stdpath('data') .. '/mason/bin/OpenDebugAD7',
+    }
+
+    return vim.tbl_deep_extend('force', opts or {}, {
+      defaults = {
+        adapters = {
+          cppdbg = {
+            id = 'cppdbg',
+            name = 'cpp',
+            type = 'executable',
+            command = vim.fn.stdpath('data') .. '/mason/bin/OpenDebugAD7',
+          },
+          ['cuda-gdb'] = {
+            id = 'cuda-gdb',
+            name = 'cpp',
+            type = 'executable',
+            command = vim.fn.stdpath('data') .. '/mason/bin/OpenDebugAD7',
+          },
+        },
+        fallback = {
+          integrated_terminal = {
+            command = vim.o.shell,
+            args = { '-c' },
+          },
         },
       },
-      fallback = {
-        integrated_terminal = {
-          command = vim.o.shell,
-          args = { '-c' },
-        },
-      },
-    },
-  },
+    })
+  end,
 }
