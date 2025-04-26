@@ -84,5 +84,9 @@ return {
         action_palette = { provider = 'default' },
       },
     },
+    config = function(_, opts)
+      require('codecompanion').setup(opts)
+      require('plugins.codecompanion.utils.extmarks').setup()
+    end,
   },
 }
