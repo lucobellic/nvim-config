@@ -17,8 +17,10 @@ local git_icons = {
 
 local function get_diagnostic_label(props)
   local label = {}
+  local severities = { 'ERROR', 'WARN', 'HINT', 'INFO' }
 
-  for severity, icon in pairs(icons) do
+  for _, severity in ipairs(severities) do
+    local icon = icons[severity]
     local n = #vim.diagnostic.get(props.buf, { severity = vim.diagnostic.severity[severity] })
     if n > 0 then
       table.insert(label, { icon .. n .. ' ', group = props.focused and 'DiagnosticSign' .. severity or unfocused })
