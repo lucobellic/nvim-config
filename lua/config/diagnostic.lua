@@ -3,7 +3,9 @@ local diagnostic_virtual_text = {
   spacing = 1,
   source = 'if_many',
   severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
-  prefix = '',
+  prefix = '',
+  suffix = '   ',
+  virt_text_pos = 'eol_right_align'
 }
 
 --- @type vim.diagnostic.Opts.VirtualText
