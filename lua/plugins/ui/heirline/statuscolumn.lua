@@ -57,7 +57,7 @@ local statuscolumn = {
     local fold = { text = ' ' }
 
     local win = vim.api.nvim_get_current_win()
-    local show_signs = vim.wo[win].signcolumn ~= 'no' and vim.v.virtnum == 0
+    local show_signs = vim.wo[win].signcolumn ~= 'no' and vim.v.virtnum >= 0
     if show_signs then
       local buf = vim.api.nvim_win_get_buf(win)
       vim.iter(M.get_signs(buf, vim.v.lnum)):each(function(sign)

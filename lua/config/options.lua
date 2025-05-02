@@ -40,6 +40,7 @@ vim.o.number = false
 vim.o.relativenumber = false
 vim.o.wrap = false
 vim.o.showbreak = '↪'
+vim.opt.breakindent = true
 
 vim.o.backup = false
 vim.o.writebackup = false
