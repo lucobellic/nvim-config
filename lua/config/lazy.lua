@@ -40,7 +40,7 @@ require('lazy').setup({
     { import = 'lazyvim.plugins.extras.editor.dial' },
     { import = 'lazyvim.plugins.extras.editor.harpoon2' },
     { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
-    { import = "lazyvim.plugins.extras.editor.refactoring" },
+    { import = 'lazyvim.plugins.extras.editor.refactoring' },
 
     { import = 'lazyvim.plugins.extras.formatting.prettier' },
 
@@ -94,6 +94,7 @@ require('lazy').setup({
     border = vim.g.border.style,
     backdrop = 100,
   },
+  defaults = { lazy = true },
   install = { colorscheme = { 'habamax', 'gruvbox', 'ayugloom' } },
   checker = { enabled = false }, -- automatically check for plugin updates
   change_detection = {

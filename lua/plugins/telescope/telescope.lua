@@ -39,7 +39,6 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim',
-    lazy = true,
     keys = {
       { '<leader>gc', false },
       { '<leader>gs', false },
