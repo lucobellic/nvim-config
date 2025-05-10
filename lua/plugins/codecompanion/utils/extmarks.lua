@@ -21,7 +21,7 @@ local default_opts = {
   },
 }
 
---- @type VirtualTextBlockSpinner.Opts
+--- @type VirtualTextBlockSpinner.SpinnerOpts
 --- @diagnostic disable-next-line: missing-fields
 local virtual_text_spinners_opts = {
   hl_group = 'Comment',

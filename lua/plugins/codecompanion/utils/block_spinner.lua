@@ -1,4 +1,4 @@
---- @class VirtualTextBlockSpinner.Opts
+--- @class VirtualTextBlockSpinner.SpinnerOpts
 --- @field hl_group string Highlight group for the spinner
 --- @field repeat_interval number Interval in milliseconds to update the spinner
 --- @field extmark vim.api.keyset.set_extmark Extmark options passed to nvim_buf_set_extmark
@@ -22,7 +22,11 @@ local spinner_opts = {
 --- @field patterns table<string> Table of spinner patterns to cycle through
 --- @field current_index number Current index in the spinner patterns array
 --- @field timer uv.uv_timer_t | nil Timer used to update spinner animation
---- @field opts VirtualTextBlockSpinner.Opts Configuration options for the spinner
+--- @field opts VirtualTextBlockSpinner.SpinnerOpts Configuration options for the spinner
+--- @field width number The width of the spinner content
+--- @field height number The height of the spinner content
+--- @field border_top string Top border of the spinner
+--- @field border_bottom string Bottom border of the spinner
 local VirtualTextBlockSpinner = {
   bufnr = 0,
   ns_id = 0,
@@ -33,17 +37,21 @@ local VirtualTextBlockSpinner = {
   current_index = 1,
   timer = nil,
   opts = spinner_opts,
+  width = 0,
+  height = 0,
+  border_top = "",
+  border_bottom = "",
 }
 
---- @class VirtualTextBlockSpinner.New
+--- @class VirtualTextBlockSpinner.Opts
 --- @field bufnr number Buffer number where the spinner will be shown
 --- @field ns_id number Namespace ID for the extmarks
 --- @field start_line number Starting line (1-indexed) for the spinner
 --- @field end_line number Ending line (1-indexed) for the spinner
---- @field opts? VirtualTextBlockSpinner.Opts Optional configuration options
+--- @field opts? VirtualTextBlockSpinner.SpinnerOpts Optional configuration options
 
 --- Creates a new VirtualTextBlockSpinner instance
---- @param opts VirtualTextBlockSpinner.New Options for the spinner
+--- @param opts VirtualTextBlockSpinner.Opts Options for the spinner
 --- @return VirtualTextBlockSpinner self New spinner instance
 function VirtualTextBlockSpinner.new(opts)
   local lines = vim.api.nvim_buf_get_lines(opts.bufnr, opts.start_line - 1, opts.end_line, false)
@@ -67,6 +75,8 @@ function VirtualTextBlockSpinner.new(opts)
   --- @diagnostic disable-next-line: need-check-nil
   local pattern_width = vim.fn.strdisplaywidth(raw_patterns[1])
   local repetitions = pattern_width > 0 and math.ceil(width / pattern_width) or width
+  local width = repetitions * pattern_width
+  local horizontal_line = string.rep('─', width)
 
   -- Now create the final patterns with proper repetition
   for _, pattern in ipairs(raw_patterns) do
@@ -83,6 +93,10 @@ function VirtualTextBlockSpinner.new(opts)
     current_index = 1,
     timer = vim.uv.new_timer(),
     opts = merged_opts,
+    width = width,
+    height = #lines,
+    border_top = '╭' .. horizontal_line .. '╮',
+    border_bottom = '╰' .. horizontal_line .. '╯',
   }, { __index = VirtualTextBlockSpinner })
 end
 
@@ -91,7 +105,24 @@ end
 --- @return table[] Virtual text for the extmark in the format required by nvim_buf_set_extmark
 function VirtualTextBlockSpinner:get_virtual_text(i)
   local pattern_index = ((i + self.current_index - 1) % #self.patterns) + 1
-  return { { self.patterns[pattern_index], self.opts.hl_group } }
+  local pattern = self.patterns[pattern_index]
+
+  if self.height <= 2 then
+    return { { pattern, self.opts.hl_group } }
+  end
+
+  -- First line (top border)
+  if i == self.start_line then
+    return { { self.border_top, self.opts.hl_group } }
+  end
+
+  -- Last line (bottom border)
+  if i == self.end_line then
+    return { { self.border_bottom, self.opts.hl_group } }
+  end
+
+  -- Middle lines with spinner animation
+  return { { '│' .. pattern .. '│', self.opts.hl_group } }
 end
 
 --- Sets up new extmarks for all lines in the spinner range
@@ -116,12 +147,16 @@ end
 function VirtualTextBlockSpinner:set_extmarks()
   for i, id in pairs(self.ids) do
     local current_pos = vim.api.nvim_buf_get_extmark_by_id(self.bufnr, self.ns_id, id, {})
-    vim.api.nvim_buf_set_extmark(
-      self.bufnr,
-      self.ns_id,
-      current_pos[1],
-      0,
-      vim.tbl_deep_extend('force', self.opts.extmark, { virt_text = self:get_virtual_text(i), id = id })
+    pcall(
+      function()
+        vim.api.nvim_buf_set_extmark(
+          self.bufnr,
+          self.ns_id,
+          current_pos[1],
+          0,
+          vim.tbl_deep_extend('force', self.opts.extmark, { virt_text = self:get_virtual_text(i), id = id })
+        )
+      end
     )
   end
 end
