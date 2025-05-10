@@ -19,6 +19,7 @@ return {
       'MunifTanjim/nui.nvim',
       'nvim-tree/nvim-web-devicons',
     },
+    cmd = { 'Neotree' },
     keys = {
       { '<leader>e', false },
       { '<leader>E', false },
