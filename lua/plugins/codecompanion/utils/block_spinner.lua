@@ -2,6 +2,7 @@
 --- @field hl_group string Highlight group for the spinner
 --- @field repeat_interval number Interval in milliseconds to update the spinner
 --- @field extmark vim.api.keyset.set_extmark Extmark options passed to nvim_buf_set_extmark
+--- @field patterns? table<string> Table of spinner patterns to cycle through
 local spinner_opts = {
   hl_group = 'Comment',
   repeat_interval = 250,
@@ -18,9 +19,8 @@ local spinner_opts = {
 --- @field start_line number Starting line (0-indexed) for the spinner
 --- @field end_line number Ending line (0-indexed) for the spinner
 --- @field ids table<number, number> Table of extmark IDs indexed by line numbers
---- @field first_line string First animation frame content
---- @field second_line string Second animation frame content
---- @field current_index number Current index in the spinner frames array
+--- @field patterns table<string> Table of spinner patterns to cycle through
+--- @field current_index number Current index in the spinner patterns array
 --- @field timer uv.uv_timer_t | nil Timer used to update spinner animation
 --- @field opts VirtualTextBlockSpinner.Opts Configuration options for the spinner
 local VirtualTextBlockSpinner = {
@@ -29,8 +29,7 @@ local VirtualTextBlockSpinner = {
   start_line = 0,
   end_line = 0,
   ids = {},
-  first_line = '',
-  second_line = '',
+  patterns = {},
   current_index = 1,
   timer = nil,
   opts = spinner_opts,
@@ -48,9 +47,31 @@ local VirtualTextBlockSpinner = {
 --- @return VirtualTextBlockSpinner self New spinner instance
 function VirtualTextBlockSpinner.new(opts)
   local lines = vim.api.nvim_buf_get_lines(opts.bufnr, opts.start_line - 1, opts.end_line, false)
-  local width = vim.fn.max(vim.iter(lines):map(function(line) return vim.fn.strdisplaywidth(line) end):totable()) / 2
-  local first_line = string.rep('╲ ', width + 1)
-  local second_line = string.rep(' ╲', width + 1)
+  local width = vim.fn.max(vim.iter(lines):map(function(line) return vim.fn.strdisplaywidth(line) end):totable())
+
+  local merged_opts = vim.tbl_deep_extend('force', spinner_opts, opts.opts or {})
+  local patterns = {}
+
+  -- First determine the raw patterns
+  local raw_patterns = {
+    '╲  ',
+    ' ╲ ',
+    '  ╲',
+  }
+
+  if merged_opts.patterns and #merged_opts.patterns > 0 then
+    raw_patterns = merged_opts.patterns --- @type string[]
+  end
+
+  -- Calculate required repetitions to match the content width
+  --- @diagnostic disable-next-line: need-check-nil
+  local pattern_width = vim.fn.strdisplaywidth(raw_patterns[1])
+  local repetitions = pattern_width > 0 and math.ceil(width / pattern_width) or width
+
+  -- Now create the final patterns with proper repetition
+  for _, pattern in ipairs(raw_patterns) do
+    table.insert(patterns, string.rep(pattern, repetitions))
+  end
 
   return setmetatable({
     bufnr = opts.bufnr,
@@ -58,11 +79,10 @@ function VirtualTextBlockSpinner.new(opts)
     start_line = opts.start_line - 1,
     end_line = opts.end_line - 1,
     ids = {},
-    first_line = first_line,
-    second_line = second_line,
+    patterns = patterns,
     current_index = 1,
     timer = vim.uv.new_timer(),
-    opts = vim.tbl_deep_extend('force', spinner_opts, opts.opts or {}),
+    opts = merged_opts,
   }, { __index = VirtualTextBlockSpinner })
 end
 
@@ -70,11 +90,8 @@ end
 --- @param i number The line number to get virtual text for
 --- @return table[] Virtual text for the extmark in the format required by nvim_buf_set_extmark
 function VirtualTextBlockSpinner:get_virtual_text(i)
-  if (i + self.current_index) % 2 == 0 then
-    return { { self.first_line, self.opts.hl_group } }
-  else
-    return { { self.second_line, self.opts.hl_group } }
-  end
+  local pattern_index = ((i + self.current_index - 1) % #self.patterns) + 1
+  return { { self.patterns[pattern_index], self.opts.hl_group } }
 end
 
 --- Sets up new extmarks for all lines in the spinner range
@@ -118,7 +135,7 @@ function VirtualTextBlockSpinner:start()
     0,
     self.opts.repeat_interval,
     vim.schedule_wrap(function()
-      self.current_index = self.current_index % 2 + 1
+      self.current_index = (self.current_index % #self.patterns) + 1
       self:set_extmarks()
     end)
   )
