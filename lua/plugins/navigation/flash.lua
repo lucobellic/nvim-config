@@ -1,4 +1,32 @@
----@param opts Flash.Format
+--- Override the default rainbow colors with custom ones
+--- @param idx number The index of the color in the rainbow table
+--- @param shade number? The shade multiplier (default: 5)
+--- @return string | nil highlight group name if color is found
+local function get_rainbow_colors(idx, shade)
+  local Rainbow = require('flash.rainbow')
+  Rainbow.setup()
+
+  -- Normalize idx to be within the rainbow table bounds
+  idx = (idx - 1) % #Rainbow.rainbow + 1
+
+  local color = Rainbow.rainbow[idx]
+  shade = (shade or 5) * 100
+
+  local fg = vim.tbl_get(Rainbow.colors, color, shade)
+  if not fg then
+    return nil
+  end
+
+  local hl = 'FlashColor' .. color .. shade
+  if not Rainbow.hl[hl] then
+    Rainbow.hl[hl] = true
+    vim.api.nvim_set_hl(0, hl, { fg = '#' .. fg, italic = true })
+  end
+
+  return hl
+end
+
+--- @param opts Flash.Format
 local function format(opts)
   -- always show first and second label
   return {
@@ -7,7 +35,7 @@ local function format(opts)
   }
 end
 
----@param match Flash.Match
+--- @param match Flash.Match
 local function add_fold(match)
   vim.api.nvim_win_call(match.win, function()
     local fold = vim.fn.foldclosed(match.pos[1])
@@ -149,7 +177,7 @@ return {
       {
         'R',
         mode = { 'o', 'x' },
-        require('flash').treesitter_search,
+        function() require('flash').treesitter_search({ label = { rainbow = { enabled = true, shade = 4 } } }) end,
         desc = 'Flash Treesitter Search',
       },
     }
@@ -157,6 +185,21 @@ return {
   opts = {
     jump = { autojump = false },
     modes = {
+      char = {
+        jump_labels = true,
+        config = function(opts)
+          -- Disable in operator-pending mode
+          opts.jump_labels = opts.jump_labels and not vim.fn.mode(true):find('no')
+        end,
+        char_actions = function(motion)
+          return {
+            [';'] = 'right',
+            [','] = 'left',
+            [motion:lower()] = 'right',
+            [motion:upper()] = 'left',
+          }
+        end,
+      },
       search = {
         enabled = false,
         highlight = {
@@ -168,6 +211,8 @@ return {
   },
   config = function(_, opts)
     require('flash').setup(opts)
+    require('flash.rainbow').get_color = get_rainbow_colors
+
     if vim.g.vscode then
       vim.api.nvim_set_hl(0, 'FlashLabel', { fg = '#c1d94a' })
       vim.api.nvim_set_hl(0, 'FlashMatch', { fg = '#37bbe6' })
