@@ -1,6 +1,15 @@
 return {
   'folke/persistence.nvim',
   event = 'VeryLazy',
+  dependencies = {
+    {
+      'tiagovla/scope.nvim',
+      version = '*',
+      opts = {
+        restore_state = true,
+      },
+    },
+  },
   keys = {
     {
       '<leader>fs',

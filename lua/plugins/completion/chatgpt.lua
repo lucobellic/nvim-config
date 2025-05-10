@@ -14,7 +14,6 @@ return {
     'jackMort/ChatGPT.nvim',
     name = 'chatgpt',
     enabled = false,
-    event = 'VeryLazy',
     cmd = { 'ChatGPT', 'ChatGPTRun' },
     keys = {
       -- { '<leader>cg', '<cmd>ChatGPT<CR>', desc = 'ChatGPT', mode = { 'n', 'v' } },

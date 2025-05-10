@@ -41,7 +41,6 @@ end
 return {
   'kevinhwang91/nvim-ufo',
   vscode = false,
-  event = 'VeryLazy',
   dependencies = { 'kevinhwang91/promise-async' },
   keys = {
     {
