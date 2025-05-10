@@ -50,7 +50,8 @@ vim.o.undofile = true
 vim.o.pumblend = 0
 vim.o.winblend = 0
 
-vim.go.incsearch = false
+vim.opt.spell = false
+vim.opt_global.incsearch = false
 
 vim.opt.listchars = {
   tab = ' ',
