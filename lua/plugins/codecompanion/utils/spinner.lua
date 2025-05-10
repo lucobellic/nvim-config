@@ -4,8 +4,6 @@
 --- @field hl_group string Highlight group for the spinner
 --- @field repeat_interval number Interval in milliseconds to update the spinner
 --- @field extmark vim.api.keyset.set_extmark Extmark options passed to nvim_buf_set_extmark
-
---- @type VirtualTextSpinner.Opts
 local spinner_opts = {
   spinner_text = 'Processing',
   spinner_frames = { '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾' },
@@ -37,7 +35,7 @@ local VirtualTextSpinner = {
 --- @param bufnr number Buffer number to display the spinner in
 --- @param ns_id number Namespace ID for the extmark
 --- @param line_num number Line number to display the spinner on (1-indexed)
---- @param opts? VirtualTextSpinner.Opts Optional configuration options
+--- @param opts? VirtualTextBlockSpinner Optional configuration options
 --- @return VirtualTextSpinner self New spinner instance
 function VirtualTextSpinner.new(bufnr, ns_id, line_num, opts)
   local self = setmetatable({}, { __index = VirtualTextSpinner })

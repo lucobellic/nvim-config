@@ -21,10 +21,10 @@ local default_opts = {
   },
 }
 
---- @type VirtualTextSpinner.Opts
+--- @type VirtualTextBlockSpinner.Opts
 --- @diagnostic disable-next-line: missing-fields
 local virtual_text_spinners_opts = {
-  hl_group = hl_group,
+  hl_group = 'Comment',
   extmark = {
     virt_text_pos = 'overlay',
     priority = priority,
@@ -53,10 +53,17 @@ local function set_line_extmark(bufnr, ns_id, line_num, opts, sign_type)
 end
 
 --- @param bufnr number
---- @param line_num number
 --- @param ns_id number
-local function start_spinner(bufnr, line_num, ns_id)
-  local spinner = require('plugins.codecompanion.utils.spinner').new(bufnr, ns_id, line_num, virtual_text_spinners_opts)
+--- @param start_line number
+--- @param end_line number
+local function start_spinner(bufnr, ns_id, start_line, end_line)
+  local spinner = require('plugins.codecompanion.utils.block_spinner').new({
+    bufnr = bufnr,
+    ns_id = ns_id,
+    start_line = start_line,
+    end_line = end_line,
+    opts = virtual_text_spinners_opts,
+  })
   spinner:start()
   virtual_text_spinners[ns_id] = spinner
 end
@@ -78,7 +85,7 @@ local function create_extmarks(opts, data, ns_id)
   local context = data.context
 
   -- Start a spinner on first line at the end of line
-  start_spinner(context.bufnr, context.start_line, ns_id)
+  start_spinner(context.bufnr, ns_id, context.start_line, context.end_line)
 
   -- Handle the case where start and end lines are the same (unique line)
   if context.start_line == context.end_line then
