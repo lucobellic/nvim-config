@@ -10,7 +10,7 @@ return {
   },
   opts = {
     max_lines = 3,
-    min_window_height = 50,
+    min_window_height = 40,
     mode = 'topline',
     line_numbers = true,
     trim_scope = 'inner',
