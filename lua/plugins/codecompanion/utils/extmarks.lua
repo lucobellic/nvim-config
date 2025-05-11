@@ -31,7 +31,7 @@ local virtual_text_spinners_opts = {
   },
 }
 
---- @type {number: VirtualTextSpinner}
+--- @type {number: [VirtualTextSpinner, VirtualTextBlockSpinner]}
 local virtual_text_spinners = {}
 
 --- Helper function to set a line extmark with specified sign text
@@ -52,28 +52,48 @@ local function set_line_extmark(bufnr, ns_id, line_num, opts, sign_type)
   )
 end
 
---- @param bufnr number
---- @param ns_id number
---- @param start_line number
---- @param end_line number
-local function start_spinner(bufnr, ns_id, start_line, end_line)
-  local spinner = require('plugins.codecompanion.utils.block_spinner').new({
+--- Start animated spinners for a buffer region
+--- This function creates and starts two spinner objects:
+---  - A block spinner that spans multiple lines
+---  - A centered spinner that appears in the middle of the block
+---
+--- @param bufnr number Buffer number where the spinners will be displayed
+--- @param ns_id number Namespace ID for the extmarks
+--- @param start_line number Starting line of the region (0-indexed)
+--- @param end_line number Ending line of the region (0-indexed)
+local function start_spinners(bufnr, ns_id, start_line, end_line)
+  local block_spinner = require('plugins.codecompanion.utils.block_spinner').new({
     bufnr = bufnr,
     ns_id = ns_id,
     start_line = start_line,
     end_line = end_line,
     opts = virtual_text_spinners_opts,
   })
+
+  local spinner = require('plugins.codecompanion.utils.spinner').new({
+    bufnr = bufnr,
+    ns_id = ns_id,
+    line_num = start_line + math.floor((end_line - start_line) / 2),
+    width = block_spinner.width,
+    opts = { extmark = { virt_text_pos = 'overlay', priority = priority + 1 } },
+  })
+
   spinner:start()
-  virtual_text_spinners[ns_id] = spinner
+  block_spinner:start()
+  virtual_text_spinners[ns_id] = { spinner, block_spinner }
 end
 
+--- Stop active spinners associated with a namespace ID
+--- @param ns_id number The namespace ID to stop spinners
 local function stop_spinner(ns_id)
-  local spinner = virtual_text_spinners[ns_id]
+  local block_spinner, spinner = unpack(virtual_text_spinners[ns_id])
   if spinner then
     spinner:stop()
-    virtual_text_spinners[ns_id] = nil
   end
+  if block_spinner then
+    block_spinner:stop()
+  end
+  virtual_text_spinners[ns_id] = nil
 end
 
 --- Creates extmarks for inline code annotations
@@ -85,7 +105,7 @@ local function create_extmarks(opts, data, ns_id)
   local context = data.context
 
   -- Start a spinner on first line at the end of line
-  start_spinner(context.bufnr, ns_id, context.start_line, context.end_line)
+  start_spinners(context.bufnr, ns_id, context.start_line, context.end_line)
 
   -- Handle the case where start and end lines are the same (unique line)
   if context.start_line == context.end_line then
@@ -110,23 +130,25 @@ end
 --- Creates autocmds for CodeCompanionRequest events
 --- @param opts CodeCompanion.InlineExtmark Configuration options passed from setup
 local function create_autocmds(opts)
-  vim.api.nvim_create_autocmd({ 'User' }, {
-    pattern = { 'CodeCompanionRequest*' },
-    callback =
-      --- @param args {buf: number, data : CodeCompanion.InlineArgs, match: string}
-      function(args)
-        local data = args.data or {}
-        local context = data and data.context or {}
-        if data and data.context then
-          local ns_id = vim.api.nvim_create_namespace('CodeCompanionInline_' .. data.id)
-          if args.match:find('StartedInline') then
-            create_extmarks(opts, data, ns_id)
-          elseif args.match:find('FinishedInline') then
-            stop_spinner(ns_id)
-            vim.api.nvim_buf_clear_namespace(context.bufnr, ns_id, 0, -1)
-          end
-        end
-      end,
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'CodeCompanionRequest*',
+    callback = function(args)
+      local data = args.data or {}
+      local context = data.context or {}
+
+      if vim.tbl_isempty(context) then
+        return
+      end
+
+      local ns_id = vim.api.nvim_create_namespace('CodeCompanionInline_' .. data.id)
+
+      if args.match:find('StartedInline') then
+        create_extmarks(opts, data, ns_id)
+      elseif args.match:find('FinishedInline') then
+        stop_spinner(ns_id)
+        vim.api.nvim_buf_clear_namespace(context.bufnr, ns_id, 0, -1)
+      end
+    end,
   })
 end
 

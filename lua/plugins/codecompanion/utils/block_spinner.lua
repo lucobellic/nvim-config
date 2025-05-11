@@ -5,7 +5,7 @@
 --- @field patterns? table<string> Table of spinner patterns to cycle through
 local spinner_opts = {
   hl_group = 'Comment',
-  repeat_interval = 250,
+  repeat_interval = 100,
   extmark = {
     virt_text_pos = 'inline',
     priority = 1000,

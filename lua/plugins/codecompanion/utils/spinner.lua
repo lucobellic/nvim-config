@@ -1,11 +1,11 @@
---- @class VirtualTextSpinner.Opts
+--- @class VirtualTextSpinner.SpinnerOpts
 --- @field spinner_text string Text to display before the spinner
 --- @field spinner_frames string[] Spinner frames to use for the spinner
 --- @field hl_group string Highlight group for the spinner
 --- @field repeat_interval number Interval in milliseconds to update the spinner
 --- @field extmark vim.api.keyset.set_extmark Extmark options passed to nvim_buf_set_extmark
 local spinner_opts = {
-  spinner_text = 'Processing',
+  spinner_text = '  Processing',
   spinner_frames = { '⣷', '⣯', '⣟', '⡿', '⢿', '⣻', '⣽', '⣾' },
   hl_group = 'DiagnosticVirtualTextWarn',
   repeat_interval = 100,
@@ -21,7 +21,7 @@ local spinner_opts = {
 --- @field line_num number The line number where the spinner is displayed
 --- @field current_index number Current index in the spinner frames array
 --- @field timer uv.uv_timer_t | nil Timer used to update spinner animation
---- @field opts VirtualTextSpinner.Opts Configuration options for the spinner
+--- @field opts VirtualTextSpinner.SpinnerOpts Configuration options for the spinner
 local VirtualTextSpinner = {
   bufnr = 0,
   ns_id = 0,
@@ -31,21 +31,29 @@ local VirtualTextSpinner = {
   opts = spinner_opts,
 }
 
+--- @class VirtualTextSpinner.Opts
+--- @field bufnr number Buffer number to display the spinner in
+--- @field ns_id number Namespace ID for the extmark
+--- @field line_num number Line number to display the spinner on (1-indexed)
+--- @field width? number Width of the spinner
+--- @field opts? VirtualTextSpinner.SpinnerOpts Optional configuration options
+
 --- Creates a new VirtualTextSpinner instance
---- @param bufnr number Buffer number to display the spinner in
---- @param ns_id number Namespace ID for the extmark
---- @param line_num number Line number to display the spinner on (1-indexed)
---- @param opts? VirtualTextBlockSpinner Optional configuration options
+--- @param opts VirtualTextSpinner.Opts Options for the spinner
 --- @return VirtualTextSpinner self New spinner instance
-function VirtualTextSpinner.new(bufnr, ns_id, line_num, opts)
-  local self = setmetatable({}, { __index = VirtualTextSpinner })
-  self.bufnr = bufnr
-  self.ns_id = ns_id
-  self.line_num = line_num - 1
-  self.current_index = 1
-  self.timer = vim.uv.new_timer()
-  self.opts = vim.tbl_deep_extend('force', spinner_opts, opts or {})
-  return self
+function VirtualTextSpinner.new(opts)
+  local width = opts.width or 0
+  local spinner_opts = vim.tbl_deep_extend('force', spinner_opts, opts.opts or {})
+  local width_center = width - spinner_opts.spinner_text:len()
+  local col = width_center > 0 and math.floor(width_center / 2) or 0
+  return setmetatable({
+    bufnr = opts.bufnr,
+    ns_id = opts.ns_id,
+    line_num = opts.line_num - 1,
+    current_index = 1,
+    timer = vim.uv.new_timer(),
+    opts = vim.tbl_deep_extend('force', spinner_opts, { extmark = { virt_text_win_col = col } }),
+  }, { __index = VirtualTextSpinner })
 end
 
 --- Gets the virtual text content for the spinner
