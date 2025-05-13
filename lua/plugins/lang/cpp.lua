@@ -9,7 +9,6 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
-    ft = { 'c', 'cpp' },
     opts = {
       servers = {
         clangd = {
