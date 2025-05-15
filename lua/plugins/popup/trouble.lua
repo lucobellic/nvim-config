@@ -43,18 +43,29 @@ return {
       type = 'main',
       scratch = false,
     },
+    ---@type table<string, trouble.Mode>
     modes = {
       lsp_references = {
-        desc = 'LSP References',
-        mode = 'lsp_references',
-        title = false,
         restore = true,
         focus = false,
         follow = false,
       },
       lsp_definitions = {
-        desc = 'LSP definitions',
-        mode = 'lsp_definitions',
+        restore = true,
+        focus = false,
+        follow = false,
+      },
+      lsp = {
+        desc = 'LSP definitions, implementations, type definitions, declarations and references',
+        sections = {
+          'lsp_definitions',
+          'lsp_implementations',
+          'lsp_type_definitions',
+          'lsp_declarations',
+          'lsp_incoming_calls',
+          'lsp_outgoing_calls',
+          'lsp_references',
+        },
         title = false,
         restore = true,
         focus = false,

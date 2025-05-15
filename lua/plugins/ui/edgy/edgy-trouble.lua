@@ -10,17 +10,7 @@ return {
           return win_trouble and win_trouble.mode == 'symbols'
         end,
         open = 'Trouble symbols toggle focus=false win.position=left',
-      },
-    },
-    right = {
-      {
-        title = 'trouble-lsp',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'lsp'
-        end,
-        open = 'Trouble lsp toggle focus=false win.position=right',
+        size = { width = 0.20 },
       },
     },
     bottom = {
@@ -104,6 +94,16 @@ return {
           return win_trouble and win_trouble.mode == 'todo'
         end,
         open = 'Trouble loclist toggle',
+      },
+      {
+        title = 'trouble-lsp',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'lsp'
+        end,
+        open = 'Trouble lsp toggle restore=true focus=false win.position=bottom',
+        size = { height = 0.25 },
       },
       {
         title = 'quickfix',

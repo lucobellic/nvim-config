@@ -64,9 +64,10 @@ return {
         bottom = {
           { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },
           { icon = '', titles = { 'trouble-diagnostics', 'trouble-qflist' }, pick_key = 'x' },
-          { icon = '', titles = { 'trouble-snacks', 'trouble-snacks-files' }, pick_key = 's' },
+          { icon = '', titles = { 'trouble-snacks', 'trouble-snacks-files' }, pick_key = 's' },
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-lsp-definitions' }, pick_key = 'r' },
-          { icon = '', titles = { 'noice' }, pick_key = 'n' },
+          { icon = '', titles = { 'trouble-lsp' }, pick_key = 'l' },
+          { icon = '', titles = { 'noice' }, pick_key = 'n' },
           { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },
           { icon = '', titles = { 'dap-repl', 'dapui_console' }, pick_key = 'd' },
         },
