@@ -9,7 +9,7 @@ return {
     },
   },
   opts = {
-    max_lines = 3,
+    max_lines = 5,
     min_window_height = 40,
     mode = 'topline',
     line_numbers = true,
