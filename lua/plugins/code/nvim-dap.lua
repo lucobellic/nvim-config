@@ -1,3 +1,49 @@
+if vim.g.vscode then
+  local vscode = require('vscode')
+  vim.keymap.set(
+    { 'n' },
+    '<leader>db',
+    function() vscode.action('editor.debug.action.toggleBreakpoint') end,
+    { repeatable = true, desc = 'Toggle Breakpoint' }
+  )
+  vim.keymap.set(
+    { 'n' },
+    '<leader>dq',
+    function() vscode.action('workbench.action.debug.stop') end,
+    { repeatable = true, desc = 'Terminate' }
+  )
+  vim.keymap.set(
+    { 'n' },
+    '<leader>dc',
+    function() vscode.action('workbench.action.debug.start') end,
+    { repeatable = true, desc = 'Continue' }
+  )
+  vim.keymap.set(
+    { 'n' },
+    '<leader>dC',
+    function() vscode.action('editor.debug.action.runToCursor') end,
+    { repeatable = true, desc = 'Run to Cursor' }
+  )
+  vim.keymap.set(
+    { 'n' },
+    '<leader>di',
+    function() vscode.action('workbench.action.debug.stepInto') end,
+    { repeatable = true, desc = 'Step Into' }
+  )
+  vim.keymap.set(
+    { 'n' },
+    '<leader>do',
+    function() vscode.action('workbench.action.debug.stepOut') end,
+    { repeatable = true, desc = 'Step Out' }
+  )
+  vim.keymap.set(
+    { 'n' },
+    '<leader>dO',
+    function() vscode.action('workbench.action.debug.stepOver') end,
+    { repeatable = true, desc = 'Step Over' }
+  )
+end
+
 return {
   'mfussenegger/nvim-dap',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
