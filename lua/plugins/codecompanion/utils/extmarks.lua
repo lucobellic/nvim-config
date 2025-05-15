@@ -7,7 +7,8 @@
 local M = {}
 
 local hl_group = 'DiagnosticVirtualTextWarn'
-local priority = 2048 -- Above indent-blankline
+local priority = 2048
+local repeat_interval = 100
 
 --- @type CodeCompanion.InlineExtmark
 local default_opts = {
@@ -25,6 +26,7 @@ local default_opts = {
 --- @diagnostic disable-next-line: missing-fields
 local virtual_text_spinners_opts = {
   hl_group = 'Comment',
+  repeat_interval = repeat_interval,
   extmark = {
     virt_text_pos = 'overlay',
     priority = priority,
@@ -75,7 +77,10 @@ local function start_spinners(bufnr, ns_id, start_line, end_line)
     ns_id = ns_id,
     line_num = start_line + math.floor((end_line - start_line) / 2),
     width = block_spinner.width,
-    opts = { extmark = { virt_text_pos = 'overlay', priority = priority + 1 } },
+    opts = {
+      repeat_interval = repeat_interval,
+      extmark = { virt_text_pos = 'overlay', priority = priority + 1 },
+    },
   })
 
   spinner:start()
