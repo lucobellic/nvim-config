@@ -86,6 +86,7 @@ local filter_skip = {
       { event = 'msg_show', kind = { '', 'echo', 'echomsg', 'search_count' }, find = 'yanked' },
       { event = 'msg_show', kind = 'wmsg', find = 'BOTTOM' },
       { event = 'notify', kind = 'error', find = 'Neo' },
+      { event = 'notify', kind = 'error', find = 'Failed to create diff buffer' },
       { event = 'msg_show', kind = 'emsg', find = 'Pattern not found' },
       { event = 'msg_show', kind = 'lua_error', find = 'bdelete' },
       { event = 'msg_show', kind = 'lua_error', find = 'inlay_hint' },
