@@ -29,7 +29,7 @@ return {
       include = {
         node_type = {
           lua = { 'return_statement', 'table_constructor' },
-          python = { 'if_statement', 'for_statement', 'while_statement', 'with_statement' },
+          python = { '*' },
         },
         -- Make every node type valid. Note that this can lead to some weird behavior
         -- node_type = { ["*"] = { "*" } },
