@@ -16,27 +16,31 @@ return {
     keys = {
       {
         '<leader>re',
-        function() require('refactoring').refactor('Extract Function') end,
+        function() return require('refactoring').refactor('Extract Function') end,
         mode = 'v',
         desc = 'Extract Function',
+        expr = true,
       },
       {
         '<leader>rf',
-        function() require('refactoring').refactor('Extract Function To File') end,
+        function() return require('refactoring').refactor('Extract Function To File') end,
         mode = 'v',
         desc = 'Extract Function To File',
+        expr = true,
       },
       {
         '<leader>rv',
-        function() require('refactoring').refactor('Extract Variable') end,
+        function() return require('refactoring').refactor('Extract Variable') end,
         mode = 'v',
         desc = 'Extract Variable',
+        expr = true,
       },
       {
         '<leader>ri',
-        function() require('refactoring').refactor('Inline Variable') end,
+        function() return require('refactoring').refactor('Inline Variable') end,
         mode = 'v',
         desc = 'Inline Variable',
+        expr = true,
       },
       -- prompt for a refactor to apply when the remap is triggered
       {
@@ -56,19 +60,22 @@ return {
       -- Extract block doesn't need visual mode
       {
         '<leader>rbb',
-        function() require('refactoring').refactor('Extract Block') end,
+        function() return require('refactoring').refactor('Extract Block') end,
         desc = 'Extract Block',
+        expr = true,
       },
       {
         '<leader>rbf',
-        function() require('refactoring').refactor('Extract Block To File') end,
+        function() return require('refactoring').refactor('Extract Block To File') end,
         desc = 'Extract Block To File',
+        expr = true,
       },
       -- Inline variable can also pick up the identifier currently under the cursor without visual mode
       {
         '<leader>ri',
-        function() require('refactoring').refactor('Inline Variable') end,
+        function() return require('refactoring').refactor('Inline Variable') end,
         desc = 'Inline Variable',
+        expr = true,
       },
     },
   },
