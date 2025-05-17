@@ -99,6 +99,7 @@ return {
       {
         title = 'codecompanion',
         ft = 'codecompanion',
+        filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
         open = 'CodeCompanionChat toggle',
         size = { width = 0.25 },
       },
