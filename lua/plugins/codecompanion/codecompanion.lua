@@ -51,6 +51,10 @@ return {
     opts = {
       strategies = {
         chat = {
+          roles = {
+            user = '',
+            llm = function(adapter) return '  ' .. adapter.formatted_name end,
+          },
           keymaps = {
             clear = { modes = { n = '<C-x>' } },
             next_chat = { modes = { n = '>>' } },
@@ -79,7 +83,7 @@ return {
         diff = { enabled = false },
         chat = {
           show_header_separator = false,
-          show_settings = false,
+          show_settings = true,
         },
         action_palette = { provider = 'default' },
       },
