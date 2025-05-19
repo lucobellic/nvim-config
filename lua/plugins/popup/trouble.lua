@@ -20,7 +20,7 @@ return {
     },
     {
       '<leader>cL',
-      '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+      '<cmd>Trouble lsp toggle focus=false win.position=bottom<cr>',
       desc = 'LSP Definitions / references / ... (Trouble)',
     },
     {
@@ -56,15 +56,23 @@ return {
         follow = false,
       },
       lsp = {
-        desc = 'LSP definitions, implementations, type definitions, declarations and references',
+        desc = 'LSP definitions, implementations, type definitions and declarations',
         sections = {
           'lsp_definitions',
           'lsp_implementations',
           'lsp_type_definitions',
           'lsp_declarations',
+        },
+        title = false,
+        restore = true,
+        focus = false,
+        follow = false,
+      },
+      in_out = {
+        desc = 'LSP incoming and outgoing calls',
+        sections = {
           'lsp_incoming_calls',
           'lsp_outgoing_calls',
-          'lsp_references',
         },
         title = false,
         restore = true,
