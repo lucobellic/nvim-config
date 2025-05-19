@@ -215,7 +215,7 @@ vim.api.nvim_create_autocmd('User', {
   end,
 })
 
-local function get_codecompanion_icons() return codecompanion_processing and ' ' .. get_spinner() .. ' ' or ' ' end
+local function get_codecompanion_icons() return codecompanion_processing and get_spinner() .. ' ' or ' ' end
 
 local CodeCompanion = {
   provider = function() return get_codecompanion_icons() .. ' ' end,
