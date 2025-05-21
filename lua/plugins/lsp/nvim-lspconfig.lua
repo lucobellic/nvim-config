@@ -80,7 +80,7 @@ return {
         { 'gd', function() Snacks.picker.lsp_definitions() end, desc = 'Goto Definition', has = 'definition' },
         { 'gr', function() Snacks.picker.lsp_references() end, nowait = true, desc = 'References' },
         { 'gI', function() Snacks.picker.lsp_implementations() end, desc = 'Goto Implementation' },
-        { 'gy', function() Snacks.picker.lsp_type_definitions() end, desc = 'Goto T[y]pe Definition' },
+        { 'gi', function() require('telescope.builtin').lsp_incoming_calls() end, desc = 'Goto Incoming Calls' },
         {
           '<leader>ss',
           function() Snacks.picker.lsp_symbols({ filter = LazyVim.config.kind_filter }) end,

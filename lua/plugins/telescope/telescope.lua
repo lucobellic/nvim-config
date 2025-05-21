@@ -182,6 +182,9 @@ return {
         lsp_references = {
           layout_strategy = 'vertical',
         },
+        lsp_incoming_calls = {
+          layout_strategy = 'vertical',
+        },
       },
       extensions = {
         fzf = {
