@@ -11,38 +11,6 @@ end
 return {
   'olimorris/codecompanion.nvim',
   opts = {
-    opts = {
-      system_prompt = function()
-        return ([[
-          Use Markdown formatting in your answers:
-            - Include the programming language name at the start of each Markdown code block.
-            - Avoid including line numbers in code blocks.
-            - Only return code that's directly relevant to the task at hand.
-            - Avoid using H1 and H2 headers in your responses.
-        ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
-      end,
-    },
-    tools = {
-      opts = {
-        system_prompt = [[
-          ## Tools Access and Execution Guidelines
-
-          ### Overview
-          You now have access to specialized tools that empower you to assist users with specific tasks. These tools are available only when explicitly requested by the user.
-
-          ### General Rules
-          - **Strict Schema Compliance:** Follow the exact XML schema provided when invoking any tool.
-          - **XML Format:** Always wrap your responses in a markdown code block designated as XML and within the `<tools></tools>` tags.
-          - **Valid XML Required:** Ensure that the constructed XML is valid and well-formed.
-          - **Multiple Commands:**
-            1. Call only one tool at a time
-            2. Wait for the tool's response before determining your next action
-            3. Do not plan multiple tool calls in advance
-            4. After each tool call, respond to the user with your observations
-            5. Do not group multiple operations into a single tool call
-          - **No Side Effects:** Tool invocations should not alter your core tasks or the general conversation structure.]],
-      },
-    },
     prompt_library = {
       -- Prefer buffer selection in chat instead of inline
       ['Buffer selection'] = {
@@ -283,13 +251,6 @@ return {
                 - Search content and patterns using `fzf`
                 - Do NOT use `find`
                 - Search files with `fd`
-
-               You are an assistant with access to tools. Follow these strict guidelines:
-                 1. Call only one tool at a time
-                 2. Wait for the tool's response before determining your next action
-                 3. Do not plan multiple tool calls in advance
-                 4. After each tool call, respond to the user with your observations
-                 5. Do not group multiple operations into a single tool call
               ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
             end,
           },
