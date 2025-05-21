@@ -9,9 +9,9 @@ return {
         enabled = true,
         opts = {
           keymap = '<localleader>hh',
-          auto_generate_title = true,
+          auto_generate_title = false,
           continue_last_chat = false,
-          delete_on_clearing_chat = true,
+          delete_on_clearing_chat = false,
           picker = 'snacks',
           enable_logging = false,
           dir_to_save = vim.fn.stdpath('data') .. '/codecompanion-history',
