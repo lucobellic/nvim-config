@@ -47,6 +47,7 @@ return {
     { '<leader>up', '<cmd>ToggleTerm<cr>', desc = 'Toggle Toggleterm' },
   },
   opts = {
+    size = function() return vim.o.columns end,
     auto_scroll = false,
     close_on_exit = false,
     persist_mode = false,

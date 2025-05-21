@@ -37,6 +37,7 @@ return {
       dap = false, -- TODO: add condition to only load if dap is loaded
       strategy = {
         'toggleterm',
+        size = 200,
         auto_scroll = false,
         close_on_exit = false,
         hidden = false,
