@@ -19,26 +19,6 @@ local function term_focus_offset(offset)
   end
 end
 
-local function open_file()
-  -- Find the first open window with a valid buffer
-  local buffers = vim.tbl_filter(
-    function(buffer) return #buffer.windows >= 1 end,
-    vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
-  )
-  local first_window = #buffers > 0 and buffers[1].windows[1] or nil
-
-  -- Open file under cursor in first valid window or in new window otherwise
-  local filename = vim.fn.findfile(vim.fn.expand('<cfile>'))
-  if vim.fn.filereadable(filename) == 1 then
-    if first_window then
-      vim.api.nvim_set_current_win(first_window)
-    end
-    vim.cmd('edit ' .. filename)
-  else
-    vim.notify('File does not exist: ' .. filename)
-  end
-end
-
 local close_term = function()
   local terminal = require('toggleterm.terminal')
   local current_id = terminal.get_focused_id()
@@ -54,4 +34,4 @@ vim.keymap.set('n', '<S-h>', function() term_focus_offset(-1) end, { buffer = tr
 vim.keymap.set('n', '<S-l>', function() term_focus_offset(1) end, { buffer = true, desc = 'Focus next terminal' })
 vim.keymap.set('n', '<C-q>', function() close_term() end, { buffer = true, desc = 'Close terminal' })
 vim.keymap.set('n', '<C-t>', '<cmd>ToggleTermSplit<cr>', { buffer = true, desc = 'Open terminal' })
-vim.keymap.set('n', 'gf', function() open_file() end, { buffer = 0 })
+vim.keymap.set('n', 'gf', function() require('util.util').open_file() end, { buffer = 0 })
