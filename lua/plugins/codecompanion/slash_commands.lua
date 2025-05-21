@@ -46,6 +46,7 @@ return {
                 },
                 win = { input = { keys = { ['<CR>'] = { 'add_to_chat', mode = { 'i', 'n' } } } } },
                 filter = { filter = function(item) return vim.bo[item.buf].buftype == 'terminal' end },
+                main = { file = false },
               })
             end,
             description = 'Insert terminal output',
