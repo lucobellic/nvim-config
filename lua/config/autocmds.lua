@@ -76,7 +76,7 @@ vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
   pattern = { '*' },
   callback = function()
     if vim.g.change then
-      change_text = vim.fn.getreg('.')
+      change_text = vim.fn.keytrans(vim.fn.getreg('.'))
       vim.fn.setreg('/', vim.fn.getreg('"', 1))
       vim.g.change = false
       vim.fn['repeat#set'](vim.api.nvim_replace_termcodes('<cmd>RepeatChange<cr>', true, false, true))

@@ -43,7 +43,6 @@ return {
       desc = 'Replace word under cursor',
       expr = true,
     },
-    { mode = 'v', 'c', '<cmd>lua vim.g.change = true<cr>c', desc = 'Change' },
     { '<leader>A', '<cmd>silent %y+<cr>', desc = 'Copy all' },
     { mode = { 'n', 'v' }, '>>', '>>', remap = false, desc = 'Increase Indent' },
     { mode = { 'n', 'v' }, '<<', '<<', remap = false, desc = 'Decrease Indent' },
