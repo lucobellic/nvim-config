@@ -33,7 +33,4 @@ return {
       vim.lsp.enable('copilot_ls')
     end,
   },
-  opts = {},
-  init = function() vim.g.copilot_nes_debounce = 500 end,
-  config = function() vim.lsp.enable('copilot') end,
 }

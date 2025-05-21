@@ -86,6 +86,12 @@ return {
       copilot_model = 'gpt-4o-copilot',
       should_attach = function() return true end,
     },
+    config = function(_, opts)
+      require('copilot').setup(opts)
+      if vim.env.INSIDE_DOCKER then
+        vim.cmd('Copilot disable')
+      end
+    end,
   },
   {
     'github/copilot.vim',
