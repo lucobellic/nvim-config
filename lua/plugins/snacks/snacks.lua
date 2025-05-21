@@ -29,6 +29,7 @@ return {
           trace = ' ',
         },
       },
+      zen = { enabled = true },
     }
   end,
 }
