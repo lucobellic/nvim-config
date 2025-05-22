@@ -54,7 +54,8 @@ return {
       :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
       :totable()
 
-    opts = vim.tbl_deep_extend('force', opts, {
+    ---@type blink.cmp.Config
+    local config = {
       cmdline = { enabled = false },
       completion = {
         list = { selection = { preselect = true, auto_insert = true } },
@@ -63,6 +64,7 @@ return {
           auto_show = debounce == nil,
           direction_priority = { 'n', 's' },
           border = vim.g.winborder,
+          min_width = 35,
           draw = {
             components = {
               kind_icon = {
@@ -82,7 +84,8 @@ return {
           },
         },
       },
-    })
+    }
+    opts = vim.tbl_deep_extend('force', opts, config)
 
     opts.completion.menu.draw.treesitter = {}
     opts.keymap = {
