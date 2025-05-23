@@ -21,6 +21,7 @@ vim.filetype.add({
     gersemirc = 'yaml',
   },
   pattern = {
+    ['.*%.cpp.tpl'] = 'cpp.jinja',
     ['gitlab.*%.txt'] = 'markdown',
     ['github.*%.txt'] = 'markdown',
   },
