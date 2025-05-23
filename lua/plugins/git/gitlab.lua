@@ -1,10 +1,10 @@
 return {
-  'harrisoncramer/gitlab.nvim',
+  'lucobellic/gitlab.nvim',
   enabled = not vim.g.started_by_firenvim and vim.env.INSIDE_DOCKER ~= nil,
   dependencies = {
     'MunifTanjim/nui.nvim',
     'nvim-lua/plenary.nvim',
-    'lucobellic/diffview.nvim',
+    { 'lucobellic/diffview.nvim', branch = 'personal' },
     'stevearc/dressing.nvim', -- Recommended but not required. Better UI for pickers.
     'nvim-tree/nvim-web-devicons', -- Recommended but not required. Icons in discussion tree.
     {
@@ -23,10 +23,10 @@ return {
   keys = {
     { '<leader>gl', false },
     { '<leader>glb', function() require('gitlab').choose_merge_request() end, desc = 'Gitlab Choose Merge Request' },
-    { '<leader>glR', function() require('gitlab').review() end, desc = 'Gitlab Review' },
+    { '<leader>glS', function() require('gitlab').review() end, desc = 'Gitlab Start Review' },
     { '<leader>gls', function() require('gitlab').summary() end, desc = 'Gitlab Summary' },
     { '<leader>glA', function() require('gitlab').approve() end, desc = 'Gitlab Approve' },
-    { '<leader>glrr', function() require('gitlab').revoke() end, desc = 'Gitlab Revoke' },
+    { '<leader>glR', function() require('gitlab').revoke() end, desc = 'Gitlab Revoke' },
     { '<leader>glc', function() require('gitlab').create_comment() end, desc = 'Gitlab Create Comment' },
     {
       '<leader>glc',
@@ -59,22 +59,26 @@ return {
     { '<leader>glM', function() require('gitlab').merge() end, desc = 'Gitlab Merge' },
     { '<leader>glu', function() require('gitlab').copy_mr_url() end, desc = 'Gitlab Copy Mr Url' },
     { '<leader>glP', function() require('gitlab').publish_all_drafts() end, desc = 'Gitlab Publish All Drafts' },
-    { '<leader>glD', function() require('gitlab').toggle_draft_mode() end, desc = 'Gitlab Toggle Draf tMode' },
+    { '<leader>glD', function() require('gitlab').toggle_draft_mode() end, desc = 'Gitlab Toggle Draft Mode' },
   },
   build = function() require('gitlab.server').build(true) end, -- Builds the Go binary
+  --- @type Settings
   opts = {
     discussion_tree = {
       position = 'bottom',
       resolved = '󱍧',
       unresolved = '󱍮',
       toggle_node = 'l',
+      draft = "",
+      draft_mode = true
     },
     discussion_sign_and_diagnostic = {
       skip_resolved_discussion = true,
     },
-    keymap = {
+    keymaps = {
+      global = { disable_all = true },
       popup = { -- The popup for comment creation, editing, and replying
-        exit = '<Esc>',
+        discard_changes = '<Esc>',
         perform_action = '<c-cr>', -- Once in normal mode, does action (like saving comment or editing description, etc)
         perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
       },
