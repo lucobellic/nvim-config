@@ -231,7 +231,7 @@ return {
       },
       ['Agent Mode'] = {
         strategy = 'chat',
-        description = 'Agent mode with explicit set of tools',
+        description = 'agent mode with explicit set of tools',
         opts = {
           index = 21,
           is_default = false,
@@ -252,6 +252,48 @@ return {
                 - Do NOT use `find`
                 - Search files with `fd`
               ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
+            end,
+          },
+        },
+      },
+      ['Split Commits'] = {
+        strategy = 'chat',
+        description = 'agent mode with explicit set of tools',
+        opts = {
+          index = 22,
+          is_default = false,
+          short_name = 'commits',
+          is_slash_cmd = true,
+          auto_submit = false,
+        },
+        prompts = {
+          {
+            role = 'user',
+            contains_code = true,
+            content = function()
+              local current_branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
+              local logs = vim.fn.system('git log --pretty=format:"%s%n%b" -n 50')
+              local commit_history = 'Commit history for branch ' .. current_branch .. ':\n' .. logs .. '\n\n'
+              local staged_changes = 'Staged files:\n' .. vim.fn.system('git diff --cached --name-only')
+              local prompt = '<prompt>' .. commit_history .. staged_changes .. '</prompt> \n\n'
+              local task = ([[
+                You are an expert Git assistant.
+                Your task is to help the user create well-structured and conventional commits from their currently
+                staged changes.
+
+                Based on the provided commit logs and branch name, first, infer the established commit message
+                convention
+                Next, use the staged changes to determine the logical grouping of changes and generate appropriate
+                commit messages.
+
+                Your primary goal is to analyze these staged changes and determine if they should be split into
+                multiple logical and separate commits or if they represent a single cohesive change.
+                If the staged changes are empty or too trivial for a meaningful commit, please state that.
+
+                Use @cmd_runner to execute git commands for staging and un-staging files,
+                to group staged changes into meaningful commits when necessary.
+              ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
+              return prompt .. task
             end,
           },
         },
