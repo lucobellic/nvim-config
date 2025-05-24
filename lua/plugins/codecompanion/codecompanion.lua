@@ -42,6 +42,7 @@ return {
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
       { '<leader>as', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate Test' },
+      { '<leader>at', ':CodeCompanion #explain terminal error<cr>', mode = { 'n' }, desc = 'Code Companion Explain Terminal Error' },
     },
     init = function()
       vim.g.codecompanion_auto_tool_mode = true
@@ -83,7 +84,7 @@ return {
         diff = { enabled = false },
         chat = {
           show_header_separator = false,
-          show_settings = true,
+          show_settings = false, -- do not show settings to allow them to be changed with shortcuts
         },
         action_palette = { provider = 'default' },
       },
