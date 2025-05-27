@@ -49,11 +49,13 @@ return {
         restore = true,
         focus = false,
         follow = false,
+        auto_refresh = false,
       },
       lsp_definitions = {
         restore = true,
         focus = false,
         follow = false,
+        auto_refresh = false,
       },
       lsp = {
         desc = 'LSP definitions, implementations, type definitions and declarations',
@@ -67,6 +69,7 @@ return {
         restore = true,
         focus = false,
         follow = false,
+        auto_refresh = false,
       },
       in_out = {
         desc = 'LSP incoming and outgoing calls',
@@ -78,6 +81,7 @@ return {
         restore = true,
         focus = false,
         follow = false,
+        auto_refresh = false,
       },
       lsp_document_symbols = {
         title = false,
