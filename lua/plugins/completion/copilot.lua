@@ -84,7 +84,7 @@ return {
         },
       },
       copilot_model = 'gpt-4o-copilot',
-      should_attach = function() return true end,
+      should_attach = function() return vim.bo.filetype ~= 'codecompanion' end,
     },
     config = function(_, opts)
       require('copilot').setup(opts)
