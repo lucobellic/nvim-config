@@ -21,15 +21,34 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup({
-  rocks = { hererocks = true },
-  spec = {
-    { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
+local spec = function()
+  local specs = {}
 
-    -- Load extras first
-    { import = 'plugins.extras' },
+  if vim.g.distribution == 'astronvim' then
+    specs = {
+      {
+        'AstroNvim/AstroNvim',
+        version = '^5',
+        import = 'astronvim.plugins',
+        opts = { -- AstroNvim options must be set here with the `import` key
+          mapleader = ' ', -- This ensures the leader key must be configured before Lazy is set up
+          maplocalleader = ',', -- This ensures the localleader key must be configured before Lazy is set up
+          icons_enabled = true, -- Set to false to disable icons (if no Nerd Font is available)
+          pin_plugins = nil, -- Default will pin plugins when tracking `version` of AstroNvim, set to true/false to override
+          update_notifications = true, -- Enable/disable notification about running `:Lazy update` twice to update pinned plugins
+        },
+      },
+      { import = 'distribution.astronvim' },
+    }
+  elseif vim.g.distribution == 'lazyvim' then
+    specs = {
+      { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
+      { import = 'distribution.lazyvim.lazyvim' },
+      { import = 'distribution.lazyvim.extras' },
+    }
+  end
 
-    { import = 'plugins' },
+  vim.list_extend(specs, {
     { import = 'plugins.code' },
     { import = 'plugins.codecompanion' },
     { import = 'plugins.completion' },
@@ -47,7 +66,14 @@ require('lazy').setup({
     { import = 'plugins.terminal' },
     { import = 'plugins.theme' },
     { import = 'plugins.ui' },
-  },
+  })
+
+  return specs
+end
+
+require('lazy').setup({
+  rocks = { hererocks = true },
+  spec = spec(),
   ui = {
     border = vim.g.border.style,
     backdrop = 100,

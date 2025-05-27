@@ -1,3 +1,6 @@
+--- @type 'astronvim'|'lazyvim'
+vim.g.distribution = 'lazyvim'
+
 -- Set border style
 vim.g.winborder = 'single'
 local enable_border = true
@@ -53,6 +56,11 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
     end, opts)
   end
   return keymap_set(mode, lhs, rhs, opts)
+end
+
+if vim.g.distribution ~= 'lazyvim' then
+  require('config.options')
+  require('config.autocmds')
 end
 
 require('config.shell')

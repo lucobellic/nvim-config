@@ -59,7 +59,17 @@ return {
         },
       },
       config = function()
-        local path = require('mason-registry').get_package('debugpy'):get_install_path()
+        local path = ''
+        if vim.g.distribution == 'lazyvim' then
+          path = require('mason-registry').get_package('debugpy'):get_install_path()
+        else
+          path = require('mason-registry')
+              .get_package('debugpy')
+              :get_install_handle()
+              :and_then(function(p) return p:get_install_path() end)
+              :or_else(vim.fn.stdpath('data') .. '/mason/packages/debugpy')
+        end
+
         require('dap-python').setup(path .. '/venv/bin/python', {
           include_configs = true,
           console = 'integratedTerminal',
@@ -169,19 +179,19 @@ return {
     },
   },
   keys = {
-    { '<leader>dq', function() require('dap').terminate() end, repeatable = true, desc = 'Terminate' },
+    { '<leader>dq', function() require('dap').terminate() end,         repeatable = true, desc = 'Terminate' },
     { '<leader>db', function() require('dap').toggle_breakpoint() end, repeatable = true, desc = 'Toggle Breakpoint' },
-    { '<leader>dc', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
-    { '<F5>', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
-    { '<leader>dC', function() require('dap').run_to_cursor() end, repeatable = true, desc = 'Run to Cursor' },
-    { '<leader>di', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },
-    { '<F11>', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },
-    { '<leader>dj', function() require('dap').down() end, repeatable = true, desc = 'Down' },
-    { '<leader>dk', function() require('dap').up() end, repeatable = true, desc = 'Up' },
-    { '<leader>do', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
-    { '<F12>', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
-    { '<leader>dO', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
-    { '<F10>', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
+    { '<leader>dc', function() require('dap').continue() end,          repeatable = true, desc = 'Continue' },
+    { '<F5>',       function() require('dap').continue() end,          repeatable = true, desc = 'Continue' },
+    { '<leader>dC', function() require('dap').run_to_cursor() end,     repeatable = true, desc = 'Run to Cursor' },
+    { '<leader>di', function() require('dap').step_into() end,         repeatable = true, desc = 'Step Into' },
+    { '<F11>',      function() require('dap').step_into() end,         repeatable = true, desc = 'Step Into' },
+    { '<leader>dj', function() require('dap').down() end,              repeatable = true, desc = 'Down' },
+    { '<leader>dk', function() require('dap').up() end,                repeatable = true, desc = 'Up' },
+    { '<leader>do', function() require('dap').step_out() end,          repeatable = true, desc = 'Step Out' },
+    { '<F12>',      function() require('dap').step_out() end,          repeatable = true, desc = 'Step Out' },
+    { '<leader>dO', function() require('dap').step_over() end,         repeatable = true, desc = 'Step Over' },
+    { '<F10>',      function() require('dap').step_over() end,         repeatable = true, desc = 'Step Over' },
   },
   opts = function(_, opts)
     local dap = require('dap')

@@ -167,6 +167,9 @@ return {
     { '<C-9>', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
     { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
     { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
+    { 'H', '<cmd>BufferLineCyclePrev<cr>', desc = 'Previous Buffer' },
+    { 'L', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
+    { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
     { '<leader>bf', '<cmd>BufferLineSortByRelativeDirectory<cr>', desc = 'Buffer Order By Directory' },
     { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
     {

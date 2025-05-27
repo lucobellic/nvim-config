@@ -93,6 +93,7 @@ local filter_skip = {
       { event = 'msg_show', kind = '', find = 'lnum' },
       { event = 'notify', kind = 'warn', find = 'Unsupported input type' },
       { event = 'notify', kind = 'warn', find = 'Tool cmd_runner' },
+      { event = 'notify', kind = 'warn', find = 'failed to run generator' },
       { event = 'notify', kind = 'error', find = 'invalid AST' },
       { event = 'notify', kind = 'error', find = 'Failed to set cursor' },
       { event = 'notify', kind = 'error', find = 'Edgy' },
@@ -116,11 +117,18 @@ return {
   keys = {
     { '<c-f>', false },
     { '<c-p>', false },
+    { "<leader>sn", "", desc = "+noice"},
     {
       '<leader>snn',
       function() require('telescope').extensions.notify.notify() end,
       desc = 'Find Notifications',
     },
+    { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
+    { "<leader>snl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
+    { "<leader>snh", function() require("noice").cmd("history") end, desc = "Noice History" },
+    { "<leader>sna", function() require("noice").cmd("all") end, desc = "Noice All" },
+    { "<leader>snd", function() require("noice").cmd("dismiss") end, desc = "Dismiss All" },
+    { "<leader>snt", function() require("noice").cmd("pick") end, desc = "Noice Picker (Telescope/FzfLua)" },
   },
   opts = {
     cmdline = cmdline,

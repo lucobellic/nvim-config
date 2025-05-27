@@ -72,7 +72,7 @@ return {
   {
     'neovim/nvim-lspconfig',
     opts = function(_, opts)
-      local Keys = require('lazyvim.plugins.lsp.keymaps').get()
+      local Keys = vim.g.distribution == 'lazyvim' and require('lazyvim.plugins.lsp.keymaps').get() or {}
       vim.list_extend(Keys, {
         { '<leader>cc', false, mode = { 'n', 'v' } },
         { '<leader>cC', false, mode = { 'n', 'v' } },

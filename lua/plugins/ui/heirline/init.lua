@@ -15,7 +15,7 @@ end
 
 return {
   'rebelot/heirline.nvim',
-  event = 'LazyFile',
+  event = vim.g.distribution == 'lazyvim' and 'LazyFile' or 'BufEnter',
   dependencies = {
     {
       'linrongbin16/lsp-progress.nvim',
