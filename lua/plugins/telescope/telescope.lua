@@ -39,6 +39,7 @@ return {
   },
   {
     'nvim-telescope/telescope.nvim',
+    event = 'VeryLazy',
     keys = {
       { '<leader>gc', false },
       { '<leader>gs', false },
