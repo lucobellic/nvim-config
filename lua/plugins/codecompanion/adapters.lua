@@ -13,12 +13,12 @@ return {
     adapters = {
       copilot = function()
         return require('codecompanion.adapters').extend('copilot', {
-          schema = { model = { default = 'claude-3.7-sonnet' } },
+          schema = { model = { default = 'claude-sonnet-4' } },
         })
       end,
       copilot_inline = function()
         return require('codecompanion.adapters').extend('copilot', {
-          schema = { model = { default = 'claude-3.7-sonnet' } },
+          schema = { model = { default = 'claude-sonnet-4' } },
         })
       end,
       ollama = function()
