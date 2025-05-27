@@ -56,10 +56,20 @@ return {
 
     ---@type blink.cmp.Config
     local config = {
-      cmdline = { enabled = false },
+      cmdline = {
+        enabled = true,
+        completion = { menu = { auto_show = true } },
+        keymap = {
+          ['<Tab>'] = { 'show', 'accept' },
+          ['<c-j>'] = { 'select_next', 'fallback' },
+          ['<down>'] = { 'select_next', 'fallback' },
+          ['<c-k>'] = { 'select_prev', 'fallback' },
+          ['<up>'] = { 'select_prev', 'fallback' },
+        },
+      },
       completion = {
         list = { selection = { preselect = true, auto_insert = true } },
-        documentation = { window = { border = vim.g.winborder } },
+        documentation = { auto_show = false, window = { border = vim.g.winborder } },
         menu = {
           auto_show = debounce == nil,
           direction_priority = { 'n', 's' },
