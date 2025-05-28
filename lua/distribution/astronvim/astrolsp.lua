@@ -4,8 +4,8 @@ return {
     ---@type AstroLSPOpts
     opts = {
       features = {
-        codelens = true,        -- enable/disable codelens refresh on start
-        inlay_hints = false,    -- enable/disable inlay hints on start
+        codelens = true, -- enable/disable codelens refresh on start
+        inlay_hints = false, -- enable/disable inlay hints on start
         semantic_tokens = true, -- enable/disable semantic token highlighting
       },
       formatting = {
@@ -85,11 +85,11 @@ return {
             desc = 'Goto T[y]pe Definition',
           },
           ['<leader>ss'] = {
-            function() Snacks.picker.lsp_symbols({ filter = LazyVim.config.kind_filter }) end,
+            function() Snacks.picker.lsp_symbols({ filter = vim.g.kind_filter }) end,
             desc = 'LSP Symbols',
           },
           ['<leader>sS'] = {
-            function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
+            function() Snacks.picker.lsp_workspace_symbols({ filter = vim.g.kind_filter }) end,
             desc = 'LSP Workspace Symbols',
           },
           gs = { '<cmd>lua vim.lsp.buf.signature_help()<CR>', desc = 'Signature Help' },
@@ -101,26 +101,32 @@ return {
           ['[d'] = {
             function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
             desc = 'Previous Diagnostic',
+            repeatable = true,
           },
           [']d'] = {
             function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
             desc = 'Next Diagnostic',
+            repeatable = true,
           },
           ['[w'] = {
             function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
             desc = 'Previous Warning',
+            repeatable = true,
           },
           [']w'] = {
             function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
             desc = 'Next Warning',
+            repeatable = true,
           },
           ['[e'] = {
             function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
             desc = 'Previous Error',
+            repeatable = true,
           },
           [']e'] = {
             function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
             desc = 'Next Error',
+            repeatable = true,
           },
           ['<Leader>='] = {
             function() vim.lsp.buf.format({}) end,
@@ -133,6 +139,7 @@ return {
               return client.supports_method('textDocument/semanticTokens/full') and vim.lsp.semantic_tokens ~= nil
             end,
           },
+          ['<M-o>'] = { '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch Source/Header (C/C++)' },
         },
         v = {
           ['<leader>='] = {
