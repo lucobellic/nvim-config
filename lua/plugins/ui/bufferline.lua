@@ -264,14 +264,14 @@ return {
       },
       highlights = {
         buffer_visible = {
-          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferVisible', link = false }).bg,
+          bg = vim.api.nvim_get_hl(0, { name = 'bufferLineBufferVisible', link = true }).bg,
         },
         buffer_selected = {
-          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferSelected', link = false }).bg,
+          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferSelected', link = true }).bg,
         },
         background = {
-          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBackground', link = false }).bg
-            or vim.api.nvim_get_hl(0, { name = 'Normal', link = false }).bg,
+          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBackground', link = true }).bg
+            or vim.api.nvim_get_hl(0, { name = 'Normal', link = true }).bg,
         },
       },
     }
