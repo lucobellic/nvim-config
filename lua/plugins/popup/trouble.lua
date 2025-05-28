@@ -34,29 +34,34 @@ return {
       desc = 'Quickfix List (Trouble)',
     },
   },
+  cmd = { 'Trouble' },
   opts = {
     max_items = 500, -- limit number of items that can be displayed per section
     warn_no_results = false, -- show a warning when there are no results
     open_no_results = true, -- open the trouble window when there are no results
-    ---@type trouble.Window.opts
+    --- @type trouble.Window.opts
     preview = {
       type = 'main',
       scratch = false,
     },
-    ---@type table<string, trouble.Mode>
+    --- @type table<string, trouble.Mode>
     modes = {
+      --- @diagnostic disable-next-line: missing-fields
       lsp_references = {
         restore = true,
         focus = false,
         follow = false,
         auto_refresh = false,
       },
+      --- @diagnostic disable-next-line: missing-fields
       lsp_definitions = {
         restore = true,
         focus = false,
         follow = false,
         auto_refresh = false,
       },
+
+      --- @diagnostic disable-next-line: missing-fields
       lsp = {
         desc = 'LSP definitions, implementations, type definitions and declarations',
         sections = {
@@ -71,6 +76,8 @@ return {
         follow = false,
         auto_refresh = false,
       },
+
+      --- @diagnostic disable-next-line: missing-fields
       in_out = {
         desc = 'LSP incoming and outgoing calls',
         sections = {
@@ -83,6 +90,8 @@ return {
         follow = false,
         auto_refresh = false,
       },
+
+      --- @diagnostic disable-next-line: missing-fields
       lsp_document_symbols = {
         title = false,
         focus = false,
