@@ -68,6 +68,7 @@ vim.opt.diffopt = {
 }
 
 vim.opt.fillchars = {
+  fold = ' ',
   diff = '╱',
   eob = ' ',
   stl = ' ',
