@@ -94,4 +94,12 @@ return {
       require('plugins.codecompanion.utils.extmarks').setup()
     end,
   },
+  {
+    'nvim-treesitter/nvim-treesitter',
+    optional = true,
+    opts = function(_, opts)
+      vim.treesitter.language.register('markdown', 'codecompanion')
+      return opts
+    end,
+  },
 }
