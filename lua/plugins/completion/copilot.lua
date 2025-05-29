@@ -60,7 +60,7 @@ end
 return {
   {
     'zbirenbaum/copilot.lua',
-    enabled = vim.g.suggestions == 'copilot',
+    enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1) and (vim.g.suggestions == 'copilot'),
     keys = get_keys(),
     opts = {
       suggestion = {
