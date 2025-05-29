@@ -5,6 +5,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ','
 
 vim.g.autoformat = false
+vim.g.markdown_folding = true
 
 -- Use ai compiletion with nvim-cmp/blink or prefer virtual text suggestions
 vim.g.ai_cmp = false
