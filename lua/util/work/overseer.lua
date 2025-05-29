@@ -1,10 +1,49 @@
--- TODO: set and test problem matcher (python/cpp) such as tasks.json
-local cmake_targets = nil
+local cache_dir = vim.fn.stdpath('cache') .. '/cmake_targets'
+
+local function get_project_id()
+  local cwd = vim.fn.getcwd()
+  -- Create a simple hash of the project path
+  return vim.fn.fnamemodify(cwd, ':t') .. '_' .. vim.fn.sha256(cwd):sub(1, 8)
+end
+
+local function get_cache_file()
+  vim.fn.mkdir(cache_dir, 'p')
+  return cache_dir .. '/' .. get_project_id() .. '.json'
+end
+
+local function load_cmake_cache()
+  local file = io.open(get_cache_file(), 'r')
+  if file then
+    local content = file:read('*all')
+    file:close()
+    local ok, data = pcall(vim.json.decode, content)
+    return ok and data or nil
+  end
+  return nil
+end
+
+local function save_cmake_cache(targets)
+  local file = io.open(get_cache_file(), 'w')
+  if file then
+    file:write(vim.json.encode(targets))
+    file:close()
+  end
+end
+
+local function get_cmake_targets()
+  local project_key = 'cmake_targets_' .. get_project_id()
+  if not vim.g[project_key] then
+    vim.g[project_key] = load_cmake_cache()
+  end
+  return vim.g[project_key]
+end
 
 local function cmake_build()
   local Job = require('plenary.job')
   local overseer = require('overseer')
-  if not cmake_targets then
+  local cached_targets = get_cmake_targets()
+
+  if not cached_targets then
     ---@diagnostic disable-next-line: missing-fields
     Job:new({
       command = 'cmake',
@@ -25,14 +64,18 @@ local function cmake_build()
           end, j:result())
 
           -- Remove ': phony' from target names
-          cmake_targets = vim.tbl_map(function(target) return target:gsub(': phony', '') end, targets)
+          local cleaned_targets = vim.tbl_map(function(target) return target:gsub(': phony', '') end, targets)
+
+          local project_key = 'cmake_targets_' .. get_project_id()
+          vim.g[project_key] = cleaned_targets
+          save_cmake_cache(cleaned_targets)
 
           vim.notify('CMake targets cache updated', vim.log.levels.INFO)
         end
       end,
     }):start()
   else
-    vim.ui.select(cmake_targets, { prompt = 'Select cmake target' }, function(choice)
+    vim.ui.select(cached_targets, { prompt = 'Select cmake target' }, function(choice)
       if choice then
         overseer
           .new_task({
@@ -45,6 +88,14 @@ local function cmake_build()
       end
     end)
   end
+end
+
+local function clear_cmake_cache()
+  vim.notify('Clearing CMake cache...', vim.log.levels.INFO)
+  local project_key = 'cmake_targets_' .. get_project_id()
+  vim.g[project_key] = nil
+  os.remove(get_cache_file())
+  vim.notify('CMake cache cleared', vim.log.levels.INFO)
 end
 
 local function get_reach_result(args)
@@ -103,4 +154,4 @@ if ok then
 end
 
 vim.keymap.set('n', '<leader>oeb', cmake_build, { desc = 'CMake Build Target', repeatable = true })
-vim.keymap.set('n', '<leader>oec', function() cmake_targets = nil end, { desc = 'CMake Clear Target Cache' })
+vim.keymap.set('n', '<leader>oec', clear_cmake_cache, { desc = 'CMake Clear Target Cache' })
