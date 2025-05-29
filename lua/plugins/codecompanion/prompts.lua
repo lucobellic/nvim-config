@@ -58,17 +58,15 @@ return {
         prompts = {
           {
             role = 'system',
-            content = [[
-                When asked to add documentation, follow these steps:
-                1. **Identify Key Points**: Carefully read the provided code to understand its functionality.
-                2. **Review the Documentation**: Ensure the documentation:
-                  - Includes necessary explanations.
-                  - Helps in understanding the code's functionality.
-                  - Follows best practices for readability and maintainability.
-                  - Is formatted correctly.
-
-                For C/C++ code: use Doxygen comments using `\` instead of `@`.
-                For Python code: Use Docstring numpy-notypes format.]],
+            content = 'When asked to add documentation, follow these steps:\n'
+              .. '1. **Identify Key Points**: Carefully read the provided code to understand its functionality.\n'
+              .. '2. **Review the Documentation**: Ensure the documentation:\n'
+              .. '  - Includes necessary explanations.\n'
+              .. "  - Helps in understanding the code's functionality.\n"
+              .. '  - Follows best practices for readability and maintainability.\n'
+              .. '  - Is formatted correctly.\n\n'
+              .. 'For C/C++ code: use Doxygen comments using `\\` instead of `@`.\n'
+              .. 'For Python code: Use Docstring numpy-notypes format.',
             opts = {
               visible = false,
             },
@@ -101,18 +99,16 @@ return {
         prompts = {
           {
             role = 'system',
-            content = [[
-                When asked to optimize code, follow these steps:
-                1. **Analyze the Code**: Understand the functionality and identify potential bottlenecks.
-                2. **Implement the Optimization**: Apply the optimizations including best practices to the code.
-                3. **Shorten the code**: Remove unnecessary code and refactor the code to be more concise.
-                3. **Review the Optimized Code**: Ensure the code is optimized for performance and readability. Ensure the code:
-                  - Maintains the original functionality.
-                  - Is more efficient in terms of time and space complexity.
-                  - Follows best practices for readability and maintainability.
-                  - Is formatted correctly.
-
-                Use Markdown formatting and include the programming language name at the start of the code block.]],
+            content = 'When asked to optimize code, follow these steps:\n'
+              .. '1. **Analyze the Code**: Understand the functionality and identify potential bottlenecks.\n'
+              .. '2. **Implement the Optimization**: Apply the optimizations including best practices to the code.\n'
+              .. '3. **Shorten the code**: Remove unnecessary code and refactor the code to be more concise.\n'
+              .. '3. **Review the Optimized Code**: Ensure the code is optimized for performance and readability. Ensure the code:\n'
+              .. '  - Maintains the original functionality.\n'
+              .. '  - Is more efficient in terms of time and space complexity.\n'
+              .. '  - Follows best practices for readability and maintainability.\n'
+              .. '  - Is formatted correctly.\n\n'
+              .. 'Use Markdown formatting and include the programming language name at the start of the code block.',
             opts = {
               visible = false,
             },
@@ -244,14 +240,12 @@ return {
             role = 'user',
             contains_code = true,
             content = function()
-              return ([[
-                You are in agent mode:
-                Use tools to answer user request using @cmd_runner
-                - Do NOT use `grep`
-                - Search content and patterns using `fzf`
-                - Do NOT use `find`
-                - Search files with `fd`
-              ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
+              return 'You are in agent mode:\n'
+                .. 'Use tools to answer user request using @cmd_runner\n'
+                .. '- Do NOT use `grep`\n'
+                .. '- Search content and patterns using `fzf`\n'
+                .. '- Do NOT use `find`\n'
+                .. '- Search files with `fd`'
             end,
           },
         },
@@ -276,23 +270,13 @@ return {
               local commit_history = 'Commit history for branch ' .. current_branch .. ':\n' .. logs .. '\n\n'
               local staged_changes = 'Staged files:\n' .. vim.fn.system('git diff --cached --name-only')
               local prompt = '<prompt>' .. commit_history .. staged_changes .. '</prompt> \n\n'
-              local task = ([[
-                You are an expert Git assistant.
-                Your task is to help the user create well-structured and conventional commits from their currently
-                staged changes.
-
-                Based on the provided commit logs and branch name, first, infer the established commit message
-                convention
-                Next, use the staged changes to determine the logical grouping of changes and generate appropriate
-                commit messages.
-
-                Your primary goal is to analyze these staged changes and determine if they should be split into
-                multiple logical and separate commits or if they represent a single cohesive change.
-                If the staged changes are empty or too trivial for a meaningful commit, please state that.
-
-                Use @cmd_runner to execute git commands for staging and un-staging files,
-                to group staged changes into meaningful commits when necessary.
-              ]]):gsub('^ +', '', 1):gsub('\n +', '\n')
+              local task = 'You are an expert Git assistant.\n'
+                .. 'Your task is to help the user create well-structured and conventional commits from their currently staged changes.\n\n'
+                .. 'Based on the provided commit logs and branch name, first, infer the established commit message convention\n'
+                .. 'Next, use the staged changes to determine the logical grouping of changes and generate appropriate commit messages.\n\n'
+                .. 'Your primary goal is to analyze these staged changes and determine if they should be split into multiple logical and separate commits.\n'
+                .. 'If the staged changes are empty or too trivial for a meaningful commit, please state that.\n\n'
+                .. 'Use @cmd_runner to execute git commands for staging and un-staging files to group staged changes into meaningful commits when necessary.'
               return prompt .. task
             end,
           },
