@@ -80,6 +80,8 @@ local lsp = {
 
 local filter_skip = {
   filter = {
+
+    --- @type NoiceFilter[]
     any = {
       -- Hide display messages but still show them in :messages
       { event = 'msg_show', kind = { '', 'echo', 'echomsg', 'search_count' }, find = 'written' },
@@ -97,6 +99,7 @@ local filter_skip = {
       { event = 'notify', kind = 'error', find = 'invalid AST' },
       { event = 'notify', kind = 'error', find = 'Failed to set cursor' },
       { event = 'notify', kind = 'error', find = 'Edgy' },
+      { event = 'notify', kind = 'error', find = 'mason-lspconfig.nvim'  },
       { event = 'msg_show', kind = '', find = 'query' },
       { event = 'msg_show', kind = 'lua_error', find = 'Autocommands' },
       -- Hide spamming pylsp messages
