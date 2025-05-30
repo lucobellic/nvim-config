@@ -1,7 +1,7 @@
 local border_style = vim.g.border.enabled and { '─', '─', '─', ' ', '─', '─', '─', ' ' } or { ' ' }
 
 return {
-  'SmiteshP/nvim-navbuddy',
+  'hasansujon786/nvim-navbuddy',
   dependencies = {
     'SmiteshP/nvim-navic',
   },
