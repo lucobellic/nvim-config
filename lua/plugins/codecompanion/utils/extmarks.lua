@@ -9,6 +9,7 @@ local M = {}
 local hl_group = 'DiagnosticVirtualTextWarn'
 local priority = 2048
 local repeat_interval = 100
+local use_block_spinner = false
 
 --- @type CodeCompanion.InlineExtmark
 local default_opts = {
@@ -64,19 +65,26 @@ end
 --- @param start_line number Starting line of the region (0-indexed)
 --- @param end_line number Ending line of the region (0-indexed)
 local function start_spinners(bufnr, ns_id, start_line, end_line)
-  local block_spinner = require('plugins.codecompanion.utils.block_spinner').new({
-    bufnr = bufnr,
-    ns_id = ns_id,
-    start_line = start_line,
-    end_line = end_line,
-    opts = virtual_text_spinners_opts,
-  })
+  --- @type VirtualTextBlockSpinner|nil
+  local block_spinner = nil
+  if use_block_spinner then
+    -- Use block spinner if configured
+    block_spinner = require('plugins.codecompanion.utils.block_spinner').new({
+      bufnr = bufnr,
+      ns_id = ns_id,
+      start_line = start_line,
+      end_line = end_line,
+      opts = virtual_text_spinners_opts,
+    })
+  end
 
+  local spinner_width = block_spinner and block_spinner.width or 0
+  local spinner_line = block_spinner and start_line + math.floor((end_line - start_line) / 2) or start_line
   local spinner = require('plugins.codecompanion.utils.spinner').new({
     bufnr = bufnr,
     ns_id = ns_id,
-    line_num = start_line + math.floor((end_line - start_line) / 2),
-    width = block_spinner.width,
+    line_num = spinner_line,
+    width = spinner_width,
     opts = {
       repeat_interval = repeat_interval,
       extmark = { virt_text_pos = 'overlay', priority = priority + 1 },
@@ -84,14 +92,16 @@ local function start_spinners(bufnr, ns_id, start_line, end_line)
   })
 
   spinner:start()
-  block_spinner:start()
+  if block_spinner then
+    block_spinner:start()
+  end
   virtual_text_spinners[ns_id] = { spinner, block_spinner }
 end
 
 --- Stop active spinners associated with a namespace ID
 --- @param ns_id number The namespace ID to stop spinners
 local function stop_spinner(ns_id)
-  local block_spinner, spinner = unpack(virtual_text_spinners[ns_id])
+  local spinner, block_spinner = unpack(virtual_text_spinners[ns_id])
   if spinner then
     spinner:stop()
   end
