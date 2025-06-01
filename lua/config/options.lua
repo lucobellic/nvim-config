@@ -5,6 +5,8 @@ vim.o.conceallevel = 2
 vim.o.laststatus = 3
 vim.o.signcolumn = 'yes:2'
 
+vim.opt.foldlevel = 99
+
 vim.opt.sessionoptions = {
   'buffers',
   'curdir',

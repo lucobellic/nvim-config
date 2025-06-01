@@ -48,48 +48,48 @@ function M.setup()
   })
 
   local normal_fold_commands = {
-    'zo',
-    'zO',
-    'zc',
-    'zC',
-    'za',
-    'zA',
-    'zv',
-    'zx',
-    'zX',
-    'zm',
-    'zM',
-    'zr',
-    'zR',
-    'zn',
-    'zN',
-    'zi',
+    { cmd = 'zo', desc = 'Open fold under cursor' },
+    { cmd = 'zO', desc = 'Open all folds under cursor recursively' },
+    { cmd = 'zc', desc = 'Close fold under cursor' },
+    { cmd = 'zC', desc = 'Close all folds under cursor recursively' },
+    { cmd = 'za', desc = 'Toggle fold under cursor' },
+    { cmd = 'zA', desc = 'Toggle all folds under cursor recursively' },
+    { cmd = 'zv', desc = 'View cursor line (open folds to reveal cursor)' },
+    { cmd = 'zx', desc = 'Update folds (undo manually opened/closed folds)' },
+    { cmd = 'zX', desc = 'Undo manually opened/closed folds' },
+    { cmd = 'zm', desc = 'Fold more (increase foldlevel)' },
+    { cmd = 'zM', desc = 'Close all folds' },
+    { cmd = 'zr', desc = 'Reduce folds (decrease foldlevel)' },
+    { cmd = 'zR', desc = 'Open all folds' },
+    { cmd = 'zn', desc = 'Fold none (disable folding)' },
+    { cmd = 'zN', desc = 'Fold normal (enable folding)' },
+    { cmd = 'zi', desc = 'Invert folding' },
   }
 
   local visual_fold_commands = {
-    'zf',
-    'zF',
-    'zd',
-    'zD',
-    'zE',
+    { cmd = 'zf', desc = 'Create fold from selection' },
+    { cmd = 'zF', desc = 'Create fold from selection (alternative)' },
+    { cmd = 'zd', desc = 'Delete fold under cursor' },
+    { cmd = 'zD', desc = 'Delete all folds under cursor recursively' },
+    { cmd = 'zE', desc = 'Eliminate all folds in window' },
   }
 
-  for _, cmd in ipairs(normal_fold_commands) do
-    vim.keymap.set('n', cmd, function()
-      vim.cmd('normal! ' .. cmd)
+  for _, fold_cmd in ipairs(normal_fold_commands) do
+    vim.keymap.set('n', fold_cmd.cmd, function()
+      vim.cmd('normal! ' .. fold_cmd.cmd)
       vim.schedule(M.add_fold_virtual_text)
-    end)
+    end, { desc = fold_cmd.desc, repeatable = true })
   end
 
   --- Allow visual mode folding commands to work with any foldmethod
-  for _, cmd in ipairs(visual_fold_commands) do
-    vim.keymap.set('v', cmd, function()
+  for _, fold_cmd in ipairs(visual_fold_commands) do
+    vim.keymap.set('v', fold_cmd.cmd, function()
       local previous_foldmethod = vim.wo.foldmethod
       vim.wo.foldmethod = 'manual'
-      vim.cmd('normal! ' .. cmd)
+      vim.cmd('normal! ' .. fold_cmd.cmd)
       vim.schedule(M.add_fold_virtual_text)
       vim.wo.foldmethod = previous_foldmethod
-    end)
+    end, { desc = fold_cmd.desc })
   end
 
   if vim.g.vscode then
@@ -103,6 +103,27 @@ function M.setup()
     vim.keymap.set('n', 'zO', function() vscode.action('editor.unfoldRecursively') end)
     vim.keymap.set('n', 'za', function() vscode.action('editor.toggleFold') end)
   end
+
+  if vim.g.distribution ~= 'lazyvim' then
+    vim.opt.foldexpr = "v:lua.require('util.folds.folds').foldexpr()"
+  end
+end
+
+function M.foldexpr()
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.b[buf].ts_folds == nil then
+    -- as long as we don't have a filetype, don't bother
+    -- checking if treesitter is available (it won't)
+    if vim.bo[buf].filetype == '' then
+      return '0'
+    end
+    if vim.bo[buf].filetype:find('dashboard') then
+      vim.b[buf].ts_folds = false
+    else
+      vim.b[buf].ts_folds = pcall(vim.treesitter.get_parser, buf)
+    end
+  end
+  return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or '0'
 end
 
 return M
