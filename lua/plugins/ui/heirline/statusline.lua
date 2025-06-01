@@ -1,8 +1,4 @@
-local conditions = require('heirline.conditions')
-local utils = require('heirline.utils')
 local colors = require('plugins.ui.heirline.colors').colors
-local copilot_status_ok, copilot_status = pcall(require, 'copilot.status')
-local copilot_client_ok, copilot_client = pcall(require, 'copilot.client')
 
 local primary_mode_colors = {
   n = { fg = colors.dark_gray },
@@ -55,7 +51,7 @@ local ViMode = {
 }
 
 local Git = {
-  condition = conditions.is_git_repo,
+  condition = function() return require('heirline.conditions').is_git_repo() end,
   init = function(self)
     ---@diagnostic disable-next-line: undefined-field
     self.status_dict = vim.b.gitsigns_status_dict
@@ -136,7 +132,7 @@ local function OverseerTasksForStatus(status)
     provider = function(self) return string.format('%s%d', self.symbols[status], #self.tasks[status]) end,
     hl = function()
       return {
-        fg = utils.get_highlight(string.format('Overseer%s', status)).fg,
+        fg = require('heirline.utils').get_highlight(string.format('Overseer%s', status)).fg,
       }
     end,
   }
@@ -179,6 +175,8 @@ local function get_spinner()
 end
 
 local function get_copilot_icons()
+  local copilot_client_ok, copilot_client = pcall(require, 'copilot.client')
+  local copilot_status_ok, copilot_status = pcall(require, 'copilot.status')
   if copilot_client_ok and copilot_client.is_disabled() then
     return ' ' .. copilot_icons.Disabled
   elseif copilot_status_ok and copilot_status.data.status == 'InProgress' then
