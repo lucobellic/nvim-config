@@ -72,12 +72,7 @@ return {
           opts = { noremap = false, expr = true, buffer = true },
         },
       },
-      -- Optional, set to true if you use the Obsidian Advanced URI plugin.
-      -- https://github.com/Vinzent03/obsidian-advanced-uri
-      use_advanced_uri = true,
 
-      -- Optional, set to true to force '<cmd>ObsidianOpen' to bring the app to the foreground.
-      open_app_foreground = true,
       finder = 'telescope.nvim',
 
       ui = {
