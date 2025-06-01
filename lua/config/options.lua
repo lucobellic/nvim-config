@@ -1,21 +1,6 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ','
-
-vim.g.autoformat = false
-vim.g.markdown_folding = true
-
--- Use ai compiletion with nvim-cmp/blink or prefer virtual text suggestions
-vim.g.ai_cmp = false
-
----@type 'copilot'|'supermaven'|false
-vim.g.suggestions = 'copilot'
--- vim.g.suggestions = false
-
-vim.g.winborder = 'single'
-
 vim.o.conceallevel = 2
 vim.o.laststatus = 3
 vim.o.signcolumn = 'yes:2'
