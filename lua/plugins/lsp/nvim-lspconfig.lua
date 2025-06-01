@@ -20,6 +20,7 @@ return {
     opts = {
       PATH = 'prepend',
       ui = {
+        backdrop = 100,
         border = vim.g.border.style,
         width = 0.8,
         height = 0.8,
