@@ -13,6 +13,7 @@ return {
     snacks.toggle.profiler():map('<leader>pp')
     snacks.toggle.profiler_highlights():map('<leader>ph')
     return {
+      scratch = { backdrop = false },
       words = { enabled = false },
       ---@type snacks.bigfile.Config
       bigfile = {
