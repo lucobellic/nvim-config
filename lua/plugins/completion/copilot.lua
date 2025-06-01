@@ -12,8 +12,20 @@ local get_keys = function()
   local keys = not vim.g.ai_cmp
       and {
         {
+          '<S-Tab>',
+          function() suggestion_key_fallback('<S-Tab>', 'accept') end,
+          desc = 'Copilot accept',
+          mode = 'i',
+        },
+        {
           '<Tab>',
-          function() suggestion_key_fallback('<Tab>', 'accept') end,
+          function()
+            if require('blink.cmp').is_visible() then
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+            else
+              suggestion_key_fallback('<Tab>', 'accept')
+            end
+          end,
           desc = 'Copilot accept',
           mode = 'i',
         },

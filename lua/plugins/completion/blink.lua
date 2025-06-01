@@ -99,7 +99,7 @@ return {
 
     opts.completion.menu.draw.treesitter = {}
     opts.keymap = {
-      preset = vim.g.ai_cmp and 'super-tab' or 'enter',
+      preset = 'super-tab',
       ['<Up>'] = { 'select_prev', 'fallback' },
       ['<Down>'] = { 'select_next', 'fallback' },
       ['<C-k>'] = { 'select_prev', 'fallback' },
@@ -107,7 +107,6 @@ return {
       ['<C-l>'] = {},
       ['<C-h>'] = {},
     }
-
     return opts
   end,
 }
