@@ -106,6 +106,8 @@ return {
       ['<C-j>'] = { 'select_next', 'fallback' },
       ['<C-l>'] = {},
       ['<C-h>'] = {},
+      ['<left>'] = { 'fallback' },
+      ['<right>'] = { 'fallback' },
     }
     return opts
   end,
