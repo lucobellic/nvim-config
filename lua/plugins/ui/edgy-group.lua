@@ -80,6 +80,8 @@ return {
           inactive = 'Directory',
           pick_active = 'FlashLabel',
           pick_inactive = 'FlashLabel',
+          separator_active = 'StatusLine',
+          separator_inactive = 'StatusLine',
         },
         pick_key_pose = 'right_separator',
         pick_function = function(key)

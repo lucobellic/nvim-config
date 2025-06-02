@@ -262,18 +262,6 @@ return {
           right = function() return get_edgy_group_icons('right') end,
         },
       },
-      highlights = {
-        buffer_visible = {
-          bg = vim.api.nvim_get_hl(0, { name = 'bufferLineBufferVisible', link = true }).bg,
-        },
-        buffer_selected = {
-          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBufferSelected', link = true }).bg,
-        },
-        background = {
-          bg = vim.api.nvim_get_hl(0, { name = 'BufferLineBackground', link = true }).bg
-            or vim.api.nvim_get_hl(0, { name = 'Normal', link = true }).bg,
-        },
-      },
     }
   end,
   config = function(_, opts)
