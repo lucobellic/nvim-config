@@ -23,6 +23,8 @@ local function load_cmake_cache()
 end
 
 local function save_cmake_cache(targets)
+  local project_key = 'cmake_targets_' .. get_project_id()
+  vim.g[project_key] = targets
   local file = io.open(get_cache_file(), 'w')
   if file then
     file:write(vim.json.encode(targets))
@@ -66,10 +68,7 @@ local function cmake_build()
           -- Remove ': phony' from target names
           local cleaned_targets = vim.tbl_map(function(target) return target:gsub(': phony', '') end, targets)
 
-          local project_key = 'cmake_targets_' .. get_project_id()
-          vim.g[project_key] = cleaned_targets
-          save_cmake_cache(cleaned_targets)
-
+          vim.schedule(function() save_cmake_cache(cleaned_targets) end)
           vim.notify('CMake targets cache updated', vim.log.levels.INFO)
         end
       end,
