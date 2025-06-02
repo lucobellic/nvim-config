@@ -1,3 +1,7 @@
+if vim.g.distribution ~= 'lazyvim' then
+  return {}
+end
+
 return {
   {
     'p00f/clangd_extensions.nvim',

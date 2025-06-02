@@ -1,7 +1,4 @@
 vim.lsp.config('clangd', {
-  keys = {
-    { '<M-o>', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch Source/Header (C/C++)' },
-  },
   cmd = {
     'clangd',
     '--background-index',

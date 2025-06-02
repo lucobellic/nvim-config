@@ -3,6 +3,7 @@ return {
     'AstroNvim/astrolsp',
     ---@type AstroLSPOpts
     opts = {
+      native_lsp_config = true, -- enable native lspconfig support
       features = {
         codelens = true, -- enable/disable codelens refresh on start
         inlay_hints = false, -- enable/disable inlay hints on start
@@ -26,9 +27,7 @@ return {
       servers = {},
       -- customize language server configuration options passed to `lspconfig`
       ---@diagnostic disable: missing-fields
-      config = {
-        lua_ls = require('lsp.lua_ls'),
-      },
+      config = {},
       handlers = {
         -- a function without a key is simply the default handler, functions take two parameters, the server name and the configured options table for that server
         -- function(server, opts) require("lspconfig")[server].setup(opts) end
@@ -145,7 +144,6 @@ return {
               return client.supports_method('textDocument/semanticTokens/full') and vim.lsp.semantic_tokens ~= nil
             end,
           },
-          ['<M-o>'] = { '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch Source/Header (C/C++)' },
         },
         v = {
           ['<leader>='] = {
