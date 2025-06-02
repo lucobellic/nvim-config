@@ -41,6 +41,7 @@ return {
         ['<Leader>q'] = false,
         ['<Leader>h'] = false,
         ['<Leader>o'] = false,
+        ['<Leader>c'] = false,
         ['<F7>'] = false,
         ['<Leader>w'] = { '<c-w>', remap = true },
       },
