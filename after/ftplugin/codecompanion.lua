@@ -29,4 +29,4 @@ vim.keymap.set('i', '<c-cr>', function()
   --- @type CodeCompanion.Chat
   local chat = require('codecompanion').buf_get_chat(0)
   chat:submit()
-end, { desc = 'Send CodeCompanion Chat and Exit Insert Mode' })
+end, { desc = 'Send CodeCompanion Chat and Exit Insert Mode', buffer = 0 })
