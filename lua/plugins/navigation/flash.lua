@@ -130,18 +130,6 @@ return {
         mode = { 'n', 'v', 'o' },
       },
       {
-        '<leader>l',
-        function() label2_jump(false, '^') end,
-        desc = 'Flash Word',
-        mode = { 'n', 'v', 'o' },
-      },
-      {
-        '<leader>L',
-        function() label2_jump(true, '^') end,
-        desc = 'Flash Word',
-        mode = { 'n', 'v', 'o' },
-      },
-      {
         '<c-s>',
         mode = { 'c' },
         require('flash').toggle,
