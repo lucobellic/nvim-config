@@ -111,7 +111,12 @@ return {
           mode = 'v',
           has = 'documentRangeFormatting',
         },
-        { '<F2>', '<cmd>Lspsaga rename<CR>' },
+        {
+          '<F2>',
+          function() vim.lsp.buf.rename() end,
+          desc = 'Rename current symbol',
+          cond = 'textDocument/rename',
+        },
         { 'gK', '<cmd>Lspsaga hover_doc<CR>' },
         {
           '[d',
