@@ -6,9 +6,7 @@ local function set_global_options()
   vim.g.maplocalleader = ','
   vim.g.autoformat = false
   vim.g.markdown_folding = true
-
-  -- Use ai completion with nvim-cmp/blink or prefer virtual text suggestions
-  vim.g.ai_cmp = false
+  vim.g.ai_cmp = true
 
   ---@type 'copilot'|'supermaven'|false
   vim.g.suggestions = 'copilot'

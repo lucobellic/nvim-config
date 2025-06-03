@@ -37,78 +37,99 @@ local function setup_text_changed_debounce(debounce_delay)
 end
 
 return {
-  'saghen/blink.cmp',
-  dependencies = { 'onsails/lspkind.nvim' },
-  opts = function(_, opts)
-    ---@type number | nil debounce time in milliseconds or nil to disable
-    local debounce = nil
+  {
+    'saghen/blink.cmp',
+    dependencies = { 'onsails/lspkind.nvim' },
+    opts = function(_, opts)
+      ---@type number | nil debounce time in milliseconds or nil to disable
+      local debounce = nil
 
-    if debounce then
-      setup_text_changed_debounce(debounce)
-    end
+      if debounce then
+        setup_text_changed_debounce(debounce)
+      end
 
-    opts = opts or {}
-    opts.sources = opts.sources or {}
-    opts.sources.default = vim
-      .iter(opts.sources.default or { 'lsp', 'path' })
-      :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
-      :totable()
+      opts = opts or {}
+      opts.sources = opts.sources or {}
+      opts.sources.default = vim
+        .iter(opts.sources.default or { 'lsp', 'path' })
+        :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
+        :totable()
 
-    ---@type blink.cmp.Config
-    local config = {
-      cmdline = {
-        enabled = true,
-        completion = { menu = { auto_show = true } },
-        keymap = {
-          ['<Tab>'] = { 'show', 'accept' },
-          ['<c-j>'] = { 'select_next', 'fallback' },
-          ['<down>'] = { 'select_next', 'fallback' },
-          ['<c-k>'] = { 'select_prev', 'fallback' },
-          ['<up>'] = { 'select_prev', 'fallback' },
+      ---@type blink.cmp.Config
+      local config = {
+        cmdline = {
+          enabled = true,
+          completion = { menu = { auto_show = true } },
+          keymap = {
+            ['<Tab>'] = { 'show', 'accept' },
+            ['<c-j>'] = { 'select_next', 'fallback' },
+            ['<down>'] = { 'select_next', 'fallback' },
+            ['<c-k>'] = { 'select_prev', 'fallback' },
+            ['<up>'] = { 'select_prev', 'fallback' },
+          },
         },
-      },
-      completion = {
-        list = { selection = { preselect = true, auto_insert = true } },
-        documentation = { auto_show = false, window = { border = vim.g.winborder } },
-        menu = {
-          auto_show = debounce == nil,
-          direction_priority = { 'n', 's' },
-          border = vim.g.winborder,
-          min_width = 35,
-          draw = {
-            components = {
-              kind_icon = {
-                text = function(ctx)
-                  -- For Path source, use devicon based on file type otherwise use lspkind
-                  local icon = vim.tbl_contains({ 'Path' }, ctx.source_name)
-                      and (require('nvim-web-devicons').get_icon(ctx.label) or ctx.kind_icon)
-                    or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
-                  return ' ' .. icon .. ' '
-                end,
+        completion = {
+          list = { selection = { preselect = true, auto_insert = true } },
+          documentation = { auto_show = false, window = { border = vim.g.winborder } },
+          ghost_text = { enabled = vim.g.ai_cmp or vim.g.suggestions == false },
+          menu = {
+            auto_show = debounce == nil,
+            direction_priority = { 'n', 's' },
+            border = vim.g.winborder,
+            min_width = 35,
+            draw = {
+              components = {
+                kind_icon = {
+                  text = function(ctx)
+                    -- For Path source, use devicon based on file type otherwise use lspkind
+                    local icon = vim.tbl_contains({ 'Path' }, ctx.source_name)
+                        and (require('nvim-web-devicons').get_icon(ctx.label) or ctx.kind_icon)
+                      or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
+                    return ' ' .. icon .. ' '
+                  end,
+                },
               },
-            },
-            columns = {
-              { 'kind_icon' },
-              { 'label', 'label_description', gap = 1 },
+              columns = {
+                { 'kind_icon' },
+                { 'label', 'label_description', gap = 1 },
+              },
             },
           },
         },
-      },
-    }
-    opts = vim.tbl_deep_extend('force', opts, config)
+      }
+      opts = vim.tbl_deep_extend('force', opts, config)
 
-    opts.completion.menu.draw.treesitter = {}
-    opts.keymap = {
-      preset = 'super-tab',
-      ['<Up>'] = { 'select_prev', 'fallback' },
-      ['<Down>'] = { 'select_next', 'fallback' },
-      ['<C-k>'] = { 'select_prev', 'fallback' },
-      ['<C-j>'] = { 'select_next', 'fallback' },
-      ['<C-l>'] = {},
-      ['<C-h>'] = {},
-      ['<left>'] = { 'fallback' },
-      ['<right>'] = { 'fallback' },
-    }
-    return opts
-  end,
+      opts.completion.menu.draw.treesitter = {}
+      opts.keymap = {
+        preset = 'super-tab',
+        ['<Up>'] = { 'select_prev', 'fallback' },
+        ['<Down>'] = { 'select_next', 'fallback' },
+        ['<C-k>'] = { 'select_prev', 'fallback' },
+        ['<C-j>'] = { 'select_next', 'fallback' },
+        ['<C-l>'] = {},
+        ['<C-h>'] = {},
+        ['<left>'] = { 'fallback' },
+        ['<right>'] = { 'fallback' },
+      }
+      return opts
+    end,
+  },
+  {
+    'saghen/blink.cmp',
+    optional = true,
+    dependencies = { 'fang2hou/blink-copilot' },
+    opts = {
+      sources = {
+        default = { 'copilot' },
+        providers = {
+          copilot = {
+            name = 'copilot',
+            module = 'blink-copilot',
+            score_offset = 100,
+            async = true,
+          },
+        },
+      },
+    },
+  },
 }
