@@ -14,12 +14,17 @@ if vim.g.vscode then
   )
 
   -- File Explorer
-  vim.keymap.set(
-    'n',
-    '<leader>fe',
-    function() vscode.action('workbench.explorer.fileView.focus') end,
-    { desc = 'Focus file explorer' }
-  )
+  vim.keymap.set('n', '<leader>fe', function()
+    if vscode.get_config('workbench.explorer.openEditors.visible') then
+      if vscode.get_config('workbench.sideBar.location') == 'left' then
+        vscode.action('workbench.action.toggleSidebarVisibility')
+      elseif vscode.get_config('workbench.sideBar.location') == 'right' then
+        vscode.action('workbench.action.toggleAuxiliaryBar')
+      end
+    else
+      vscode.action('workbench.view.explorer')
+    end
+  end, { desc = 'Toggle file explorer' })
 
   vim.keymap.set('n', '<leader>ub', function() vscode.action('gitlens.toggleReviewMode') end, { desc = 'Line Blame' })
 end
