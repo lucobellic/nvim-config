@@ -1,13 +1,13 @@
 ---@alias Sign {name:string, text:string, texthl:string, priority:number}
 
 local M = {
-  cache_ttl = 250,
-  fold_cache_ttl = 250,
+  cache_ttl = 100,
+  fold_cache_ttl = 100,
   empty_sign = { text = ' ' },
   fold_sign = { text = '', texthl = 'Constant' },
 
   -- Cache current time to avoid repeated os.clock() calls
-  current_time = 0
+  current_time = 0,
 }
 M.__index = M
 
