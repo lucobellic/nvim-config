@@ -7,7 +7,7 @@ local function set_global_options()
   vim.g.autoformat = false
   vim.g.markdown_folding = true
 
-  -- Use ai compiletion with nvim-cmp/blink or prefer virtual text suggestions
+  -- Use ai completion with nvim-cmp/blink or prefer virtual text suggestions
   vim.g.ai_cmp = false
 
   ---@type 'copilot'|'supermaven'|false
