@@ -14,6 +14,7 @@ return {
   { import = 'astrocommunity.editing-support.dial-nvim' },
   { import = 'astrocommunity.git.octo-nvim' },
   { import = 'astrocommunity.indent.indent-blankline-nvim' },
+  { import = 'astrocommunity.markdown-and-latex.markdown-preview-nvim' },
   { import = 'astrocommunity.motion.mini-ai' },
   { import = 'astrocommunity.motion.mini-surround' },
   { import = 'astrocommunity.pack.ansible' },
