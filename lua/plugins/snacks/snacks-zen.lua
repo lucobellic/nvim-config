@@ -2,6 +2,18 @@ return {
   'folke/snacks.nvim',
   keys = {
     { '<c-z>', function() require('snacks.zen').zen() end, desc = 'Toggle Zen Mode' },
+    {
+      '<leader>zd',
+      function()
+        local dim = require('snacks.dim')
+        if dim.enabled then
+          dim.disable()
+        else
+          dim.enable()
+        end
+      end,
+      desc = 'Toggle Dim Mode',
+    },
   },
   opts = {
     styles = {
