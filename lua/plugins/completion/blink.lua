@@ -51,8 +51,8 @@ return {
       opts = opts or {}
       opts.sources = opts.sources or {}
       opts.sources.default = vim
-        .iter(opts.sources.default or { 'lsp', 'path' })
-        :filter(function(source) return not vim.tbl_contains({ 'buffer', 'snippets' }, source) end)
+        .iter(opts.sources.default or { 'lsp', 'path', 'buffer' })
+        :filter(function(source) return not vim.tbl_contains({ 'snippets' }, source) end)
         :totable()
 
       ---@type blink.cmp.Config
@@ -102,6 +102,7 @@ return {
       opts.completion.menu.draw.treesitter = {}
       opts.keymap = {
         preset = 'super-tab',
+        ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<Up>'] = { 'select_prev', 'fallback' },
         ['<Down>'] = { 'select_next', 'fallback' },
         ['<C-k>'] = { 'select_prev', 'fallback' },

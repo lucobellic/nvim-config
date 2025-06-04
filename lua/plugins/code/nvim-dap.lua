@@ -203,6 +203,7 @@ return {
       command = vim.fn.stdpath('data') .. '/mason/bin/OpenDebugAD7',
     }
 
+    require("overseer").enable_dap()
     return vim.tbl_deep_extend('force', opts or {}, {
       defaults = {
         adapters = {
