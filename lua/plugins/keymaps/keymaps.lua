@@ -27,6 +27,15 @@ if vim.g.vscode then
   end, { desc = 'Toggle file explorer' })
 
   vim.keymap.set('n', '<leader>ub', function() vscode.action('gitlens.toggleReviewMode') end, { desc = 'Line Blame' })
+
+  -- Search and navigation
+  vim.keymap.set('n', '<leader><space>', '<cmd>Find<cr>')
+  vim.keymap.set('n', '<leader>/', [[<cmd>lua require('vscode').action('workbench.action.findInFiles')<cr>]])
+  vim.keymap.set('n', '<leader>ss', [[<cmd>lua require('vscode').action('workbench.action.gotoSymbol')<cr>]])
+
+  -- Keep undo/redo lists in sync with VsCode
+  vim.keymap.set('n', 'u', "<Cmd>call VSCodeNotify('undo')<CR>")
+  vim.keymap.set('n', '<C-r>', "<Cmd>call VSCodeNotify('redo')<CR>")
 end
 
 return {

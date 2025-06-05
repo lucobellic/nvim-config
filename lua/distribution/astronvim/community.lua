@@ -5,7 +5,6 @@
 return {
   'AstroNvim/astrocommunity',
 
-  { import = "astrocommunity.recipes.cache-colorscheme" },
   { import = 'astrocommunity.color.mini-hipatterns' },
   { import = 'astrocommunity.color.modes-nvim' },
   { import = 'astrocommunity.colorscheme.vscode-nvim' },
@@ -30,9 +29,10 @@ return {
   { import = 'astrocommunity.pack.toml' },
   { import = 'astrocommunity.pack.typescript' },
   { import = 'astrocommunity.pack.yaml' },
+  { import = 'astrocommunity.recipes.cache-colorscheme' },
+  { import = 'astrocommunity.recipes.vscode' },
   { import = 'astrocommunity.snippet.mini-snippets' },
   { import = 'astrocommunity.test.neotest' },
   { import = 'astrocommunity.utility.lua-json5' },
   { import = 'astrocommunity.utility.noice-nvim' },
-
 }

@@ -70,6 +70,10 @@ if vim.g.vscode then
     end,
     { desc = 'Buffer Line Close Others (Non Pinned)' }
   )
+
+  -- Navigate VSCode tabs
+  vim.keymap.set('n', 'H', "<Cmd>call VSCodeNotify('workbench.action.previousEditor')<CR>")
+  vim.keymap.set('n', 'L', "<Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>")
 end
 
 --- Check if a buffer is pinned
@@ -166,7 +170,6 @@ return {
     { '<C-8>', '<cmd>BufferLineGoToBuffer 8<cr>', desc = 'Buffer 8' },
     { '<C-9>', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
     { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
-    { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
     { 'H', '<cmd>BufferLineCyclePrev<cr>', desc = 'Previous Buffer' },
     { 'L', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
     { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },

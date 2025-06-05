@@ -107,6 +107,9 @@ return {
   end,
   config = function(_, opts)
     require('mini.ai').setup(opts)
-    ai_whichkey(opts)
+    local ok, _ = pcall(require, 'which-key')
+    if ok then
+      ai_whichkey(opts)
+    end
   end,
 }
