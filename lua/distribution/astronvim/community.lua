@@ -31,6 +31,7 @@ return {
   { import = 'astrocommunity.pack.yaml' },
   { import = 'astrocommunity.recipes.cache-colorscheme' },
   { import = 'astrocommunity.recipes.vscode' },
+  { import = 'astrocommunity.register.nvim-neoclip-lua' },
   { import = 'astrocommunity.snippet.mini-snippets' },
   { import = 'astrocommunity.test.neotest' },
   { import = 'astrocommunity.utility.lua-json5' },
