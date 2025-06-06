@@ -3,6 +3,7 @@ vim.b.minianimate_disable = true
 vim.b.miniindentscope_disable = true
 vim.wo.number = false
 vim.wo.relativenumber = false
+vim.wo.wrap = true
 
 local function term_focus_offset(offset)
   local terminal = require('toggleterm.terminal')
