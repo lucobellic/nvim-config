@@ -7,6 +7,12 @@ local function open_in_normal_window()
   end
 end
 
+local function refresh_floaterm()
+  local buffer = vim.api.nvim_win_get_buf(0)
+  vim.api.nvim_call_function('floaterm#window#hide', { buffer })
+  vim.api.nvim_call_function('floaterm#terminal#open_existing', { buffer })
+end
+
 local function close_current_floaterm()
   local buffer = vim.api.nvim_call_function('floaterm#buflist#curr', {})
   local nb_buffers = #vim.api.nvim_call_function('floaterm#buflist#gather', {})
@@ -18,6 +24,7 @@ local function close_current_floaterm()
   else
     vim.api.nvim_call_function('floaterm#prev', {})
     vim.api.nvim_call_function('floaterm#terminal#kill', { buffer })
+    refresh_floaterm()
   end
 end
 
@@ -30,12 +37,6 @@ local function add_dimension_offset(key, offset)
   local dim = dim_var[false] --I don't get this, but whatever
   local new_dim = math.max(math.min(dim + offset, 0.999), 0.1)
   vim.api.nvim_call_function('floaterm#config#set', { buffer, key, new_dim })
-end
-
-local function refresh_floaterm()
-  local buffer = vim.api.nvim_win_get_buf(0)
-  vim.api.nvim_call_function('floaterm#window#hide', { buffer })
-  vim.api.nvim_call_function('floaterm#terminal#open_existing', { buffer })
 end
 
 -- User commands

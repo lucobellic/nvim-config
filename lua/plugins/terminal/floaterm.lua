@@ -13,7 +13,7 @@ end
 
 --- Function to override the floaterm#window#open function
 ---@param bufnr number
----@param config any @floaterm configuration
+---@param config table floaterm configuration
 ---@return number winid
 local function open_popup(bufnr, config)
   local highlights = {
@@ -39,16 +39,38 @@ local function open_popup(bufnr, config)
 
   --- Extract title and index from floaterm title
   ---@param title string @Title provided by floaterm, expected format: "Title 1/2"
-  ---@return {title:string, index:string}
+  ---@return {title:string, index:string, total:string}
   local function extract_title_and_index(title)
     local tokens = title.gmatch(title, '[^%s]+')
-    return { title = tokens() or '', index = tokens() or '' }
+    local title_part = tokens() or ''
+    local index_part = tokens() or ''
+    local current, total = index_part:match('(%d+)/(%d+)')
+    return { title = title_part, index = current or '1', total = total or '1' }
+  end
+
+  --- Generate terminal number sequence (1, 2, 3, etc.) up to total count
+  ---@param total string @Total number of terminals
+  ---@param current string @Current terminal index
+  ---@return NuiLine
+  local function generate_terminal_sequence(total, current)
+    local NuiLine = require('nui.line')
+    local NuiText = require('nui.text')
+    local count = tonumber(total) or 1
+    local current_num = tonumber(current) or 1
+    local line = NuiLine()
+    for i = 1, count do
+      local highlight = (i == current_num) and get_highlight(current) or 'FloatBorder'
+      line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
+      if i < count then
+        line:append(NuiText('─', 'FloatBorder'))
+      end
+    end
+    return line
   end
 
   local parsed_title = extract_title_and_index(config.title)
 
   local Popup = require('nui.popup')
-  local NuiText = require('nui.text')
 
   local popup = Popup({
     position = '50%',
@@ -72,7 +94,7 @@ local function open_popup(bufnr, config)
       text = {
         top = ' ' .. parsed_title.title .. ' ',
         top_align = 'center',
-        bottom = NuiText(' ' .. parsed_title.index .. ' ', get_highlight(parsed_title.index)),
+        bottom = generate_terminal_sequence(parsed_title.total, parsed_title.index),
         bottom_align = 'center',
       },
     },
