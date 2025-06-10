@@ -129,7 +129,7 @@ return {
     { '<leader>fR', function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = 'Recent (cwd)' },
     { '<leader>fp', function() Snacks.picker.projects() end, desc = 'Projects' },
     -- git
-    { '<leader>gd', function() Snacks.picker.git_diff() end, desc = 'Git Diff (hunks)' },
+    { '<leader>gh', function() Snacks.picker.git_diff() end, desc = 'Git Diff (hunks)' },
     { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status' },
     { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash' },
     -- Grep
@@ -189,6 +189,8 @@ return {
         lsp_definitions = { layout = { preset = 'telescope_preview' } },
         jumps = { layout = { preset = 'telescope_vertical' } },
         colorschemes = { layout = { preset = 'ivy' } },
+        git_diff = { layout = { preset = 'telescope_preview' } },
+        git_status = { layout = { preset = 'telescope_preview' } },
       },
       layouts = {
         telescope_no_preview = telescope_no_preview,
