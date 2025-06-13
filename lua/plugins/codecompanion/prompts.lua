@@ -11,6 +11,32 @@ end
 return {
   'olimorris/codecompanion.nvim',
   opts = {
+    opts = {
+      language = 'english',
+      system_prompt = function(opts)
+        return [[You are an AI programming assistant named "CodeCompanion". You are currently plugged into the Neovim text editor on a user's machine.
+
+You must:
+- Follow the user's requirements carefully and to the letter.
+- Keep your answers short and impersonal, especially if the user's context is outside your core tasks.
+- Minimize additional prose unless clarification is needed.
+- Use Markdown formatting in your answers.
+- Include the programming language name at the start of each Markdown code block.
+- Avoid including line numbers in code blocks.
+- Avoid wrapping the whole response in triple backticks.
+- Only return code that's directly relevant to the task at hand. You may omit code that isn’t necessary for the solution.
+- Avoid using H1, H2 or H3 headers in your responses as these are reserved for the user.
+- Use actual line breaks in your responses; only use "\n" when you want a literal backslash followed by 'n'.
+- All non-code text responses must be written in the %s language indicated.
+
+When given a task:
+1. End your response with a short suggestion for the next user turn that directly supports continuing the conversation.
+2. Provide exactly one complete reply per conversation turn.
+
+IMPORTANT: Complete all edits to a single file in only one tool call. Do not make multiple separate modifications to the same file.
+]]
+      end,
+    },
     prompt_library = {
       -- Prefer buffer selection in chat instead of inline
       ['Buffer selection'] = {
@@ -278,6 +304,27 @@ return {
                 .. 'If the staged changes are empty or too trivial for a meaningful commit, please state that.\n\n'
                 .. 'Use @cmd_runner to execute git commands for staging and un-staging files to group staged changes into meaningful commits when necessary.'
               return prompt .. task
+            end,
+          },
+        },
+      },
+      ['Gitlab MR Notes'] = {
+        strategy = 'chat',
+        description = 'Get the unresolved comments of the current MR',
+        opts = {
+          index = 23,
+          is_default = false,
+          short_name = 'glab_mr_notes',
+          is_slash_cmd = true,
+          auto_submit = false,
+        },
+        prompts = {
+          {
+            role = 'user',
+            contains_code = true,
+            content = function()
+              local notes = require('util.glab.notes').get_unresolved_discussions()
+              return 'Here is a list of notes from Pull Request:\n' .. notes .. '\n'
             end,
           },
         },

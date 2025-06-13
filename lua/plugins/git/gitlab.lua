@@ -63,14 +63,15 @@ return {
   },
   build = function() require('gitlab.server').build(true) end, -- Builds the Go binary
   --- @type Settings
+  --- @diagnostic disable-next-line: missing-fields
   opts = {
     discussion_tree = {
       position = 'bottom',
       resolved = '󱍧',
       unresolved = '󱍮',
       toggle_node = 'l',
-      draft = "",
-      draft_mode = true
+      draft = '',
+      draft_mode = true,
     },
     discussion_sign_and_diagnostic = {
       skip_resolved_discussion = true,
