@@ -176,6 +176,7 @@ return {
     ---@type snacks.picker.Config
     picker = {
       enabled = true,
+      ui_select = true,
       prompt = '',
       formatters = {
         file = {
