@@ -80,7 +80,6 @@ local lsp = {
 
 local filter_skip = {
   filter = {
-
     --- @type NoiceFilter[]
     any = {
       -- Hide display messages but still show them in :messages
@@ -99,9 +98,11 @@ local filter_skip = {
       { event = 'notify', kind = 'error', find = 'invalid AST' },
       { event = 'notify', kind = 'error', find = 'Failed to set cursor' },
       { event = 'notify', kind = 'error', find = 'Edgy' },
-      { event = 'notify', kind = 'error', find = 'mason-lspconfig.nvim'  },
+      { event = 'notify', kind = 'error', find = 'mason-lspconfig.nvim' },
+      { event = 'notify', kind = 'error', find = 'InvalidParams' },
       { event = 'msg_show', kind = '', find = 'query' },
       { event = 'msg_show', kind = 'lua_error', find = 'Autocommands' },
+      { event = 'msg_show', kind = 'error', find = 'E5108' },
       -- Hide spamming pylsp messages
       { event = 'lsp', find = 'pylsp' },
       -- Hide spamming cspell messages
@@ -116,22 +117,29 @@ local filter_skip = {
 return {
   'folke/noice.nvim',
   -- Disable noice if started by firenvim or profiling
-  enabled = not vim.g.started_by_firenvim and not os.getenv('NVIM_PROFILE'),
+  enabled = not vim.g.vscode,
+  cond = not vim.g.started_by_firenvim and not os.getenv('NVIM_PROFILE'),
+  event = 'VeryLazy',
   keys = {
     { '<c-f>', false },
     { '<c-p>', false },
-    { "<leader>sn", "", desc = "+noice"},
+    { '<leader>sn', '', desc = '+noice' },
     {
       '<leader>snn',
       function() require('telescope').extensions.notify.notify() end,
       desc = 'Find Notifications',
     },
-    { "<S-Enter>", function() require("noice").redirect(vim.fn.getcmdline()) end, mode = "c", desc = "Redirect Cmdline" },
-    { "<leader>snl", function() require("noice").cmd("last") end, desc = "Noice Last Message" },
-    { "<leader>snh", function() require("noice").cmd("history") end, desc = "Noice History" },
-    { "<leader>sna", function() require("noice").cmd("all") end, desc = "Noice All" },
-    { "<leader>snd", function() require("noice").cmd("dismiss") end, desc = "Dismiss All" },
-    { "<leader>snt", function() require("noice").cmd("pick") end, desc = "Noice Picker (Telescope/FzfLua)" },
+    {
+      '<S-Enter>',
+      function() require('noice').redirect(vim.fn.getcmdline()) end,
+      mode = 'c',
+      desc = 'Redirect Cmdline',
+    },
+    { '<leader>snl', function() require('noice').cmd('last') end, desc = 'Noice Last Message' },
+    { '<leader>snh', function() require('noice').cmd('history') end, desc = 'Noice History' },
+    { '<leader>sna', function() require('noice').cmd('all') end, desc = 'Noice All' },
+    { '<leader>snd', function() require('noice').cmd('dismiss') end, desc = 'Dismiss All' },
+    { '<leader>snt', function() require('noice').cmd('pick') end, desc = 'Noice Picker (Telescope/FzfLua)' },
   },
   opts = {
     cmdline = cmdline,
