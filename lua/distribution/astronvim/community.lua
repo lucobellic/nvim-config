@@ -15,7 +15,6 @@ return {
   { import = 'astrocommunity.indent.indent-blankline-nvim' },
   { import = 'astrocommunity.markdown-and-latex.markdown-preview-nvim' },
   { import = 'astrocommunity.motion.mini-ai' },
-  { import = 'astrocommunity.motion.mini-surround' },
   { import = 'astrocommunity.pack.ansible' },
   { import = 'astrocommunity.pack.cmake' },
   { import = 'astrocommunity.pack.cpp' },
