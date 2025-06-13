@@ -73,10 +73,10 @@ vim.opt.fillchars = {
 vim.o.virtualedit = 'block'
 
 vim.opt.guicursor = {
-  't-n:block-Cursor/lCursor',
+  'n:block-Cursor/lCursor',
   'v:block-CursorVisual',
-  'c:block-CursorOperator',
-  'i-ci-ve:ver15-CursorInsert',
+  'c:ver15-CursorOperator',
+  't-i-ci-ve:ver15-CursorInsert',
   'r-cr-o:hor20-CursorOperator',
   'a:blinkon0',
 }

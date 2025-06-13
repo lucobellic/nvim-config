@@ -84,6 +84,20 @@ vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
   end,
 })
 
+-- Set toggleterm filetype to terminal buffer with toggleterm name
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = { '*toggleterm*' },
+  callback = function(ev)
+    if
+      vim.api.nvim_buf_is_valid(ev.buf)
+      and vim.api.nvim_get_option_value('filetype', { buf = ev.buf }) == ''
+      and vim.api.nvim_get_option_value('buftype', { buf = ev.buf }) == 'terminal'
+    then
+      vim.api.nvim_set_option_value('filetype', 'toggleterm', { buf = ev.buf })
+    end
+  end,
+})
+
 -- Create command from keymaps
 require('util.commands').create_command_from_keymaps()
 -- Create command to toggle fold virtual text
