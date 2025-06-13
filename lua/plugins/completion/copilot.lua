@@ -72,7 +72,8 @@ end
 return {
   {
     'zbirenbaum/copilot.lua',
-    enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1) and (vim.g.suggestions == 'copilot'),
+    enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1),
+    cond = vim.g.suggestions == 'copilot',
     keys = get_keys(),
     opts = {
       suggestion = {
@@ -96,7 +97,7 @@ return {
         },
       },
       copilot_model = 'gpt-4o-copilot',
-      should_attach = function() return vim.bo.filetype ~= 'codecompanion' end,
+      should_attach = function() return true end,
     },
     config = function(_, opts)
       require('copilot').setup(opts)

@@ -1,26 +1,12 @@
-local chat_adapter = 'copilot'
-local agent_adapter = 'copilot'
-local inline_adapter = 'copilot_inline'
-
 return {
   'olimorris/codecompanion.nvim',
   opts = {
     strategies = {
-      chat = { adapter = chat_adapter },
-      inline = { adapter = inline_adapter },
-      agent = { adapter = agent_adapter },
+      agent = { adapter = { name = 'copilot', model = 'claude-sonnet-4' } },
+      chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4' } },
+      inline = { adapter = { name = 'copilot', model = 'gpt-4.1' } },
     },
     adapters = {
-      copilot = function()
-        return require('codecompanion.adapters').extend('copilot', {
-          schema = { model = { default = 'claude-sonnet-4' } },
-        })
-      end,
-      copilot_inline = function()
-        return require('codecompanion.adapters').extend('copilot', {
-          schema = { model = { default = 'claude-sonnet-4' } },
-        })
-      end,
       ollama = function()
         return require('codecompanion.adapters').extend('ollama', {
           schema = {

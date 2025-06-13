@@ -6,7 +6,7 @@ local function set_global_options()
   vim.g.maplocalleader = ','
   vim.g.autoformat = false
   vim.g.markdown_folding = true
-  vim.g.ai_cmp = true
+  vim.g.ai_cmp = false
 
   ---@type 'copilot'|'supermaven'|false
   vim.g.suggestions = 'copilot'
