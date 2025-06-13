@@ -88,6 +88,7 @@ vim.keymap.set('t', '<S-left>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
 
 vim.keymap.set('n', '<C-t>', '<cmd>FloatermNew<CR>', opts)
 vim.keymap.set('t', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts)
+vim.keymap.set('t', '<C-l>', '<C-l>', opts)
 
 -- Options
 vim.opt_local.spell = false
