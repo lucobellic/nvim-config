@@ -156,18 +156,14 @@ return {
           --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
           ['P'] = { 'toggle_preview', config = { use_float = false } },
           ['S'] = 'open_split',
-          ['s'] = 'open_vsplit',
-          -- ["S"] = "split_with_window_picker",
-          -- ["s"] = "vsplit_with_window_picker",
+          ['<c-s>'] = 'open_split',
+          ['<c-v>'] = 'open_vsplit',
+          ['s'] = false, -- use flash instead
           ['t'] = 'open_tabnew',
-          -- ["<cr>"] = "open_drop",
-          -- ["t"] = "open_tab_drop",
           ['w'] = 'open_with_window_picker',
           ['C'] = 'close_node',
           ['h'] = 'close_node',
           ['z'] = 'none',
-          -- ["z"] = "close_all_nodes",
-          --["Z"] = "expand_all_nodes",
           ['a'] = {
             'add',
             -- this command supports BASH style brace expansion ("x{a,b,c}" -> xa,xb,xc). see `:h neo-tree-file-actions` for details
