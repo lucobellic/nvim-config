@@ -12,6 +12,7 @@ return {
   {
     'olimorris/codecompanion.nvim',
     enabled = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true',
+    version = '*',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -42,7 +43,12 @@ return {
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
       { '<leader>as', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate Test' },
-      { '<leader>at', ':CodeCompanion #explain terminal error<cr>', mode = { 'n' }, desc = 'Code Companion Explain Terminal Error' },
+      {
+        '<leader>at',
+        ':CodeCompanion #explain terminal error<cr>',
+        mode = { 'n' },
+        desc = 'Code Companion Explain Terminal Error',
+      },
     },
     init = function()
       vim.g.codecompanion_auto_tool_mode = true
@@ -52,6 +58,7 @@ return {
     opts = {
       strategies = {
         chat = {
+          opts = { goto_file_action = 'edit' },
           roles = {
             user = '',
             llm = function(adapter) return '  ' .. adapter.formatted_name end,
