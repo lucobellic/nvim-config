@@ -99,7 +99,9 @@ return {
       {
         title = 'codecompanion',
         ft = 'codecompanion',
-        filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
+        filter = function(_, win)
+          return vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
+        end,
         open = 'CodeCompanionChat toggle',
         size = { width = 0.25 },
       },
@@ -109,7 +111,9 @@ return {
       {
         title = 'avante-input',
         ft = 'AvanteInput',
-        filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
+        filter = function(_, win)
+          return vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
+        end,
         size = { height = 0.2 },
       },
     },
@@ -123,6 +127,11 @@ return {
           return is_no_file and is_not_floating
         end,
         open = 'Noice',
+      },
+      {
+        title = 'gitlab',
+        ft = 'gitlab',
+        filter = function(buf, win) return vim.api.nvim_win_get_config(win).relative == '' end,
       },
     },
     animate = {
