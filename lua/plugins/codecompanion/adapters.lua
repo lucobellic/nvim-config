@@ -4,7 +4,7 @@ return {
     strategies = {
       agent = { adapter = { name = 'copilot', model = 'claude-sonnet-4' } },
       chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4' } },
-      inline = { adapter = { name = 'copilot', model = 'gpt-4.1' } },
+      inline = { adapter = { name = 'copilot', model = 'claude-sonnet-4' } },
     },
     adapters = {
       ollama = function()
