@@ -180,6 +180,7 @@ return {
       prompt = '',
       formatters = {
         file = {
+          filename_first = true,
           truncate = 100,
         },
       },
