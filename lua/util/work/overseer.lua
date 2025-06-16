@@ -74,16 +74,22 @@ local function cmake_build()
       end,
     }):start()
   else
-    vim.ui.select(cached_targets, { prompt = 'Select cmake target' }, function(choice)
-      if choice then
-        overseer
-          .new_task({
-            name = 'CMake build ' .. choice,
-            cmd = 'cmake',
-            args = { '--build', '../build', '-j', '6', '--target', choice },
-            components = { 'default', 'default_vscode' },
-          })
-          :start()
+    require('util.util').multi_select(cached_targets, { prompt = 'Select cmake target' }, function(choices)
+      if choices and #choices > 0 then
+        vim.iter(choices):each(
+          function(choice)
+            overseer
+              .new_task({
+                name = 'CMake build ' .. choice,
+                cmd = 'cmake',
+                args = { '--build', '../build', '-j', '6', '--target', choice },
+                components = { 'default', 'default_vscode' },
+              })
+              :start()
+          end
+        )
+      else
+        vim.notify('No cmake target selected', vim.log.levels.WARN)
       end
     end)
   end
@@ -118,17 +124,25 @@ end
 local function reach_run(run_args, list_args)
   local overseer = require('overseer')
   local results = get_reach_result(list_args)
-  vim.ui.select(results, { prompt = 'Select' }, function(choice)
-    if choice then
-      table.insert(run_args, choice)
-      overseer
-        .new_task({
-          name = choice,
-          cmd = 'reach',
-          args = run_args,
-          components = { 'default' },
-        })
-        :start()
+  require('util.util').multi_select(results, {
+    prompt = 'Select Reach Test',
+    format_item = function(item) return item:gsub('%.reach$', '') end,
+  }, function(choices)
+    if choices and #choices > 0 then
+      vim.iter(choices):each(
+        function(choice)
+          overseer
+            .new_task({
+              name = choice,
+              cmd = 'reach',
+              args = vim.list_extend({ 'test', 'run', '-b' }, { choice }),
+              components = { 'default' },
+            })
+            :start()
+        end
+      )
+    else
+      vim.notify('No Reach test selected', vim.log.levels.WARN)
     end
   end)
 end
