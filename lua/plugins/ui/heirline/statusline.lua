@@ -42,11 +42,56 @@ local secondary_highlight = function() return secondary_mode_colors[get_mode()] 
 
 local left_components_length = 0
 
-------------------------------------- Left -------------------------------------
+local PrimarySpace = {
+  provider = ' ',
+  hl = primary_highlight,
+}
+
+local SecondarySpace = {
+  provider = ' ',
+  hl = secondary_highlight,
+}
+
+-------------------------------------- Left -------------------------------------
+
+-- Trigger ModeChanged as a User autocmd to allow heirline update to use it
+vim.api.nvim_create_autocmd('ModeChanged', {
+  callback = vim.schedule_wrap(function() vim.api.nvim_exec_autocmds('User', { pattern = 'ModeChanged' }) end),
+})
 
 local ViMode = {
   init = function() left_components_length = 4 end,
   provider = function() return '   ' end,
+  hl = primary_highlight,
+}
+
+local CPU = {
+  init = function() return require('plugins.ui.heirline.utils.system').start_auto_update() end,
+  provider = function() return require('plugins.ui.heirline.utils.system').system_stats_cache.cpu end,
+  update = {
+    'User',
+    pattern = { 'CpuUpdated', 'ModeChanged' },
+  },
+  hl = primary_highlight,
+}
+
+local GPU = {
+  init = function() return require('plugins.ui.heirline.utils.system').start_auto_update() end,
+  provider = function() return require('plugins.ui.heirline.utils.system').system_stats_cache.gpu end,
+  update = {
+    'User',
+    pattern = { 'GpuUpdated', 'ModeChanged' },
+  },
+  hl = primary_highlight,
+}
+
+local Memory = {
+  init = function() return require('plugins.ui.heirline.utils.system').start_auto_update() end,
+  provider = function() return require('plugins.ui.heirline.utils.system').system_stats_cache.memory end,
+  update = {
+    'User',
+    pattern = { 'MemoryUpdated', 'ModeChanged' },
+  },
   hl = primary_highlight,
 }
 
@@ -191,6 +236,11 @@ local Copilot = {
     local ok, copilot_client = pcall(require, 'copilot.client')
     return ok and not copilot_client.is_disabled() and copilot_client.buf_is_attached(vim.api.nvim_get_current_buf())
   end,
+  update = {
+    'User',
+    pattern = { 'CopilotStatusUpdated', 'ModeChanged' },
+    callback = vim.schedule_wrap(function() vim.cmd('redrawstatus') end),
+  },
   provider = function() return get_copilot_icons() .. ' ' end,
   hl = secondary_highlight,
 }
@@ -198,13 +248,17 @@ local Copilot = {
 local codecompanion_processing = false
 local codecompanion_timer = vim.uv.new_timer()
 
--- Scheduce redrawstatus every 200ms when code companion request started until finished
+-- Schedule event every 200ms when code companion request started until finished
 vim.api.nvim_create_autocmd('User', {
   pattern = 'CodeCompanionRequest*',
   callback = function(args)
     if args.match == 'CodeCompanionRequestStarted' then
       codecompanion_processing = true
-      codecompanion_timer:start(0, 200, vim.schedule_wrap(function() vim.cmd('redrawstatus') end))
+      codecompanion_timer:start(
+        0,
+        200,
+        vim.schedule_wrap(function() vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionUpdated' }) end)
+      )
     elseif args.match == 'CodeCompanionRequestFinished' then
       codecompanion_processing = false
       codecompanion_timer:stop()
@@ -217,6 +271,11 @@ local function get_codecompanion_icons() return codecompanion_processing and get
 
 local CodeCompanion = {
   provider = function() return get_codecompanion_icons() .. ' ' end,
+  udpate = {
+    'User',
+    pattern = { 'CodeCompanionUpdated', 'ModeChanged' },
+    callback = vim.schedule_wrap(function() vim.cmd('redrawstatus') end),
+  },
   hl = secondary_highlight,
 }
 
@@ -224,7 +283,7 @@ local LspProgress = {
   provider = function() return require('lsp-progress').progress() .. ' ' end,
   update = {
     'User',
-    pattern = 'LspProgressStatusUpdated',
+    pattern = { 'LspProgressStatusUpdated', 'ModeChanged' },
     callback = vim.schedule_wrap(function() vim.cmd('redrawstatus') end),
   },
   hl = secondary_highlight,
@@ -261,11 +320,18 @@ local Date = {
 local Left = { ViMode, Git, Dap, Molten, MacroRec }
 local Center = { Edgy }
 local Align = { provider = '%=', hl = { bg = 'none' } }
+local SystemStats = {
+  PrimarySpace,
+  CPU,
+  GPU,
+  Memory,
+}
 local Right = {
   Overseer,
   LspProgress,
   Copilot,
   CodeCompanion,
+  -- SystemStats,
   SearchCount,
   Date,
 }
