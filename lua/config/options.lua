@@ -1,9 +1,11 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
-vim.o.conceallevel = 2
-vim.o.laststatus = 3
-vim.o.signcolumn = 'yes:2'
+vim.opt.conceallevel = 2
+vim.opt.laststatus = 3
+vim.opt.signcolumn = 'yes:2'
+
+vim.opt.more = false
 
 vim.opt.foldlevel = 99
 
@@ -22,21 +24,21 @@ vim.opt.sessionoptions = {
 
 -- Default splitting will cause your main splits to jump when opening an edgebar.
 -- To prevent this, set `splitkeep` to either `screen` or `topline`.
-vim.o.splitkeep = 'screen'
+vim.opt.splitkeep = 'screen'
 
-vim.o.number = false
-vim.o.relativenumber = false
-vim.o.wrap = false
-vim.o.showbreak = '↪'
+vim.opt.number = false
+vim.opt.relativenumber = false
+vim.opt.wrap = false
+vim.opt.showbreak = '↪'
 vim.opt.breakindent = true
 
-vim.o.backup = false
-vim.o.writebackup = false
-vim.o.swapfile = false
-vim.o.undofile = true
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+vim.opt.undofile = true
 
-vim.o.pumblend = 0
-vim.o.winblend = 0
+vim.opt.pumblend = 0
+vim.opt.winblend = 0
 
 vim.opt.spell = false
 vim.opt_global.incsearch = false
@@ -70,7 +72,7 @@ vim.opt.fillchars = {
   verthoriz = '┼',
 }
 
-vim.o.virtualedit = 'block'
+vim.opt.virtualedit = 'block'
 
 vim.opt.guicursor = {
   'n:block-Cursor/lCursor',
