@@ -131,7 +131,7 @@ return {
       {
         title = 'gitlab',
         ft = 'gitlab',
-        filter = function(buf, win) return vim.api.nvim_win_get_config(win).relative == '' end,
+        filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
       },
     },
     animate = {
