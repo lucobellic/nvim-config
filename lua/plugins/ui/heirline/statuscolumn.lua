@@ -173,8 +173,9 @@ function M.clear_cache(buf)
 end
 
 local statuscolumn = {
-  condition = function() return require('heirline.conditions').is_active() end,
-
+  condition = function()
+    return require('heirline.conditions').is_active() and vim.bo.buftype ~= 'nofile'
+  end,
   provider = function()
     -- Early exit for virtual lines
     if vim.v.virtnum < 0 then
