@@ -82,10 +82,19 @@ function M.get_code_from_position(note)
 end
 
 function M.get_unresolved_discussions()
-  -- TODO: Update gitlab to refresh discussion correctly
+  local state = require('gitlab.state')
+  local server = require('gitlab.server')
   local discussions = require('gitlab.actions.discussions')
-  discussions.load_discussions()
-  unresolved_discussion_notes = M.get_unresolved_discussion_notes()
+
+  if not state.go_server_running then
+    state.setPluginConfiguration()
+    server.start(function()
+      state.go_server_running = true
+      state.load_new_state('info', function() discussions.load_discussions() end)
+    end)
+  end
+
+  local unresolved_discussion_notes = M.get_unresolved_discussion_notes()
 
   -- Process the example data
   local processed_notes = {}
@@ -94,7 +103,7 @@ function M.get_unresolved_discussions()
       local result = {
         body = note.body,
         code = vim.F.npcall(M.get_code_from_position, note),
-        path = note.position and note.position.new_path or nil,
+        path = vim.F.npcall(function() return note.position and note.position.new_path end),
       }
       table.insert(processed_notes, result)
     end
