@@ -43,6 +43,8 @@ return {
   event = 'VeryLazy',
   keys = {
 
+    { mode = 't', '<esc>', [[<C-\><C-n>]] },
+
     --------------------
     -- Text Manipulation
     --------------------
