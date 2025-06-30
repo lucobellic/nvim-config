@@ -1,17 +1,14 @@
-local cspell_config = {
-  find_json = function() return vim.fn.stdpath('config') .. '/spell/cspell.json' end,
-}
-
 return {
   'nvimtools/none-ls.nvim',
   dependencies = { 'davidmh/cspell.nvim' },
+  event = 'LspAttach',
   opts_extend = { 'sources' },
   opts = function(_, opts)
     local nls = require('null-ls')
-    local cspell = require('cspell')
 
     opts = vim.tbl_deep_extend('force', opts or {}, {
       fallback_severity = vim.diagnostic.severity.HINT,
+      should_attach = function(buf) return vim.api.nvim_get_option_value('buftype', { buf = buf }) ~= 'prompt' end,
     })
 
     vim.list_extend(opts.sources or {}, {
@@ -22,8 +19,6 @@ return {
       nls.builtins.diagnostics.rstcheck,
       nls.builtins.code_actions.statix,
       nls.builtins.formatting.gersemi,
-      cspell.diagnostics.with({ filetypes = {}, config = cspell_config }),
-      cspell.code_actions.with({ filetypes = {}, config = cspell_config }),
     })
     return opts
   end,

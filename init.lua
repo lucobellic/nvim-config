@@ -74,10 +74,26 @@ local function override_keymap_set()
   end
 end
 
+local function configure_lsp()
+  vim.lsp.enable('cspell_lsp')
+  vim.lsp.handlers['textDocument/publishDiagnostics'] = function(err, result, ctx, config)
+    local client = vim.lsp.get_client_by_id(ctx.client_id)
+    if client and client.name == 'cspell_lsp' then
+      for _, diagnostic in ipairs(result.diagnostics) do
+        diagnostic.severity = vim.diagnostic.severity.HINT
+      end
+      return vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx)
+    end
+
+    return vim.lsp.diagnostic.on_publish_diagnostics(err, result, ctx)
+  end
+end
+
 set_global_options()
 set_docker_clipboard()
 set_profiling()
 override_keymap_set()
+configure_lsp()
 
 require('config.shell')
 require('config.lazy')
