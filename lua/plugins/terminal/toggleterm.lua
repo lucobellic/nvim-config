@@ -47,13 +47,22 @@ return {
     { '<leader>up', '<cmd>ToggleTerm<cr>', desc = 'Toggle Toggleterm' },
   },
   opts = {
-    size = 1000,
+    size = 120,
     auto_scroll = false,
     close_on_exit = false,
-    persist_mode = false,
+    persist_mode = true,
     persist_size = false,
     shade_terminals = false,
     start_in_insert = false,
+    direction = 'horizontal',
+    on_open = function()
+      vim.opt_local.spell = false
+      vim.opt_local.number = false
+      vim.opt_local.signcolumn = 'no'
+      vim.opt_local.relativenumber = false
+      vim.wo.wrap = true
+      vim.wo.winfixwidth = true
+    end,
     winbar = {
       enabled = false,
       name_formatter = function(term) --  term: Terminal
