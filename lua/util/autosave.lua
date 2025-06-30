@@ -31,8 +31,10 @@ function M.setup()
     if M.autocmd_save_id ~= 0 then
       vim.api.nvim_del_autocmd(M.autocmd_save_id)
       M.autocmd_save_id = 0
+      vim.notify('Auto Save Disabled', vim.log.levels.WARN)
     else
       M.autocmd_save_id = M.create_autosave_autocmd()
+      vim.notify('Auto Save Enabled', vim.log.levels.INFO)
     end
   end, { desc = 'Toggle Auto Save' })
 end
