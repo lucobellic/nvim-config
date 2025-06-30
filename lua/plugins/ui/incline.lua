@@ -149,7 +149,7 @@ return {
     window = {
       zindex = 30,
       margin = {
-        vertical = { top = vim.o.laststatus == 3 and 0 or 1, bottom = 0 }, -- shift to overlap window borders
+        vertical = { top = 0, bottom = 0 }, -- shift to overlap window borders
         horizontal = { left = 0, right = 2 }, -- shift for scrollbar
       },
       overlap = {
