@@ -45,7 +45,7 @@ return {
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate Test' },
       {
         '<leader>at',
-        ':CodeCompanion #explain terminal error<cr>',
+        ':CodeCompanion #{explain terminal error}<cr>',
         mode = { 'n' },
         desc = 'Code Companion Explain Terminal Error',
       },
@@ -91,7 +91,7 @@ return {
         diff = { enabled = false },
         chat = {
           show_header_separator = false,
-          show_settings = false, -- do not show settings to allow them to be changed with shortcuts
+          show_settings = false, -- do not show settings to allow model change with shortcut
         },
         action_palette = { provider = 'default' },
       },

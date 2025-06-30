@@ -267,7 +267,7 @@ IMPORTANT: Complete all edits to a single file in only one tool call. Do not mak
             contains_code = true,
             content = function()
               return 'You are in agent mode:\n'
-                .. 'Use tools to answer user request using @cmd_runner\n'
+                .. 'Use tools to answer user request using @{cmd_runner}\n'
                 .. '- Do NOT use `grep`\n'
                 .. '- Search content and patterns using `fzf`\n'
                 .. '- Do NOT use `find`\n'
@@ -302,7 +302,7 @@ IMPORTANT: Complete all edits to a single file in only one tool call. Do not mak
                 .. 'Next, use the staged changes to determine the logical grouping of changes and generate appropriate commit messages.\n\n'
                 .. 'Your primary goal is to analyze these staged changes and determine if they should be split into multiple logical and separate commits.\n'
                 .. 'If the staged changes are empty or too trivial for a meaningful commit, please state that.\n\n'
-                .. 'Use @cmd_runner to execute git commands for staging and un-staging files to group staged changes into meaningful commits when necessary.'
+                .. 'Use @{cmd_runner} to execute git commands for staging and un-staging files to group staged changes into meaningful commits when necessary.'
               return prompt .. task
             end,
           },
@@ -325,6 +325,40 @@ IMPORTANT: Complete all edits to a single file in only one tool call. Do not mak
             content = function()
               local notes = require('util.glab.notes').get_unresolved_discussions()
               return 'Here is a list of notes from Pull Request:\n' .. notes .. '\n'
+            end,
+          },
+        },
+      },
+      ['qflist'] = {
+        strategy = 'chat',
+        description = 'Send errors to qflist and diagnostics',
+        opts = {
+          index = 24,
+          is_default = false,
+          short_name = 'qflist',
+          is_slash_cmd = true,
+          auto_submit = false,
+        },
+        prompts = {
+          {
+            role = 'user',
+            contains_code = true,
+            content = function()
+              local content =
+                'Create a neovim command line for `:` to send the current errors to qflist and diagnostics using neovim api.\n'
+              local example = [[
+                :lua do local ns = vim.api.nvim_create_namespace('review');
+
+                  -- For each files:
+                  local bufnr = vim.fn.bufnr('/full/path/to/your/file.txt');
+                  if bufnr ~= -1 then
+                    local diagnostics = {{bufnr=bufnr, lnum=324, col=0, message='This is the ErrorMessage', severity=vim.diagnostic.severity.ERROR}};
+                    vim.diagnostic.set(ns, bufnr, diagnostics);
+                    vim.fn.setqflist(vim.diagnostic.toqflist(diagnostics), 'a');
+                  end
+                end
+                ]]
+              return content .. '\nExample:\n' .. example:gsub('\n', ' '):gsub(' +', ' ')
             end,
           },
         },
