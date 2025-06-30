@@ -44,6 +44,7 @@ return {
         ['<Leader>c'] = false,
         ['<Leader>gc'] = false,
         ['<Leader>gC'] = false,
+        ['<Leader>n'] = false,
         ['<F7>'] = false,
         ['<Leader>w'] = { '<c-w>', remap = true },
         ['c'] = { '<cmd>lua vim.g.change = true<cr>c', noremap = true, desc = 'Change' },

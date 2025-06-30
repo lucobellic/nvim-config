@@ -20,7 +20,7 @@ local get_keys = function()
         {
           '<Tab>',
           function()
-            if require('blink.cmp').is_visible() then
+            if vim.g.cmp_mode == 'super-tab' and require('blink.cmp').is_visible() then
               vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
             else
               suggestion_key_fallback('<Tab>', 'accept')

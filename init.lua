@@ -19,6 +19,9 @@ local function set_global_options()
     borderchars = enable_border and { '─', '│', '─', '│', '┌', '┐', '┘', '└' }
       or { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
   }
+
+  ---@type 'default'|'super-tab'|'enter'|'none'
+  vim.g.cmp_mode = 'super-tab'
 end
 
 local function set_profiling()

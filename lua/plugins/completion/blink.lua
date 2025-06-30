@@ -119,14 +119,16 @@ local blink = {
 
     opts.completion.menu.draw.treesitter = {}
     opts.keymap = {
-      preset = 'super-tab',
-      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-      ['<Up>'] = { 'select_prev', 'fallback' },
-      ['<Down>'] = { 'select_next', 'fallback' },
-      ['<C-k>'] = { 'select_prev', 'fallback' },
-      ['<C-j>'] = { 'select_next', 'fallback' },
-      ['<C-l>'] = {},
-      ['<C-h>'] = {},
+      preset = vim.g.cmp_mode,
+      ['<tab>'] = vim.g.cmp_mode ~= 'super-tab' and { 'fallback_to_mappings' } or { 'accept', 'fallback' },
+      ['<cr>'] = vim.g.cmp_mode ~= 'enter' and { 'fallback_to_mappings' } or { 'accept', 'fallback' },
+      ['<c-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+      ['<up>'] = { 'select_prev', 'fallback' },
+      ['<down>'] = { 'select_next', 'fallback' },
+      ['<c-k>'] = { 'select_prev', 'fallback' },
+      ['<c-j>'] = { 'select_next', 'fallback' },
+      ['<c-l>'] = {},
+      ['<c-h>'] = {},
       ['<left>'] = { 'fallback' },
       ['<right>'] = { 'fallback' },
     }

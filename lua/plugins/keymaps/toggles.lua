@@ -1,7 +1,7 @@
 return {
   'folke/which-key.nvim',
   keys = {
-    { '<leader>uS', '<cmd>ToggleAutoSave<cr>', desc = 'Toggle Autosave' },
+    { '<leader>uS', '<cmd>ToggleAutoSave<cr>', desc = 'Toggle Auto Save' },
     {
       '<leader>uW',
       function()

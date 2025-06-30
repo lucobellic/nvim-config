@@ -1,6 +1,7 @@
 local prefix = 'gs'
 return {
   'echasnovski/mini.surround',
+  event = 'VeryLazy',
   dependencies = {
     { 'AstroNvim/astroui', opts = { icons = { Surround = '󰑤' } } },
     {
