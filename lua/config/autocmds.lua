@@ -21,25 +21,6 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
   desc = 'Set terminal buffer options',
 })
 
--- Display cursorline only in focused window
-vim.api.nvim_create_autocmd({ 'WinEnter' }, {
-  pattern = '*',
-  callback = function(ev) vim.api.nvim_set_option_value('cursorline', true, { win = ev.win }) end,
-  desc = 'Display cursorline only in focused window',
-})
-
-vim.api.nvim_create_autocmd({ 'WinLeave' }, {
-  pattern = '*',
-  callback = function(ev)
-    local current_filetype = vim.api.nvim_get_option_value('filetype', { buf = ev.buf }):lower()
-    local ignored_list = { 'neo-tree', 'outline' }
-    if not vim.tbl_contains(ignored_list, function(ft) return ft == current_filetype end, { predicate = true }) then
-      vim.api.nvim_set_option_value('cursorline', false, { win = ev.win })
-    end
-  end,
-  desc = 'Hide cursorline when leaving window',
-})
-
 -- Automatic save
 require('util.autosave').setup()
 
