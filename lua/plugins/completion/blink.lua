@@ -121,7 +121,7 @@ local blink = {
     opts.keymap = {
       preset = vim.g.cmp_mode,
       ['<tab>'] = vim.g.cmp_mode ~= 'super-tab' and { 'fallback_to_mappings' } or { 'accept', 'fallback' },
-      ['<cr>'] = vim.g.cmp_mode ~= 'enter' and { 'fallback_to_mappings' } or { 'accept', 'fallback' },
+      ['<cr>'] = { 'accept', 'fallback' },
       ['<c-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
       ['<up>'] = { 'select_prev', 'fallback' },
       ['<down>'] = { 'select_next', 'fallback' },

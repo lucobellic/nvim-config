@@ -6,7 +6,6 @@ local function set_global_options()
   vim.g.maplocalleader = ','
   vim.g.autoformat = false
   vim.g.markdown_folding = true
-  vim.g.ai_cmp = false
 
   ---@type 'copilot'|'supermaven'|false
   vim.g.suggestions = 'copilot'
@@ -20,8 +19,8 @@ local function set_global_options()
       or { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
   }
 
-  ---@type 'default'|'super-tab'|'enter'|'none'
-  vim.g.cmp_mode = 'super-tab'
+  vim.g.ai_cmp = false
+  vim.g.cmp_mode = vim.g.ai_cmp and 'super-tab' or 'enter' --- @type 'default'|'super-tab'|'enter'|'none'
 end
 
 local function set_profiling()
