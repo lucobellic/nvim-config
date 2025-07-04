@@ -14,8 +14,8 @@ return {
     opts = {
       language = 'english',
       system_prompt = function(opts)
-        return [[You are an AI programming assistant named "CodeCompanion". You are currently plugged into the Neovim text editor on a user's machine.
-
+        local default_prompt =
+          [[ You are an AI programming assistant named "CodeCompanion". You are currently plugged into the Neovim text editor on a user's machine.
 You must:
 - Follow the user's requirements carefully and to the letter.
 - Keep your answers short and impersonal, especially if the user's context is outside your core tasks.
@@ -35,6 +35,13 @@ When given a task:
 
 IMPORTANT: Complete all edits to a single file in only one tool call. Do not make multiple separate modifications to the same file.
 ]]
+
+        --- @type CodeCompanion.Adapter
+        local adapter = opts.adapter
+        if adapter.model.name:find('gpt%-4.1') then
+          return require('plugins.codecompanion.utils.prompts.gpt41') .. '\n' .. default_prompt
+        end
+        return default_prompt
       end,
     },
     prompt_library = {
