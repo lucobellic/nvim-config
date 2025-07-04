@@ -44,6 +44,8 @@ return {
   keys = {
 
     { mode = 't', '<esc>', [[<C-\><C-n>]] },
+    { mode = 't', '<c-esc>', '<esc>' },
+    { mode = 't', '<c-bs>', '<esc>' },
 
     --------------------
     -- Text Manipulation
@@ -109,7 +111,6 @@ return {
       noremap = true,
       desc = 'Quit UIs',
     },
-    { 't', '<esc>', '<c-\\><c-n>', desc = 'Enter Normal Mode' },
 
     ------------------
     -- Tab Management
