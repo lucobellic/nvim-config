@@ -1,5 +1,6 @@
 return {
   ['GitHub Copilot'] = '',
+  ['cspell_lsp'] = '',
   ['null-ls'] = '',
   ['rust-analyzer'] = '󱘗',
   ansiblels = '󱂚',

@@ -1,11 +1,10 @@
 return {
   'nvim-zh/colorful-winsep.nvim',
-  enabled = false,
   event = { 'WinEnter' },
   opts = {
     -- highlight for Window separator
     hi = {
-      link = 'Identifier',
+      link = 'FloatBorder',
     },
     -- This plugin will not be activated for filetype in the following table.
     no_exec_files = {
