@@ -120,7 +120,7 @@ return {
   keys = {
     { '<leader>er', '<cmd>FloatermToggleTool ranger<cr>', desc = 'Ranger' },
     { '<leader>g;', '<cmd>FloatermToggleTool lazygit<cr>', desc = 'Lazygit' },
-    { '<leader>ao', '<cmd>FloatermToggleTool opencode<cr>', desc = 'Opencode' },
+    { '<leader>ao', '<cmd>FloatermToggleTool opencode<cr>', desc = 'OpenCode' },
     { '<leader>ey', '<cmd>FloatermToggleTool yazi<cr>', desc = 'Yazi' },
     { '<F7>', '<cmd>FloatermToggle<cr>', mode = 'n', desc = 'Toggle Floaterm' },
     { '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', mode = 't', desc = 'Toggle Floaterm' },
