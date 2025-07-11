@@ -84,4 +84,4 @@ require('util.commands').create_command_from_keymaps()
 -- Create command to toggle fold virtual text
 require('util.folds.folds').setup()
 -- Create command to toggle opencode
-require('util.opencode').setup({focus = true, split = 'right', insert = true})
+require('util.opencode').setup({ focus = true, split = 'right', insert = true })
