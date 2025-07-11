@@ -20,7 +20,7 @@ local function set_global_options()
   }
 
   vim.g.ai_cmp = false
-  vim.g.cmp_mode = vim.g.ai_cmp and 'super-tab' or 'enter' --- @type 'default'|'super-tab'|'enter'|'none'
+  vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
 end
 
 local function set_profiling()

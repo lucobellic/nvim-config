@@ -20,10 +20,11 @@ local get_keys = function()
         {
           '<Tab>',
           function()
-            if vim.g.cmp_mode == 'super-tab' and require('blink.cmp').is_visible() then
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
-            else
+            -- Always accept copilot suggest with tab when suggestion is visible
+            if require('copilot.suggestion').is_visible() then
               suggestion_key_fallback('<Tab>', 'accept')
+            else
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
             end
           end,
           desc = 'Copilot accept',
