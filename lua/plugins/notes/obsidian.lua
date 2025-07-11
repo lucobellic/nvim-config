@@ -65,13 +65,14 @@ return {
 
       note_id_func = function(title) return title end,
 
-      mappings = {
-        -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-        ['gf'] = {
-          action = function() return require('obsidian').util.gf_passthrough() end,
-          opts = { noremap = false, expr = true, buffer = true },
-        },
-      },
+      -- TODO:
+      -- mappings = {
+      --   -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
+      --   ['gf'] = {
+      --     action = function() return require('obsidian').util.gf_passthrough() end,
+      --     opts = { noremap = false, expr = true, buffer = true },
+      --   },
+      -- },
 
       finder = 'telescope.nvim',
 
