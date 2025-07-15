@@ -1,8 +1,9 @@
 return {
   'folke/snacks.nvim',
+  lazy = false,
   opts = {
     dashboard = {
-      enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
+      cond = function() return not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true') end,
       width = 72,
       autokeys = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       sections = {

@@ -2,7 +2,7 @@ local prefix = 'gs'
 return {
   'echasnovski/mini.surround',
   event = 'VeryLazy',
-  dependencies = {
+  dependencies = vim.g.distribution == 'astronvim' and {
     { 'AstroNvim/astroui', opts = { icons = { Surround = '󰑤' } } },
     {
       'AstroNvim/astrocore',
