@@ -75,6 +75,13 @@ return {
         mode = { 'n', 'v' },
         desc = 'diffthis',
       },
+      {
+        '<leader>gdh',
+        function() require('util.diffview_highlight_toggle').toggle() end,
+        mode = { 'n' },
+        desc = 'Toggle diffview diff highlights',
+        repeatable = true,
+      },
     },
     opts = function(_, opts)
       return vim.tbl_deep_extend('force', opts, {
