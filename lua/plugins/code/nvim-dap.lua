@@ -50,6 +50,10 @@ return {
   dependencies = {
     {
       'mfussenegger/nvim-dap-python',
+      dependcies = {
+	'mason.nvim',
+	'nvim-dap-ui',
+      },
       keys = {
         {
           '<leader>dPu',

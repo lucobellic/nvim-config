@@ -16,7 +16,7 @@ return {
               if first_failed_task then
                 local lines = vim.api.nvim_buf_get_lines(first_failed_task.strategy.term.bufnr, 0, -1, false)
                 local context = 'Explain the error from the command '
-                  .. first_failed_task.cmd
+                  .. (type(first_failed_task.cmd) == "table" and first_failed_task.cmd[1] or first_failed_task.cmd)
                   .. ':\n'
                   .. table.concat(lines, '\n')
                   .. '\n\n'
