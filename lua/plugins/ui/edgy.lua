@@ -134,6 +134,17 @@ return {
         end,
         size = { height = 0.2 },
       },
+      {
+        title = 'notes',
+        ft = 'markdown',
+        filter = function(buf, win)
+          local is_normal_window = vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
+          local buf_name = vim.api.nvim_buf_get_name(buf)
+          local is_in_notes = string.find(buf_name, '/notes/') ~= nil
+          return is_normal_window and is_in_notes
+        end,
+        size = { width = 0.2 },
+      },
     },
     bottom = {
       {
