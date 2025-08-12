@@ -29,12 +29,12 @@ local function close_current_floaterm()
 end
 
 --- Update current floaterm dimension
----@param key string 'height' or 'width'
----@param offset float offset to apply to the dimension in range [0, 1]
+--- @param key string 'height' or 'width'
+--- @param offset number offset to apply to the dimension in range [0, 1]
 local function add_dimension_offset(key, offset)
   local buffer = vim.api.nvim_win_get_buf(0)
   local dim_var = vim.api.nvim_buf_get_var(buffer, 'floaterm_' .. key)
-  local dim = dim_var[false] --I don't get this, but whatever
+  local dim = dim_var[false] -- I don't get this, but whatever
   local new_dim = math.max(math.min(dim + offset, 0.999), 0.1)
   vim.api.nvim_call_function('floaterm#config#set', { buffer, key, new_dim })
 end
