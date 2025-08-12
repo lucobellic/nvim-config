@@ -32,6 +32,7 @@ vim.opt.wrap = false
 vim.opt.showbreak = '↪'
 vim.opt.breakindent = true
 
+vim.opt.autoread = true
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false

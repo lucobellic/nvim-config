@@ -24,5 +24,8 @@ vim.filetype.add({
     ['.*%.cpp.tpl'] = 'cpp.jinja',
     ['gitlab.*%.txt'] = 'markdown',
     ['github.*%.txt'] = 'markdown',
+    ['tasks.json'] = 'jsonc',
+    ['launch.json'] = 'jsonc',
+    ['settings.json'] = 'jsonc',
   },
 })
