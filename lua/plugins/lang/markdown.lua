@@ -60,10 +60,10 @@ return {
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    ft = { 'markdown', 'codecompanion', 'mcphub' },
+    ft = { 'markdown', 'codecompanion', 'mcphub', 'obsidian' },
     opts_extend = { 'file_types', 'render_modes', 'sign.exclude.buftypes' },
     opts = {
-      file_types = { 'markdown', 'codecompanion', 'mcphub' },
+      file_types = { 'markdown', 'codecompanion', 'mcphub', 'obsidian' },
       render_modes = { 'n', 'c', 'i' },
       sign = {
         enabled = false,

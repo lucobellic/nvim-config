@@ -72,7 +72,8 @@ end
 
 return {
   {
-    'zbirenbaum/copilot.lua',
+    'lucobellic/copilot.lua',
+    branch = 'fix/document-uri',
     enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1),
     cond = vim.g.suggestions == 'copilot',
     keys = get_keys(),

@@ -135,7 +135,7 @@ local function reach_run(run_args, list_args)
             .new_task({
               name = choice,
               cmd = 'reach',
-              args = vim.list_extend({ 'test', 'run', '-b' }, { choice }),
+              args = vim.list_extend(run_args, { choice }),
               components = { 'default' },
             })
             :start()

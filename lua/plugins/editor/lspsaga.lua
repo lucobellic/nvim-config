@@ -2,6 +2,7 @@ return {
   'nvimdev/lspsaga.nvim',
   enabled = not vim.g.started_by_firenvim,
   event = 'LspAttach',
+  dev = true,
   dependencies = {
     { 'nvim-tree/nvim-web-devicons' },
     { 'nvim-treesitter/nvim-treesitter' },
@@ -10,6 +11,7 @@ return {
     diagnostic = {
       on_insert = false,
       border_follow = false,
+      extend_relatedInformation = true,
     },
     lightbulb = { enable = false },
     outline = {
