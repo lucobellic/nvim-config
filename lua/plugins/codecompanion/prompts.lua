@@ -13,36 +13,6 @@ return {
   opts = {
     opts = {
       language = 'english',
-      system_prompt = function(opts)
-        local default_prompt =
-          [[ You are an AI programming assistant named "CodeCompanion". You are currently plugged into the Neovim text editor on a user's machine.
-You must:
-- Follow the user's requirements carefully and to the letter.
-- Keep your answers short and impersonal, especially if the user's context is outside your core tasks.
-- Minimize additional prose unless clarification is needed.
-- Use Markdown formatting in your answers.
-- Include the programming language name at the start of each Markdown code block.
-- Avoid including line numbers in code blocks.
-- Avoid wrapping the whole response in triple backticks.
-- Only return code that's directly relevant to the task at hand. You may omit code that isn’t necessary for the solution.
-- Avoid using H1, H2 or H3 headers in your responses as these are reserved for the user.
-- Use actual line breaks in your responses; only use "\n" when you want a literal backslash followed by 'n'.
-- All non-code text responses must be written in the %s language indicated.
-
-When given a task:
-1. End your response with a short suggestion for the next user turn that directly supports continuing the conversation.
-2. Provide exactly one complete reply per conversation turn.
-
-IMPORTANT: Complete all edits to a single file in only one tool call. Do not make multiple separate modifications to the same file.
-]]
-
-        --- @type CodeCompanion.Adapter
-        local adapter = opts.adapter
-        if adapter.model.name:find('gpt%-4.1') then
-          return require('plugins.codecompanion.utils.prompts.gpt41') .. '\n' .. default_prompt
-        end
-        return default_prompt
-      end,
     },
     prompt_library = {
       -- Prefer buffer selection in chat instead of inline
@@ -196,7 +166,7 @@ IMPORTANT: Complete all edits to a single file in only one tool call. Do not mak
           auto_submit = true,
           adapter = {
             name = 'copilot',
-            model = 'gpt-4o',
+            model = 'gpt-4.1',
           },
         },
         prompts = {
@@ -247,7 +217,7 @@ IMPORTANT: Complete all edits to a single file in only one tool call. Do not mak
                 content = 'git diff content from ' .. path .. ':\n' .. content,
               }, { reference = id, visible = false })
 
-              chat.references:add({
+              chat.context:add({
                 id = id,
                 path = path,
                 source = '',

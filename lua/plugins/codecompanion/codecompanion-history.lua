@@ -9,7 +9,6 @@ return {
         enabled = true,
         opts = {
           keymap = '<localleader>hh',
-          auto_generate_title = false,
           continue_last_chat = false,
           delete_on_clearing_chat = false,
           picker = 'snacks',
@@ -17,6 +16,11 @@ return {
           dir_to_save = vim.fn.stdpath('data') .. '/codecompanion-history',
           auto_save = true,
           save_chat_keymap = '<localleader>hs',
+          auto_generate_title = true,
+          title_generation_opts = {
+            adapter = 'copilot',
+            model = 'gpt-4.1',
+          },
         },
       },
     },

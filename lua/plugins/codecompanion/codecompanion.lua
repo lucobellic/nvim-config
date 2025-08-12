@@ -11,7 +11,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
-    enabled = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true',
+    cond = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true',
     version = '*',
     dependencies = {
       'nvim-lua/plenary.nvim',
