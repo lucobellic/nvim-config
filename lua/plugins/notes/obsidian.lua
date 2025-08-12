@@ -19,7 +19,7 @@ return {
   },
   {
     'obsidian-nvim/obsidian.nvim',
-    enabled = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
+    cond = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
@@ -40,7 +40,6 @@ return {
       { '<leader>nn', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
       { '<leader>nw', '<cmd>ObsidianWorkspace<CR>', desc = 'Obsidian Workspace' },
     },
-    ft = 'markdown',
     opts = {
       workspaces = {
         {

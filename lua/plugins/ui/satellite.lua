@@ -11,7 +11,7 @@ end
 
 return {
   'lewis6991/satellite.nvim',
-  enabled = not vim.g.started_by_firenvim,
+  cond = not vim.g.started_by_firenvim and not vim.g.neovide,
   event = 'BufEnter',
   keys = {
     { '<leader>ut', toggle_satellite, desc = 'Toggle Satellite' },
