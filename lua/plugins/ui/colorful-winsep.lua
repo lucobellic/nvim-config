@@ -14,8 +14,8 @@ return {
       'NvimTree',
     },
     -- Symbols for separator lines, the order: horizontal, vertical, top left, top right, bottom left, bottom right.
-    -- symbols = { '─', '│', '┌', '┐', '└', '┘' },
-    symbols = { '─', '│', '╭', '╮', '╰', '╯' },
+    symbols = vim.g.winborder == 'single' and { '─', '│', '┌', '┐', '└', '┘' }
+      or { '─', '│', '╭', '╮', '╰', '╯' },
     -- Smooth moving switch
     smooth = false,
     zindex = 20,

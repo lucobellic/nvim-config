@@ -2,6 +2,7 @@ return {
   ['GitHub Copilot'] = '',
   ['cspell_lsp'] = '',
   ['null-ls'] = '',
+  ['obsidian-ls'] = '',
   ['rust-analyzer'] = '󱘗',
   ansiblels = '󱂚',
   basedpyright = '󱔎',
