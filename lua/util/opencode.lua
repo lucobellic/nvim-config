@@ -103,7 +103,13 @@ function M.send_buffer()
     vim.notify('No file to send', vim.log.levels.WARN)
     return
   end
-  M.send_files_to_terminal({ file })
+
+  vim.ui.input({ prompt = 'Ask file:' }, function(input)
+    if input ~= nil then
+      M.send_files_to_terminal({ file })
+      M.send_text_to_terminal(input)
+    end
+  end)
 end
 
 ---Open file picker to select and send multiple files to OpenCode
@@ -147,7 +153,12 @@ function M.send_selection()
   local filetype = vim.api.nvim_get_option_value('filetype', { buf = 0 })
   local formatted_text = '\x0A ' .. '```' .. filetype .. '\x0A' .. text .. '\x0A ' .. '```' .. '\x0A'
 
-  M.send_text_to_terminal(formatted_text)
+  vim.ui.input({ prompt = 'Ask selection:' }, function(input)
+    if input ~= nil then
+      M.send_text_to_terminal(formatted_text)
+      M.send_text_to_terminal(input)
+    end
+  end)
 
   vim.notify('Sent selection to OpenCode', vim.log.levels.INFO)
 end
