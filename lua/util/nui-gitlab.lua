@@ -11,38 +11,40 @@ local renderer = n.create_renderer({
 
 local function get_mr_list(signal, args)
   ---@diagnostic disable-next-line: missing-fields
-  Job:new({
-    command = 'glab',
-    args = { 'mr', 'list', args },
-    on_exit = function(j, exit_code)
-      if exit_code ~= 0 then
-        vim.notify('Failed to get gitlab issues', vim.log.levels.ERROR)
-      else
-        local data = vim
-          .iter(j:result())
-          :filter(function(issue) return issue:match('^!') end)
-          :map(function(issue)
-            local parts = vim.split(issue, '\t', { plain = true })
-            return n.option(parts[3], { id = parts[1] })
-          end)
-          :totable()
+  Job
+    :new({
+      command = 'glab',
+      args = { 'mr', 'list', args },
+      on_exit = function(j, exit_code)
+        if exit_code ~= 0 then
+          vim.notify('Failed to get gitlab issues', vim.log.levels.ERROR)
+        else
+          local data = vim
+            .iter(j:result())
+            :filter(function(issue) return issue:match('^!') end)
+            :map(function(issue)
+              local parts = vim.split(issue, '\t', { plain = true })
+              return n.option(parts[3], { id = parts[1] })
+            end)
+            :totable()
 
-        vim.schedule(function()
-          signal.data = data
-          signal.selected = { data[1].text }
-          local width = vim.fn.max(vim.iter(data):map(function(item) return item.text:len() end):totable()) + 5
-          width = vim.fn.max({width, min_width})
-          width = vim.fn.min({width, max_width})
-          renderer:set_size({
-            height = #data + 3,
-            width = width
-          })
-          signal.is_loading = false
-          signal.is_visible = true
-        end)
-      end
-    end,
-  }):start()
+          vim.schedule(function()
+            signal.data = data
+            signal.selected = { data[1].text }
+            local width = vim.fn.max(vim.iter(data):map(function(item) return item.text:len() end):totable()) + 5
+            width = vim.fn.max({ width, min_width })
+            width = vim.fn.min({ width, max_width })
+            renderer:set_size({
+              height = #data + 3,
+              width = width,
+            })
+            signal.is_loading = false
+            signal.is_visible = true
+          end)
+        end
+      end,
+    })
+    :start()
 end
 
 local tab_signal = n.create_signal({ active_tab = 'assigned' })

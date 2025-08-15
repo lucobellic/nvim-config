@@ -2,7 +2,7 @@ return {
   'sarrisv/readermode.nvim',
   opts = {
     enabled = false,
-    keymap = "<leader>zc"
+    keymap = '<leader>zc',
   },
   keys = {
 

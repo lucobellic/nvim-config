@@ -3,6 +3,12 @@ return {
     'lucobellic/ayugloom.nvim',
     name = 'ayugloom',
     dependencies = 'rktjmp/lush.nvim',
+    dev = true,
+    init = function()
+      if not vim.g.distribution then
+        vim.cmd([[colorscheme ayugloom]])
+      end
+    end,
     priority = 1000,
   },
   {

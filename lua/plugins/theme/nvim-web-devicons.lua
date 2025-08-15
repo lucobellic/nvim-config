@@ -38,8 +38,8 @@ return {
         icon = '',
         color = '#519aba',
         cterm_color = 74,
-        name = 'Jenkinsfile'
-      }
+        name = 'Jenkinsfile',
+      },
     },
   },
 }

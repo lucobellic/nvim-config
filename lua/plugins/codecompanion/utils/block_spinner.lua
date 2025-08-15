@@ -39,8 +39,8 @@ local VirtualTextBlockSpinner = {
   opts = spinner_opts,
   width = 0,
   height = 0,
-  border_top = "",
-  border_bottom = "",
+  border_top = '',
+  border_bottom = '',
 }
 
 --- @class VirtualTextBlockSpinner.Opts

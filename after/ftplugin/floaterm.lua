@@ -53,8 +53,8 @@ vim.api.nvim_create_user_command('FloatermCloseCurrent', close_current_floaterm,
 
 local opts = { noremap = true, silent = true, buffer = true }
 
-vim.keymap.set('t', '<c-j>', '<c-j>', { buffer = 0, nowait = true })
-vim.keymap.set('t', '<c-k>', '<c-k>', { buffer = 0, nowait = true })
+vim.keymap.set('t', '<c-j>', '<c-j>', { buffer = true, nowait = true })
+vim.keymap.set('t', '<c-k>', '<c-k>', { buffer = true, nowait = true })
 
 vim.keymap.set({ 'n', 't' }, '<C-down>', function()
   add_dimension_offset('height', -0.1)

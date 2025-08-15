@@ -47,7 +47,6 @@ local function floaterm_reset_keymaps(bufnr)
   pcall(vim.keymap.del, 't', '<C-t>', { buffer = bufnr })
 end
 
-
 --- Send a buffer from floaterm that was moved from other window back to a new window in the current tab
 --- @param floaterm_window number The window ID of the floating terminal
 --- @param bufnr number The buffer number to be sent back to a new window

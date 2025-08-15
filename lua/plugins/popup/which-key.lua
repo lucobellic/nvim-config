@@ -25,6 +25,6 @@ return {
         winblend = vim.o.winblend,
       },
     },
-    sort = { "alphanum", "local", "order", "mod" },
+    sort = { 'alphanum', 'local', 'order', 'mod' },
   },
 }

@@ -2,13 +2,11 @@ return {
   {
     'junegunn/fzf',
     build = './install --bin',
-    config = function ()
-    end,
+    config = function() end,
   },
   {
     'junegunn/fzf.vim',
-    config = function ()
-    end,
+    config = function() end,
   },
   {
     'ibhagwan/fzf-lua',
