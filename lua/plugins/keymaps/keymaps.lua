@@ -1,3 +1,29 @@
+--- Operator-pending paste: allows using motions/textobjects after `p` or `P`
+--- Example: `piw` will paste over the inner word under the cursor
+---@param type 'line'|'char'|'block'
+function _G.custom_operator_paste(type)
+  -- Ensure we have valid positions
+  if vim.fn.getpos("'[")[2] == 0 or vim.fn.getpos("']")[2] == 0 then
+    return
+  end
+
+  -- Select the text that was just operated on
+  if type == 'line' then
+    -- For line-wise operations, select the entire lines
+    vim.cmd('normal! `[V`]')
+  elseif type == 'block' then
+    -- For block-wise operations, use block selection
+    vim.cmd('normal! `[<C-v>`]')
+  else
+    -- Default to character-wise if type is unknown
+    -- For character-wise operations, select the characters
+    vim.cmd('normal! `[v`]')
+  end
+
+  -- Paste over the selection (this will replace the selected text)
+  vim.cmd('normal! P')
+end
+
 if vim.g.vscode then
   local vscode = require('vscode')
   vim.notify = vscode.notify
@@ -65,6 +91,19 @@ return {
     { mode = { 'n', 'v' }, '>>', '>>', remap = false, desc = 'Increase Indent' },
     { mode = { 'n', 'v' }, '<<', '<<', remap = false, desc = 'Decrease Indent' },
 
+    ------------------
+    -- Paste
+    ------------------
+    -- Paste over motion/textobject: enter operator-pending mode with `p`
+    {
+      '<leader>v',
+      function()
+        vim.go.operatorfunc = 'v:lua.custom_operator_paste'
+        vim.api.nvim_feedkeys('g@', 'n', false)
+      end,
+      desc = 'Paste over motion/textobject',
+      repeatable = true,
+    },
     {
       '<leader>yP',
       function()
