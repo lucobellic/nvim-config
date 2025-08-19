@@ -196,6 +196,48 @@ return {
     { '<F12>', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
     { '<leader>dO', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
     { '<F10>', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
+    {
+      '>b',
+      function()
+        local breakpoints = require('dap.breakpoints').get()
+        local current_buf = vim.api.nvim_get_current_buf()
+        local current_line = vim.api.nvim_win_get_cursor(0)[1]
+        local next_bp = nil
+
+        for _, bp in pairs(breakpoints[current_buf] or {}) do
+          if bp.line > current_line and (not next_bp or bp.line < next_bp) then
+            next_bp = bp.line
+          end
+        end
+
+        if next_bp then
+          vim.api.nvim_win_set_cursor(0, { next_bp, 0 })
+        end
+      end,
+      repeatable = true,
+      desc = 'Next Breakpoint',
+    },
+    {
+      '<b',
+      function()
+        local breakpoints = require('dap.breakpoints').get()
+        local current_buf = vim.api.nvim_get_current_buf()
+        local current_line = vim.api.nvim_win_get_cursor(0)[1]
+        local prev_bp = nil
+
+        for _, bp in pairs(breakpoints[current_buf] or {}) do
+          if bp.line < current_line and (not prev_bp or bp.line > prev_bp) then
+            prev_bp = bp.line
+          end
+        end
+
+        if prev_bp then
+          vim.api.nvim_win_set_cursor(0, { prev_bp, 0 })
+        end
+      end,
+      repeatable = true,
+      desc = 'Previous Breakpoint',
+    },
   },
   opts = function(_, opts)
     local dap = require('dap')
