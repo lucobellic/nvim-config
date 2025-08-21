@@ -39,7 +39,7 @@ return {
       groups = {
         left = {
           { icon = '', titles = { 'Neo-Tree', 'Neo-Tree Buffers' }, pick_key = 'e' },
-          { icon = '', titles = { 'trouble-symbols' }, pick_key = 'o' },
+          { icon = '', titles = { 'aerial' }, pick_key = 'o' },
           { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'g' },
           {
             icon = '',

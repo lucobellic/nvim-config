@@ -94,6 +94,11 @@ return {
           end
         end,
       },
+      {
+        title = 'aerial',
+        ft = 'aerial',
+        open = 'AerialToggle',
+      },
     },
     right = {
       {

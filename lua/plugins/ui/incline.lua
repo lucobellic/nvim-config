@@ -65,6 +65,7 @@ local edgy_filetypes = {
   'Outline',
   'trouble',
   'copilot-chat',
+  'aerial',
 }
 
 local edgy_titles = {
@@ -74,6 +75,7 @@ local edgy_titles = {
   Trouble = 'trouble',
   OverseerList = 'overseer',
   Outline = 'outline',
+  aerial = 'aerial',
 }
 
 local function is_edgy_group(props, filename) return vim.tbl_contains(edgy_filetypes, vim.bo[props.buf].filetype) end
