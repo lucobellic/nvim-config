@@ -77,7 +77,22 @@ function AgentTerminal:create_terminal()
   vim.api.nvim_set_option_value('filetype', self._filetype, { buf = self.terminal_buf })
   self.terminal_win = vim.api.nvim_open_win(self.terminal_buf, opts.focus, { split = opts.split or 'right', win = 0 })
 
-  self.terminal_job_id = vim.fn.jobstart(self._executable, { term = true })
+  self.terminal_job_id = vim.fn.jobstart(self._executable, {
+    term = true,
+    on_exit = function()
+      -- Close the terminal window when the process exits
+      if self.terminal_win and vim.api.nvim_win_is_valid(self.terminal_win) then
+        vim.api.nvim_win_close(self.terminal_win, true)
+      end
+      -- Clean up the terminal buffer and job ID
+      self.terminal_job_id = nil
+      self.terminal_win = nil
+      if self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) then
+        vim.api.nvim_buf_delete(self.terminal_buf, { force = true })
+        self.terminal_buf = nil
+      end
+    end,
+  })
 
   self:focus_terminal()
 end
