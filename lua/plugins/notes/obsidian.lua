@@ -25,22 +25,18 @@ return {
       'nvim-telescope/telescope.nvim',
     },
     cmd = {
-      'ObsidianOpen',
-      'ObsidianQuickSwitch',
-      'ObsidianSearch',
-      'ObsidianToday',
-      'ObsidianYesterday',
-      'ObsidianTask',
+      'Obsidian',
     },
     keys = {
-      { '<leader>no', '<cmd>ObsidianOpen<cr>', desc = 'Obsidian Open' },
-      { '<leader>nf', '<cmd>ObsidianQuickSwitch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>nt', '<cmd>ObsidianToday<cr>', desc = 'Obsidian Today' },
-      { '<leader>ny', '<cmd>ObsidianYesterday<cr>', desc = 'Obsidian Yesterday' },
-      { '<leader>nn', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
-      { '<leader>nw', '<cmd>ObsidianWorkspace<CR>', desc = 'Obsidian Workspace' },
+      { '<leader>no', '<cmd>Obsidian open<cr>', desc = 'Obsidian Open' },
+      { '<leader>nf', '<cmd>Obsidian quick_switch<cr>', desc = 'Obsidian Find Files' },
+      { '<leader>nt', '<cmd>Obsidian today<cr>', desc = 'Obsidian Today' },
+      { '<leader>ny', '<cmd>Obsidian yesterday<cr>', desc = 'Obsidian Yesterday' },
+      { '<leader>nn', '<cmd>Obsidian task<CR>', desc = 'Obsidian Task' },
+      { '<leader>nw', '<cmd>Obsidian workspace<CR>', desc = 'Obsidian Workspace' },
     },
     opts = {
+      legacy_commands = false,
       workspaces = {
         {
           name = 'work',
@@ -77,13 +73,6 @@ return {
 
       ui = {
         enable = false, -- Prefer usage of mardown.nvim
-        checkboxes = {
-          [' '] = { char = '󱍫', hl_group = 'DiagnosticInfo' },
-          ['x'] = { char = '󱍧', hl_group = 'DiagnosticOk' },
-          ['/'] = { char = '󱍬', hl_group = 'DiagnosticWarn' },
-          ['%-'] = { char = '󱍮', hl_group = 'DiagnosticError' },
-          ['%?'] = { char = '󱍥', hl_group = 'DiagnosticWarn' },
-        },
       },
     },
     config = function(_, opts)
@@ -102,7 +91,7 @@ return {
           vim.notify('Unable to create note', vim.log.levels.WARN, { title = 'obsidian.nvim' })
         end
       end
-      vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
+      vim.api.nvim_create_user_command('Obsidian task', toggle_current_task, {})
     end,
   },
 }
