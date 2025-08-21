@@ -13,7 +13,7 @@ return {
     hint_hl = 'FloatTitle',
 
     -- The border style to use for the floating window.
-    border = 'none',
+    border = vim.g.border_style,
 
     -- The characters available for hinting windows.
     chars = {
