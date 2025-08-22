@@ -32,7 +32,7 @@ return {
       { '<leader>nf', '<cmd>Obsidian quick_switch<cr>', desc = 'Obsidian Find Files' },
       { '<leader>nt', '<cmd>Obsidian today<cr>', desc = 'Obsidian Today' },
       { '<leader>ny', '<cmd>Obsidian yesterday<cr>', desc = 'Obsidian Yesterday' },
-      { '<leader>nn', '<cmd>Obsidian task<CR>', desc = 'Obsidian Task' },
+      { '<leader>nn', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
       { '<leader>nw', '<cmd>Obsidian workspace<CR>', desc = 'Obsidian Workspace' },
     },
     opts = {
@@ -91,7 +91,7 @@ return {
           vim.notify('Unable to create note', vim.log.levels.WARN, { title = 'obsidian.nvim' })
         end
       end
-      vim.api.nvim_create_user_command('Obsidian task', toggle_current_task, {})
+      vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
     end,
   },
 }
