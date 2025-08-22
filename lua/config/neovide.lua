@@ -11,9 +11,9 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = 'pixiedust'
   vim.g.neovide_hide_mouse_when_typing = true
 
-  vim.g.neovide_opacity = 0.75
+  vim.g.neovide_opacity = 0.70
   vim.g.neovide_text_background_opacity = 1.0
-  vim.g.neovide_normal_opacity = 0.75
+  vim.g.neovide_normal_opacity = 0.70
 
   vim.g.neovide_floating_blur = true
   vim.g.neovide_floating_blur_amount_x = 5.0
