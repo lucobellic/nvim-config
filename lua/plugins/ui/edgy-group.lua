@@ -38,8 +38,7 @@ return {
     opts = {
       groups = {
         left = {
-          { icon = '', titles = { 'Neo-Tree', 'Neo-Tree Buffers' }, pick_key = 'e' },
-          { icon = '', titles = { 'aerial' }, pick_key = 'o' },
+          { icon = '', titles = { 'Neo-Tree Buffers', 'Neo-Tree', 'aerial' }, pick_key = 'e' },
           { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'g' },
           {
             icon = '',
