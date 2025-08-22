@@ -174,6 +174,7 @@ function AgentTerminal:send_selection()
 
   vim.ui.input({ prompt = 'Ask selection:' }, function(input)
     if input ~= nil then
+      self:send_files_to_terminal({ vim.fn.expand('%:p') })
       self:send_text_to_terminal(formatted_text)
       self:send_text_to_terminal(input)
     end
