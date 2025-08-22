@@ -1,6 +1,8 @@
 local function set_global_options()
-  --- @type 'astronvim'|'lazyvim'
-  vim.g.distribution = 'lazyvim'
+  --- @type 'astronvim'|'lazyvim'|nil
+  -- vim.g.distribution = 'lazyvim'
+  vim.g.distribution = 'astronvim'
+  -- vim.g.distribution = nil
 
   vim.g.mapleader = ' '
   vim.g.maplocalleader = ','
@@ -78,6 +80,7 @@ end
 
 local function configure_lsp()
   vim.lsp.enable('cspell_lsp')
+  vim.lsp.enable('qmlls')
   vim.lsp.handlers['textDocument/publishDiagnostics'] = function(err, result, ctx, config)
     local client = vim.lsp.get_client_by_id(ctx.client_id)
     if client and client.name == 'cspell_lsp' then
