@@ -19,6 +19,7 @@ return {
   neocmake = '',
   nil_ls = '',
   pylsp = '󰌠',
+  qmlls = '',
   ruff = '󰌠',
   ruff_lsp = '󱔎',
   taplo = '',
