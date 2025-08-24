@@ -7,6 +7,7 @@
 ---@field executable string Command to launch (e.g., 'opencode')
 ---@field filetype string Filetype to set on terminal buffer
 ---@field display_name string Human-readable name (e.g., 'OpenCode')
+---@field leader string Keymap prefix (e.g., '<leader>c') for setting up default keymaps
 ---@field opts AgentTerminalOptions
 
 ---@class AgentTerminal
@@ -36,7 +37,39 @@ function AgentTerminal.new(config)
     focus = true,
     insert = true,
   }, config.opts or {})
+
+  self:setup_keymaps(config.leader)
+  self:setup_autocmds(config.display_name:gsub('%s+', ''))
   return self
+end
+
+--- Setup user commands with the given group name prefix.
+---@private
+---@param group_name string Command group name prefix (e.g., 'OpenCode')
+function AgentTerminal:setup_autocmds(group_name)
+  vim.api.nvim_create_user_command(group_name .. 'Toggle', function() self:toggle_terminal() end, {})
+  vim.api.nvim_create_user_command(group_name .. 'SendBuffer', function() self:send_buffer() end, {})
+  vim.api.nvim_create_user_command(group_name .. 'SendFiles', function() self:select_files() end, {})
+  vim.api.nvim_create_user_command(
+    group_name .. 'SendSelection',
+    function() self:send_selection() end,
+    { range = true }
+  )
+end
+
+--- Setup keymaps with the given prefix.
+---@private
+---@param prefix string Keymap prefix (e.g., '<leader>c')
+function AgentTerminal:setup_keymaps(prefix)
+  vim.keymap.set('n', prefix .. 't', function() self:toggle_terminal() end, { desc = self._display_name .. ' Toggle' })
+  vim.keymap.set('n', prefix .. 'b', function() self:send_buffer() end, { desc = self._display_name .. ' Send Buffer' })
+  vim.keymap.set('n', prefix .. 'F', function() self:select_files() end, { desc = self._display_name .. ' Send Files' })
+  vim.keymap.set(
+    'v',
+    prefix .. 'e',
+    function() self:send_selection() end,
+    { desc = self._display_name .. ' Send Selection' }
+  )
 end
 
 --- Focus the terminal window/buffer and optionally enter insert mode.
@@ -56,14 +89,7 @@ end
 --- Ensure a terminal exists; optionally focus it if already open.
 ---@param focus boolean|nil Focus the terminal when it already exists
 function AgentTerminal:ensure_terminal(focus)
-  if
-    not (
-      self.terminal_buf
-      and vim.api.nvim_buf_is_valid(self.terminal_buf)
-      and self.terminal_win
-      and vim.api.nvim_win_is_valid(self.terminal_win)
-    )
-  then
+  if not (self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf)) then
     self:create_terminal()
   elseif focus then
     self:focus_terminal()
@@ -181,6 +207,45 @@ function AgentTerminal:send_selection()
   end)
 
   vim.notify('Sent selection to ' .. self._display_name, vim.log.levels.INFO)
+end
+
+--- Send current buffer's diagnostics to the terminal with context.
+function AgentTerminal:send_buffer_diagnostics()
+  local current_buf = vim.api.nvim_get_current_buf()
+  local file = vim.fn.expand('%:p')
+
+  if file == '' then
+    vim.notify('No file to send diagnostics for', vim.log.levels.WARN)
+    return
+  end
+
+  local diagnostics = vim.diagnostic.get(current_buf)
+
+  if #diagnostics == 0 then
+    vim.notify('No diagnostics found in current buffer', vim.log.levels.INFO)
+    return
+  end
+
+  -- Sort diagnostics by line number
+  table.sort(diagnostics, function(a, b) return a.lnum < b.lnum end)
+
+  local diagnostic_text = '\x0A```\nDiagnostics for ' .. vim.fn.expand('%:t') .. ':\n\n'
+
+  for _, diagnostic in ipairs(diagnostics) do
+    local severity = vim.diagnostic.severity[diagnostic.severity] or 'UNKNOWN'
+    local line_num = diagnostic.lnum + 1 -- Convert from 0-based to 1-based
+    local col_num = diagnostic.col + 1
+
+    diagnostic_text = diagnostic_text
+      .. string.format('[%s] Line %d:%d - %s\n', severity, line_num, col_num, diagnostic.message)
+  end
+
+  diagnostic_text = diagnostic_text .. '```\x0A'
+
+  self:send_files_to_terminal({ file })
+  self:send_text_to_terminal(diagnostic_text)
+
+  vim.notify('Sent ' .. #diagnostics .. ' diagnostic(s) to ' .. self._display_name, vim.log.levels.INFO)
 end
 
 return AgentTerminal
