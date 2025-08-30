@@ -86,7 +86,7 @@ return {
         -- Get the task based on regex
         local task = branch and branch:match('(%w+%-%d+)') or ''
         if task ~= '' then
-          vim.cmd('ObsidianNew ' .. task)
+          vim.cmd('Obsidian new ' .. task)
         else
           vim.notify('Unable to create note', vim.log.levels.WARN, { title = 'obsidian.nvim' })
         end
