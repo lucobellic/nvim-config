@@ -38,7 +38,7 @@ return {
     opts = {
       groups = {
         left = {
-          { icon = '', titles = { 'Neo-Tree Buffers', 'Neo-Tree', 'aerial' }, pick_key = 'e' },
+          { icon = '', titles = { 'Neo-Tree Buffers', 'Neo-Tree', 'trouble-symbols' }, pick_key = 'e' },
           { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'g' },
           {
             icon = '',
@@ -48,7 +48,7 @@ return {
         },
         right = {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
-          { icon = '', titles = { 'opencode' }, pick_key = 'i' },
+          { icon = '', titles = { 'opencode' }, pick_key = 'o' },
           { icon = '', titles = { 'cursor-agent' }, pick_key = 'c' },
           { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
           {
