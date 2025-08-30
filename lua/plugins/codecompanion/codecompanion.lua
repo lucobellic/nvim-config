@@ -13,6 +13,44 @@ local function send_buffer_to_chat(bufnr)
   chat.ui:open()
 end
 
+local function ask_selection()
+  vim.ui.input({ prompt = 'CodeCompanion Input: ' }, function(input)
+    if not input then
+      return
+    end
+
+    CodeCompanion = require('codecompanion')
+    local prompt = input and '<prompt>\n' .. input .. '\n</prompt>' or ''
+    local filetype = vim.api.nvim_get_option_value('filetype', { buf = 0 })
+    local buffer_reference = '#{buffer}'
+    local lines = vim.fn.getline(vim.fn.getpos("'<")[2], vim.fn.getpos("'>")[2])
+    local text = ''
+    if #lines ~= 0 then
+      text = '```' .. filetype .. '\n' .. table.concat(lines, '\n') .. '\n```'
+    end
+
+    local content = '@{insert_edit_into_file}\n'
+      .. buffer_reference
+      .. '\n'
+      .. text
+      .. '\n'
+      .. prompt
+      .. '\nApply the changes directly to the file if requested.'
+
+    -- local chat = CodeCompanion.last_chat()
+    -- if not chat then
+    --   chat = CodeCompanion.chat()
+    -- end
+    --
+    -- chat:add_buf_message({
+    --   role = 'user',
+    --   content = content
+    -- })
+    -- chat:submit()
+    -- -- chat.ui:hide()
+  end)
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -51,7 +89,8 @@ return {
       { '<leader>ad', ':CodeCompanion /doc<cr>', mode = { 'v' }, desc = 'Code Companion Documentation' },
       { '<leader>af', ':CodeCompanion /fix<cr>', mode = { 'v' }, desc = 'Code Companion Fix' },
       { '<leader>ag', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
-      { '<leader>ai', ':CodeCompanion<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
+      { '<leader>ai', ':CodeCompanion /agent<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
+      { '<leader>aj', ask_selection, mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
       { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
       {
         '<leader>an',
@@ -76,6 +115,11 @@ return {
       vim.cmd([[cab ccc CodeCompanionChat]])
     end,
     opts = {
+      opts = {
+        system_prompt = function()
+          return 'You are a world class programming AI assistant. Help the user with their coding tasks.'
+        end,
+      },
       strategies = {
         chat = {
           opts = { goto_file_action = 'edit' },
@@ -98,12 +142,6 @@ return {
             debug = { modes = { n = '<localleader>d' } },
             system_prompt = { modes = { n = '<localleader>s' } },
             auto_tool_mode = { modes = { n = '<localleader>ta' } },
-          },
-          tools = {
-            opts = {
-              auto_submit_errors = true, -- Send any errors to the LLM automatically
-              auto_submit_success = true, -- Send any successful output to the LLM automatically
-            },
           },
         },
       },

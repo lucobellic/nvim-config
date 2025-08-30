@@ -228,36 +228,11 @@ return {
           },
         },
       },
-      ['Agent Mode'] = {
-        strategy = 'chat',
-        description = 'agent mode with explicit set of tools',
-        opts = {
-          index = 21,
-          is_default = false,
-          short_name = 'agent',
-          is_slash_cmd = true,
-          auto_submit = false,
-        },
-        prompts = {
-          {
-            role = 'user',
-            contains_code = true,
-            content = function()
-              return 'You are in agent mode:\n'
-                .. 'Use tools to answer user request using @{cmd_runner}\n'
-                .. '- Do NOT use `grep`\n'
-                .. '- Search content and patterns using `fzf`\n'
-                .. '- Do NOT use `find`\n'
-                .. '- Search files with `fd`'
-            end,
-          },
-        },
-      },
       ['Split Commits'] = {
         strategy = 'chat',
         description = 'agent mode with explicit set of tools',
         opts = {
-          index = 22,
+          index = 21,
           is_default = false,
           short_name = 'commits',
           is_slash_cmd = true,
@@ -289,7 +264,7 @@ return {
         strategy = 'chat',
         description = 'Get the unresolved comments of the current MR',
         opts = {
-          index = 23,
+          index = 22,
           is_default = false,
           short_name = 'glab_mr_notes',
           is_slash_cmd = true,
@@ -310,7 +285,7 @@ return {
         strategy = 'chat',
         description = 'Send errors to qflist and diagnostics',
         opts = {
-          index = 24,
+          index = 23,
           is_default = false,
           short_name = 'qflist',
           is_slash_cmd = true,
@@ -336,6 +311,33 @@ return {
                 end
                 ]]
               return content .. '\nExample:\n' .. example:gsub('\n', ' '):gsub(' +', ' ')
+            end,
+          },
+        },
+      },
+      ['agent'] = {
+        strategy = 'inline',
+        description = 'Ask agent',
+        opts = {
+          index = 24,
+          is_default = false,
+          short_name = 'agent',
+          is_slash_cmd = false,
+          auto_submit = true,
+          user_prompt = true,
+          adapter = {
+            name = 'copilot',
+            model = 'gpt-4.1',
+          },
+        },
+        prompts = {
+          {
+            role = 'user',
+            contains_code = true,
+            content = function(context)
+              buffer = '#{buffer}\n'
+              tools = '@{cmd_runner} @{files} @{insert_edit_into_file}\n'
+              return buffer .. tools .. require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
             end,
           },
         },
