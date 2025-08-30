@@ -85,8 +85,8 @@ return {
           },
           keymaps = {
             clear = { modes = { n = '<C-x>' } },
-            next_chat = { modes = { n = '>>' } },
-            previous_chat = { modes = { n = '<<' } },
+            next_chat = { modes = { n = '<A-l>' } },
+            previous_chat = { modes = { n = '<A-h>' } },
             regenerate = { modes = { n = '<localleader>r' } },
             stop = { modes = { n = 'q' } },
             codeblock = { modes = { n = '<localleader>c' } },
