@@ -107,6 +107,7 @@ return {
       },
       task_list = {
         direction = 'right',
+        separator = '',
         bindings = {
           ['<C-h>'] = '<C-w>h',
           ['<C-j>'] = '<C-w>j',
