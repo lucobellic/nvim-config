@@ -24,6 +24,7 @@ local telescope_no_preview = {
   preset = 'telescope',
   previewer = false,
   reverse = false,
+  cycle = true,
   ---@type snacks.layout.Box
   layout = {
     box = 'horizontal',
@@ -159,7 +160,7 @@ return {
     { '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Buffer Diagnostics' },
     { '<leader>sh', function() Snacks.picker.help() end, desc = 'Help Pages' },
     { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Highlights' },
-    { '<leader>si', function() Snacks.picker.icons() end, desc = 'Icons' },
+    { '<leader>sI', function() Snacks.picker.icons() end, desc = 'Icons' },
     { '<leader>sj', function() Snacks.picker.jumps() end, desc = 'Jumps' },
     { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'Keymaps' },
     { '<leader>sl', function() Snacks.picker.loclist() end, desc = 'Location List' },
@@ -192,6 +193,7 @@ return {
         colorschemes = { layout = { preset = 'ivy' } },
         git_diff = { layout = { preset = 'telescope_preview' } },
         git_status = { layout = { preset = 'telescope_preview' } },
+        agent_terminals = { layout = { preset = 'telescope_vertical' } },
       },
       layouts = {
         telescope_no_preview = telescope_no_preview,
