@@ -46,6 +46,8 @@ return {
         ['<Leader>q'] = false,
         ['<Leader>uC'] = false,
         ['<Leader>ud'] = false,
+        ['<Leader>gT'] = false,
+        ['<Leader>gt'] = false,
         ['<F7>'] = false,
         ['<Leader>w'] = { '<c-w>', remap = true },
         ['<c-left>'] = false,

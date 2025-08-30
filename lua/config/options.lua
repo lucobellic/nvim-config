@@ -17,7 +17,6 @@ vim.opt.sessionoptions = {
   'help',
   'skiprtp',
   'tabpages',
-  'terminal',
   'winpos',
   'winsize',
 }
