@@ -3,27 +3,26 @@
 ---@field focus boolean Whether to focus the window
 ---@field insert boolean Whether to enter insert mode in the terminal
 
----@class CursorAgentModule
+---@class CursorAgent
 ---@field opts CursorAgentOptions
-local M = { opts = { split = 'right', focus = true, insert = true } }
+local Cursor = { opts = { split = 'right', focus = true, insert = true } }
 
 ---@param opts CursorAgentOptions|nil
-function M.setup(opts)
-  M.opts = vim.tbl_deep_extend('force', M.opts or {}, opts or {})
-  local AgentTerminal = require('util.agent-terminal')
+function Cursor.setup(opts)
+  Cursor.opts = vim.tbl_deep_extend('force', Cursor.opts or {}, opts or {})
+  local AgentTerminal = require('util.agents.agent-manager')
   AgentTerminal.new({
     executable = 'cursor-agent',
     filetype = 'cursor-agent',
     display_name = 'Cursor Agent',
     leader = '<leader>cc',
-    opts = M.opts,
+    opts = Cursor.opts,
   })
 
   local ok, wk = pcall(require, 'which-key')
   if ok then
     wk.add({ { '<leader>cc', group = 'Cursor Agent', mode = { 'n', 'v' } } }, { notify = false })
   end
-
 end
 
-return M
+return Cursor

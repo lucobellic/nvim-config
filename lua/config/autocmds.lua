@@ -84,6 +84,6 @@ require('util.commands').create_command_from_keymaps()
 -- Create command to toggle fold virtual text
 require('util.folds.folds').setup()
 -- Create command to toggle opencode
-require('util.opencode').setup({ focus = true, split = 'right', insert = false })
+require('util.agents.opencode').setup({ focus = true, split = 'right', insert = false })
 -- Create command to toggle cursor agent
-require('util.cursor-agent').setup({ focus = true, split = 'right', insert = false })
+require('util.agents.cursor').setup({ focus = true, split = 'right', insert = false })

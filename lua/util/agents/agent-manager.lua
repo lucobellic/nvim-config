@@ -1,93 +1,42 @@
----@class AgentTerminalsOpts
----@field display_name string Human-readable name (e.g., 'OpenCode')
----@field executable string Command to launch (e.g., 'opencode')
----@field filetype string Filetype to set on terminal buffer
----@field focus boolean
----@field insert boolean
----@field leader string Keymap prefix (e.g., '<leader>c') for setting up default keymaps
----@field split 'right'|'left'|'above'|'below'
+local Agent = require('util.agents.agent')
+local Util = require('util.agents.util')
 
----@class AgentTerminal
----@field display_name string
----@field executable string
----@field filetype string
----@field terminal_buf? integer
----@field terminal_job_id? integer
----@field private opts AgentTerminalsOpts options for the managed terminal
-local AgentTerminal = {}
-AgentTerminal.__index = AgentTerminal
-
----@class AgentTerminals
----@field private last_visited_agent AgentTerminal? last visited terminal instance
+---@class AgentManager
+---@field private last_visited_agent Agent? last visited terminal instance
 ---@field private newline string newline character
----@field private agents AgentTerminal[] list of managed agents
----@field opts AgentTerminalsOpts options for the managed agents
-local AgentTerminals = {
-  last_visited_agent = nil,
-  newline = ' \x0A ',
-  agents = {},
-  opts = {
-    executable = 'agent-terminal',
-    filetype = 'agent-terminal',
-    display_name = 'Agent Terminal',
-    leader = '<leader>a',
-    split = 'right',
-    focus = true,
-    insert = true,
-  },
-}
-AgentTerminals.__index = AgentTerminals
+---@field private agents Agent[] list of managed agents
+---@field opts AgentsOpts options for the managed agents
+local AgentManager = {}
+AgentManager.__index = AgentManager
 
---- Get all non floating valid windows displaying the given buffer
----@param bufnr integer
----@return integer[] list of window IDs
-local function buf_get_valid_wins(bufnr)
-  local wins = vim.api.nvim_tabpage_list_wins(0)
-  return vim.tbl_filter(
-    function(win)
-      return vim.api.nvim_win_is_valid(win)
-        and vim.api.nvim_win_get_config(win).relative == ''
-        and vim.api.nvim_win_get_buf(win) == bufnr
-    end,
-    wins
-  )
-end
-
----@param opts AgentTerminalsOpts options for the managed terminals
-function AgentTerminals.new(opts)
-  local self = setmetatable({
+---@param opts AgentsOpts options for the managed terminals
+function AgentManager.new(opts)
+  local agent_manager = setmetatable({
     last_visited_terminal = nil,
+    agents = {},
     terminals = {},
-    opts = vim.tbl_deep_extend('force', AgentTerminals.opts, opts or {}),
-  }, AgentTerminals)
+    opts = vim.tbl_deep_extend('force', {
+      executable = 'agent-terminal',
+      filetype = 'agent-terminal',
+      display_name = 'Agent Terminal',
+      leader = '<leader>a',
+      split = 'right',
+      focus = true,
+      insert = true,
+    }, opts or {}),
+  }, AgentManager)
 
-  self:setup_commands_and_keymaps(opts)
-  self:setup_autocmds()
-  return self
+  agent_manager:setup_commands_and_keymaps(agent_manager.opts)
+  agent_manager:setup_autocmds()
+  return agent_manager
 end
 
 --- Setup autocommands to track last visited terminal buffer.
 ---@private
-function AgentTerminals:setup_autocmds()
-  -- local pattern = '*' .. self.opts.filetype .. '*'
-  -- vim.api.nvim_create_autocmd('BufEnter', {
-  --   pattern = { pattern },
-  --   callback = function(args)
-  --     if vim.bo[args.buf].buftype == 'terminal' then
-  --       local buf = args.buf
-  --       local agent = vim.iter(self.agents):filter(function(agent) return agent.terminal_buf == buf end):next()
-  --       if agent then
-  --         self.last_visited_agent = agent
-  --       else
-  --         pcall(function() self:create(args.buf) end)
-  --       end
-  --     end
-  --   end,
-  -- })
-
+function AgentManager:setup_autocmds()
   vim.api.nvim_create_autocmd('TermClose', {
     callback = function(args)
-      ---@type AgentTerminal|nil
+      ---@type Agent|nil
       local agent_to_remove = vim
         .iter(self.agents)
         :filter(function(agent) return agent.terminal_buf == args.buf end)
@@ -102,8 +51,8 @@ end
 
 --- Setup user command and keymaps with the given prefix.
 ---@private
----@param opts AgentTerminalsOpts terminal options
-function AgentTerminals:setup_commands_and_keymaps(opts)
+---@param opts AgentsOpts terminal options
+function AgentManager:setup_commands_and_keymaps(opts)
   local prefix = opts.leader
   local name = opts.display_name:gsub('%s+', '')
   vim.keymap.set('n', prefix .. 't', function() self:toggle() end, { desc = name .. ' Toggle' })
@@ -137,7 +86,7 @@ end
 --- Focus the next/previous terminal by offset, wrapping around.
 ---@private
 ---@param offset integer
-function AgentTerminals:focus_offset(offset)
+function AgentManager:focus_offset(offset)
   if #self.agents == 0 then
     vim.notify('No agent terminals available', vim.log.levels.WARN)
     return
@@ -162,13 +111,13 @@ function AgentTerminals:focus_offset(offset)
   end
 end
 
-function AgentTerminals:next() self:focus_offset(1) end
-function AgentTerminals:prev() self:focus_offset(-1) end
+function AgentManager:next() self:focus_offset(1) end
+function AgentManager:prev() self:focus_offset(-1) end
 
 --- First, hide all terminals if at least one is visible.
 --- Otherwise, focus the last visited agent or the first existing one.
 --- Finally, create a new terminal if none exist.
-function AgentTerminals:toggle()
+function AgentManager:toggle()
   local any_open = vim.iter(self.agents):any(function(agent) return agent:is_open() end)
   if any_open then
     self:hide_all()
@@ -182,19 +131,19 @@ function AgentTerminals:toggle()
   end
 end
 
-function AgentTerminals:hide_all()
+function AgentManager:hide_all()
   vim.iter(self.agents):each(function(agent)
-    vim.iter(buf_get_valid_wins(agent.terminal_buf)):each(function(win) vim.api.nvim_win_hide(win) end)
+    vim.iter(Util.buf_get_valid_wins(agent.terminal_buf)):each(function(win) vim.api.nvim_win_hide(win) end)
   end)
 end
 
 --- Create the terminal buffer/window and start the agent process.
-function AgentTerminals:create()
+function AgentManager:create()
   -- Get first available window or create a new split
   local first_win_that_show_agent = self:get_current_agent_win()
     or vim
       .iter(self.agents)
-      :map(function(agent) return buf_get_valid_wins(agent.terminal_buf) end)
+      :map(function(agent) return Util.buf_get_valid_wins(agent.terminal_buf) end)
       :filter(function(wins) return #wins > 0 end)
       :map(function(wins) return wins[1] end)
       :next()
@@ -204,7 +153,7 @@ function AgentTerminals:create()
     vim.api.nvim_set_current_win(first_win_that_show_agent)
   end
 
-  local agent = AgentTerminal.new(self.opts, nil, first_win_that_show_agent, nil)
+  local agent = Agent.new(self.opts, nil, first_win_that_show_agent, nil)
   table.insert(self.agents, agent)
   self.last_visited_agent = agent
 
@@ -213,13 +162,13 @@ end
 
 --- Focus the current window if it contains an agent otherwise,
 --- find the first available agent window that is not the target or create a new one.
----@param agent_to_focus AgentTerminal
-function AgentTerminals:switch_focus(agent_to_focus)
+---@param agent_to_focus Agent
+function AgentManager:switch_focus(agent_to_focus)
   local win_to_focus = self:get_current_agent_win()
     or vim
       .iter(self.agents)
       :filter(function(agent) return agent.terminal_buf ~= agent_to_focus.terminal_buf end)
-      :map(function(agent) return buf_get_valid_wins(agent.terminal_buf) end)
+      :map(function(agent) return Util.buf_get_valid_wins(agent.terminal_buf) end)
       :filter(function(wins) return #wins > 0 end)
       :map(function(wins) return wins[1] end)
       :next()
@@ -233,7 +182,7 @@ function AgentTerminals:switch_focus(agent_to_focus)
   end
 end
 
-function AgentTerminals:get_current_agent_win()
+function AgentManager:get_current_agent_win()
   local current_buf = vim.api.nvim_get_current_buf()
   return vim.tbl_contains(
     self.agents,
@@ -242,8 +191,8 @@ function AgentTerminals:get_current_agent_win()
   ) and vim.api.nvim_get_current_win() or nil
 end
 
----@param agent_to_remove AgentTerminal
-function AgentTerminals:remove(agent_to_remove)
+---@param agent_to_remove Agent
+function AgentManager:remove(agent_to_remove)
   self.agents = vim.tbl_filter(
     function(agent) return agent.terminal_buf ~= agent_to_remove.terminal_buf end,
     self.agents
@@ -256,7 +205,7 @@ function AgentTerminals:remove(agent_to_remove)
 end
 
 --- Update agents window filename as 'Name <index>/<total>'
-function AgentTerminals:update_agent_names()
+function AgentManager:update_agent_names()
   local nb_agents = #self.agents
   local title = self.opts.display_name
   vim.iter(self.agents):enumerate():each(function(i, agent)
@@ -267,23 +216,23 @@ function AgentTerminals:update_agent_names()
   end)
 end
 
-function AgentTerminals:hide_other_agents(current_agent)
+function AgentManager:hide_other_agents(current_agent)
   vim
     .iter(self.agents)
     :filter(
-      ---@param other AgentTerminal
+      ---@param other Agent
       function(other) return other.terminal_buf ~= current_agent.terminal_buf end
     )
     :each(
-      ---@param agent AgentTerminal
+      ---@param agent Agent
       function(agent)
-        vim.iter(buf_get_valid_wins(agent.terminal_buf)):each(function(win) vim.api.nvim_win_hide(win) end)
+        vim.iter(Util.buf_get_valid_wins(agent.terminal_buf)):each(function(win) vim.api.nvim_win_hide(win) end)
       end
     )
 end
 
 --- Select a terminal by index and update last_visited_terminal
-function AgentTerminals:select()
+function AgentManager:select()
   local items = {}
   for i, agent in ipairs(self.agents) do
     table.insert(items, {
@@ -298,7 +247,7 @@ function AgentTerminals:select()
     :enumerate()
     :map(
       ---@param i integer
-      ---@param agent AgentTerminal
+      ---@param agent Agent
       function(i, agent)
         local last_visited = agent == self.last_visited_agent and ' (current)' or ''
         return {
@@ -333,7 +282,7 @@ function AgentTerminals:select()
           return item.buf
               and vim.tbl_contains(
                 self.agents,
-                ---@param terminal AgentTerminal
+                ---@param terminal Agent
                 function(terminal) return terminal.terminal_buf == item.buf end,
                 { predicate = true } or false
               )
@@ -353,87 +302,8 @@ function AgentTerminals:select()
   })
 end
 
---- Create a new terminal controller for a specific external agent/executable.
----@param opts AgentTerminalsOpts options for the managed terminal
----@param buf? integer existing buffer number to attach to
----@param win? integer existing window number to attach to
----@param job_id? integer existing buffer number to attach to
----@return AgentTerminal
-function AgentTerminal.new(opts, buf, win, job_id)
-  local self = setmetatable({
-    display_name = opts.display_name,
-    executable = opts.executable,
-    filetype = opts.filetype,
-    terminal_buf = buf or vim.api.nvim_create_buf(false, false),
-    terminal_job_id = job_id,
-    opts = opts,
-  }, AgentTerminal)
-
-  vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
-
-  if not win then
-    vim.api.nvim_open_win(self.terminal_buf, opts.focus, { split = opts.split or 'right', win = 0 })
-  else
-    vim.api.nvim_win_set_buf(win, self.terminal_buf)
-  end
-
-  if not job_id then
-    self.terminal_job_id = vim.fn.jobstart(self.executable, {
-      term = true,
-      on_exit = function()
-        -- Clean up the terminal buffer and job ID
-        self.terminal_job_id = nil
-        if self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) then
-          vim.api.nvim_buf_delete(self.terminal_buf, { force = true })
-          self.terminal_buf = nil
-        end
-      end,
-    })
-  end
-
-  return self
-end
-
-function AgentTerminal:buffer_valid() return self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) end
-function AgentTerminal:is_open() return #buf_get_valid_wins(self.terminal_buf) > 0 end
-function AgentTerminal:job_valid() return self.terminal_job_id and vim.fn.jobwait({ self.terminal_job_id }, 0)[1] == -1 end
-
-function AgentTerminal:focus()
-  if not self:buffer_valid() then
-    vim.notify('Terminal buffer is not valid', vim.log.levels.ERROR)
-    return
-  end
-
-  local wins = buf_get_valid_wins(self.terminal_buf)
-  if #wins > 0 then
-    vim.api.nvim_set_current_win(wins[1])
-  else
-    vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
-  end
-
-  if self.opts.insert then
-    vim.cmd('startinsert')
-  end
-end
-
-function AgentTerminal:toggle()
-  local wins = buf_get_valid_wins(self.terminal_buf)
-  if #wins > 0 then
-    vim.iter(wins):each(function(win) vim.api.nvim_win_hide(win) end)
-  else
-    self:focus()
-  end
-end
-
----@param content string
-function AgentTerminal:send(content)
-  if self:job_valid() then
-    vim.api.nvim_chan_send(self.terminal_job_id, content)
-  end
-end
-
 --- Prompt, then send the current buffer's file and the user input to the terminal.
-function AgentTerminals:send_current_buffer()
+function AgentManager:send_current_buffer()
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
@@ -450,7 +320,7 @@ function AgentTerminals:send_current_buffer()
 end
 
 --- Open a file picker and send selected files to the terminal.
-function AgentTerminals:select_and_send_files()
+function AgentManager:select_and_send_files()
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
@@ -474,7 +344,7 @@ function AgentTerminals:select_and_send_files()
 end
 
 --- Send the current visual selection as a fenced code block, then prompt for a question.
-function AgentTerminals:send_selection()
+function AgentManager:send_selection()
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
@@ -513,7 +383,7 @@ function AgentTerminals:send_selection()
 end
 
 --- Send current buffer's diagnostics to the terminal with context.
-function AgentTerminals:send_buffer_diagnostics()
+function AgentManager:send_buffer_diagnostics()
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
@@ -552,4 +422,4 @@ function AgentTerminals:send_buffer_diagnostics()
   agent:send(diagnostic_text .. self.newline .. '```' .. self.newline)
 end
 
-return AgentTerminals
+return AgentManager
