@@ -9,7 +9,7 @@ local M = {}
 local hl_group = 'DiagnosticVirtualTextWarn'
 local priority = 2048
 local repeat_interval = 100
-local use_block_spinner = false
+local use_block_spinner = true
 
 --- @type CodeCompanion.InlineExtmark
 local default_opts = {
@@ -34,7 +34,7 @@ local virtual_text_spinners_opts = {
   },
 }
 
---- @type {number: [VirtualTextSpinner, VirtualTextBlockSpinner]}
+--- @type { [number]: [VirtualTextSpinner, VirtualTextBlockSpinner] }
 local virtual_text_spinners = {}
 
 --- Helper function to set a line extmark with specified sign text
@@ -98,16 +98,21 @@ local function start_spinners(bufnr, ns_id, start_line, end_line)
   virtual_text_spinners[ns_id] = { spinner, block_spinner }
 end
 
---- Stop active spinners associated with a namespace ID
---- @param ns_id number The namespace ID to stop spinners
-local function stop_spinner(ns_id)
-  local spinner, block_spinner = unpack(virtual_text_spinners[ns_id])
+---@param virtual_text_spinner [VirtualTextSpinner, VirtualTextBlockSpinner]
+local function stop_spinner(virtual_text_spinner)
+  local spinner, block_spinner = unpack(virtual_text_spinner)
   if spinner then
     spinner:stop()
   end
   if block_spinner then
     block_spinner:stop()
   end
+end
+
+--- Stop active spinners associated with a namespace ID
+--- @param ns_id number The namespace ID to stop spinners
+local function stop_spinners(ns_id)
+  stop_spinner(virtual_text_spinners[ns_id])
   virtual_text_spinners[ns_id] = nil
 end
 
@@ -117,7 +122,7 @@ end
 --- @param ns_id number unique namespace id for the extmarks
 local function create_extmarks(opts, data, ns_id)
   --- @type {bufnr: number, start_line: number, end_line: number}
-  local context = data.context
+  local context = data.buffer_context
 
   -- Start a spinner on first line at the end of line
   start_spinners(context.bufnr, ns_id, context.start_line, context.end_line)
@@ -147,9 +152,9 @@ end
 local function create_autocmds(opts)
   vim.api.nvim_create_autocmd('User', {
     pattern = 'CodeCompanionRequest*',
-    callback = function(args)
-      local data = args.data or {}
-      local context = data.context or {}
+    callback = function(event)
+      local data = event.data or {}
+      local context = data.buffer_context or {}
 
       if vim.tbl_isempty(context) then
         return
@@ -157,17 +162,32 @@ local function create_autocmds(opts)
 
       local ns_id = vim.api.nvim_create_namespace('CodeCompanionInline_' .. data.id)
 
-      if args.match:find('StartedInline') then
+      if event.match:find('Started') and data.strategy == 'inline' then
         create_extmarks(opts, data, ns_id)
-      elseif args.match:find('FinishedInline') then
-        stop_spinner(ns_id)
+      elseif event.match:find('Finished') and data.strategy == 'inline' then
+        stop_spinners(ns_id)
         vim.api.nvim_buf_clear_namespace(context.bufnr, ns_id, 0, -1)
       end
     end,
   })
 end
 
+--- Clears all virtual text spinners and their associated namespaces from the current buffer.
+function M.clear_all()
+  vim.iter(virtual_text_spinners):enumerate():each(function(ns_id)
+    stop_spinners(ns_id)
+    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+  end)
+end
+
 --- @param opts? CodeCompanion.InlineExtmark Optional configuration to override defaults
-function M.setup(opts) create_autocmds(vim.tbl_deep_extend('force', default_opts, opts or {})) end
+function M.setup(opts)
+  vim.api.nvim_create_user_command(
+    'CodeCompanionClearInlineExtmarks',
+    M.clear_all,
+    { desc = 'CodeCompanion clear inline extmarks' }
+  )
+  create_autocmds(vim.tbl_deep_extend('force', default_opts, opts or {}))
+end
 
 return M

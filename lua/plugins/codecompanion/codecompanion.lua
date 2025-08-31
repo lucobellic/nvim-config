@@ -76,6 +76,7 @@ return {
       'CodeCompanionChat',
       'CodeCompanionActions',
       'CodeCompanionAdd',
+      'CodeCompanionClearInlineExtmarks',
     },
     keys = {
       { '<leader>ae', ':CodeCompanionChat Add<cr>', mode = { 'v' }, desc = 'Code Companion Add' },
