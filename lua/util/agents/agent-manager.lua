@@ -75,6 +75,7 @@ function AgentManager:setup_commands_and_keymaps(opts)
 
   vim.api.nvim_create_user_command(name .. 'Next', function() self:next() end, {})
   vim.api.nvim_create_user_command(name .. 'Prev', function() self:prev() end, {})
+  vim.api.nvim_create_user_command(name .. 'Close', function() self:close() end, {})
 
   vim.api.nvim_create_user_command(
     name .. 'DebugAgents',
@@ -202,6 +203,20 @@ function AgentManager:remove(agent_to_remove)
   end
 
   self:update_agent_names()
+end
+
+--- Close the currently focused agent terminal
+function AgentManager:close()
+  local buf = vim.api.nvim_get_current_buf()
+  local agent_to_close = vim.iter(self.agents):filter(function(agent) return agent.terminal_buf == buf end):next()
+
+  if agent_to_close then
+    -- switch the window to the previous agent if available
+    self:prev()
+
+    -- remove the buffer of the current agent, should trigger TermClose autocmd
+    vim.api.nvim_buf_delete(agent_to_close.terminal_buf, { force = true })
+  end
 end
 
 --- Update agents window filename as 'Name <index>/<total>'
