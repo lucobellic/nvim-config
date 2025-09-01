@@ -13,8 +13,8 @@ AgentManager.__index = AgentManager
 function AgentManager.new(opts)
   local agent_manager = setmetatable({
     last_visited_terminal = nil,
+    newline = ' \x0A ',
     agents = {},
-    terminals = {},
     opts = vim.tbl_deep_extend('force', {
       executable = 'agent-terminal',
       filetype = 'agent-terminal',
