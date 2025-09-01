@@ -317,7 +317,12 @@ local Date = {
   hl = primary_highlight,
 }
 
-local Left = { ViMode, Git, Dap, Molten, MacroRec }
+local Sperator = {
+  provider = function() return get_mode() == 'n' and ' ' or '┃' end,
+  hl = secondary_highlight,
+}
+
+local Left = { ViMode, Git, Sperator, Dap, Molten, MacroRec }
 local Center = { Edgy }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {
@@ -333,6 +338,7 @@ local Right = {
   CodeCompanion,
   -- SystemStats,
   SearchCount,
+  Sperator,
   Date,
 }
 
