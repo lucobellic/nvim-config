@@ -1,6 +1,5 @@
 return {
-  'lucobellic/advanced-git-search.nvim',
-  branch = 'feature/snacks_picker',
+  'aaronhallaert/advanced-git-search.nvim',
   cmd = { 'AdvancedGitSearch' },
   opts = {
     diff_plugin = 'diffview',
