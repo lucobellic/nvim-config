@@ -128,6 +128,15 @@ return {
         end,
         size = { width = 0.30 },
       },
+      {
+        title = 'gemini',
+        ft = 'gemini',
+        open = 'GeminiToggle',
+        filter = function(_, win)
+          return vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
+        end,
+        size = { width = 0.30 },
+      },
       { title = 'avante', ft = 'Avante', open = 'AvanteToggle', size = { width = 0.25 } },
       { title = 'avante-files', ft = 'AvanteFiles' },
       { title = 'avante-selected-files', ft = 'AvanteSelectedFiles', size = { height = 0.1 } },

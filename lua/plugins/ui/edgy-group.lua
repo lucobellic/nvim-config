@@ -21,6 +21,7 @@ return {
   {
     'lucobellic/edgy-group.nvim',
     dependencies = { 'folke/edgy.nvim' },
+    dev = true,
     keys = {
       {
         '<leader>;',
@@ -39,32 +40,25 @@ return {
       groups = {
         left = {
           { icon = '', titles = { 'Neo-Tree Buffers', 'Neo-Tree', 'trouble-symbols' }, pick_key = 'e' },
-          { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'g' },
-          {
-            icon = '',
-            titles = { 'dapui_scopes', 'dapui_watches' },
-            pick_key = 'd',
-          },
+          { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'i' },
+          { icon = '', titles = { 'dapui_scopes', 'dapui_watches' }, pick_key = 'd' },
         },
         right = {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
           { icon = '', titles = { 'opencode' }, pick_key = 'o' },
-          { icon = '', titles = { 'cursor-agent' }, pick_key = 'c' },
-          { icon = '󰙨', titles = { 'neotest-summary' }, pick_key = 't' },
-          {
-            icon = '',
-            titles = { 'dapui_stacks', 'dapui_breakpoints' },
-            pick_key = 'd',
-          },
+          { icon = '', titles = { 'cursor-agent' }, pick_key = 'c' },
+          { icon = '󰊭', titles = { 'gemini' }, pick_key = 'g' },
+          { icon = '', titles = { 'neotest-summary' }, pick_key = 't' },
+          { icon = '', titles = { 'dapui_stacks', 'dapui_breakpoints' }, pick_key = 'd' },
         },
         bottom = {
           { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },
-          { icon = '', titles = { 'trouble-diagnostics', 'trouble-qflist' }, pick_key = 'x' },
-          { icon = '', titles = { 'trouble-snacks', 'trouble-snacks-files' }, pick_key = 's' },
+          { icon = '', titles = { 'trouble-qflist', 'trouble-diagnostics' }, pick_key = 'x' },
+          { icon = '', titles = { 'trouble-snacks', 'trouble-snacks-files' }, pick_key = 's' },
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-lsp-definitions' }, pick_key = 'r' },
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-in-out', 'trouble-lsp' }, pick_key = 'l' },
-          { icon = '', titles = { 'noice' }, pick_key = 'n' },
-          { icon = '󰙨', titles = { 'neotest-panel' }, pick_key = 't' },
+          { icon = '', titles = { 'noice' }, pick_key = 'n' },
+          { icon = '', titles = { 'neotest-panel' }, pick_key = 't' },
           { icon = '', titles = { 'dap-repl', 'dapui_console' }, pick_key = 'd' },
         },
       },
@@ -72,12 +66,12 @@ return {
         clickable = true,
         colored = true,
         colors = {
-          active = 'Identifier',
-          inactive = 'Directory',
-          pick_active = 'FlashLabel',
-          pick_inactive = 'FlashLabel',
-          separator_active = 'StatusLine',
-          separator_inactive = 'StatusLine',
+          active = 'EdgyGroupActive',
+          inactive = 'EdgyGroupInactive',
+          pick_active = 'EdgyGroupPickActive',
+          pick_inactive = 'EdgyGroupPickInactive',
+          separator_active = 'EdgyGroupSeparatorActive',
+          separator_inactive = 'EdgyGroupSeparatorInactive',
         },
         pick_key_pose = 'right_separator',
         pick_function = function(key)

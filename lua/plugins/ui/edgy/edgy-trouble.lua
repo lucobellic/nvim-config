@@ -60,15 +60,6 @@ return {
         open = 'Trouble lsp_references toggle restore=true',
       },
       {
-        title = 'trouble-diagnostics',
-        ft = 'trouble',
-        filter = function(_, win)
-          local win_trouble = vim.w[win].trouble
-          return win_trouble and win_trouble.mode == 'diagnostics'
-        end,
-        open = 'Trouble diagnostics toggle filter.buf=0',
-      },
-      {
         title = 'trouble-qflist',
         ft = 'trouble',
         filter = function(_, win)
@@ -76,6 +67,15 @@ return {
           return win_trouble and (win_trouble.mode == 'qflist' or win_trouble.mode == 'quickfix')
         end,
         open = 'Trouble qflist toggle',
+      },
+      {
+        title = 'trouble-diagnostics',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'diagnostics'
+        end,
+        open = 'Trouble diagnostics toggle filter.buf=0',
       },
       {
         title = 'trouble-loclist',
