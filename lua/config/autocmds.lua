@@ -87,3 +87,5 @@ require('util.folds.folds').setup()
 require('util.agents.opencode').setup({ focus = true, split = 'right', insert = false })
 -- Create command to toggle cursor agent
 require('util.agents.cursor').setup({ focus = true, split = 'right', insert = false })
+-- Create command to toggle gemini clid
+require('util.agents.gemini').setup({ focus = true, split = 'right', insert = false })

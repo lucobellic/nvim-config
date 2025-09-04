@@ -1,6 +1,7 @@
 vim.lsp.config('clangd', {
   cmd = {
     'clangd',
+    -- '/usr/local/bin/clangd',
     '--background-index',
     '--background-index-priority=background',
     '--all-scopes-completion',
