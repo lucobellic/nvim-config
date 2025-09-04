@@ -111,19 +111,20 @@ return {
       },
     },
     init = function()
-      vim.g.codecompanion_auto_tool_mode = true
+      vim.g.codecompanion_yolo_mode = true
       vim.cmd([[cab cc CodeCompanion]])
       vim.cmd([[cab ccc CodeCompanionChat]])
     end,
     opts = {
-      opts = {
-        system_prompt = function()
-          return 'You are a world class programming AI assistant. Help the user with their coding tasks.'
-        end,
-      },
+      requires_approval = false,
       strategies = {
         chat = {
-          opts = { goto_file_action = 'edit' },
+          opts = {
+            goto_file_action = 'edit',
+            system_prompt = function()
+              return 'You are a world class programming AI assistant. Help the user with their coding tasks.'
+            end,
+          },
           roles = {
             user = '',
             llm = function(adapter) return '  ' .. adapter.formatted_name end,
@@ -142,7 +143,6 @@ return {
             fold_code = { modes = { n = '<localleader>f' } },
             debug = { modes = { n = '<localleader>d' } },
             system_prompt = { modes = { n = '<localleader>s' } },
-            auto_tool_mode = { modes = { n = '<localleader>ta' } },
           },
         },
       },
