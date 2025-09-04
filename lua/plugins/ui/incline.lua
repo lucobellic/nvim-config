@@ -108,7 +108,7 @@ local function get_codecompanion_title(props)
     :nth(1)
 
   if current_chat and current_chat.chat then
-    local model = current_chat.chat.settings and current_chat.chat.settings['model']
+    local model = current_chat.chat.settings and current_chat.chat.settings['model'] or ''
     local adapter_name = current_chat.chat.adapter.name
     title = model and ' ' .. adapter_name .. ': ' .. model .. ' ' or adapter_name
   end

@@ -40,6 +40,54 @@ end
 local primary_highlight = function() return primary_mode_colors[get_mode()] end
 local secondary_highlight = function() return secondary_mode_colors[get_mode()] end
 
+local function highlight_change_setup()
+  -- List of highlight groups to manage
+  local hl_names = {
+    'EdgyGroupActive_bottom',
+    'EdgyGroupInactive_bottom',
+    'EdgyGroupPickActive_bottom',
+    'EdgyGroupPickInactive_bottom',
+    'EdgyGroupSeparatorActive_bottom',
+    'EdgyGroupSeparatorInactive_bottom',
+  }
+  -- Store the default highlights at startup
+  local default_hls = {}
+  for _, name in ipairs(hl_names) do
+    default_hls[name] = vim.api.nvim_get_hl(0, { name = name })
+  end
+
+  local function update_highlights()
+    local mode = get_mode()
+    if mode == 'n' then
+      -- Restore default highlights
+      for _, name in ipairs(hl_names) do
+        vim.api.nvim_set_hl(0, name, default_hls[name])
+      end
+    else
+      local hl = primary_highlight()
+      if hl and hl.bg then
+        for _, name in ipairs(hl_names) do
+          vim.api.nvim_set_hl(0, name, { bg = hl.bg, fg = colors.black })
+        end
+      end
+    end
+  end
+
+  vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
+    callback = function()
+      -- Re-fetch default highlights on colorscheme change
+      for _, name in ipairs(hl_names) do
+        default_hls[name] = vim.api.nvim_get_hl(0, { name = name })
+      end
+      update_highlights()
+    end,
+  })
+
+  vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
+    callback = function() update_highlights() end,
+  })
+end
+
 local left_components_length = 0
 
 local PrimarySpace = {
@@ -147,15 +195,21 @@ local MacroRec = {
 
 ------------------------------------ Center -------------------------------------
 
-local Edgy = {
+local LeftAlignment = {
   init = function(self)
     local mid_screen = math.floor(vim.api.nvim_get_option_value('columns', {}) / 2)
     local mid_section = table.concat(require('edgy-group.stl').get_statusline('bottom'))
     local mid_width = math.floor(vim.api.nvim_eval_statusline(mid_section, {}).width / 2)
     local nb_spaces = mid_screen - left_components_length - mid_width
-    local left_padding = string.rep(' ', nb_spaces > 0 and nb_spaces or 0)
-    self.text = left_padding .. mid_section
+    local left_padding = string.rep(' ', nb_spaces > 0 and nb_spaces - 1 or 0)
+    self.text = left_padding
   end,
+  provider = function(self) return self.text end,
+  hl = { bg = 'none' },
+}
+
+local Edgy = {
+  init = function(self) self.text = table.concat(require('edgy-group.stl').get_statusline('bottom')) end,
   provider = function(self) return self.text end,
   hl = { bg = 'none' },
 }
@@ -317,13 +371,13 @@ local Date = {
   hl = primary_highlight,
 }
 
-local Sperator = {
+local Separator = {
   provider = function() return get_mode() == 'n' and ' ' or '┃' end,
   hl = secondary_highlight,
 }
 
-local Left = { ViMode, Git, Sperator, Dap, Molten, MacroRec }
-local Center = { Edgy }
+local Left = { ViMode, Git, Separator, Dap, Molten, MacroRec }
+local Center = { LeftAlignment, Separator, Edgy, Separator }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {
   PrimarySpace,
@@ -338,8 +392,9 @@ local Right = {
   CodeCompanion,
   -- SystemStats,
   SearchCount,
-  Sperator,
+  Separator,
   Date,
 }
 
+highlight_change_setup()
 return { Left, Center, Align, Right }
