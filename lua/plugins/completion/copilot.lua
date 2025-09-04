@@ -72,8 +72,7 @@ end
 
 return {
   {
-    'lucobellic/copilot.lua',
-    branch = 'fix/document-uri',
+    'zbirenbaum/copilot.lua',
     enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1),
     cond = vim.g.suggestions == 'copilot',
     keys = get_keys(),
@@ -99,7 +98,10 @@ return {
         },
       },
       copilot_model = 'gpt-4o-copilot',
-      should_attach = function() return true end,
+      should_attach = function(bufnr)
+        local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+        return buftype ~= 'terminal' and buftype ~= 'help' and buftype ~= 'nowrite'
+      end,
     },
     config = function(_, opts)
       require('copilot').setup(opts)
