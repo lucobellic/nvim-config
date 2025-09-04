@@ -11,15 +11,16 @@ if vim.g.neovide then
   vim.g.neovide_cursor_vfx_mode = 'pixiedust'
   vim.g.neovide_hide_mouse_when_typing = true
 
-  vim.g.neovide_opacity = 0.70
+  vim.g.neovide_opacity = 0.80
   vim.g.neovide_text_background_opacity = 1.0
-  vim.g.neovide_normal_opacity = 0.70
+  vim.g.neovide_normal_opacity = 0.80
 
   vim.g.neovide_floating_blur = true
   vim.g.neovide_floating_blur_amount_x = 5.0
   vim.g.neovide_floating_blur_amount_y = 5.0
   vim.g.neovide_floating_corner_radius = 0
 
+  -- TODO: remove padding in fullscreen mode
   vim.g.neovide_padding_top = 5
   vim.g.neovide_padding_bottom = 0
   vim.g.neovide_padding_right = 0
