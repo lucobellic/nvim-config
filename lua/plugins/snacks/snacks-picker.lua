@@ -1,12 +1,11 @@
 ---@module 'snacks.picker'
 
 local preferred = {
-  'telescope_no_preview',
+  'dropdown',
   'telescope_preview',
   'telescope_vertical',
   'bottom',
   'default',
-  'dropdown',
   'ivy',
   'ivy_split',
   'left',
@@ -16,6 +15,7 @@ local preferred = {
   'telescope',
   'top',
   'vertical',
+  'telescope_no_preview',
   'vscode',
 }
 
@@ -200,7 +200,7 @@ return {
         telescope_preview = telescope_preview,
         telescope_vertical = telescope_vertical,
       },
-      layout = 'telescope_no_preview',
+      layout = 'dropdown',
       actions = {
         trouble_open = function(...) return require('trouble.sources.snacks').actions.trouble_open.action(...) end,
         cycle_next_layouts = function(picker) set_next_preferred_layout(picker) end,
