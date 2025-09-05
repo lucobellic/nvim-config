@@ -144,7 +144,6 @@ return {
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   event = 'BufEnter',
   dependencies = {
-    { 'echasnovski/mini.bufremove' },
     { 'lucobellic/edgy-group.nvim' },
     {
       'folke/which-key.nvim',
@@ -177,7 +176,7 @@ return {
     { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
     {
       '<C-q>',
-      function() require('mini.bufremove').delete(0, false) end,
+      function() require('snacks').bufdelete({ force = true }) end,
       desc = 'Delete Buffer',
     },
     {
