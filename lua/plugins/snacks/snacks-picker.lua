@@ -108,6 +108,53 @@ local function set_prev_preferred_layout(picker)
   end
 end
 
+---@param current_file string current file to exclude
+---@param cwd? boolean|string filter current working directory
+---@return snacks.picker.Item[]
+local function recent_files(current_file, cwd)
+  return vim
+    .iter(vim.g.VISITEDFILES or {})
+    :filter(function(file)
+      if cwd then
+        return vim.startswith(file, vim.uv.cwd() .. '/')
+      end
+      return true
+    end)
+    :filter(function(file) return file ~= current_file end)
+    :map(function(file) return { file = file, text = file } end)
+    :totable()
+end
+
+---@param opts snacks.picker.recent.Config
+local function recent(opts)
+  local cwd = opts and opts.filter and opts.filter.cwd
+  local current_file = vim.fn.resolve(vim.fn.expand('%:p'))
+  Snacks.picker.pick(vim.tbl_extend('force', opts or {}, {
+    title = 'Recent Files',
+    ---@param opts snacks.picker.recent.Config
+    ---@type snacks.picker.finder
+    finder = function(opts, ctx) return ctx.filter:filter(recent_files(current_file, cwd)) end,
+    format = 'file',
+    actions = {
+      ---@param picker snacks.Picker
+      remove = function(picker)
+        picker.preview:reset()
+        local items = picker:selected({ fallback = true })
+        vim.g.VISITEDFILES = vim
+          .iter(vim.g.VISITEDFILES or {})
+          :filter(function(file)
+            return not vim.tbl_contains(items, function(item) return item.file == file end, { predicate = true })
+          end)
+          :totable()
+        picker.list:set_selected()
+        picker.list:set_target()
+        picker:find()
+      end,
+    },
+    win = { input = { keys = { ['<c-x>'] = { 'remove', mode = { 'i', 'n' } } } } },
+  }))
+end
+
 return {
   'folke/snacks.nvim',
   keys = {
@@ -125,8 +172,8 @@ return {
     { '<leader>ff', function() Snacks.picker.files() end, desc = 'Find Files (Root Dir)' },
     { '<leader>fF', function() Snacks.picker.files({ root = false }) end, desc = 'Find Files (cwd)' },
     { '<leader>fg', function() Snacks.picker.git_files() end, desc = 'Find Files (git-files)' },
-    { '<leader>fr', function() Snacks.picker.recent({ filter = { cwd = false } }) end, desc = 'Recent' },
-    { '<leader>fR', function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = 'Recent (cwd)' },
+    { '<leader>fr', function() recent({ filter = { cwd = true } }) end, desc = 'Recent (cwd)' },
+    { '<leader>fR', function() recent({ filter = { cwd = false } }) end, desc = 'Recent' },
     { '<leader>fp', function() Snacks.picker.projects() end, desc = 'Projects' },
     -- git
     { '<leader>gh', function() Snacks.picker.git_diff() end, desc = 'Git Diff (hunks)' },

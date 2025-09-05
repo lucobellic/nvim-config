@@ -89,3 +89,5 @@ require('util.agents.opencode').setup({ focus = true, split = 'right', insert = 
 require('util.agents.cursor').setup({ focus = true, split = 'right', insert = false })
 -- Create command to toggle gemini clid
 require('util.agents.gemini').setup({ focus = true, split = 'right', insert = false })
+-- Track visited files by keeping a list in a global variable
+require('util.commands').track_visited_files()
