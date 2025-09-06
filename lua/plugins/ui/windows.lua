@@ -3,7 +3,6 @@ return {
   event = 'VeryLazy',
   dependencies = {
     'anuvyklack/middleclass',
-    'anuvyklack/animation.nvim',
   },
   init = function()
     vim.o.winwidth = 10
