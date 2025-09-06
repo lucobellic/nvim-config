@@ -21,7 +21,6 @@ return {
   {
     'lucobellic/edgy-group.nvim',
     dependencies = { 'folke/edgy.nvim' },
-    dev = true,
     keys = {
       {
         '<leader>;',
@@ -65,14 +64,6 @@ return {
       statusline = {
         clickable = true,
         colored = true,
-        colors = {
-          active = 'EdgyGroupActive',
-          inactive = 'EdgyGroupInactive',
-          pick_active = 'EdgyGroupPickActive',
-          pick_inactive = 'EdgyGroupPickInactive',
-          separator_active = 'EdgyGroupSeparatorActive',
-          separator_inactive = 'EdgyGroupSeparatorInactive',
-        },
         pick_key_pose = 'right_separator',
         pick_function = function(key)
           -- Use upper case to focus all element of the selected group while closing other (disable toggle)

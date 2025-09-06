@@ -43,25 +43,21 @@ local secondary_highlight = function() return secondary_mode_colors[get_mode()] 
 local function highlight_change_setup()
   -- List of highlight groups to manage
   local hl_names = {
-    'EdgyGroupActive_bottom',
-    'EdgyGroupInactive_bottom',
-    'EdgyGroupPickActive_bottom',
-    'EdgyGroupPickInactive_bottom',
-    'EdgyGroupSeparatorActive_bottom',
-    'EdgyGroupSeparatorInactive_bottom',
+    'EdgyGroupActiveBottom',
+    'EdgyGroupInactiveBottom',
+    'EdgyGroupPickActiveBottom',
+    'EdgyGroupPickInactiveBottom',
+    'EdgyGroupSeparatorActiveBottom',
+    'EdgyGroupSeparatorInactiveBottom',
   }
-  -- Store the default highlights at startup
-  local default_hls = {}
-  for _, name in ipairs(hl_names) do
-    default_hls[name] = vim.api.nvim_get_hl(0, { name = name })
-  end
 
+  -- Store the default highlights at startup
   local function update_highlights()
     local mode = get_mode()
     if mode == 'n' then
-      -- Restore default highlights
+      -- Restore default highlights link
       for _, name in ipairs(hl_names) do
-        vim.api.nvim_set_hl(0, name, default_hls[name])
+        vim.api.nvim_set_hl(0, name, { link = name:gsub('Bottom', '') })
       end
     else
       local hl = primary_highlight()
@@ -72,16 +68,6 @@ local function highlight_change_setup()
       end
     end
   end
-
-  vim.api.nvim_create_autocmd({ 'ColorScheme' }, {
-    callback = function()
-      -- Re-fetch default highlights on colorscheme change
-      for _, name in ipairs(hl_names) do
-        default_hls[name] = vim.api.nvim_get_hl(0, { name = name })
-      end
-      update_highlights()
-    end,
-  })
 
   vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
     callback = function() update_highlights() end,
