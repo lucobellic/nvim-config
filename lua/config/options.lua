@@ -7,6 +7,10 @@ vim.opt.signcolumn = 'yes:2'
 
 vim.opt.more = false
 
+-- Disable support for keymap part of a sequence
+vim.opt.timeout = true
+vim.opt.timeoutlen = 0
+
 vim.opt.foldlevel = 99
 
 vim.opt.sessionoptions = {
