@@ -47,10 +47,10 @@ return {
     { '<leader>up', '<cmd>ToggleTerm<cr>', desc = 'Toggle Toggleterm' },
   },
   opts = {
-    size = 120,
+    size = 1000,
     auto_scroll = false,
     close_on_exit = false,
-    persist_mode = true,
+    persist_mode = false,
     persist_size = false,
     shade_terminals = false,
     start_in_insert = false,
@@ -61,7 +61,6 @@ return {
       vim.opt_local.signcolumn = 'no'
       vim.opt_local.relativenumber = false
       vim.wo.wrap = true
-      vim.wo.winfixwidth = true
     end,
     winbar = {
       enabled = false,

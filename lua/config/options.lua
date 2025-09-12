@@ -4,6 +4,7 @@
 vim.opt.conceallevel = 2
 vim.opt.laststatus = 3
 vim.opt.signcolumn = 'yes:2'
+vim.opt.cursorline = true
 
 vim.opt.more = false
 

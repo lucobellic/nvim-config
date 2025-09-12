@@ -6,7 +6,6 @@ return {
         tools = {
           ['insert_edit_into_file'] = {
             opts = {
-              patching_algorithm = 'inline',
               requires_approval = {
                 buffer = false,
                 file = false,

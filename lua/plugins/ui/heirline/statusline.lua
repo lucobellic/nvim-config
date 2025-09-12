@@ -40,6 +40,108 @@ end
 local primary_highlight = function() return primary_mode_colors[get_mode()] end
 local secondary_highlight = function() return secondary_mode_colors[get_mode()] end
 
+local function hsv_to_hex(h, s, v)
+  -- h in [0,1), s,v in [0,1]
+  local r, g, b
+
+  if s == 0 then
+    r, g, b = v, v, v
+  else
+    h = h * 6
+    local i = math.floor(h)
+    local f = h - i
+    local p = v * (1 - s)
+    local q = v * (1 - s * f)
+    local t = v * (1 - s * (1 - f))
+    i = i % 6
+
+    if i == 0 then
+      r, g, b = v, t, p
+    elseif i == 1 then
+      r, g, b = q, v, p
+    elseif i == 2 then
+      r, g, b = p, v, t
+    elseif i == 3 then
+      r, g, b = p, q, v
+    elseif i == 4 then
+      r, g, b = t, p, v
+    elseif i == 5 then
+      r, g, b = v, p, q
+    end
+  end
+
+  local ir = math.floor(r * 255 + 0.5)
+  local ig = math.floor(g * 255 + 0.5)
+  local ib = math.floor(b * 255 + 0.5)
+  return string.format('#%02x%02x%02x', ir, ig, ib), r, g, b
+end
+
+-- base_names: array of base highlight group names (without trailing number)
+-- count: how many indexed groups (1..count)
+-- interval_ms: timer interval in milliseconds (default 100)
+-- returns: table with stop() method to stop the animation
+local function setup_rainbow_highlights(base_names, count, interval_ms)
+  interval_ms = interval_ms or 50
+  count = count or 10
+  base_names = base_names or { 'EdgyGroupInactiveBottom', 'EdgyGroupSeparatorInactiveBottom' }
+
+  local positions = {}
+  for i = 1, count do
+    positions[i] = (i - 1) / count
+  end
+
+  local offset = 0.0
+  local offset_step = 0.01 -- positive; subtract to go left->right
+
+  local timer = vim.loop.new_timer()
+  local running = true
+
+  local function update()
+    for _, base in ipairs(base_names) do
+      for i = 1, count do
+        local hue = positions[i] + offset
+        hue = hue - math.floor(hue)
+        local s, v = 0.85, 0.9
+        local hex, r, g, b = hsv_to_hex(hue, s, v)
+        local luminance = 0.299 * r + 0.587 * g + 0.114 * b
+        local fg = luminance > 0.5 and '#000000' or '#ffffff'
+        local hl_name = base .. tostring(i)
+        vim.api.nvim_set_hl(0, hl_name, { bg = hex, fg = fg })
+      end
+    end
+
+    -- move in opposite direction: subtract the offset step
+    offset = offset - offset_step
+    if offset < 0 then
+      offset = offset + 1
+    end
+  end
+
+  timer:start(
+    0,
+    interval_ms,
+    vim.schedule_wrap(function()
+      if not running then
+        return
+      end
+      update()
+    end)
+  )
+
+  local handle = {}
+  function handle.stop()
+    if not running then
+      return
+    end
+    running = false
+    timer:stop()
+    timer:close()
+    timer = nil
+  end
+
+  return handle
+end
+
 local function highlight_change_setup()
   -- List of highlight groups to manage
   local hl_names = {
@@ -383,4 +485,5 @@ local Right = {
 }
 
 highlight_change_setup()
+-- setup_rainbow_highlights()
 return { Left, Center, Align, Right }

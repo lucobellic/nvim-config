@@ -157,7 +157,7 @@ return {
           local is_in_notes = string.find(buf_name, '/notes/') ~= nil
           return is_normal_window and is_in_notes
         end,
-        size = { width = 0.2 },
+        size = { width = 0.3 },
       },
     },
     bottom = {

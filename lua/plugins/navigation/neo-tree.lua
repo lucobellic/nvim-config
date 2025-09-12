@@ -14,6 +14,7 @@ return {
     'nvim-neo-tree/neo-tree.nvim',
     enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
     version = '*',
+    -- dev = true,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
@@ -42,6 +43,13 @@ return {
     },
     init = function() vim.g.neo_tree_remove_legacy_commands = 0 end,
     opts = {
+      -- Center revealed file in Neo-tree
+      event_handlers = {
+        {
+          event = 'neo_tree_buffer_enter',
+          handler = function() vim.cmd('normal! zz') end,
+        },
+      },
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = vim.g.border.style,
 
@@ -108,7 +116,7 @@ return {
         },
         icon = {
           folder_closed = ' ',
-          folder_open = ' ',
+          folder_open = ' ',
           folder_empty = ' ',
           -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
           -- then these will never be used.
@@ -301,6 +309,7 @@ return {
         },
         follow_current_file = {
           enabled = true, -- This will find and focus the file in the active buffer every time
+          center = true, -- center the file in the window
           --               -- the current file is changed while the tree is open.
           leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
@@ -314,6 +323,7 @@ return {
         -- instead of relying on nvim autocmd events.
         window = {
           mappings = {
+            ['<space>'] = 'none',
             ['<C-p>'] = 'snacks_find',
             ['<C-f>'] = 'snacks_grep',
             ['<bs>'] = 'navigate_up',
