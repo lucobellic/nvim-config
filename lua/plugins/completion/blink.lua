@@ -70,7 +70,7 @@ local blink = {
     opts.sources = opts.sources or {}
     opts.sources.default = vim
       .iter(opts.sources.default or { 'lsp', 'path' })
-      :filter(function(source) return not vim.tbl_contains({ 'snippets', 'buffer' }, source) end)
+      :filter(function(source) return not vim.tbl_contains({ 'snippets' }, source) end)
       :totable()
 
     ---@type blink.cmp.Config
