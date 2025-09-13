@@ -56,9 +56,13 @@ function M.multi_select(items, opts, on_choice)
     items = finder_items,
     format = Snacks.picker.format.ui_select(opts.kind, #items),
     title = title,
+    matcher = {
+      frecency = true,
+      highlight = true,
+    },
     layout = {
-      preview = false,
       layout = {
+        preview = false,
         height = math.floor(math.min(vim.o.lines * 0.8 - 10, #items + 2) + 0.5),
       },
     },
