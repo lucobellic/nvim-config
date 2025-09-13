@@ -3,6 +3,7 @@ if vim.g.neovide then
   local font_size = 12
   vim.g.guifont = font_family .. ':h' .. font_size
   vim.opt.linespace = 2
+  vim.opt.columns = 1024
 
   vim.g.neovide_cursor_animation_length = 0.1
   vim.g.neovide_cursor_trail_size = 0.2
