@@ -1,29 +1,29 @@
+local single = vim.g.winborder == 'single'
 return {
   'nvim-zh/colorful-winsep.nvim',
   event = { 'WinEnter' },
   opts = {
-    -- highlight for Window separator
-    hi = {
-      link = 'FloatBorder',
-    },
-    -- This plugin will not be activated for filetype in the following table.
+    border = single and { '─', '│', '┌', '┐', '└', '┘' } or { '─', '│', '╭', '╮', '╰', '╯' },
+    highlight = '#38526b',
     no_exec_files = {
       'packer',
       'TelescopePrompt',
       'mason',
       'NvimTree',
     },
-    -- Symbols for separator lines, the order: horizontal, vertical, top left, top right, bottom left, bottom right.
-    symbols = vim.g.winborder == 'single' and { '─', '│', '┌', '┐', '└', '┘' }
-      or { '─', '│', '╭', '╮', '╰', '╯' },
-    -- Smooth moving switch
-    smooth = false,
-    zindex = 20,
-    anchor = {
-      left = { height = 1, x = -1, y = -1 },
-      right = { height = 1, x = -1, y = 0 },
-      up = { width = 0, x = -1, y = 0 },
-      bottom = { width = 0, x = 1, y = 0 },
+    indicator_for_2wins = {
+      position = 'center',
+      symbols = {
+        start_left = single and '┌' or '╭',
+        end_left = single and '└' or '╰',
+        start_down = single and '└' or '╰',
+        end_down = single and '┘' or '╯',
+        start_up = single and '┌' or '╭',
+        end_up = single and '┐' or '╮',
+        start_right = vim.g.winborder and '┐' or '╮',
+        end_right = vim.g.winborder and '┘' or '╯',
+      },
     },
+    zindex = 20,
   },
 }
