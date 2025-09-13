@@ -1,7 +1,7 @@
 return {
   'folke/which-key.nvim',
   opts = {
-    preset = 'classic',
+    preset = 'helix',
     delay = 300,
     show_help = false, -- show help message on the command line when the popup is visible
     show_keys = false, -- show the currently pressed key and its label as a message in the command line
@@ -19,8 +19,8 @@ return {
     },
     win = {
       no_overlap = false,
-      border = vim.g.border.enabled and { '─', '─', '─', '', '─', '─', '─', '' } or { ' ' },
-      padding = { 1, 5, 0, 5 }, -- extra window padding [top, right, bottom, left]
+      width = { min = 35, max = 35 },
+      height = { max = 120 },
       wo = {
         winblend = vim.o.winblend,
       },
