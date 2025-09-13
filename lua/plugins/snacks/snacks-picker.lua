@@ -1,7 +1,7 @@
 ---@module 'snacks.picker'
 
 local preferred = {
-  'dropdown',
+  'vertical',
   'telescope_preview',
   'telescope_vertical',
   'bottom',
@@ -14,8 +14,8 @@ local preferred = {
   'sidebar',
   'telescope',
   'top',
-  'vertical',
   'telescope_no_preview',
+  'dropdown',
   'vscode',
 }
 
@@ -213,7 +213,7 @@ return {
     { '<leader>sl', function() Snacks.picker.loclist() end, desc = 'Location List' },
     { '<leader>sM', function() Snacks.picker.man() end, desc = 'Man Pages' },
     { '<leader>sm', function() Snacks.picker.marks() end, desc = 'Marks' },
-    { '<leader>sR', function() Snacks.picker.resume() end, desc = 'Resume' },
+    { '<leader>s.', function() Snacks.picker.resume() end, desc = 'Resume' },
     { '<leader>sq', function() Snacks.picker.qflist() end, desc = 'Quickfix List' },
     { '<leader>su', function() Snacks.picker.undo() end, desc = 'Undotree' },
     -- ui
@@ -241,13 +241,14 @@ return {
         git_diff = { layout = { preset = 'telescope_preview' } },
         git_status = { layout = { preset = 'telescope_preview' } },
         agent_terminals = { layout = { preset = 'telescope_vertical' } },
+        keymaps = { layout = { preset = 'telescope_preview' } },
       },
       layouts = {
         telescope_no_preview = telescope_no_preview,
         telescope_preview = telescope_preview,
         telescope_vertical = telescope_vertical,
       },
-      layout = 'dropdown',
+      layout = 'vertical',
       actions = {
         trouble_open = function(...) return require('trouble.sources.snacks').actions.trouble_open.action(...) end,
         cycle_next_layouts = function(picker) set_next_preferred_layout(picker) end,
