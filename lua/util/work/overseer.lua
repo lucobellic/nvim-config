@@ -46,6 +46,24 @@ local function cmake_build()
   local cached_targets = get_cmake_targets()
 
   if not cached_targets then
+    local custom_targets = {}
+    -- Also list all custom targets from 'cmake/custom_targets.txt' if the file is present
+    -- Parse all `add_custom_target(<name> ...)` lines to extract <name>
+    local file_path = vim.fn.getcwd() .. '/cmake/custom_targets.cmake'
+    if vim.fn.filereadable(file_path) == 1 then
+      local custom_file = io.open(file_path, 'r')
+      if custom_file then
+        custom_targets = vim
+          .iter(custom_file:lines())
+          :map(function(line) return line:match('add_custom_target%(([%w_%-]+)') end)
+          :filter(function(name) return name ~= nil end)
+          :totable()
+        custom_file:close()
+      end
+    else
+      vim.notify('No custom targets file found at ' .. file_path, vim.log.levels.INFO, { title = 'CMake' })
+    end
+
     ---@diagnostic disable-next-line: missing-fields
     Job:new({
       command = 'cmake',
@@ -67,9 +85,10 @@ local function cmake_build()
 
           -- Remove ': phony' from target names
           local cleaned_targets = vim.tbl_map(function(target) return target:gsub(': phony', '') end, targets)
+          cleaned_targets = vim.list_extend(cleaned_targets, custom_targets)
 
           vim.schedule(function() save_cmake_cache(cleaned_targets) end)
-          vim.notify('CMake targets cache updated', vim.log.levels.INFO)
+          vim.notify('CMake targets cache updated', vim.log.levels.INFO, { title = 'CMake' })
         end
       end,
     }):start()
@@ -100,7 +119,7 @@ local function clear_cmake_cache()
   local project_key = 'cmake_targets_' .. get_project_id()
   vim.g[project_key] = nil
   os.remove(get_cache_file())
-  vim.notify('CMake cache cleared', vim.log.levels.INFO)
+  vim.notify('CMake cache cleared', vim.log.levels.INFO, { title = 'CMake' })
 end
 
 local function get_reach_result(args)
