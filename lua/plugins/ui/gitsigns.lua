@@ -56,6 +56,32 @@ return {
   },
   {
     'lewis6991/gitsigns.nvim',
+    keys = {
+      {
+        '[h',
+        function() require('gitsigns').nav_hunk('prev', { navigation_message = false }) end,
+        repeatable = true,
+        desc = 'Prev Hunk',
+      },
+      {
+        '[H',
+        function() require('gitsigns').nav_hunk('prev', { navigation_message = false }) end,
+        repeatable = true,
+        desc = 'Prev Hunk',
+      },
+      {
+        ']h',
+        function() require('gitsigns').nav_hunk('next', { navigation_message = false }) end,
+        repeatable = true,
+        desc = 'Next Hunk',
+      },
+      {
+        ']H',
+        function() require('gitsigns').nav_hunk('next', { navigation_message = false }) end,
+        repeatable = true,
+        desc = 'Next Hunk',
+      },
+    },
     opts = {
       signs = {
         add = { text = symbol },
@@ -87,24 +113,6 @@ return {
           opts.buffer = bufnr
           vim.keymap.set(mode, l, r, opts)
         end
-
-        -- Navigation
-        map('n', '>H', function()
-          if vim.wo.diff then
-            return '>H'
-          end
-          vim.schedule(function() gs.next_hunk({ navigation_message = false }) end)
-          return '<Ignore>'
-        end, { repeatable = true, desc = 'Next Hunk' })
-
-        map('n', '<H', function()
-          if vim.wo.diff then
-            return '<H'
-          end
-          vim.schedule(function() gs.prev_hunk({ navigation_message = false }) end)
-          return '<Ignore>'
-        end, { repeatable = true, desc = 'Prev Hunk' })
-
         -- Actions
         map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })
         map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset Hunk' })

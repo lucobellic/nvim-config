@@ -108,7 +108,7 @@ return {
         },
         icon = {
           folder_closed = ' ',
-          folder_open = ' ',
+          folder_open = ' ',
           folder_empty = ' ',
           -- The next two settings are only a fallback, if you use nvim-web-devicons and configure default icons there
           -- then these will never be used.
@@ -301,6 +301,7 @@ return {
         },
         follow_current_file = {
           enabled = true, -- This will find and focus the file in the active buffer every time
+          center = true, -- center the file in the window
           --               -- the current file is changed while the tree is open.
           leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
@@ -314,6 +315,7 @@ return {
         -- instead of relying on nvim autocmd events.
         window = {
           mappings = {
+            ['<space>'] = 'none',
             ['<C-p>'] = 'snacks_find',
             ['<C-f>'] = 'snacks_grep',
             ['<bs>'] = 'navigate_up',

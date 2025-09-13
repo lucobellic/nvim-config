@@ -2,5 +2,7 @@ return {
   'mvllow/modes.nvim',
   version = '*',
   event = 'VeryLazy',
-  opts = {},
+  opts = {
+    ignore = function() return false end
+  },
 }
