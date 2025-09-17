@@ -50,7 +50,9 @@ local function goto_breakpoint(direction)
   local current_line = vim.api.nvim_win_get_cursor(0)[1]
   local buf_bps = breakpoints[current_buf] or {}
 
-  if #buf_bps == 0 then return end
+  if #buf_bps == 0 then
+    return
+  end
 
   -- Extract and sort breakpoint lines
   local bp_lines = {}
@@ -110,16 +112,11 @@ return {
         },
       },
       config = function()
-        local path = ''
-        if vim.g.distribution == 'lazyvim' then
-          path = require('mason-registry').get_package('debugpy'):get_install_path()
-        else
-          path = require('mason-registry')
-            .get_package('debugpy')
-            :get_install_handle()
-            :and_then(function(p) return p:get_install_path() end)
-            :or_else(vim.fn.stdpath('data') .. '/mason/packages/debugpy')
-        end
+        local path = require('mason-registry')
+          .get_package('debugpy')
+          :get_install_handle()
+          :and_then(function(p) return p:get_install_path() end)
+          :or_else(vim.fn.stdpath('data') .. '/mason/packages/debugpy')
 
         require('dap-python').setup(path .. '/venv/bin/python', {
           include_configs = true,

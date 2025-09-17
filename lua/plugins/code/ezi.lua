@@ -1,6 +1,7 @@
 return {
   'nvim-treesitter/nvim-treesitter',
   enabled = false,
+  cond = false,
   opts = function(_, opts)
     local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
     --- @diagnostic disable-next-line: inject-field
