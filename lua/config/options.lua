@@ -9,8 +9,10 @@ vim.opt.cursorline = true
 vim.opt.more = false
 
 -- Disable support for keymap part of a sequence
-vim.opt.timeout = true
-vim.opt.timeoutlen = 0
+if not vim.g.vscode then
+  vim.opt.timeout = true
+  vim.opt.timeoutlen = 0
+end
 
 vim.opt.foldlevel = 99
 
