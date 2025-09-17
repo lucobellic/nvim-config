@@ -10,7 +10,7 @@ local throttle_scroll = function()
 end
 
 return {
-  'echasnovski/mini.animate',
+  'nvim-mini/mini.animate',
   enabled = false,
   opts = {
     open = {
