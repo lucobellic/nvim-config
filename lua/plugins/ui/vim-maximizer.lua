@@ -2,7 +2,7 @@ return {
   'szw/vim-maximizer',
   keys = {
     {
-      '<leader>wm',
+      '<leader>wM',
       function() vim.cmd('MaximizerToggle!') end,
       repeatable = true,
       desc = 'Toggle Maximizer',

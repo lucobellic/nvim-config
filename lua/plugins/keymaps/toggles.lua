@@ -1,9 +1,9 @@
 return {
   'folke/which-key.nvim',
   keys = {
-    { '<leader>uS', '<cmd>ToggleAutoSave<cr>', desc = 'Toggle Auto Save' },
+    { '<leader>uW', '<cmd>ToggleAutoSave<cr>', desc = 'Toggle Auto Save' },
     {
-      '<leader>uW',
+      '<leader>u=',
       function()
         require('windows.autowidth').toggle()
         local is_enabled = require('windows.config').autowidth.enable

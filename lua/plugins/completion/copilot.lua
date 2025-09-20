@@ -7,75 +7,49 @@ local function suggestion_key_fallback(key, action)
   end
 end
 
--- Enable Copilot keys only if nvim-cmp is not enabled
-local get_keys = function()
-  local keys = not vim.g.ai_cmp
-      and {
-        {
-          '<S-Tab>',
-          function() suggestion_key_fallback('<S-Tab>', 'accept') end,
-          desc = 'Copilot accept',
-          mode = 'i',
-        },
-        {
-          '<Tab>',
-          function()
-            -- Always accept copilot suggest with tab when suggestion is visible
-            if require('copilot.suggestion').is_visible() then
-              suggestion_key_fallback('<Tab>', 'accept')
-            else
-              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
-            end
-          end,
-          desc = 'Copilot accept',
-          mode = 'i',
-        },
-      }
-    or {}
-
-  return vim.list_extend(keys, {
-    {
-      '<leader>ae',
-      function()
-        local is_disabled = require('copilot.client').is_disabled()
-        if is_disabled then
-          vim.notify('Enabled copilot', vim.log.levels.INFO, { title = 'copilot' })
-          vim.cmd('Copilot enable')
-        else
-          vim.notify('Disabled copilot', vim.log.levels.WARN, { title = 'copilot' })
-          vim.cmd('Copilot disable')
-        end
-      end,
-      mode = { 'n' },
-      desc = 'Copilot enable',
-    },
-    {
-      '<C-l>',
-      function() suggestion_key_fallback('<C-l>', 'next') end,
-      desc = 'Copilot next',
-      mode = 'i',
-    },
-    {
-      '<C-h>',
-      function() suggestion_key_fallback('<C-h>', 'prev') end,
-      desc = 'Copilot prev',
-      mode = 'i',
-    },
-    {
-      '<A-l>',
-      function() suggestion_key_fallback('<A-l>', 'accept_word') end,
-      desc = 'Copilot accept work',
-      mode = 'i',
-    },
-  })
-end
-
 return {
   {
     'zbirenbaum/copilot.lua',
     enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1),
-    cond = vim.g.suggestions == 'copilot',
-    keys = get_keys(),
+    dependencies = {
+      'copilotlsp-nvim/copilot-lsp',
+    },
+    cond = vim.g.suggestions == 'copilot' and not vim.g.vscode,
+    keys = {
+      {
+        '<leader>ae',
+        function()
+          local is_disabled = require('copilot.client').is_disabled()
+          if is_disabled then
+            vim.notify('Enabled copilot', vim.log.levels.INFO, { title = 'copilot' })
+            vim.cmd('Copilot enable')
+          else
+            vim.notify('Disabled copilot', vim.log.levels.WARN, { title = 'copilot' })
+            vim.cmd('Copilot disable')
+          end
+        end,
+        mode = { 'n' },
+        desc = 'Copilot enable',
+      },
+      {
+        '<C-l>',
+        function() suggestion_key_fallback('<C-l>', 'next') end,
+        desc = 'Copilot next',
+        mode = 'i',
+      },
+      {
+        '<C-h>',
+        function() suggestion_key_fallback('<C-h>', 'prev') end,
+        desc = 'Copilot prev',
+        mode = 'i',
+      },
+      {
+        '<A-l>',
+        function() suggestion_key_fallback('<A-l>', 'accept_word') end,
+        desc = 'Copilot accept work',
+        mode = 'i',
+      },
+    },
     opts = {
       suggestion = {
         enabled = not vim.g.ai_cmp,
@@ -85,6 +59,15 @@ return {
           accept = false,
           next = false,
           prev = false,
+        },
+      },
+      nes = {
+        enabled = true,
+        auto_trigger = false,
+        keymap = {
+          accept_and_goto = false,
+          accept = '<S-Tab>',
+          dismiss = '<esc>',
         },
       },
       filetypes = {

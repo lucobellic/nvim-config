@@ -3,7 +3,7 @@ return {
   keys = {
     { '<c-z>', function() require('snacks.zen').zen() end, desc = 'Toggle Zen Mode' },
     {
-      '<leader>zd',
+      '<leader>uD',
       function()
         local dim = require('snacks.dim')
         if dim.enabled then

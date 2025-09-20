@@ -17,6 +17,7 @@ end
 return {
   {
     'mason-org/mason.nvim',
+    lazy = false,
     opts = {
       PATH = 'prepend',
       ui = {
@@ -90,6 +91,12 @@ return {
         },
         {
           '<leader>sS',
+          function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
+          desc = 'LSP Workspace Symbols',
+          has = 'workspace/symbols',
+        },
+        {
+          '<leader>SS',
           function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
           desc = 'LSP Workspace Symbols',
           has = 'workspace/symbols',

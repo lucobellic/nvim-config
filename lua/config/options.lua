@@ -1,6 +1,26 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
+vim.g.autoformat = false
+vim.g.markdown_folding = true
+
+---@type 'copilot'|'supermaven'|false
+vim.g.suggestions = 'copilot'
+vim.g.winborder = 'single'
+
+local enable_border = true
+vim.g.border = {
+  enabled = enable_border,
+  style = enable_border and vim.g.winborder or { ' ' },
+  borderchars = enable_border and { '─', '│', '─', '│', '┌', '┐', '┘', '└' }
+    or { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+}
+
+vim.g.ai_cmp = false
+vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
+
 vim.opt.conceallevel = 2
 vim.opt.laststatus = 3
 vim.opt.signcolumn = 'yes:2'
