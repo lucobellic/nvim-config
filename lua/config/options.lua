@@ -20,6 +20,9 @@ vim.g.border = {
 
 vim.g.ai_cmp = false
 vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
+vim.opt.completeopt = ''
+vim.opt.wildmenu = false
+vim.opt.wildmode = ''
 
 vim.opt.conceallevel = 2
 vim.opt.laststatus = 3

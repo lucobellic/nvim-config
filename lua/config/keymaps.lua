@@ -3,7 +3,6 @@ pcall(function() vim.keymap.del('n', '<leader>e') end)
 pcall(function() vim.keymap.del('n', '<leader>.') end)
 pcall(function() vim.keymap.del('n', 'gc') end)
 vim.keymap.set('n', 'gc', '<Nop>', { noremap = true, silent = true, desc = 'comment' })
-pcall(function() vim.keymap.del('n', '<leader>gs') end)
 pcall(function() vim.keymap.del('n', '<leader>l') end)
 pcall(function() vim.keymap.del('n', '<leader>rb') end)
 

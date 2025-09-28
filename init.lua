@@ -17,4 +17,7 @@ end
 if vim.g.distribution ~= 'lazyvim' then
   require('config.options')
   require('config.autocmds')
+  if not vim.g.distribution then
+    require('config.keymaps')
+  end
 end
