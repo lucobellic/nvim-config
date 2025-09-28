@@ -63,11 +63,18 @@ return {
     ft = { 'markdown', 'codecompanion', 'mcphub', 'obsidian' },
     opts_extend = { 'file_types', 'render_modes', 'sign.exclude.buftypes' },
     opts = {
-      file_types = { 'markdown', 'markdown.floaterm', 'codecompanion', 'codecompanion.floaterm', 'mcphub', 'obsidian' },
+      file_types = {
+        'markdown',
+        'markdown.floaterm',
+        'codecompanion',
+        'codecompanion.floaterm',
+        'mcphub',
+        'obsidian',
+        'noice',
+      },
       render_modes = { 'n', 'c', 'i' },
       sign = {
         enabled = false,
-        exclude = { buftypes = { 'nofile' } },
       },
       heading = {
         sign = false,

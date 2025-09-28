@@ -1,4 +1,4 @@
-if vim.g.distribution ~= 'lazyvim' then
+if true then
   return {}
 end
 
