@@ -83,7 +83,7 @@ return {
       copilot_model = 'gpt-4o-copilot',
       should_attach = function(bufnr)
         local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
-        return buftype ~= 'terminal' and buftype ~= 'help' and buftype ~= 'nowrite'
+        return buftype ~= 'terminal' and buftype ~= 'help' and buftype ~= 'nowrite' and buftype ~= 'prompt'
       end,
     },
     config = function(_, opts)
