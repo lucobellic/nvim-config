@@ -1,6 +1,6 @@
 return {
   'AckslD/nvim-neoclip.lua',
-  optional = true,
+  event = 'BufEnter',
   dependencies = { 'kkharji/sqlite.lua' },
   keys = { { '<leader>sy', '<cmd>Telescope neoclip<cr>', desc = 'Find yanks (neoclip)' } },
   opts = {
