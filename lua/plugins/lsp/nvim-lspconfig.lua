@@ -79,6 +79,7 @@ return {
         { '<leader>cc', false, mode = { 'n', 'v' } },
         { '<leader>cC', false, mode = { 'n', 'v' } },
         { '<c-k>', false, mode = { 'n', 'v', 'i' } },
+        { 'gs', false, mode = { 'n', 'v' } },
         { 'gd', function() Snacks.picker.lsp_definitions() end, desc = 'Goto Definition', has = 'definition' },
         { 'gr', function() Snacks.picker.lsp_references() end, nowait = true, desc = 'References' },
         { 'gI', function() Snacks.picker.lsp_implementations() end, desc = 'Goto Implementation' },
@@ -101,7 +102,16 @@ return {
           desc = 'LSP Workspace Symbols',
           has = 'workspace/symbols',
         },
-        { 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>' },
+        { 'gS', function() vim.lsp.buf.signature_help() end, desc = 'Signature Help', has = 'signatureHelp' },
+        {
+          'K',
+          function()
+            local under_cursor = ' ' .. vim.fn.expand('<cword>') .. ' '
+            vim.lsp.buf.hover({ border = vim.g.border.style, title = under_cursor, title_pos = 'center' })
+          end,
+          mode = {'n', 'v'},
+          desc = 'Hover',
+        },
         { '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>' },
         { '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>' },
         { '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' },
