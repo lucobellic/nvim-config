@@ -15,13 +15,13 @@ function Gemini.setup(opts)
     executable = 'gemini',
     filetype = 'gemini',
     display_name = 'Gemini',
-    leader = '<leader>cg',
+    leader = '<leader>lg',
     opts = Gemini.opts,
   })
 
   local ok, wk = pcall(require, 'which-key')
   if ok then
-    wk.add({ { '<leader>cg', group = 'Gemini', mode = { 'n', 'v' } } }, { notify = false })
+    wk.add({ { '<leader>lg', group = 'Gemini', mode = { 'n', 'v' } } }, { notify = false })
   end
 end
 

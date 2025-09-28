@@ -15,9 +15,14 @@ function OpenCode.setup(opts)
     executable = 'opencode',
     filetype = 'opencode',
     display_name = 'OpenCode',
-    leader = '<leader>c',
+    leader = '<leader>lo',
     opts = OpenCode.opts,
   })
+
+  local ok, wk = pcall(require, 'which-key')
+  if ok then
+    wk.add({ { '<leader>lo', group = 'OpenCode', mode = { 'n', 'v' } } }, { notify = false })
+  end
 end
 
 return OpenCode
