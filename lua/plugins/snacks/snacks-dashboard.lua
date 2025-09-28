@@ -3,7 +3,7 @@ return {
   lazy = false,
   opts = {
     dashboard = {
-      cond = function() return not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true') end,
+      enabled = function() return not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true') end,
       width = 72,
       autokeys = 'abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       sections = {
