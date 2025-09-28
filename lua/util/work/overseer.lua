@@ -101,7 +101,7 @@ local function cmake_build()
               .new_task({
                 name = 'CMake build ' .. choice,
                 cmd = 'cmake',
-                args = { '--build', '../build', '-j', '6', '--target', choice },
+                args = { '--build', '../build', '-j', '8', '--target', choice },
                 components = { 'default', 'default_vscode' },
               })
               :start()
