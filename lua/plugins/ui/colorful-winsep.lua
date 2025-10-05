@@ -3,8 +3,9 @@ return {
   'nvim-zh/colorful-winsep.nvim',
   event = { 'WinEnter' },
   opts = {
+    animate = { enabled = false },
     border = single and { '─', '│', '┌', '┐', '└', '┘' } or { '─', '│', '╭', '╮', '╰', '╯' },
-    highlight = '#38526b',
+    highlight = '#127080',
     no_exec_files = {
       'packer',
       'TelescopePrompt',
