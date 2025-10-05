@@ -8,13 +8,18 @@ pcall(function() vim.keymap.del('n', '<leader>rb') end)
 
 if not vim.g.vscode then
   local function tab()
-    local ok, copilot_suggestion = pcall(require, 'copilot.suggestion')
-    if ok and copilot_suggestion.is_visible() then
-      copilot_suggestion.accept()
-    elseif vim.b[vim.api.nvim_get_current_buf()].nes_state then
-      require('copilot-lsp.nes').apply_pending_nes()
-    elseif not require('blink.cmp').accept() then
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+    local ok_sidekick, sidekick = pcall(require, 'sidekick')
+    local sidekick_applied = ok_sidekick and sidekick.nes_jump_or_apply()
+
+    if not sidekick_applied then
+      local ok, copilot_suggestion = pcall(require, 'copilot.suggestion')
+      if ok and copilot_suggestion.is_visible() then
+        copilot_suggestion.accept()
+      elseif vim.b[vim.api.nvim_get_current_buf()].nes_state then
+        require('copilot-lsp.nes').apply_pending_nes()
+      elseif not require('blink.cmp').accept() then
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+      end
     end
   end
 
