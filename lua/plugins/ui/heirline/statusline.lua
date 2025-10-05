@@ -285,6 +285,29 @@ local Copilot = {
   hl = secondary_highlight,
 }
 
+local sidekick_icons = {
+  Normal = '󱙺',
+  Error = '󱚢',
+  Warning = '󱚠',
+  Inactive = '󱙻',
+}
+
+local function get_sidekick_icons()
+  local sidekick_ok, status = pcall(require, 'sidekick.status')
+  local status = sidekick_ok and status.get() or nil
+  if status and status.busy then
+    return get_spinner() .. ' ' .. sidekick_icons.Normal
+  end
+  local icon = status and sidekick_icons[status.kind]
+  return icon and (' ' .. icon) or (' ' .. sidekick_icons.Warning)
+end
+
+local Sidekick = {
+  condition = function() return package.loaded.sidekick end,
+  provider = function() return get_sidekick_icons() .. ' ' end,
+  hl = secondary_highlight,
+}
+
 local codecompanion_processing = false
 local codecompanion_timer = vim.uv.new_timer()
 
@@ -374,6 +397,7 @@ local SystemStats = {
 local Right = {
   Overseer,
   LspProgress,
+  Sidekick,
   Copilot,
   CodeCompanion,
   -- SystemStats,
