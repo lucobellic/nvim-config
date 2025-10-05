@@ -366,9 +366,9 @@ function AgentManager:send_selection()
     return
   end
 
-  local start_pos = vim.fn.getpos("'<")
-  local end_pos = vim.fn.getpos("'>")
-  local lines = vim.fn.getline(start_pos[2], end_pos[2])
+  local start_line = vim.fn.line('v')
+  local end_line = vim.fn.line('.')
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
   local text = table.concat(lines, self.newline)
 
   local filetype = vim.api.nvim_get_option_value('filetype', { buf = 0 })
