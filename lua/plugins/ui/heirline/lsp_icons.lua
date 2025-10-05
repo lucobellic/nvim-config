@@ -14,6 +14,7 @@ return {
   gitlab_ci_ls = '',
   gopls = '',
   jsonls = '',
+  stylua = '',
   lua_ls = '󰢱',
   marksman = '',
   neocmake = '',
