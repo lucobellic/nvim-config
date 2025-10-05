@@ -56,13 +56,14 @@ return {
         auto_trigger = true,
         hide_during_completion = false,
         keymap = {
+
           accept = false,
           next = false,
           prev = false,
         },
       },
       nes = {
-        enabled = true,
+        enabled = false,
         auto_trigger = false,
         keymap = {
           accept_and_goto = false,
