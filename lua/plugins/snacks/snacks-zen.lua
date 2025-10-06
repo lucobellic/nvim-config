@@ -1,5 +1,5 @@
 return {
-  'folke/snacks.nvim',
+  'snacks.nvim',
   keys = {
     { '<c-z>', function() require('snacks.zen').zen() end, desc = 'Toggle Zen Mode' },
     {

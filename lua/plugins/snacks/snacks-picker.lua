@@ -156,7 +156,7 @@ local function recent(opts)
 end
 
 return {
-  'folke/snacks.nvim',
+  'snacks.nvim',
   keys = {
     { '<leader>gd', false },
     { '<c-p>', function() Snacks.picker.files() end, desc = 'Find Files' },

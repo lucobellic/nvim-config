@@ -1,7 +1,7 @@
 ---@module 'snacks.input'
 
 return {
-  'folke/snacks.nvim',
+  'snacks.nvim',
   opts = {
     ---@type table<string, snacks.win.Config>
     styles = {

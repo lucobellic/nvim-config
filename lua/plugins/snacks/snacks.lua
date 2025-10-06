@@ -1,6 +1,5 @@
 return {
   'lucobellic/snacks.nvim',
-  dev = true,
   keys = {
     { '<leader>..', function() require('snacks').scratch() end, desc = 'Scratch Toggle Buffer' },
     { '<leader>f.', function() require('snacks').scratch.select() end, desc = 'Scratch Select Buffer' },
