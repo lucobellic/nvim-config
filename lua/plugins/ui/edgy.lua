@@ -78,7 +78,7 @@ return {
         title = 'Neo-Tree',
         ft = 'neo-tree',
         filter = function(buf) return vim.b[buf].neo_tree_source == 'filesystem' end,
-        size = { height = 0.5 },
+        size = { height = 0.7 },
         open = 'Neotree show position=left filesystem',
       },
       {
