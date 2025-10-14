@@ -1,5 +1,6 @@
 return {
   'https://gitlab.com/HiPhish/jinja.vim',
+  enabled = false,
   init = function()
     vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
       pattern = { '*.html', '*.yaml' },
