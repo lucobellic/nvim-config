@@ -37,7 +37,7 @@ function M.multi_select(items, opts, on_choice)
   ---@type snacks.picker.finder.Item[]
   local finder_items = {}
   for idx, item in ipairs(items) do
-    local text = (opts.format_item or tostring)(item)
+    local text = (opts and opts.format_item or tostring)(item)
     table.insert(finder_items, {
       formatted = text,
       text = idx .. ' ' .. text,
@@ -54,7 +54,7 @@ function M.multi_select(items, opts, on_choice)
   return Snacks.picker.pick({
     source = 'select',
     items = finder_items,
-    format = Snacks.picker.format.ui_select(opts.kind, #items),
+    format = 'text',
     title = title,
     matcher = {
       frecency = true,
