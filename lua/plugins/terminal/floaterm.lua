@@ -253,11 +253,8 @@ return {
   keys = {
     { '<leader>er', '<cmd>FloatermToggleTool ranger<cr>', desc = 'Ranger' },
     { '<leader>g;', '<cmd>FloatermToggleTool lazygit<cr>', desc = 'Lazygit' },
-    -- TODO: Start the buffer using opencode.lua instead of creating a new terminal
-    { '<leader>to', '<cmd>FloatermToggleTool opencode<cr>', desc = 'OpenCode' },
-    -- TODO: Start the buffer using cursor-agent.lua instead of creating a new terminal
-    { '<leader>tc', '<cmd>FloatermToggleTool cursor-agent<cr>', desc = 'Cursor Agent' },
     { '<leader>ey', '<cmd>FloatermToggleTool yazi<cr>', desc = 'Yazi' },
+    { '<leader>ld', '<cmd>FloatermToggleTool lazydash<cr>', desc = 'Lazydash' },
     { '<F7>', '<cmd>FloatermToggle<cr>', mode = { 'n', 'i' }, desc = 'Floaterm Toggle' },
     { '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', mode = 't', desc = 'Floaterm Toggle' },
     { '<F8>', '<cmd>FloatermToggleBuffer<cr>', mode = 'n', desc = 'Floaterm toggle buffer' },
