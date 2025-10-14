@@ -63,12 +63,16 @@ if vim.g.vscode then
   -- Keep undo/redo lists in sync with VsCode
   vim.keymap.set('n', 'u', "<Cmd>call VSCodeNotify('undo')<CR>")
   vim.keymap.set('n', '<C-r>', "<Cmd>call VSCodeNotify('redo')<CR>")
-
 end
 
 return {
   'folke/which-key.nvim',
   event = 'VeryLazy',
+  opts = {
+    spec = {
+      { '<leader>y', group = 'yank' },
+    },
+  },
   keys = {
 
     { mode = 't', '<esc>', [[<C-\><C-n>]] },
