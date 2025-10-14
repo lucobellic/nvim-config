@@ -91,3 +91,5 @@ require('util.agents.cursor').setup({ focus = true, split = 'right', insert = fa
 require('util.agents.gemini').setup({ focus = true, split = 'right', insert = false })
 -- Track visited files by keeping a list in a global variable
 require('util.commands').track_visited_files()
+-- Create block spinner command
+require('util.commands').create_block_spinner_command()

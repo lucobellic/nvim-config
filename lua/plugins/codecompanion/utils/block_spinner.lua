@@ -7,7 +7,7 @@ local spinner_opts = {
   hl_group = 'Comment',
   repeat_interval = 100,
   extmark = {
-    virt_text_pos = 'inline',
+    virt_text_pos = 'overlay',
     priority = 1000,
     virt_text_repeat_linebreak = true,
   },
@@ -56,6 +56,8 @@ local VirtualTextBlockSpinner = {
 function VirtualTextBlockSpinner.new(opts)
   local lines = vim.api.nvim_buf_get_lines(opts.bufnr, opts.start_line - 1, opts.end_line, false)
   local width = vim.fn.max(vim.iter(lines):map(function(line) return vim.fn.strdisplaywidth(line) end):totable())
+  local window_width = vim.api.nvim_win_get_width(0) - 6
+  width = math.min(width, window_width)
 
   local merged_opts = vim.tbl_deep_extend('force', spinner_opts, opts.opts or {})
   local patterns = {}
@@ -75,7 +77,7 @@ function VirtualTextBlockSpinner.new(opts)
   --- @diagnostic disable-next-line: need-check-nil
   local pattern_width = vim.fn.strdisplaywidth(raw_patterns[1])
   local repetitions = pattern_width > 0 and math.ceil(width / pattern_width) or width
-  local width = repetitions * pattern_width
+  width = repetitions * pattern_width
   local horizontal_line = string.rep('─', width)
 
   -- Now create the final patterns with proper repetition
