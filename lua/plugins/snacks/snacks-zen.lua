@@ -2,6 +2,8 @@ return {
   'snacks.nvim',
   keys = {
     { '<c-z>', function() require('snacks.zen').zen() end, desc = 'Toggle Zen Mode' },
+    { '<leader>zz', function() require('snacks.zen').zen() end, desc = 'Toggle Zen Mode' },
+    { '<leader>zm', function() require('snacks.zen').zoom() end, desc = 'Toggle Zoom Mode' },
     {
       '<leader>uD',
       function()
@@ -16,6 +18,7 @@ return {
     },
   },
   opts = {
+    spec = { { '<leader>z', group = 'zen' } },
     styles = {
       fullzen = {
         enter = true,
