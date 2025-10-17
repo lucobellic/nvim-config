@@ -91,10 +91,9 @@ function Agent:toggle()
   end
 end
 
----@param content string
 function Agent:send(content)
   if self:job_valid() then
-    vim.api.nvim_chan_send(self.terminal_job_id, content .. '\r')
+    vim.api.nvim_chan_send(self.terminal_job_id, content)
   end
 end
 

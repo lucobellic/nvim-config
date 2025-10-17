@@ -397,6 +397,16 @@ function AgentManager:send_selection()
   end)
 end
 
+function AgentManager:send(...)
+  local agent = self.last_visited_agent
+  if not agent then
+    vim.notify('No agent terminal selected', vim.log.levels.WARN)
+    return
+  end
+
+  agent:send(...)
+end
+
 --- Send current buffer's diagnostics to the terminal with context.
 function AgentManager:send_buffer_diagnostics()
   local agent = self.last_visited_agent
