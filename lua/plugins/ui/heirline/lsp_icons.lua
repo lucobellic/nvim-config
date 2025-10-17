@@ -13,6 +13,7 @@ return {
   dockerls = '󰡨',
   gitlab_ci_ls = '',
   gopls = '',
+  hyprls = '',
   jsonls = '',
   stylua = '',
   lua_ls = '󰢱',
