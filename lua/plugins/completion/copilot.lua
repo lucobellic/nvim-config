@@ -10,11 +10,11 @@ end
 return {
   {
     'zbirenbaum/copilot.lua',
-    enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1),
     dependencies = {
       'copilotlsp-nvim/copilot-lsp',
     },
-    cond = vim.g.suggestions == 'copilot' and not vim.g.vscode,
+    enabled = (vim.fn.isdirectory('/data/data/com.termux') ~= 1),
+    cond = (vim.fn.has('nvim-0.12') == 0) and vim.g.suggestions == 'copilot' and not vim.g.vscode,
     keys = {
       {
         '<leader>ae',

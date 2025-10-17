@@ -2,7 +2,7 @@ return {
   'snacks.nvim',
   opts = {
     image = {
-      enabled = true,
+      enabled = not vim.env.INSIDE_DOCKER,
       doc = {
         inline = false,
         float = true,

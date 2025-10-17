@@ -125,14 +125,7 @@ local blink = {
       opts.completion.menu.draw.treesitter = {}
       opts.keymap = {
         preset = vim.g.cmp_mode,
-        ['<tab>'] = {
-          function(cmp)
-            if not require('copilot.suggestion').is_visible() then
-              return cmp.select_and_accept()
-            end
-          end,
-          'fallback',
-        },
+        ['<tab>'] = { 'fallback' },
         ['<cr>'] = { 'accept', 'fallback' },
         ['<c-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<up>'] = { 'select_prev', 'fallback' },

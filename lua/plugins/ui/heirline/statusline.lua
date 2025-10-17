@@ -303,7 +303,6 @@ local function get_sidekick_icons()
 end
 
 local Sidekick = {
-  condition = function() return package.loaded.sidekick end,
   provider = function() return get_sidekick_icons() .. ' ' end,
   hl = secondary_highlight,
 }
