@@ -8,8 +8,8 @@ vim.g.maplocalleader = ','
 vim.g.autoformat = false
 vim.g.markdown_folding = true
 
----@type 'copilot'|'supermaven'|false
-vim.g.suggestions = 'copilot'
+---@type 'copilot'|'gitlab'|'supermaven'|false
+vim.g.suggestions = vim.env.INSIDE_DOCKER and 'gitlab' or 'copilot'
 vim.g.winborder = 'single'
 
 local enable_border = true

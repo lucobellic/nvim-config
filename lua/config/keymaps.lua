@@ -14,8 +14,19 @@ if not vim.g.vscode then
     local nes_state = vim.b[buf].nes_state
 
     if is_nvim_012 then
-      if vim.lsp.inline_completion.get() then
+      if vim.g.suggestions == 'copilot' and vim.lsp.inline_completion.get() then
         return
+      end
+
+      if vim.g.suggestions == 'gitlab' then
+        local GhostText = require('gitlab.ghost_text')
+        local ns = vim.api.nvim_create_namespace('gitlab.GhostText')
+        local bufnr = vim.api.nvim_get_current_buf()
+        local has_suggestion = #vim.api.nvim_buf_get_extmarks(bufnr or 0, ns, 0, -1, { limit = 1 }) > 0
+        if has_suggestion then
+          GhostText.insert_ghost_text()
+          return
+        end
       end
 
       if require('sidekick').nes_jump_or_apply() then

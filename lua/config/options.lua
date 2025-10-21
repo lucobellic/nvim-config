@@ -6,8 +6,6 @@ vim.g.maplocalleader = '_'
 vim.g.autoformat = false
 vim.g.markdown_folding = true
 
----@type 'copilot'|'supermaven'|false
-vim.g.suggestions = 'copilot'
 vim.g.winborder = 'single'
 
 local enable_border = true
