@@ -12,6 +12,7 @@ return {
   docker_compose_language_service = '',
   dockerls = '󰡨',
   gitlab_ci_ls = '',
+  gitlab_code_suggestions = '󰮠',
   gopls = '',
   hyprls = '',
   jsonls = '',
