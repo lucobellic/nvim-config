@@ -58,8 +58,24 @@ function AgentManager:setup_commands_and_keymaps(opts)
   vim.keymap.set('n', prefix .. 't', function() self:toggle() end, { desc = name .. ' Toggle' })
   vim.api.nvim_create_user_command(name .. 'Toggle', function() self:toggle() end, {})
 
-  vim.keymap.set('n', prefix .. 'b', function() self:send_current_buffer() end, { desc = name .. ' Send Buffer' })
-  vim.api.nvim_create_user_command(name .. 'SendBuffer', function() self:send_current_buffer() end, {})
+  vim.keymap.set(
+    'n',
+    prefix .. 'b',
+    function() self:send_current_buffer() end,
+    { desc = name .. ' Send Current Buffer' }
+  )
+  vim.api.nvim_create_user_command(name .. 'SendCurrentBuffer', function() self:send_current_buffer() end, {})
+
+  vim.keymap.set('n', prefix .. 'B', function() self:select_and_send_buffers() end, { desc = name .. ' Send Buffers' })
+  vim.api.nvim_create_user_command(name .. 'SendBuffers', function() self:select_and_send_buffers() end, {})
+
+  vim.keymap.set(
+    'n',
+    prefix .. 't',
+    function() self:select_and_send_terminals() end,
+    { desc = name .. ' Send Terminals' }
+  )
+  vim.api.nvim_create_user_command(name .. 'SendTerminals', function() self:select_and_send_terminals() end, {})
 
   vim.keymap.set('n', prefix .. 'f', function() self:select_and_send_files() end, { desc = name .. ' Send Files' })
   vim.api.nvim_create_user_command(name .. 'SendFiles', function() self:select_and_send_files() end, {})
@@ -350,6 +366,69 @@ function AgentManager:select_and_send_files()
         local files = picker:selected()
         local files_text = vim.iter(files):map(function(f) return f.file end):join(self.newline) .. self.newline
         agent:send(files_text)
+        picker:close()
+      end,
+    })
+  else
+    vim.notify('No agent terminal selected', vim.log.levels.WARN)
+  end
+end
+
+--- Open a buffer picker and send selected buffers to the terminal.
+function AgentManager:select_and_send_buffers()
+  local agent = self.last_visited_agent
+  if not agent then
+    vim.notify('No agent terminal selected', vim.log.levels.WARN)
+    return
+  end
+
+  if agent then
+    local snacks = require('snacks')
+    snacks.picker.buffers({
+      title = 'Select Buffers to Send to ' .. (agent.display_name or 'Agent'),
+      confirm = function(picker)
+        local buffers = picker:selected()
+        local buffers_text = vim.iter(buffers):map(function(b) return b.buf end):join(self.newline) .. self.newline
+        agent:send(buffers_text)
+        picker:close()
+      end,
+    })
+  else
+    vim.notify('No agent terminal selected', vim.log.levels.WARN)
+  end
+end
+
+--- Open a terminal picker and send selected terminals to the terminal
+--- Send the content of the terminal buffers
+function AgentManager:select_and_send_terminals()
+  local agent = self.last_visited_agent
+  if not agent then
+    vim.notify('No agent terminal selected', vim.log.levels.WARN)
+    return
+  end
+
+  if agent then
+    local snacks = require('snacks')
+    snacks.picker.buffers({
+      title = 'Select Terminals to Send to ' .. (agent.display_name or 'Agent'),
+      hidden = true,
+      sort_lastused = true,
+      filter = {
+        filter =
+          ---@param item snacks.picker.finder.Item
+          function(item)
+            return item.buf
+              and vim.api.nvim_get_option_value('buftype', { buf = item.buf }) == 'terminal'
+              and item.buf ~= agent.terminal_buf
+          end,
+      },
+      confirm = function(picker)
+        local terminals = picker:selected()
+        local terminals_content = vim
+          .iter(terminals)
+          :map(function(t) return table.concat(vim.api.nvim_buf_get_lines(t.buf, 0, -1, false), self.newline) end)
+          :join(self.newline .. self.newline) .. self.newline
+        agent:send(terminals_content)
         picker:close()
       end,
     })
