@@ -8,6 +8,7 @@ local Util = require('util.agents.util')
 ---@field insert boolean
 ---@field leader string Keymap prefix (e.g., '<leader>c') for setting up default keymaps
 ---@field split 'right'|'left'|'above'|'below'
+---@field on_focus? fun(agent: Agent) Callback when agent is focused
 
 ---@class Agent
 ---@field display_name string
@@ -16,6 +17,7 @@ local Util = require('util.agents.util')
 ---@field terminal_buf? integer
 ---@field terminal_job_id? integer
 ---@field private opts AgentsOpts options for the managed terminal
+---@field private on_focus? fun(agent: Agent) Callback when agent is focused
 local Agent = {}
 Agent.__index = Agent
 
@@ -33,6 +35,7 @@ function Agent.new(opts, buf, win, job_id)
     terminal_buf = buf or vim.api.nvim_create_buf(false, false),
     terminal_job_id = job_id,
     opts = opts,
+    on_focus = opts.on_focus,
   }, Agent)
 
   vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
@@ -79,6 +82,10 @@ function Agent:focus()
 
   if self.opts.insert then
     vim.cmd('startinsert')
+  end
+
+  if self.on_focus then
+    self.on_focus(self)
   end
 end
 

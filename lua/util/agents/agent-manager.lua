@@ -1,4 +1,5 @@
 local Agent = require('util.agents.agent')
+local AgentRegistry = require('util.agents.agent-registry')
 local Util = require('util.agents.util')
 
 ---@class AgentManager
@@ -26,8 +27,17 @@ function AgentManager.new(opts)
     }, opts or {}),
   }, AgentManager)
 
+  agent_manager.opts.on_focus = function(agent)
+    agent_manager.last_visited_agent = agent
+    AgentRegistry.update_last_used(agent_manager)
+  end
+
   agent_manager:setup_commands_and_keymaps(agent_manager.opts)
   agent_manager:setup_autocmds()
+
+  AgentRegistry.register(agent_manager)
+  AgentRegistry.setup_keymaps()
+
   return agent_manager
 end
 
@@ -47,6 +57,21 @@ function AgentManager:setup_autocmds()
       end
     end,
   })
+
+  vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+    callback = function(args)
+      ---@type Agent|nil
+      local entered_agent = vim
+        .iter(self.agents)
+        :filter(function(agent) return agent.terminal_buf == args.buf end)
+        :next()
+
+      if entered_agent and entered_agent:buffer_valid() then
+        self.last_visited_agent = entered_agent
+        AgentRegistry.update_last_used(self)
+      end
+    end,
+  })
 end
 
 --- Setup user command and keymaps with the given prefix.
@@ -55,43 +80,22 @@ end
 function AgentManager:setup_commands_and_keymaps(opts)
   local prefix = opts.leader
   local name = opts.display_name:gsub('%s+', '')
-  vim.keymap.set('n', prefix .. 't', function() self:toggle() end, { desc = name .. ' Toggle' })
-  vim.api.nvim_create_user_command(name .. 'Toggle', function() self:toggle() end, {})
 
-  vim.keymap.set(
-    'n',
-    prefix .. 'b',
-    function() self:send_current_buffer() end,
-    { desc = name .. ' Send Current Buffer' }
-  )
-  vim.api.nvim_create_user_command(name .. 'SendCurrentBuffer', function() self:send_current_buffer() end, {})
-
-  vim.keymap.set('n', prefix .. 'B', function() self:select_and_send_buffers() end, { desc = name .. ' Send Buffers' })
-  vim.api.nvim_create_user_command(name .. 'SendBuffers', function() self:select_and_send_buffers() end, {})
-
-  vim.keymap.set(
-    'n',
-    prefix .. 't',
-    function() self:select_and_send_terminals() end,
-    { desc = name .. ' Send Terminals' }
-  )
-  vim.api.nvim_create_user_command(name .. 'SendTerminals', function() self:select_and_send_terminals() end, {})
-
-  vim.keymap.set('n', prefix .. 'f', function() self:select_and_send_files() end, { desc = name .. ' Send Files' })
-  vim.api.nvim_create_user_command(name .. 'SendFiles', function() self:select_and_send_files() end, {})
-
-  vim.keymap.set('v', prefix .. 'e', function() self:send_selection() end, { desc = name .. ' Send Selection' })
-  vim.api.nvim_create_user_command(name .. 'SendSelection', function() self:send_selection() end, { range = true })
-
-  vim.keymap.set('n', prefix .. 'n', function() self:create() end, { desc = name .. ' New' })
-  vim.api.nvim_create_user_command(name .. 'New', function() self:create() end, {})
-
-  vim.keymap.set('n', prefix .. 's', function() self:select() end, { desc = name .. ' Select' })
-  vim.api.nvim_create_user_command(name .. 'Select', function() self:select() end, {})
-
-  vim.api.nvim_create_user_command(name .. 'Next', function() self:next() end, {})
-  vim.api.nvim_create_user_command(name .. 'Prev', function() self:prev() end, {})
-  vim.api.nvim_create_user_command(name .. 'Close', function() self:close() end, {})
+  Util.setup_keymaps_and_commands(prefix, name, {
+    toggle = function() self:toggle() end,
+    send_current_buffer = function() self:send_current_buffer() end,
+    select_and_send_buffers = function() self:select_and_send_buffers() end,
+    select_and_send_terminals = function() self:select_and_send_terminals() end,
+    select_and_send_files = function() self:select_and_send_files() end,
+    send_selection = function() self:send_selection() end,
+    create = function() self:create() end,
+    select = function() self:select() end,
+    next = function() self:next() end,
+    prev = function() self:prev() end,
+    close = function() self:close() end,
+    send_buffer_diagnostics = function() self:send_buffer_diagnostics() end,
+    send_selection_diagnostics = function() self:send_selection_diagnostics() end,
+  })
 
   vim.api.nvim_create_user_command(
     name .. 'DebugAgents',
@@ -135,6 +139,7 @@ function AgentManager:prev() self:focus_offset(-1) end
 --- Otherwise, focus the last visited agent or the first existing one.
 --- Finally, create a new terminal if none exist.
 function AgentManager:toggle()
+  AgentRegistry.update_last_used(self)
   local any_open = vim.iter(self.agents):any(function(agent) return agent:is_open() end)
   if any_open then
     self:hide_all()
@@ -156,6 +161,7 @@ end
 
 --- Create the terminal buffer/window and start the agent process.
 function AgentManager:create()
+  AgentRegistry.update_last_used(self)
   -- Get first available window or create a new split
   local first_win_that_show_agent = self:get_current_agent_win()
     or vim
@@ -264,6 +270,7 @@ end
 
 --- Select a terminal by index and update last_visited_terminal
 function AgentManager:select()
+  AgentRegistry.update_last_used(self)
   local items = {}
   for i, agent in ipairs(self.agents) do
     table.insert(items, {
@@ -338,16 +345,16 @@ function AgentManager:send_current_buffer()
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
+    return
   end
+  AgentRegistry.update_last_used(self)
 
-  if agent then
-    local file = vim.fn.expand('%:p')
-    vim.ui.input({ prompt = 'Ask file:' }, function(input)
-      if input ~= nil then
-        agent:send(file .. self.newline .. input .. self.newline)
-      end
-    end)
-  end
+  local file = vim.fn.expand('%:p')
+  vim.ui.input({ prompt = 'Ask file:' }, function(input)
+    if input ~= nil then
+      agent:send(file .. self.newline .. input .. self.newline)
+    end
+  end)
 end
 
 --- Open a file picker and send selected files to the terminal.
@@ -357,21 +364,18 @@ function AgentManager:select_and_send_files()
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
     return
   end
+  AgentRegistry.update_last_used(self)
 
-  if agent then
-    local snacks = require('snacks')
-    snacks.picker.files({
-      title = 'Select Files to Send to ' .. (agent.display_name or 'Agent'),
-      confirm = function(picker)
-        local files = picker:selected()
-        local files_text = vim.iter(files):map(function(f) return f.file end):join(self.newline) .. self.newline
-        agent:send(files_text)
-        picker:close()
-      end,
-    })
-  else
-    vim.notify('No agent terminal selected', vim.log.levels.WARN)
-  end
+  local snacks = require('snacks')
+  snacks.picker.files({
+    title = 'Select Files to Send to ' .. (agent.display_name or 'Agent'),
+    confirm = function(picker)
+      local files = picker:selected()
+      local files_text = vim.iter(files):map(function(f) return f.file end):join(self.newline) .. self.newline
+      agent:send(files_text)
+      picker:close()
+    end,
+  })
 end
 
 --- Open a buffer picker and send selected buffers to the terminal.
@@ -381,21 +385,18 @@ function AgentManager:select_and_send_buffers()
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
     return
   end
+  AgentRegistry.update_last_used(self)
 
-  if agent then
-    local snacks = require('snacks')
-    snacks.picker.buffers({
-      title = 'Select Buffers to Send to ' .. (agent.display_name or 'Agent'),
-      confirm = function(picker)
-        local buffers = picker:selected()
-        local buffers_text = vim.iter(buffers):map(function(b) return b.buf end):join(self.newline) .. self.newline
-        agent:send(buffers_text)
-        picker:close()
-      end,
-    })
-  else
-    vim.notify('No agent terminal selected', vim.log.levels.WARN)
-  end
+  local snacks = require('snacks')
+  snacks.picker.buffers({
+    title = 'Select Buffers to Send to ' .. (agent.display_name or 'Agent'),
+    confirm = function(picker)
+      local buffers = picker:selected()
+      local buffers_text = vim.iter(buffers):map(function(b) return b.buf end):join(self.newline) .. self.newline
+      agent:send(buffers_text)
+      picker:close()
+    end,
+  })
 end
 
 --- Open a terminal picker and send selected terminals to the terminal
@@ -406,35 +407,32 @@ function AgentManager:select_and_send_terminals()
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
     return
   end
+  AgentRegistry.update_last_used(self)
 
-  if agent then
-    local snacks = require('snacks')
-    snacks.picker.buffers({
-      title = 'Select Terminals to Send to ' .. (agent.display_name or 'Agent'),
-      hidden = true,
-      sort_lastused = true,
-      filter = {
-        filter =
-          ---@param item snacks.picker.finder.Item
-          function(item)
-            return item.buf
-              and vim.api.nvim_get_option_value('buftype', { buf = item.buf }) == 'terminal'
-              and item.buf ~= agent.terminal_buf
-          end,
-      },
-      confirm = function(picker)
-        local terminals = picker:selected()
-        local terminals_content = vim
-          .iter(terminals)
-          :map(function(t) return table.concat(vim.api.nvim_buf_get_lines(t.buf, 0, -1, false), self.newline) end)
-          :join(self.newline .. self.newline) .. self.newline
-        agent:send(terminals_content)
-        picker:close()
-      end,
-    })
-  else
-    vim.notify('No agent terminal selected', vim.log.levels.WARN)
-  end
+  local snacks = require('snacks')
+  snacks.picker.buffers({
+    title = 'Select Terminals to Send to ' .. (agent.display_name or 'Agent'),
+    hidden = true,
+    sort_lastused = true,
+    filter = {
+      filter =
+        ---@param item snacks.picker.finder.Item
+        function(item)
+          return item.buf
+            and vim.api.nvim_get_option_value('buftype', { buf = item.buf }) == 'terminal'
+            and item.buf ~= agent.terminal_buf
+        end,
+    },
+    confirm = function(picker)
+      local terminals = picker:selected()
+      local terminals_content = vim
+        .iter(terminals)
+        :map(function(t) return table.concat(vim.api.nvim_buf_get_lines(t.buf, 0, -1, false), self.newline) end)
+        :join(self.newline .. self.newline) .. self.newline
+      agent:send(terminals_content)
+      picker:close()
+    end,
+  })
 end
 
 --- Send the current visual selection as a fenced code block, then prompt for a question.
@@ -444,10 +442,10 @@ function AgentManager:send_selection()
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
     return
   end
+  AgentRegistry.update_last_used(self)
 
-  local start_line = vim.fn.line('v')
-  local end_line = vim.fn.line('.')
-  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  local start_line, end_line = Util.get_visual_selection_range()
+  local lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
   local text = table.concat(lines, self.newline)
 
   local filetype = vim.api.nvim_get_option_value('filetype', { buf = 0 })
@@ -477,6 +475,7 @@ function AgentManager:send_selection()
 end
 
 function AgentManager:send(...)
+  AgentRegistry.update_last_used(self)
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
@@ -488,6 +487,7 @@ end
 
 --- Send current buffer's diagnostics to the terminal with context.
 function AgentManager:send_buffer_diagnostics()
+  AgentRegistry.update_last_used(self)
   local agent = self.last_visited_agent
   if not agent then
     vim.notify('No agent terminal selected', vim.log.levels.WARN)
@@ -502,7 +502,6 @@ function AgentManager:send_buffer_diagnostics()
     return
   end
 
-  -- Sort diagnostics by line number
   table.sort(diagnostics, function(a, b) return a.lnum < b.lnum end)
 
   local diagnostic_text = self.newline
@@ -516,7 +515,54 @@ function AgentManager:send_buffer_diagnostics()
 
   for _, diagnostic in ipairs(diagnostics) do
     local severity = vim.diagnostic.severity[diagnostic.severity] or 'UNKNOWN'
-    local line_num = diagnostic.lnum + 1 -- Convert from 0-based to 1-based
+    local line_num = diagnostic.lnum + 1
+    local col_num = diagnostic.col + 1
+
+    diagnostic_text = diagnostic_text
+      .. string.format('[%s] Line %d:%d - %s%s', severity, line_num, col_num, diagnostic.message, self.newline)
+  end
+
+  agent:send(diagnostic_text .. self.newline .. '```' .. self.newline)
+end
+
+function AgentManager:send_selection_diagnostics()
+  AgentRegistry.update_last_used(self)
+  local agent = self.last_visited_agent
+  if not agent then
+    vim.notify('No agent terminal selected', vim.log.levels.WARN)
+    return
+  end
+
+  local start_line, end_line = Util.get_visual_selection_range()
+
+  local current_buf = vim.api.nvim_get_current_buf()
+  local diagnostics = vim.diagnostic.get(current_buf)
+
+  diagnostics = vim.tbl_filter(function(d) return d.lnum >= start_line and d.lnum < end_line end, diagnostics)
+
+  if #diagnostics == 0 then
+    vim.notify('No diagnostics found in selected lines', vim.log.levels.INFO)
+    return
+  end
+
+  table.sort(diagnostics, function(a, b) return a.lnum < b.lnum end)
+
+  local diagnostic_text = self.newline
+    .. '```'
+    .. self.newline
+    .. 'Diagnostics for '
+    .. vim.fn.expand('%:p')
+    .. ' (lines '
+    .. (start_line + 1)
+    .. '-'
+    .. end_line
+    .. '):'
+    .. self.newline
+    .. self.newline
+
+  for _, diagnostic in ipairs(diagnostics) do
+    local severity = vim.diagnostic.severity[diagnostic.severity] or 'UNKNOWN'
+    local line_num = diagnostic.lnum + 1
     local col_num = diagnostic.col + 1
 
     diagnostic_text = diagnostic_text

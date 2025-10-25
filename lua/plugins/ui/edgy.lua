@@ -122,7 +122,7 @@ return {
       {
         title = 'cursor-agent',
         ft = 'cursor-agent',
-        open = 'CursorAgentToggle',
+        open = 'CursorToggle',
         filter = function(_, win)
           return vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
         end,
