@@ -26,7 +26,12 @@ return {
         local buftype = vim.api.nvim_get_option_value('buftype', { buf = buf })
         return vim.lsp.inline_completion.is_enabled() and buftype ~= 'nofile' and buftype ~= 'terminal'
       end,
-      -- trigger = { events = { 'InsertLeave', 'TextChanged', 'User SidekickNesDone' } },
+      job = {
+        enabled = true,
+        run_in_insert = true,
+        debounce = 150,
+      },
+      trigger = { events = { 'InsertLeave', 'TextChanged', 'TextChangedI', 'User SidekickNesDone' } },
       -- clear = { events = { 'TextChangedI', 'InsertEnter' } },
     },
   },
