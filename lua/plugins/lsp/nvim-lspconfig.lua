@@ -34,14 +34,6 @@ return {
       opts = vim.tbl_deep_extend('force', opts or {}, {
         codelens = { enabled = false },
         inlay_hints = { enabled = false },
-        capabilities = {
-          textDocument = {
-            foldingRange = {
-              dynamicRegistration = true,
-              lineFoldingOnly = true,
-            },
-          },
-        },
         diagnostics = {
           virtual_text = false,
           virtual_lines = false,
@@ -73,106 +65,117 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
-    opts = function(_, opts)
-      local Keys = vim.g.distribution == 'lazyvim' and require('lazyvim.plugins.lsp.keymaps').get() or {}
-      vim.list_extend(Keys, {
-        { '<leader>cc', false, mode = { 'n', 'v' } },
-        { '<leader>cC', false, mode = { 'n', 'v' } },
-        { '<c-k>', false, mode = { 'n', 'v', 'i' } },
-        { 'gs', false, mode = { 'n', 'v' } },
-        { 'gd', function() Snacks.picker.lsp_definitions() end, desc = 'Goto Definition', has = 'definition' },
-        { 'gr', function() Snacks.picker.lsp_references() end, nowait = true, desc = 'References' },
-        { 'gI', function() Snacks.picker.lsp_implementations() end, desc = 'Goto Implementation' },
-        { 'gi', function() require('telescope.builtin').lsp_incoming_calls() end, desc = 'Goto Incoming Calls' },
-        {
-          '<leader>ss',
-          function() Snacks.picker.lsp_symbols({ filter = LazyVim.config.kind_filter }) end,
-          desc = 'LSP Symbols',
-          has = 'documentSymbol',
+    opts = {
+      servers = {
+        ['*'] = {
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = true,
+                lineFoldingOnly = true,
+              },
+            },
+          },
+          keys = {
+            { '<leader>cc', false, mode = { 'n', 'v' } },
+            { '<leader>cC', false, mode = { 'n', 'v' } },
+            { '<c-k>', false, mode = { 'n', 'v', 'i' } },
+            { 'gs', false, mode = { 'n', 'v' } },
+            { 'gd', function() Snacks.picker.lsp_definitions() end, desc = 'Goto Definition', has = 'definition' },
+            { 'gr', function() Snacks.picker.lsp_references() end, nowait = true, desc = 'References' },
+            { 'gI', function() Snacks.picker.lsp_implementations() end, desc = 'Goto Implementation' },
+            { 'gi', function() Snacks.picker.lsp_incoming_calls() end, desc = 'Goto Incoming Calls' },
+            { 'go', function() Snacks.picker.lsp_outgoing_calls() end, desc = 'Goto Outgoing Calls' },
+            {
+              '<leader>ss',
+              function() Snacks.picker.lsp_symbols({ filter = LazyVim.config.kind_filter }) end,
+              desc = 'LSP Symbols',
+              has = 'documentSymbol',
+            },
+            {
+              '<leader>sS',
+              function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
+              desc = 'LSP Workspace Symbols',
+              has = 'workspace/symbols',
+            },
+            {
+              '<leader>SS',
+              function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
+              desc = 'LSP Workspace Symbols',
+              has = 'workspace/symbols',
+            },
+            { 'gS', function() vim.lsp.buf.signature_help() end, desc = 'Signature Help', has = 'signatureHelp' },
+            {
+              'K',
+              function()
+                local under_cursor = ' ' .. vim.fn.expand('<cword>') .. ' '
+                vim.lsp.buf.hover({ border = vim.g.border.style, title = under_cursor, title_pos = 'center' })
+              end,
+              mode = { 'n', 'v' },
+              desc = 'Hover',
+            },
+            { '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>' },
+            { '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>' },
+            { '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' },
+            {
+              '<leader>=',
+              function() require('lazyvim.util.format').format({ force = true }) end,
+              desc = 'Format Document',
+              has = 'documentFormatting',
+            },
+            {
+              '<leader>=',
+              function() require('lazyvim.util.format').format({ force = true }) end,
+              desc = 'Format Range',
+              mode = 'v',
+              has = 'documentRangeFormatting',
+            },
+            {
+              '<F2>',
+              function() vim.lsp.buf.rename() end,
+              desc = 'Rename current symbol',
+              cond = 'textDocument/rename',
+            },
+            { 'gK', '<cmd>Lspsaga hover_doc<CR>' },
+            {
+              '[d',
+              function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
+              repeatable = true,
+              desc = 'Previous Diagnostic',
+            },
+            {
+              ']d',
+              function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
+              repeatable = true,
+              desc = 'Next Diagnostic',
+            },
+            {
+              '[w',
+              function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
+              repeatable = true,
+              desc = 'Previous Warning',
+            },
+            {
+              ']w',
+              function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
+              repeatable = true,
+              desc = 'Next Warning',
+            },
+            {
+              '[e',
+              function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
+              repeatable = true,
+              desc = 'Previous Error',
+            },
+            {
+              ']e',
+              function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
+              repeatable = true,
+              desc = 'Next Error',
+            },
+          },
         },
-        {
-          '<leader>sS',
-          function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
-          desc = 'LSP Workspace Symbols',
-          has = 'workspace/symbols',
-        },
-        {
-          '<leader>SS',
-          function() Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter }) end,
-          desc = 'LSP Workspace Symbols',
-          has = 'workspace/symbols',
-        },
-        { 'gS', function() vim.lsp.buf.signature_help() end, desc = 'Signature Help', has = 'signatureHelp' },
-        {
-          'K',
-          function()
-            local under_cursor = ' ' .. vim.fn.expand('<cword>') .. ' '
-            vim.lsp.buf.hover({ border = vim.g.border.style, title = under_cursor, title_pos = 'center' })
-          end,
-          mode = {'n', 'v'},
-          desc = 'Hover',
-        },
-        { '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>' },
-        { '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>' },
-        { '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' },
-        {
-          '<leader>=',
-          function() require('lazyvim.util.format').format({ force = true }) end,
-          desc = 'Format Document',
-          has = 'documentFormatting',
-        },
-        {
-          '<leader>=',
-          function() require('lazyvim.util.format').format({ force = true }) end,
-          desc = 'Format Range',
-          mode = 'v',
-          has = 'documentRangeFormatting',
-        },
-        {
-          '<F2>',
-          function() vim.lsp.buf.rename() end,
-          desc = 'Rename current symbol',
-          cond = 'textDocument/rename',
-        },
-        { 'gK', '<cmd>Lspsaga hover_doc<CR>' },
-        {
-          '[d',
-          function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
-          repeatable = true,
-          desc = 'Previous Diagnostic',
-        },
-        {
-          ']d',
-          function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
-          repeatable = true,
-          desc = 'Next Diagnostic',
-        },
-        {
-          '[w',
-          function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
-          repeatable = true,
-          desc = 'Previous Warning',
-        },
-        {
-          ']w',
-          function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
-          repeatable = true,
-          desc = 'Next Warning',
-        },
-        {
-          '[e',
-          function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
-          repeatable = true,
-          desc = 'Previous Error',
-        },
-        {
-          ']e',
-          function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
-          repeatable = true,
-          desc = 'Next Error',
-        },
-      })
-      return opts
-    end,
+      },
+    },
   },
 }
