@@ -22,8 +22,8 @@ local function add_separators(bufnr)
 
   vim.api.nvim_buf_clear_namespace(bufnr, ns_id, 0, -1)
 
-  local parser = vim.treesitter.get_parser(bufnr)
-  if not parser then
+  local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
+  if not ok or not parser then
     return
   end
 
@@ -48,15 +48,13 @@ local function add_separators(bufnr)
   vim
     .iter(query:iter_captures(tree:root(), bufnr))
     :filter(function(id, node) return query.captures[id] == 'separator' and node:range() > 0 end)
-    :each(
-      function(_, node)
-        local row = node:range()
-        vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
-          virt_lines = { { { string.rep('─', vim.api.nvim_win_get_width(0)), 'Comment' } } },
-          virt_lines_above = true,
-        })
-      end
-    )
+    :each(function(_, node)
+      local row = node:range()
+      vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
+        virt_lines = { { { string.rep('_', vim.api.nvim_win_get_width(0)), 'Comment' } } },
+        virt_lines_above = true,
+      })
+    end)
 end
 
 function M.toggle()
@@ -80,8 +78,6 @@ function M.setup(opts)
   })
 
   vim.api.nvim_create_user_command('SeparatorsToggle', M.toggle, { desc = 'Toggle function/class separators' })
-
-  add_separators()
 end
 
 return M

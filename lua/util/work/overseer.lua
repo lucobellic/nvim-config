@@ -145,21 +145,19 @@ local function reach_run(run_args, list_args)
   local results = get_reach_result(list_args)
   require('util.util').multi_select(results, {
     prompt = 'Select Reach Test',
-    format_item = function(item) return item:gsub('%.reach$', '') end,
   }, function(choices)
     if choices and #choices > 0 then
-      vim.iter(choices):each(
-        function(choice)
-          overseer
-            .new_task({
-              name = choice,
-              cmd = 'reach',
-              args = vim.list_extend(run_args, { choice }),
-              components = { 'default' },
-            })
-            :start()
-        end
-      )
+      vim.iter(choices):each(function(choice)
+        local args = vim.deepcopy(run_args)
+        overseer
+          .new_task({
+            name = choice,
+            cmd = 'reach',
+            args = vim.list_extend(args, { choice }),
+            components = { 'default' },
+          })
+          :start()
+      end)
     else
       vim.notify('No Reach test selected', vim.log.levels.WARN)
     end

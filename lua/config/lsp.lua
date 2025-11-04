@@ -8,6 +8,7 @@ if vim.fn.has('nvim-0.12') == 1 then
   end
 end
 
+-- require('util.separators').setup()
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = function(err, result, ctx, config)
   local client = vim.lsp.get_client_by_id(ctx.client_id)
