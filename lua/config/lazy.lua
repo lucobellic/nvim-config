@@ -72,7 +72,10 @@ local spec = function()
 end
 
 require('lazy').setup({
-  rocks = { hererocks = true },
+  rocks = {
+    enabled = false,
+    hererocks = false,
+  },
   spec = spec(),
   ui = {
     border = vim.g.border.style,
