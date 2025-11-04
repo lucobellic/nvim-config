@@ -14,7 +14,7 @@ return {
             },
           },
           opts = {
-            default_tools = { 'cmd_runner', 'files' },
+            default_tools = { 'code_execution', 'full_stack_dev', 'memory' },
             auto_submit_errors = true, -- Send any errors to the LLM automatically
             auto_submit_success = true, -- Send any successful output to the LLM automatically
           },

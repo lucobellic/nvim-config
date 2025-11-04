@@ -337,7 +337,9 @@ return {
             content = function(context)
               buffer = '#{buffer}\n'
               tools = '@{cmd_runner} @{files} @{insert_edit_into_file}\n'
-              return buffer .. tools .. require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
+              return buffer
+                .. tools
+                .. require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
             end,
           },
         },
