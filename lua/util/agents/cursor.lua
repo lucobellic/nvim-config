@@ -15,14 +15,14 @@ function Cursor.setup(opts)
   Cursor.manager = AgentManager.new({
     executable = 'cursor-agent',
     filetype = 'cursor-agent',
-    display_name = 'Cursor Agent',
+    display_name = 'Cursor',
     leader = '<leader>lc',
     opts = Cursor.opts,
   })
 
   local ok, wk = pcall(require, 'which-key')
   if ok then
-    wk.add({ { '<leader>lc', group = 'Cursor Agent', mode = { 'n', 'v' } } }, { notify = false })
+    wk.add({ { '<leader>lc', group = 'Cursor', mode = { 'n', 'v' } } }, { notify = false })
   end
 end
 

@@ -427,9 +427,13 @@ function AgentManager:select_and_send_terminals()
       local terminals = picker:selected()
       local terminals_content = vim
         .iter(terminals)
-        :map(function(t) return table.concat(vim.api.nvim_buf_get_lines(t.buf, 0, -1, false), self.newline) end)
-        :join(self.newline .. self.newline) .. self.newline
-      agent:send(terminals_content)
+        :map(function(t)
+          local lines = vim.api.nvim_buf_get_lines(t.buf, 0, -1, false)
+          return table.concat(lines, '\n')
+        end)
+        :join('\n\n')
+
+      agent:send(terminals_content .. self.newline)
       picker:close()
     end,
   })
