@@ -10,6 +10,10 @@ return {
       spacing = 3, -- spacing between columns
       align = 'center', -- align columns left, center or right
     },
+    triggers = {
+      { '<auto>', mode = 'nxso' },
+      { '<localleader>', mode = 'nxso' },
+    },
     icons = {
       rules = false,
       breadcrumb = ' ', -- symbol used in the command line area that shows your active key combo

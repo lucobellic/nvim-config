@@ -5,6 +5,13 @@ pcall(function() vim.keymap.del('n', 'gc') end)
 vim.keymap.set('n', 'gc', '<Nop>', { noremap = true, silent = true, desc = 'comment' })
 pcall(function() vim.keymap.del('n', '<leader>l') end)
 pcall(function() vim.keymap.del('n', '<leader>rb') end)
+pcall(function() vim.keymap.del('n', '<A-j>') end)
+pcall(function() vim.keymap.del('n', '<A-k>') end)
+vim.keymap.set('n', '<A-j>', function() require('util.tabpages').move_buffer_to_tab('prev', true) end)
+vim.keymap.set('n', '<A-k>', function() require('util.tabpages').move_buffer_to_tab('next', true) end)
+
+-- Fix usage of localleader with which-key
+vim.keymap.set('n', '<localleader>', '<cmd>lua require("which-key").show("' .. vim.g.maplocalleader .. '")<cr>')
 
 if not vim.g.vscode then
   local function tab()
@@ -29,7 +36,7 @@ if not vim.g.vscode then
         end
       end
 
-      if require('sidekick').nes_jump_or_apply() then
+      if require('sidekick.nes').apply() then
         return
       end
 
@@ -62,10 +69,9 @@ if not vim.g.vscode then
 
   vim.keymap.set({ 'n', 'v' }, 'c', '<cmd>lua vim.g.change = true<cr>c', { noremap = true, desc = 'Change' })
   vim.keymap.set({ 'i', 'n' }, '<Tab>', tab, { desc = 'Next suggestion' })
-  vim.keymap.set(
-    { 'i', 'n' },
-    '<S-Tab>',
-    function() require('copilot-lsp.nes').apply_pending_nes() end,
-    { desc = 'Next suggestion' }
-  )
+  vim.keymap.set({ 'i', 'n' }, '<S-Tab>', function()
+    if not require('sidekick.nes').apply() then
+      return '<S-Tab>'
+    end
+  end, { desc = 'Next suggestion', expr = true })
 end
