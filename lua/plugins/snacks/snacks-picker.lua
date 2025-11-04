@@ -48,7 +48,7 @@ local telescope_preview = {
   preset = 'telescope_no_preview',
   layout = {
     box = 'horizontal',
-    backdrop = vim.g.neovide == true,
+    backdrop = false,
     width = 0.9,
     height = 0.9,
     {
@@ -74,7 +74,7 @@ local telescope_vertical = {
   preset = 'telescope_preview',
   layout = {
     box = 'horizontal',
-    backdrop = vim.g.neovide == true,
+    backdrop = false,
     width = 0.9,
     height = 0.9,
     {
@@ -161,10 +161,10 @@ return {
     { '<leader>gd', false },
     { '<c-p>', function() Snacks.picker.files() end, desc = 'Find Files' },
     { '<c-f>', function() Snacks.picker.grep() end, desc = 'Find Files' },
-    { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers' },
+    { '<leader>,', function() Snacks.picker.files() end, desc = 'Buffers' },
     { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)' },
     { '<leader>:', function() Snacks.picker.command_history() end, desc = 'Command History' },
-    { '<leader><space>', function() Snacks.picker.files() end, desc = 'Find Files (Root Dir)' },
+    { '<leader><space>', function() Snacks.picker.buffers() end, desc = 'Find Files (Root Dir)' },
     -- find
     { '<leader>fb', function() Snacks.picker.buffers() end, desc = 'Buffers' },
     { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Buffers (all)' },

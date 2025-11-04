@@ -27,10 +27,9 @@ return {
           completion = true, -- enable/disable blink completions in input
         },
         keys = {
-          n_esc = { '<esc>', { 'cmp_close', 'cancel' }, mode = 'n', expr = true },
-          i_esc = { '<esc>', { 'cmp_close', 'stopinsert' }, mode = 'i', expr = true },
-          i_cr = { '<cr>', { 'cmp_accept', 'confirm' }, mode = 'i', expr = true },
-          i_tab = { '<tab>', { 'cmp_select_next', 'cmp', 'fallback' }, mode = 'i', expr = true },
+          n_esc = { '<esc>', { 'cancel' }, mode = 'n', expr = true },
+          i_esc = { '<esc>', { 'stopinsert' }, mode = 'i', expr = true },
+          i_cr = { '<cr>', { 'confirm' }, mode = 'i', expr = true },
           i_ctrl_w = { '<c-w>', '<c-s-w>', mode = 'i', expr = true },
           i_up = { '<up>', { 'hist_up' }, mode = { 'i', 'n' } },
           i_down = { '<down>', { 'hist_down' }, mode = { 'i', 'n' } },

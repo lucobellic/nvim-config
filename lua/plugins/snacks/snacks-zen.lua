@@ -26,7 +26,7 @@ return {
         minimal = false,
         width = 120,
         height = 0,
-        backdrop = vim.g.neovide and { transparent = true, blend = 0 } or { transparent = false, blend = 99 },
+        backdrop = { transparent = false, blend = 99 },
         keys = { q = false },
         zindex = 40,
         w = { snacks_main = true },
