@@ -77,18 +77,30 @@ if vim.g.vscode then
 end
 
 --- Check if a buffer is pinned
----@param buf any
-local function is_pinned(buf)
-  for _, e in ipairs(require('bufferline').get_elements().elements or {}) do
-    if e.id == buf.bufnr then
-      return require('bufferline.groups')._is_pinned(e)
-    end
-  end
-
-  return false
+---@param bufnr number
+local function is_pinned(bufnr)
+  return vim
+    .iter(require('bufferline').get_elements().elements or {})
+    :filter(function(e) return e.id == bufnr end)
+    :any(function(e) return require('bufferline.groups')._is_pinned(e) end)
 end
 
----@param position Edgy.Pos
+--- Bufferline filter mode state
+--- @type 'visible' | 'pinned' | 'all' | 'none'
+local filter_mode = 'visible'
+
+--- Toggle bufferline filter mode
+local function toggle_filter_mode()
+  local modes = { 'visible', 'pinned', 'all', 'none' }
+  local current_index = vim.tbl_contains(modes, filter_mode) and vim.fn.index(modes, filter_mode) + 1 or 1
+  local next_index = (current_index % #modes) + 1
+  filter_mode = modes[next_index]
+
+  require('bufferline.ui').refresh()
+  vim.notify('Bufferline filter: ' .. filter_mode, vim.log.levels.INFO)
+end
+
+--- @param position Edgy.Pos
 local function get_edgy_group_icons(position)
   local result = {}
   local statusline = require('edgy-group.stl').get_statusline(position)
@@ -101,10 +113,10 @@ end
 
 local icon_hl_cache = {}
 
----Set the icon highlight color only for selected buffers
----@param state bufferline.Visibility
----@param base_hl string
----@return string
+--- Set the icon highlight color only for selected buffers
+--- @param state bufferline.Visibility
+--- @param base_hl string
+--- @return string
 local function set_icon_highlight(state, _, base_hl)
   local colors = require('bufferline.colors')
   local base_name = 'BufferLine' .. base_hl
@@ -159,6 +171,7 @@ return {
     { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
     { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
+    { '<leader>bu', function() toggle_filter_mode() end, repeatable = true, desc = 'Toggle Bufferline Filter' },
     { '<C-1>', '<cmd>BufferLineGoToBuffer 1<cr>', desc = 'Buffer 1' },
     { '<C-2>', '<cmd>BufferLineGoToBuffer 2<cr>', desc = 'Buffer 2' },
     { '<C-3>', '<cmd>BufferLineGoToBuffer 3<cr>', desc = 'Buffer 3' },
@@ -169,8 +182,10 @@ return {
     { '<C-8>', '<cmd>BufferLineGoToBuffer 8<cr>', desc = 'Buffer 8' },
     { '<C-9>', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
     { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
-    { 'H', '<cmd>BufferLineCyclePrev<cr>', desc = 'Previous Buffer' },
-    { 'L', '<cmd>BufferLineCycleNext<cr>', desc = 'Next Buffer' },
+    { 'H', function() vim.cmd('BufferLineCyclePrev') end, desc = 'Previous Bufferline' },
+    { 'L', function() vim.cmd('BufferLineCycleNext') end, desc = 'Next Bufferline' },
+    { '<S-left>', function() vim.cmd('bprevious') end, desc = 'Previous Buffer' },
+    { '<S-right>', function() vim.cmd('bnext') end, desc = 'Next Buffer' },
     { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
     { '<leader>bf', '<cmd>BufferLineSortByRelativeDirectory<cr>', desc = 'Buffer Order By Directory' },
     { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
@@ -186,7 +201,7 @@ return {
         vim.tbl_map(
           function(buf) vim.api.nvim_buf_delete(buf.bufnr, { force = true }) end,
           vim.tbl_filter(
-            function(buf) return not is_pinned(buf) and buf.bufnr ~= current_buf end,
+            function(buf) return not is_pinned(buf.bufnr) and buf.bufnr ~= current_buf end,
             vim.fn.getbufinfo({ buflisted = 1 })
           )
         )
@@ -214,14 +229,27 @@ return {
   opts = function()
     return {
       options = {
-        custom_filter = function(buf_number)
-          if
-            vim.bo[buf_number].filetype == 'codecompanion'
-            or vim.fn.bufname(buf_number):sub(0, 15) == '[CodeCompanion]'
-          then
+        custom_filter = function(bufnr)
+          if filter_mode == 'none' then
+            return false
+          elseif filter_mode == 'all' then
+            return true
+          elseif filter_mode == 'pinned' then
+            return is_pinned(bufnr)
+          else -- 'visible'
+            -- Show if pinned
+            if is_pinned(bufnr) then
+              return true
+            end
+
+            -- Show if visible in any window
+            if vim.fn.bufwinid(bufnr) ~= -1 then
+              return true
+            end
+
+            -- Hide everything else
             return false
           end
-          return true
         end,
         themable = true,
         -- color_icons = false,
@@ -234,7 +262,11 @@ return {
         truncate_names = false,
         name_formatter = function(buf)
           local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
-          return is_pinned(buf) and '' or short_name
+          if filter_mode == 'pinned' then
+            return short_name
+          else
+            return is_pinned(buf.bufnr) and '' or short_name
+          end
         end,
         tab_size = 0,
         separator_style = { '', '' },

@@ -7,7 +7,7 @@ return {
   },
   keys = {
     {
-      '<leader>ln',
+      '<leader>cn',
       function() require('nvim-navbuddy').open() end,
       desc = 'Navbuddy',
     },

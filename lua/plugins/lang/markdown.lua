@@ -87,12 +87,13 @@ return {
       },
       checkbox = {
         enabled = true,
-        unchecked = { icon = '󱍫', highlight = 'DiagnosticInfo' },
-        checked = { icon = '󱍧', highlight = 'DiagnosticOk' },
+        bullet = true,
+        unchecked = { icon = '󱍫 ', highlight = 'DiagnosticInfo' },
+        checked = { icon = '󱍧 ', highlight = 'DiagnosticOk' },
         custom = {
-          in_progress = { raw = '[+]', rendered = '󱍬', highlight = 'DiagnosticInfo' },
-          wont_do = { raw = '[/]', rendered = '󱍮', highlight = 'DiagnosticError' },
-          waiting = { raw = '[?]', rendered = '󱍥', highlight = 'DiagnosticWarn' },
+          in_progress = { raw = '[~]', rendered = '󱍬 ', highlight = 'DiagnosticInfo' },
+          wont_do = { raw = '[>]', rendered = '󱍮 ', highlight = 'DiagnosticError' },
+          waiting = { raw = '[!]', rendered = '󱍥 ', highlight = 'DiagnosticWarn' },
         },
       },
     },

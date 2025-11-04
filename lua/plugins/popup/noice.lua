@@ -86,30 +86,30 @@ local filter_skip = {
     any = {
       -- Hide display messages but still show them in :messages
       -- stylua: off
-      { event = 'msg_show', kind = '',          find = 'lnum'                         },
-      { event = 'msg_show', kind = '',          find = 'query'                        },
-      { event = 'msg_show', kind = 'emsg',      find = 'Pattern not found'            },
-      { event = 'msg_show', kind = 'error',     find = 'E5108'                        },
-      { event = 'msg_show', kind = 'lua_error', find = 'Autocommands'                 },
-      { event = 'msg_show', kind = 'lua_error', find = 'attempt to call upvalue'      },
-      { event = 'msg_show', kind = 'lua_error', find = 'bdelete'                      },
-      { event = 'msg_show', kind = 'lua_error', find = 'inlay_hint'                   },
-      { event = 'msg_show', kind = 'wmsg',      find = 'BOTTOM'                       },
-      { event = 'notify',   kind = 'error',     find = 'Edgy'                         },
-      { event = 'notify',   kind = 'error',     find = 'Failed to create diff buffer' },
-      { event = 'notify',   kind = 'error',     find = 'Failed to set cursor'         },
-      { event = 'notify',   kind = 'error',     find = 'InvalidParams'                },
-      { event = 'notify',   kind = 'error',     find = 'Neo'                          },
-      { event = 'notify',   kind = 'error',     find = 'invalid AST'                  },
-      { event = 'notify',   kind = 'error',     find = 'mason-lspconfig.nvim'         },
-      { event = 'notify',   kind = 'error',     find = 'unable to get a view'         },
-      { event = 'notify',   kind = 'warn',      find = 'Heads up!'                    },
-      { event = 'notify',   kind = 'warn',      find = 'Tool cmd_runner'              },
-      { event = 'notify',   kind = 'warn',      find = 'Unsupported input type'       },
-      { event = 'notify',   kind = 'warn',      find = 'failed to run generator'      },
-      { event = 'lsp',      find = 'pylsp'       }, -- Hide spamming pylsp messages
-      { event = 'lsp',      find = 'cspell'      }, -- Hide spamming cspell messages
-      { event = 'lsp',      find = 'diagnostics' }, -- Hide spamming null-ls messages
+      { event = 'msg_show', kind = ''             , find = 'lnum' }                        ,
+      { event = 'msg_show', kind = ''             , find = 'query' }                       ,
+      { event = 'msg_show', kind = 'emsg'         , find = 'Pattern not found' }           ,
+      { event = 'msg_show', kind = 'error'        , find = 'E5108' }                       ,
+      { event = 'msg_show', kind = 'lua_error'    , find = 'Autocommands' }                ,
+      { event = 'msg_show', kind = 'lua_error'    , find = 'attempt to call upvalue' }     ,
+      { event = 'msg_show', kind = 'lua_error'    , find = 'bdelete' }                     ,
+      { event = 'msg_show', kind = 'lua_error'    , find = 'inlay_hint' }                  ,
+      { event = 'msg_show', kind = 'wmsg'         , find = 'BOTTOM' }                      ,
+      { event = 'notify'  , kind = 'error'        , find = 'Edgy' }                        ,
+      { event = 'notify'  , kind = 'error'        , find = 'Failed to create diff buffer' },
+      { event = 'notify'  , kind = 'error'        , find = 'Failed to set cursor' }        ,
+      { event = 'notify'  , kind = 'error'        , find = 'InvalidParams' }               ,
+      { event = 'notify'  , kind = 'error'        , find = 'Neo' }                         ,
+      { event = 'notify'  , kind = 'error'        , find = 'invalid AST' }                 ,
+      { event = 'notify'  , kind = 'error'        , find = 'mason-lspconfig.nvim' }        ,
+      { event = 'notify'  , kind = 'error'        , find = 'unable to get a view' }        ,
+      { event = 'notify'  , kind = 'warn'         , find = 'Heads up!' }                   ,
+      { event = 'notify'  , kind = 'warn'         , find = 'Tool cmd_runner' }             ,
+      { event = 'notify'  , kind = 'warn'         , find = 'Unsupported input type' }      ,
+      { event = 'notify'  , kind = 'warn'         , find = 'failed to run generator' }     ,
+      { event = 'lsp'     , find = 'pylsp' }      , -- Hide spamming pylsp messages
+      { event = 'lsp'     , find = 'cspell' }     , -- Hide spamming cspell messages
+      { event = 'lsp'     , find = 'diagnostics' }, -- Hide spamming null-ls messages
       -- stylua: on
     },
   },

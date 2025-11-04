@@ -210,13 +210,13 @@ return {
     },
     prompt = { enabled = false },
   },
-  -- config = function(_, opts)
-  --   require('flash').setup(opts)
-  --   require('flash.rainbow').get_color = get_rainbow_colors
-  --
-  --   if vim.g.vscode then
-  --     vim.api.nvim_set_hl(0, 'FlashLabel', { fg = '#c1d94a' })
-  --     vim.api.nvim_set_hl(0, 'FlashMatch', { fg = '#37bbe6' })
-  --   end
-  -- end,
+  config = function(_, opts)
+    require('flash').setup(opts)
+    require('flash.rainbow').get_color = get_rainbow_colors
+
+    if vim.g.vscode then
+      vim.api.nvim_set_hl(0, 'FlashLabel', { fg = '#c1d94a' })
+      vim.api.nvim_set_hl(0, 'FlashMatch', { fg = '#37bbe6' })
+    end
+  end,
 }
