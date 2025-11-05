@@ -371,7 +371,7 @@ function AgentManager:select_and_send_files()
     title = 'Select Files to Send to ' .. (agent.display_name or 'Agent'),
     confirm = function(picker)
       local files = picker:selected()
-      local files_text = vim.iter(files):map(function(f) return f.file end):join(self.newline) .. self.newline
+      local files_text = vim.iter(files):map(function(f) return ' ' .. f.file end):join(self.newline) .. self.newline
       agent:send(files_text)
       picker:close()
     end,
