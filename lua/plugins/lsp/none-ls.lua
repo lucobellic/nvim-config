@@ -18,7 +18,6 @@ return {
       nls.builtins.diagnostics.markdownlint_cli2,
       nls.builtins.diagnostics.rstcheck,
       nls.builtins.code_actions.statix,
-      nls.builtins.formatting.gersemi,
     })
     return opts
   end,

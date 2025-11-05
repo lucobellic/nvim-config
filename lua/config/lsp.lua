@@ -1,5 +1,6 @@
 vim.lsp.enable('cspell_lsp')
 vim.lsp.enable('qmlls')
+vim.lsp.enable('neocmake')
 
 if vim.fn.has('nvim-0.12') == 1 then
   if vim.g.suggestions == 'copilot' and not vim.env.INSIDE_DOCKER then
