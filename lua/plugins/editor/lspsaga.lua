@@ -47,5 +47,8 @@ return {
     code_action = {
       num_shortcut = true,
     },
+    beacon = {
+      enable = false,
+    },
   },
 }
