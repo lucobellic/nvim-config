@@ -1,7 +1,6 @@
 return {
   'rachartier/tiny-glimmer.nvim',
-  enabled = true,
-  cond = false,
+  cond = false, -- not functional yet
   event = 'VeryLazy',
   priority = 10, -- Needs to be a really low priority, to catch others plugins keybindings.
   opts = {

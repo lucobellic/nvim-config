@@ -125,20 +125,6 @@ return {
       end,
     },
     {
-      'rcarriga/cmp-dap',
-      enabled = false,
-      config = function()
-        local ok, cmp = pcall(require, 'cmp')
-        if ok then
-          cmp.setup.filetype({ 'dap-repl', 'dapui_watches', 'dapui_hover' }, {
-            sources = {
-              { name = 'dap' },
-            },
-          })
-        end
-      end,
-    },
-    {
       'rcarriga/nvim-dap-ui',
       opts = {
         highlight_new_as_changed = true,

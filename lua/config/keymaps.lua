@@ -15,48 +15,22 @@ vim.keymap.set('n', '<localleader>', '<cmd>lua require("which-key").show("' .. v
 
 if not vim.g.vscode then
   local function tab()
-    -- Check for Neovim version >= 0.12
-    local is_nvim_012 = vim.fn.has('nvim-0.12') == 1
-    local buf = vim.api.nvim_get_current_buf()
-    local nes_state = vim.b[buf].nes_state
-
-    if is_nvim_012 then
-      if vim.g.suggestions == 'copilot' and vim.lsp.inline_completion.get() then
-        return
-      end
-
-      if vim.g.suggestions == 'gitlab' then
-        local GhostText = require('gitlab.ghost_text')
-        local ns = vim.api.nvim_create_namespace('gitlab.GhostText')
-        local bufnr = vim.api.nvim_get_current_buf()
-        local has_suggestion = #vim.api.nvim_buf_get_extmarks(bufnr or 0, ns, 0, -1, { limit = 1 }) > 0
-        if has_suggestion then
-          GhostText.insert_ghost_text()
-          return
-        end
-      end
-
-      if require('sidekick.nes').apply() then
-        return
-      end
-
-      if require('blink.cmp').accept() then
-        return
-      end
-
-      -- fallback to space instead of tab
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Space>', true, false, true), 'n', false)
-    end
-
-    -- For Neovim < 0.12, try Copilot suggestion, Copilot NES, or Blink CMP
-    local ok_copilot, copilot_suggestion = pcall(require, 'copilot.suggestion')
-    if ok_copilot and copilot_suggestion.is_visible() then
-      copilot_suggestion.accept()
+    if vim.g.suggestions == 'copilot' and vim.lsp.inline_completion.get() then
       return
     end
 
-    if nes_state then
-      require('copilot-lsp.nes').apply_pending_nes()
+    if vim.g.suggestions == 'gitlab' then
+      local GhostText = require('gitlab.ghost_text')
+      local ns = vim.api.nvim_create_namespace('gitlab.GhostText')
+      local bufnr = vim.api.nvim_get_current_buf()
+      local has_suggestion = #vim.api.nvim_buf_get_extmarks(bufnr or 0, ns, 0, -1, { limit = 1 }) > 0
+      if has_suggestion then
+        GhostText.insert_ghost_text()
+        return
+      end
+    end
+
+    if require('sidekick.nes').apply() then
       return
     end
 

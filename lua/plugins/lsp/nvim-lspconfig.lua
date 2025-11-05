@@ -59,7 +59,6 @@ return {
       })
 
       require('lspconfig.ui.windows').default_options.border = vim.g.border.style
-      -- require('plugins.lsp.util.keymaps').setup()
       return opts
     end,
   },
