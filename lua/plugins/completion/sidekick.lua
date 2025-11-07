@@ -19,6 +19,19 @@ return {
       mode = { 'n' },
       desc = 'Copilot enable',
     },
+    {
+      '<leader>uN',
+      function()
+        if require('sidekick.nes').enabled then
+          vim.notify('Disabled NES', vim.log.levels.WARN, { title = 'Sidekick' })
+          require('sidekick.nes').enable(false)
+        else
+          vim.notify('Enabled NES', vim.log.levels.INFO, { title = 'Sidekick' })
+          require('sidekick.nes').enable()
+        end
+      end,
+      desc = 'Sidekick toggle NES',
+    },
   },
   opts = {
     nes = {
