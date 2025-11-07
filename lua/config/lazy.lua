@@ -78,7 +78,7 @@ require('lazy').setup({
   },
   spec = spec(),
   ui = {
-    border = vim.g.border.style,
+    border = vim.g.winborder,
     backdrop = 100,
   },
   defaults = { lazy = true },

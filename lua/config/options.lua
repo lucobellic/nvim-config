@@ -6,7 +6,8 @@ vim.g.maplocalleader = '_'
 vim.g.autoformat = false
 vim.g.markdown_folding = true
 
-vim.g.winborder = 'single'
+vim.g.winborder = vim.g.neovide_floating_shadow and  'solid' or 'single'
+vim.o.winborder = vim.g.winborder
 
 local enable_border = true
 vim.g.border = {

@@ -184,11 +184,18 @@ local function open_popup(bufnr, config)
     local count = tonumber(total) or 1
     local current_num = tonumber(current) or 1
     local line = NuiLine()
-    for i = 1, count do
-      local highlight = (i == current_num) and get_highlight(current) or 'FloatBorder'
-      line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
-      if i < count then
-        line:append(NuiText('─', 'FloatBorder'))
+    if vim.g.winborder == 'solid' then
+      for i = 1, count do
+        local highlight = (i == current_num) and get_highlight(current) or 'Comment'
+        line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
+      end
+    else
+      for i = 1, count do
+        local highlight = (i == current_num) and get_highlight(current) or 'FloatBorder'
+        line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
+        if i < count then
+          line:append(NuiText('─', 'FloatBorder'))
+        end
       end
     end
     return line
@@ -216,7 +223,7 @@ local function open_popup(bufnr, config)
         left = 0,
         right = 0,
       },
-      style = vim.g.border.style,
+      style = vim.g.winborder == 'none' and 'single' or vim.g.winborder, -- 'none' border is not supported
       text = {
         top = ' ' .. parsed_title.title .. ' ',
         top_align = 'center',

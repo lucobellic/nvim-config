@@ -2,6 +2,7 @@ local single = vim.g.winborder == 'single'
 return {
   'nvim-zh/colorful-winsep.nvim',
   event = { 'WinEnter' },
+  cond = not vim.g.neovide_floating_shadow,
   opts = {
     animate = { enabled = false },
     border = single and { '─', '│', '┌', '┐', '└', '┘' } or { '─', '│', '╭', '╮', '╰', '╯' },
