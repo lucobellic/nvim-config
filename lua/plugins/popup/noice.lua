@@ -126,11 +126,7 @@ return {
     { '<c-f>', false },
     { '<c-p>', false },
     { '<leader>sn', '', desc = '+noice' },
-    {
-      '<leader>snn',
-      function() require('telescope').extensions.notify.notify() end,
-      desc = 'Find Notifications',
-    },
+    { '<leader>snn', '<cmd>NoiceSnacks<cr>', desc = 'Find Notifications' },
     {
       '<S-Enter>',
       function() require('noice').redirect(vim.fn.getcmdline()) end,

@@ -17,9 +17,6 @@ return {
   vesion = '*',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
   event = 'BufEnter',
-  dependencies = {
-    'nvim-telescope/telescope-fzf-native.nvim',
-  },
   keys = {
     {
       '<C-m>',

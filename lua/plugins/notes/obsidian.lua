@@ -22,7 +22,6 @@ return {
     cond = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
     },
     cmd = {
       'Obsidian',
@@ -68,8 +67,6 @@ return {
       --     opts = { noremap = false, expr = true, buffer = true },
       --   },
       -- },
-
-      finder = 'telescope.nvim',
 
       ui = {
         enable = false, -- Prefer usage of mardown.nvim

@@ -9,7 +9,6 @@ return {
   { import = 'lazyvim.plugins.extras.dap.nlua' },
 
   { import = 'lazyvim.plugins.extras.editor.dial' },
-  { import = 'lazyvim.plugins.extras.editor.harpoon2' },
   { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
   { import = 'lazyvim.plugins.extras.editor.refactoring' },
 

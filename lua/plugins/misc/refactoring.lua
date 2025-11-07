@@ -49,14 +49,6 @@ return {
         mode = 'v',
         desc = 'Select Refactor',
       },
-      -- remap to open the Telescope refactoring menu in visual mode
-      {
-        '<leader>rt',
-        function() require('telescope').extensions.refactoring.refactors() end,
-        mode = 'v',
-        desc = 'Telescope Refactor',
-      },
-
       -- Extract block doesn't need visual mode
       {
         '<leader>rbb',
