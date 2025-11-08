@@ -47,8 +47,6 @@ vim.api.nvim_create_user_command(
   { desc = 'Open file in normal window from floating terminal' }
 )
 
-vim.api.nvim_create_user_command('FloatermCloseCurrent', close_current_floaterm, { desc = 'Close current floaterm' })
-
 -- Keymaps
 
 local opts = { noremap = true, silent = true, buffer = true }
@@ -69,8 +67,8 @@ vim.keymap.set({ 'n', 't' }, '<C-up>', function()
 end, opts)
 
 vim.keymap.set('n', 'gf', '<cmd>OpenInNormalWindow<cr>', opts)
-vim.keymap.set('n', '<C-q>', '<cmd>FloatermCloseCurrent<cr>', opts)
-vim.keymap.set('t', '<C-q>', '<C-\\><C-n>:FloatermCloseCurrent<cr>', opts)
+vim.keymap.set('n', '<C-q>', close_current_floaterm, opts)
+vim.keymap.set('t', '<C-q>', close_current_floaterm, opts)
 vim.keymap.set('t', '<esc>', '<C-\\><C-n>', opts)
 vim.keymap.set('t', '<c-esc>', '<esc>', opts)
 vim.keymap.set('t', '<c-bs>', '<esc>', opts)
@@ -78,15 +76,24 @@ vim.keymap.set('t', '<c-bs>', '<esc>', opts)
 vim.keymap.set('n', 'q', '<cmd>FloatermHide<CR><esc>', opts)
 vim.keymap.set('n', '<esc>', '<cmd>FloatermHide<CR><esc>', opts)
 
-vim.keymap.set('n', '<C-l>', '<cmd>FloatermNext<CR>', opts)
-vim.keymap.set('n', '<S-right>', '<cmd>FloatermNext<CR>', opts)
-vim.keymap.set('t', '<C-l>', '<C-\\><C-n>:FloatermNext<CR>', opts)
-vim.keymap.set('t', '<S-right>', '<C-\\><C-n>:FloatermNext<CR>', opts)
+local function floaterm_next() vim.api.nvim_call_function('floaterm#next', {}) end
+vim.keymap.set('n', '<C-l>', floaterm_next, opts)
+vim.keymap.set('n', '<S-right>', floaterm_next, opts)
+vim.keymap.set('t', '<C-l>', floaterm_next, opts)
+vim.keymap.set('t', '<S-right>', floaterm_next, opts)
 
-vim.keymap.set('n', '<C-h>', '<cmd>FloatermPrev<CR>', opts)
-vim.keymap.set('n', '<S-left>', '<cmd>FloatermPrev<CR>', opts)
-vim.keymap.set('t', '<C-h>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
-vim.keymap.set('t', '<S-left>', '<C-\\><C-n>:FloatermPrev<CR>', opts)
+local function floaterm_prev() vim.api.nvim_call_function('floaterm#prev', {}) end
+vim.keymap.set('n', '<C-h>', floaterm_prev, opts)
+vim.keymap.set('n', '<S-left>', floaterm_prev, opts)
+vim.keymap.set('t', '<C-h>', floaterm_prev, opts)
+vim.keymap.set('t', '<S-left>', floaterm_prev, opts)
+
+-- TODO: figure out how to call foaterm#new with proper arguments
+-- local function floaterm_new()
+--   vim.api.nvim_call_function('floaterm#new', { false, '', {}, {} })
+-- end
+-- vim.keymap.set('n', '<C-t>', floaterm_new, opts)
+-- vim.keymap.set('t', '<C-t>', floaterm_new, opts)
 
 vim.keymap.set('n', '<C-t>', '<cmd>FloatermNew<CR>', opts)
 vim.keymap.set('t', '<C-t>', '<C-\\><C-n>:FloatermNew<CR>', opts)

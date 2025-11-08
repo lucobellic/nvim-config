@@ -137,93 +137,165 @@ local function floaterm_toggle_terminal_buffer(opts)
   floaterm_open_existing_buffer(bufnr)
 end
 
+--- Store active layout and popups for reuse
+local active_layout = nil
+
+--- Helper functions for highlights and title parsing
+local highlights = {
+  'TelescopePromptTitle',
+  'TelescopeResultsTitle',
+  'TelescopePreviewTitle',
+}
+
+local function get_highlight(index)
+  local term_index = tonumber(index:match('%d') or '1') - 1
+  local highlight_index = (term_index % #highlights) + 1
+  return highlights[highlight_index]
+end
+
+--- Get popup highlight string with title highlight based on index value
+--- @param index string
+--- @return string
+local function get_window_highlight(index)
+  return ('Normal:Normal,FloatBorder:FloatBorder,FloatTitle:%s'):format(get_highlight(index))
+end
+
+--- Extract title and index from floaterm title
+--- @param title string Title provided by floaterm, expected format: "Title 1/2"
+--- @return {title:string, index:string, total:string}
+local function extract_title_and_index(title)
+  local tokens = title.gmatch(title, '[^%s]+')
+  local title_part = tokens() or ''
+  local index_part = tokens() or ''
+  local current, total = index_part:match('(%d+)/(%d+)')
+  return { title = title_part, index = current or '1', total = total or '1' }
+end
+
+--- Generate terminal number sequence (1, 2, 3, etc.) up to total count
+--- @param total string Total number of terminals
+--- @param current string Current terminal index
+--- @return NuiLine
+local function generate_terminal_sequence(total, current)
+  local NuiLine = require('nui.line')
+  local NuiText = require('nui.text')
+  local count = tonumber(total) or 1
+  local current_num = tonumber(current) or 1
+  local line = NuiLine()
+  if vim.g.winborder == 'solid' then
+    for i = 1, count do
+      local highlight = (i == current_num) and get_highlight(current) or 'Comment'
+      line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
+    end
+  else
+    for i = 1, count do
+      local highlight = (i == current_num) and get_highlight(current) or 'FloatBorder'
+      line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
+      if i < count then
+        line:append(NuiText('─', 'FloatBorder'))
+      end
+    end
+  end
+  return line
+end
+
+--- Get all floaterm buffers with their titles and indices
+--- @return table List of {bufnr: number, title: string, index: number}
+local function get_all_floaterms()
+  local floaterms = {}
+  local buffers = vim.api.nvim_call_function('floaterm#buflist#gather', {})
+
+  for index, buf in ipairs(buffers) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      -- Get the terminal name using floaterm#config#get
+      local name = vim.api.nvim_call_function('floaterm#config#get', { buf, 'name', '' })
+
+      -- Use the buffer name if no floaterm name is set
+      if name == '' then
+        name = vim.api.nvim_buf_get_name(buf)
+        -- Extract just the terminal command/title from the buffer name if possible
+        name = name:match('[^:]+$') or 'Terminal'
+      end
+
+      table.insert(floaterms, {
+        bufnr = buf,
+        title = name:gsub('^%l', string.upper), -- Capitalize first letter
+        index = index,
+      })
+    end
+  end
+
+  return floaterms
+end
+
+local function get_index_icon(index)
+  local icons = { '󰎦', '󰎩', '󰎬', '󰎮', '󰎰', '󰎵', '󰎸', '󰎻', '󰎾', '󰽾' }
+  local idx = tonumber(index) or 1
+  return icons[((idx - 1) % #icons) + 1]
+end
+
+--- Create menu with all floaterms
+--- @param current_bufnr number The currently active terminal buffer
+--- @param style string Border style for the menu
+--- @return NuiMenu
+local function create_floaterm_menu(current_bufnr, style)
+  local Menu = require('nui.menu')
+  local NuiText = require('nui.text')
+  local NuiLine = require('nui.line')
+
+  local floaterms = get_all_floaterms()
+
+  local menu_items = {}
+  for _, term in ipairs(floaterms) do
+    local line = NuiLine()
+    local highlight = (term.bufnr == current_bufnr) and 'Special' or 'Comment'
+    line:append(NuiText(string.format('%s %s ', get_index_icon(term.index), term.title), highlight))
+    table.insert(
+      menu_items,
+      Menu.item(line, {
+        bufnr = term.bufnr,
+        index = term.index,
+      })
+    )
+  end
+
+  local menu = Menu({
+    enter = false,
+    focusable = false,
+    border = { style = style },
+    win_options = {
+      winblend = vim.o.winblend,
+      winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
+      cursorline = false,
+    },
+  }, {
+    lines = menu_items,
+  })
+
+  return menu
+end
+
 --- Function to override the floaterm#window#open function
 --- @param bufnr number
 --- @param config table floaterm configuration
 --- @return number winid
 local function open_popup(bufnr, config)
-  local highlights = {
-    'TelescopePromptTitle',
-    'TelescopeResultsTitle',
-    'TelescopePreviewTitle',
-  }
-
-  local function get_highlight(index)
-    local term_index = tonumber(index:match('%d') or '1') - 1
-    local highlight_index = (term_index % #highlights) + 1
-    local highlight = highlights[highlight_index]
-    return highlight
-  end
-
-  --- Get popup highlight string with title highlight based on index value
-  --- Find the first digit as index from the provided string
-  --- @param index string
-  --- @return string
-  local function get_window_highlight(index)
-    return ('Normal:Normal,FloatBorder:FloatBorder,FloatTitle:%s'):format(get_highlight(index))
-  end
-
-  --- Extract title and index from floaterm title
-  --- @param title string @Title provided by floaterm, expected format: "Title 1/2"
-  --- @return {title:string, index:string, total:string}
-  local function extract_title_and_index(title)
-    local tokens = title.gmatch(title, '[^%s]+')
-    local title_part = tokens() or ''
-    local index_part = tokens() or ''
-    local current, total = index_part:match('(%d+)/(%d+)')
-    return { title = title_part, index = current or '1', total = total or '1' }
-  end
-
-  --- Generate terminal number sequence (1, 2, 3, etc.) up to total count
-  --- @param total string @Total number of terminals
-  --- @param current string @Current terminal index
-  --- @return NuiLine
-  local function generate_terminal_sequence(total, current)
-    local NuiLine = require('nui.line')
-    local NuiText = require('nui.text')
-    local count = tonumber(total) or 1
-    local current_num = tonumber(current) or 1
-    local line = NuiLine()
-    if vim.g.winborder == 'solid' then
-      for i = 1, count do
-        local highlight = (i == current_num) and get_highlight(current) or 'Comment'
-        line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
-      end
-    else
-      for i = 1, count do
-        local highlight = (i == current_num) and get_highlight(current) or 'FloatBorder'
-        line:append(NuiText(' ' .. tostring(i) .. ' ', highlight))
-        if i < count then
-          line:append(NuiText('─', 'FloatBorder'))
-        end
-      end
-    end
-    return line
-  end
-
   local parsed_title = extract_title_and_index(config.title)
 
+  -- Create new layout with new buffer
   local Popup = require('nui.popup')
+  local Layout = require('nui.layout')
 
-  local popup = Popup({
-    position = '50%',
+  local style = vim.g.winborder == 'none' and 'single' or vim.g.winborder
+  local zindex = 100
+
+  -- Create terminal popup with the current buffer
+  local terminal_popup = Popup({
     bufnr = bufnr,
-    size = {
-      width = config.width,
-      height = config.height,
-    },
     enter = true,
     focusable = true,
-    zindex = 100,
-    relative = 'editor',
+    zindex = zindex,
     border = {
-      padding = {
-        top = 0,
-        bottom = 0,
-        left = 0,
-        right = 0,
-      },
-      style = vim.g.winborder == 'none' and 'single' or vim.g.winborder, -- 'none' border is not supported
+      style = style,
       text = {
         top = ' ' .. parsed_title.title .. ' ',
         top_align = 'center',
@@ -241,8 +313,35 @@ local function open_popup(bufnr, config)
     },
   })
 
-  popup:mount()
-  return popup.winid
+  -- Create menu with all terminals
+  local menu = create_floaterm_menu(bufnr, style)
+
+  -- Create layout with menu and terminal
+  local previous_layout = active_layout
+  active_layout = Layout(
+    {
+      position = 0.5,
+      relative = 'editor',
+      size = {
+        width = config.width,
+        height = config.height,
+      },
+    },
+    Layout.Box({
+      Layout.Box(menu, { size = { width = 15 } }),
+      Layout.Box(terminal_popup, { size = '100%' }),
+    }, { dir = 'row' })
+  )
+
+  terminal_popup:on('BufLeave', function() active_layout:unmount() end, { once = true })
+
+  active_layout:mount()
+  if previous_layout then
+    previous_layout:unmount()
+    previous_layout = nil
+  end
+
+  return terminal_popup.winid
 end
 
 return {
