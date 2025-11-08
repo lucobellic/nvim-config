@@ -9,11 +9,12 @@ return {
     },
   },
   opts = {
+    line_numbers = true,
     max_lines = 5,
     min_window_height = 40,
     mode = 'topline',
-    line_numbers = true,
+    multiwindow = false,
+    separator = not vim.g.winborder == 'solid' and '─' or ' ',
     trim_scope = 'inner',
-    separator = '─',
   },
 }

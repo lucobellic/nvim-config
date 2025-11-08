@@ -25,9 +25,8 @@ return {
       no_overlap = false,
       width = { min = 35, max = 35 },
       height = { max = 120 },
-      wo = {
-        winblend = vim.o.winblend,
-      },
+      border = vim.g.winborder,
+      wo = { winblend = vim.o.winblend },
     },
     sort = { 'alphanum', 'local', 'order', 'mod' },
   },

@@ -21,8 +21,7 @@ if vim.g.neovide then
   vim.g.neovide_floating_corner_radius = 0
   vim.g.neovide_floating_xray = true
 
-  -- TODO: remove padding in fullscreen mode
-  vim.g.neovide_padding_top = 5
+  vim.g.neovide_padding_top = 2
   vim.g.neovide_padding_bottom = 0
   vim.g.neovide_padding_right = 0
   vim.g.neovide_padding_left = 0
@@ -69,9 +68,9 @@ if vim.g.neovide then
   vim.g.terminal_color_15 = '#bfbdb6'
 
   -- Shadow
-  vim.g.neovide_floating_z_height = 2 -- virtual height of floating window
-  vim.g.neovide_light_angle_degrees = 45 -- angle from screen normal of the casting light
-  vim.g.neovide_light_radius = 2 -- radius of the casting light
+  vim.g.neovide_floating_z_height = 5 -- virtual height of floating window
+  vim.g.neovide_light_angle_degrees = 0 -- angle from screen normal of the casting light
+  vim.g.neovide_light_radius = 5 -- radius of the casting light
 
   -- fix border and winbar scrolling glitches
   vim.g.neovide_unlink_border_highlights = true

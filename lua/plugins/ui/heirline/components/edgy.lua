@@ -98,6 +98,7 @@ local function setup_rainbow_highlights(base_names, count, interval_ms)
 end
 
 local function highlight_change_setup()
+  local timer = vim.uv.new_timer()
   local hl_names = {
     'EdgyGroupActiveBottom',
     'EdgyGroupInactiveBottom',
@@ -108,23 +109,28 @@ local function highlight_change_setup()
   }
 
   local function update_highlights()
-    local mode = mode_helpers.get_mode()
+    local mode = vim.fn.mode()
+    mode = mode and mode:sub(1, 1) or 'n'
     if mode == 'n' then
-      for _, name in ipairs(hl_names) do
-        vim.api.nvim_set_hl(0, name, { link = name:gsub('Bottom', '') })
-      end
+      vim.iter(hl_names):each(function(name) vim.api.nvim_set_hl(0, name, { link = name:gsub('Bottom', '') }) end)
     else
       local hl = mode_helpers.primary_highlight()
       if hl and hl.bg then
-        for _, name in ipairs(hl_names) do
-          vim.api.nvim_set_hl(0, name, { bg = hl.bg, fg = colors.black })
-        end
+        vim.iter(hl_names):each(function(name) vim.api.nvim_set_hl(0, name, { bg = hl.bg, fg = colors.black }) end)
       end
     end
   end
 
   vim.api.nvim_create_autocmd({ 'ModeChanged' }, {
-    callback = function() update_highlights() end,
+    ---@diagnostic disable-next-line: undefined-field
+    callback = function()
+      if timer then
+        if timer:is_active() then
+          timer:stop()
+        end
+        timer:start(50, 0, vim.schedule_wrap(function() update_highlights() end))
+      end
+    end,
   })
 end
 

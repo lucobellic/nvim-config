@@ -7,10 +7,17 @@ local function open_in_normal_window()
   end
 end
 
-local function refresh_floaterm()
-  local buffer = vim.api.nvim_win_get_buf(0)
-  vim.api.nvim_call_function('floaterm#window#hide', { buffer })
-  vim.api.nvim_call_function('floaterm#terminal#open_existing', { buffer })
+--- HACK: Refresh floaterm to update content visualization
+--- @param nb_buffers number number of floaterm buffers
+local function refresh_floaterm(nb_buffers)
+  if nb_buffers > 2 then
+    vim.api.nvim_call_function('floaterm#prev', {})
+    vim.api.nvim_call_function('floaterm#next', {})
+  else
+    local buffer = vim.api.nvim_win_get_buf(0)
+    vim.api.nvim_call_function('floaterm#window#hide', { buffer })
+    vim.api.nvim_call_function('floaterm#terminal#open_existing', { buffer })
+  end
 end
 
 local function close_current_floaterm()
@@ -24,8 +31,10 @@ local function close_current_floaterm()
   else
     vim.api.nvim_call_function('floaterm#prev', {})
     vim.api.nvim_call_function('floaterm#terminal#kill', { buffer })
-    refresh_floaterm()
+    refresh_floaterm(nb_buffers)
   end
+  --- HACK: trigger ModeChanged autocommand to fix untriggered mode changed
+  vim.cmd('doautocmd ModeChanged t:n')
 end
 
 --- Update current floaterm dimension

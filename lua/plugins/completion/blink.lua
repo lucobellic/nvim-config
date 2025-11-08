@@ -61,7 +61,7 @@ local blink = {
     dependencies = { 'onsails/lspkind.nvim' },
     opts = function(_, opts)
       ---@type number | nil debounce time in milliseconds or nil to disable
-      local debounce = nil
+      local debounce = 300
 
       if debounce then
         setup_text_changed_debounce(debounce)

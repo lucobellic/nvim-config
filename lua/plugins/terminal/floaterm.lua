@@ -157,7 +157,7 @@ end
 --- @param index string
 --- @return string
 local function get_window_highlight(index)
-  return ('Normal:Normal,FloatBorder:FloatBorder,FloatTitle:%s'):format(get_highlight(index))
+  return ('FloatTitle:%s'):format(get_highlight(index))
 end
 
 --- Extract title and index from floaterm title
