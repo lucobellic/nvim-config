@@ -156,9 +156,7 @@ end
 --- Get popup highlight string with title highlight based on index value
 --- @param index string
 --- @return string
-local function get_window_highlight(index)
-  return ('FloatTitle:%s'):format(get_highlight(index))
-end
+local function get_window_highlight(index) return ('FloatTitle:%s'):format(get_highlight(index)) end
 
 --- Extract title and index from floaterm title
 --- @param title string Title provided by floaterm, expected format: "Title 1/2"
@@ -344,6 +342,33 @@ local function open_popup(bufnr, config)
   return terminal_popup.winid
 end
 
+local function pick_term()
+  Snacks.picker.buffers({
+    title = 'Terminals',
+    hidden = true,
+    sort_lastused = true,
+    source = 'terminals',
+    layout = { preset = 'telescope_vertical' },
+    filter = {
+      filter = function(item, filter)
+        return item.buf and vim.api.nvim_get_option_value('buftype', { buf = item.buf }) == 'terminal' or false
+      end,
+    },
+    confirm = function(picker)
+      local selected = picker:selected({ fallback = true })[1]
+      picker:close()
+      if selected then
+        local filetype = vim.api.nvim_get_option_value('filetype', { buf = selected.buf })
+        if filetype:match('floaterm') then
+          vim.schedule(function() floaterm_open_existing_buffer(selected.buf) end)
+        else
+          vim.api.nvim_set_current_buf(selected.buf)
+        end
+      end
+    end,
+  })
+end
+
 return {
   'lucobellic/vim-floaterm',
   branch = 'personal',
@@ -365,6 +390,7 @@ return {
     { '<F7>', '<C-\\><C-n>:FloatermToggle<cr>', mode = 't', desc = 'Floaterm Toggle' },
     { '<F8>', '<cmd>FloatermToggleBuffer<cr>', mode = 'n', desc = 'Floaterm toggle buffer' },
     { '<F8>', '<C-\\><C-n>:FloatermToggleBuffer<cr>', mode = 't', desc = 'Floaterm toggle buffer' },
+    { '<leader>ft', pick_term, desc = 'Find terminals' },
   },
   init = function()
     vim.g.floaterm_shell = vim.o.shell

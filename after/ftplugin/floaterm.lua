@@ -8,8 +8,9 @@ local function open_in_normal_window()
 end
 
 --- HACK: Refresh floaterm to update content visualization
---- @param nb_buffers number number of floaterm buffers
+--- @param nb_buffers number|nil number of floaterm buffers
 local function refresh_floaterm(nb_buffers)
+  local nb_buffers = nb_buffers or #vim.api.nvim_call_function('floaterm#buflist#gather', {})
   if nb_buffers > 2 then
     vim.api.nvim_call_function('floaterm#prev', {})
     vim.api.nvim_call_function('floaterm#next', {})
@@ -37,6 +38,16 @@ local function close_current_floaterm()
   vim.cmd('doautocmd ModeChanged t:n')
 end
 
+--- Open existing floaterm by index
+--- @param index number floaterm index to open (1-based)
+local function open_existing_floaterm(index)
+  local buffers = vim.api.nvim_call_function('floaterm#buflist#gather', {})
+  if index <= #buffers then
+    local buffer = buffers[index]
+    vim.api.nvim_call_function('floaterm#terminal#open_existing', { buffer })
+  end
+end
+
 --- Update current floaterm dimension
 --- @param key string 'height' or 'width'
 --- @param offset number offset to apply to the dimension in range [0, 1]
@@ -59,6 +70,10 @@ vim.api.nvim_create_user_command(
 -- Keymaps
 
 local opts = { noremap = true, silent = true, buffer = true }
+
+for i = 1, 9 do
+  vim.keymap.set({ 'n', 't' }, '<C-' .. i .. '>', function() open_existing_floaterm(i) end, opts)
+end
 
 vim.keymap.set('t', '<c-j>', '<c-j>', { buffer = true, nowait = true })
 vim.keymap.set('t', '<c-k>', '<c-k>', { buffer = true, nowait = true })
