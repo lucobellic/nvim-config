@@ -17,7 +17,7 @@ end
 return {
   {
     'mason-org/mason.nvim',
-    lazy = false,
+    event = 'BufEnter',
     opts = {
       PATH = 'prepend',
       ui = {
@@ -30,6 +30,7 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
+    event = 'LspAttach',
     opts = function(_, opts)
       opts = vim.tbl_deep_extend('force', opts or {}, {
         codelens = { enabled = false },
@@ -64,6 +65,45 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
+    optional = true,
+    keys = {
+      {
+        '[d',
+        function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
+        repeatable = true,
+        desc = 'Previous Diagnostic',
+      },
+      {
+        ']d',
+        function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
+        repeatable = true,
+        desc = 'Next Diagnostic',
+      },
+      {
+        '[w',
+        function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
+        repeatable = true,
+        desc = 'Previous Warning',
+      },
+      {
+        ']w',
+        function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
+        repeatable = true,
+        desc = 'Next Warning',
+      },
+      {
+        '[e',
+        function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
+        repeatable = true,
+        desc = 'Previous Error',
+      },
+      {
+        ']e',
+        function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
+        repeatable = true,
+        desc = 'Next Error',
+      },
+    },
     opts = {
       servers = {
         ['*'] = {
@@ -136,42 +176,6 @@ return {
               cond = 'textDocument/rename',
             },
             { 'gK', '<cmd>Lspsaga hover_doc<CR>' },
-            {
-              '[d',
-              function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
-              repeatable = true,
-              desc = 'Previous Diagnostic',
-            },
-            {
-              ']d',
-              function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
-              repeatable = true,
-              desc = 'Next Diagnostic',
-            },
-            {
-              '[w',
-              function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
-              repeatable = true,
-              desc = 'Previous Warning',
-            },
-            {
-              ']w',
-              function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
-              repeatable = true,
-              desc = 'Next Warning',
-            },
-            {
-              '[e',
-              function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
-              repeatable = true,
-              desc = 'Previous Error',
-            },
-            {
-              ']e',
-              function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
-              repeatable = true,
-              desc = 'Next Error',
-            },
           },
         },
       },

@@ -96,12 +96,32 @@ local function goto_previous_breakpoint() goto_breakpoint('prev') end
 return {
   'mfussenegger/nvim-dap',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
+  cmd = {
+    'DapNew',
+    'DapEval',
+    'DapPause',
+    'DapInstall',
+    'DapShowLog',
+    'DapStepOut',
+    'DapContinue',
+    'DapStepInto',
+    'DapStepOver',
+    'DapTerminate',
+    'DapUninstall',
+    'DapDisconnect',
+    'DapToggleRepl',
+    'DapSetLogLevel',
+    'DapRestartFrame',
+    'DapClearBreakpoints',
+    'DapToggleBreakpoint',
+  },
   dependencies = {
     {
       'mfussenegger/nvim-dap-python',
-      dependcies = {
-        'mason.nvim',
-        'nvim-dap-ui',
+      optional = true,
+      dependencies = {
+        { 'mason.nvim', optional = true },
+        { 'nvim-dap-ui', optional = true },
       },
       keys = {
         {
@@ -126,6 +146,8 @@ return {
     },
     {
       'rcarriga/nvim-dap-ui',
+      optional = true,
+      cmd = { 'DapUI' },
       opts = {
         highlight_new_as_changed = true,
         commented = true,
@@ -209,6 +231,7 @@ return {
     },
     {
       'theHamsta/nvim-dap-virtual-text',
+      cmd = { 'DapVirtualTextEnable', 'DapVirtualTextDisable', 'DapVirtualTextToggle' },
       opts = { virt_text_pos = 'eol' },
     },
   },
