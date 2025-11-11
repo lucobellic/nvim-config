@@ -20,6 +20,26 @@ function M.open_file()
   end
 end
 
+--- @return [number, number, number, number] [number, number, number, number] tuple of [buffer, line, col, off]
+function M.get_visual_selection_range()
+  local vpos = vim.fn.getpos('v')
+  local dotpos = vim.fn.getpos('.')
+
+  if vpos[2] > dotpos[2] or vpos[2] == dotpos[2] and vpos[3] > dotpos[3] then
+    vpos, dotpos = dotpos, vpos
+  end
+
+  return vpos, dotpos
+end
+
+function M.get_visual_selection_text()
+  local cursor_start, cursor_end = M.get_visual_selection_range()
+  local bufnr = cursor_start[1]
+  local text =
+    vim.api.nvim_buf_get_text(bufnr, cursor_start[2] - 1, cursor_start[3] - 1, cursor_end[2] - 1, cursor_end[3], {})
+  return table.concat(text, '\n')
+end
+
 ---@generic T
 ---@param items T[] Arbitrary items
 ---@param opts? {prompt?: string, format_item?: (fun(item: T): string), kind?: string}

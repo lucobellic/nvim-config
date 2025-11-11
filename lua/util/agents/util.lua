@@ -29,6 +29,13 @@ function M.get_visual_selection_range()
   return start_line, end_line + 1
 end
 
+function M.get_visual_selection_text()
+  local start_line, end_line = M.get_visual_selection_range()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local lines = vim.api.nvim_buf_get_lines(bufnr, start_line, end_line, false)
+  return table.concat(lines, '\n')
+end
+
 --- Setup keymaps and user commands for agent actions
 ---@param prefix string Keymap prefix (e.g., '<leader>c')
 ---@param name string Command name prefix (e.g., 'OpenCode')

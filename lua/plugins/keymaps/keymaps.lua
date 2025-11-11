@@ -84,7 +84,16 @@ return {
     --------------------
     { mode = 'c', '<esc>', '<C-c>', desc = 'Exit insert mode' },
     { mode = 'v', '/', '"hy/<C-r>h', desc = 'Search word' },
-    { mode = 'v', '<leader>rr', function() vim.fn.feedkeys(':s/', 't') end, desc = 'Replace Visual' },
+    {
+      mode = 'v',
+      '<leader>rr',
+      function()
+        local text = require('util.util').get_visual_selection_text()
+        return '<esc>:%s/' .. text .. '//g<left><left>'
+      end,
+      desc = 'Replace Visual Selection',
+      expr = true,
+    },
 
     { '<leader>rr', function() vim.fn.feedkeys(':%s/', 't') end, desc = 'Replace' },
     {
