@@ -7,7 +7,7 @@ local mode = require('plugins.ui.heirline.components.mode')
 local system = require('plugins.ui.heirline.components.system')
 local tasks = require('plugins.ui.heirline.components.tasks')
 
-local Left = { mode.ViMode, git.Git, info.Separator, debug.Dap, debug.Molten, debug.MacroRec }
+local Left = { mode.ViMode, git.Git, info.LazyUpdates, info.Separator, debug.Dap, debug.Molten, debug.MacroRec }
 local Center = { edgy.LeftAlignment, info.Separator, edgy.Edgy, info.Separator }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {
@@ -28,5 +28,4 @@ local Right = {
   info.Date,
 }
 
-edgy.highlight_change_setup()
 return { Left, Center, Align, Right }

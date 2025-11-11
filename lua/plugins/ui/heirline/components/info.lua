@@ -41,7 +41,14 @@ local Separator = {
   hl = mode_helpers.secondary_highlight,
 }
 
+local LazyUpdates = {
+  provider = function() return require('lazy.status').updates() end,
+  cond = require('lazy.status').has_updates,
+  hl = mode_helpers.primary_highlight,
+}
+
 return {
+  LazyUpdates = LazyUpdates,
   LspProgress = LspProgress,
   SearchCount = SearchCount,
   Ruler = Ruler,
