@@ -289,6 +289,9 @@ return {
             ['<c-d>'] = { 'preview_scroll_down' },
           },
         },
+        icons = {
+          kinds = LazyVim.config.icons.kinds,
+        },
       },
     },
   },

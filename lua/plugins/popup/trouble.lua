@@ -35,6 +35,7 @@ return {
     },
   },
   cmd = { 'Trouble' },
+  --- @type trouble.Config
   opts = {
     max_items = 500, -- limit number of items that can be displayed per section
     warn_no_results = false, -- show a warning when there are no results
@@ -95,8 +96,22 @@ return {
       lsp_document_symbols = {
         title = false,
         focus = false,
-        format = '{kind_icon}{symbol.name} {text:Comment} {pos}',
+        format = '{kind_icon}{symbol.name}',
       },
+    },
+    formatters = {
+      kind_icon = function(ctx)
+        if not ctx.item.kind then
+          return
+        end
+        local icon = LazyVim.config.icons.kinds[ctx.item.kind] or ctx.opts.icons.kinds[ctx.item.kind]
+        if icon then
+          return {
+            text = icon,
+            hl = 'TroubleIcon' .. ctx.item.kind,
+          }
+        end
+      end,
     },
     -- Key mappings can be set to the name of a builtin action,
     -- or you can define your own custom action.
