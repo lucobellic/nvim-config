@@ -83,9 +83,9 @@ local filter_skip = {
     --- @type NoiceFilter[]
     -- { event = 'msg_show', kind = { '',  'echo', 'echomsg', 'search_count' }, find = 'written' },
     -- { event = 'msg_show', kind = { '',  'echo', 'echomsg', 'search_count' }, find = 'yanked'  },
+    -- stylua: ignore
     any = {
       -- Hide display messages but still show them in :messages
-      -- stylua: off
       { event = 'msg_show', kind = ''             , find = 'lnum' }                        ,
       { event = 'msg_show', kind = ''             , find = 'query' }                       ,
       { event = 'msg_show', kind = 'emsg'         , find = 'Pattern not found' }           ,
@@ -110,7 +110,6 @@ local filter_skip = {
       { event = 'lsp'     , find = 'pylsp' }      , -- Hide spamming pylsp messages
       { event = 'lsp'     , find = 'cspell' }     , -- Hide spamming cspell messages
       { event = 'lsp'     , find = 'diagnostics' }, -- Hide spamming null-ls messages
-      -- stylua: on
     },
   },
   opts = { stop = true, skip = true },
