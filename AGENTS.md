@@ -1,4 +1,4 @@
-# AstroNvim Configuration - Agent Guidelines
+# Neovim Configuration - Agent Guidelines
 
 ## Commands
 
