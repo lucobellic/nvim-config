@@ -16,6 +16,7 @@ return {
       },
     },
     opts = {
+      disable_context_highlighting = true,
       signs = {
         hunk = { '', '' },
         item = { '', '' },
