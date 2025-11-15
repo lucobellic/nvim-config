@@ -6,6 +6,28 @@ local vaults_overrides = {
   },
 }
 
+local function get_workspaces()
+  local workspaces = {
+    {
+      name = 'personal',
+      path = '~/vaults/personal',
+      overrides = vaults_overrides,
+    },
+    {
+      name = 'work',
+      path = '~/vaults/work',
+      overrides = vaults_overrides,
+    },
+  }
+  if vim.env.INSIDE_DOCKER then
+    workspaces = {
+      workspaces[2],
+      workspaces[1],
+    }
+  end
+  return workspaces
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -34,20 +56,10 @@ return {
       { '<leader>nn', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
       { '<leader>nw', '<cmd>Obsidian workspace<CR>', desc = 'Obsidian Workspace' },
     },
+    --- @type obsidian.config
     opts = {
       legacy_commands = false,
-      workspaces = {
-        {
-          name = 'work',
-          path = '~/vaults/work',
-          overrides = vaults_overrides,
-        },
-        {
-          name = 'personal',
-          path = '~/vaults/personal',
-          overrides = vaults_overrides,
-        },
-      },
+      workspaces = get_workspaces(),
       notes_subdir = 'notes',
       daily_notes = {
         folder = 'dailies',
@@ -71,6 +83,7 @@ return {
       ui = {
         enable = false, -- Prefer usage of mardown.nvim
       },
+      picker = { name = 'snacks.pick' },
     },
     config = function(_, opts)
       require('obsidian').setup(opts)
