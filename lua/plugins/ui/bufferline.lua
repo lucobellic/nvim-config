@@ -100,6 +100,34 @@ local function toggle_filter_mode()
   vim.notify('Bufferline filter: ' .. filter_mode, vim.log.levels.INFO)
 end
 
+--- Navigate bufferline buffers with fallback to vim buffer navigation at boundaries
+--- @param direction 'prev' | 'next' Direction to navigate
+local function navigate_buffer(direction)
+  local state = require('bufferline.state')
+  local current_buf = vim.fn.bufnr()
+
+  -- Find current buffer position in bufferline's visible components
+  local current_index = nil
+  for i, item in ipairs(state.components) do
+    local element = item:as_element()
+    if element and element.id == current_buf then
+      current_index = i
+      break
+    end
+  end
+
+  -- If buffer not found in bufferline or at a boundary, use vim buffer navigation
+  local at_boundary = not current_index
+    or (direction == 'prev' and current_index == 1)
+    or (direction == 'next' and current_index == #state.components)
+
+  if at_boundary then
+    vim.cmd(direction == 'prev' and 'bprevious' or 'bnext')
+  else
+    vim.cmd(direction == 'prev' and 'BufferLineCyclePrev' or 'BufferLineCycleNext')
+  end
+end
+
 --- @param position Edgy.Pos
 local function get_edgy_group_icons(position)
   local result = {}
@@ -182,8 +210,8 @@ return {
     { '<C-8>', '<cmd>BufferLineGoToBuffer 8<cr>', desc = 'Buffer 8' },
     { '<C-9>', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
     { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
-    { 'H', function() vim.cmd('BufferLineCyclePrev') end, desc = 'Previous Bufferline' },
-    { 'L', function() vim.cmd('BufferLineCycleNext') end, desc = 'Next Bufferline' },
+    { 'H', function() navigate_buffer('prev') end, desc = 'Previous Bufferline' },
+    { 'L', function() navigate_buffer('next') end, desc = 'Next Bufferline' },
     { '<S-left>', function() vim.cmd('bprevious') end, desc = 'Previous Buffer' },
     { '<S-right>', function() vim.cmd('bnext') end, desc = 'Next Buffer' },
     { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
