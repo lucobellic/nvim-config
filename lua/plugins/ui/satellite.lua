@@ -11,7 +11,7 @@ end
 
 return {
   'lewis6991/satellite.nvim',
-  cond = not vim.g.started_by_firenvim and not vim.g.neovide,
+  cond = not vim.g.started_by_firenvim,
   event = 'BufEnter',
   keys = {
     { '<leader>ut', toggle_satellite, desc = 'Toggle Satellite' },
@@ -64,4 +64,14 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require('satellite').setup(opts)
+    vim.api.nvim_create_autocmd('BufEnter', {
+      callback = function()
+        if satellite_enabled then
+          vim.defer_fn(function() vim.cmd('SatelliteRefresh') end, 200)
+        end
+      end,
+    })
+  end,
 }
