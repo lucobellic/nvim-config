@@ -1,5 +1,25 @@
 local M = {}
 
+local function save_tab_names()
+  local tabs = require('bufferline.tabpages').get()
+  vim.g.SCOPETABNAMES = vim
+    .iter(tabs)
+    :map(function(tab) return tab.component end)
+    :map(function(components)
+      return vim.iter(components):filter(function(comp) return comp.attr ~= nil end):nth(1)
+    end)
+    :filter(function(title) return title ~= nil end)
+    :totable()
+end
+
+local function load_tab_names()
+  local tabs = vim.g.SCOPETABNAMES or {}
+  vim.iter(tabs):enumerate():each(function(tabnr, tab)
+    local name = (tab.text or tostring(tabnr)):match('^%s*(.-)%s*$')
+    vim.api.nvim_tabpage_set_var(tabnr, 'name', name)
+  end)
+end
+
 ---Get persistence sessions sorted by last modification time
 ---@return string[] sessions
 function M.get_sorted_sessions()
@@ -34,11 +54,16 @@ function M.load_session(session_file)
     -- vim.cmd('tabdo Neotree close')
     vim.cmd('silent! %bd!')
     vim.cmd('silent! source ' .. vim.fn.fnameescape(session_file))
-    vim.cmd('ScopeLoadState')
   end
 end
 
+function M.post_load()
+  pcall(load_tab_names)
+  vim.cmd('ScopeLoadState')
+end
+
 function M.pre_save()
+  pcall(save_tab_names)
   vim.cmd('tabmove 0')
   vim.cmd('ScopeSaveState')
 end

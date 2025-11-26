@@ -196,6 +196,13 @@ return {
     },
   },
   keys = {
+    {
+      '<leader><tab>r',
+      function()
+        vim.ui.input({ prompt = 'Tab name:' }, function(input) vim.cmd('BufferLineTabRename ' .. input) end)
+      end,
+      desc = 'Buffer Tab Rename',
+    },
     { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
     { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
