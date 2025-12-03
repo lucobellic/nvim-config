@@ -10,6 +10,7 @@ return {
   bashls                          = '',
   clangd                          = '',
   copilot                         = '',
+  codebook                        = '',
   docker_compose_language_service = '',
   dockerls                        = '󰡨',
   gitlab_ci_ls                    = '',

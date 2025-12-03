@@ -30,7 +30,6 @@ return {
   { import = 'lazyvim.plugins.extras.editor.mini-move' },
 
   { import = 'lazyvim.plugins.extras.lsp.neoconf' },
-  { import = 'lazyvim.plugins.extras.lsp.none-ls' },
 
   { import = 'lazyvim.plugins.extras.test.core' },
 
