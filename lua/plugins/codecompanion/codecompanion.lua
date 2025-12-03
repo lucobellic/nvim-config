@@ -27,7 +27,7 @@ return {
   {
     'olimorris/codecompanion.nvim',
     cond = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true' and not vim.g.vscode,
-    version = '*',
+    version = 'v17.33.0',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -62,7 +62,8 @@ return {
       },
       { '<leader>ap', ':CodeCompanion /pr<cr>', mode = { 'n' }, desc = 'Code Companion PR' },
       { '<leader>ar', ':CodeCompanion /optimize<cr>', mode = { 'v' }, desc = 'Code Companion Refactor' },
-      { '<leader>as', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
+      { '<leader>as', ':CodeCompanion /grammar<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Grammar' },
+      { '<leader>aS', ':CodeCompanion /spell<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Spell' },
       { '<leader>at', ':CodeCompanion /tests<cr>', mode = { 'v' }, desc = 'Code Companion Generate Test' },
       {
         '<leader>at',

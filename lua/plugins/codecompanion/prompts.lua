@@ -180,11 +180,36 @@ return {
           },
         },
       },
+      ['Grammar'] = {
+        strategy = 'inline',
+        description = 'Correct grammar',
+        opts = {
+          index = 20,
+          is_default = false,
+          short_name = 'grammar',
+          is_slash_cmd = true,
+          auto_submit = true,
+          adapter = {
+            name = 'copilot',
+            model = 'gpt-4.1',
+          },
+        },
+        prompts = {
+          {
+            role = 'user',
+            contains_code = false,
+            content = function(context)
+              local text = require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
+              return 'Correct grammar as in the original language but keep the same meaning and formulation:\n\n' .. text
+            end,
+          },
+        },
+      },
       ['Bug Finder'] = {
         strategy = 'chat',
         description = 'Find potential bugs from the provided diff changes',
         opts = {
-          index = 20,
+          index = 21,
           is_default = false,
           short_name = 'bugs',
           is_slash_cmd = true,
@@ -232,7 +257,7 @@ return {
         strategy = 'chat',
         description = 'agent mode with explicit set of tools',
         opts = {
-          index = 21,
+          index = 22,
           is_default = false,
           short_name = 'commits',
           is_slash_cmd = true,
@@ -264,7 +289,7 @@ return {
         strategy = 'chat',
         description = 'Get the unresolved comments of the current MR',
         opts = {
-          index = 22,
+          index = 23,
           is_default = false,
           short_name = 'glab_mr_notes',
           is_slash_cmd = true,
@@ -285,7 +310,7 @@ return {
         strategy = 'chat',
         description = 'Send errors to qflist and diagnostics',
         opts = {
-          index = 23,
+          index = 24,
           is_default = false,
           short_name = 'qflist',
           is_slash_cmd = true,
@@ -297,7 +322,7 @@ return {
             contains_code = true,
             content = function()
               local content =
-                'Create a neovim command line for `:` to send the current errors to qflist and diagnostics using neovim api.\n'
+                'Create a Neovim command-line command (:) that sends the current errors to the quickfix list and updates diagnostics using the Neovim API.\n'
               local example = [[
                 :lua do local ns = vim.api.nvim_create_namespace('review');
 
@@ -319,16 +344,12 @@ return {
         strategy = 'inline',
         description = 'Ask agent',
         opts = {
-          index = 24,
+          index = 25,
           is_default = false,
           short_name = 'agent',
           is_slash_cmd = false,
           auto_submit = true,
           user_prompt = true,
-          adapter = {
-            name = 'copilot',
-            model = 'gpt-4.1',
-          },
         },
         prompts = {
           {
