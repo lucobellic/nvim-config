@@ -6,7 +6,7 @@ vim.g.maplocalleader = '_'
 vim.g.autoformat = false
 vim.g.markdown_folding = true
 
-vim.g.winborder = vim.g.neovide_floating_shadow and  'solid' or 'single'
+vim.g.winborder = vim.g.neovide_floating_shadow and 'solid' or 'single'
 vim.o.winborder = vim.g.winborder
 
 local enable_border = true
@@ -53,6 +53,7 @@ vim.opt.sessionoptions = {
 -- Default splitting will cause your main splits to jump when opening an edgebar.
 -- To prevent this, set `splitkeep` to either `screen` or `topline`.
 vim.opt.splitkeep = 'screen'
+vim.opt.cursorlineopt = 'screenline'
 
 vim.opt.number = false
 vim.opt.relativenumber = false
