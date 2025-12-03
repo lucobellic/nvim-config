@@ -94,7 +94,7 @@ local blink = {
         completion = {
           list = { selection = { preselect = true, auto_insert = true } },
           documentation = { auto_show = false, window = { border = vim.g.winborder } },
-          ghost_text = { enabled = vim.g.ai_cmp or vim.g.suggestions == false },
+          ghost_text = { enabled = function() return vim.g.ai_cmp or vim.g.suggestions == false end },
           menu = {
             auto_show = debounce == nil,
             direction_priority = { 'n', 's' },

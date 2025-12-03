@@ -1,6 +1,7 @@
 return {
   'https://gitlab.com/gitlab-org/editor-extensions/gitlab.vim.git',
   event = { 'BufReadPre', 'BufNewFile' },
+  enabled = false,
   cond = function() return vim.g.suggestions == 'gitlab' end,
   opts = {
     gitlab_url = 'https://gitlab.easymile.com',
