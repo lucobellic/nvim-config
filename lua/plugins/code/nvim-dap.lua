@@ -239,6 +239,12 @@ return {
     { '<leader>dq', function() require('dap').terminate() end, repeatable = true, desc = 'Terminate' },
     { '<leader>db', function() require('dap').toggle_breakpoint() end, repeatable = true, desc = 'Toggle Breakpoint' },
     { '<leader>dc', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
+    {
+      '<leader>dd',
+      function() require('dap').toggle_breakpoint(nil, nil, vim.fn.input('Log Message:'), true) end,
+      repeatable = true,
+      desc = 'Toggle Logging Breakpoint',
+    },
     { '<F5>', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
     { '<leader>dC', function() require('dap').run_to_cursor() end, repeatable = true, desc = 'Run to Cursor' },
     { '<leader>di', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },

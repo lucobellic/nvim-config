@@ -9,7 +9,7 @@ return {
         Breakpoint          = { '', 'DiagnosticError' }, -- 󰧞    
         BreakpointCondition = { '', 'DiagnosticWarn'  },
         BreakpointRejected  = { '', 'Comment'         },
-        LogPoint            = '',
+        LogPoint            = { '', 'DiagnosticInfo'  }
       },
       diagnostics = {
         Error = ' ',
