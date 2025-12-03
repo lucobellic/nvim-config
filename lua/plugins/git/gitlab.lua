@@ -22,6 +22,7 @@ return {
       },
     },
   },
+  -- stylua: ignore
   keys = {
     { '<leader>gl', false },
     { '<leader>glb', function() require('gitlab-nvim').choose_merge_request() end, desc = 'Gitlab Choose Merge Request' },
@@ -30,24 +31,10 @@ return {
     { '<leader>glA', function() require('gitlab-nvim').approve() end, desc = 'Gitlab Approve' },
     { '<leader>glR', function() require('gitlab-nvim').revoke() end, desc = 'Gitlab Revoke' },
     { '<leader>glc', function() require('gitlab-nvim').create_comment() end, desc = 'Gitlab Create Comment' },
-    {
-      '<leader>glc',
-      function() require('gitlab-nvim').create_multiline_comment() end,
-      desc = 'Gitlab Create Multiline Comment',
-      mode = { 'n', 'v' },
-    },
-    {
-      '<leader>glC',
-      function() require('gitlab-nvim').create_comment_suggestion() end,
-      desc = 'Gitlab Create Comment Suggestion',
-      mode = { 'n', 'v' },
-    },
+    { '<leader>glc', function() require('gitlab-nvim').create_multiline_comment() end, desc = 'Gitlab Create Multiline Comment', mode = { 'n', 'v' }, },
+    { '<leader>glC', function() require('gitlab-nvim').create_comment_suggestion() end, desc = 'Gitlab Create Comment Suggestion', mode = { 'n', 'v' }, },
     { '<leader>glO', function() require('gitlab-nvim').create_mr() end, desc = 'Gitlab Create Mr' },
-    {
-      '<leader>glm',
-      function() require('gitlab-nvim').move_to_discussion_tree_from_diagnostic() end,
-      desc = 'Gitlab Move To Discussion Tree From Diagnostic',
-    },
+    { '<leader>glm', function() require('gitlab-nvim').move_to_discussion_tree_from_diagnostic() end, desc = 'Gitlab Move To Discussion Tree From Diagnostic', },
     { '<leader>gln', function() require('gitlab-nvim').create_note() end, desc = 'Gitlab Create Note' },
     { '<leader>gld', function() require('gitlab-nvim').toggle_discussions() end, desc = 'Gitlab Toggle Discussions' },
     { '<leader>glaa', function() require('gitlab-nvim').add_assignee() end, desc = 'Gitlab Add Assignee' },
@@ -102,10 +89,29 @@ return {
         imply_local = true,
       },
     },
+    -- stylua: ignore
     pipeline = {
-      failed = '',
+      failed   = '',
       canceled = '',
-      success = '',
+      success  = '',
+    },
+    colors = {
+      -- stylua: ignore
+      discussion_tree = {
+        username       = 'String',
+        mention        = 'WarningMsg',
+        date           = 'Comment',
+        expander       = 'Folded',
+        directory      = 'Directory',
+        directory_icon = 'DiffviewFolderSign',
+        file_name      = 'Normal',
+        resolved       = 'DiagnosticOk',
+        unresolved     = 'DiagnosticWarn',
+        draft          = 'NonText',
+        draft_mode     = 'DiagnosticWarn',
+        live_mode      = 'DiagnosticOk',
+        sort_method    = 'Keyword',
+      },
     },
   },
 }

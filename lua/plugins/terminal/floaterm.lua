@@ -138,6 +138,7 @@ local function floaterm_toggle_terminal_buffer(opts)
 end
 
 --- Store active layout and popups for reuse
+--- @type NuiLayout|nil
 local active_layout = nil
 
 --- Helper functions for highlights and title parsing
@@ -311,9 +312,6 @@ local function open_popup(bufnr, config)
     },
   })
 
-  -- Create menu with all terminals
-  local menu = create_floaterm_menu(bufnr, style)
-
   -- Create layout with menu and terminal
   local previous_layout = active_layout
   active_layout = Layout(
@@ -326,7 +324,7 @@ local function open_popup(bufnr, config)
       },
     },
     Layout.Box({
-      Layout.Box(menu, { size = { width = 15 } }),
+      -- Layout.Box(create_floaterm_menu(bufnr, style), { size = { width = 15 } }),
       Layout.Box(terminal_popup, { size = '100%' }),
     }, { dir = 'row' })
   )

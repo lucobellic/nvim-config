@@ -352,7 +352,7 @@ function AgentManager:send_current_buffer()
   local file = vim.fn.expand('%:p')
   vim.ui.input({ prompt = 'Ask file:' }, function(input)
     if input ~= nil then
-      agent:send(file .. self.newline .. input .. self.newline)
+      agent:send('File: ' .. self.newline .. file .. self.newline .. input .. self.newline)
     end
   end)
 end
@@ -372,7 +372,7 @@ function AgentManager:select_and_send_files()
     confirm = function(picker)
       local files = picker:selected()
       local files_text = vim.iter(files):map(function(f) return ' ' .. f.file end):join(self.newline) .. self.newline
-      agent:send(files_text)
+      agent:send('files: ' .. self.newline .. ' ' .. files_text)
       picker:close()
     end,
   })
@@ -393,7 +393,7 @@ function AgentManager:select_and_send_buffers()
     confirm = function(picker)
       local buffers = picker:selected()
       local buffers_text = vim.iter(buffers):map(function(b) return b.buf end):join(self.newline) .. self.newline
-      agent:send(buffers_text)
+      agent:send('buffers: ' .. self.newline .. ' ' .. buffers_text)
       picker:close()
     end,
   })

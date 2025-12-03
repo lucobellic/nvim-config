@@ -1,7 +1,6 @@
 return {
   'Isrothy/neominimap.nvim',
   version = 'v3.*.*',
-  event = 'VeryLazy',
   keys = {
     { '<leader>uM', '<cmd>Neominimap toggle<CR>', desc = 'Toggle minimap' },
   },

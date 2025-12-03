@@ -86,12 +86,12 @@ local function is_pinned(bufnr)
 end
 
 --- Bufferline filter mode state
---- @type 'visible' | 'pinned' | 'all' | 'none'
-local filter_mode = 'visible'
+--- @type 'visible' |  'all' | 'none'
+local filter_mode = 'all'
 
 --- Toggle bufferline filter mode
 local function toggle_filter_mode()
-  local modes = { 'visible', 'pinned', 'all', 'none' }
+  local modes = { 'none', 'all', 'visible' }
   local current_index = vim.tbl_contains(modes, filter_mode) and vim.fn.index(modes, filter_mode) + 1 or 1
   local next_index = (current_index % #modes) + 1
   filter_mode = modes[next_index]
@@ -269,10 +269,7 @@ return {
             return false
           elseif filter_mode == 'all' then
             return true
-          elseif filter_mode == 'pinned' then
-            return is_pinned(bufnr)
           else -- 'visible'
-            -- Show if pinned
             if is_pinned(bufnr) then
               return true
             end
@@ -297,11 +294,7 @@ return {
         truncate_names = false,
         name_formatter = function(buf)
           local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
-          if filter_mode == 'pinned' then
-            return short_name
-          else
-            return is_pinned(buf.bufnr) and '' or short_name
-          end
+          return is_pinned(buf.bufnr) and '' or short_name
         end,
         tab_size = 0,
         separator_style = { '', '' },

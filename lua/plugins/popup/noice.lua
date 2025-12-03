@@ -46,7 +46,7 @@ local views = {
   },
   notify = {
     replace = true,
-    merge = false,
+    merge = true,
   },
 }
 
@@ -74,7 +74,7 @@ local lsp = {
     },
   },
   signature = {
-    enabled = false,
+    enabled = true,
   },
 }
 
@@ -161,7 +161,7 @@ return {
       view_search = false, -- view for search count messages. Set to `false` to disable
     },
     notify = {
-      enabled = true,
+      enabled = false,
       view = 'notify',
     },
     format = {
