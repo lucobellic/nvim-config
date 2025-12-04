@@ -88,8 +88,10 @@ local filter_skip = {
       -- Hide display messages but still show them in :messages
       { event = 'msg_show', kind = ''             , find = 'lnum' }                        ,
       { event = 'msg_show', kind = ''             , find = 'query' }                       ,
+      { event = 'msg_show', kind = 'echoerr'      , find = 'satellite.nvim: unable to' }   ,
       { event = 'msg_show', kind = 'emsg'         , find = 'Pattern not found' }           ,
       { event = 'msg_show', kind = 'error'        , find = 'E5108' }                       ,
+      { event = 'msg_show', kind = 'error'        , find = 'satellite.nvim: unable to' }   ,
       { event = 'msg_show', kind = 'lua_error'    , find = 'Autocommands' }                ,
       { event = 'msg_show', kind = 'lua_error'    , find = 'attempt to call upvalue' }     ,
       { event = 'msg_show', kind = 'lua_error'    , find = 'bdelete' }                     ,
