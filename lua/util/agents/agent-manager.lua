@@ -352,7 +352,11 @@ function AgentManager:send_current_buffer()
   local file = vim.fn.expand('%:p')
   vim.ui.input({ prompt = 'Ask file:' }, function(input)
     if input ~= nil then
-      agent:send('File: ' .. self.newline .. file .. self.newline .. input .. self.newline)
+      local message = 'File: ' .. self.newline .. file
+      if input ~= '' then
+        message = message .. self.newline .. input
+      end
+      agent:send(message .. self.newline)
     end
   end)
 end
@@ -370,9 +374,9 @@ function AgentManager:select_and_send_files()
   snacks.picker.files({
     title = 'Select Files to Send to ' .. (agent.display_name or 'Agent'),
     confirm = function(picker)
-      local files = picker:selected()
-      local files_text = vim.iter(files):map(function(f) return ' ' .. f.file end):join(self.newline) .. self.newline
-      agent:send('files: ' .. self.newline .. ' ' .. files_text)
+      local files = picker:selected({ fallback = true })
+      local files_names = vim.iter(files):map(function(f) return f.file end):join(' ')
+      agent:send('files: ' .. files_names .. self.newline)
       picker:close()
     end,
   })
@@ -391,9 +395,15 @@ function AgentManager:select_and_send_buffers()
   snacks.picker.buffers({
     title = 'Select Buffers to Send to ' .. (agent.display_name or 'Agent'),
     confirm = function(picker)
-      local buffers = picker:selected()
-      local buffers_text = vim.iter(buffers):map(function(b) return b.buf end):join(self.newline) .. self.newline
-      agent:send('buffers: ' .. self.newline .. ' ' .. buffers_text)
+      local buffers = picker:selected({ fallback = true })
+      local buffers_names = vim
+        .iter(buffers)
+        :map(function(buffer)
+          local buffer_name = vim.api.nvim_buf_get_name(buffer.buf)
+          return buffer_name ~= '' and buffer_name or '[No Name]'
+        end)
+        :join(' ')
+      agent:send('buffers: ' .. buffers_names .. self.newline)
       picker:close()
     end,
   })
@@ -413,6 +423,7 @@ function AgentManager:select_and_send_terminals()
   snacks.picker.buffers({
     title = 'Select Terminals to Send to ' .. (agent.display_name or 'Agent'),
     hidden = true,
+    auto_confirm = true,
     sort_lastused = true,
     filter = {
       filter =
@@ -424,7 +435,7 @@ function AgentManager:select_and_send_terminals()
         end,
     },
     confirm = function(picker)
-      local terminals = picker:selected()
+      local terminals = picker:selected({fallback = true})
       local terminals_content = vim
         .iter(terminals)
         :map(function(t)
@@ -464,16 +475,11 @@ function AgentManager:send_selection()
 
   vim.ui.input({ prompt = 'Ask selection:' }, function(input)
     if input ~= nil then
-      agent:send(
-        'Here is a code snippet from '
-          .. vim.fn.expand('%:p')
-          .. ':'
-          .. self.newline
-          .. formatted_text
-          .. self.newline
-          .. input
-          .. self.newline
-      )
+      local message = 'Here is a code snippet from ' .. vim.fn.expand('%:p') .. ':' .. self.newline .. formatted_text
+      if input ~= '' then
+        message = message .. self.newline .. input
+      end
+      agent:send(message .. self.newline)
     end
   end)
 end
