@@ -39,8 +39,9 @@ end
 ---Load session from file
 ---@param session_file string
 function M.load_session(session_file)
+  local persistence = require('persistence')
   -- Skip current session loading
-  local current = require('persistence').current()
+  local current = persistence.current()
   if vim.bo.filetype ~= 'dashboard' and current == session_file then
     return
   end
@@ -48,24 +49,33 @@ function M.load_session(session_file)
   if session_file and vim.fn.filereadable(session_file) ~= 0 then
     -- Save current session before loading a new one
     if vim.bo.filetype ~= 'dashboard' then
-      require('persistence').save()
+      persistence.fire('SavePre')
+      persistence.save()
+      persistence.fire('SavePost')
     end
 
+    persistence.fire('LoadPre')
     -- vim.cmd('tabdo Neotree close')
     vim.cmd('silent! %bd!')
     vim.cmd('silent! source ' .. vim.fn.fnameescape(session_file))
+    persistence.fire('LoadPost')
   end
 end
 
+--- Callback after loading session
 function M.post_load()
   pcall(load_tab_names)
   vim.cmd('ScopeLoadState')
+  require('util.breakpoints').restore_breakpoints()
 end
 
-function M.pre_save()
+--- Callback before saving session
+--- @param session_file string
+function M.pre_save(session_file)
   pcall(save_tab_names)
   vim.cmd('tabmove 0')
   vim.cmd('ScopeSaveState')
+  require('util.breakpoints').save_breakpoints(session_file)
 end
 
 ---Use vim.ui.select() to load session from persistence plugin

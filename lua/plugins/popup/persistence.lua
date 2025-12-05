@@ -33,7 +33,12 @@ return {
     },
     {
       '<leader>qs',
-      function() require('persistence').save() end,
+      function()
+        local persistence = require('persistence')
+        persistence.fire('SavePre')
+        persistence.save()
+        persistence.fire('SavePost')
+      end,
       desc = 'Save session',
     },
   },
@@ -45,11 +50,15 @@ return {
     local util = require('util.persistence')
     persistence.setup(opts)
 
-    -- Save current directory on exit
-    vim.api.nvim_create_autocmd('VimLeavePre', { callback = function() persistence.save() end })
-    vim.api.nvim_create_autocmd('User', { pattern = 'PersistenceSavePre', callback = function() util.pre_save() end })
-    vim.api.nvim_create_autocmd('User', { pattern = 'PersistenceLoadPost', callback = function() util.post_load() end })
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'PersistenceSavePost',
+      callback = function() util.pre_save(persistence.current()) end,
+    })
 
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'PersistenceLoadPost',
+      callback = function() util.post_load() end,
+    })
 
     -- Load session from persistence
     vim.api.nvim_create_user_command(
