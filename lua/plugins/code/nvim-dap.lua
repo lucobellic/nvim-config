@@ -255,6 +255,49 @@ return {
     { '<F12>', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
     { '<leader>dO', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
     { '<F10>', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
+    {
+      '<leader>se',
+      function()
+        local breakpoints = require('dap.breakpoints').get()
+        local items = vim.iter(pairs(breakpoints or {})):map(
+          ---@param buffer number
+          ---@param breakpoints dap.bp[]
+          function(buffer, breakpoints)
+            local filename = vim.api.nvim_buf_get_name(buffer)
+            return vim.iter(breakpoints or {}):map(
+              ---@param breakpoint dap.bp
+              function(breakpoint)
+                return {
+                  file = filename,
+                  buf = buffer,
+                  lnum = breakpoint.line - 1,
+                  pos = { breakpoint.line, 0 },
+                  text = string.format('%s:%d', vim.fn.fnamemodify(filename, ':~:.'), breakpoint.line),
+                  item = breakpoint,
+                }
+              end
+            )
+          end
+        )
+
+        breakpoints_flattened = {}
+        vim.iter(items):each(function(item)
+          vim.iter(item):each(function(sub_item) table.insert(breakpoints_flattened, sub_item) end)
+        end)
+
+        if #breakpoints_flattened == 0 then
+          vim.notify('No breakpoints set', vim.log.levels.INFO, { title = 'DAP' })
+          return
+        end
+
+        Snacks.picker.pick({
+          title = 'Breakpoints',
+          items = breakpoints_flattened,
+          format = 'file',
+        })
+      end,
+      desc = 'Jump to Breakpoint',
+    },
     { ']b', goto_next_breakpoint, repeatable = true, desc = 'Next Breakpoint' },
     { ']B', goto_next_breakpoint, repeatable = true, desc = 'Next Breakpoint' },
     { '[b', goto_previous_breakpoint, repeatable = true, desc = 'Previous Breakpoint' },
