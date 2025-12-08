@@ -34,6 +34,12 @@ return {
         repeatable = true,
         desc = 'Toggle Diagnostics',
       },
+      {
+        '<leader>udf',
+        function() vim.cmd('CycleDiagnosticSeverity') end,
+        repeatable = true,
+        desc = 'Cycle Diagnostic Severity',
+      },
       { ']S', ']s', remap = true, desc = 'Next Spelling' },
       { '[S', '[s', remap = true, desc = 'Prev Spelling' },
       { ']D', ']d', remap = true, desc = 'Next Diagnostic' },

@@ -3,19 +3,29 @@
 --- @field diagnostic_current_virtual_text vim.diagnostic.Opts.VirtualText
 --- @field diagnostic_virtual_lines vim.diagnostic.Opts.VirtualLines
 --- @field diagnostic_current_virtual_lines vim.diagnostic.Opts.VirtualLines
+--- @field virtual_severity vim.diagnostic.Severity
 local Diagnostic = {
   diagnostic_virtual_text = {
     spacing = 1,
     source = 'if_many',
-    severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
+    severity = { min = vim.diagnostic.severity.WARN, max = vim.diagnostic.severity.ERROR },
     prefix = '',
     suffix = '   ',
     virt_text_pos = 'eol_right_align',
   },
 
   diagnostic_virtual_lines = {
-    severity = { vim.diagnostic.severity.WARN, vim.diagnostic.severity.ERROR },
+    severity = { min = vim.diagnostic.severity.WARN, max = vim.diagnostic.severity.ERROR },
   },
+
+  virtual_severity = vim.diagnostic.severity.WARN,
+}
+
+local severity_invert = {
+  [1] = 'ERROR',
+  [2] = 'WARN',
+  [3] = 'INFO',
+  [4] = 'HINT',
 }
 
 --- @type vim.diagnostic.Opts.VirtualText
@@ -61,6 +71,44 @@ function Diagnostic._toggle_diagnostic_feature(config_key, normal_config, curren
     vim.diagnostic.config({ [config_key] = false })
     Diagnostic._notify_diagnostic(messages.disabled, vim.log.levels.WARN)
   end
+end
+
+function Diagnostic.update_virtual_severity()
+  local virtual_text = vim.diagnostic.config()['virtual_tex']
+  if virtual_text then
+    virtual_text.severity.min = Diagnostic.virtual_severity
+    vim.diagnostic.config({ virtual_text = virtual_text })
+  end
+
+  local virtual_lines = vim.diagnostic.config()['virtual_lines']
+  if virtual_lines then
+    virtual_lines.severity.min = Diagnostic.virtual_severity
+    vim.diagnostic.config({ virtual_lines = virtual_lines })
+  end
+end
+
+--- Cycle through diagnostic severity levels
+--- @param severity vim.diagnostic.Severity
+--- @return vim.diagnostic.Severity
+function Diagnostic.cycle_severity(severity)
+  if severity == vim.diagnostic.severity.HINT then
+    return vim.diagnostic.severity.INFO
+  elseif severity == vim.diagnostic.severity.INFO then
+    return vim.diagnostic.severity.WARN
+  elseif severity == vim.diagnostic.severity.WARN then
+    return vim.diagnostic.severity.ERROR
+  else
+    return vim.diagnostic.severity.HINT
+  end
+end
+
+function Diagnostic.cycle_virtual_severity()
+  Diagnostic.virtual_severity = Diagnostic.cycle_severity(Diagnostic.virtual_severity)
+  Diagnostic.diagnostic_current_virtual_lines.severity.min = Diagnostic.virtual_severity
+  Diagnostic.diagnostic_virtual_lines.severity.min = Diagnostic.virtual_severity
+  Diagnostic.diagnostic_current_virtual_text.severity.min = Diagnostic.virtual_severity
+  Diagnostic.diagnostic_virtual_text.severity.min = Diagnostic.virtual_severity
+  Diagnostic.update_virtual_severity()
 end
 
 --- Generic toggle function for simple boolean features
@@ -130,6 +178,14 @@ function Diagnostic.setup()
     end,
     { desc = 'Toggle Diagnostics Underline' }
   )
+
+  vim.api.nvim_create_user_command('CycleDiagnosticSeverity', function()
+    Diagnostic.cycle_virtual_severity()
+    Diagnostic._notify_diagnostic(
+      'Virtual Severity Level ' .. severity_invert[Diagnostic.virtual_severity],
+      vim.log.levels.INFO
+    )
+  end, { desc = 'Cycle Diagnostic Severity Level' })
 end
 
 Diagnostic.setup()
