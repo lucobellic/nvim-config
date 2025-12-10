@@ -2,21 +2,26 @@ local M = {}
 
 local function save_tab_names()
   local tabs = require('bufferline.tabpages').get()
-  vim.g.SCOPETABNAMES = vim
+  local tab_names = vim
     .iter(tabs)
     :map(function(tab) return tab.component end)
     :map(function(components)
-      return vim.iter(components):filter(function(comp) return comp.attr ~= nil end):nth(1)
+      return vim.iter(components):filter(function(comp) return comp.attr ~= nil end):next()
     end)
     :filter(function(title) return title ~= nil end)
     :totable()
+  vim.g.ScopeTabNames = vim.json.encode(tab_names)
 end
 
 local function load_tab_names()
-  local tabs = vim.g.SCOPETABNAMES or {}
+  local tabs = vim.json.decode(vim.g.ScopeTabNames or '{}')
+  local current_tabs = vim.api.nvim_list_tabpages()
   vim.iter(tabs):enumerate():each(function(tabnr, tab)
     local name = (tab.text or tostring(tabnr)):match('^%s*(.-)%s*$')
-    vim.api.nvim_tabpage_set_var(tabnr, 'name', name)
+    local tab = current_tabs[tabnr]
+    if tab and name then
+      vim.api.nvim_tabpage_set_var(tab, 'name', name)
+    end
   end)
 end
 
@@ -55,8 +60,6 @@ function M.load_session(session_file)
     end
 
     persistence.fire('LoadPre')
-    -- vim.cmd('tabdo Neotree close')
-    vim.cmd('silent! %bd!')
     vim.cmd('silent! source ' .. vim.fn.fnameescape(session_file))
     persistence.fire('LoadPost')
   end
@@ -64,17 +67,17 @@ end
 
 --- Callback after loading session
 function M.post_load()
-  pcall(load_tab_names)
   vim.cmd('ScopeLoadState')
+  load_tab_names()
   require('util.breakpoints').restore_breakpoints()
 end
 
 --- Callback before saving session
 --- @param session_file string
 function M.pre_save(session_file)
-  pcall(save_tab_names)
-  vim.cmd('tabmove 0')
+  vim.cmd('tabfirst')
   vim.cmd('ScopeSaveState')
+  pcall(save_tab_names)
   require('util.breakpoints').save_breakpoints(session_file)
 end
 

@@ -51,7 +51,7 @@ return {
     persistence.setup(opts)
 
     vim.api.nvim_create_autocmd('User', {
-      pattern = 'PersistenceSavePost',
+      pattern = 'PersistenceSavePre',
       callback = function() util.pre_save(persistence.current()) end,
     })
 
