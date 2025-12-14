@@ -39,6 +39,10 @@ return {
       end,
       desc = 'Edgy Toggle Bottom',
     },
+    { '<leader>we',
+      function() vim.b.edgy_disable = not vim.b.edgy_disable end,
+      desc = 'Edgy Toggle Attachment',
+    },
   },
   opts = {
     options = {

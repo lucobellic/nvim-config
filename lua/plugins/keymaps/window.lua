@@ -70,77 +70,64 @@ if vim.g.vscode then
   )
 end
 
+local function get_edgy_window(direction)
+  local ok, EdgyWindow = pcall(require, 'edgy.window')
+  if not ok then
+    return nil
+  end
+
+  local winnr = vim.fn.winnr(direction)
+  local winid = vim.fn.win_getid(winnr)
+
+  local is_win_disabled = vim.w[winid].edgy_disable
+  local is_buf_disabled = vim.b[vim.api.nvim_win_get_buf(winid)].edgy_disable
+  local is_edgy_valid = not is_win_disabled and not is_buf_disabled
+  return is_edgy_valid and EdgyWindow.cache[winid] or nil
+end
+
+--- Creates a resize handler for edgy windows with fallback to smart-splits
+---@param winnr_direction 'l'|'j'|'k'|'h' Window direction for winnr()
+---@param dimension 'width'|'height' Resize dimension
+---@param amount number Resize amount (positive = increase)
+---@param fallback_fn string Smart-splits function name
+local function create_resize_handler(winnr_direction, dimension, amount, fallback_fn)
+  return function()
+    local edgy_win = get_edgy_window(winnr_direction)
+    if edgy_win then
+      edgy_win:resize(dimension, amount)
+    else
+      local smart_splits_ok, smart_splits = pcall(require, 'smart-splits')
+      if smart_splits_ok then
+        smart_splits[fallback_fn]()
+      end
+    end
+  end
+end
+
 return {
   'folke/which-key.nvim',
   keys = {
     {
       '<c-left>',
-      function()
-        local ok, EdgyWindow = pcall(require, 'edgy.window')
-        local right_edgy = ok and EdgyWindow.cache[vim.fn.win_getid(vim.fn.winnr('l'))] or nil
-        if right_edgy then
-          right_edgy:resize('width', 5)
-        else
-          local smart_splits_ok, smart_splits = pcall(require, 'smart-splits')
-          if smart_splits_ok then
-            smart_splits.resize_left()
-          end
-        end
-      end,
+      create_resize_handler('l', 'width', 5, 'resize_left'),
       repeatable = true,
       desc = 'Resize left',
     },
     {
-
       '<c-right>',
-      function()
-        local ok, EdgyWindow = pcall(require, 'edgy.window')
-        local right_edgy = ok and EdgyWindow.cache[vim.fn.win_getid(vim.fn.winnr('l'))] or nil
-        if right_edgy then
-          right_edgy:resize('width', -5)
-        else
-          local smart_splits_ok, smart_splits = pcall(require, 'smart-splits')
-          if smart_splits_ok then
-            smart_splits.resize_right()
-          end
-        end
-      end,
+      create_resize_handler('l', 'width', -5, 'resize_right'),
       repeatable = true,
       desc = 'Resize right',
     },
     {
-
       '<c-up>',
-      function()
-        local ok, EdgyWindow = pcall(require, 'edgy.window')
-        local down_edgy = ok and EdgyWindow.cache[vim.fn.win_getid(vim.fn.winnr('j'))] or nil
-        if down_edgy then
-          down_edgy:resize('height', 5)
-        else
-          local smart_splits_ok, smart_splits = pcall(require, 'smart-splits')
-          if smart_splits_ok then
-            smart_splits.resize_up()
-          end
-        end
-      end,
+      create_resize_handler('j', 'height', 5, 'resize_up'),
       repeatable = true,
       desc = 'Resize up',
     },
     {
-
       '<c-down>',
-      function()
-        local ok, EdgyWindow = pcall(require, 'edgy.window')
-        local down_edgy = ok and EdgyWindow.cache[vim.fn.win_getid(vim.fn.winnr('j'))] or nil
-        if down_edgy then
-          down_edgy:resize('height', -5)
-        else
-          local smart_splits_ok, smart_splits = pcall(require, 'smart-splits')
-          if smart_splits_ok then
-            smart_splits.resize_down()
-          end
-        end
-      end,
+      create_resize_handler('j', 'height', -5, 'resize_down'),
       repeatable = true,
       desc = 'Resize down',
     },
