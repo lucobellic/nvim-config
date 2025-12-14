@@ -17,19 +17,19 @@ return {
     prompt_library = {
       -- Prefer buffer selection in chat instead of inline
       ['Buffer selection'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         opts = {
           auto_submit = false,
         },
       },
       ['Generate a Commit Message for Staged Files'] = {
-        strategy = 'inline',
+        interaction = 'inline',
         description = 'staged file commit messages',
         opts = {
           index = 15,
           is_default = false,
           is_slash_cmd = true,
-          short_name = 'scommit',
+          alias = 'scommit',
           auto_submit = true,
         },
         prompts = {
@@ -46,13 +46,13 @@ return {
         },
       },
       ['Add Documentation'] = {
-        strategy = 'inline',
+        interaction = 'inline',
         description = 'Add documentation to the selected code',
         opts = {
           index = 16,
           is_default = false,
           modes = { 'v' },
-          short_name = 'doc',
+          alias = 'doc',
           is_slash_cmd = true,
           auto_submit = true,
           user_prompt = false,
@@ -87,13 +87,13 @@ return {
         },
       },
       ['Refactor'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         description = 'Refactor the selected code for readability, maintainability and performances',
         opts = {
           index = 17,
           is_default = false,
           modes = { 'v' },
-          short_name = 'refactor',
+          alias = 'refactor',
           is_slash_cmd = true,
           auto_submit = true,
           user_prompt = false,
@@ -130,12 +130,12 @@ return {
         },
       },
       ['PullRequest'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         description = 'Generate a Pull Request message description',
         opts = {
           index = 18,
           is_default = false,
-          short_name = 'pr',
+          alias = 'pr',
           is_slash_cmd = true,
           auto_submit = true,
         },
@@ -156,12 +156,12 @@ return {
         },
       },
       ['Spell'] = {
-        strategy = 'inline',
+        interaction = 'inline',
         description = 'Correct grammar and reformulate',
         opts = {
           index = 19,
           is_default = false,
-          short_name = 'spell',
+          alias = 'spell',
           is_slash_cmd = true,
           auto_submit = true,
           adapter = {
@@ -181,12 +181,12 @@ return {
         },
       },
       ['Grammar'] = {
-        strategy = 'inline',
+        interaction = 'inline',
         description = 'Correct grammar',
         opts = {
           index = 20,
           is_default = false,
-          short_name = 'grammar',
+          alias = 'grammar',
           is_slash_cmd = true,
           auto_submit = true,
           adapter = {
@@ -200,18 +200,19 @@ return {
             contains_code = false,
             content = function(context)
               local text = require('codecompanion.helpers.actions').get_code(context.start_line, context.end_line)
-              return 'Correct grammar as in the original language but keep the same meaning and formulation:\n\n' .. text
+              return 'Correct grammar as in the original language but keep the same meaning and formulation:\n\n'
+                .. text
             end,
           },
         },
       },
       ['Bug Finder'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         description = 'Find potential bugs from the provided diff changes',
         opts = {
           index = 21,
           is_default = false,
-          short_name = 'bugs',
+          alias = 'bugs',
           is_slash_cmd = true,
           auto_submit = true,
         },
@@ -254,12 +255,12 @@ return {
         },
       },
       ['Split Commits'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         description = 'agent mode with explicit set of tools',
         opts = {
           index = 22,
           is_default = false,
-          short_name = 'commits',
+          alias = 'commits',
           is_slash_cmd = true,
           auto_submit = false,
         },
@@ -286,12 +287,12 @@ return {
         },
       },
       ['Gitlab MR Notes'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         description = 'Get the unresolved comments of the current MR',
         opts = {
           index = 23,
           is_default = false,
-          short_name = 'glab_mr_notes',
+          alias = 'glab_mr_notes',
           is_slash_cmd = true,
           auto_submit = false,
         },
@@ -307,12 +308,12 @@ return {
         },
       },
       ['qflist'] = {
-        strategy = 'chat',
+        interaction = 'chat',
         description = 'Send errors to qflist and diagnostics',
         opts = {
           index = 24,
           is_default = false,
-          short_name = 'qflist',
+          alias = 'qflist',
           is_slash_cmd = true,
           auto_submit = false,
         },
@@ -341,12 +342,12 @@ return {
         },
       },
       ['agent'] = {
-        strategy = 'inline',
+        interaction = 'inline',
         description = 'Ask agent',
         opts = {
           index = 25,
           is_default = false,
-          short_name = 'agent',
+          alias = 'agent',
           is_slash_cmd = false,
           auto_submit = true,
           user_prompt = true,

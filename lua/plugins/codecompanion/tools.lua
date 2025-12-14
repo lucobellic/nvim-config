@@ -1,16 +1,16 @@
 return {
   'olimorris/codecompanion.nvim',
   opts = {
-    strategies = {
+    interactions = {
       chat = {
         tools = {
           ['insert_edit_into_file'] = {
             opts = {
-              requires_approval = {
+              require_approval_before = {
                 buffer = false,
                 file = false,
               },
-              user_confirmation = false,
+              require_confirmation_after = false,
             },
           },
           opts = {

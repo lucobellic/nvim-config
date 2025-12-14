@@ -27,7 +27,7 @@ return {
   {
     'olimorris/codecompanion.nvim',
     cond = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true' and not vim.g.vscode,
-    version = 'v17.33.0',
+    version = '18.*',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -78,8 +78,8 @@ return {
       vim.cmd([[cab ccc CodeCompanionChat]])
     end,
     opts = {
-      requires_approval = false,
-      strategies = {
+      require_approval_before = false,
+      interactions = {
         chat = {
           opts = {
             goto_file_action = 'edit',
@@ -99,8 +99,8 @@ return {
             stop = { modes = { n = 'q' } },
             codeblock = { modes = { n = '<localleader>c' } },
             yank_code = { modes = { n = '<localleader>y' } },
-            pin = { modes = { n = '<localleader>p' } },
-            watch = { modes = { n = '<localleader>w' } },
+            sync_all = { modes = { n = '<localleader>p' } },
+            sync_diff = { modes = { n = '<localleader>w' } },
             change_adapter = { modes = { n = '<localleader>a' } },
             fold_code = { modes = { n = '<localleader>f' } },
             debug = { modes = { n = '<localleader>d' } },

@@ -1,7 +1,7 @@
 return {
   'olimorris/codecompanion.nvim',
   opts = {
-    strategies = {
+    interactions = {
       chat = {
         slash_commands = {
           ['buffer'] = {

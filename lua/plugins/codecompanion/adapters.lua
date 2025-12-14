@@ -20,8 +20,8 @@ return {
         end,
       },
     },
-    ---@type CodeCompanion.Strategies
-    strategies = {
+    ---@type CodeCompanion.Interactions
+    interactions = {
       cmd = { adapter = 'copilot', model = 'gpt-5-mini' },
       chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4.5' } },
       inline = { adapter = { name = 'copilot', model = 'gpt-5-mini' } },

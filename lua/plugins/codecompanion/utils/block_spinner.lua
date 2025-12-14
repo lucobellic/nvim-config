@@ -97,8 +97,8 @@ function VirtualTextBlockSpinner.new(opts)
     opts = merged_opts,
     width = width,
     height = #lines,
-    border_top = '╭' .. horizontal_line .. '╮',
-    border_bottom = '╰' .. horizontal_line .. '╯',
+    border_top = '┌' .. horizontal_line .. '┐',
+    border_bottom = '└' .. horizontal_line .. '┘',
   }, { __index = VirtualTextBlockSpinner })
 end
 
