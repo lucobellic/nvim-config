@@ -1,4 +1,4 @@
-vim.lsp.config('clangd', {
+return {
   cmd = {
     'clangd',
     -- '/usr/local/bin/clangd',
@@ -14,4 +14,4 @@ vim.lsp.config('clangd', {
     '-j',
     '2',
   },
-})
+}
