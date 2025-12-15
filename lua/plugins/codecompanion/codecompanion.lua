@@ -71,6 +71,15 @@ return {
         mode = { 'n' },
         desc = 'Code Companion Explain Terminal Error',
       },
+      {
+        '<C-l>',
+        function()
+          require('codecompanion').inline_accept_word()
+        end,
+        desc = 'Copilot accept word',
+        mode = 'i',
+      },
+
     },
     init = function()
       vim.g.codecompanion_yolo_mode = true
