@@ -265,6 +265,11 @@ return {
     return {
       options = {
         custom_filter = function(bufnr)
+          local is_edgy = vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= false
+          if is_edgy then
+            return false
+          end
+
           if filter_mode == 'none' then
             return false
           elseif filter_mode == 'all' then
