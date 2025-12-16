@@ -1,6 +1,7 @@
 return {
   'ravitemer/mcphub.nvim',
-  enabled = vim.fn.executable('npm') == 1,
+  -- enabled = vim.fn.executable('npm') == 1,
+  enabled = false,
   cond = not vim.env.INSIDE_DOCKER,
   dependencies = {
     'nvim-lua/plenary.nvim',

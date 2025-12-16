@@ -73,13 +73,10 @@ return {
       },
       {
         '<C-l>',
-        function()
-          require('codecompanion').inline_accept_word()
-        end,
+        function() require('codecompanion').inline_accept_word() end,
         desc = 'Copilot accept word',
         mode = 'i',
       },
-
     },
     init = function()
       vim.g.codecompanion_yolo_mode = true
@@ -104,16 +101,23 @@ return {
             clear = { modes = { n = '<C-x>' } },
             next_chat = { modes = { n = '<A-l>' } },
             previous_chat = { modes = { n = '<A-h>' } },
+            next_header = { modes = { n = ']]' } },
+            previous_header = { modes = { n = '[[' } },
             regenerate = { modes = { n = '<localleader>r' } },
             stop = { modes = { n = 'q' } },
             codeblock = { modes = { n = '<localleader>c' } },
             yank_code = { modes = { n = '<localleader>y' } },
-            sync_all = { modes = { n = '<localleader>p' } },
-            sync_diff = { modes = { n = '<localleader>w' } },
             change_adapter = { modes = { n = '<localleader>a' } },
             fold_code = { modes = { n = '<localleader>f' } },
             debug = { modes = { n = '<localleader>d' } },
             system_prompt = { modes = { n = '<localleader>s' } },
+            buffer_sync_all = { modes = { n = '<localleader>ba' } },
+            buffer_sync_diff = { modes = { n = '<localleader>bd' } },
+            rules = { modes = { n = '<localleader>M' } },
+            yolo_mode = { modes = { n = '<localleader>ty' } },
+            goto_file_under_cursor = { modes = { n = '<localleader>R' } },
+            copilot_stats = { modes = { n = '<localleader>S' } },
+            super_diff = { modes = { n = '<localleader>D' } },
           },
         },
       },

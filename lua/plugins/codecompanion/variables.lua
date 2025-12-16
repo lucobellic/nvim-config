@@ -1,7 +1,7 @@
 return {
   'olimorris/codecompanion.nvim',
   opts = {
-    strategies = {
+    interactions = {
       chat = {
         variables = {
           ['explain terminal error'] = {
