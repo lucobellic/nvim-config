@@ -76,6 +76,29 @@ if vim.g.vscode then
   vim.keymap.set('n', 'L', "<Cmd>call VSCodeNotify('workbench.action.nextEditor')<CR>")
 end
 
+--- Check if a buffer is open in another tab
+--- @param current_buffer number
+local function is_buffer_in_an_other_tab(current_buffer)
+  local current_tabpage = vim.api.nvim_get_current_tabpage()
+  return vim
+    .iter(require('scope.core').cache or {})
+    :enumerate()
+    :filter(function(tab, _) return tab ~= current_tabpage end)
+    :map(function(_, buffers) return buffers end)
+    :flatten()
+    :any(function(buffer) return buffer == current_buffer end)
+end
+
+local function scope_close_buffer(buffer)
+  local window = vim.fn.bufwinid(buffer)
+  vim.api.nvim_set_option_value('buflisted', false, { buf = buffer })
+  if not is_buffer_in_an_other_tab(buffer) then
+    vim.api.nvim_buf_delete(buffer, { force = true })
+  elseif window ~= -1 and vim.api.nvim_win_is_valid(window) then
+    vim.api.nvim_win_hide(window)
+  end
+end
+
 --- Check if a buffer is pinned
 ---@param bufnr number
 local function is_pinned(bufnr)
@@ -226,21 +249,18 @@ return {
     { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
     {
       '<C-q>',
-      function() require('snacks').bufdelete({ force = true }) end,
+      function() scope_close_buffer(vim.api.nvim_get_current_buf()) end,
       desc = 'Delete Buffer',
     },
     {
       '<leader>bco',
       function()
-        local current_buf = vim.fn.bufnr()
-        vim.tbl_map(
-          function(buf) vim.api.nvim_buf_delete(buf.bufnr, { force = true }) end,
-          vim.tbl_filter(
-            function(buf) return not is_pinned(buf.bufnr) and buf.bufnr ~= current_buf end,
-            vim.fn.getbufinfo({ buflisted = 1 })
-          )
-        )
-        vim.cmd.redrawtabline()
+        local current_buffer = vim.api.nvim_get_current_buf()
+        vim
+          .iter(vim.fn.getbufinfo({ buflisted = 1 }) or {})
+          :map(function(buffer_info) return buffer_info.bufnr end)
+          :filter(function(buffer) return buffer ~= current_buffer end)
+          :each(function(buffer) scope_close_buffer(buffer) end)
       end,
       desc = 'Buffer Line Close Others (Non Pinned)',
     },
@@ -251,12 +271,13 @@ return {
     {
       '<leader>bcv',
       function()
-        -- Close all non visible buffers
-        for _, buf in ipairs(vim.fn.getbufinfo({ buflisted = 1 })) do
-          if vim.fn.bufwinid(buf.bufnr) == -1 then
-            vim.api.nvim_command('bdelete ' .. buf.bufnr)
-          end
-        end
+        local current_buffer = vim.api.nvim_get_current_buf()
+        vim
+          .iter(vim.fn.getbufinfo({ buflisted = 1 }) or {})
+          :map(function(buffer_info) return buffer_info.bufnr end)
+          :filter(function(bufnr) return bufnr ~= current_buffer end)
+          :filter(function(bufnr) return vim.fn.bufwinid(bufnr) == -1 end)
+          :each(function(buffer) scope_close_buffer(buffer) end)
       end,
       desc = 'Buffer Line Close Non Visible',
     },
@@ -265,8 +286,7 @@ return {
     return {
       options = {
         custom_filter = function(bufnr)
-          local is_edgy = vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= false
-          if is_edgy then
+          if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
             return false
           end
 
