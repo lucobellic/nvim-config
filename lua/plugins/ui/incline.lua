@@ -129,6 +129,24 @@ local function get_avante_title(props)
   return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
 end
 
+local function get_search_count(props)
+  if vim.v.hlsearch == 0 then
+    return {}
+  end
+
+  if props.buf ~= vim.api.nvim_get_current_buf() then
+    return {}
+  end
+
+  local ok, search = pcall(vim.fn.searchcount)
+  if not ok or not search.total then
+    return {}
+  end
+
+  local search_text = string.format('[%d/%d] ', search.current, math.min(search.total, search.maxcount))
+  return { { search_text, group = props.focused and 'Identifier' or unfocused } }
+end
+
 return {
   'b0o/incline.nvim',
   event = 'BufEnter',
@@ -191,12 +209,17 @@ return {
       local filetype_icon, filetype_color = require('nvim-web-devicons').get_icon_color(filename)
       local diagnostics = get_diagnostic_label(props)
       local diffs = get_git_diff(props)
+      local search_count = get_search_count(props)
 
       local color = props.focused and focused or unfocused
       local icon = props.focused and { filetype_icon, guifg = filetype_color } or { filetype_icon, group = unfocused }
-      local separator = (#diagnostics > 0 and #diffs > 0) and { separator_char .. ' ', group = color } or ''
-      local filename_separator = (#diagnostics > 0 or #diffs > 0) and { ' ' .. separator_char .. ' ', group = color }
+
+      local has_info = #diagnostics > 0 or #diffs > 0 or #search_count > 0
+      local separator = (#diagnostics > 0 and (#diffs > 0 or #search_count > 0))
+          and { separator_char .. ' ', group = color }
         or ''
+      local search_separator = (#diffs > 0 and #search_count > 0) and { separator_char .. ' ', group = color } or ''
+      local filename_separator = has_info and { ' ' .. separator_char .. ' ', group = color } or ''
 
       local filename_component = {
         icon,
@@ -214,6 +237,8 @@ return {
         { diagnostics },
         { separator },
         { diffs },
+        { search_separator },
+        { search_count },
       }
       return buffer
     end,
