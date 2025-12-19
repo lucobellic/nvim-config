@@ -53,7 +53,7 @@ return {
             },
           },
           underline = true,
-          update_in_insert = true,
+          update_in_insert = false, -- Disable to remove blinking while in insert mode
           severity_sort = true,
           float = { source = true, header = {}, border = vim.g.border.style },
         },
