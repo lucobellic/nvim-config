@@ -298,6 +298,64 @@ function M.new(cmd, opts)
   M.open(name, command, opts)
 end
 
+--- Replace current terminal with a new one without UI transition
+---@param cmd? string|string[] Command to execute
+---@param opts? TermOpts Terminal options
+function M.replace(cmd, opts)
+  if not M.active_term or not is_popup_visible() then
+    M.new(cmd, opts)
+    return
+  end
+
+  ---@type Term
+  local old_term = M.active_term
+  local old_index = old_term.index
+
+  opts = vim.tbl_deep_extend('force', config.get().defaults, opts or {})
+  opts.width = old_term.opts.width
+  opts.height = old_term.opts.height
+
+  local command = cmd or vim.o.shell
+  local name = 'Terminal ' .. tostring(vim.loop.hrtime())
+
+  local user_on_exit = opts.on_exit
+  opts.on_exit = function(term, code)
+    if user_on_exit then
+      user_on_exit(term, code)
+    end
+    if code == 0 then
+      vim.schedule(function() M.remove(name) end)
+    end
+  end
+
+  local new_term = Term.new(name, command, opts)
+
+  if not new_term:start() then
+    vim.notify('Failed to start terminal: ' .. new_term.name, vim.log.levels.ERROR)
+    return
+  end
+
+  M.terminals[old_index] = new_term
+  new_term.index = old_index
+  reindex_terminals(old_index + 1)
+
+  vim.api.nvim_win_set_buf(M.popup.winid, new_term.bufnr)
+  vim.api.nvim_set_option_value('sidescrolloff', 0, { win = M.popup.winid })
+
+  ui.update_border(M.popup, new_term, #M.terminals)
+  M.active_term = new_term
+
+  old_term:kill()
+
+  if new_term.opts.on_open then
+    new_term.opts.on_open(new_term)
+  end
+
+  if new_term.opts.start_insert then
+    vim.cmd('startinsert')
+  end
+end
+
 --- Resize the popup
 ---@param width? number Window width (0.0-1.0 relative)
 ---@param height? number Window height (0.0-1.0 relative)

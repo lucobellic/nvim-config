@@ -18,6 +18,12 @@ vim.keymap.set({ 'n' }, '<Esc>', function() core.hide() end, { buffer = true, si
 vim.keymap.set({ 't', 'n' }, '<C-t>', function() core.new() end, { buffer = true, silent = true, desc = 'Term New' })
 vim.keymap.set(
   { 't', 'n' },
+  '<C-r>',
+  function() core.replace() end,
+  { buffer = true, silent = true, desc = 'Term Replace' }
+)
+vim.keymap.set(
+  { 't', 'n' },
   '<C-h>',
   function() core.prev() end,
   { buffer = true, silent = true, desc = 'Term Previous' }
