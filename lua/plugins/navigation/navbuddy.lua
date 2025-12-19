@@ -1,4 +1,4 @@
-local border_style = vim.g.border.enabled and { '─', '─', '─', ' ', '─', '─', '─', ' ' } or { ' ' }
+local border_style = vim.g.neovide_floating_shadow and { ' ' } or { '─', '─', '─', ' ', '─', '─', '─', ' ' }
 
 return {
   'hasansujon786/nvim-navbuddy',
