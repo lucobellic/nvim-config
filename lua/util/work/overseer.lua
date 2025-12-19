@@ -164,12 +164,102 @@ local function reach_run(run_args, list_args)
   end)
 end
 
+local function reach_debug_test()
+  local executables_dir = vim.fn.resolve(vim.fn.getcwd() .. '/../build/Executables')
+
+  -- Check if the directory exists
+  if vim.fn.isdirectory(executables_dir) == 0 then
+    vim.notify('Executables directory not found: ' .. executables_dir, vim.log.levels.ERROR)
+    return
+  end
+
+  -- Use plenary to scan directory recursively
+  local scan = require('plenary.scandir')
+  local files = scan.scan_dir(executables_dir, {
+    hidden = false,
+    add_dirs = false,
+    depth = 10,
+  })
+
+  -- Filter for executable files and create items
+  local items = {}
+  for _, file in ipairs(files) do
+    if vim.fn.executable(file) == 1 then
+      -- Store relative path from executables_dir for display
+      local relative_path = file:sub(#executables_dir + 2) -- +2 to remove leading '/'
+      table.insert(items, {
+        text = relative_path,
+        path = file,
+      })
+    end
+  end
+
+  if #items == 0 then
+    vim.notify('No executable files found in ' .. executables_dir, vim.log.levels.WARN)
+    return
+  end
+
+  Snacks.picker.pick({
+    title = 'Select Executable to Debug',
+    items = items,
+    format = 'text',
+    preview = function() return false end,
+    layout = 'vscode',
+    actions = {
+      confirm = function(picker, item)
+        if not item then
+          return
+        end
+
+        picker:close()
+
+        vim.schedule(function()
+          local dap = require('dap')
+          local executable_name = item.text
+          local executable_path = item.path
+
+          -- Create DAP configuration for this executable
+          local config = {
+            name = 'Debug: ' .. executable_name,
+            type = 'cppdbg',
+            request = 'launch',
+            program = executable_path,
+            args = {},
+            cwd = vim.fn.getcwd(),
+            stopAtEntry = false,
+            environment = {},
+            externalConsole = false,
+            MIMode = 'gdb',
+            setupCommands = {
+              {
+                description = 'Enable pretty-printing for gdb',
+                text = '-enable-pretty-printing',
+                ignoreFailures = true,
+              },
+              {
+                description = 'Set Disassembly Flavor to Intel',
+                text = '-gdb-set disassembly-flavor intel',
+                ignoreFailures = true,
+              },
+            },
+          }
+
+          -- Start the debug session
+          dap.run(config)
+        end)
+      end,
+    },
+  })
+end
+
 vim.keymap.set(
   'n',
   '<leader>oet',
   function() reach_run({ 'test', 'run', '-b' }, { 'test', 'list' }) end,
   { desc = 'Reach Test' }
 )
+
+vim.keymap.set('n', '<leader>oed', reach_debug_test, { desc = 'Reach Test (Debug)' })
 
 vim.keymap.set(
   'n',
