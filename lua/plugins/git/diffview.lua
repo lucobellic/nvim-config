@@ -47,7 +47,10 @@ return {
       },
       {
         '<leader>gdf',
-        '<cmd>DiffviewFileHistory --no-merges --follow %<cr>',
+        function()
+          local file = vim.fn.resolve(vim.fn.expand('%:p'))
+          vim.cmd('DiffviewFileHistory --no-merges --follow ' .. vim.fn.fnameescape(file))
+        end,
         mode = { 'n' },
         desc = 'Diffview File History',
       },
