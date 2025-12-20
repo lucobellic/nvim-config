@@ -53,6 +53,25 @@ function Term.new(name, cmd, opts)
   return self
 end
 
+--- Build environment variables for terminal (prevents nested nvim)
+---@return table<string, string>
+local function build_env()
+  local env = {
+    TERM = vim.env.TERM or 'xterm-256color',
+  }
+
+  local servername = vim.v.servername
+  if servername and servername ~= '' then
+    env.NVIM = servername
+    local wrapper_path = vim.fn.stdpath('config') .. '/lua/util/term/editor-wrapper.sh'
+    env.GIT_EDITOR = wrapper_path
+    env.EDITOR = wrapper_path
+    env.VISUAL = wrapper_path
+  end
+
+  return env
+end
+
 --- Start the terminal job if not already running
 ---@return boolean success
 function Term:start()
@@ -66,50 +85,20 @@ function Term:start()
 
   local on_exit = self.opts.on_exit
 
-  -- Need to be in the buffer to start the terminal
-  local current_buf = vim.api.nvim_get_current_buf()
-  vim.api.nvim_set_current_buf(self.bufnr)
-
-  -- Build environment variables to prevent nested nvim (floaterm-style)
-  local env = vim.fn.environ()
-
-  -- Ensure TERM is set (required by tools like lazygit)
-  -- Inherit from parent if available, otherwise use a sensible default
-  if not env.TERM or env.TERM == '' then
-    env.TERM = vim.env.TERM or 'xterm-256color'
-  end
-
-  -- Set NVIM to the server address so tools can connect back
-  local servername = vim.v.servername
-  if servername and servername ~= '' then
-    env.NVIM = servername
-    -- Use the editor wrapper script that mimics floaterm's behavior
-    local wrapper_path = vim.fn.stdpath('config') .. '/lua/util/term/editor-wrapper.sh'
-    env.GIT_EDITOR = wrapper_path
-    env.EDITOR = wrapper_path
-    env.VISUAL = wrapper_path
-  end
-
-  ---@diagnostic disable-next-line: deprecated
-  self.job_id = vim.fn.termopen(self.cmd, {
-    env = env,
-    on_exit = function(_, code)
-      self.job_id = nil
-      if on_exit then
-        on_exit(self, code)
-      end
-    end,
-  })
-
-  -- Ensure buftype is set to terminal
-  if self:is_valid() then
-    vim.api.nvim_set_option_value('buftype', 'terminal', { buf = self.bufnr })
-  end
-
-  -- Restore previous buffer
-  if vim.api.nvim_buf_is_valid(current_buf) then
-    vim.api.nvim_set_current_buf(current_buf)
-  end
+  -- Use nvim_buf_call to run jobstart in context of our buffer
+  -- This avoids switching the current buffer which can cause flicker
+  vim.api.nvim_buf_call(self.bufnr, function()
+    self.job_id = vim.fn.jobstart(self.cmd, {
+      term = true,
+      env = build_env(),
+      on_exit = function(_, code)
+        self.job_id = nil
+        if on_exit then
+          on_exit(self, code)
+        end
+      end,
+    })
+  end)
 
   return self.job_id ~= nil and self.job_id > 0
 end

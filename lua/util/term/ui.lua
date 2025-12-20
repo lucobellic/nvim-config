@@ -52,23 +52,17 @@ end
 --- Create popup window for terminal display
 ---@return NuiPopup
 function M.create_popup()
+  local width = config.get_default_width()
+  local height = config.get_default_height()
   local cfg = config.get()
 
-  -- Calculate size (keep as relative values for Nui)
-  local width = cfg.defaults.width or 0.6
-  local height = cfg.defaults.height or 0.6
-
-  -- Create popup
   ---@diagnostic disable-next-line: missing-fields
   return Popup({
     enter = true,
     focusable = true,
     relative = 'editor',
     position = '50%',
-    size = {
-      width = width,
-      height = height,
-    },
+    size = { width = width, height = height },
     border = {
       style = config.get_border_style(),
       text = {
@@ -80,6 +74,8 @@ function M.create_popup()
     win_options = {
       winhighlight = 'Normal:Normal,FloatBorder:FloatBorder',
       sidescrolloff = 0,
+      signcolumn = 'no',
+      wrap = true,
     },
     zindex = cfg.defaults.zindex or 50,
   })

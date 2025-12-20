@@ -3,6 +3,8 @@ local config = require('util.term.config')
 local ui = require('util.term.ui')
 local event = require('nui.utils.autocmd').event
 
+local CONSTANTS = config.CONSTANTS
+
 ---@class TermCore
 ---@field active_term Term? Active terminal instance
 ---@field popup NuiPopup? Popup window instance
@@ -15,20 +17,64 @@ local M = {
   disable_autohide = false,
 }
 
+-- ══════════════════════════════════════════════════════════════════════════════
+-- Helper Functions
+-- ══════════════════════════════════════════════════════════════════════════════
+
 --- Check if popup is currently visible and valid
 ---@return boolean
 local function is_popup_visible()
   return M.popup ~= nil and M.popup.winid ~= nil and vim.api.nvim_win_is_valid(M.popup.winid)
 end
 
---- Get current width and height from active terminal or config defaults
+--- Find terminal by name
+---@param name string
+---@return Term?
+local function find_terminal_by_name(name)
+  return vim.iter(M.terminals):filter(function(t) return t.name == name end):next()
+end
+
+--- Get dimensions from terminal opts or config defaults
+---@param term_opts? TermOpts
 ---@return number width, number height
-local function get_current_dimensions()
-  local cfg = config.get()
-  local width = (M.active_term and M.active_term.opts.width) or cfg.defaults.width or 0.6
-  local height = (M.active_term and M.active_term.opts.height) or cfg.defaults.height or 0.6
+local function get_dimensions(term_opts)
+  local width = (term_opts and term_opts.width) or config.get_default_width()
+  local height = (term_opts and term_opts.height) or config.get_default_height()
   return width, height
 end
+
+--- Configure window options for terminal buffer display
+---@param winid integer Window ID
+---@param bufnr integer Buffer number
+local function setup_window_buffer(winid, bufnr)
+  vim.api.nvim_win_set_buf(winid, bufnr)
+  vim.api.nvim_set_option_value('sidescrolloff', 0, { win = winid })
+  vim.api.nvim_set_option_value('signcolumn', 'no', { win = winid })
+  vim.api.nvim_set_option_value('wrap', true, { win = winid })
+  vim.api.nvim_set_option_value('list', false, { win = winid })
+end
+
+--- Wrap user on_exit callback with cleanup logic
+---@param opts TermOpts
+---@param name string Terminal name for cleanup
+---@return TermOpts opts Modified options with wrapped callback
+local function wrap_on_exit(opts, name)
+  local user_on_exit = opts.on_exit
+  opts.on_exit = function(term, code)
+    if user_on_exit then
+      user_on_exit(term, code)
+    end
+    -- Remove terminal on normal exit to allow fresh creation next time
+    if code == 0 then
+      vim.schedule(function() M.remove(name) end)
+    end
+  end
+  return opts
+end
+
+--- Generate unique terminal name
+---@return string
+local function generate_unique_name() return 'Terminal ' .. tostring(vim.uv.hrtime()) end
 
 --- Reindex terminals starting from a given index
 ---@param start_index number Starting index for reindexing
@@ -94,43 +140,35 @@ local function show_terminal(term)
   end
 
   -- Resize popup to match terminal's dimensions
-  if M.popup and term.opts then
-    local cfg = config.get()
-    local width = term.opts.width or cfg.defaults.width or 0.6
-    local height = term.opts.height or cfg.defaults.height or 0.6
-
+  if M.popup then
+    local width, height = get_dimensions(term.opts)
     M.popup:update_layout({
       position = '50%',
-      size = {
-        width = width,
-        height = height,
-      },
+      size = { width = width, height = height },
     })
   end
 
   -- Ensure the popup window is the current window before starting insert
   if is_popup_visible() then
     vim.api.nvim_set_current_win(M.popup.winid)
-    vim.api.nvim_win_set_buf(M.popup.winid, term.bufnr)
-    vim.api.nvim_set_option_value('sidescrolloff', 0, { win = M.popup.winid })
+    setup_window_buffer(M.popup.winid, term.bufnr)
   end
 
   ui.update_border(M.popup, term, #M.terminals)
 
-  -- Schedule a second border update to ensure titles are refreshed after any timing issues
+  -- NUI popup sometimes has timing issues with border updates after buffer changes
   vim.defer_fn(function()
     if M.popup and M.active_term == term then
       ui.update_border(M.popup, term, #M.terminals)
     end
-  end, 200)
+  end, CONSTANTS.BORDER_UPDATE_DELAY)
 
   if term.opts.on_open then
     term.opts.on_open(term)
   end
 
-  -- Only start insert mode if explicitly enabled (default: false to preserve cursor position)
   if term.opts.start_insert then
-    vim.cmd('startinsert')
+    vim.cmd.startinsert()
   end
   M.active_term = term
 end
@@ -141,8 +179,7 @@ end
 ---@param opts? TermOpts Terminal options
 ---@return Term?
 function M.get_or_create(name, cmd, opts)
-  -- Find existing terminal
-  local existing_term = vim.iter(M.terminals):filter(function(t) return t.name == name end):next()
+  local existing_term = find_terminal_by_name(name)
   if existing_term then
     if existing_term:is_job_running() and existing_term:is_valid() then
       return existing_term
@@ -163,18 +200,7 @@ function M.get_or_create(name, cmd, opts)
     opts = vim.tbl_deep_extend('force', config.get().defaults, opts or {})
   end
 
-  local user_on_exit = opts.on_exit
-  opts.on_exit = function(term, code)
-    if user_on_exit then
-      user_on_exit(term, code)
-    end
-
-    -- If terminal exited normally (user typed exit), remove it from manager
-    -- This allows creating a fresh terminal next time
-    if code == 0 then
-      vim.schedule(function() M.remove(name) end)
-    end
-  end
+  opts = wrap_on_exit(opts, name)
 
   local term = Term.new(name, cmd, opts)
   term.index = #M.terminals + 1
@@ -253,11 +279,10 @@ function M.hide(unmount, skip_autohide_disable)
     -- This is crucial for editor-wrapper workflow
     if not skip_autohide_disable then
       M.disable_autohide = true
-      vim.defer_fn(function() M.disable_autohide = false end, 100) -- Re-enable after 100ms
+      vim.defer_fn(function() M.disable_autohide = false end, CONSTANTS.AUTOHIDE_DELAY)
     end
 
     if unmount then
-      -- Clean up autocmd group before unmounting
       pcall(vim.api.nvim_del_augroup_by_name, 'TermPopupAutoHide')
       M.popup:unmount()
       M.popup = nil
@@ -294,7 +319,7 @@ end
 ---@param opts? TermOpts Terminal options
 function M.new(cmd, opts)
   local command = cmd or vim.o.shell
-  local name = 'Terminal ' .. tostring(vim.loop.hrtime())
+  local name = generate_unique_name()
   M.open(name, command, opts)
 end
 
@@ -316,17 +341,9 @@ function M.replace(cmd, opts)
   opts.height = old_term.opts.height
 
   local command = cmd or vim.o.shell
-  local name = 'Terminal ' .. tostring(vim.loop.hrtime())
+  local name = generate_unique_name()
 
-  local user_on_exit = opts.on_exit
-  opts.on_exit = function(term, code)
-    if user_on_exit then
-      user_on_exit(term, code)
-    end
-    if code == 0 then
-      vim.schedule(function() M.remove(name) end)
-    end
-  end
+  opts = wrap_on_exit(opts, name)
 
   local new_term = Term.new(name, command, opts)
 
@@ -339,8 +356,7 @@ function M.replace(cmd, opts)
   new_term.index = old_index
   reindex_terminals(old_index + 1)
 
-  vim.api.nvim_win_set_buf(M.popup.winid, new_term.bufnr)
-  vim.api.nvim_set_option_value('sidescrolloff', 0, { win = M.popup.winid })
+  setup_window_buffer(M.popup.winid, new_term.bufnr)
 
   ui.update_border(M.popup, new_term, #M.terminals)
   M.active_term = new_term
@@ -352,7 +368,7 @@ function M.replace(cmd, opts)
   end
 
   if new_term.opts.start_insert then
-    vim.cmd('startinsert')
+    vim.cmd.startinsert()
   end
 end
 
@@ -364,20 +380,14 @@ function M.resize(width, height)
     return
   end
 
-  local cfg = config.get()
-  width = width or cfg.defaults.width or 0.6
-  height = height or cfg.defaults.height or 0.6
+  width = width or config.get_default_width()
+  height = height or config.get_default_height()
 
-  -- Update popup layout with relative values
   M.popup:update_layout({
     position = '50%',
-    size = {
-      width = width,
-      height = height,
-    },
+    size = { width = width, height = height },
   })
 
-  -- Update active terminal's stored dimensions
   if M.active_term then
     M.active_term.opts.width = width
     M.active_term.opts.height = height
@@ -391,12 +401,11 @@ function M.increase_size(percent)
     return
   end
 
-  percent = percent or 0.1
-  local current_width, current_height = get_current_dimensions()
+  percent = percent or CONSTANTS.DEFAULT_RESIZE_STEP
+  local current_width, current_height = get_dimensions(M.active_term and M.active_term.opts)
 
-  -- Increase by percentage, cap at 1.0 for relative sizes
-  local new_width = math.min(current_width + percent, 1.0)
-  local new_height = math.min(current_height + percent, 1.0)
+  local new_width = math.min(current_width + percent, CONSTANTS.MAX_SIZE)
+  local new_height = math.min(current_height + percent, CONSTANTS.MAX_SIZE)
 
   M.resize(new_width, new_height)
 end
@@ -408,12 +417,11 @@ function M.decrease_size(percent)
     return
   end
 
-  percent = percent or 0.1
-  local current_width, current_height = get_current_dimensions()
+  percent = percent or CONSTANTS.DEFAULT_RESIZE_STEP
+  local current_width, current_height = get_dimensions(M.active_term and M.active_term.opts)
 
-  -- Decrease by percentage, keep minimum of 0.3 (30%)
-  local new_width = math.max(current_width - percent, 0.3)
-  local new_height = math.max(current_height - percent, 0.3)
+  local new_width = math.max(current_width - percent, CONSTANTS.MIN_SIZE)
+  local new_height = math.max(current_height - percent, CONSTANTS.MIN_SIZE)
 
   M.resize(new_width, new_height)
 end
@@ -421,7 +429,7 @@ end
 --- Remove terminal from manager
 ---@param name string Terminal name to remove
 function M.remove(name)
-  local term = vim.iter(M.terminals):filter(function(t) return t.name == name end):next()
+  local term = find_terminal_by_name(name)
   if not term then
     return
   end
@@ -429,7 +437,7 @@ function M.remove(name)
   local term_index = term.index
   local was_active = M.active_term and M.active_term.name == name
   if was_active and #M.terminals > 1 then
-    next_term_to_show = term_index < #M.terminals and M.terminals[term_index + 1] or M.terminals[term_index - 1]
+    local next_term_to_show = term_index < #M.terminals and M.terminals[term_index + 1] or M.terminals[term_index - 1]
     show_terminal(next_term_to_show)
   end
 

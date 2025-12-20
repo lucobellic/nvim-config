@@ -5,6 +5,15 @@
 ---@class TermManagerConfigModule
 local M = {}
 
+--- Constants for terminal management
+M.CONSTANTS = {
+  MIN_SIZE = 0.3, -- Minimum terminal size (30%)
+  MAX_SIZE = 1.0, -- Maximum terminal size (100%)
+  DEFAULT_RESIZE_STEP = 0.1, -- Default resize increment (10%)
+  BORDER_UPDATE_DELAY = 200, -- Delay for border update in ms
+  AUTOHIDE_DELAY = 100, -- Delay before re-enabling autohide
+}
+
 --- Default configuration
 ---@type TermManagerConfig
 M.defaults = {
@@ -29,6 +38,14 @@ function M.setup(user_config) M.config = vim.tbl_deep_extend('force', M.config, 
 --- Get current configuration
 ---@return TermManagerConfig
 function M.get() return M.config end
+
+--- Get default width from config
+---@return number
+function M.get_default_width() return M.config.defaults.width or 0.6 end
+
+--- Get default height from config
+---@return number
+function M.get_default_height() return M.config.defaults.height or 0.6 end
 
 --- Get border style respecting vim.g.winborder
 ---@return string
