@@ -46,8 +46,7 @@ return {
         run_in_insert = true,
         debounce = 150,
       },
-      trigger = { events = { 'InsertLeave', 'TextChanged', 'TextChangedI', 'User SidekickNesDone' } },
-      -- clear = { events = { 'TextChangedI', 'InsertEnter' } },
+      trigger = { events = { 'ModeChanged i:n', 'TextChanged', 'User SidekickNesDone' } },
     },
   },
 }
