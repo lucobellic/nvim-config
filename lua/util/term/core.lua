@@ -76,6 +76,52 @@ end
 ---@return string
 local function generate_unique_name() return 'Terminal ' .. tostring(vim.uv.hrtime()) end
 
+--- Create a terminal instance from existing buffer
+---@param bufnr integer Existing terminal buffer number
+---@param opts? TermOpts Terminal options
+---@return Term? term The created terminal or nil if invalid
+local function create_term_from_buffer(bufnr, opts)
+  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+
+  if buftype ~= 'terminal' then
+    vim.notify('Buffer ' .. bufnr .. ' is not a terminal buffer', vim.log.levels.ERROR)
+    return nil
+  end
+
+  -- Create a term object from existing buffer
+  local name = generate_unique_name()
+  opts = vim.tbl_deep_extend('force', config.get().defaults, opts or {})
+
+  -- Create a Term-like object without creating new buffer or starting job
+  local term = setmetatable({
+    name = name,
+    title = opts.title or name:gsub('^%l', string.upper),
+    cmd = '', -- No command for existing buffer
+    bufnr = bufnr,
+    job_id = vim.b[bufnr].terminal_job_id, -- Get existing job_id from buffer
+    index = #M.terminals + 1,
+    opts = opts,
+    _created_at = os.time(),
+    _from_existing = true, -- Flag to indicate this is from existing buffer
+  }, { __index = Term })
+
+  -- Override methods for existing terminal buffers
+  term.start = function(_)
+    -- Already running, no need to start
+    return true
+  end
+
+  term.kill = function(self)
+    if self.opts.on_close then
+      self.opts.on_close(self)
+    end
+    -- Don't kill job or delete buffer for existing terminals
+    self.job_id = nil
+  end
+
+  return term
+end
+
 --- Reindex terminals starting from a given index
 ---@param start_index number Starting index for reindexing
 local function reindex_terminals(start_index)
@@ -100,8 +146,9 @@ local function ensure_popup()
           end
 
           -- Only hide if popup is still valid and we entered a different window
-          if is_popup_visible() and M.popup.winid then
-            local entered_win = args.win or vim.api.nvim_get_current_win()
+          if is_popup_visible() and M.popup and M.popup.winid then
+            local entered_win = args.event == 'WinEnter' and vim.api.nvim_get_current_win()
+              or vim.api.nvim_get_current_win()
             if entered_win ~= M.popup.winid then
               M.hide()
             end
@@ -317,7 +364,20 @@ end
 --- Create a new terminal with auto-incremented name
 ---@param cmd? string|string[] Command to execute
 ---@param opts? TermOpts Terminal options
+---@overload fun(bufnr: integer, opts?: TermOpts)
 function M.new(cmd, opts)
+  -- Check if cmd is an existing terminal buffer number
+  if type(cmd) == 'number' and vim.api.nvim_buf_is_valid(cmd) then
+    local term = create_term_from_buffer(cmd, opts)
+    if term then
+      table.insert(M.terminals, term)
+      show_terminal(term)
+    end
+    return
+  end
+
+  -- Original behavior for cmd string
+  ---@diagnostic disable-next-line: cast-local-type
   local command = cmd or vim.o.shell
   local name = generate_unique_name()
   M.open(name, command, opts)
@@ -458,5 +518,133 @@ end
 --- Get list of all terminals
 ---@return Term[]
 function M.list() return M.terminals end
+
+--- Detach current terminal from floating manager and open in standard window
+---@return boolean success Whether the operation succeeded
+function M.detach_to_window()
+  if not M.active_term then
+    vim.notify('No active terminal to detach', vim.log.levels.WARN)
+    return false
+  end
+
+  local term = M.active_term
+  if not term.bufnr or not term.index then
+    vim.notify('Invalid terminal state', vim.log.levels.ERROR)
+    return false
+  end
+
+  local bufnr = term.bufnr
+  local term_index = term.index
+
+  -- Remove from terminals list without killing
+  table.remove(M.terminals, term_index)
+  reindex_terminals(term_index)
+
+  -- Show next terminal if any, otherwise hide popup
+  if #M.terminals > 0 then
+    local next_index = math.min(term_index, #M.terminals)
+    show_terminal(M.terminals[next_index])
+  else
+    M.hide(true)
+    M.active_term = nil
+  end
+
+  -- Open buffer in a new split window
+  vim.cmd('split')
+  local new_win = vim.api.nvim_get_current_win()
+  vim.api.nvim_win_set_buf(new_win, bufnr)
+
+  -- Remove ftplugin keymaps when switching to non-floating terminal
+  vim.schedule(function()
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      local keymaps = vim.b[bufnr].term_ftplugin_keymaps
+      local saved_keymaps = vim.b[bufnr].term_ftplugin_saved_keymaps
+
+      if keymaps then
+        -- First, remove all ftplugin keymaps
+        for _, keymap in ipairs(keymaps) do
+          local modes = type(keymap.mode) == 'table' and keymap.mode or { keymap.mode }
+          for _, mode in ipairs(modes) do
+            pcall(vim.keymap.del, mode, keymap.lhs, { buffer = bufnr })
+          end
+        end
+
+        -- Then, restore previously saved keymaps
+        if saved_keymaps then
+          for _, saved in ipairs(saved_keymaps) do
+            pcall(vim.keymap.set, saved.mode, saved.lhs, saved.rhs, saved.opts)
+          end
+        end
+
+        -- Clear buffer variables
+        vim.b[bufnr].term_ftplugin_keymaps = nil
+        vim.b[bufnr].term_ftplugin_saved_keymaps = nil
+      end
+    end
+  end)
+
+  return true
+end
+
+--- Attach existing terminal buffer to floating manager
+---@param bufnr integer Terminal buffer number
+---@param opts? TermOpts Terminal options
+---@return boolean success Whether the operation succeeded
+function M.attach_to_floating(bufnr, opts)
+  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+
+  if buftype ~= 'terminal' then
+    vim.notify('Current buffer is not a terminal', vim.log.levels.WARN)
+    return false
+  end
+
+  -- Get the current window before creating floating terminal
+  local current_win = vim.api.nvim_get_current_win()
+
+  -- Create floating terminal from existing buffer
+  local term = create_term_from_buffer(bufnr, opts)
+  if not term then
+    return false
+  end
+
+  table.insert(M.terminals, term)
+  show_terminal(term)
+
+  -- Load the ftplugin for terminal
+  vim.cmd('runtime! after/ftplugin/term.lua')
+
+  -- Close/hide the original window if it's still valid and not the last one
+  if vim.api.nvim_win_is_valid(current_win) then
+    local wins = vim.api.nvim_list_wins()
+    if #wins > 1 then
+      pcall(vim.api.nvim_win_close, current_win, false)
+    end
+  end
+
+  return true
+end
+
+--- Toggle terminal between floating and standard window
+---@param bufnr? integer Terminal buffer number (defaults to current buffer)
+---@param opts? TermOpts Terminal options for floating mode
+---@return boolean success Whether the operation succeeded
+function M.toggle_floating(bufnr, opts)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+
+  if buftype ~= 'terminal' then
+    vim.notify('Current buffer is not a terminal', vim.log.levels.WARN)
+    return false
+  end
+
+  -- Check if we're in a floating terminal (managed by core)
+  local is_in_floating = M.active_term and M.active_term.bufnr == bufnr
+
+  if is_in_floating then
+    return M.detach_to_window()
+  else
+    return M.attach_to_floating(bufnr, opts)
+  end
+end
 
 return M

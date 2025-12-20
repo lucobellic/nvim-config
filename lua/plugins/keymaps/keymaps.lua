@@ -183,5 +183,14 @@ return {
     { '<leader>njp', function() require('util.jupytext').pair() end, desc = 'Jupytext Pair' },
     { '<leader>njc', function() require('util.jupytext').to_notebook() end, desc = 'Jupytext Convert' },
     { '<leader>njl', function() require('util.jupytext').to_paired_notebook() end, desc = 'Jupytext Link' },
+
+    ------------------
+    -- Terminal
+    ------------------
+    {
+      '<F8>',
+      function() require('util.term.core').toggle_floating() end,
+      desc = 'Toggle floating/standard terminal',
+    },
   },
 }
