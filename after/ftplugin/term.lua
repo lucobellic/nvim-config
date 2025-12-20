@@ -53,13 +53,13 @@ local function get_keymaps()
     },
     {
       mode = { 't', 'n' },
-      lhs = '<C-Down>',
+      lhs = '<C-Up>',
       rhs = function() core.increase_size() end,
       opts = { buffer = true, silent = true, desc = 'Term Increase Size' },
     },
     {
       mode = { 't', 'n' },
-      lhs = '<C-Up>',
+      lhs = '<C-Down>',
       rhs = function() core.decrease_size() end,
       opts = { buffer = true, silent = true, desc = 'Term Decrease Size' },
     },

@@ -8,7 +8,7 @@ local M = {}
 --- Constants for terminal management
 M.CONSTANTS = {
   MIN_SIZE = 0.3, -- Minimum terminal size (30%)
-  MAX_SIZE = 1.0, -- Maximum terminal size (100%)
+  MAX_SIZE = 0.999, -- Maximum terminal size (100%)
   DEFAULT_RESIZE_STEP = 0.1, -- Default resize increment (10%)
   BORDER_UPDATE_DELAY = 200, -- Delay for border update in ms
   AUTOHIDE_DELAY = 100, -- Delay before re-enabling autohide
