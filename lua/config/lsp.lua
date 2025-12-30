@@ -11,20 +11,15 @@ end
 
 require('util.separators').setup({ enabled = false })
 
----@type table<string, fun(params: lsp.PublishDiagnosticsParams)>
-local diagnostics = {
-  ['basedpyright'] = function(params)
-    vim.iter(params.diagnostics):each(function(diagnostic) diagnostic.severity = vim.diagnostic.severity.HINT end)
-  end,
-}
-
----@param response_error? lsp.ResponseError,
----@param params lsp.PublishDiagnosticsParams
----@param context lsp.HandlerContext
-vim.lsp.handlers['textDocument/publishDiagnostics'] = function(response_error, params, context, _)
-  local client = vim.lsp.get_client_by_id(context.client_id)
-  if client and diagnostics[client.name] then
-    pcall(diagnostics[client.name], params)
+---@param error lsp.ResponseError?
+---@param result lsp.DocumentDiagnosticReport
+---@param ctx lsp.HandlerContext
+vim.lsp.handlers['textDocument/diagnostic'] = function(error, result, ctx)
+  if type(result.items) == 'table' then
+    vim
+      .iter(result.items)
+      :filter(function(diagnostic) return diagnostic.source == 'basedpyright' end)
+      :each(function(diagnostic) diagnostic.severity = vim.diagnostic.severity.HINT end)
   end
-  return vim.lsp.diagnostic.on_publish_diagnostics(response_error, params, context)
+  return vim.lsp.diagnostic.on_diagnostic(error, result, ctx)
 end
