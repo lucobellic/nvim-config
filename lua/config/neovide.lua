@@ -41,27 +41,27 @@ if vim.g.neovide then
 
   -- red
   vim.g.terminal_color_1 = '#f26d78'
-  vim.g.terminal_color_9 = '#f26d78'
+  vim.g.terminal_color_9 = '#ff7a5d'
 
   -- green
   vim.g.terminal_color_2 = '#aad94c'
-  vim.g.terminal_color_10 = '#aad94c'
+  vim.g.terminal_color_10 = '#e9fe83'
 
   -- yellow
   vim.g.terminal_color_3 = '#ffb454'
-  vim.g.terminal_color_11 = '#ffb454'
+  vim.g.terminal_color_11 = '#ffcc66'
 
   -- blue
   vim.g.terminal_color_4 = '#39bae6'
-  vim.g.terminal_color_12 = '#39bae6'
+  vim.g.terminal_color_12 = '#59c2ff'
 
   -- magenta
   vim.g.terminal_color_5 = '#d2a6ff'
   vim.g.terminal_color_13 = '#d2a6ff'
 
   -- cyan
-  vim.g.terminal_color_6 = '#73b8ff'
-  vim.g.terminal_color_14 = '#73b8ff'
+  vim.g.terminal_color_6 = '#95e6cb'
+  vim.g.terminal_color_14 = '#c7fffc'
 
   -- white
   vim.g.terminal_color_7 = '#bfbdb6'
