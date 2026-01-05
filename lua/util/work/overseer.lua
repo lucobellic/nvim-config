@@ -165,37 +165,45 @@ local function reach_run(run_args, list_args)
 end
 
 local function reach_debug_test()
-  local executables_dir = vim.fn.resolve(vim.fn.getcwd() .. '/../build/Executables')
-
-  -- Check if the directory exists
-  if vim.fn.isdirectory(executables_dir) == 0 then
-    vim.notify('Executables directory not found: ' .. executables_dir, vim.log.levels.ERROR)
-    return
-  end
+  local executables_dirs = {
+    vim.fn.resolve(vim.fn.getcwd() .. '/../build/Executables'),
+    vim.fn.resolve(vim.fn.getcwd() .. '/../build/bindev'),
+  }
 
   -- Use plenary to scan directory recursively
   local scan = require('plenary.scandir')
-  local files = scan.scan_dir(executables_dir, {
-    hidden = false,
-    add_dirs = false,
-    depth = 10,
-  })
-
-  -- Filter for executable files and create items
   local items = {}
-  for _, file in ipairs(files) do
-    if vim.fn.executable(file) == 1 then
-      -- Store relative path from executables_dir for display
-      local relative_path = file:sub(#executables_dir + 2) -- +2 to remove leading '/'
-      table.insert(items, {
-        text = relative_path,
-        path = file,
+
+  -- Scan all directories and collect executables
+  items = vim
+    .iter(executables_dirs)
+    :filter(function(dir) return vim.fn.isdirectory(dir) == 1 end)
+    :map(function(executables_dir)
+      local files = scan.scan_dir(executables_dir, {
+        hidden = false,
+        add_dirs = false,
+        depth = 10,
       })
-    end
-  end
+
+      -- Filter for executable files and create items
+      return vim
+        .iter(files)
+        :filter(function(file) return vim.fn.executable(file) == 1 end)
+        :map(function(file)
+          -- Store relative path from executables_dir for display
+          local relative_path = file:sub(#executables_dir + 2) -- +2 to remove leading '/'
+          return {
+            text = relative_path,
+            path = file,
+          }
+        end)
+        :totable()
+    end)
+    :flatten()
+    :totable()
 
   if #items == 0 then
-    vim.notify('No executable files found in ' .. executables_dir, vim.log.levels.WARN)
+    vim.notify('No executable files found in any build directory', vim.log.levels.WARN)
     return
   end
 
@@ -214,38 +222,56 @@ local function reach_debug_test()
         picker:close()
 
         vim.schedule(function()
-          local dap = require('dap')
-          local executable_name = item.text
-          local executable_path = item.path
+          -- Prompt for optional arguments
+          vim.ui.input({
+            prompt = 'Arguments (optional): ',
+            default = '',
+          }, function(input)
+            if input == nil then
+              return
+            end
 
-          -- Create DAP configuration for this executable
-          local config = {
-            name = 'Debug: ' .. executable_name,
-            type = 'cppdbg',
-            request = 'launch',
-            program = executable_path,
-            args = {},
-            cwd = vim.fn.getcwd(),
-            stopAtEntry = false,
-            environment = {},
-            externalConsole = false,
-            MIMode = 'gdb',
-            setupCommands = {
-              {
-                description = 'Enable pretty-printing for gdb',
-                text = '-enable-pretty-printing',
-                ignoreFailures = true,
-              },
-              {
-                description = 'Set Disassembly Flavor to Intel',
-                text = '-gdb-set disassembly-flavor intel',
-                ignoreFailures = true,
-              },
-            },
-          }
+            local dap = require('dap')
+            local executable_name = item.text
+            local executable_path = item.path
 
-          -- Start the debug session
-          dap.run(config)
+            -- Parse arguments string into table
+            local args = {}
+            if input and input ~= '' then
+              for arg in input:gmatch('%S+') do
+                table.insert(args, arg)
+              end
+            end
+
+            -- Create DAP configuration for this executable
+            local config = {
+              name = 'Debug: ' .. executable_name,
+              type = 'cppdbg',
+              request = 'launch',
+              program = executable_path,
+              args = args,
+              cwd = vim.fn.getcwd(),
+              stopAtEntry = false,
+              environment = {},
+              externalConsole = false,
+              MIMode = 'gdb',
+              setupCommands = {
+                {
+                  description = 'Enable pretty-printing for gdb',
+                  text = '-enable-pretty-printing',
+                  ignoreFailures = true,
+                },
+                {
+                  description = 'Set Disassembly Flavor to Intel',
+                  text = '-gdb-set disassembly-flavor intel',
+                  ignoreFailures = true,
+                },
+              },
+            }
+
+            -- Start the debug session
+            dap.run(config)
+          end)
         end)
       end,
     },
