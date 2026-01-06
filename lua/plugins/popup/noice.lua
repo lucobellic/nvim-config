@@ -35,15 +35,6 @@ local cmdline_popup_view = {
 
 local views = {
   cmdline_popup = cmdline_popup_view,
-  mini = {
-    position = { row = -1, col = 0 },
-    size = {
-      width = '20%',
-      height = 3,
-      align = 'message-left',
-    },
-    reverse = true,
-  },
   notify = {
     replace = true,
     merge = true,
@@ -58,7 +49,8 @@ local lsp = {
     ['cmp.entry.get_documentation'] = false,
   },
   progress = {
-    enabled = false,
+    enabled = true,
+    view = 'mini'
   },
   message = {
     enabled = true,
