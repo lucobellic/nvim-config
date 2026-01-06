@@ -13,17 +13,33 @@ return {
       'noice',
     },
     render_modes = { 'n', 'c', 'i' },
+    restart_highlighter = false,
     sign = {
       enabled = false,
     },
     heading = {
       sign = false,
-      icons = { '󰉫 ', '󰉬 ', '󰉭 ', '󰉮 ', '󰉯 ', '󰉰 ', '󰉴 ' },
+      icons = {
+        '█ 󰉫 ',
+        '██ 󰉬 ',
+        '███ 󰉭 ',
+        '████ 󰉮 ',
+        '█████ 󰉯 ',
+        '██████ 󰉰 ',
+        '███████ 󰉴 ',
+      },
+      width = 'block',
+      right_pad = 1,
+      border_prefix = false,
+      border = true,
     },
     bullet = {
       enabled = true,
       icons = { '•' },
       highlight = 'DiagnosticInfo',
+    },
+    code = {
+      border = 'thin',
     },
     checkbox = {
       enabled = true,
