@@ -74,12 +74,13 @@ local lsp = {
   },
 }
 
+--- @type NoiceRouteConfig
 local filter_skip = {
   filter = {
-    --- @type NoiceFilter[]
     -- { event = 'msg_show', kind = { '',  'echo', 'echomsg', 'search_count' }, find = 'written' },
     -- { event = 'msg_show', kind = { '',  'echo', 'echomsg', 'search_count' }, find = 'yanked'  },
     -- stylua: ignore
+    --- @type NoiceFilter[]
     any = {
       -- Hide display messages but still show them in :messages
       { event = 'msg_show', kind = ''            , find = 'lnum'                        } ,
@@ -113,7 +114,7 @@ local filter_skip = {
       { event = 'lsp'                            , find = 'diagnostics'                 } , -- Hide spamming null-ls messages
     },
   },
-  opts = { stop = true, skip = true },
+  opts = { skip = true },
 }
 
 return {
