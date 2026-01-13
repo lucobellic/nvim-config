@@ -146,15 +146,17 @@ return {
                     local nio = require('nio')
                     local path = file.absolute_path
                     nio.run(function()
-                      nio.process.run({ cmd = 'git', args = { 'stash', '--keep-index' } }).result(true)
-                      nio.process
-                        .run({
-                          cmd = 'git',
-                          args = { 'commit', '--fixup=' .. item.commit.hash, '--', path },
-                        })
-                        .result(true)
-                      nio.process.run({ cmd = 'git', args = { 'stash', 'pop', '--index' } }).result(true)
-                      vim.notify('Fixup ' .. item.commit.hash, vim.log.levels.INFO)
+                      vim.schedule(function()
+                        nio.process.run({ cmd = 'git', args = { 'stash', '--keep-index' } }).result(true)
+                        nio.process
+                          .run({
+                            cmd = 'git',
+                            args = { 'commit', '--fixup=' .. item.commit.hash, '--', path },
+                          })
+                          .result(true)
+                        nio.process.run({ cmd = 'git', args = { 'stash', 'pop', '--index' } }).result(true)
+                        vim.notify('Fixup ' .. item.commit.hash, vim.log.levels.INFO)
+                      end)
                     end)
                   end
                 end
