@@ -48,8 +48,8 @@ local sidekick_icons = {
 }
 
 local function get_sidekick_icons()
-  local sidekick_ok, status = pcall(require, 'sidekick.status')
-  local status = sidekick_ok and status.get() or nil
+  local nes_status, status = pcall(require, 'copilot-nes.status')
+  local status = nes_status and status.get() or nil
   if status and status.busy then
     return get_spinner() .. ' ' .. sidekick_icons.Normal
   end

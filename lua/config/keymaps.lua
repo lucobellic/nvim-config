@@ -30,7 +30,7 @@ if not vim.g.vscode then
       end
     end
 
-    if require('sidekick.nes').apply() then
+    if require('copilot-nes').apply() then
       return
     end
 

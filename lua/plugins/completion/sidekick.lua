@@ -1,5 +1,6 @@
 return {
   'folke/sidekick.nvim',
+  enabled = false,
   ---@type sidekick.Config
   keys = {
     {
