@@ -1,5 +1,6 @@
 return {
   'chomosuke/term-edit.nvim',
+  cond = false, -- TODO: fix insert mode for running processing
   event = 'TermOpen',
   opts = {
     prompt_end = '% ',
