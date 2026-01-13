@@ -18,6 +18,12 @@ return {
       'nvim-lua/plenary.nvim',
       'MunifTanjim/nui.nvim',
       'nvim-tree/nvim-web-devicons',
+      {
+        's1n7ax/nvim-window-picker',
+        opts = {
+          hint = 'floating-letter',
+        },
+      },
     },
     cmd = { 'Neotree' },
     keys = {
