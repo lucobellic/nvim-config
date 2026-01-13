@@ -112,6 +112,7 @@ local filter_skip = {
       { event = 'lsp'                            , find = 'pylsp'                       } , -- Hide spamming pylsp messages
       { event = 'lsp'                            , find = 'cspell'                      } , -- Hide spamming cspell messages
       { event = 'lsp'                            , find = 'diagnostics'                 } , -- Hide spamming null-ls messages
+      { event = 'lsp'                            , find = 'basedpyright'                } ,
     },
   },
   opts = { skip = true },
