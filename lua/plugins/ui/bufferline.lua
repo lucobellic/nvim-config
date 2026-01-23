@@ -202,6 +202,29 @@ local function set_icon_highlight(state, _, base_hl)
   return icon_hl
 end
 
+local function select_tab()
+  local tabs = vim.api.nvim_list_tabpages()
+  local tab_name_with_index = vim
+    .iter(ipairs(tabs or {}))
+    :filter(function(_, tab) return vim.api.nvim_tabpage_is_valid(tab) end)
+    :map(function(tab, i)
+      local _, tab_name = pcall(vim.api.nvim_tabpage_get_var, tab, 'name')
+      return { name = tab_name or tostring(i), tab = i }
+    end)
+    :totable()
+
+  ---@type vim.ui.select.Opts
+  vim.ui.select(
+    tab_name_with_index,
+    { prompt = 'Select Tab:', format_item = function(item) return item.name end },
+    function(choice, idx)
+      if choice and idx then
+        vim.api.nvim_set_current_tabpage(choice.tab)
+      end
+    end
+  )
+end
+
 return {
   'akinsho/bufferline.nvim',
   enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
@@ -226,6 +249,7 @@ return {
       end,
       desc = 'Buffer Tab Rename',
     },
+    { '<leader>s<tab>', select_tab, desc = 'Slash Buffer Tab' },
     { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
     { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
     { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
