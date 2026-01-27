@@ -98,4 +98,48 @@ function M.create_block_spinner_command()
   })
 end
 
+---Setup window resize utility
+---Resizes windows to minimum dimensions when entering them
+---@param opts {min_width?: number, min_height?: number, ignore_buftypes?: string[], ignore_filetypes?: string[]}
+function M.setup_window_resize(opts)
+  opts = opts or {}
+  local min_width = opts.min_width or 80
+  local min_height = opts.min_height or 20
+  local ignore_buftypes = opts.ignore_buftypes or {}
+  local ignore_filetypes = opts.ignore_filetypes or {}
+  local group_name = 'window_resize'
+
+  local augroup = vim.api.nvim_create_augroup(group_name, { clear = true })
+
+  vim.api.nvim_create_autocmd('WinEnter', {
+    group = augroup,
+    ---@param args vim.api.keyset.create_autocmd.callback_args
+    callback = function(args)
+      local winid = vim.api.nvim_get_current_win()
+      local buftype = vim.bo[args.buf].buftype
+      local filetype = vim.bo[args.buf].filetype
+
+      local disabled = vim.b.focus_disable
+        or not vim.api.nvim_win_is_valid(winid)
+        or vim.tbl_contains(ignore_buftypes, buftype)
+        or vim.tbl_contains(ignore_filetypes, filetype)
+
+      if not disabled then
+        local current_width = vim.api.nvim_win_get_width(winid)
+        local current_height = vim.api.nvim_win_get_height(winid)
+        local change_width = current_width < min_width
+        local change_height = current_height < min_height
+
+        if change_width then
+          vim.api.nvim_win_set_width(winid, math.max(current_width, min_width))
+        end
+        if change_height then
+          vim.api.nvim_win_set_height(winid, math.max(current_height, min_height))
+        end
+      end
+    end,
+    desc = 'Resize window to minimum dimensions on enter',
+  })
+end
+
 return M
