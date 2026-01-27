@@ -7,8 +7,31 @@ pcall(function() vim.keymap.del('n', '<leader>l') end)
 pcall(function() vim.keymap.del('n', '<leader>rb') end)
 pcall(function() vim.keymap.del('n', '<A-j>') end)
 pcall(function() vim.keymap.del('n', '<A-k>') end)
+
+local number = false
+local relative_number = false
+
+vim.keymap.set('n', '<leader>uL', function()
+  relative_number = not relative_number
+  if number then
+    vim.opt.relativenumber = relative_number
+  end
+end, { desc = 'Toggle Relative Line Number' })
+
+vim.keymap.set('n', '<leader>ul', function()
+  number = not number
+  vim.opt.number = number
+  vim.opt.relativenumber = number and relative_number
+end, { desc = 'Toggle Line Number' })
+
 vim.keymap.set('n', '<A-j>', function() require('util.tabpages').move_buffer_to_tab('prev', true) end)
 vim.keymap.set('n', '<A-k>', function() require('util.tabpages').move_buffer_to_tab('next', true) end)
+
+-- Clear search and stop snippet on escape
+vim.keymap.set({ 'i', 'n', 's' }, '<esc>', function()
+  vim.cmd('noh')
+  return '<esc>'
+end, { expr = true, desc = 'Escape and Clear hlsearch' })
 
 -- Fix usage of localleader with which-key
 vim.keymap.set('n', '<localleader>', '<cmd>lua require("which-key").show("' .. vim.g.maplocalleader .. '")<cr>')
