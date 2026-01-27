@@ -59,7 +59,14 @@ return {
         },
       })
 
+      -- Disable auto-installation of nil_ls
+      opts.servers = opts.servers or {}
+      opts.servers.nil_ls = vim.tbl_deep_extend('force', opts.servers.nil_ls or {}, {
+        mason = false,
+        enabled = false,
+      })
       require('lspconfig.ui.windows').default_options.border = vim.g.border.style
+
       return opts
     end,
   },
