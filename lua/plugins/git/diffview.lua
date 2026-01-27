@@ -143,21 +143,11 @@ return {
                   local item = view.panel:get_item_at_cursor()
 
                   if file and item then
-                    local nio = require('nio')
                     local path = file.absolute_path
-                    nio.run(function()
-                      vim.schedule(function()
-                        nio.process.run({ cmd = 'git', args = { 'stash', '--keep-index' } }).result(true)
-                        nio.process
-                          .run({
-                            cmd = 'git',
-                            args = { 'commit', '--fixup=' .. item.commit.hash, '--', path },
-                          })
-                          .result(true)
-                        nio.process.run({ cmd = 'git', args = { 'stash', 'pop', '--index' } }).result(true)
-                        vim.notify('Fixup ' .. item.commit.hash, vim.log.levels.INFO)
-                      end)
-                    end)
+                    vim.system({ 'git', 'stash', '--keep-index' })
+                    vim.system({ 'git', 'commit', '--fixup=' .. item.commit.hash, '--', path })
+                    vim.system({ 'git', 'stash', 'pop', '--index' })
+                    vim.schedule(function() vim.notify('Fixup ' .. item.commit.hash, vim.log.levels.INFO) end)
                   end
                 end
               end,
