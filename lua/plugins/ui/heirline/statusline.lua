@@ -8,7 +8,7 @@ local system = require('plugins.ui.heirline.components.system')
 local tasks = require('plugins.ui.heirline.components.tasks')
 
 local Left = { mode.ViMode, git.Git, info.LazyUpdates, info.Separator, debug.Dap, debug.Molten, debug.MacroRec }
-local Center = { edgy.LeftAlignment, info.Separator, edgy.Edgy, info.Separator }
+local Center = { edgy.LeftAlignment, edgy.Edgy }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {
   mode.PrimarySpace,

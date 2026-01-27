@@ -21,6 +21,7 @@ return {
   {
     'lucobellic/edgy-group.nvim',
     dependencies = { 'folke/edgy.nvim' },
+    dev = true,
     keys = {
       {
         '<leader>;',
@@ -38,7 +39,7 @@ return {
     opts = {
       groups = {
         left = {
-          { icon = '', titles = { 'Neo-Tree Buffers', 'Neo-Tree', 'trouble-symbols' }, pick_key = 'e' },
+          { icon = '', titles = { 'Neo-Tree Buffers', 'Neo-Tree' }, pick_key = 'e' },
           { icon = '', titles = { 'diffview-file-panel' }, pick_key = 'i' },
           { icon = '', titles = { 'dapui_scopes', 'dapui_watches' }, pick_key = 'd' },
         },

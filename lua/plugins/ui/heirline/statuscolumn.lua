@@ -67,6 +67,13 @@ local statuscolumn = {
     if vim.v.virtnum < 0 then
       return ''
     end
+
+    -- Only display line numbers when signcolumn is 'no'
+    if vim.wo.signcolumn == 'no' then
+      local show_line_number = (vim.opt.number or vim.opt.relativenumber) and vim.v.virtnum == 0
+      return show_line_number and '%l ' or ''
+    end
+
     local line = vim.v.lnum - 1
     local buf = vim.api.nvim_get_current_buf()
     local sign = get_sign(buf, line)

@@ -33,7 +33,7 @@ local LeftAlignment = {
     self.text = left_padding
   end,
   provider = function(self)
-    vim.schedule(update_highlights)
+    -- vim.schedule(update_highlights)
     return self.text
   end,
   update = { 'ModeChanged' },

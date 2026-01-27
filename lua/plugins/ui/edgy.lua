@@ -43,8 +43,11 @@ return {
       '<leader>we',
       function()
         vim.b.edgy_disable = not vim.b.edgy_disable
+        vim.b.focus_disable = not vim.b.edgy_disable
         vim.api.nvim_set_option_value('buflisted', vim.b.edgy_disable, { buf = 0 })
-        vim.cmd('redrawstatus!')
+        vim.wo.winfixwidth = false
+        vim.wo.winfixheight = false
+        vim.schedule(function() vim.cmd('wincmd =') end)
       end,
       desc = 'Edgy Toggle Attachment',
     },
