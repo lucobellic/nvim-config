@@ -10,6 +10,17 @@ return {
     keys = {
       { '<Tab>', function() return require('copilot-nes').update() end, desc = 'Copilot NES Update' },
       {
+        '<Esc>',
+        function()
+          if require('copilot-nes').have() then
+            require('copilot-nes').clear()
+            return
+          end
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
+        end,
+        desc = 'Copilot NES clear',
+      },
+      {
         '<leader>ae',
         function()
           local is_enabled = vim.lsp.inline_completion.is_enabled()
@@ -25,8 +36,7 @@ return {
             vim.lsp.inline_completion.enable(true)
           end
         end,
-        mode = { 'n' },
-        desc = 'Copilot enable',
+        desc = 'Copilot NES enable',
       },
       {
         '<leader>uN',
@@ -43,6 +53,10 @@ return {
       },
     },
     opts = {
+      signs = {
+        enabled = true,
+        icon = '',
+      },
       inline = {
         enabled = true,
       },
