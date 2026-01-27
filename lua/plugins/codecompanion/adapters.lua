@@ -1,6 +1,20 @@
+---@type CodeCompanion.Interactions
+local interactions = vim.env.INSIDE_DOCKER
+    and {
+      cmd = { adapter = 'cursor', model = 'Composer 1' },
+      chat = { adapter = 'cursor', model = 'Composer 1' },
+      inline = { adapter = 'cursor', model = 'Composer 1' },
+    }
+  or {
+    cmd = { adapter = 'copilot', model = 'gpt-5-mini' },
+    chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4.5' } },
+    inline = { adapter = { name = 'copilot', model = 'gpt-5-mini' } },
+  }
+
 return {
   'olimorris/codecompanion.nvim',
   opts = {
+    ---@type CodeCompanion.Adapters
     adapters = {
       gitlab_duo = function() return require('plugins.codecompanion.adapters.gitlab-duo') end,
       copilot = function()
@@ -13,18 +27,19 @@ return {
           return require('codecompanion.adapters').extend('claude_code', {
             name = 'opencode',
             formatted_name = 'OpenCode',
-            commands = {
-              default = { 'opencode', 'acp' },
-            },
+            commands = { default = { 'opencode', 'acp' } },
+          })
+        end,
+        cursor = function()
+          return require('codecompanion.adapters').extend('claude_code', {
+            defaults = { model = 'Composer 1' },
+            name = 'cursor',
+            formatted_name = 'Cursor',
+            commands = { default = { 'cursor-agent', 'acp' } },
           })
         end,
       },
     },
-    ---@type CodeCompanion.Interactions
-    interactions = {
-      cmd = { adapter = 'copilot', model = 'gpt-5-mini' },
-      chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4.5' } },
-      inline = { adapter = { name = 'copilot', model = 'gpt-5-mini' } },
-    },
+    interactions = interactions,
   },
 }

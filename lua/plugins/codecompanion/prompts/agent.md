@@ -3,9 +3,6 @@ name: agent
 interaction: inline
 description: AI agent inline completion
 opts:
-  adapter:
-    name: copilot
-    model: claude-haiku-4.5
   is_default: false
   alias: agent
   is_slash_cmd: false
