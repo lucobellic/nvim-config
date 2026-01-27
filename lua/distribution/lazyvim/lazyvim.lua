@@ -2,6 +2,9 @@ return {
   'LazyVim/LazyVim',
   opts = {
     colorscheme = vim.g.neovide and 'ayugloom' or 'ayubleak',
+    defaults = {
+      keymaps = false,
+    },
     -- stylua: ignore
     icons = {
       dap = {
