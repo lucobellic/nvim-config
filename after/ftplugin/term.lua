@@ -2,6 +2,9 @@ local core = require('util.term.core')
 
 -- Disable spell checking in terminal buffers
 vim.opt_local.spell = false
+vim.opt_local.foldcolumn = '0'
+vim.opt_local.signcolumn = 'no'
+vim.opt_local.statuscolumn = ''
 
 -- Disable animations from mini.animate
 vim.b.miniindentscope_disable = true
