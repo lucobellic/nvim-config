@@ -1,5 +1,5 @@
 return {
-  cmd = { "neocmakelsp", "--stdio" },
+  cmd = { "neocmakelsp", "stdio" },
   filetypes = { "cmake" },
   init_options = {
     format = { enable = true },
