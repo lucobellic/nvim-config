@@ -105,6 +105,8 @@ return {
     { '<leader>A', '<cmd>silent %y+<cr>', desc = 'Copy all' },
     { mode = { 'n', 'v' }, '>>', '>>', remap = false, desc = 'Increase Indent' },
     { mode = { 'n', 'v' }, '<<', '<<', remap = false, desc = 'Decrease Indent' },
+    { mode = 'x', '<', '<gv' },
+    { mode = 'x', '>', '>gv' },
 
     ------------------
     -- Paste
@@ -175,6 +177,12 @@ return {
     { 'gq', '<cmd>tabclose<cr>', desc = 'Tab Close' },
     { '<A-j>', function() require('util.tabpages').move_buffer_to_tab('prev', true) end },
     { '<A-k>', function() require('util.tabpages').move_buffer_to_tab('next', true) end },
+    { '<leader><tab>l', '<cmd>tablast<cr>', { desc = 'Tab Last' } },
+    { '<leader><tab>o', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs' } },
+    { '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'Tab First' } },
+    { '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'Tab New' } },
+    { '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Tab Close' } },
+    { '<leader><tab>q', '<cmd>tabclose<cr>', { desc = 'Tab Close' } },
 
     ------------------
     -- Jupytext
