@@ -1,6 +1,7 @@
 return {
   'folke/which-key.nvim',
   keys = {
+    { '<leader>u=', '<cmd>ToggleFocusResize<cr>', desc = 'Toggle Focus Resize' },
     { '<leader>uW', '<cmd>ToggleAutoSave<cr>', desc = 'Toggle Auto Save' },
     {
       '<leader>uh',

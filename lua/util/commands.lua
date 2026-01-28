@@ -109,12 +109,20 @@ function M.setup_window_resize(opts)
   local ignore_filetypes = opts.ignore_filetypes or {}
   local group_name = 'window_resize'
 
+  local enabled = true
   local augroup = vim.api.nvim_create_augroup(group_name, { clear = true })
+
+  vim.api.nvim_create_user_command('ToggleFocusResize', function() enabled = not enabled end, {
+    desc = 'Toggle Focus Resize',
+  })
 
   vim.api.nvim_create_autocmd('WinEnter', {
     group = augroup,
     ---@param args vim.api.keyset.create_autocmd.callback_args
     callback = function(args)
+      if not enabled then
+        return
+      end
       local winid = vim.api.nvim_get_current_win()
       local buftype = vim.bo[args.buf].buftype
       local filetype = vim.bo[args.buf].filetype
