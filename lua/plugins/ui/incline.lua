@@ -149,7 +149,7 @@ end
 
 return {
   'b0o/incline.nvim',
-  event = 'BufEnter',
+  event = { 'User LazyBufEnter' },
   keys = {
     {
       '<leader>uo',

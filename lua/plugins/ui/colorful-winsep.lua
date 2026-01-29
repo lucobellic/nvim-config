@@ -1,8 +1,20 @@
 local single = vim.g.winborder == 'single'
+
 return {
   'nvim-zh/colorful-winsep.nvim',
-  event = { 'WinEnter' },
   cond = not vim.g.neovide_floating_shadow,
+  init = function()
+    local augroup = vim.api.nvim_create_augroup('ColorfulWinsepLazyLoad', { clear = true })
+    vim.api.nvim_create_autocmd('WinEnter', {
+      group = augroup,
+      callback = function()
+        if vim.fn.winnr('$') >= 2 then
+          require('lazy').load({ plugins = { 'colorful-winsep.nvim' } })
+          vim.api.nvim_clear_autocmds({ group = augroup })
+        end
+      end,
+    })
+  end,
   opts = {
     animate = { enabled = false },
     border = single and { '─', '│', '┌', '┐', '└', '┘' } or { '─', '│', '╭', '╮', '╰', '╯' },

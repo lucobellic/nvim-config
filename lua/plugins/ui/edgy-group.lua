@@ -22,6 +22,7 @@ return {
     'lucobellic/edgy-group.nvim',
     dependencies = { 'folke/edgy.nvim' },
     dev = true,
+    lazy = true,
     keys = {
       {
         '<leader>;',

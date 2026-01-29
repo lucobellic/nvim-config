@@ -17,7 +17,7 @@ end
 return {
   {
     'mason-org/mason.nvim',
-    event = 'BufEnter',
+    cmd = { 'Mason' },
     opts = {
       PATH = 'prepend',
       ui = {

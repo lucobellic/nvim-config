@@ -14,6 +14,7 @@ end
 
 return {
   'folke/edgy.nvim',
+  lazy = true,
   keys = {
     {
       '<leader>wl',

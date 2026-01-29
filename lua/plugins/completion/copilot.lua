@@ -6,7 +6,19 @@ return {
   {
     'lucobellic/copilot-nes.nvim',
     dev = true,
-    lazy = false,
+    init = function()
+      local augroup = vim.api.nvim_create_augroup('CopilotNesLazyLoad', { clear = true })
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = augroup,
+        callback = function(ev)
+          local client = vim.lsp.get_client_by_id(ev.data.client_id)
+          if client and client.name == 'copilot-language-server' then
+            require('lazy').load({ plugins = { 'lucobellic/copilot-nes.nvim' } })
+            vim.api.nvim_clear_autocmds({ group = augroup })
+          end
+        end,
+      })
+    end,
     keys = {
       { '<Tab>', function() return require('copilot-nes').update() end, desc = 'Copilot NES Update' },
       {

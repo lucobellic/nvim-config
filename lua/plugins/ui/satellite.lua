@@ -12,7 +12,7 @@ end
 return {
   'lewis6991/satellite.nvim',
   cond = not vim.g.started_by_firenvim,
-  event = 'BufEnter',
+  event = function() return { 'User LazyBufEnter' } end,
   dev = true,
   keys = {
     { '<leader>ut', toggle_satellite, desc = 'Toggle Satellite' },

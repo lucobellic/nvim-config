@@ -1,7 +1,6 @@
 local prefix = 'gs'
 return {
   'nvim-mini/mini.surround',
-  event = 'VeryLazy',
   dependencies = vim.g.distribution == 'astronvim' and {
     { 'AstroNvim/astroui', opts = { icons = { Surround = '󰑤' } } },
     {

@@ -81,7 +81,7 @@ end
 
 return {
   'nvim-mini/mini.ai',
-  event = 'VeryLazy',
+  event = function() return { 'User LazyBufEnter' } end,
   opts = function()
     local ai = require('mini.ai')
     return {

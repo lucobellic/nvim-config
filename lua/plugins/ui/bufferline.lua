@@ -226,157 +226,154 @@ local function select_tab()
 end
 
 return {
-  'akinsho/bufferline.nvim',
-  enabled = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
-  event = 'BufEnter',
-  dependencies = {
-    { 'lucobellic/edgy-group.nvim' },
-    {
-      'folke/which-key.nvim',
-      optional = true,
-      opts = {
-        spec = {
-          { '<leader>bc', group = 'close' },
-        },
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = { spec = { { '<leader>bc', group = 'close' } } },
+  },
+  {
+
+    'akinsho/bufferline.nvim',
+    cond = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
+    event = function() return { 'User LazyBufEnter' } end,
+    dependencies = { { 'lucobellic/edgy-group.nvim', optional = true } },
+    keys = {
+      {
+        '<leader><tab>r',
+        function()
+          vim.ui.input({ prompt = 'Tab name:' }, function(input) vim.cmd('BufferLineTabRename ' .. input) end)
+        end,
+        desc = 'Buffer Tab Rename',
+      },
+      { '<leader>s<tab>', select_tab, desc = 'Slash Buffer Tab' },
+      { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
+      { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
+      { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
+      { '<leader>bu', function() toggle_filter_mode() end, repeatable = true, desc = 'Toggle Bufferline Filter' },
+      { '<C-1>', '<cmd>BufferLineGoToBuffer 1<cr>', desc = 'Buffer 1' },
+      { '<C-2>', '<cmd>BufferLineGoToBuffer 2<cr>', desc = 'Buffer 2' },
+      { '<C-3>', '<cmd>BufferLineGoToBuffer 3<cr>', desc = 'Buffer 3' },
+      { '<C-4>', '<cmd>BufferLineGoToBuffer 4<cr>', desc = 'Buffer 4' },
+      { '<C-5>', '<cmd>BufferLineGoToBuffer 5<cr>', desc = 'Buffer 5' },
+      { '<C-6>', '<cmd>BufferLineGoToBuffer 6<cr>', desc = 'Buffer 6' },
+      { '<C-7>', '<cmd>BufferLineGoToBuffer 7<cr>', desc = 'Buffer 7' },
+      { '<C-8>', '<cmd>BufferLineGoToBuffer 8<cr>', desc = 'Buffer 8' },
+      { '<C-9>', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
+      { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
+      { 'H', function() navigate_buffer('prev') end, desc = 'Previous Bufferline' },
+      { 'L', function() navigate_buffer('next') end, desc = 'Next Bufferline' },
+      { '<S-left>', function() vim.cmd('bprevious') end, desc = 'Previous Buffer' },
+      { '<S-right>', function() vim.cmd('bnext') end, desc = 'Next Buffer' },
+      { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
+      { '<leader>bf', '<cmd>BufferLineSortByRelativeDirectory<cr>', desc = 'Buffer Order By Directory' },
+      { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
+      {
+        '<C-q>',
+        function() scope_close_buffer(vim.api.nvim_get_current_buf()) end,
+        desc = 'Delete Buffer',
+      },
+      {
+        '<leader>bco',
+        function()
+          local current_buffer = vim.api.nvim_get_current_buf()
+          vim
+            .iter(vim.fn.getbufinfo({ buflisted = 1 }) or {})
+            :map(function(buffer_info) return buffer_info.bufnr end)
+            :filter(function(buffer) return buffer ~= current_buffer end)
+            :each(function(buffer) scope_close_buffer(buffer) end)
+        end,
+        desc = 'Buffer Line Close Others (Non Pinned)',
+      },
+      { '<leader>bch', '<cmd>BufferLineCloseLeft<cr>', desc = 'Buffer Line Close Left' },
+      { '<leader>bcl', '<cmd>BufferLineCloseRight<cr>', desc = 'Buffer Line Close Right' },
+      { '<leader>bcp', '<cmd>BufferLinePickClose<cr>', desc = 'Buffer Line Pick Close' },
+      { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
+      {
+        '<leader>bcv',
+        function()
+          local current_buffer = vim.api.nvim_get_current_buf()
+          vim
+            .iter(vim.fn.getbufinfo({ buflisted = 1 }) or {})
+            :map(function(buffer_info) return buffer_info.bufnr end)
+            :filter(function(bufnr) return bufnr ~= current_buffer end)
+            :filter(function(bufnr) return vim.fn.bufwinid(bufnr) == -1 end)
+            :each(function(buffer) scope_close_buffer(buffer) end)
+        end,
+        desc = 'Buffer Line Close Non Visible',
       },
     },
-  },
-  keys = {
-    {
-      '<leader><tab>r',
-      function()
-        vim.ui.input({ prompt = 'Tab name:' }, function(input) vim.cmd('BufferLineTabRename ' .. input) end)
-      end,
-      desc = 'Buffer Tab Rename',
-    },
-    { '<leader>s<tab>', select_tab, desc = 'Slash Buffer Tab' },
-    { '<A-h>', '<cmd>BufferLineMovePrev<cr>', desc = 'Buffer Move Previous' },
-    { '<A-l>', '<cmd>BufferLineMoveNext<cr>', desc = 'Buffer Move Next' },
-    { '<A-p>', '<cmd>BufferLineTogglePin<cr>', desc = 'Buffer Pin' },
-    { '<leader>bu', function() toggle_filter_mode() end, repeatable = true, desc = 'Toggle Bufferline Filter' },
-    { '<C-1>', '<cmd>BufferLineGoToBuffer 1<cr>', desc = 'Buffer 1' },
-    { '<C-2>', '<cmd>BufferLineGoToBuffer 2<cr>', desc = 'Buffer 2' },
-    { '<C-3>', '<cmd>BufferLineGoToBuffer 3<cr>', desc = 'Buffer 3' },
-    { '<C-4>', '<cmd>BufferLineGoToBuffer 4<cr>', desc = 'Buffer 4' },
-    { '<C-5>', '<cmd>BufferLineGoToBuffer 5<cr>', desc = 'Buffer 5' },
-    { '<C-6>', '<cmd>BufferLineGoToBuffer 6<cr>', desc = 'Buffer 6' },
-    { '<C-7>', '<cmd>BufferLineGoToBuffer 7<cr>', desc = 'Buffer 7' },
-    { '<C-8>', '<cmd>BufferLineGoToBuffer 8<cr>', desc = 'Buffer 8' },
-    { '<C-9>', '<cmd>BufferLineGoToBuffer 9<cr>', desc = 'Buffer 9' },
-    { '<C-0>', '<cmd>BufferLast<cr>', desc = 'Buffer Last' },
-    { 'H', function() navigate_buffer('prev') end, desc = 'Previous Bufferline' },
-    { 'L', function() navigate_buffer('next') end, desc = 'Next Bufferline' },
-    { '<S-left>', function() vim.cmd('bprevious') end, desc = 'Previous Buffer' },
-    { '<S-right>', function() vim.cmd('bnext') end, desc = 'Next Buffer' },
-    { '<c-/>', '<cmd>BufferLinePick<cr>', desc = 'Buffer Pick' },
-    { '<leader>bf', '<cmd>BufferLineSortByRelativeDirectory<cr>', desc = 'Buffer Order By Directory' },
-    { '<leader>bl', '<cmd>BufferLineSortByExtension<cr>', desc = 'Buffer Order By Language' },
-    {
-      '<C-q>',
-      function() scope_close_buffer(vim.api.nvim_get_current_buf()) end,
-      desc = 'Delete Buffer',
-    },
-    {
-      '<leader>bco',
-      function()
-        local current_buffer = vim.api.nvim_get_current_buf()
-        vim
-          .iter(vim.fn.getbufinfo({ buflisted = 1 }) or {})
-          :map(function(buffer_info) return buffer_info.bufnr end)
-          :filter(function(buffer) return buffer ~= current_buffer end)
-          :each(function(buffer) scope_close_buffer(buffer) end)
-      end,
-      desc = 'Buffer Line Close Others (Non Pinned)',
-    },
-    { '<leader>bch', '<cmd>BufferLineCloseLeft<cr>', desc = 'Buffer Line Close Left' },
-    { '<leader>bcl', '<cmd>BufferLineCloseRight<cr>', desc = 'Buffer Line Close Right' },
-    { '<leader>bcp', '<cmd>BufferLinePickClose<cr>', desc = 'Buffer Line Pick Close' },
-    { '<leader>bcg', '<cmd>BufferLineGroupClose<cr>', desc = 'Buffer Line Group Close' },
-    {
-      '<leader>bcv',
-      function()
-        local current_buffer = vim.api.nvim_get_current_buf()
-        vim
-          .iter(vim.fn.getbufinfo({ buflisted = 1 }) or {})
-          :map(function(buffer_info) return buffer_info.bufnr end)
-          :filter(function(bufnr) return bufnr ~= current_buffer end)
-          :filter(function(bufnr) return vim.fn.bufwinid(bufnr) == -1 end)
-          :each(function(buffer) scope_close_buffer(buffer) end)
-      end,
-      desc = 'Buffer Line Close Non Visible',
-    },
-  },
-  opts = function()
-    return {
-      options = {
-        custom_filter = function(bufnr)
-          if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
-            return false
-          end
-
-          if filter_mode == 'none' then
-            return false
-          elseif filter_mode == 'all' then
-            return true
-          else -- 'visible'
-            if is_pinned(bufnr) then
-              return true
+    opts = function()
+      return {
+        options = {
+          custom_filter = function(bufnr)
+            if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
+              return false
             end
 
-            -- Show if visible in any window
-            if vim.fn.bufwinid(bufnr) ~= -1 then
+            if filter_mode == 'none' then
+              return false
+            elseif filter_mode == 'all' then
               return true
+            else -- 'visible'
+              if is_pinned(bufnr) then
+                return true
+              end
+
+              -- Show if visible in any window
+              if vim.fn.bufwinid(bufnr) ~= -1 then
+                return true
+              end
+
+              -- Hide everything else
+              return false
             end
+          end,
+          themable = true,
+          -- color_icons = false,
+          show_buffer_close_icons = false,
+          show_close_icon = false,
+          show_tab_indicators = true,
+          always_show_bufferline = true,
 
-            -- Hide everything else
-            return false
-          end
-        end,
-        themable = true,
-        -- color_icons = false,
-        show_buffer_close_icons = false,
-        show_close_icon = false,
-        show_tab_indicators = true,
-        always_show_bufferline = true,
-
-        modified_icon = '',
-        truncate_names = false,
-        name_formatter = function(buf)
-          local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
-          return is_pinned(buf.bufnr) and '' or short_name
-        end,
-        tab_size = 0,
-        separator_style = { '', '' },
-        indicator = {
-          icon = '',
-          style = 'none',
-        },
-        offsets = {
-          -- {
-          --   filetype = "neo-tree",
-          --   text = "File Explorer",
-          --   text_align = "center",
-          --   separator = false,
-          -- }
-        },
-        diagnostics = false,
-        diagnostics_update_in_insert = false,
-        diagnostics_indicator = nil,
-        groups = {
-          items = {
-            require('bufferline.groups').builtin.pinned:with({ icon = '󱂺' }),
+          modified_icon = '',
+          truncate_names = false,
+          name_formatter = function(buf)
+            local short_name = vim.fn.fnamemodify(buf.name, ':t:r')
+            return is_pinned(buf.bufnr) and '' or short_name
+          end,
+          tab_size = 0,
+          separator_style = { '', '' },
+          indicator = {
+            icon = '',
+            style = 'none',
+          },
+          offsets = {
+            -- {
+            --   filetype = "neo-tree",
+            --   text = "File Explorer",
+            --   text_align = "center",
+            --   separator = false,
+            -- }
+          },
+          diagnostics = false,
+          diagnostics_update_in_insert = false,
+          diagnostics_indicator = nil,
+          groups = {
+            items = {
+              require('bufferline.groups').builtin.pinned:with({ icon = '󱂺' }),
+            },
+          },
+          hover = { enabled = false },
+          custom_areas = {
+            left = function() return get_edgy_group_icons('left') end,
+            right = function() return get_edgy_group_icons('right') end,
           },
         },
-        hover = { enabled = false },
-        custom_areas = {
-          left = function() return get_edgy_group_icons('left') end,
-          right = function() return get_edgy_group_icons('right') end,
-        },
-      },
-    }
-  end,
-  config = function(_, opts)
-    require('bufferline.highlights').set_icon_highlight = set_icon_highlight
-    require('bufferline').setup(opts)
-  end,
+      }
+    end,
+    config = function(_, opts)
+      require('bufferline.highlights').set_icon_highlight = set_icon_highlight
+      require('bufferline').setup(opts)
+    end,
+  },
 }

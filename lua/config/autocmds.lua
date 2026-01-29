@@ -18,8 +18,8 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
     vim.opt_local.wrap = false
-    vim.opt_local.foldcolumn = "0"
-    vim.opt_local.signcolumn = "no"
+    vim.opt_local.foldcolumn = '0'
+    vim.opt_local.signcolumn = 'no'
     vim.opt_local.statuscolumn = ''
   end,
   desc = 'Set terminal buffer options',
@@ -79,6 +79,18 @@ vim.api.nvim_create_autocmd('BufEnter', {
       and vim.api.nvim_get_option_value('buftype', { buf = ev.buf }) == 'terminal'
     then
       vim.api.nvim_set_option_value('filetype', 'toggleterm', { buf = ev.buf })
+    end
+  end,
+})
+
+local augroup = vim.api.nvim_create_augroup('LazyBufEnter', { clear = true })
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = augroup,
+  callback = function(ev)
+    local filetype = vim.bo[ev.buf].filetype
+    if filetype ~= '' and not filetype:match('^snacks.*') then
+      vim.api.nvim_exec_autocmds('User', { pattern = 'LazyBufEnter', modeline = false, data = ev })
+      vim.api.nvim_clear_autocmds({ group = augroup })
     end
   end,
 })
