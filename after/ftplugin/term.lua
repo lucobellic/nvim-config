@@ -5,6 +5,7 @@ vim.opt_local.spell = false
 vim.opt_local.foldcolumn = '0'
 vim.opt_local.signcolumn = 'no'
 vim.opt_local.statuscolumn = ''
+vim.opt_local.wrap = false
 
 -- Disable animations from mini.animate
 vim.b.miniindentscope_disable = true
