@@ -64,6 +64,11 @@ end
 local statuscolumn = {
   condition = function() return require('heirline.conditions').is_active() and vim.bo.buftype ~= 'nofile' end,
   provider = function()
+
+    if vim.g.zen_mode then
+      return ''
+    end
+
     if vim.v.virtnum < 0 then
       return ''
     end

@@ -1,3 +1,6 @@
+local number = false
+local relative_number = false
+
 return {
   'folke/which-key.nvim',
   keys = {

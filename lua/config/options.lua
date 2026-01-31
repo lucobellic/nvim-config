@@ -17,6 +17,7 @@ vim.g.border = {
     or { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
 }
 
+vim.g.zen_mode = false
 vim.g.ai_cmp = false
 vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
 vim.opt.completeopt = ''
@@ -28,6 +29,7 @@ vim.opt.laststatus = 3
 vim.opt.signcolumn = 'yes:1'
 vim.opt.foldcolumn = 'auto:1'
 vim.opt.cursorline = true
+vim.opt.showtabline = 2
 
 vim.opt.more = false
 

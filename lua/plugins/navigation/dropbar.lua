@@ -28,6 +28,8 @@ return {
       desc = 'Dropbar Pick Item',
     },
   },
+
+  ---@type dropbar_configs_t
   opts = {
     icons = {
       kinds = {
@@ -123,7 +125,8 @@ return {
     },
     bar = {
       enable = function(buf, win)
-        return not vim.api.nvim_win_get_config(win).zindex
+        return not vim.g.dropbar_disabled
+          and not vim.api.nvim_win_get_config(win).zindex
           and vim.bo[buf].buftype == ''
           and vim.bo[buf].buftype ~= 'terminal'
           and vim.bo[buf].buftype ~= 'dropbar'
