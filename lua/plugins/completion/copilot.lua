@@ -20,18 +20,6 @@ return {
       })
     end,
     keys = {
-      { '<Tab>', function() return require('copilot-nes').update() end, desc = 'Copilot NES Update' },
-      {
-        '<Esc>',
-        function()
-          if require('copilot-nes').have() then
-            require('copilot-nes').clear()
-            return
-          end
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
-        end,
-        desc = 'Copilot NES clear',
-      },
       {
         '<leader>ae',
         function()

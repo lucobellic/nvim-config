@@ -4,7 +4,32 @@ local relative_number = false
 return {
   'folke/which-key.nvim',
   keys = {
+    {
+      '<leader>ul',
+      function()
+        number = not number
+        vim.opt.number = number
+        vim.opt.relativenumber = number and relative_number
+      end,
+      desc = 'Toggle Line Number',
+    },
+    {
+      '<leader>uL',
+      function()
+        relative_number = not relative_number
+        if number then
+          vim.opt.relativenumber = relative_number
+        end
+      end,
+      desc = 'Toggle Relative Line Number',
+    },
     { '<leader>u=', '<cmd>ToggleFocusResize<cr>', desc = 'Toggle Focus Resize' },
+    {
+      '<leader>uw',
+      function() vim.opt_local.wrap = not vim.opt_local.wrap:get() end,
+      repeatable = true,
+      desc = 'Toggle Auto Wrap',
+    },
     { '<leader>uW', '<cmd>ToggleAutoSave<cr>', desc = 'Toggle Auto Save' },
     {
       '<leader>uh',

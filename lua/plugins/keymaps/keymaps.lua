@@ -65,6 +65,33 @@ if vim.g.vscode then
   vim.keymap.set('n', '<C-r>', "<Cmd>call VSCodeNotify('redo')<CR>")
 end
 
+local function tab()
+  if vim.g.suggestions == 'copilot' and vim.lsp.inline_completion.get() then
+    return
+  end
+
+  if vim.g.suggestions == 'gitlab' then
+    local GhostText = require('gitlab.ghost_text')
+    local ns = vim.api.nvim_create_namespace('gitlab.GhostText')
+    local bufnr = vim.api.nvim_get_current_buf()
+    local has_suggestion = #vim.api.nvim_buf_get_extmarks(bufnr or 0, ns, 0, -1, { limit = 1 }) > 0
+    if has_suggestion then
+      GhostText.insert_ghost_text()
+      return
+    end
+  end
+
+  if require('copilot-nes').apply() then
+    return
+  end
+
+  if require('blink.cmp').accept() then
+    return
+  end
+
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+end
+
 return {
   'folke/which-key.nvim',
   event = 'VeryLazy',
@@ -79,9 +106,41 @@ return {
     { mode = 't', '<c-esc>', '<esc>' },
     { mode = 't', '<c-bs>', '<esc>' },
 
+    {
+      mode = { 'i', 'n', 's' },
+      '<esc>',
+      function()
+        vim.cmd('noh')
+        require('copilot-nes').clear()
+        return '<esc>'
+      end,
+      expr = true,
+      desc = 'Escape and Clear hlsearch',
+    },
+
+    -- save file
+    { mode = { 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', desc = 'Save File' },
+
+    --------------------
+    -- Which Key
+    --------------------
+    { '<localleader>', '<cmd>lua require("which-key").show("' .. vim.g.maplocalleader .. '")<cr>' },
+
     --------------------
     -- Text Manipulation
     --------------------
+
+    -- Move Lines
+    { '<A-j>', "<cmd>execute 'move .+' . v:count1<cr>==", desc = 'Move Down' },
+    { '<A-k>', "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", desc = 'Move Up' },
+
+    {
+      mode = { 'n', 'v' },
+      'c',
+      '<cmd>lua vim.g.change = true<cr>c',
+      noremap = true,
+      desc = 'Change',
+    },
     { mode = 'c', '<esc>', '<C-c>', desc = 'Exit insert mode' },
     { mode = 'v', '/', '"hy/<C-r>h', desc = 'Search word' },
     {
@@ -107,6 +166,19 @@ return {
     { mode = { 'n', 'v' }, '<<', '<<', remap = false, desc = 'Decrease Indent' },
     { mode = 'x', '<', '<gv' },
     { mode = 'x', '>', '>gv' },
+
+    { mode = { 'i', 'n' }, '<Tab>', tab, desc = 'Next suggestion' },
+    {
+      mode = { 'i', 'n' },
+      '<S-Tab>',
+      function()
+        if not require('copilot-nes').apply() then
+          return '<S-Tab>'
+        end
+      end,
+      desc = 'Next suggestion',
+      expr = true,
+    },
 
     ------------------
     -- Paste
@@ -167,6 +239,9 @@ return {
       noremap = true,
       desc = 'Quit UIs',
     },
+
+    -- new file
+    { '<leader>fn', '<cmd>enew<cr>', desc = 'New File' },
 
     ------------------
     -- Tab Management
