@@ -271,6 +271,7 @@ return {
           })
         end,
       },
+      matcher = { frecency = true },
       win = {
         input = {
           keys = {
