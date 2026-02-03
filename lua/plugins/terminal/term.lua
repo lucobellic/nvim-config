@@ -59,13 +59,21 @@ return {
     local config = require('util.term.config')
     local core = require('util.term.core')
 
-    -- Setup with configuration
+    ---@type TermManagerConfig
     config.setup({
       defaults = {
         width = 0.6,
         height = 0.6,
         border = 'auto',
         zindex = 50,
+        on_open = function()
+          vim.opt_local.spell = false
+          vim.opt_local.number = false
+          vim.opt_local.signcolumn = 'no'
+          vim.opt_local.foldcolumn = '0'
+          vim.opt_local.relativenumber = false
+          vim.opt_local.wrap = false
+        end,
       },
       terminals = {
         lazygit = {
