@@ -56,7 +56,7 @@ vim.opt.sessionoptions = {
 -- Default splitting will cause your main splits to jump when opening an edgebar.
 -- To prevent this, set `splitkeep` to either `screen` or `topline`.
 vim.opt.splitkeep = 'screen'
-vim.opt.cursorlineopt = 'screenline'
+vim.opt.cursorlineopt = 'both'
 
 vim.opt.number = false
 vim.opt.relativenumber = false
