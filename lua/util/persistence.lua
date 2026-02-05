@@ -25,6 +25,17 @@ local function load_tab_names()
   end)
 end
 
+local function load_tab_buffers()
+  vim
+    .iter(vim.api.nvim_list_bufs())
+    :filter(function(bufnr) return vim.api.nvim_buf_is_valid(bufnr) and not vim.api.nvim_buf_is_loaded(bufnr) end)
+    :filter(function(bufnr) return vim.api.nvim_buf_get_name(bufnr) ~= '' end)
+    :each(function(bufnr)
+      vim.fn.bufload(bufnr)
+      vim.api.nvim_buf_call(bufnr, function() vim.cmd('filetype detect') end)
+    end)
+end
+
 ---Get persistence sessions sorted by last modification time
 ---@return string[] sessions
 function M.get_sorted_sessions()
@@ -69,13 +80,13 @@ end
 function M.post_load()
   vim.cmd('ScopeLoadState')
   load_tab_names()
+  load_tab_buffers()
   require('util.breakpoints').restore_breakpoints()
 end
 
 --- Callback before saving session
 --- @param session_file string
 function M.pre_save(session_file)
-  vim.cmd('tabfirst')
   vim.cmd('ScopeSaveState')
   pcall(save_tab_names)
   require('util.breakpoints').save_breakpoints(session_file)
