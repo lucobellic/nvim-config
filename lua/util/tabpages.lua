@@ -12,13 +12,12 @@ local tab_direction = {
 --- Get all `buflisted` buffers
 ---@return number[] listed_buffers
 function M.nvim_list_buflisted()
-  local listed_buffers = {}
-  for _, buffer in pairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_get_option_value('buflisted', { buf = buffer }) then
-      table.insert(listed_buffers, buffer)
-    end
-  end
-  return listed_buffers
+  return vim
+    .iter(vim.fn.getbufinfo({ buflisted = 1 } or {}))
+    :filter(function(buffer) return vim.api.nvim_buf_is_valid(buffer.bufnr) end)
+    :filter(function(buffer) return vim.api.nvim_get_option_value('filetype', { buf = buffer.bufnr }) ~= '' end)
+    :map(function(buffer) return buffer.bufnr end)
+    :totable()
 end
 
 --- Focus to the window with the first `buflisted` buffer in the current tab if any

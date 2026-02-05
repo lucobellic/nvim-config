@@ -130,10 +130,6 @@ return {
     -- Text Manipulation
     --------------------
 
-    -- Move Lines
-    { '<A-j>', "<cmd>execute 'move .+' . v:count1<cr>==", desc = 'Move Down' },
-    { '<A-k>', "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", desc = 'Move Up' },
-
     {
       mode = { 'n', 'v' },
       'c',
@@ -250,9 +246,8 @@ return {
     { '<S-down>', '<cmd>tabprev<cr>', desc = 'Tab Prev' },
     { '<C-t>', '<cmd>tabnew<cr>', desc = 'Tab New' },
     { 'gq', '<cmd>tabclose<cr>', desc = 'Tab Close' },
-    { '<A-j>', function() require('util.tabpages').move_buffer_to_tab('prev', true) end },
-    { '<A-k>', function() require('util.tabpages').move_buffer_to_tab('next', true) end },
-    { '<leader><tab>l', '<cmd>tablast<cr>', { desc = 'Tab Last' } },
+    { '<leader><tab>h', function() require('util.tabpages').move_buffer_to_tab('prev', true) end, desc = 'Tab Move Prev' },
+    { '<leader><tab>l', function() require('util.tabpages').move_buffer_to_tab('next', true) end, desc = 'Tab Move Next' },
     { '<leader><tab>o', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs' } },
     { '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'Tab First' } },
     { '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'Tab New' } },
