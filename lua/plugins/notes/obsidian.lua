@@ -41,9 +41,11 @@ return {
   },
   {
     'obsidian-nvim/obsidian.nvim',
+    version = '3.15.5',
     cond = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'snacks.nvim',
     },
     cmd = {
       'Obsidian',
@@ -67,19 +69,7 @@ return {
       completion = {
         nvim_cmp = false, -- if using nvim-cmp, otherwise set to false
       },
-      disable_frontmatter = true,
-
       note_id_func = function(title) return title end,
-
-      -- TODO:
-      -- mappings = {
-      --   -- Overrides the 'gf' mapping to work on markdown/wiki links within your vault.
-      --   ['gf'] = {
-      --     action = function() return require('obsidian').util.gf_passthrough() end,
-      --     opts = { noremap = false, expr = true, buffer = true },
-      --   },
-      -- },
-
       ui = {
         enable = false, -- Prefer usage of mardown.nvim
       },
