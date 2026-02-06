@@ -19,7 +19,7 @@ end
 ---@param extmarks table[]
 ---@return table?
 local function get_first_extmark(extmarks)
-  table.sort(extmarks, function(a, b) return (a[4].priority or 0) < (b[4].priority or 0) end)
+  table.sort(extmarks, function(a, b) return (a[4].priority or 0) > (b[4].priority or 0) end)
   return extmarks[1]
 end
 
@@ -64,7 +64,6 @@ end
 local statuscolumn = {
   condition = function() return require('heirline.conditions').is_active() and vim.bo.buftype ~= 'nofile' end,
   provider = function()
-
     if vim.g.zen_mode then
       return ''
     end
