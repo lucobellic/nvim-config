@@ -62,14 +62,14 @@ function Diagnostic._toggle_diagnostic_feature(config_key, normal_config, curren
   local current_value = vim.diagnostic.config()[config_key]
 
   if not current_value then
-    vim.diagnostic.config({ [config_key] = current_config })
-    Diagnostic._notify_diagnostic(messages.current, vim.log.levels.INFO)
-  elseif current_value.current_line then
     vim.diagnostic.config({ [config_key] = normal_config })
     Diagnostic._notify_diagnostic(messages.normal, vim.log.levels.INFO)
-  else
+  elseif current_value.current_line then
     vim.diagnostic.config({ [config_key] = false })
     Diagnostic._notify_diagnostic(messages.disabled, vim.log.levels.WARN)
+  else
+    vim.diagnostic.config({ [config_key] = current_config })
+    Diagnostic._notify_diagnostic(messages.current, vim.log.levels.INFO)
   end
 end
 
