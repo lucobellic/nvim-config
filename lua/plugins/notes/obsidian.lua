@@ -53,7 +53,6 @@ return {
     keys = {
       { '<leader>no', '<cmd>Obsidian open<cr>', desc = 'Obsidian Open' },
       { '<leader>nf', '<cmd>Obsidian quick_switch<cr>', desc = 'Obsidian Find Files' },
-      { '<leader>nt', '<cmd>Obsidian today<cr>', desc = 'Obsidian Today' },
       { '<leader>ny', '<cmd>Obsidian yesterday<cr>', desc = 'Obsidian Yesterday' },
       { '<leader>nn', '<cmd>ObsidianTask<CR>', desc = 'Obsidian Task' },
       { '<leader>nw', '<cmd>Obsidian workspace<CR>', desc = 'Obsidian Workspace' },
