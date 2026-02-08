@@ -25,18 +25,17 @@ end
 
 local LeftAlignment = {
   init = function(self)
+    local left_width = require('plugins.ui.heirline.utils.width_tracker').get()
     local mid_screen = math.floor(vim.api.nvim_get_option_value('columns', {}) / 2)
     local mid_section = table.concat(require('edgy-group.stl').get_statusline('bottom'))
     local mid_width = math.floor(vim.api.nvim_eval_statusline(mid_section, {}).width / 2)
-    local nb_spaces = mid_screen - left_components_length - mid_width
-    local left_padding = string.rep(' ', nb_spaces > 0 and nb_spaces - 1 or 0)
-    self.text = left_padding
+    local nb_spaces = mid_screen - left_width - mid_width
+    self.text = string.rep(' ', math.max(0, nb_spaces - 1))
   end,
   provider = function(self)
     -- vim.schedule(update_highlights)
     return self.text
   end,
-  update = { 'ModeChanged' },
   hl = { bg = 'none' },
 }
 

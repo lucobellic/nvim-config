@@ -55,7 +55,11 @@ vim.api.nvim_create_autocmd('ModeChanged', {
 })
 
 local ViMode = {
-  init = function() left_components_length = 4 end,
+  init = function()
+    local wt = require('plugins.ui.heirline.utils.width_tracker')
+    wt.reset()
+    wt.add('  ')
+  end,
   provider = function() return '  ' end,
   hl = primary_highlight,
 }

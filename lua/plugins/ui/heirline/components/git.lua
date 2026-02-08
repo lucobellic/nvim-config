@@ -9,7 +9,7 @@ local Git = {
     if #self.text > 20 then
       self.text = string.sub(self.text, 1, 20) .. '...'
     end
-    left_components_length = left_components_length + vim.api.nvim_eval_statusline(self.text, {}).width
+    require('plugins.ui.heirline.utils.width_tracker').add(self.text)
   end,
   provider = function(self) return self.text end,
   hl = mode_helpers.primary_highlight,

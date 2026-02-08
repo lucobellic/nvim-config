@@ -37,13 +37,21 @@ local Date = {
 }
 
 local Separator = {
-  provider = function() return mode_helpers.get_mode() == 'n' and ' ' or '┃' end,
+  init = function(self)
+    self.text = mode_helpers.get_mode() == 'n' and ' ' or '┃'
+    require('plugins.ui.heirline.utils.width_tracker').add(self.text)
+  end,
+  provider = function(self) return self.text end,
   hl = mode_helpers.secondary_highlight,
 }
 
 local LazyUpdates = {
-  provider = function() return require('lazy.status').updates() end,
-  cond = require('lazy.status').has_updates,
+  condition = require('lazy.status').has_updates,
+  init = function(self)
+    self.text = require('lazy.status').updates()
+    require('plugins.ui.heirline.utils.width_tracker').add(self.text)
+  end,
+  provider = function(self) return self.text end,
   hl = mode_helpers.primary_highlight,
 }
 
