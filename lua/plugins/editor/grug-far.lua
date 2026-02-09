@@ -22,9 +22,28 @@ return {
     disableBufferLineNumbers = true,
   },
   keys = {
-    { '<leader>s;', function() require('grug-far').open({}) end, desc = 'GrugFar' },
+    { '<leader>sR', function() require('grug-far').open({}) end, desc = 'GrugFar All Files' },
     {
-      '<leader>s;',
+      '<leader>sR',
+      function()
+        require('grug-far').with_visual_selection({
+          prefills = { search = vim.fn.expand('<cword>') },
+        })
+      end,
+      mode = 'v',
+      desc = 'GrugFar Visual All Files',
+    },
+    {
+      '<leader>sr',
+      function()
+        require('grug-far').open({
+          prefills = { filesFilter = vim.fn.expand('%') },
+        })
+      end,
+      desc = 'GrugFar Current File',
+    },
+    {
+      '<leader>sr',
       function()
         require('grug-far').with_visual_selection({
           prefills = {
@@ -34,7 +53,7 @@ return {
         })
       end,
       mode = 'v',
-      desc = 'GrugFar',
+      desc = 'GrugFar Visual Current File',
     },
   },
 }
