@@ -11,7 +11,7 @@ return {
       end,
     },
   },
-  keys = function(_, keys)
+  keys = function()
     local plugin = require('lazy.core.config').spec.plugins['mini.surround']
     local opts = require('lazy.core.plugin').values(plugin, 'opts', false) -- resolve mini.clue options
     -- Populate the keys based on the user's options
@@ -25,8 +25,6 @@ return {
       { opts.mappings.update_n_lines, desc = 'Update `MiniSurround.config.n_lines`' },
     }
     mappings = vim.tbl_filter(function(m) return m[1] and #m[1] > 0 end, mappings)
-
-    mappings = vim.list_extend(mappings, keys)
     return vim.list_extend(mappings, {
       {
         'S',
