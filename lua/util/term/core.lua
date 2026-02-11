@@ -46,12 +46,17 @@ end
 --- Configure window options for terminal buffer display
 ---@param winid integer Window ID
 ---@param bufnr integer Buffer number
+---@return boolean success Whether the buffer was successfully set
 local function setup_window_buffer(winid, bufnr)
+  if not vim.api.nvim_win_is_valid(winid) or not vim.api.nvim_buf_is_valid(bufnr) then
+    return false
+  end
   vim.api.nvim_win_set_buf(winid, bufnr)
   vim.api.nvim_set_option_value('sidescrolloff', 0, { win = winid })
   vim.api.nvim_set_option_value('signcolumn', 'no', { win = winid })
   vim.api.nvim_set_option_value('wrap', true, { win = winid })
   vim.api.nvim_set_option_value('list', false, { win = winid })
+  return true
 end
 
 --- Wrap user on_exit callback with cleanup logic
@@ -172,6 +177,22 @@ end
 --- Show terminal in the popup
 ---@param term Term
 local function show_terminal(term)
+  -- Validate buffer before proceeding - if invalid, remove stale terminal
+  if not term:is_valid() then
+    vim.notify('Terminal buffer is no longer valid: ' .. term.name, vim.log.levels.WARN)
+    local term_index = term.index
+    table.remove(M.terminals, term_index)
+    reindex_terminals(term_index)
+    if #M.terminals > 0 then
+      local next_index = math.min(term_index, #M.terminals)
+      show_terminal(M.terminals[next_index])
+    else
+      M.hide(true)
+      M.active_term = nil
+    end
+    return false
+  end
+
   ensure_popup()
 
   if not term:is_job_running() then
@@ -198,7 +219,11 @@ local function show_terminal(term)
   -- Ensure the popup window is the current window before starting insert
   if is_popup_visible() then
     vim.api.nvim_set_current_win(M.popup.winid)
-    setup_window_buffer(M.popup.winid, term.bufnr)
+    if not setup_window_buffer(M.popup.winid, term.bufnr) then
+      vim.notify('Failed to display terminal buffer: ' .. term.name, vim.log.levels.ERROR)
+      M.popup:hide()
+      return false
+    end
   end
 
   ui.update_border(M.popup, term, #M.terminals)
