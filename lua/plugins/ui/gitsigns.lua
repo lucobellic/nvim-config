@@ -51,7 +51,7 @@ return {
     'folke/which-key.nvim',
     optional = true,
     opts = {
-      spec = { { '<leader>h', group = 'hunk' } },
+      spec = { { '<leader>h', group = 'hunk' }, { '<leader>ht', group = 'toggle' } },
     },
   },
   {
@@ -80,6 +80,16 @@ return {
         function() require('gitsigns').nav_hunk('next', { navigation_message = false }) end,
         repeatable = true,
         desc = 'Next Hunk',
+      },
+      {
+        '<leader>htb',
+        function() require('gitsigns').toggle_current_line_blame() end,
+        desc = 'Toggle Line Blame',
+      },
+      {
+        '<leader>htw',
+        function() require('gitsigns').toggle_word_diff() end,
+        desc = 'Toggle Word Diff',
       },
     },
     opts = {
