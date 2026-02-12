@@ -176,14 +176,23 @@ return {
     { '<leader>fR', function() recent({ filter = { cwd = false } }) end, desc = 'Recent' },
     { '<leader>fp', function() Snacks.picker.projects() end, desc = 'Projects' },
     -- git
-    { '<leader>gh', function() Snacks.picker.git_diff() end, desc = 'Git Diff (hunks)' },
+    {
+      '<leader>sG',
+      function() require('util.snacks.picker.git').git_diff_content() end,
+      desc = 'Git Diff Content (search)',
+    },
+    {
+      '<leader>sg',
+      function()
+        require('util.snacks.picker.git').git_diff_content({ base_branches = { 'develop', 'main', 'master' } })
+      end,
+      desc = 'Git Diff Content (vs branch)',
+    },
     { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status' },
     { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash' },
     -- Grep
     { '<leader>sb', function() Snacks.picker.lines() end, desc = 'Buffer Lines' },
     { '<leader>sB', function() Snacks.picker.grep_buffers() end, desc = 'Grep Open Buffers' },
-    { '<leader>sg', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)' },
-    { '<leader>sG', function() Snacks.picker.grep({ root = false }) end, desc = 'Grep (cwd)' },
     { '<leader>sp', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec' },
     {
       '<leader>sw',
@@ -240,6 +249,7 @@ return {
         jumps = { layout = { preset = 'telescope_vertical' } },
         colorschemes = { layout = { preset = 'ivy' } },
         git_diff = { layout = { preset = 'telescope_preview' } },
+        git_diff_content = { layout = { preset = 'telescope_preview' } },
         git_status = { layout = { preset = 'telescope_preview' } },
         agent_terminals = { layout = { preset = 'telescope_vertical' } },
         keymaps = { layout = { preset = 'telescope_preview' } },
