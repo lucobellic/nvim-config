@@ -49,7 +49,7 @@ local lsp = {
     ['cmp.entry.get_documentation'] = false,
   },
   progress = {
-    enabled = true,
+    enabled = false,
     view = 'mini'
   },
   message = {

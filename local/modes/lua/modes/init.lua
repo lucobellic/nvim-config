@@ -4,7 +4,10 @@
 ---@field private highlights table Mode-specific highlight definitions
 ---@field private original_highlights table Saved original highlights
 ---@field private original_cursorlineopt string Saved cursorlineopt setting
-local M = {}
+local M = {
+  original_highlights = {},
+  original_cursorlineopt = vim.opt.cursorlineopt:get(),
+}
 
 ---@class ModesConfig
 ---@field highlights? table Custom highlight definitions for different modes
@@ -24,9 +27,6 @@ local defaults = {
     },
   },
 }
-
-M.original_highlights = {}
-M.original_cursorlineopt = vim.opt.cursorlineopt:get()
 
 --- Store original highlights
 function M.save_highlights()

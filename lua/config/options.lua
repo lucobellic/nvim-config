@@ -164,3 +164,5 @@ vim.g.kind_filter = vim.g.distribution == 'lazyvim' and LazyVim.config.kind_filt
       'Trait',
     },
   }
+
+vim.opt.statuscolumn = [[%!v:lua.require'heirline'.eval_statuscolumn()]]

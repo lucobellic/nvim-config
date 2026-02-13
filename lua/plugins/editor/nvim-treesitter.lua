@@ -25,7 +25,7 @@ return {
       min_window_height = 40,
       mode = 'topline',
       multiwindow = false,
-      separator = not vim.g.winborder == 'solid' and '─' or ' ',
+      separator = (vim.g.winborder == 'none' or vim.g.winborder == 'solid') and ' ' or '─',
       trim_scope = 'inner',
     },
   },

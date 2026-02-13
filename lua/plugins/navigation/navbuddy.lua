@@ -13,6 +13,9 @@ return {
     },
   },
   opts = {
+    integrations = {
+      snacks = true,
+    },
     window = {
       size = { width = '100%', height = '20%' },
       position = { row = '99%', col = '50%' },
@@ -29,11 +32,12 @@ return {
         },
         right = {
           border = border_style,
-          preview = 'leaf', -- "leaf", "always" or "never"
+          preview = 'never', -- "leaf", "always" or "never"
         },
       },
     },
     lsp = { auto_attach = true },
+    source_buffer = { reorient = 'none' },
   },
   config = function(_, opts)
     require('nvim-navbuddy').setup(opts)

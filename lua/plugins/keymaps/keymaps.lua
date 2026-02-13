@@ -246,8 +246,16 @@ return {
     { '<S-down>', '<cmd>tabprev<cr>', desc = 'Tab Prev' },
     { '<C-t>', '<cmd>tabnew<cr>', desc = 'Tab New' },
     { 'gq', '<cmd>tabclose<cr>', desc = 'Tab Close' },
-    { '<leader><tab>h', function() require('util.tabpages').move_buffer_to_tab('prev', true) end, desc = 'Tab Move Prev' },
-    { '<leader><tab>l', function() require('util.tabpages').move_buffer_to_tab('next', true) end, desc = 'Tab Move Next' },
+    {
+      '<leader><tab>h',
+      function() require('util.tabpages').move_buffer_to_tab('prev', true) end,
+      desc = 'Tab Move Prev',
+    },
+    {
+      '<leader><tab>l',
+      function() require('util.tabpages').move_buffer_to_tab('next', true) end,
+      desc = 'Tab Move Next',
+    },
     { '<leader><tab>o', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs' } },
     { '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'Tab First' } },
     { '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'Tab New' } },
