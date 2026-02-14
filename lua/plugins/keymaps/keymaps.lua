@@ -175,6 +175,18 @@ return {
       desc = 'Next suggestion',
       expr = true,
     },
+    {
+      mode = 'v',
+      'S',
+      function()
+        local char = vim.fn.nr2char(vim.fn.getchar())
+        local selected_text = require('util.util').get_visual_selection_text()
+        local start_pos, end_pos = require('util.util').get_visual_selection_range()
+        local lines = vim.split(char .. selected_text .. char, '\n', { plain = true })
+        vim.api.nvim_buf_set_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, end_pos[3], lines)
+      end,
+      desc = 'Surround',
+    },
 
     ------------------
     -- Paste
