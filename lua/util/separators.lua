@@ -14,11 +14,87 @@ M.common_node_types = {
     'class_specifier',
     'method_definition',
     'struct_specifier',
+    'template_declaration',
+    'template_instantiation',
   },
   lua = {
     'function_declaration',
   },
 }
+
+--- Template-like node types that wrap function/class definitions.
+--- When a separator target node is a child of one of these, the separator
+--- is placed on the parent instead and the child is skipped.
+M.template_node_types = {
+  'template_declaration',
+  'template_instantiation',
+  'decorated_definition',
+}
+
+--- Check whether a treesitter comment node ends on the line directly above `row`.
+--- Walks siblings and previous nodes to find any comment that occupies `row - 1`.
+---@param bufnr integer Buffer number
+---@param root TSNode Root node of the tree
+---@param row integer 0-indexed row of the target node
+---@return boolean
+local function has_comment_above(bufnr, root, row)
+  if row == 0 then
+    return false
+  end
+
+  local prev_row = row - 1
+  local line = vim.api.nvim_buf_get_lines(bufnr, prev_row, prev_row + 1, false)[1]
+  if not line or line:match('^%s*$') then
+    return false
+  end
+
+  -- Get the smallest node at the end of the previous line
+  local col = #line - 1
+  if col < 0 then
+    return false
+  end
+
+  local node_at = root:named_descendant_for_range(prev_row, 0, prev_row, col)
+  if not node_at then
+    return false
+  end
+
+  -- Walk up from the detected node to check if it (or an ancestor ending on
+  -- the same line) is a comment node.
+  local cur = node_at
+  while cur do
+    local ntype = cur:type()
+    if ntype == 'comment' or ntype:match('comment') then
+      return true
+    end
+    local _, _, end_row = cur:range()
+    -- Stop walking up once the ancestor extends beyond our line of interest
+    if end_row ~= prev_row then
+      break
+    end
+    cur = cur:parent()
+  end
+
+  return false
+end
+
+--- Check whether a node's parent is a template-like declaration.
+---@param node TSNode
+---@return boolean
+local function has_template_parent(node)
+  local parent = node:parent()
+  if not parent then
+    return false
+  end
+
+  local parent_type = parent:type()
+  for _, tpl_type in ipairs(M.template_node_types) do
+    if parent_type == tpl_type then
+      return true
+    end
+  end
+  return false
+end
 
 --- Get or create a treesitter query for separator nodes in the given language.
 --- This function validates each common node type against the language grammar
@@ -99,9 +175,30 @@ local function add_separators(bufnr)
     return
   end
 
+  local root = tree:root()
+
   vim
-    .iter(query:iter_captures(tree:root(), bufnr))
-    :filter(function(id, node) return query.captures[id] == 'separator' and node:range() > 0 end)
+    .iter(query:iter_captures(root, bufnr))
+    :filter(function(id, node)
+      if query.captures[id] ~= 'separator' then
+        return false
+      end
+      local row = node:range()
+      -- Skip nodes at the very first line
+      if row == 0 then
+        return false
+      end
+      -- Skip nodes whose parent is a template-like declaration (the parent
+      -- will get its own separator instead).
+      if has_template_parent(node) then
+        return false
+      end
+      -- Skip nodes that have a comment directly above them
+      if has_comment_above(bufnr, root, row) then
+        return false
+      end
+      return true
+    end)
     :each(function(_, node)
       local row = node:range()
       vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
