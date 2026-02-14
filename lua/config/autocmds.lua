@@ -28,6 +28,9 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
 -- Automatic save
 require('util.autosave').setup()
 
+-- Mutable reference hints for clangd
+require('util.mutable_reference_hints').setup()
+
 -- Switch colorscheme with transparency
 vim.g.transparent_colorscheme = false
 local toggle_transparency = function()

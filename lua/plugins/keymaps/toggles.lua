@@ -36,6 +36,13 @@ return {
       function()
         local is_enabled = vim.lsp.inlay_hint.is_enabled()
         vim.lsp.inlay_hint.enable(not is_enabled)
+
+        -- Sync mutable reference hints (inverse of inlay hints)
+        local ok, mutable_ref_hints = pcall(require, 'util.mutable_reference_hints')
+        if ok then
+          mutable_ref_hints.sync_with_inlay_hints()
+        end
+
         local text = (not is_enabled and 'Enabled' or 'Disabled') .. ' inlay hints'
         local level = not is_enabled and vim.log.levels.INFO or vim.log.levels.WARN
         vim.notify(text, level, { title = 'Options' })

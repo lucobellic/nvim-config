@@ -1,5 +1,9 @@
-local default_handler = vim.lsp.handlers['textDocument/inlayHint']
+---@type lsp.Handler
+local default_inlay_hint_handler = vim.lsp.handlers['textDocument/inlayHint']
 local max_length = 20
+
+-- Load mutable reference hints module
+local mutable_ref_hints = require('util.mutable_reference_hints')
 
 --- replace angle-bracket contents with "..." and remove namespaces
 --- std::vector<int> -> vector<int> -> vector<...>
@@ -37,7 +41,7 @@ local function on_inlayhint(err, result, ctx)
       end
     )
   end
-  return default_handler(err, result, ctx)
+  return default_inlay_hint_handler(err, result, ctx)
 end
 
 return {
@@ -58,5 +62,7 @@ return {
   },
   handlers = {
     ['textDocument/inlayHint'] = on_inlayhint,
+    ['textDocument/semanticTokens/full'] = mutable_ref_hints.on_semantic_tokens,
   },
+  on_attach = function(client, bufnr) mutable_ref_hints.setup_buffer(client, bufnr) end,
 }
