@@ -1,35 +1,35 @@
-local M = {}
+local M = {
+  enabled = true,
+  query_cache = {},
+  common_node_types = {
+    ['*'] = {
+      'function_definition',
+      'function_declaration',
+      'class_definition',
+      'class_declaration',
+      'class_specifier',
+      'method_definition',
+      'struct_specifier',
+      'template_declaration',
+      'template_instantiation',
+    },
+    lua = {
+      'function_declaration',
+    },
+  },
 
-local ns_id = vim.api.nvim_create_namespace('function_class_separators')
-
-M.enabled = true
-M.query_cache = {}
-
-M.common_node_types = {
-  ['*'] = {
-    'function_definition',
-    'function_declaration',
-    'class_definition',
-    'class_declaration',
-    'class_specifier',
-    'method_definition',
-    'struct_specifier',
+  --- Template-like node types that wrap function/class definitions.
+  --- When a separator target node is a child of one of these, the separator
+  --- is placed on the parent instead and the child is skipped.
+  template_node_types = {
     'template_declaration',
     'template_instantiation',
-  },
-  lua = {
-    'function_declaration',
+    'decorated_definition',
   },
 }
 
---- Template-like node types that wrap function/class definitions.
---- When a separator target node is a child of one of these, the separator
---- is placed on the parent instead and the child is skipped.
-M.template_node_types = {
-  'template_declaration',
-  'template_instantiation',
-  'decorated_definition',
-}
+local ns_id = vim.api.nvim_create_namespace('function_class_separators')
+local highlight = 'Separators'
 
 --- Check whether a treesitter comment node ends on the line directly above `row`.
 --- Walks siblings and previous nodes to find any comment that occupies `row - 1`.
@@ -199,13 +199,30 @@ local function add_separators(bufnr)
       end
       return true
     end)
-    :each(function(_, node)
-      local row = node:range()
-      vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
-        virt_lines = { { { string.rep('_', vim.api.nvim_win_get_width(0)), 'Comment' } } },
-        virt_lines_above = true,
-      })
-    end)
+    :each(
+      ---@param node TSNode
+      function(_, node)
+        local row = node:range()
+        local line_above = vim.api.nvim_buf_get_lines(bufnr, row - 1, row, false)[1]
+
+        -- Check if the line above is empty (whitespace only or nil)
+        local is_empty = not line_above or line_above:match('^%s*$')
+
+        if is_empty then
+          vim.api.nvim_buf_set_extmark(bufnr, ns_id, row - 1, 0, {
+            virt_text = { { string.rep('▄', vim.api.nvim_win_get_width(0)), highlight } },
+            virt_text_pos = 'inline',
+            invalidate = true,
+          })
+        else
+          vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
+            virt_lines = { { { string.rep('▄', vim.api.nvim_win_get_width(0)), highlight } } },
+            virt_lines_above = true,
+            invalidate = true,
+          })
+        end
+      end
+    )
 end
 
 function M.toggle()
@@ -230,6 +247,14 @@ function M.setup(opts)
   vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'WinResized' }, {
     group = group,
     callback = function(ev) add_separators(ev.buf) end,
+  })
+
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    pattern = '*',
+    callback = function()
+      local cursor_line_bg = vim.api.nvim_get_hl(0, { name = 'CursorLine' }).bg
+      vim.api.nvim_set_hl(0, 'Separators', { fg = cursor_line_bg })
+    end,
   })
 
   vim.api.nvim_create_user_command('ToggleSeparators', M.toggle, { desc = 'Toggle Function Separators' })
