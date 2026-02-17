@@ -92,21 +92,81 @@ function M.pre_save(session_file)
   require('util.breakpoints').save_breakpoints(session_file)
 end
 
----Use vim.ui.select() to load session from persistence plugin
+---Use Snacks picker to load session from persistence plugin
 function M.select_session()
   local sessions = M.get_sorted_sessions()
 
-  local display_names = {}
-  for _, session in ipairs(sessions) do
-    local session_path = M.get_session_path(session)
-    table.insert(display_names, session_path)
-  end
+  -- Build picker items
+  local items = vim
+    .iter(sessions)
+    :map(
+      function(session)
+        return {
+          text = M.get_session_path(session),
+          session_file = session,
+        }
+      end
+    )
+    :totable()
 
-  vim.ui.select(display_names, { prompt = 'Load Session' }, function(_, idx)
-    if idx then
-      M.load_session(sessions[idx])
-    end
-  end)
+  Snacks.picker.pick({
+    title = 'Load Session',
+    items = items,
+    format = 'text',
+    ---@type snacks.picker.finder
+    finder = function(opts, ctx)
+      local sessions = M.get_sorted_sessions()
+      local items = vim
+        .iter(sessions)
+        :map(
+          function(session)
+            return {
+              text = M.get_session_path(session),
+              session_file = session,
+            }
+          end
+        )
+        :totable()
+      return ctx.filter:filter(items)
+    end,
+    actions = {
+      confirm = function(picker)
+        local item = picker:selected({ fallback = true })[1]
+        picker:close()
+        if item then
+          vim.schedule(function() M.load_session(item.session_file) end)
+        end
+      end,
+      remove = function(picker)
+        local selected = picker:selected({ fallback = true })
+        vim.iter(selected):each(function(item)
+          local session_file = item.session_file
+          if vim.fn.filereadable(session_file) == 1 then
+            os.remove(session_file)
+          end
+        end)
+        vim.schedule(
+          function()
+            vim.notify(
+              string.format('Removed %d session(s)', #selected),
+              vim.log.levels.INFO,
+              { title = 'Persistence' }
+            )
+          end
+        )
+        picker.list:set_selected()
+        picker.list:set_target()
+        picker:find()
+      end,
+    },
+    win = {
+      input = {
+        keys = {
+          ['<c-x>'] = { 'remove', mode = { 'i', 'n' } },
+        },
+      },
+    },
+  })
 end
 
 return M
