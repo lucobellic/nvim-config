@@ -20,6 +20,10 @@ return {
       { '<leader>nS', function() require('notes').search_all_notes() end, desc = 'Notes Search (All)' },
       { '<leader>nbs', function() require('notes').select_bookmark() end, desc = 'Notes Select Bookmark' },
       { '<leader>nbn', function() require('notes').create_bookmark() end, desc = 'Notes New Bookmark' },
+      { '[n', function() require('notes').jump_next() end, repeatable = true, desc = 'Notes Jump Next' },
+      { '[N', function() require('notes').jump_next() end, repeatable = true, desc = 'Notes Jump Next' },
+      { ']n', function() require('notes').jump_prev() end, repeatable = true, desc = 'Notes Jump Previous' },
+      { ']N', function() require('notes').jump_prev() end, repeatable = true, desc = 'Notes Jump Previous' },
     },
     ---@type NotesConfig
     opts = {

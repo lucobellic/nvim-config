@@ -399,6 +399,48 @@ function M.toggle()
   )
 end
 
+--- Jump to a note in the specified direction
+---@param direction 'next'|'prev' Direction to jump
+local function jump_note(direction)
+  local extmarks = require('notes.extmarks')
+  local bufnr = vim.api.nvim_get_current_buf()
+  local current_line = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
+
+  local notes = extmarks.get_all_notes(bufnr)
+  if #notes == 0 then
+    return
+  end
+
+  table.sort(notes, function(a, b) return a.line < b.line end)
+
+  local target_note = nil
+  if direction == 'next' then
+    for _, note in ipairs(notes) do
+      if note.line > current_line then
+        target_note = note
+        break
+      end
+    end
+    target_note = target_note or notes[1]
+  else
+    for i = #notes, 1, -1 do
+      if notes[i].line < current_line then
+        target_note = notes[i]
+        break
+      end
+    end
+    target_note = target_note or notes[#notes]
+  end
+
+  vim.api.nvim_win_set_cursor(0, { target_note.line + 1, 0 })
+end
+
+--- Jump to the next note extmark in the current buffer (cycles to first if at end)
+function M.jump_next() jump_note('next') end
+
+--- Jump to the previous note extmark in the current buffer (cycles to last if at start)
+function M.jump_prev() jump_note('prev') end
+
 --- Setup the notes plugin with the given configuration
 ---@param opts? NotesConfig User configuration (merged with defaults)
 function M.setup(opts)
