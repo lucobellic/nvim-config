@@ -3,18 +3,26 @@ local default_inlay_hint_handler = vim.lsp.handlers['textDocument/inlayHint']
 local max_length = 20
 
 -- Load mutable reference hints module
-local mutable_ref_hints = require('util.mutable_reference_hints')
+local mutable_ref_hints = require('util.cpp.mutable_reference_hints')
 
 --- replace angle-bracket contents with "..." and remove namespaces
---- std::vector<int> -> vector<int> -> vector<...>
+--- std::vector<int> -> vector<...>
+--- const std::optional<std::vector<int>> -> const optional<vector<int>>
 --- @param str string
 local function shorten_label(str)
   local result = str
   if result:len() > max_length then
     local current_length = result:len()
     local prefix = result:match('^(: )')
-    result = result:gsub('^.*::', '')
-    if prefix and result:len() < current_length then
+
+    -- Remove namespaces from both outer type and generic parameters
+    -- Process each segment between angle brackets separately
+    result = result:gsub('([%w_]+)::([%w_<>:]+)', function(_, rest)
+      -- Recursively strip namespaces from the rest
+      return rest:gsub('([%w_]+)::', '')
+    end)
+
+    if prefix and not result:match('^(: )') and result:len() < current_length then
       result = prefix .. result
     end
   end

@@ -11,6 +11,9 @@ end
 
 require('util.separators').setup({ enabled = false })
 
+-- cpp extra
+require('util.cpp').setup()
+
 local ruff_code_severity = {
   ANN001 = vim.diagnostic.severity.INFO,
   ANN201 = vim.diagnostic.severity.INFO,

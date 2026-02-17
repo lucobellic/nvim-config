@@ -38,7 +38,7 @@ return {
         vim.lsp.inlay_hint.enable(not is_enabled)
 
         -- Sync mutable reference hints (inverse of inlay hints)
-        local ok, mutable_ref_hints = pcall(require, 'util.mutable_reference_hints')
+        local ok, mutable_ref_hints = pcall(require, 'util.cpp.mutable_reference_hints')
         if ok then
           mutable_ref_hints.sync_with_inlay_hints()
         end
