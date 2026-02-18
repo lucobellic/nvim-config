@@ -1,3 +1,4 @@
+local logo_path = vim.fn.stdpath('config') .. '/local/logo/'
 return {
   'snacks.nvim',
   lazy = false,
@@ -10,9 +11,9 @@ return {
         {
           section = 'terminal',
           align = 'center',
-          cmd = 'cat | cat ' .. vim.fn.stdpath('config') .. '/lua/plugins/ui/header.cat',
-          height = 11,
-          width = 72,
+          cmd = logo_path .. 'rainbow-logo.sh --speed 20 --play ' .. logo_path .. 'rainbow-logo.cache',
+          height = 14,
+          width = 69,
           padding = 1,
         },
         {
