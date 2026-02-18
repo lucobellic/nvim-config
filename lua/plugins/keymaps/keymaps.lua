@@ -179,7 +179,7 @@ return {
       mode = 'v',
       'S',
       function()
-        local char = vim.fn.nr2char(vim.fn.getchar())
+        local char = vim.fn.getcharstr()
         local selected_text = require('util.util').get_visual_selection_text()
         local start_pos, end_pos = require('util.util').get_visual_selection_range()
         local lines = vim.split(char .. selected_text .. char, '\n', { plain = true })
