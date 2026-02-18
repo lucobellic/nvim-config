@@ -51,7 +51,8 @@ return {
       { '<leader>ac', ':CodeCompanionChat<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Chat' },
       { '<leader>ad', ':CodeCompanion /doc<cr>', mode = { 'v' }, desc = 'Code Companion Documentation' },
       { '<leader>af', ':CodeCompanion /fix<cr>', mode = { 'v' }, desc = 'Code Companion Fix' },
-      { '<leader>ag', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
+      { '<leader>agg', ':CodeCompanion /scommit<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Commit' },
+      { '<leader>ags', ':CodeCompanion /split_commits<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Split Commits' },
       { '<leader>ai', ':CodeCompanion /agent<cr>', mode = { 'n', 'v' }, desc = 'Code Companion Inline Prompt' },
       { '<leader>al', ':CodeCompanion /lsp<cr>', mode = { 'n', 'v' }, desc = 'Code Companion LSP' },
       {
