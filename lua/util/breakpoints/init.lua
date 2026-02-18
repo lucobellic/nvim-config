@@ -78,8 +78,6 @@ function M.restore_breakpoints()
 end
 
 --- Clear breakpoints
-function M.clear_breakpoints()
-  vim.g.DapBreakpoints = '{}'
-end
+function M.clear_breakpoints() vim.g.DapBreakpoints = '{}' end
 
 return M

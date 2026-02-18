@@ -27,16 +27,12 @@ return {
     })
 
     vim.api.nvim_create_autocmd('WinLeave', {
-      callback = function()
-        require('neominimap.api').win.disable()
-      end,
+      callback = function() require('neominimap.api').win.disable() end,
       desc = 'Disable neominimap when leaving buffer',
     })
 
     vim.api.nvim_create_autocmd('WinEnter', {
-      callback = function()
-        require('neominimap.api').win.enable()
-      end,
+      callback = function() require('neominimap.api').win.enable() end,
       desc = 'Enable neominimap when entering buffer',
     })
   end,

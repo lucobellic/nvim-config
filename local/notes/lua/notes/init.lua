@@ -235,7 +235,8 @@ local function create_notes_picker(opts)
           }
         end)
         :totable()
-    end):totable()
+    end)
+    :totable()
 
   ---@type snacks.picker.finder.Item[]
   items = vim.iter(items):flatten():totable()

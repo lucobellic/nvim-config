@@ -435,7 +435,7 @@ function AgentManager:select_and_send_terminals()
         end,
     },
     confirm = function(picker)
-      local terminals = picker:selected({fallback = true})
+      local terminals = picker:selected({ fallback = true })
       local terminals_content = vim
         .iter(terminals)
         :map(function(t)
