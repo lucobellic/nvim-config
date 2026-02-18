@@ -50,7 +50,7 @@ local lsp = {
   },
   progress = {
     enabled = false,
-    view = 'mini'
+    view = 'mini',
   },
   message = {
     enabled = true,

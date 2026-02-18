@@ -14,4 +14,3 @@ return {
     picker = 'snacks',
   },
 }
-

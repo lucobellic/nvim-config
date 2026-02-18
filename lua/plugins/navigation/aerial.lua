@@ -10,5 +10,5 @@ return {
       ['<C-j>'] = false,
       ['<C-k>'] = false,
     },
-  }
+  },
 }
