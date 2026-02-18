@@ -61,6 +61,33 @@ local function collect_diff_blocks(ctx, cwd, base_args, extra_args, is_staged)
   return result
 end
 
+--- Get git status indicator from a diff block.
+--- @param block snacks.picker.diff.Block Diff block to get status from
+--- @return string status Single character status code (A, M, D, R, C)
+--- @return table<string, string> status_hls Highlight groups for each status
+local function get_block_status(block)
+  local status = block.new and 'A' or block.delete and 'D' or block.rename and 'R' or block.copy and 'C' or 'M'
+  local status_hls = {
+    A = 'SnacksPickerGitStatusAdded',
+    M = 'SnacksPickerGitStatusModified',
+    D = 'SnacksPickerGitStatusDeleted',
+    R = 'SnacksPickerGitStatusRenamed',
+    C = 'SnacksPickerGitStatusCopied',
+  }
+  return status, status_hls
+end
+
+--- Build diff string from a block's hunks.
+--- @param block snacks.picker.diff.Block Diff block to build from
+--- @return string diff_string Combined diff string
+local function build_block_diff(block)
+  local hunk_diff = vim.list_extend(vim.deepcopy(block.header), {})
+  for _, hunk in ipairs(block.hunks) do
+    vim.list_extend(hunk_diff, hunk.diff)
+  end
+  return table.concat(hunk_diff, '\n')
+end
+
 --- Extract searchable content lines from a diff block.
 --- Filters lines based on the include mode (changes/additions/deletions).
 --- @param block snacks.picker.diff.Block Diff block to extract from
@@ -144,11 +171,7 @@ local function build_file_diff(blocks)
     if entry.staged then
       has_staged = true
     end
-    local hunk_diff = vim.list_extend(vim.deepcopy(entry.block.header), {})
-    for _, hunk in ipairs(entry.block.hunks) do
-      vim.list_extend(hunk_diff, hunk.diff)
-    end
-    diff_parts[#diff_parts + 1] = table.concat(hunk_diff, '\n')
+    diff_parts[#diff_parts + 1] = build_block_diff(entry.block)
   end
 
   return table.concat(diff_parts, '\n'), has_staged, first_block
@@ -170,14 +193,7 @@ local function format_diff_item(item, picker)
 
   -- Derive a git-status-like indicator from the block metadata
   local block = item.block ---@type snacks.picker.diff.Block
-  local status = block.new and 'A' or block.delete and 'D' or block.rename and 'R' or block.copy and 'C' or 'M'
-  local status_hls = {
-    A = 'SnacksPickerGitStatusAdded',
-    M = 'SnacksPickerGitStatusModified',
-    D = 'SnacksPickerGitStatusDeleted',
-    R = 'SnacksPickerGitStatusRenamed',
-    C = 'SnacksPickerGitStatusCopied',
-  }
+  local status, status_hls = get_block_status(block)
   ret[#ret + 1] = { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true }
 
   -- file name
@@ -361,6 +377,178 @@ function M.git_diff_content(picker_opts)
     matcher = { sort_empty = true, fuzzy = false },
     finder = function(config, ctx) return finder_diff(config, ctx, picker_opts, include) end,
     format = format_diff_item,
+    preview = function(ctx) render_diff_preview(ctx, ns_search) end,
+  })
+end
+
+--- Collect diff blocks from git log -p output for a specific file.
+--- Parses commits with their diffs into blocks.
+--- @param ctx snacks.picker.finder.ctx Picker context
+--- @param cwd string Working directory
+--- @param file string File path relative to git root
+--- @return { commit: string, msg: string, block: snacks.picker.diff.Block }[]
+local function collect_file_history_blocks(ctx, cwd, file)
+  local args = {
+    '-c',
+    'core.quotepath=false',
+    '--no-pager',
+    'log',
+    '--no-color',
+    '-p',
+    '-U3',
+    '--format=COMMIT>>%H>>%ct>>%as>>%s',
+    '--',
+    file,
+  }
+  local lines = {} ---@type string[]
+  require('snacks.picker.source.proc').proc(
+    ctx:opts({
+      cmd = 'git',
+      args = args,
+      cwd = cwd,
+    }),
+    ctx
+  )(function(item) lines[#lines + 1] = item.text end)
+
+  ---@type { commit: string, msg: string, date: string, block: snacks.picker.diff.Block }[]
+  local commits = {}
+  local current_commit = nil
+  local current_msg = nil
+  local current_date = nil
+  local current_ts = nil
+  local current_diff_lines = {} ---@type string[]
+
+  for _, line in ipairs(lines) do
+    if line:match('^COMMIT>>') then
+      -- Process previous commit's diff if any
+      if current_commit and #current_diff_lines > 0 then
+        local parsed = require('snacks.picker.source.diff').parse(current_diff_lines)
+        for _, block in ipairs(parsed.blocks) do
+          commits[#commits + 1] = { commit = current_commit, msg = current_msg, date = current_date, block = block }
+        end
+      end
+      -- Parse new commit info (format: COMMIT>>hash>>date>>message)
+      -- new format: COMMIT>>hash>>timestamp>>date_str>>message
+      local hash, ts, date, msg = line:match('^COMMIT>>([^>]+)>>([^>]+)>>([^>]+)>>(.*)$')
+      current_commit = hash
+      current_ts = tonumber(ts)
+      current_msg = msg
+      current_date = date
+      current_diff_lines = {}
+    else
+      current_diff_lines[#current_diff_lines + 1] = line
+    end
+  end
+
+  -- Process last commit
+  if current_commit and #current_diff_lines > 0 then
+    local parsed = require('snacks.picker.source.diff').parse(current_diff_lines)
+    for _, block in ipairs(parsed.blocks) do
+      commits[#commits + 1] = { commit = current_commit, msg = current_msg, date = current_date, ts = current_ts, block = block }
+    end
+  end
+
+  -- sort by unix timestamp (newest first)
+  table.sort(commits, function(a, b) return (a.ts or 0) > (b.ts or 0) end)
+
+  return commits
+end
+
+---@param _ snacks.picker.Config
+---@param ctx snacks.picker.finder.ctx
+---@param file string File path
+---@param include 'changes'|'all'|'additions'|'deletions'
+---@return snacks.picker.finder.async
+local function finder_file_history(_, ctx, file, include)
+  local cwd = Snacks.git.get_root(ctx.filter.cwd) or ctx.filter.cwd
+  ctx.picker:set_cwd(cwd)
+
+  -- Get the relative path from git root
+  local rel_file = vim.fn.fnamemodify(file, ':~:.')
+  if rel_file:sub(1, 1) == '/' then
+    rel_file = vim.fn.fnamemodify(file, ':.')
+  end
+
+  ---@param cb async fun(item:snacks.picker.finder.Item)
+  return function(cb)
+    local commits = collect_file_history_blocks(ctx, cwd, rel_file)
+
+    for _, entry in ipairs(commits) do
+      local block = entry.block
+
+      -- Build searchable text: commit hash, message, and content
+      local content_lines = extract_block_content(block, include)
+      local joined_content = entry.commit .. ' ' .. entry.msg .. '\n' .. table.concat(content_lines, '\n')
+
+      -- Build diff string for preview
+      local diff_string = build_block_diff(block)
+
+      if
+        ctx.filter:match({ file = block.file, text = joined_content })
+        and text_matches_search(joined_content, ctx.filter.search or '')
+      then
+        cb({
+          text = joined_content,
+          file = block.file,
+          cwd = cwd,
+          pos = { block.hunks[1] and block.hunks[1].line or 1, 0 },
+          diff = diff_string,
+          block = block,
+          commit = entry.commit,
+          commit_msg = entry.msg,
+          commit_date = entry.date,
+        })
+      end
+    end
+  end
+end
+
+--- Format a picker item for git file history.
+--- @param item snacks.picker.finder.Item Item to format
+--- @return snacks.picker.Highlight[]
+local function format_history_item(item)
+  -- commit hash (short)
+  local short_hash = item.commit:sub(1, 7)
+
+  -- status indicator
+  local block = item.block ---@type snacks.picker.diff.Block
+  local status, status_hls = get_block_status(block)
+
+  ---@type snacks.picker.Highlight[]
+  return {
+    { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true },
+    { short_hash .. ' ', 'SnacksPickerGitCommit', virtual = true },
+    { item.commit_date .. ' ', 'SnacksPickerComment', virtual = true },
+    { item.commit_msg, 'SnacksPickerComment', virtual = true },
+  }
+end
+
+--- Git file history picker: search through file history changes.
+--- Shows one item per commit, with all changed content searchable.
+--- The preview shows the full diff with search matches highlighted.
+--- @param opts? { file?: string, include?: 'changes'|'all'|'additions'|'deletions' }
+function M.git_file_history(opts)
+  opts = opts or {}
+  local include = opts.include or 'changes'
+  local file = opts.file or vim.api.nvim_buf_get_name(0)
+
+  if file == '' then
+    vim.notify('No file specified and no current buffer', vim.log.levels.WARN)
+    return
+  end
+
+  local ns_search = vim.api.nvim_create_namespace('snacks.picker.git_file_history.search')
+
+  Snacks.picker.pick({
+    source = 'git_diff_content',
+    title = 'Git File History',
+    live = true,
+    supports_live = true,
+    matcher = { sort_empty = true, fuzzy = false },
+    -- ensure commits are shown in chronological order (newest first)
+    sort = { fields = { 'commit_date:desc', 'idx' } },
+    finder = function(config, ctx) return finder_file_history(config, ctx, file, include) end,
+    format = format_history_item,
     preview = function(ctx) render_diff_preview(ctx, ns_search) end,
   })
 end
