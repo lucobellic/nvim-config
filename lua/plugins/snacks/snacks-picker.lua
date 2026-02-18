@@ -156,153 +156,171 @@ local function recent(opts)
 end
 
 return {
-  'snacks.nvim',
-  keys = {
-    { '<leader>gd', false },
-    { '<c-p>', function() Snacks.picker.files() end, desc = 'Find Files' },
-    { '<c-f>', function() Snacks.picker.grep() end, desc = 'Find Files' },
-    { '<leader>,', function() Snacks.picker.files() end, desc = 'Buffers' },
-    { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)' },
-    { '<leader>:', function() Snacks.picker.command_history() end, desc = 'Command History' },
-    { '<leader><space>', function() Snacks.picker.buffers() end, desc = 'Find Files (Root Dir)' },
-    -- find
-    { '<leader>fb', function() Snacks.picker.buffers() end, desc = 'Buffers' },
-    { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Buffers (all)' },
-    { '<leader>fc', function() Snacks.picker.files({ cwd = vim.fn.stdpath('config') }) end, desc = 'Find Config File' },
-    { '<leader>ff', function() Snacks.picker.files() end, desc = 'Find Files (Root Dir)' },
-    { '<leader>fF', function() Snacks.picker.files({ root = false }) end, desc = 'Find Files (cwd)' },
-    { '<leader>fg', function() Snacks.picker.git_files() end, desc = 'Find Files (git-files)' },
-    { '<leader>fr', function() recent({ filter = { cwd = true } }) end, desc = 'Recent (cwd)' },
-    { '<leader>fR', function() recent({ filter = { cwd = false } }) end, desc = 'Recent' },
-    { '<leader>fp', function() Snacks.picker.projects() end, desc = 'Projects' },
-    -- git
-    {
-      '<leader>sG',
-      function() require('util.snacks.picker.git').git_diff_content() end,
-      desc = 'Git Diff Content (search)',
-    },
-    {
-      '<leader>sg',
-      function()
-        require('util.snacks.picker.git').git_diff_content({ base_branches = { 'develop', 'main', 'master' } })
-      end,
-      desc = 'Git Diff Content (vs branch)',
-    },
-    { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status' },
-    { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash' },
-    -- Grep
-    { '<leader>sb', function() Snacks.picker.lines() end, desc = 'Buffer Lines' },
-    { '<leader>sB', function() Snacks.picker.grep_buffers() end, desc = 'Grep Open Buffers' },
-    { '<leader>sp', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec' },
-    {
-      '<leader>sw',
-      function() Snacks.picker.grep_word() end,
-      desc = 'Visual selection or word (Root Dir)',
-      mode = { 'n', 'x' },
-    },
-    {
-      '<leader>sW',
-      function() Snacks.picker.grep_word({ root = false }) end,
-      desc = 'Visual selection or word (cwd)',
-      mode = { 'n', 'x' },
-    },
-    -- search
-    { '<leader>s"', function() Snacks.picker.registers() end, desc = 'Registers' },
-    { '<leader>s/', function() Snacks.picker.search_history() end, desc = 'Search History' },
-    { '<leader>sa', function() Snacks.picker.autocmds() end, desc = 'Autocmds' },
-    { '<leader>sc', function() Snacks.picker.command_history() end, desc = 'Command History' },
-    { '<leader>sC', function() Snacks.picker.commands() end, desc = 'Commands' },
-    { '<leader>sd', function() Snacks.picker.diagnostics() end, desc = 'Diagnostics' },
-    { '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Buffer Diagnostics' },
-    { '<leader>sh', function() Snacks.picker.help() end, desc = 'Help Pages' },
-    { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Highlights' },
-    { '<leader>sI', function() Snacks.picker.icons() end, desc = 'Icons' },
-    { '<leader>si', false },
-    { '<leader>sj', function() Snacks.picker.jumps() end, desc = 'Jumps' },
-    { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'Keymaps' },
-    { '<leader>sl', function() Snacks.picker.loclist() end, desc = 'Location List' },
-    { '<leader>sM', function() Snacks.picker.man() end, desc = 'Man Pages' },
-    { '<leader>sm', function() Snacks.picker.marks() end, desc = 'Marks' },
-    { '<leader>s.', function() Snacks.picker.resume() end, desc = 'Resume' },
-    { '<leader>sq', function() Snacks.picker.qflist() end, desc = 'Quickfix List' },
-    { '<leader>su', function() Snacks.picker.undo() end, desc = 'Undotree' },
-    -- ui
-    { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes' },
+  {
+    'folke/which-key.nvim',
+    optional = true,
+    opts = { spec = { { '<leader>sg', group = 'git' } } },
   },
-  opts = {
-    ---@type snacks.picker.Config
-    picker = {
-      enabled = true,
-      ui_select = true,
-      prompt = '',
-      formatters = {
-        file = {
-          filename_first = true,
-          truncate = 100,
-        },
+  {
+    'snacks.nvim',
+    keys = {
+      { '<leader>gd', false },
+      { '<leader>sg', false },
+      { '<c-p>', function() Snacks.picker.files() end, desc = 'Find Files' },
+      { '<c-f>', function() Snacks.picker.grep() end, desc = 'Find Files' },
+      { '<leader>,', function() Snacks.picker.files() end, desc = 'Buffers' },
+      { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)' },
+      { '<leader>:', function() Snacks.picker.command_history() end, desc = 'Command History' },
+      { '<leader><space>', function() Snacks.picker.buffers() end, desc = 'Find Files (Root Dir)' },
+      -- find
+      { '<leader>fb', function() Snacks.picker.buffers() end, desc = 'Buffers' },
+      { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Buffers (all)' },
+      {
+        '<leader>fc',
+        function() Snacks.picker.files({ cwd = vim.fn.stdpath('config') }) end,
+        desc = 'Find Config File',
       },
-      sources = {
-        grep_word = { layout = { preset = 'telescope_preview' } },
-        grep = { layout = { preset = 'telescope_preview' } },
-        lsp_references = { layout = { preset = 'telescope_preview' } },
-        lsp_definitions = { layout = { preset = 'telescope_preview' } },
-        jumps = { layout = { preset = 'telescope_vertical' } },
-        colorschemes = { layout = { preset = 'ivy' } },
-        git_diff = { layout = { preset = 'telescope_preview' } },
-        git_diff_content = { layout = { preset = 'telescope_preview' } },
-        git_status = { layout = { preset = 'telescope_preview' } },
-        agent_terminals = { layout = { preset = 'telescope_vertical' } },
-        keymaps = { layout = { preset = 'telescope_preview' } },
+      { '<leader>ff', function() Snacks.picker.files() end, desc = 'Find Files (Root Dir)' },
+      { '<leader>fF', function() Snacks.picker.files({ root = false }) end, desc = 'Find Files (cwd)' },
+      { '<leader>fg', function() Snacks.picker.git_files() end, desc = 'Find Files (git-files)' },
+      { '<leader>fr', function() recent({ filter = { cwd = true } }) end, desc = 'Recent (cwd)' },
+      { '<leader>fR', function() recent({ filter = { cwd = false } }) end, desc = 'Recent' },
+      { '<leader>fp', function() Snacks.picker.projects() end, desc = 'Projects' },
+      -- git
+      {
+        '<leader>sgc',
+        function() require('util.snacks.picker.git').git_diff_content() end,
+        desc = 'Search Git Content (current changes)',
       },
-      layouts = {
-        telescope_no_preview = telescope_no_preview,
-        telescope_preview = telescope_preview,
-        telescope_vertical = telescope_vertical,
-      },
-      layout = 'vertical',
-      actions = {
-        trouble_open = function(...) return require('trouble.sources.snacks').actions.trouble_open.action(...) end,
-        cycle_next_layouts = function(picker) set_next_preferred_layout(picker) end,
-        cycle_prev_layouts = function(picker) set_prev_preferred_layout(picker) end,
-        flash = function(picker)
-          require('flash').jump({
-            pattern = '^',
-            label = { after = { 0, 0 } },
-            search = {
-              mode = 'search',
-              exclude = {
-                function(win) return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'snacks_picker_list' end,
-              },
-            },
-            action = function(match)
-              local idx = picker.list:row2idx(match.pos[1])
-              picker.list:_move(idx, true, true)
-            end,
-          })
+      {
+        '<leader>sgr',
+        function()
+          require('util.snacks.picker.git').git_diff_content({ base_branches = { 'develop', 'main', 'master' } })
         end,
+        desc = 'Search Git Content (remote)',
       },
-      matcher = { frecency = true },
-      win = {
-        input = {
-          keys = {
-            ['<c-h>'] = { 'cycle_next_layouts', mode = { 'i', 'n' } },
-            ['<c-l>'] = { 'cycle_prev_layouts', mode = { 'i', 'n' } },
-            ['<c-t>'] = { 'trouble_open', mode = { 'n', 'i' } },
-            ['<c-s>'] = { 'flash', mode = { 'n', 'i' } },
-            ['<c-c>'] = { 'close', mode = { 'n', 'i' } },
-            ['<c-u>'] = { 'preview_scroll_up', mode = { 'i', 'n' } },
-            ['<c-d>'] = { 'preview_scroll_down', mode = { 'i', 'n' } },
-            ['s'] = { 'flash' },
+      {
+        '<leader>sgf',
+        function() require('util.snacks.picker.git').git_file_history() end,
+        desc = 'Search Git Content (file)',
+      },
+      { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status' },
+      { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash' },
+      -- Grep
+      { '<leader>sb', function() Snacks.picker.lines() end, desc = 'Buffer Lines' },
+      { '<leader>sB', function() Snacks.picker.grep_buffers() end, desc = 'Grep Open Buffers' },
+      { '<leader>sp', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec' },
+      {
+        '<leader>sw',
+        function() Snacks.picker.grep_word() end,
+        desc = 'Visual selection or word (Root Dir)',
+        mode = { 'n', 'x' },
+      },
+      {
+        '<leader>sW',
+        function() Snacks.picker.grep_word({ root = false }) end,
+        desc = 'Visual selection or word (cwd)',
+        mode = { 'n', 'x' },
+      },
+      -- search
+      { '<leader>s"', function() Snacks.picker.registers() end, desc = 'Registers' },
+      { '<leader>s/', function() Snacks.picker.search_history() end, desc = 'Search History' },
+      { '<leader>sa', function() Snacks.picker.autocmds() end, desc = 'Autocmds' },
+      { '<leader>sc', function() Snacks.picker.command_history() end, desc = 'Command History' },
+      { '<leader>sC', function() Snacks.picker.commands() end, desc = 'Commands' },
+      { '<leader>sd', function() Snacks.picker.diagnostics() end, desc = 'Diagnostics' },
+      { '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Buffer Diagnostics' },
+      { '<leader>sh', function() Snacks.picker.help() end, desc = 'Help Pages' },
+      { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Highlights' },
+      { '<leader>sI', function() Snacks.picker.icons() end, desc = 'Icons' },
+      { '<leader>si', false },
+      { '<leader>sj', function() Snacks.picker.jumps() end, desc = 'Jumps' },
+      { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'Keymaps' },
+      { '<leader>sl', function() Snacks.picker.loclist() end, desc = 'Location List' },
+      { '<leader>sM', function() Snacks.picker.man() end, desc = 'Man Pages' },
+      { '<leader>sm', function() Snacks.picker.marks() end, desc = 'Marks' },
+      { '<leader>s.', function() Snacks.picker.resume() end, desc = 'Resume' },
+      { '<leader>sq', function() Snacks.picker.qflist() end, desc = 'Quickfix List' },
+      { '<leader>su', function() Snacks.picker.undo() end, desc = 'Undotree' },
+      -- ui
+      { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes' },
+    },
+    opts = {
+      ---@type snacks.picker.Config
+      picker = {
+        enabled = true,
+        ui_select = true,
+        prompt = '',
+        formatters = {
+          file = {
+            filename_first = true,
+            truncate = 100,
           },
         },
-        list = {
-          keys = {
-            ['<c-u>'] = { 'preview_scroll_up' },
-            ['<c-d>'] = { 'preview_scroll_down' },
-          },
+        sources = {
+          grep_word = { layout = { preset = 'telescope_preview' } },
+          grep = { layout = { preset = 'telescope_preview' } },
+          lsp_references = { layout = { preset = 'telescope_preview' } },
+          lsp_definitions = { layout = { preset = 'telescope_preview' } },
+          jumps = { layout = { preset = 'telescope_vertical' } },
+          colorschemes = { layout = { preset = 'ivy' } },
+          git_diff = { layout = { preset = 'telescope_preview' } },
+          git_diff_content = { layout = { preset = 'telescope_preview' } },
+          git_diff_file = { layout = { preset = 'telescope_preview' } },
+          git_status = { layout = { preset = 'telescope_preview' } },
+          agent_terminals = { layout = { preset = 'telescope_vertical' } },
+          keymaps = { layout = { preset = 'telescope_preview' } },
         },
-        icons = {
-          kinds = LazyVim.config.icons.kinds,
+        layouts = {
+          telescope_no_preview = telescope_no_preview,
+          telescope_preview = telescope_preview,
+          telescope_vertical = telescope_vertical,
+        },
+        layout = 'vertical',
+        actions = {
+          trouble_open = function(...) return require('trouble.sources.snacks').actions.trouble_open.action(...) end,
+          cycle_next_layouts = function(picker) set_next_preferred_layout(picker) end,
+          cycle_prev_layouts = function(picker) set_prev_preferred_layout(picker) end,
+          flash = function(picker)
+            require('flash').jump({
+              pattern = '^',
+              label = { after = { 0, 0 } },
+              search = {
+                mode = 'search',
+                exclude = {
+                  function(win) return vim.bo[vim.api.nvim_win_get_buf(win)].filetype ~= 'snacks_picker_list' end,
+                },
+              },
+              action = function(match)
+                local idx = picker.list:row2idx(match.pos[1])
+                picker.list:_move(idx, true, true)
+              end,
+            })
+          end,
+        },
+        matcher = { frecency = true },
+        win = {
+          input = {
+            keys = {
+              ['<c-h>'] = { 'cycle_next_layouts', mode = { 'i', 'n' } },
+              ['<c-l>'] = { 'cycle_prev_layouts', mode = { 'i', 'n' } },
+              ['<c-t>'] = { 'trouble_open', mode = { 'n', 'i' } },
+              ['<c-s>'] = { 'flash', mode = { 'n', 'i' } },
+              ['<c-c>'] = { 'close', mode = { 'n', 'i' } },
+              ['<c-u>'] = { 'preview_scroll_up', mode = { 'i', 'n' } },
+              ['<c-d>'] = { 'preview_scroll_down', mode = { 'i', 'n' } },
+              ['s'] = { 'flash' },
+            },
+          },
+          list = {
+            keys = {
+              ['<c-u>'] = { 'preview_scroll_up' },
+              ['<c-d>'] = { 'preview_scroll_down' },
+            },
+          },
+          icons = {
+            kinds = LazyVim.config.icons.kinds,
+          },
         },
       },
     },
