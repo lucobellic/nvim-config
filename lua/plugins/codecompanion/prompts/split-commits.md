@@ -4,7 +4,7 @@ interaction: chat
 description: agent mode with explicit set of tools
 opts:
   is_default: false
-  alias: commits
+  alias: split_commits
   is_slash_cmd: true
   auto_submit: false
 ---

@@ -20,6 +20,7 @@ return {
     opts = {
       spec = {
         { '<leader>a', group = 'codecompanion', mode = { 'n', 'v' } },
+        { '<leader>ag', group = 'commit', mode = { 'n', 'v' } },
         { '<localleader>a', group = 'codecompanion', mode = { 'n', 'v' } },
       },
     },
