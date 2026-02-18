@@ -41,6 +41,29 @@ function AgentManager.new(opts)
   return agent_manager
 end
 
+--- Prompt user for input and call on_confirm callback with the input.
+---@param prompt string
+---@param on_confirm fun(input: string): boolean callback that returns true if the input is valid
+function AgentManager:input(prompt, on_confirm)
+  ---@type snacks.input.Opts
+  Snacks.input.input({
+    prompt = prompt,
+    win = {
+      keys = { c_cr = { '<c-cr>', 'submit', mode = { 'n', 'i' } } },
+      actions = {
+        submit =
+          ---@type snacks.win.Action.spec
+          function(win)
+            if on_confirm(win:text()) then
+              vim.defer_fn(function() self.last_visited_agent:send('\r') end, 50)
+            end
+            win:close()
+          end,
+      },
+    },
+  }, on_confirm)
+end
+
 --- Setup autocommands to track last visited terminal buffer.
 ---@private
 function AgentManager:setup_autocmds()
@@ -350,14 +373,15 @@ function AgentManager:send_current_buffer()
   AgentRegistry.update_last_used(self)
 
   local file = vim.fn.expand('%:p')
-  vim.ui.input({ prompt = 'Ask file:' }, function(input)
-    if input ~= nil then
-      local message = 'File: ' .. self.newline .. file
-      if input ~= '' then
-        message = message .. self.newline .. input
-      end
-      agent:send(message .. self.newline)
+  self:input('Ask about current file:', function(input)
+    if input == nil then
+      return false
     end
+
+    local message = self.newline .. file
+    local input_message = input ~= '' and input .. self.newline or ''
+    agent:send(message .. self.newline .. input_message)
+    return true
   end)
 end
 
@@ -473,14 +497,15 @@ function AgentManager:send_selection()
     .. '```'
     .. self.newline
 
-  vim.ui.input({ prompt = 'Ask selection:' }, function(input)
-    if input ~= nil then
-      local message = 'Here is a code snippet from ' .. vim.fn.expand('%:p') .. ':' .. self.newline .. formatted_text
-      if input ~= '' then
-        message = message .. self.newline .. input
-      end
-      agent:send(message .. self.newline)
+  self:input('Ask selection:', function(input)
+    if not input then
+      return false
     end
+
+    local message = ' ' .. vim.fn.expand('%:p') .. ' :' .. self.newline .. formatted_text
+    local input_message = input ~= '' and input .. self.newline or ''
+    agent:send(message .. self.newline .. input_message)
+    return true
   end)
 end
 
