@@ -11,7 +11,10 @@ opts:
 
 ## user
 
-You are an expert at following the Conventional Commit specification. Given the git diff listed below, please generate a commit message for me:
+You are an expert at following the Conventional Commit specification.
+Keep the commit message concise.
+
+Given the git diff listed below, please generate a commit message for me:
 
 ```diff
 ${staged-commit.diff}
