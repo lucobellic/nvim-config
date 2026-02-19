@@ -74,23 +74,27 @@ function M.setup()
     { cmd = 'zE', desc = 'Eliminate all folds in window' },
   }
 
-  for _, fold_cmd in ipairs(normal_fold_commands) do
+  vim.iter(normal_fold_commands):each(function(fold_cmd)
     vim.keymap.set('n', fold_cmd.cmd, function()
-      vim.cmd('normal! ' .. fold_cmd.cmd)
-      vim.schedule(M.add_fold_virtual_text)
+      pcall(function()
+        vim.cmd('normal! ' .. fold_cmd.cmd)
+        vim.schedule(M.add_fold_virtual_text)
+      end)
     end, { desc = fold_cmd.desc, repeatable = true })
-  end
+  end)
 
   --- Allow visual mode folding commands to work with any foldmethod
-  for _, fold_cmd in ipairs(visual_fold_commands) do
+  vim.iter(visual_fold_commands):each(function(fold_cmd)
     vim.keymap.set('v', fold_cmd.cmd, function()
-      local previous_foldmethod = vim.wo.foldmethod
-      vim.wo.foldmethod = 'manual'
-      vim.cmd('normal! ' .. fold_cmd.cmd)
-      vim.schedule(M.add_fold_virtual_text)
-      vim.wo.foldmethod = previous_foldmethod
+      pcall(function()
+        local previous_foldmethod = vim.wo.foldmethod
+        vim.wo.foldmethod = 'manual'
+        vim.cmd('normal! ' .. fold_cmd.cmd)
+        vim.schedule(M.add_fold_virtual_text)
+        vim.wo.foldmethod = previous_foldmethod
+      end)
     end, { desc = fold_cmd.desc })
-  end
+  end)
 
   if vim.g.vscode then
     local vscode = require('vscode')
