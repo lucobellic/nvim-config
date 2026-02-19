@@ -46,6 +46,16 @@ return {
         desc = 'Diffview Range File History',
       },
       {
+        '<leader>gdc',
+        function()
+          local branch = require('util.snacks.picker.git').resolve_base_branch({ 'develop', 'main', 'master' })
+            or 'develop'
+          vim.cmd('DiffviewFileHistory --range=' .. branch .. '..HEAD')
+        end,
+        mode = { 'n' },
+        desc = 'Diffview Range base..HEAD',
+      },
+      {
         '<leader>gdf',
         function()
           local file = vim.fn.resolve(vim.fn.expand('%:p'))
@@ -62,9 +72,13 @@ return {
       },
       {
         '<leader>gdd',
-        '<cmd>DiffviewOpen --imply-local origin/develop...HEAD<cr>',
+        function()
+          local branch = require('util.snacks.picker.git').resolve_base_branch({ 'develop', 'main', 'master' })
+            or 'develop'
+          vim.cmd('DiffviewOpen --imply-local ' .. branch .. '...HEAD')
+        end,
         mode = { 'n', 'v' },
-        desc = 'Diffview origin/develop...HEAD',
+        desc = 'Diffview base...HEAD',
       },
       {
         '<leader>gdw',
