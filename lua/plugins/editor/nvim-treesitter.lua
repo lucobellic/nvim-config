@@ -27,6 +27,7 @@ return {
       multiwindow = false,
       separator = (vim.g.winborder == 'none' or vim.g.winborder == 'solid') and ' ' or '─',
       trim_scope = 'inner',
+      zindex = 20,
     },
   },
 }
