@@ -111,6 +111,7 @@ function M.select_session()
 
   Snacks.picker.pick({
     title = 'Load Session',
+    layout = { preset = 'telescope_no_preview' },
     items = items,
     format = 'text',
     ---@type snacks.picker.finder
