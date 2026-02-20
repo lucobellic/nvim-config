@@ -270,9 +270,11 @@ return {
     },
     { '<leader><tab>o', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs' } },
     { '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'Tab First' } },
-    { '<leader><tab><tab>', '<cmd>tabnew<cr>', { desc = 'Tab New' } },
+    { '<leader><tab>n', '<cmd>tabnew<cr>', { desc = 'Tab New' } },
     { '<leader><tab>d', '<cmd>tabclose<cr>', { desc = 'Tab Close' } },
     { '<leader><tab>q', '<cmd>tabclose<cr>', { desc = 'Tab Close' } },
+    { '<A-k>', '<cmd>tabnext<cr>', { desc = 'Tab Next' } },
+    { '<A-j>', '<cmd>tabprev<cr>', { desc = 'Tab Prev' } },
 
     ------------------
     -- Jupytext
