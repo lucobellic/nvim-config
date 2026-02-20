@@ -94,6 +94,18 @@ if vim.g.neovide then
     desc = 'Decrease font size',
   })
 
+  vim.keymap.set('n', '<c-end>', function()
+    if vim.g.neovide_opacity ~= 1.0 and vim.g.neovide_normal_opacity ~= 1.0 then
+      vim.g.previous_opacity = vim.g.neovide_opacity
+      vim.g.previous_normal_opacity = vim.g.neovide_normal_opacity
+      vim.g.neovide_opacity = 1.0
+      vim.g.neovide_normal_opacity = 1.0
+    else
+      vim.g.neovide_opacity = vim.g.neovide_previous_opacity or 0.95
+      vim.g.neovide_normal_opacity = vim.g.neovide_previous_normal_opacity or 0.55
+    end
+  end, { silent = true, repeatable = true, desc = 'Toggle opacity' })
+
   vim.keymap.set('n', '<S-F11>', '<cmd>lua toggle_full_screen()<cr>', { silent = true })
   vim.keymap.set({ 'n', 'v' }, '<C-S-V>', '"+P') -- Paste normal mode
   vim.keymap.set('v', '<C-S-V>', '"+P') -- Paste visual mode
