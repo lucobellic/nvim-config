@@ -74,6 +74,7 @@ if vim.g.neovide then
 
   -- fix border and winbar scrolling glitches
   vim.g.neovide_unlink_border_highlights = true
+  vim.g.neovide_experimental_layer_grouping = true
 
   ---@param delta number
   local function change_font(delta)

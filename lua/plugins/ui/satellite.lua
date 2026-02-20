@@ -64,6 +64,7 @@ return {
         signs = { '│', '│', '│' },
       },
     },
+    zindex = 21,
   },
   config = function(_, opts)
     require('satellite').setup(opts)

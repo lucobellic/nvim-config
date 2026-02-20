@@ -159,7 +159,6 @@ return {
   opts = {
     debounce_threshold = { rising = 50, falling = 50 },
     window = {
-      zindex = 30,
       margin = {
         vertical = { top = 0, bottom = 0 }, -- shift to overlap window borders
         horizontal = { left = 0, right = 0 }, -- shift for scrollbar
@@ -170,6 +169,7 @@ return {
         tabline = false,
         winbar = true,
       },
+      zindex = 20,
     },
     hide = {
       cursorline = false,
