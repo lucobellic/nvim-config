@@ -1,7 +1,7 @@
 return {
   'LazyVim/LazyVim',
   opts = {
-    colorscheme = vim.g.neovide and 'ayugloom' or 'ayubleak',
+    colorscheme = 'ayugloom',
     defaults = {
       keymaps = false,
     },
