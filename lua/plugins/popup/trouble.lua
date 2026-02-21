@@ -104,7 +104,7 @@ return {
         if not ctx.item.kind then
           return
         end
-        local icon = LazyVim.config.icons.kinds[ctx.item.kind] or ctx.opts.icons.kinds[ctx.item.kind]
+        local icon = require('config.icons').icons.kinds[ctx.item.kind] or ctx.opts.icons.kinds[ctx.item.kind]
         if icon then
           return {
             text = icon,
