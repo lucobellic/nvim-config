@@ -13,7 +13,7 @@ function Cursor.setup(opts)
   Cursor.opts = vim.tbl_deep_extend('force', Cursor.opts or {}, opts or {})
   local AgentManager = require('util.agents.agent-manager')
   Cursor.manager = AgentManager.new({
-    executable = 'cursor-agent',
+    executable = 'agent',
     filetype = 'cursor-agent',
     display_name = 'Cursor',
     leader = '<leader>lc',

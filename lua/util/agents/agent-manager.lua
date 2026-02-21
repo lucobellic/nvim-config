@@ -271,7 +271,9 @@ function AgentManager:update_agent_names()
   vim.iter(self.agents):enumerate():each(function(i, agent)
     if agent:buffer_valid() then
       local name = nb_agents > 1 and string.format('%s %d╱%d', title, i, nb_agents) or title
-      vim.api.nvim_buf_set_name(agent.terminal_buf, name)
+      if vim.api.nvim_buf_get_name(agent.terminal_buf) ~= name then
+        pcall(vim.api.nvim_buf_set_name, agent.terminal_buf, name)
+      end
     end
   end)
 end
