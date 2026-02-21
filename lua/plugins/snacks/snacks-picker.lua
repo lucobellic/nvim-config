@@ -319,7 +319,7 @@ return {
             },
           },
           icons = {
-            kinds = LazyVim.config.icons.kinds,
+            kinds = require('config.icons').icons.kinds,
           },
         },
       },

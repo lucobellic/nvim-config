@@ -128,41 +128,7 @@ vim.opt.numberwidth = 1
 vim.g.python3_host_prog = '/usr/bin/python3'
 vim.g.lazyvim_python_lsp = 'basedpyright'
 
-vim.g.kind_filter = vim.g.distribution == 'lazyvim' and LazyVim.config.kind_filter
-  or {
-    default = {
-      'Class',
-      'Constructor',
-      'Enum',
-      'Field',
-      'Function',
-      'Interface',
-      'Method',
-      'Module',
-      'Namespace',
-      'Package',
-      'Property',
-      'Struct',
-      'Trait',
-    },
-    markdown = false,
-    help = false,
-    -- you can specify a different filter for each filetype
-    lua = {
-      'Class',
-      'Constructor',
-      'Enum',
-      'Field',
-      'Function',
-      'Interface',
-      'Method',
-      'Module',
-      'Namespace',
-      -- "Package", -- remove package since luals uses it for control flow structures
-      'Property',
-      'Struct',
-      'Trait',
-    },
-  }
+
+vim.g.kind_filter = require('config.icons').kind_filter
 
 vim.opt.statuscolumn = [[%!v:lua.require'heirline'.eval_statuscolumn()]]
