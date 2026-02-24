@@ -444,7 +444,8 @@ local function collect_file_history_blocks(ctx, cwd, file)
   if current_commit and #current_diff_lines > 0 then
     local parsed = require('snacks.picker.source.diff').parse(current_diff_lines)
     for _, block in ipairs(parsed.blocks) do
-      commits[#commits + 1] = { commit = current_commit, msg = current_msg, date = current_date, ts = current_ts, block = block }
+      commits[#commits + 1] =
+        { commit = current_commit, msg = current_msg, date = current_date, ts = current_ts, block = block }
     end
   end
 
@@ -521,6 +522,24 @@ local function format_history_item(item)
     { item.commit_date .. ' ', 'SnacksPickerComment', virtual = true },
     { item.commit_msg, 'SnacksPickerComment', virtual = true },
   }
+end
+
+--- Open a branch picker and then run git_diff_content against the selected branch.
+--- @param picker_opts? { include?: 'changes'|'all'|'additions'|'deletions' }
+function M.git_diff_content_branch(picker_opts)
+  picker_opts = picker_opts or {}
+  local include = picker_opts.include or 'changes'
+
+  Snacks.picker.git_branches({
+    confirm = function(picker, item)
+      picker:close()
+      if not item then
+        return
+      end
+      local branch = item.branch or item.text
+      M.git_diff_content({ base = branch, include = include })
+    end,
+  })
 end
 
 --- Git file history picker: search through file history changes.

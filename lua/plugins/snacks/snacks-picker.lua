@@ -204,6 +204,11 @@ return {
         function() require('util.snacks.picker.git').git_file_history() end,
         desc = 'Search Git Content (file)',
       },
+      {
+        '<leader>sgs',
+        function() require('util.snacks.picker.git').git_diff_content_branch() end,
+        desc = 'Search Git Content (select branch)',
+      },
       { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status' },
       { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash' },
       -- Grep
