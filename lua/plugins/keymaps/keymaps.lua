@@ -225,6 +225,8 @@ return {
     ------------------
     { mode = { 'o', 'v', 'n' }, '>', ']', desc = 'Next', remap = true },
     { mode = { 'o', 'v', 'n' }, '<', '[', desc = 'Prev', remap = true },
+    { mode = { 'n', 'v' }, 'j', 'gj', { noremap = false, silent = true } },
+    { mode = { 'n', 'v' }, 'k', 'gk', { noremap = false, silent = true } },
 
     ------------------
     -- File Operations
