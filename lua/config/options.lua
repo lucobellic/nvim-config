@@ -126,7 +126,7 @@ vim.opt.numberwidth = 1
 
 -- Set python3 host prog to speed up startup
 vim.g.python3_host_prog = '/usr/bin/python3'
-vim.g.lazyvim_python_lsp = 'basedpyright'
+vim.g.lazyvim_python_lsp = 'ty'
 
 
 vim.g.kind_filter = require('config.icons').kind_filter
