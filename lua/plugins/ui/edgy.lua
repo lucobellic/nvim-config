@@ -53,6 +53,7 @@ return {
       desc = 'Edgy Toggle Attachment',
     },
   },
+  ---@class Edgy.Config
   opts = {
     options = {
       bottom = { size = 0.2 },
@@ -70,20 +71,18 @@ return {
     },
     keys = {
       -- close window
-      ['q'] = function(win) win:close() end,
+      ['q'] =
+        ---@param win Edgy.Window
+        function(win)
+          if win:next({ visible = true, focus = true }) == nil then
+            win:prev({ visible = true, focus = true })
+          end
+          win:close()
+        end,
       -- hide window
-      ['<C-q>'] = false,
       ['<c-q>'] = false,
       -- close sidebar
       ['Q'] = function(win) win.view.edgebar:close() end,
-      -- next open window
-      ['>w'] = function(win) win:next({ visible = true, focus = true }) end,
-      -- previous open window
-      ['<w'] = function(win) win:prev({ visible = true, focus = true }) end,
-      -- next loaded window
-      ['>W'] = function(win) win:next({ pinned = false, focus = true }) end,
-      -- prev loaded window
-      ['<W'] = function(win) win:prev({ pinned = false, focus = true }) end,
     },
     top = {},
     left = {
