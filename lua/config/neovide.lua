@@ -107,13 +107,11 @@ if vim.g.neovide then
     end
   end, { silent = true, repeatable = true, desc = 'Toggle opacity' })
 
-  vim.keymap.set('n', '<S-F11>', '<cmd>lua toggle_full_screen()<cr>', { silent = true })
-  vim.keymap.set({ 'n', 'v' }, '<C-S-V>', '"+P') -- Paste normal mode
-  vim.keymap.set('v', '<C-S-V>', '"+P') -- Paste visual mode
-  vim.keymap.set('c', '<C-S-V>', '<C-R>+') -- Paste command mode
-  vim.keymap.set('i', '<C-S-V>', '<ESC>l"+Pli') -- Paste insert mode
+  local function save() vim.cmd.write() end
+  local function copy() vim.cmd([[normal! "+y]]) end
+  local function paste() vim.api.nvim_paste(vim.fn.getreg('+'), true, -1) end
 
-  -- Allow clipboard copy paste in neovim
-  vim.keymap.set('', '<C-S-V>', '+p<CR>', { noremap = true, silent = true })
-  vim.keymap.set({ '!', 't', 'v' }, '<C-S-V>', '<C-R>+', { noremap = true, silent = true })
+  vim.keymap.set({ 'n', 'i', 'v' }, '<C-S-s>', save, { desc = 'Save' })
+  vim.keymap.set('v', '<C-S-c>', copy, { silent = true, desc = 'Copy' })
+  vim.keymap.set({ 'n', 'i', 'v', 'c', 't' }, '<C-S-v>', paste, { silent = true, desc = 'Paste' })
 end
