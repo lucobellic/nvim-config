@@ -181,43 +181,14 @@ function M.delete_note()
   vim.notify('Note deleted', vim.log.levels.INFO, { title = 'Notes' })
 end
 
---- Internal function to create a notes picker with optional cwd filter
----@param opts? { cwd_only?: boolean } Options for the picker
-local function create_notes_picker(opts)
-  opts = opts or {}
+---@return snacks.picker.finder.Item[]
+local function notes_finder()
   local bookmarks = require('notes.bookmarks')
-  local extmarks = require('notes.extmarks')
-
-  -- First save current state so we have up-to-date positions
-  M.save_current_bookmark()
-
   local current_path = bookmarks.get_current_path()
   local data = bookmarks.load(current_path)
 
-  if not data or vim.tbl_isempty(data) then
-    vim.notify('No notes in current bookmark', vim.log.levels.WARN, { title = 'Notes' })
-    return
-  end
-
-  -- Filter data by cwd if requested
-  local filtered_data = data
-  if opts.cwd_only then
-    local cwd = vim.fn.getcwd()
-    filtered_data = {}
-    for fpath, notes in pairs(data) do
-      if vim.startswith(fpath, cwd .. '/') or fpath == cwd then
-        filtered_data[fpath] = notes
-      end
-    end
-
-    if vim.tbl_isempty(filtered_data) then
-      vim.notify('No notes in current directory', vim.log.levels.WARN, { title = 'Notes' })
-      return
-    end
-  end
-
   local items = vim
-    .iter(filtered_data)
+    .iter(data)
     :enumerate()
     :map(function(idx, fpath, notes)
       local short_path = vim.fn.fnamemodify(fpath, ':~:.')
@@ -238,23 +209,25 @@ local function create_notes_picker(opts)
     end)
     :totable()
 
-  ---@type snacks.picker.finder.Item[]
-  items = vim.iter(items):flatten():totable()
+  return vim.iter(items):flatten():totable()
+end
 
-  if #items == 0 then
-    vim.notify('No notes in current bookmark', vim.log.levels.WARN, { title = 'Notes' })
-    return
-  end
+--- Internal function to create a notes picker with optional cwd filter
+---@param opts? snacks.picker.filter.Config
+local function create_notes_picker(opts)
+  opts = opts or {}
+  local extmarks = require('notes.extmarks')
 
-  local title = opts.cwd_only and 'Notes (CWD)' or 'Notes (All)'
-  local refresh_fn = opts.cwd_only and M.search_notes or M.search_all_notes
+  -- First save current state so we have up-to-date positions
+  M.save_current_bookmark()
 
   Snacks.picker.pick({
     source = 'select',
-    items = items,
     format = 'text',
     layout = { preset = 'telescope_vertical' },
-    title = title,
+    title = opts.cwd and 'Notes' or 'Notes (All)',
+    filter = opts,
+    finder = function(_, ctx) return ctx.filter:filter(notes_finder()) end,
     actions = {
       confirm = function(picker, item)
         picker:close()
@@ -279,9 +252,13 @@ local function create_notes_picker(opts)
             end
           end
         end)
+
         -- Re-save after deletion
         M.save_current_bookmark()
-        picker:close()
+
+        picker.list:set_selected()
+        picker.list:set_target()
+        picker:find()
       end,
       edit = function(picker)
         local selected = picker:selected({ fallback = true })[1]
@@ -320,9 +297,9 @@ local function create_notes_picker(opts)
           -- Save changes
           M.save_current_bookmark()
 
-          -- Refresh picker to show updated notes
-          picker:close()
-          vim.schedule(refresh_fn)
+          picker.list:set_selected()
+          picker.list:set_target()
+          picker:find()
         end)
       end,
     },
@@ -339,11 +316,11 @@ end
 
 --- Search and jump to notes in the current working directory (cwd).
 --- Uses Snacks picker to display notes filtered to cwd with file path and line number.
-function M.search_notes() create_notes_picker({ cwd_only = true }) end
+function M.search_notes() create_notes_picker({ cwd = true }) end
 
 --- Search and jump to notes across all files in the current bookmark.
 --- Uses Snacks picker to display all notes with file path and line number.
-function M.search_all_notes() create_notes_picker({ cwd_only = false }) end
+function M.search_all_notes() create_notes_picker({ cwd = false }) end
 
 --- Switch to a different bookmark session.
 --- Saves the current bookmark, clears all notes, and loads the new one.
