@@ -1,6 +1,13 @@
 return {
   'snacks.nvim',
   ---@type snacks.Config
+  keys = {
+    {
+      '<leader>es',
+      function() Snacks.explorer.reveal() end,
+      desc = 'Snacks Explorer',
+    },
+  },
   opts = {
     picker = {
       sources = {
