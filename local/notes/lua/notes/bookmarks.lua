@@ -139,29 +139,25 @@ end
 --- Show a Snacks picker to select an existing bookmark
 ---@param on_selected fun(path: string)? Optional callback after selection
 function M.select_existing(on_selected)
-  local names = M.list()
-
-  if #names == 0 then
-    vim.notify('No bookmarks found', vim.log.levels.WARN, { title = 'Notes' })
-    return
-  end
-
-  ---@type snacks.picker.finder.Item[]
-  local items = {}
-  for idx, name in ipairs(names) do
-    items[#items + 1] = {
-      formatted = name,
-      text = idx .. '. ' .. name,
-      item = name,
-      idx = idx,
-    }
-  end
-
   Snacks.picker.pick({
     source = 'select',
-    items = items,
     format = 'text',
     title = 'Select Notes Bookmark',
+    finder = function(_, ctx)
+      return ctx.filter:filter(vim
+        .iter(ipairs(M.list()))
+        :map(
+          function(idx, name)
+            return {
+              formatted = name,
+              text = idx .. '. ' .. name,
+              item = name,
+              idx = idx,
+            }
+          end
+        )
+        :totable())
+    end,
     preview = function(ctx)
       ctx.preview:reset()
       local name = ctx.item.item
@@ -177,8 +173,8 @@ function M.select_existing(on_selected)
       local ns = ctx.preview:ns()
       local hl_ranges = {}
 
-      for fpath, notes in pairs(data) do
-        local short = vim.fn.fnamemodify(fpath, ':~:.')
+      for path, notes in pairs(data) do
+        local short = vim.fn.fnamemodify(path, ':~:.')
         table.insert(hl_ranges, { line = #lines, group = 'Directory' })
         table.insert(lines, '  ' .. short)
 
@@ -210,8 +206,10 @@ function M.select_existing(on_selected)
           local path = M.get_bookmark_path(item.item)
           os.remove(path)
         end)
-        picker:close()
-        vim.notify('Removed selected bookmarks', vim.log.levels.INFO, { title = 'Notes' })
+
+        picker.list:set_selected()
+        picker.list:set_target()
+        picker:find()
       end,
       confirm = function(picker, item)
         picker:close()

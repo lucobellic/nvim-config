@@ -6,7 +6,10 @@
 ---@class NotesModule
 ---@field private config NotesConfig Plugin configuration
 ---@field private loaded_buffers table<number, boolean> Set of buffer handles already loaded
-local M = {}
+local M = {
+  config = {},
+  loaded_buffers = {},
+}
 
 ---@class NotesConfig
 ---@field extmark? vim.api.keyset.set_extmark Options passed to nvim_buf_set_extmark
@@ -37,8 +40,6 @@ local defaults = {
   text_hl = 'DiagnosticHint',
 }
 
-M.loaded_buffers = {}
-
 --- Normalize a buffer name to an absolute path
 ---@param bufnr number Buffer handle
 ---@return string? path Absolute path, or nil if buffer has no name
@@ -53,56 +54,44 @@ end
 --- Collect current notes from all loaded buffers
 ---@return BookmarkData data
 local function collect_all_notes()
+  local bookmarks = require('notes.bookmarks')
   local extmarks = require('notes.extmarks')
+
   ---@type BookmarkData
   local data = {}
-
-  for bufnr, _ in pairs(M.loaded_buffers) do
-    if vim.api.nvim_buf_is_valid(bufnr) then
-      local path = buf_path(bufnr)
-      if path then
-        local notes = extmarks.get_all_notes(bufnr)
-        if #notes > 0 then
-          ---@type SavedNote[]
-          local saved = {}
-          for _, note in ipairs(notes) do
-            table.insert(saved, { line = note.line, text = note.text })
-          end
-          data[path] = saved
-        end
-      end
-    end
-  end
+  vim
+    .iter(pairs(M.loaded_buffers))
+    :filter(function(bufnr, _) return vim.api.nvim_buf_is_valid(bufnr) end)
+    :map(function(bufnr, _) return { path = buf_path(bufnr), bufnr = bufnr, notes = extmarks.get_all_notes(bufnr) } end)
+    :filter(function(item) return item.path and #item.notes > 0 end)
+    :each(function(item)
+      data[item.path] = vim
+        .iter(item.notes)
+        :map(function(note) return { line = note.line, text = note.text } end)
+        :totable()
+    end)
 
   -- Merge with existing bookmark data for buffers not currently loaded
-  local bookmarks = require('notes.bookmarks')
   local current_path = bookmarks.get_current_path()
   local existing = bookmarks.load(current_path)
-  if existing then
-    for fpath, notes in pairs(existing) do
-      if data[fpath] == nil then
-        -- Check if we tried to load this buffer but it had no notes
-        local was_loaded = false
-        for bufnr, _ in pairs(M.loaded_buffers) do
-          if vim.api.nvim_buf_is_valid(bufnr) and buf_path(bufnr) == fpath then
-            was_loaded = true
-            break
-          end
-        end
-        -- Keep existing data for buffers we never loaded
-        if not was_loaded then
-          data[fpath] = notes
-        end
-      end
-    end
-  end
+
+  -- Add any existing notes for files that aren't currently loaded (e.g. from closed buffers)
+  vim
+    .iter(pairs(existing or {}))
+    :filter(function(path, _) return data[path] == nil end)
+    :filter(function(path, _)
+      return not vim
+        .iter(pairs(M.loaded_buffers))
+        :any(function(bufnr, _) return vim.api.nvim_buf_is_valid(bufnr) and buf_path(bufnr) == path end)
+    end)
+    :each(function(path, notes) data[path] = notes end)
 
   return data
 end
 
 --- Load notes from the current bookmark into a specific buffer
 ---@param bufnr number Buffer handle
-local function load_buffer_notes(bufnr)
+function M.load_buffer_notes(bufnr)
   if M.loaded_buffers[bufnr] then
     return
   end
@@ -181,147 +170,6 @@ function M.delete_note()
   vim.notify('Note deleted', vim.log.levels.INFO, { title = 'Notes' })
 end
 
----@return snacks.picker.finder.Item[]
-local function notes_finder()
-  local bookmarks = require('notes.bookmarks')
-  local current_path = bookmarks.get_current_path()
-  local data = bookmarks.load(current_path)
-
-  local items = vim
-    .iter(data)
-    :enumerate()
-    :map(function(idx, fpath, notes)
-      local short_path = vim.fn.fnamemodify(fpath, ':~:.')
-      return vim
-        .iter(notes or {})
-        :map(function(note)
-          idx = idx + 1
-          return {
-            formatted = short_path .. ':' .. (note.line + 1) .. ' ' .. note.text,
-            text = idx .. ' ' .. short_path .. ':' .. (note.line + 1) .. ' ' .. note.text,
-            file = fpath,
-            pos = { note.line + 1, 0 },
-            item = note,
-            idx = idx,
-          }
-        end)
-        :totable()
-    end)
-    :totable()
-
-  return vim.iter(items):flatten():totable()
-end
-
---- Internal function to create a notes picker with optional cwd filter
----@param opts? snacks.picker.filter.Config
-local function create_notes_picker(opts)
-  opts = opts or {}
-  local extmarks = require('notes.extmarks')
-
-  -- First save current state so we have up-to-date positions
-  M.save_current_bookmark()
-
-  Snacks.picker.pick({
-    source = 'select',
-    format = 'text',
-    layout = { preset = 'telescope_vertical' },
-    title = opts.cwd and 'Notes' or 'Notes (All)',
-    filter = opts,
-    finder = function(_, ctx) return ctx.filter:filter(notes_finder()) end,
-    actions = {
-      confirm = function(picker, item)
-        picker:close()
-        vim.schedule(function()
-          if vim.fn.filereadable(item.file) == 1 then
-            vim.cmd('edit ' .. vim.fn.fnameescape(item.file))
-            vim.api.nvim_win_set_cursor(0, item.pos)
-          else
-            vim.notify('File not found: ' .. item.file, vim.log.levels.ERROR, { title = 'Notes' })
-          end
-        end)
-      end,
-      remove = function(picker)
-        local selected = picker:selected({ fallback = true })
-        vim.iter(selected):each(function(item)
-          -- Find the buffer for this file and remove the extmark
-          local bufnr = vim.fn.bufnr(item.file)
-          if bufnr ~= -1 and vim.api.nvim_buf_is_valid(bufnr) then
-            local note = extmarks.get_note_at_line(bufnr, item.item.line)
-            if note then
-              extmarks.delete_note(bufnr, note.extmark_id)
-            end
-          end
-        end)
-
-        -- Re-save after deletion
-        M.save_current_bookmark()
-
-        picker.list:set_selected()
-        picker.list:set_target()
-        picker:find()
-      end,
-      edit = function(picker)
-        local selected = picker:selected({ fallback = true })[1]
-        if not selected then
-          return
-        end
-        vim.ui.input({ prompt = 'Edit Note: ', default = selected.item.text }, function(input)
-          if input == nil then
-            return
-          end
-
-          -- Get or load the buffer for this file
-          local bufnr = vim.fn.bufnr(selected.file)
-          if bufnr == -1 then
-            vim.cmd('badd ' .. vim.fn.fnameescape(selected.file))
-            bufnr = vim.fn.bufnr(selected.file)
-          end
-
-          -- Ensure notes are loaded for this buffer
-          load_buffer_notes(bufnr)
-
-          if input:match('^%s*$') then
-            -- Empty input: delete the note
-            local note = extmarks.get_note_at_line(bufnr, selected.item.line)
-            if note then
-              extmarks.delete_note(bufnr, note.extmark_id)
-            end
-          else
-            -- Non-empty input: update the note
-            extmarks.set_note(bufnr, selected.item.line, input)
-          end
-
-          -- Mark buffer as modified so changes are tracked
-          M.loaded_buffers[bufnr] = true
-
-          -- Save changes
-          M.save_current_bookmark()
-
-          picker.list:set_selected()
-          picker.list:set_target()
-          picker:find()
-        end)
-      end,
-    },
-    win = {
-      input = {
-        keys = {
-          ['<c-x>'] = { 'remove', mode = { 'i', 'n' } },
-          ['<c-e>'] = { 'edit', mode = { 'i', 'n' } },
-        },
-      },
-    },
-  })
-end
-
---- Search and jump to notes in the current working directory (cwd).
---- Uses Snacks picker to display notes filtered to cwd with file path and line number.
-function M.search_notes() create_notes_picker({ cwd = true }) end
-
---- Search and jump to notes across all files in the current bookmark.
---- Uses Snacks picker to display all notes with file path and line number.
-function M.search_all_notes() create_notes_picker({ cwd = false }) end
-
 --- Switch to a different bookmark session.
 --- Saves the current bookmark, clears all notes, and loads the new one.
 ---@param new_path string Full path to the new bookmark JSON file
@@ -345,7 +193,7 @@ function M.change_bookmark(new_path)
   -- Load notes for currently open buffers
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(bufnr) and buf_path(bufnr) then
-      load_buffer_notes(bufnr)
+      M.load_buffer_notes(bufnr)
     end
   end
 
@@ -441,7 +289,7 @@ function M.setup(opts)
   -- Load notes when entering a buffer
   vim.api.nvim_create_autocmd('BufEnter', {
     group = group,
-    callback = function(ev) load_buffer_notes(ev.buf) end,
+    callback = function(ev) M.load_buffer_notes(ev.buf) end,
     desc = 'Load notes for buffer from current bookmark',
   })
 

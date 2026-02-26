@@ -73,6 +73,10 @@ end
 ---@param line number 0-indexed line number
 ---@return Note? note The note at the given line, or nil
 function M.get_note_at_line(bufnr, line)
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    return nil
+  end
+
   local marks = vim.api.nvim_buf_get_extmarks(bufnr, M.ns_id, { line, 0 }, { line, -1 }, { details = true })
   if #marks == 0 then
     return nil
