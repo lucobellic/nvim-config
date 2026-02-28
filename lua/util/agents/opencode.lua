@@ -7,13 +7,14 @@
 ---@class OpenCode
 ---@field opts OpenCodeOptions
 local OpenCode = { opts = { split = 'right', focus = true, insert = true }, manager = nil }
+local port = vim.env.INSIDE_DOCKER and '4097' or '4096'
 
 ---@param opts OpenCodeOptions|nil
 function OpenCode.setup(opts)
   OpenCode.opts = vim.tbl_deep_extend('force', OpenCode.opts or {}, opts or {})
   local AgentManager = require('util.agents.agent-manager')
   OpenCode.manager = AgentManager.new({
-    executable = 'opencode',
+    executable = 'opencode attach http://localhost:' .. port,
     filetype = 'opencode',
     display_name = 'OpenCode',
     leader = '<leader>lo',
