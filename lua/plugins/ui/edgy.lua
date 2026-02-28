@@ -58,6 +58,7 @@ return {
     options = {
       bottom = { size = 0.2 },
       left = { size = 40 },
+      right = { size = 0.3 },
     },
     close_when_all_hidden = false,
     exit_when_last = false,
@@ -113,6 +114,13 @@ return {
       },
     },
     right = {
+      {
+        title = 'GrugFar',
+        ft = 'grug-far',
+        filter = function(_, win)
+          return vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
+        end,
+      },
       {
         title = 'codecompanion',
         ft = 'codecompanion',
