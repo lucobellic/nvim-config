@@ -1,41 +1,3 @@
-local debounce_timer = nil
-
---- Sets up debounced auto-completion trigger on text changes in insert mode
---- @param debounce_delay number Delay in milliseconds before triggering completion
-local function setup_text_changed_debounce(debounce_delay)
-  vim.api.nvim_create_autocmd('InsertCharPre', {
-    group = vim.api.nvim_create_augroup('TextChangedDebounceGroup', { clear = true }),
-    callback = function()
-      -- Cancel any existing timer to debounce rapid text changes
-      if debounce_timer then
-        debounce_timer:stop()
-      end
-
-      if vim.v.char == ' ' then
-        return
-      end
-
-      -- Set up a new timer to show completion after the specified delay
-      debounce_timer = vim.defer_fn(function()
-        -- Only show completion if we're still in insert mode
-        if vim.api.nvim_get_mode().mode == 'i' then
-          require('blink.cmp').show()
-        end
-      end, debounce_delay)
-    end,
-  })
-
-  -- Stop the timer when leaving insert mode
-  vim.api.nvim_create_autocmd('InsertLeave', {
-    group = vim.api.nvim_create_augroup('StopDebounceTimerGroup', { clear = true }),
-    callback = function()
-      if debounce_timer then
-        debounce_timer:stop()
-      end
-    end,
-  })
-end
-
 local blink_copilot = {
   'saghen/blink.cmp',
   optional = true,
@@ -60,13 +22,6 @@ local blink = {
     'saghen/blink.cmp',
     dependencies = { 'onsails/lspkind.nvim' },
     opts = function(_, opts)
-      ---@type number | nil debounce time in milliseconds or nil to disable
-      local debounce = 300
-
-      if debounce then
-        setup_text_changed_debounce(debounce)
-      end
-
       opts = opts or {}
       opts.sources = opts.sources or {}
       opts.sources.default = vim
@@ -96,7 +51,8 @@ local blink = {
           documentation = { auto_show = false, window = { border = vim.g.winborder } },
           ghost_text = { enabled = function() return vim.g.ai_cmp or vim.g.suggestions == false end },
           menu = {
-            auto_show = debounce == nil,
+            auto_show = true,
+            auto_show_delay_ms = 300,
             direction_priority = { 'n', 's' },
             border = vim.g.winborder,
             min_width = 35,
@@ -104,10 +60,10 @@ local blink = {
               components = {
                 kind_icon = {
                   text = function(ctx)
-                    -- For Path source, use devicon based on file type otherwise use lspkind
+                    -- For Path source, use devicons based on file type otherwise use lspkind
                     local icon = vim.tbl_contains({ 'Path' }, ctx.source_name)
                         and (require('nvim-web-devicons').get_icon(ctx.label) or ctx.kind_icon)
-                      or require('lspkind').symbolic(ctx.kind, { mode = 'symbol' })
+                      or require('lspkind').symbolic(ctx.kind)
                     return ' ' .. icon .. ' '
                   end,
                 },
