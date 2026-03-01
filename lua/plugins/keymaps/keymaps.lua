@@ -85,7 +85,7 @@ local function tab()
     return
   end
 
-  if require('blink.cmp').accept() then
+  if require('blink.cmp').accept({ force = true }) then
     return
   end
 
