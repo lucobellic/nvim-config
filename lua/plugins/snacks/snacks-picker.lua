@@ -174,7 +174,11 @@ return {
       { '<leader><space>', function() Snacks.picker.buffers() end, desc = 'Find Files (Root Dir)' },
       -- find
       { '<leader>fb', function() Snacks.picker.buffers() end, desc = 'Find Buffers' },
-      { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Find Buffers (all)' },
+      {
+        '<leader>fB',
+        function() Snacks.picker.buffers({ hidden = true, nofile = true }) end,
+        desc = 'Find Buffers (all)',
+      },
       {
         '<leader>fc',
         function() Snacks.picker.files({ cwd = vim.fn.stdpath('config') }) end,
@@ -208,6 +212,11 @@ return {
         '<leader>sgs',
         function() require('util.snacks.picker.git').git_diff_content_branch() end,
         desc = 'Search Git Content (select branch)',
+      },
+      {
+        '<leader>sgm',
+        function() require('util.snacks.picker.gitmoji').pick() end,
+        desc = 'Search Gitmoji',
       },
       { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status' },
       { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash' },
@@ -275,6 +284,7 @@ return {
           git_status = { layout = { preset = 'telescope_preview' } },
           agent_terminals = { layout = { preset = 'telescope_vertical' } },
           keymaps = { layout = { preset = 'telescope_preview' } },
+          gitmoji = { layout = { preset = 'vscode' } },
         },
         layouts = {
           telescope_no_preview = telescope_no_preview,
