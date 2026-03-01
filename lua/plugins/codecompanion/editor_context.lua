@@ -3,7 +3,7 @@ return {
   opts = {
     interactions = {
       chat = {
-        variables = {
+        editor_context = {
           ['explain terminal error'] = {
             callback = function()
               local overseer = require('overseer')

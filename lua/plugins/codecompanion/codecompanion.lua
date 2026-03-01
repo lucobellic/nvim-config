@@ -28,7 +28,7 @@ return {
   {
     'olimorris/codecompanion.nvim',
     cond = vim.env.KITTY_SCROLLBACK_NVIM ~= 'true' and not vim.g.vscode,
-    version = '18.*',
+    version = '19.*',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -119,7 +119,6 @@ return {
             yolo_mode = { modes = { n = '<localleader>ty' } },
             goto_file_under_cursor = { modes = { n = '<localleader>R' } },
             copilot_stats = { modes = { n = '<localleader>S' } },
-            super_diff = { modes = { n = '<localleader>D' } },
           },
         },
       },

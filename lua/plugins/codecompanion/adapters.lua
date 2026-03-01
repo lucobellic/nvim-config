@@ -1,13 +1,13 @@
 ---@type CodeCompanion.Interactions
 local interactions = vim.env.INSIDE_DOCKER
     and {
-      cmd = { adapter = 'cursor', model = 'Composer 1' },
-      chat = { adapter = 'cursor', model = 'Composer 1' },
-      inline = { adapter = 'cursor', model = 'Composer 1' },
+      cmd = { adapter = 'cursor', model = 'auto' },
+      chat = { adapter = 'cursor', model = 'auto' },
+      inline = { adapter = 'cursor', model = 'auto' },
     }
   or {
     cmd = { adapter = 'copilot', model = 'gpt-5-mini' },
-    chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4.5' } },
+    chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4.6' } },
     inline = { adapter = { name = 'copilot', model = 'gpt-5-mini' } },
   }
 
@@ -32,10 +32,18 @@ return {
         end,
         cursor = function()
           return require('codecompanion.adapters').extend('claude_code', {
-            defaults = { model = 'Composer 1' },
+            defaults = { model = 'auto' },
             name = 'cursor',
             formatted_name = 'Cursor',
             commands = { default = { 'cursor-agent', 'acp' } },
+          })
+        end,
+        claude_code = function()
+          return require('codecompanion.adapters').extend('claude_code', {
+            defaults = { model = 'claude-sonnet-4.6' },
+            env = {
+              CLAUDE_CODE_OAUTH_TOKEN = vim.env.ANTHROPIC_API_KEY,
+            },
           })
         end,
       },
