@@ -28,3 +28,4 @@
 - Prefer `vim.tbl_deep_extend('force', opts, {})` for merging options
 - Icons defined with Nerd Font symbols
 - Use descriptive key mappings with `desc` field
+- Use `vim.iter` instead of for loops for better readability
