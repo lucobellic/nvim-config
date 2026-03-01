@@ -1,5 +1,3 @@
-local Util = require('util.agents.util')
-
 local AgentRegistry = {
   managers = {},
   last_used_manager = nil,
@@ -85,14 +83,14 @@ function AgentRegistry.select_manager()
   end)
 end
 
-function AgentRegistry.setup_keymaps()
+function AgentRegistry.setup()
   if AgentRegistry._initialized then
     return
   end
 
   local prefix = '<leader>l'
 
-  Util.setup_keymaps_and_commands(prefix, 'Agent', {
+  require('agents.util').setup_keymaps_and_commands(prefix, 'Agent', {
     toggle = function() AgentRegistry.toggle() end,
     send_current_buffer = function() AgentRegistry.send_current_buffer() end,
     select_and_send_buffers = function() AgentRegistry.select_and_send_buffers() end,
@@ -110,11 +108,6 @@ function AgentRegistry.setup_keymaps()
 
   vim.keymap.set('n', prefix .. 'm', function() AgentRegistry.select_manager() end, { desc = 'Agent Selection' })
   vim.api.nvim_create_user_command('LatestAgentSelectManager', function() AgentRegistry.select_manager() end, {})
-
-  local ok, wk = pcall(require, 'which-key')
-  if ok then
-    wk.add({ { '<leader>l', group = 'llm', mode = { 'n', 'v' } } }, { notify = false })
-  end
 
   AgentRegistry._initialized = true
 end

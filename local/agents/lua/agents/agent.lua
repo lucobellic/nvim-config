@@ -1,4 +1,4 @@
-local Util = require('util.agents.util')
+local Util = require('agents.util')
 
 ---@class AgentsOpts
 ---@field display_name string Human-readable name (e.g., 'OpenCode')

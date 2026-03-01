@@ -99,12 +99,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
 require('util.commands').create_command_from_keymaps()
 -- Create command to toggle fold virtual text
 require('util.folds.folds').setup()
--- Create command to toggle opencode
-require('util.agents.opencode').setup({ focus = true, split = 'right', insert = false })
--- Create command to toggle cursor agent
-require('util.agents.cursor').setup({ focus = true, split = 'right', insert = false })
--- Create command to toggle gemini clid
-require('util.agents.gemini').setup({ focus = true, split = 'right', insert = false })
+
 -- Track visited files by keeping a list in a global variable
 require('util.commands').track_visited_files()
 -- Create block spinner command
