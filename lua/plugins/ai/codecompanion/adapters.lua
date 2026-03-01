@@ -16,7 +16,7 @@ return {
   opts = {
     ---@type CodeCompanion.Adapters
     adapters = {
-      gitlab_duo = function() return require('plugins.codecompanion.adapters.gitlab-duo') end,
+      gitlab_duo = function() return require('plugins.ai.codecompanion.adapters.gitlab-duo') end,
       copilot = function()
         return require('codecompanion.adapters').extend('copilot', {
           schema = { model = { default = 'gpt-5-mini' } },

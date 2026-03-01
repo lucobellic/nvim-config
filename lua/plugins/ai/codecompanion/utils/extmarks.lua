@@ -115,7 +115,7 @@ local function start_spinners(bufnr, ns_id, start_line, end_line)
   local block_spinner = nil
   if use_block_spinner then
     -- Use block spinner if configured
-    block_spinner = require('plugins.codecompanion.utils.block_spinner').new({
+    block_spinner = require('plugins.ai.codecompanion.utils.block_spinner').new({
       bufnr = bufnr,
       ns_id = ns_id,
       start_line = start_line,
@@ -126,7 +126,7 @@ local function start_spinners(bufnr, ns_id, start_line, end_line)
 
   local spinner_width = block_spinner and block_spinner.width or 0
   local spinner_line = block_spinner and start_line + math.floor((end_line - start_line) / 2) or start_line
-  local spinner = require('plugins.codecompanion.utils.spinner').new({
+  local spinner = require('plugins.ai.codecompanion.utils.spinner').new({
     bufnr = bufnr,
     ns_id = ns_id,
     line_num = spinner_line,

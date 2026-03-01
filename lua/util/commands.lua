@@ -69,7 +69,7 @@ end
 
 function M.create_block_spinner_command()
   vim.api.nvim_create_user_command('BlockSpinner', function(opts)
-    local BlockSpinner = require('plugins.codecompanion.utils.block_spinner')
+    local BlockSpinner = require('plugins.ai.codecompanion.utils.block_spinner')
     local bufnr = vim.api.nvim_get_current_buf()
     local ns_id = vim.api.nvim_create_namespace('block_spinner')
 

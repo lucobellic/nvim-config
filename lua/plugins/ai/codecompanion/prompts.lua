@@ -7,7 +7,7 @@ return {
     prompt_library = {
       markdown = {
         dirs = {
-          vim.fn.stdpath('config') .. '/lua/plugins/codecompanion/prompts',
+          vim.fn.stdpath('config') .. '/lua/plugins/ai/codecompanion/prompts',
         },
       },
     },

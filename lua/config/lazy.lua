@@ -50,8 +50,8 @@ local spec = function()
 
   vim.list_extend(specs, {
     { import = 'plugins.ai' },
+    { import = 'plugins.ai.codecompanion' },
     { import = 'plugins.code' },
-    { import = 'plugins.codecompanion' },
     { import = 'plugins.completion' },
     { import = 'plugins.editor' },
     { import = 'plugins.git' },
