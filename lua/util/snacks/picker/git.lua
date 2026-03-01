@@ -82,9 +82,7 @@ end
 --- @return string diff_string Combined diff string
 local function build_block_diff(block)
   local hunk_diff = vim.list_extend(vim.deepcopy(block.header), {})
-  for _, hunk in ipairs(block.hunks) do
-    vim.list_extend(hunk_diff, hunk.diff)
-  end
+  vim.iter(block.hunks):each(function(hunk) vim.list_extend(hunk_diff, hunk.diff) end)
   return table.concat(hunk_diff, '\n')
 end
 
@@ -94,23 +92,40 @@ end
 --- @param include 'changes'|'all'|'additions'|'deletions' What content to include
 --- @return string[]
 local function extract_block_content(block, include)
-  local content_lines = {} ---@type string[]
-  for _, hunk in ipairs(block.hunks) do
-    for i = 2, #hunk.diff do
-      local raw = hunk.diff[i]
-      local prefix = raw:sub(1, 1)
-      local line_content = raw:sub(2)
-
-      local dominated = (include == 'additions' and prefix ~= '+')
-        or (include == 'deletions' and prefix ~= '-')
-        or (include == 'changes' and prefix ~= '+' and prefix ~= '-')
-
-      if not dominated then
-        content_lines[#content_lines + 1] = line_content
+  return vim
+    .iter(block.hunks)
+    :map(
+      ---@param hunk snacks.picker.diff.Hunk
+      function(hunk)
+        return vim
+          .iter(hunk.diff)
+          :skip(1)
+          :map(
+            ---@param raw string
+            function(raw)
+              local prefix = raw:sub(1, 1)
+              local line_content = raw:sub(2)
+              return prefix, line_content
+            end
+          )
+          :filter(
+            ---@param prefix string
+            function(prefix, _)
+              local dominated = (include == 'additions' and prefix ~= '+')
+                or (include == 'deletions' and prefix ~= '-')
+                or (include == 'changes' and prefix ~= '+' and prefix ~= '-')
+              return not dominated
+            end
+          )
+          :map(
+            ---@param line_content string
+            function(_, line_content) return line_content end
+          )
+          :totable()
       end
-    end
-  end
-  return content_lines
+    )
+    :flatten()
+    :totable()
 end
 
 --- Check if text contains the search term using smart case matching.
@@ -161,19 +176,11 @@ end
 --- @param blocks { block: snacks.picker.diff.Block, staged: boolean }[] Blocks for a single file
 --- @return string diff_string Combined diff for preview
 --- @return boolean has_staged Whether any block is staged
---- @return snacks.picker.diff.Block first_block First block for metadata
+--- @return snacks.picker.diff.Block? first_block First block for metadata
 local function build_file_diff(blocks)
-  local diff_parts = {} ---@type string[]
-  local has_staged = false
-  local first_block = blocks[1].block
-
-  for _, entry in ipairs(blocks) do
-    if entry.staged then
-      has_staged = true
-    end
-    diff_parts[#diff_parts + 1] = build_block_diff(entry.block)
-  end
-
+  local first_block = blocks[1] and blocks[1].block or nil
+  local diff_parts = vim.iter(blocks):map(function(entry) return build_block_diff(entry.block) end):totable()
+  local has_staged = vim.iter(blocks):any(function(entry) return entry.staged end)
   return table.concat(diff_parts, '\n'), has_staged, first_block
 end
 
@@ -182,24 +189,18 @@ end
 --- @param picker snacks.Picker Picker instance
 --- @return snacks.picker.Highlight[]
 local function format_diff_item(item, picker)
-  local ret = {} ---@type snacks.picker.Highlight[]
-
-  -- staged indicator
-  if item.staged then
-    ret[#ret + 1] = { 'S ', 'SnacksPickerGitStatusStaged', virtual = true }
-  else
-    ret[#ret + 1] = { '  ', virtual = true }
-  end
+  local staged_indicator = item.staged and { 'S ', 'SnacksPickerGitStatusStaged', virtual = true }
+    or { '  ', virtual = true }
 
   -- Derive a git-status-like indicator from the block metadata
   local block = item.block ---@type snacks.picker.diff.Block
   local status, status_hls = get_block_status(block)
-  ret[#ret + 1] = { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true }
+  local status_text = { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true }
 
-  -- file name
-  vim.list_extend(ret, Snacks.picker.format.filename(item, picker))
-
-  return ret
+  return vim.list_extend({
+    staged_indicator,
+    status_text,
+  }, Snacks.picker.format.filename(item, picker))
 end
 
 --- Highlight all occurrences of search terms (split by spaces) in preview buffer.
@@ -313,38 +314,39 @@ local function finder_diff(_, ctx, picker_opts, include)
     end
 
     local by_file, file_order = group_blocks_by_file(all_blocks)
+    vim
+      .iter(file_order)
+      :map(function(file)
+        local data = by_file[file]
+        -- Build combined diff string for preview (all hunks for this file)
+        local diff_string, has_staged, first_block = build_file_diff(data.blocks)
 
-    for _, file in ipairs(file_order) do
-      local data = by_file[file]
+        -- Build searchable text: join all changed content lines
+        ---@type string[]
+        local all_content = vim
+          .iter(data.blocks)
+          :map(function(entry) return extract_block_content(entry.block, include) end)
+          :flatten()
+          :totable()
+        local text = file .. '\n' .. table.concat(all_content, '\n')
 
-      -- Build combined diff string for preview (all hunks for this file)
-      local diff_string, has_staged, first_block = build_file_diff(data.blocks)
-
-      -- Build searchable text: join all changed content lines
-      ---@type string[]
-      local all_content = vim
-        .iter(data.blocks)
-        :map(function(entry) return extract_block_content(entry.block, include) end)
-        :flatten()
-        :totable()
-
-      local joined_content = file .. '\n' .. table.concat(all_content, '\n')
-
-      if
-        ctx.filter:match({ file = file, text = joined_content })
-        and text_matches_search(joined_content, ctx.filter.search or '')
-      then
-        cb({
-          text = joined_content,
+        return {
+          text = text,
           file = file,
           cwd = cwd,
           pos = { data.first_line, 0 },
           diff = diff_string,
           block = first_block,
           staged = has_staged or nil,
-        })
-      end
-    end
+        }
+      end)
+      :filter(
+        function(entry)
+          return ctx.filter:match({ file = entry.file, text = entry.text })
+            and text_matches_search(entry.text, ctx.filter.search or '')
+        end
+      )
+      :each(cb)
   end
 end
 
@@ -474,33 +476,32 @@ local function finder_file_history(_, ctx, file, include)
   return function(cb)
     local commits = collect_file_history_blocks(ctx, cwd, rel_file)
 
-    for _, entry in ipairs(commits) do
-      local block = entry.block
+    vim
+      .iter(commits)
+      :map(function(entry)
+        -- Build searchable text: commit hash, message, and content
+        local content_lines = extract_block_content(entry.block, include)
+        local text = entry.commit .. ' ' .. entry.msg .. '\n' .. table.concat(content_lines, '\n')
 
-      -- Build searchable text: commit hash, message, and content
-      local content_lines = extract_block_content(block, include)
-      local joined_content = entry.commit .. ' ' .. entry.msg .. '\n' .. table.concat(content_lines, '\n')
-
-      -- Build diff string for preview
-      local diff_string = build_block_diff(block)
-
-      if
-        ctx.filter:match({ file = block.file, text = joined_content })
-        and text_matches_search(joined_content, ctx.filter.search or '')
-      then
-        cb({
-          text = joined_content,
-          file = block.file,
+        return {
+          text = text,
+          file = entry.block.file,
           cwd = cwd,
-          pos = { block.hunks[1] and block.hunks[1].line or 1, 0 },
-          diff = diff_string,
-          block = block,
+          pos = { entry.block.hunks[1] and entry.block.hunks[1].line or 1, 0 },
+          diff = build_block_diff(entry.block),
+          block = entry.block,
           commit = entry.commit,
           commit_msg = entry.msg,
           commit_date = entry.date,
-        })
-      end
-    end
+        }
+      end)
+      :filter(
+        function(entry)
+          return ctx.filter:match({ file = entry.file, text = entry.text })
+            and text_matches_search(entry.text, ctx.filter.search or '')
+        end
+      )
+      :each(cb)
   end
 end
 
