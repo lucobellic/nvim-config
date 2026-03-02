@@ -3,7 +3,10 @@
 ---@field terminals table<string, {cmd: string|string[], opts?: TermOpts}> Named terminal definitions
 
 ---@class TermManagerConfigModule
-local M = {}
+---@field config TermManagerConfig Current configuration
+local M = {
+  config = {},
+}
 
 --- Constants for terminal management
 M.CONSTANTS = {
@@ -27,16 +30,6 @@ M.defaults = {
   terminals = {},
 }
 
---- Current configuration
----@type TermManagerConfig
-M.config = vim.tbl_deep_extend('force', {}, M.defaults)
-
---- Setup configuration
----@param user_config? TermManagerConfig
-function M.setup(user_config) M.config = vim.tbl_deep_extend('force', M.config, user_config or {}) end
-
---- Get current configuration
----@return TermManagerConfig
 function M.get() return M.config end
 
 --- Get default width from config

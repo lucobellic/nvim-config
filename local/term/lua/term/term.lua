@@ -63,7 +63,7 @@ local function build_env()
   local servername = vim.v.servername
   if servername and servername ~= '' then
     env.NVIM = servername
-    local wrapper_path = vim.fn.stdpath('config') .. '/lua/util/term/editor-wrapper.sh'
+    local wrapper_path = vim.fn.stdpath('config') .. '/local/term/lua/term/editor-wrapper.sh'
     env.GIT_EDITOR = wrapper_path
     env.EDITOR = wrapper_path
     env.VISUAL = wrapper_path

@@ -1,5 +1,5 @@
-local Term = require('util.term.term')
-local config = require('util.term.config')
+local Term = require('term.term')
+local config = require('term.config')
 
 local M = {}
 

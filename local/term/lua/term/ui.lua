@@ -1,5 +1,5 @@
 local Popup = require('nui.popup')
-local config = require('util.term.config')
+local config = require('term.config')
 
 ---@class TermManagerUI
 local M = {}

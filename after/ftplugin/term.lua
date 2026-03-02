@@ -1,4 +1,4 @@
-local core = require('util.term.core')
+local core = require('term.core')
 
 -- Disable spell checking in terminal buffers
 vim.opt_local.spell = false

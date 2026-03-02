@@ -1,7 +1,7 @@
-local Term = require('util.term.term')
-local config = require('util.term.config')
-local helper = require('util.term.helper')
-local ui = require('util.term.ui')
+local Term = require('term.term')
+local config = require('term.config')
+local helper = require('term.helper')
+local ui = require('term.ui')
 local event = require('nui.utils.autocmd').event
 
 local CONSTANTS = config.CONSTANTS

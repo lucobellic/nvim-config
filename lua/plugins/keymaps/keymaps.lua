@@ -291,7 +291,7 @@ return {
     ------------------
     {
       '<F8>',
-      function() require('util.term.core').toggle_floating() end,
+      function() require('term.core').toggle_floating() end,
       desc = 'Toggle floating/standard terminal',
     },
   },

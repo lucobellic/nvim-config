@@ -97,7 +97,7 @@ function M.create_editor_wrapper()
   -- This launches a headless nvim that connects back to parent and opens the file
   local config_path = vim.fn.stdpath('config')
   local wrapper_script = string.format(
-    [[%s --headless --clean --noplugin -n -R -c "set runtimepath^=%s" -c "lua require('util.term.editor-client').open_in_parent(vim.fn.argv()[-1])" -c "qall"]],
+    [[%s --headless --clean --noplugin -n -R -c "set runtimepath^=%s" -c "lua require('term.editor-client').open_in_parent(vim.fn.argv()[-1])" -c "qall"]],
     nvim_path,
     vim.fn.fnameescape(config_path)
   )
