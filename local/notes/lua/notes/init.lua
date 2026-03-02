@@ -1,11 +1,13 @@
 --- Notes utility plugin for Neovim.
 --- Allows adding, deleting, and searching inline notes as extmarks.
---- Notes are persisted to bookmark files (JSON) and their positions
---- track line movements via the extmark mechanism.
+--- Notes are stored in an in-memory store and persisted to bookmark
+--- files (JSON) on BufLeave and VimLeavePre/QuitPre.
+--- Extmarks track line movements; positions are synced back to the
+--- store before each save.
 ---
 ---@class NotesModule
 ---@field private config NotesConfig Plugin configuration
----@field private loaded_buffers table<number, boolean> Set of buffer handles already loaded
+---@field private loaded_buffers table<number, boolean> Set of buffer handles with extmarks restored
 local M = {
   config = {},
   loaded_buffers = {},
@@ -51,45 +53,37 @@ local function buf_path(bufnr)
   return vim.fn.fnamemodify(name, ':p')
 end
 
---- Collect current notes from all loaded buffers
----@return BookmarkData data
-local function collect_all_notes()
-  local bookmarks = require('notes.bookmarks')
+--- Collect extmark positions from all loaded buffers into the store.
+--- This ensures the store has the latest line numbers before saving.
+local function collect_all_to_store()
   local extmarks = require('notes.extmarks')
-
-  ---@type BookmarkData
-  local data = {}
   vim
     .iter(pairs(M.loaded_buffers))
     :filter(function(bufnr, _) return vim.api.nvim_buf_is_valid(bufnr) end)
-    :map(function(bufnr, _) return { path = buf_path(bufnr), bufnr = bufnr, notes = extmarks.get_all_notes(bufnr) } end)
-    :filter(function(item) return item.path and #item.notes > 0 end)
-    :each(function(item)
-      data[item.path] = vim
-        .iter(item.notes)
-        :map(function(note) return { line = note.line, text = note.text } end)
-        :totable()
+    :each(function(bufnr, _)
+      local path = buf_path(bufnr)
+      if path then
+        extmarks.collect_to_store(bufnr, path)
+      end
     end)
-
-  -- Merge with existing bookmark data for buffers not currently loaded
-  local current_path = bookmarks.get_current_path()
-  local existing = bookmarks.load(current_path)
-
-  -- Add any existing notes for files that aren't currently loaded (e.g. from closed buffers)
-  vim
-    .iter(pairs(existing or {}))
-    :filter(function(path, _) return data[path] == nil end)
-    :filter(function(path, _)
-      return not vim
-        .iter(pairs(M.loaded_buffers))
-        :any(function(bufnr, _) return vim.api.nvim_buf_is_valid(bufnr) and buf_path(bufnr) == path end)
-    end)
-    :each(function(path, notes) data[path] = notes end)
-
-  return data
 end
 
---- Load notes from the current bookmark into a specific buffer
+--- Save the in-memory store to the current bookmark file on disk.
+--- Collects extmark positions first, then writes.
+function M.save_current_bookmark()
+  local bookmarks = require('notes.bookmarks')
+  local store = require('notes.store')
+
+  collect_all_to_store()
+
+  local current_path = bookmarks.get_current_path()
+  local data = store.to_data()
+  bookmarks.save(current_path, data)
+  store.mark_clean()
+end
+
+--- Load notes from the store into a buffer's extmarks.
+--- On first load for a buffer, restores extmarks from the in-memory store.
 ---@param bufnr number Buffer handle
 function M.load_buffer_notes(bufnr)
   if M.loaded_buffers[bufnr] then
@@ -101,34 +95,23 @@ function M.load_buffer_notes(bufnr)
     return
   end
 
-  local bookmarks = require('notes.bookmarks')
   local extmarks = require('notes.extmarks')
-  local current_path = bookmarks.get_current_path()
-  local data = bookmarks.load(current_path)
-
-  if not data or not data[path] then
-    M.loaded_buffers[bufnr] = true
-    return
-  end
-
-  extmarks.restore_notes(bufnr, data[path])
+  extmarks.sync_from_store(bufnr, path)
   M.loaded_buffers[bufnr] = true
-end
-
---- Save the current notes to the active bookmark file
-function M.save_current_bookmark()
-  local bookmarks = require('notes.bookmarks')
-  local current_path = bookmarks.get_current_path()
-  local data = collect_all_notes()
-  bookmarks.save(current_path, data)
 end
 
 --- Add a note on the current cursor line.
 --- If a note already exists on the line, its text is pre-filled for editing.
 function M.add_note()
   local extmarks = require('notes.extmarks')
+  local store = require('notes.store')
   local bufnr = vim.api.nvim_get_current_buf()
   local line = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
+  local path = buf_path(bufnr)
+
+  if not path then
+    return
+  end
 
   -- Check for existing note to pre-fill
   local existing = extmarks.get_note_at_line(bufnr, line)
@@ -143,22 +126,29 @@ function M.add_note()
       -- Empty input: delete the note if one exists
       if existing then
         extmarks.delete_note(bufnr, existing.extmark_id)
-        M.loaded_buffers[bufnr] = true
+        store.delete_note(path, existing.line)
         vim.notify('Note deleted', vim.log.levels.INFO, { title = 'Notes' })
       end
       return
     end
 
+    -- Update both extmarks (visual) and store (source of truth)
     extmarks.set_note(bufnr, line, input)
-    M.loaded_buffers[bufnr] = true
+    store.upsert_note(path, line, input)
   end)
 end
 
 --- Delete the note on the current cursor line
 function M.delete_note()
   local extmarks = require('notes.extmarks')
+  local store = require('notes.store')
   local bufnr = vim.api.nvim_get_current_buf()
   local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local path = buf_path(bufnr)
+
+  if not path then
+    return
+  end
 
   local existing = extmarks.get_note_at_line(bufnr, line)
   if not existing then
@@ -166,18 +156,21 @@ function M.delete_note()
     return
   end
 
+  -- Delete from both extmarks and store
   extmarks.delete_note(bufnr, existing.extmark_id)
+  store.delete_note(path, existing.line)
   vim.notify('Note deleted', vim.log.levels.INFO, { title = 'Notes' })
 end
 
 --- Switch to a different bookmark session.
---- Saves the current bookmark, clears all notes, and loads the new one.
+--- Saves the current bookmark, clears the store and all extmarks,
+--- then loads the new bookmark into the store and restores extmarks.
 ---@param new_path string Full path to the new bookmark JSON file
 function M.change_bookmark(new_path)
   -- Save current bookmark first
   M.save_current_bookmark()
 
-  -- Clear all notes from loaded buffers
+  -- Clear all extmarks from loaded buffers
   local extmarks = require('notes.extmarks')
   for bufnr, _ in pairs(M.loaded_buffers) do
     if vim.api.nvim_buf_is_valid(bufnr) then
@@ -186,11 +179,19 @@ function M.change_bookmark(new_path)
   end
   M.loaded_buffers = {}
 
-  -- Set new bookmark path
+  -- Clear and reload the store
+  local store = require('notes.store')
   local bookmarks = require('notes.bookmarks')
+  store.clear()
+
+  -- Set new bookmark path
   bookmarks.set_current_path(new_path)
 
-  -- Load notes for currently open buffers
+  -- Load new bookmark data into the store
+  local data = bookmarks.load(new_path)
+  store.load_from_data(data or {})
+
+  -- Restore extmarks for currently open buffers
   for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_loaded(bufnr) and buf_path(bufnr) then
       M.load_buffer_notes(bufnr)
@@ -274,6 +275,7 @@ function M.setup(opts)
 
   local extmarks = require('notes.extmarks')
   local bookmarks = require('notes.bookmarks')
+  local store = require('notes.store')
 
   extmarks.init(M.config)
   bookmarks.init(M.config)
@@ -284,25 +286,41 @@ function M.setup(opts)
     bookmarks.set_current_path(restored_path)
   end
 
+  -- Load the current bookmark data into the in-memory store (single disk read)
+  local current_path = bookmarks.get_current_path()
+  local data = bookmarks.load(current_path)
+  store.load_from_data(data or {})
+
   local group = vim.api.nvim_create_augroup('Notes', { clear = true })
 
-  -- Load notes when entering a buffer
+  -- Load extmarks when entering a buffer (reads from store, no disk I/O)
   vim.api.nvim_create_autocmd('BufEnter', {
     group = group,
     callback = function(ev) M.load_buffer_notes(ev.buf) end,
-    desc = 'Load notes for buffer from current bookmark',
+    desc = 'Restore extmarks for buffer from in-memory store',
   })
 
-  -- Auto-save on buffer leave
+  -- Collect extmark positions and save to disk on buffer leave
   if M.config.auto_save then
     vim.api.nvim_create_autocmd('BufLeave', {
       group = group,
-      callback = function() M.save_current_bookmark() end,
-      desc = 'Auto-save notes to current bookmark',
+      callback = function(ev)
+        local path = buf_path(ev.buf)
+        if path and M.loaded_buffers[ev.buf] then
+          extmarks.collect_to_store(ev.buf, path)
+          -- Only write to disk if something changed
+          if store.is_dirty() then
+            local bm_path = bookmarks.get_current_path()
+            bookmarks.save(bm_path, store.to_data())
+            store.mark_clean()
+          end
+        end
+      end,
+      desc = 'Sync extmark positions to store and save to disk',
     })
   end
 
-  -- Fallback save before vim exits (in case QuitPre didn't fire)
+  -- Fallback save before vim exits
   vim.api.nvim_create_autocmd('VimLeavePre', {
     group = group,
     callback = function()
@@ -315,8 +333,6 @@ function M.setup(opts)
   })
 
   -- Save before vim exits (must run before BufDelete clears loaded_buffers)
-  -- We save eagerly here and set a flag so the VimLeavePre handler knows
-  -- it doesn't need to save again (buffers may be invalid by then).
   vim.api.nvim_create_autocmd('QuitPre', {
     group = group,
     callback = function()

@@ -1,3 +1,9 @@
+--- Extmarks visual layer for notes.
+--- This module manages the visual representation of notes as extmarks.
+--- It is NOT the source of truth -- the store module is.
+--- Extmarks track line movements, so we read positions back from extmarks
+--- when syncing to the store.
+---
 ---@class NotesExtmarks
 ---@field private ns_id number Namespace id for notes extmarks
 ---@field private config NotesConfig Reference to plugin configuration
@@ -44,7 +50,6 @@ function M.set_note(bufnr, line, text)
   local existing = M.get_note_at_line(bufnr, line)
   if existing then
     vim.api.nvim_buf_del_extmark(bufnr, M.ns_id, existing.extmark_id)
-    -- Clean up metadata for the old extmark
     local metadata = get_buffer_metadata(bufnr)
     metadata[existing.extmark_id] = nil
   end
@@ -60,7 +65,6 @@ function M.set_note(bufnr, line, text)
 
   local extmark_id = vim.api.nvim_buf_set_extmark(bufnr, M.ns_id, line, 0, extmark_opts)
 
-  -- Store the raw note text in metadata
   local metadata = get_buffer_metadata(bufnr)
   metadata[extmark_id] = text
 
@@ -98,7 +102,6 @@ end
 ---@param details table Extmark details from nvim_buf_get_extmarks
 ---@return string text The raw note text
 function M.extract_text(details)
-  -- Extract from virt_text
   local virt_text = details.virt_text
   if not virt_text or #virt_text == 0 then
     return ''
@@ -107,12 +110,10 @@ function M.extract_text(details)
   local raw = virt_text[1][1] or ''
   local config = M.config
 
-  -- Strip prefix
   if config.prefix and #config.prefix > 0 and raw:sub(1, #config.prefix) == config.prefix then
     raw = raw:sub(#config.prefix + 1)
   end
 
-  -- Strip suffix
   if config.suffix and #config.suffix > 0 and raw:sub(-#config.suffix) == config.suffix then
     raw = raw:sub(1, -(#config.suffix + 1))
   end
@@ -133,7 +134,6 @@ function M.get_all_notes(bufnr)
   for _, mark in ipairs(marks) do
     local extmark_id = mark[1]
     local details = mark[4]
-    -- Prefer metadata, fallback to extracting from virt_text
     local text = metadata[extmark_id] or M.extract_text(details)
     table.insert(notes, {
       line = mark[2],
@@ -150,7 +150,6 @@ end
 ---@param extmark_id number Extmark identifier
 function M.delete_note(bufnr, extmark_id)
   vim.api.nvim_buf_del_extmark(bufnr, M.ns_id, extmark_id)
-  -- Clean up metadata
   local metadata = get_buffer_metadata(bufnr)
   metadata[extmark_id] = nil
 end
@@ -159,20 +158,40 @@ end
 ---@param bufnr number Buffer handle
 function M.clear_buffer(bufnr)
   vim.api.nvim_buf_clear_namespace(bufnr, M.ns_id, 0, -1)
-  -- Clear metadata for this buffer
   M.note_metadata[bufnr] = nil
 end
 
---- Restore notes from saved data into a buffer
+--- Restore extmarks in a buffer from the in-memory store.
+--- Reads notes for the given path from the store and creates extmarks.
 ---@param bufnr number Buffer handle
----@param notes SavedNote[] List of saved notes to restore
-function M.restore_notes(bufnr, notes)
+---@param path string Absolute file path
+function M.sync_from_store(bufnr, path)
+  local store = require('notes.store')
+  local notes = store.get(path)
+
+  -- Clear existing extmarks first to avoid duplicates
+  M.clear_buffer(bufnr)
+
   local line_count = vim.api.nvim_buf_line_count(bufnr)
   for _, note in ipairs(notes) do
     if note.line < line_count then
       M.set_note(bufnr, note.line, note.text)
     end
   end
+end
+
+--- Collect current extmark positions from a buffer and update the store.
+--- Extmarks track line movements, so this captures the latest positions.
+---@param bufnr number Buffer handle
+---@param path string Absolute file path
+function M.collect_to_store(bufnr, path)
+  local store = require('notes.store')
+  local notes = M.get_all_notes(bufnr)
+
+  ---@type SavedNote[]
+  local saved = vim.iter(notes):map(function(note) return { line = note.line, text = note.text } end):totable()
+
+  store.update_positions(path, saved)
 end
 
 --- Refresh all extmarks in a buffer to update visibility
@@ -189,7 +208,6 @@ end
 ---@param loaded_buffers table<number, boolean> Set of loaded buffer handles
 function M.set_visible(visible, loaded_buffers)
   M.visible = visible
-  -- Refresh all loaded buffers to apply visibility change
   for bufnr, _ in pairs(loaded_buffers) do
     if vim.api.nvim_buf_is_valid(bufnr) then
       M.refresh_buffer(bufnr)

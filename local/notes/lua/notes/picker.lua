@@ -1,10 +1,30 @@
 local M = {}
 
+--- Collect extmark positions for all loaded buffers into the store
+--- so the picker always shows the latest line numbers.
+local function sync_loaded_buffers()
+  local notes_mod = require('notes')
+  local extmarks = require('notes.extmarks')
+  vim
+    .iter(pairs(notes_mod.loaded_buffers))
+    :filter(function(bufnr, _) return vim.api.nvim_buf_is_valid(bufnr) end)
+    :each(function(bufnr, _)
+      local name = vim.api.nvim_buf_get_name(bufnr)
+      if name ~= '' then
+        local path = vim.fn.fnamemodify(name, ':p')
+        extmarks.collect_to_store(bufnr, path)
+      end
+    end)
+end
+
 ---@return snacks.picker.finder.Item[]
 local function notes_finder()
-  local bookmarks = require('notes.bookmarks')
-  local current_path = bookmarks.get_current_path()
-  local data = bookmarks.load(current_path)
+  local store = require('notes.store')
+
+  -- Sync extmark positions before reading
+  sync_loaded_buffers()
+
+  local data = store.to_data()
 
   local items = vim
     .iter(data or {})
@@ -31,14 +51,26 @@ local function notes_finder()
   return vim.iter(items):flatten():totable()
 end
 
+--- Refresh extmarks for a buffer if it is currently loaded.
+---@param file string Absolute file path
+local function refresh_buffer_extmarks(file)
+  local notes_mod = require('notes')
+  local extmarks = require('notes.extmarks')
+
+  -- Find the loaded buffer for this file
+  local bufnr = vim.fn.bufnr(file)
+  if bufnr ~= -1 and notes_mod.loaded_buffers[bufnr] and vim.api.nvim_buf_is_valid(bufnr) then
+    extmarks.sync_from_store(bufnr, file)
+  end
+end
+
 --- Internal function to create a notes picker with optional cwd filter
 ---@param opts? snacks.picker.filter.Config
 local function create_notes_picker(opts)
   opts = opts or {}
+  local store = require('notes.store')
   local extmarks = require('notes.extmarks')
-
-  -- First save current state so we have up-to-date positions
-  require('notes').save_current_bookmark()
+  local notes_mod = require('notes')
 
   Snacks.picker.pick({
     source = 'select',
@@ -61,22 +93,21 @@ local function create_notes_picker(opts)
       end,
       remove = function(picker)
         local selected = picker:selected({ fallback = true })
-        vim
-          .iter(selected)
-          :map(function(item)
-            local bufnr = vim.fn.bufnr(item.file)
-            return {
-              bufnr = bufnr,
-              file = item.file,
-              item = item,
-              note = extmarks.get_note_at_line(bufnr, item.item.line),
-            }
-          end)
-          :filter(function(entry) return vim.api.nvim_buf_is_valid(entry.bufnr) and entry.note ~= nil end)
-          :each(function(entry) extmarks.delete_note(entry.bufnr, entry.note.extmark_id) end)
+        vim.iter(selected):each(function(item)
+          -- Delete from store (works regardless of buffer load state)
+          store.delete_note(item.file, item.item.line)
+          -- If buffer is loaded, also remove the extmark visually
+          local bufnr = vim.fn.bufnr(item.file)
+          if bufnr ~= -1 and vim.api.nvim_buf_is_valid(bufnr) and notes_mod.loaded_buffers[bufnr] then
+            local note = extmarks.get_note_at_line(bufnr, item.item.line)
+            if note then
+              extmarks.delete_note(bufnr, note.extmark_id)
+            end
+          end
+        end)
 
-        -- Re-save after deletion
-        require('notes').save_current_bookmark()
+        -- Save to disk after deletion
+        notes_mod.save_current_bookmark()
 
         picker.list:set_selected()
         picker.list:set_target()
@@ -92,32 +123,26 @@ local function create_notes_picker(opts)
             return
           end
 
-          -- Get or load the buffer for this file
-          local bufnr = vim.fn.bufnr(selected.file)
-          if bufnr == -1 then
-            vim.cmd('badd ' .. vim.fn.fnameescape(selected.file))
-            bufnr = vim.fn.bufnr(selected.file)
-          end
-
-          -- Ensure notes are loaded for this buffer
-          require('notes').load_buffer_notes(bufnr)
-
           if input:match('^%s*$') then
-            -- Empty input: delete the note
-            local note = extmarks.get_note_at_line(bufnr, selected.item.line)
-            if note then
-              extmarks.delete_note(bufnr, note.extmark_id)
+            -- Empty input: delete the note from store
+            store.delete_note(selected.file, selected.item.line)
+            -- Remove extmark if buffer is loaded
+            local bufnr = vim.fn.bufnr(selected.file)
+            if bufnr ~= -1 and vim.api.nvim_buf_is_valid(bufnr) and notes_mod.loaded_buffers[bufnr] then
+              local note = extmarks.get_note_at_line(bufnr, selected.item.line)
+              if note then
+                extmarks.delete_note(bufnr, note.extmark_id)
+              end
             end
           else
-            -- Non-empty input: update the note
-            extmarks.set_note(bufnr, selected.item.line, input)
+            -- Non-empty input: update in store
+            store.upsert_note(selected.file, selected.item.line, input)
+            -- Refresh extmarks if buffer is loaded
+            refresh_buffer_extmarks(selected.file)
           end
 
-          -- Mark buffer as modified so changes are tracked
-          M.loaded_buffers[bufnr] = true
-
-          -- Save changes
-          require('notes').save_current_bookmark()
+          -- Save to disk
+          notes_mod.save_current_bookmark()
 
           picker.list:set_selected()
           picker.list:set_target()
