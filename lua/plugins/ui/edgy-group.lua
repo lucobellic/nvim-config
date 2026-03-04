@@ -48,6 +48,7 @@ return {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
           { icon = '', titles = { 'opencode' }, pick_key = 'o' },
           { icon = '', titles = { 'cursor-agent' }, pick_key = 'c' },
+          { icon = '', titles = { 'claude' }, pick_key = 'u' },
           { icon = '󰊭', titles = { 'gemini' }, pick_key = 'g' },
           { icon = '', titles = { 'neotest-summary' }, pick_key = 't' },
           { icon = '', titles = { 'dapui_stacks', 'dapui_breakpoints' }, pick_key = 'd' },
