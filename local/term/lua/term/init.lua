@@ -25,6 +25,11 @@ function M.setup_user_commands()
   vim.api.nvim_create_user_command('TermNext', function() Core.next() end, { desc = 'Next terminal' })
   vim.api.nvim_create_user_command('TermPrev', function() Core.prev() end, { desc = 'Previous terminal' })
   vim.api.nvim_create_user_command('TermClose', function() Core.close() end, { desc = 'Close terminal' })
+
+  vim.api.nvim_create_autocmd('VimResized', {
+    pattern = '*',
+    callback = function() Core.resize() end,
+  })
 end
 
 return M
