@@ -48,7 +48,7 @@ return {
             },
           },
           opts = {
-            default_tools = { 'code_execution', 'agent', 'memory' },
+            default_tools = { 'code_execution', 'agent' },
             require_approval_before = false,
             require_cmd_approval = false,
             allowed_in_yolo_mode = true,

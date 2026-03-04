@@ -28,7 +28,7 @@ return {
         insert = false,
       },
       opencode = {
-        executable = 'opencode attach http://localhost:' .. opencode_port,
+        executable = 'opencode',
         filetype = 'opencode',
         display_name = 'OpenCode',
         leader = '<leader>lo',
@@ -45,6 +45,15 @@ return {
         focus = true,
         insert = false,
       },
+      claude = {
+        executable = 'claude',
+        filetype = 'claude',
+        display_name = 'Claude',
+        leader = '<leader>lu',
+        split = 'right',
+        focus = true,
+        insert = false,
+      }
     },
   },
 }
