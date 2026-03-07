@@ -42,29 +42,13 @@ end
 ---@param handlers table Table of handler functions
 function M.setup_keymaps_and_commands(prefix, name, handlers)
   local actions = {
-    { key = 't', cmd = 'Toggle', handler = handlers.toggle, desc = 'Toggle', mode = 'n' },
     {
       key = 'b',
-      cmd = 'SendCurrentBuffer',
-      handler = handlers.send_current_buffer,
-      desc = 'Send Current Buffer',
-      mode = 'n',
-    },
-    {
-      key = 'B',
       cmd = 'SendBuffers',
       handler = handlers.select_and_send_buffers,
       desc = 'Send Buffers',
       mode = 'n',
     },
-    {
-      key = 't',
-      cmd = 'SendTerminals',
-      handler = handlers.select_and_send_terminals,
-      desc = 'Send Terminals',
-      mode = 'n',
-    },
-    { key = 'f', cmd = 'SendFiles', handler = handlers.select_and_send_files, desc = 'Send Files', mode = 'n' },
     {
       key = 'e',
       cmd = 'SendSelection',
@@ -73,8 +57,23 @@ function M.setup_keymaps_and_commands(prefix, name, handlers)
       mode = 'v',
       range = true,
     },
+    {
+      key = 'e',
+      cmd = 'SendCurrentBuffer',
+      handler = handlers.send_current_buffer,
+      desc = 'Send Current Buffer',
+      mode = 'n',
+    },
+    { key = 'f', cmd = 'SendFiles', handler = handlers.select_and_send_files, desc = 'Send Files', mode = 'n' },
     { key = 'n', cmd = 'New', handler = handlers.create, desc = 'New', mode = 'n' },
     { key = 's', cmd = 'Select', handler = handlers.select, desc = 'Select', mode = 'n' },
+    {
+      key = 't',
+      cmd = 'SendTerminals',
+      handler = handlers.select_and_send_terminals,
+      desc = 'Send Terminals',
+      mode = 'n',
+    },
   }
 
   for _, action in ipairs(actions) do
@@ -101,6 +100,11 @@ function M.setup_keymaps_and_commands(prefix, name, handlers)
       handlers.send_selection_diagnostics,
       { range = true }
     )
+  end
+
+
+  if handlers.toggle then
+    vim.api.nvim_create_user_command(name .. 'Toggle', handlers.toggle, {})
   end
 
   if handlers.next then
