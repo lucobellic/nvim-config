@@ -17,6 +17,19 @@ local function sync_loaded_buffers()
     end)
 end
 
+--- Format a note picker item with index, note text, and filename highlights.
+--- @param item snacks.picker.finder.Item
+--- @param picker snacks.Picker
+--- @return snacks.picker.Highlight[]
+local function format_note_item(item, picker)
+  ---@type snacks.picker.Highlight[]
+  local highlights = {
+    { tostring(item.idx) .. ' ', 'Normal', virtual = true },
+    { item.item.text .. ' ', 'DiagnosticHint', virtual = true },
+  }
+  return vim.list_extend(highlights, Snacks.picker.format.filename(item, picker))
+end
+
 ---@return snacks.picker.finder.Item[]
 local function notes_finder()
   local store = require('notes.store')
@@ -74,7 +87,7 @@ local function create_notes_picker(opts)
 
   Snacks.picker.pick({
     source = 'select',
-    format = 'text',
+    format = format_note_item,
     layout = { preset = 'telescope_vertical' },
     title = opts.cwd and 'Notes' or 'Notes (All)',
     filter = opts,
