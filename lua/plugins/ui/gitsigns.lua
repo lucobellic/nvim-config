@@ -46,6 +46,10 @@ if vim.g.vscode then
   )
 end
 
+local function previous_hunk() require('gitsigns').nav_hunk('prev', { navigation_message = false }) end
+local function next_hunk() require('gitsigns').nav_hunk('next', { navigation_message = false }) end
+local repeatable = { [','] = previous_hunk, [';'] = next_hunk }
+
 return {
   {
     'folke/which-key.nvim',
@@ -57,38 +61,20 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     keys = {
-      {
-        '[h',
-        function() require('gitsigns').nav_hunk('prev', { navigation_message = false }) end,
-        repeatable = true,
-        desc = 'Prev Hunk',
-      },
-      {
-        '[H',
-        function() require('gitsigns').nav_hunk('prev', { navigation_message = false }) end,
-        repeatable = true,
-        desc = 'Prev Hunk',
-      },
-      {
-        ']h',
-        function() require('gitsigns').nav_hunk('next', { navigation_message = false }) end,
-        repeatable = true,
-        desc = 'Next Hunk',
-      },
-      {
-        ']H',
-        function() require('gitsigns').nav_hunk('next', { navigation_message = false }) end,
-        repeatable = true,
-        desc = 'Next Hunk',
-      },
+      { '[h', previous_hunk, repeatable = repeatable, desc = 'Prev Hunk' },
+      { '[H', previous_hunk, repeatable = repeatable, desc = 'Prev Hunk' },
+      { ']h', next_hunk, repeatable = repeatable, desc = 'Next Hunk' },
+      { ']H', next_hunk, repeatable = repeatable, desc = 'Next Hunk' },
       {
         '<leader>htb',
         function() require('gitsigns').toggle_current_line_blame() end,
+        repeatable = true,
         desc = 'Toggle Line Blame',
       },
       {
         '<leader>htw',
         function() require('gitsigns').toggle_word_diff() end,
+        repeatable = true,
         desc = 'Toggle Word Diff',
       },
     },
@@ -124,7 +110,7 @@ return {
           vim.keymap.set(mode, l, r, opts)
         end
         -- Actions
-        map('n', '<leader>hs', gs.stage_hunk, { desc = 'Stage Hunk' })
+        map('n', '<leader>hs', gs.stage_hunk, { repeatable = true, desc = 'Stage Hunk' })
         map('n', '<leader>hr', gs.reset_hunk, { desc = 'Reset Hunk' })
         map(
           'v',

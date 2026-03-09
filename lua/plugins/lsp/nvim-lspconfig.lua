@@ -14,6 +14,12 @@ if vim.g.vscode then
   vim.keymap.set('n', '<W', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
 end
 
+local function goto_next(severity) require('lspsaga.diagnostic'):goto_next({ severity = severity }) end
+local function goto_prev(severity) require('lspsaga.diagnostic'):goto_prev({ severity = severity }) end
+local function repeatable(severity)
+  return { [','] = function() goto_prev(severity) end, [';'] = function() goto_next(severity) end }
+end
+
 return {
   {
     'mason-org/mason.nvim',
@@ -76,38 +82,38 @@ return {
     keys = {
       {
         '[d',
-        function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.HINT } }) end,
-        repeatable = true,
+        function() goto_prev(vim.diagnostic.severity.HINT) end,
+        repeatable = repeatable(vim.diagnostic.severity.HINT),
         desc = 'Previous Diagnostic',
       },
       {
         ']d',
-        function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.HINT } }) end,
-        repeatable = true,
+        function() goto_next(vim.diagnostic.severity.HINT) end,
+        repeatable = repeatable(vim.diagnostic.severity.HINT),
         desc = 'Next Diagnostic',
       },
       {
         '[w',
-        function() require('lspsaga.diagnostic'):goto_prev({ severity = { min = vim.diagnostic.severity.WARN } }) end,
-        repeatable = true,
+        function() goto_prev(vim.diagnostic.severity.WARN) end,
+        repeatable = repeatable(vim.diagnostic.severity.WARN),
         desc = 'Previous Warning',
       },
       {
         ']w',
-        function() require('lspsaga.diagnostic'):goto_next({ severity = { min = vim.diagnostic.severity.WARN } }) end,
-        repeatable = true,
+        function() goto_next(vim.diagnostic.severity.WARN) end,
+        repeatable = repeatable(vim.diagnostic.severity.WARN),
         desc = 'Next Warning',
       },
       {
         '[e',
-        function() require('lspsaga.diagnostic'):goto_prev({ severity = vim.diagnostic.severity.ERROR }) end,
-        repeatable = true,
+        function() goto_prev(vim.diagnostic.severity.ERROR) end,
+        repeatable = repeatable(vim.diagnostic.severity.ERROR),
         desc = 'Previous Error',
       },
       {
         ']e',
-        function() require('lspsaga.diagnostic'):goto_next({ severity = vim.diagnostic.severity.ERROR }) end,
-        repeatable = true,
+        function() goto_next(vim.diagnostic.severity.ERROR) end,
+        repeatable = repeatable(vim.diagnostic.severity.ERROR),
         desc = 'Next Error',
       },
     },

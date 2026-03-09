@@ -92,6 +92,7 @@ end
 
 local function goto_next_breakpoint() goto_breakpoint('next') end
 local function goto_previous_breakpoint() goto_breakpoint('prev') end
+local repeatable = { [';'] = goto_next_breakpoint, [','] = goto_previous_breakpoint }
 
 return {
   'mfussenegger/nvim-dap',
@@ -237,7 +238,12 @@ return {
   },
   keys = {
     { '<leader>dq', function() require('dap').terminate() end, repeatable = true, desc = 'Terminate' },
-    { '<leader>db', function() require('dap').toggle_breakpoint() end, repeatable = true, desc = 'Toggle Breakpoint' },
+    {
+      '<leader>db',
+      function() require('dap').toggle_breakpoint() end,
+      repeatable = true,
+      desc = 'Toggle Breakpoint',
+    },
     { '<leader>dc', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
     {
       '<leader>dd',
@@ -245,16 +251,48 @@ return {
       repeatable = true,
       desc = 'Toggle Logging Breakpoint',
     },
-    { '<F5>', function() require('dap').continue() end, repeatable = true, desc = 'Continue' },
-    { '<leader>dC', function() require('dap').run_to_cursor() end, repeatable = true, desc = 'Run to Cursor' },
-    { '<leader>di', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },
-    { '<F11>', function() require('dap').step_into() end, repeatable = true, desc = 'Step Into' },
-    { '<leader>dj', function() require('dap').down() end, repeatable = true, desc = 'Down' },
-    { '<leader>dk', function() require('dap').up() end, repeatable = true, desc = 'Up' },
-    { '<leader>do', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
-    { '<F12>', function() require('dap').step_out() end, repeatable = true, desc = 'Step Out' },
-    { '<leader>dO', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
-    { '<F10>', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
+    { '<leader>dl', function() require('dap').run_to_cursor() end, repeatable = true, desc = 'Run to Line' },
+    {
+      '<leader>di',
+      function() require('dap').step_into() end,
+      repeatable = {
+        ['.'] = function() require('dap').step_into() end,
+        [';'] = function() require('dap').step_into() end,
+        [','] = function() require('dap').step_out() end,
+      },
+      desc = 'Step Into',
+    },
+    {
+      '<leader>dj',
+      function() require('dap').down() end,
+      repeatable = {
+        ['.'] = function() require('dap').down() end,
+        [';'] = function() require('dap').down() end,
+        [','] = function() require('dap').up() end,
+      },
+      desc = 'Down',
+    },
+    {
+      '<leader>dk',
+      function() require('dap').up() end,
+      repeatable = {
+        ['.'] = function() require('dap').up() end,
+        [';'] = function() require('dap').down() end,
+        [','] = function() require('dap').up() end,
+      },
+      desc = 'Up',
+    },
+    {
+      '<leader>do',
+      function() require('dap').step_out() end,
+      repeatable = {
+        ['.'] = function() require('dap').step_out() end,
+        [';'] = function() require('dap').step_into() end,
+        [','] = function() require('dap').step_out() end,
+      },
+      desc = 'Step Out',
+    },
+    { '<leader>dh', function() require('dap').step_over() end, repeatable = true, desc = 'Step Over' },
     {
       '<leader>se',
       function()
@@ -298,10 +336,10 @@ return {
       end,
       desc = 'Jump to Breakpoint',
     },
-    { ']b', goto_next_breakpoint, repeatable = true, desc = 'Next Breakpoint' },
-    { ']B', goto_next_breakpoint, repeatable = true, desc = 'Next Breakpoint' },
-    { '[b', goto_previous_breakpoint, repeatable = true, desc = 'Previous Breakpoint' },
-    { '[B', goto_previous_breakpoint, repeatable = true, desc = 'Previous Breakpoint' },
+    { ']b', goto_next_breakpoint, repeatable = repeatable, desc = 'Next Breakpoint' },
+    { ']B', goto_next_breakpoint, repeatable = repeatable, desc = 'Next Breakpoint' },
+    { '[b', goto_previous_breakpoint, repeatable = repeatable, desc = 'Previous Breakpoint' },
+    { '[B', goto_previous_breakpoint, repeatable = repeatable, desc = 'Previous Breakpoint' },
   },
   opts = function(_, opts)
     local dap = require('dap')

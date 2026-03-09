@@ -1,3 +1,6 @@
+local repeatable =
+  { [','] = function() require('notes').jump_prev() end, [';'] = function() require('notes').jump_next() end }
+
 return {
   {
     'folke/which-key.nvim',
@@ -20,10 +23,10 @@ return {
       { '<leader>nS', function() require('notes.picker').search_all_notes() end, desc = 'Notes Search (All)' },
       { '<leader>nbs', function() require('notes').select_bookmark() end, desc = 'Notes Select Bookmark' },
       { '<leader>nbn', function() require('notes').create_bookmark() end, desc = 'Notes New Bookmark' },
-      { '[n', function() require('notes').jump_next() end, repeatable = true, desc = 'Notes Jump Next' },
-      { '[N', function() require('notes').jump_next() end, repeatable = true, desc = 'Notes Jump Next' },
-      { ']n', function() require('notes').jump_prev() end, repeatable = true, desc = 'Notes Jump Previous' },
-      { ']N', function() require('notes').jump_prev() end, repeatable = true, desc = 'Notes Jump Previous' },
+      { '[n', function() require('notes').jump_next() end, repeatable = repeatable, desc = 'Prev Notes' },
+      { '[N', function() require('notes').jump_next() end, repeatable = repeatable, desc = 'Prev Notes' },
+      { ']n', function() require('notes').jump_prev() end, repeatable = repeatable, desc = 'Next Notes' },
+      { ']N', function() require('notes').jump_prev() end, repeatable = repeatable, desc = 'Next Notes' },
     },
     ---@type NotesConfig
     opts = {
