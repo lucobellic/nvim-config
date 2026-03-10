@@ -14,8 +14,24 @@ if vim.g.vscode then
   vim.keymap.set('n', '<W', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
 end
 
-local function goto_next(severity) require('lspsaga.diagnostic'):goto_next({ severity = severity }) end
-local function goto_prev(severity) require('lspsaga.diagnostic'):goto_prev({ severity = severity }) end
+local function goto_next(severity)
+  local Diagnostic = require('lspsaga.diagnostic')
+  if severity then
+    Diagnostic:goto_next({ severity = severity })
+  else
+    Diagnostic:goto_next()
+  end
+end
+
+local function goto_prev(severity)
+  local Diagnostic = require('lspsaga.diagnostic')
+  if severity then
+    Diagnostic:goto_prev({ severity = severity })
+  else
+    Diagnostic:goto_prev()
+  end
+end
+
 local function repeatable(severity)
   return { [','] = function() goto_prev(severity) end, [';'] = function() goto_next(severity) end }
 end
@@ -82,18 +98,36 @@ return {
     keys = {
       {
         '[d',
-        function() goto_prev(vim.diagnostic.severity.HINT) end,
-        repeatable = repeatable(vim.diagnostic.severity.HINT),
+        function() goto_prev() end,
+        repeatable = repeatable(),
+        desc = 'Previous Diagnostic',
+      },
+      {
+        '[D',
+        function() goto_prev() end,
+        repeatable = repeatable(),
         desc = 'Previous Diagnostic',
       },
       {
         ']d',
-        function() goto_next(vim.diagnostic.severity.HINT) end,
-        repeatable = repeatable(vim.diagnostic.severity.HINT),
+        function() goto_next() end,
+        repeatable = repeatable(),
+        desc = 'Next Diagnostic',
+      },
+      {
+        ']D',
+        function() goto_next() end,
+        repeatable = repeatable(),
         desc = 'Next Diagnostic',
       },
       {
         '[w',
+        function() goto_prev(vim.diagnostic.severity.WARN) end,
+        repeatable = repeatable(vim.diagnostic.severity.WARN),
+        desc = 'Previous Warning',
+      },
+      {
+        '[W',
         function() goto_prev(vim.diagnostic.severity.WARN) end,
         repeatable = repeatable(vim.diagnostic.severity.WARN),
         desc = 'Previous Warning',
@@ -105,13 +139,31 @@ return {
         desc = 'Next Warning',
       },
       {
+        ']W',
+        function() goto_next(vim.diagnostic.severity.WARN) end,
+        repeatable = repeatable(vim.diagnostic.severity.WARN),
+        desc = 'Next Warning',
+      },
+      {
         '[e',
         function() goto_prev(vim.diagnostic.severity.ERROR) end,
         repeatable = repeatable(vim.diagnostic.severity.ERROR),
         desc = 'Previous Error',
       },
       {
+        '[E',
+        function() goto_prev(vim.diagnostic.severity.ERROR) end,
+        repeatable = repeatable(vim.diagnostic.severity.ERROR),
+        desc = 'Previous Error',
+      },
+      {
         ']e',
+        function() goto_next(vim.diagnostic.severity.ERROR) end,
+        repeatable = repeatable(vim.diagnostic.severity.ERROR),
+        desc = 'Next Error',
+      },
+      {
+        ']E',
         function() goto_next(vim.diagnostic.severity.ERROR) end,
         repeatable = repeatable(vim.diagnostic.severity.ERROR),
         desc = 'Next Error',
