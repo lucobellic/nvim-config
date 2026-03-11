@@ -1,5 +1,7 @@
 ---@module 'snacks.picker'
 
+local threads_args = { '--threads', '4' }
+
 local preferred = {
   'vertical',
   'telescope_preview',
@@ -272,8 +274,9 @@ return {
           },
         },
         sources = {
-          grep_word = { layout = { preset = 'telescope_preview' } },
-          grep = { layout = { preset = 'telescope_preview' } },
+          grep_word = { layout = { preset = 'telescope_preview' },  args = threads_args},
+          grep = { layout = { preset = 'telescope_preview' },  args = threads_args},
+          files = { args = threads_args },
           lsp_references = { layout = { preset = 'telescope_preview' } },
           lsp_definitions = { layout = { preset = 'telescope_preview' } },
           jumps = { layout = { preset = 'telescope_vertical' } },
