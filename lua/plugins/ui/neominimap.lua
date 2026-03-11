@@ -13,6 +13,7 @@ return {
       },
       float = {
         window_border = 'none',
+        z_index = 20,
       },
       diagnostic = {
         ---@type Neominimap.Handler.Annotation.Mode
