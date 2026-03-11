@@ -50,6 +50,7 @@ vim.api.nvim_create_autocmd({ 'TabEnter' }, {
 
 -- Repeat change with dot repeat
 local change_text = ''
+local change_tick = -1 -- b:changedtick at the time the change was registered
 
 local function repeat_change()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('cgn' .. change_text .. '<esc>', true, false, true), 'n', false)
@@ -63,11 +64,22 @@ vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
     if vim.g.change then
       change_text = vim.fn.keytrans(vim.fn.getreg('.'))
       vim.fn.setreg('/', vim.fn.getreg('"', 1))
+      change_tick = vim.b.changedtick
       vim.g.change = false
-      vim.fn['repeat#set'](vim.api.nvim_replace_termcodes('<cmd>RepeatChange<cr>', true, false, true))
     end
   end,
 })
+
+-- Remap '.' to call repeat_change when the last registered change is current,
+-- otherwise fall through to native dot-repeat. This is the same strategy used
+-- by vim-repeat but implemented natively in Lua.
+vim.keymap.set('n', '.', function()
+  if change_tick == vim.b.changedtick then
+    repeat_change()
+  else
+    vim.api.nvim_feedkeys('.', 'n', false)
+  end
+end, { desc = 'Dot repeat (change-aware)' })
 
 -- Set toggleterm filetype to terminal buffer with toggleterm name
 vim.api.nvim_create_autocmd('BufEnter', {
