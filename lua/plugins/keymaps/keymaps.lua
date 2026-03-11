@@ -270,6 +270,11 @@ return {
       function() require('util.tabpages').move_buffer_to_tab('next', true) end,
       desc = 'Tab Move Next',
     },
+    {
+      '<leader><tab>m',
+      function() require('util.tabpages').move_buffers_to_tab() end,
+      desc = 'Tab Move Buffers (picker)',
+    },
     { '<leader><tab>o', '<cmd>tabonly<cr>', { desc = 'Close Other Tabs' } },
     { '<leader><tab>f', '<cmd>tabfirst<cr>', { desc = 'Tab First' } },
     { '<leader><tab>n', '<cmd>tabnew<cr>', { desc = 'Tab New' } },
