@@ -161,7 +161,10 @@ return {
   {
     'folke/which-key.nvim',
     optional = true,
-    opts = { spec = { { '<leader>sg', group = 'git' } } },
+    opts = { spec = {
+      { '<leader>sg', group = 'git' },
+      { '<leader>sd', group = 'debug/diagnostics' },
+    } },
   },
   {
     'snacks.nvim',
@@ -244,8 +247,9 @@ return {
       { '<leader>sa', function() Snacks.picker.autocmds() end, desc = 'Search Autocmds' },
       { '<leader>sc', function() Snacks.picker.command_history() end, desc = 'Search Command History' },
       { '<leader>sC', function() Snacks.picker.commands() end, desc = 'Search Commands' },
-      { '<leader>sd', function() Snacks.picker.diagnostics() end, desc = 'Search Diagnostics' },
-      { '<leader>sD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Search Buffer Diagnostics' },
+      { '<leader>sdb', function() require('util.breakpoints').pick() end, desc = 'Search Breakpoints' },
+      { '<leader>sdd', function() Snacks.picker.diagnostics() end, desc = 'Search Diagnostics' },
+      { '<leader>sdD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Search Buffer Diagnostics' },
       { '<leader>sh', function() Snacks.picker.help() end, desc = 'Search Help Pages' },
       { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Search Highlights' },
       { '<leader>sI', function() Snacks.picker.icons() end, desc = 'Search Icons' },
@@ -274,8 +278,8 @@ return {
           },
         },
         sources = {
-          grep_word = { layout = { preset = 'telescope_preview' },  args = threads_args},
-          grep = { layout = { preset = 'telescope_preview' },  args = threads_args},
+          grep_word = { layout = { preset = 'telescope_preview' }, args = threads_args },
+          grep = { layout = { preset = 'telescope_preview' }, args = threads_args },
           files = { args = threads_args },
           lsp_references = { layout = { preset = 'telescope_preview' } },
           lsp_definitions = { layout = { preset = 'telescope_preview' } },

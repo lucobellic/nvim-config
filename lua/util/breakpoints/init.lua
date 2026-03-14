@@ -80,4 +80,82 @@ end
 --- Clear breakpoints
 function M.clear_breakpoints() vim.g.DapBreakpoints = '{}' end
 
+--- Use snacks picker to select breakpoints to jump to
+---@param filter? snacks.picker.filter.Config
+function M.pick(filter)
+  filter = filter or {}
+
+  local dap_breakpoints = require('dap.breakpoints')
+
+  local function format_breakpoint_item(item, picker) return Snacks.picker.format.filename(item, picker) end
+
+  local function breakpoint_finder()
+    local breakpoints = dap_breakpoints.get()
+
+    return vim
+      .iter(breakpoints or {})
+      :flatten()
+      :filter(function( breakpoint) return vim.api.nvim_buf_is_valid(breakpoint.buf) end)
+      :enumerate()
+      :map(
+        ---@param idx number
+        ---@param breakpoint dap.bp
+        function(idx, breakpoint)
+          local path = vim.api.nvim_buf_get_name(breakpoint.buf)
+          local short_path = vim.fn.fnamemodify(path, ':~:.')
+          return {
+            formatted = short_path .. ':' .. breakpoint.line,
+            text = idx .. ' ' .. short_path .. ':' .. breakpoint.line,
+            file = path,
+            pos = { breakpoint.line, 0 },
+            item = breakpoint,
+            idx = idx,
+          }
+        end
+      )
+      :totable()
+  end
+
+  Snacks.picker.pick({
+    source = 'breakpoints',
+    format = format_breakpoint_item,
+    layout = { preset = 'telescope_vertical' },
+    title = 'Breakpoints',
+    filter = filter,
+    finder = function(_, ctx) return ctx.filter:filter(breakpoint_finder()) end,
+    actions = {
+      confirm = function(picker, item)
+        picker:close()
+        vim.schedule(function()
+          if vim.fn.filereadable(item.file) == 1 then
+            vim.cmd('edit ' .. vim.fn.fnameescape(item.file))
+            vim.api.nvim_win_set_cursor(0, item.pos)
+          else
+            vim.notify('File not found: ' .. item.file, vim.log.levels.ERROR, { title = 'Notes' })
+          end
+        end)
+      end,
+      remove = function(picker)
+        local selected = picker:selected({ fallback = true })
+        vim.iter(selected):each(function(item)
+          ---@type dap.bp
+          local breakpoint = item.item
+          dap_breakpoints.remove(breakpoint.buf, breakpoint.line)
+        end)
+
+        picker.list:set_selected()
+        picker.list:set_target()
+        picker:find()
+      end,
+    },
+    win = {
+      input = {
+        keys = {
+          ['<c-x>'] = { 'remove', mode = { 'i', 'n' } },
+        },
+      },
+    },
+  })
+end
+
 return M
