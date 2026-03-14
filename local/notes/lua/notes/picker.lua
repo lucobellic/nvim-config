@@ -86,7 +86,7 @@ local function create_notes_picker(opts)
   local notes_mod = require('notes')
 
   Snacks.picker.pick({
-    source = 'select',
+    source = 'notes',
     format = format_note_item,
     layout = { preset = 'telescope_vertical' },
     title = opts.cwd and 'Notes' or 'Notes (All)',
