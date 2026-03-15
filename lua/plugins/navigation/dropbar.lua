@@ -12,6 +12,18 @@ local function get_bar_with_opened_component(opts)
   return current_bar, opened_component_id, opened_component
 end
 
+---@param bufnr number
+---@param win number
+---@param cursor number[]
+local function get_path(bufnr, win, cursor)
+  local sources = require('dropbar.sources')
+  local symbols = sources.path.get_symbols(bufnr, win, cursor)
+  return vim.tbl_filter(
+    function(v) return v ~= nil end,
+    { symbols[#symbols - 2], symbols[#symbols - 1], symbols[#symbols] }
+  )
+end
+
 return {
   'Bekaboo/dropbar.nvim',
   vesion = '*',
@@ -64,7 +76,7 @@ return {
         local utils = require('dropbar.utils')
         if vim.bo[buf].ft == 'markdown' then
           return {
-            sources.path,
+            { get_symbols = get_path },
             sources.markdown,
           }
         end
@@ -74,12 +86,7 @@ return {
           }
         end
         return {
-          {
-            get_symbols = function(buff, win, cursor)
-              local symbols = sources.path.get_symbols(buff, win, cursor)
-              return vim.tbl_filter(function(v) return v ~= nil end, { symbols[#symbols - 1], symbols[#symbols] })
-            end,
-          },
+          { get_symbols = get_path },
           utils.source.fallback({
             sources.lsp,
             sources.treesitter,
