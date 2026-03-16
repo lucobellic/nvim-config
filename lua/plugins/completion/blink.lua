@@ -21,6 +21,7 @@ local blink = {
   {
     'saghen/blink.cmp',
     dependencies = { 'onsails/lspkind.nvim' },
+    version = '1.*',
     opts = function(_, opts)
       opts = opts or {}
       opts.sources = opts.sources or {}
