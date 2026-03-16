@@ -70,7 +70,7 @@ local function cmake_build()
       args = { '--build', '../build', '--target', 'help' },
       on_exit = function(j, exit_code)
         if exit_code ~= 0 then
-          vim.notify('Failed to get cmake targets', vim.log.levels.ERROR)
+          vim.schedule(function() vim.notify('Failed to get cmake targets', vim.log.levels.ERROR) end)
         else
           -- Remove invalid targets
           local targets = vim.tbl_filter(function(target)
@@ -87,8 +87,10 @@ local function cmake_build()
           local cleaned_targets = vim.tbl_map(function(target) return target:gsub(': phony', '') end, targets)
           cleaned_targets = vim.list_extend(cleaned_targets, custom_targets)
 
-          vim.schedule(function() save_cmake_cache(cleaned_targets) end)
-          vim.notify('CMake targets cache updated', vim.log.levels.INFO, { title = 'CMake' })
+          vim.schedule(function()
+            save_cmake_cache(cleaned_targets)
+            vim.notify('CMake targets cache updated', vim.log.levels.INFO, { title = 'CMake' })
+          end)
         end
       end,
     }):start()
