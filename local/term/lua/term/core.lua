@@ -349,8 +349,8 @@ function M.resize(width, height)
     return
   end
 
-  width = width or config.get_default_width()
-  height = height or config.get_default_height()
+  width = width or (M.active_term and M.active_term.opts.width) or config.get_default_width()
+  height = height or (M.active_term and M.active_term.opts.height) or config.get_default_height()
 
   M.popup:update_layout({
     position = '50%',
