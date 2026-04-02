@@ -16,6 +16,9 @@ local M = {
     lua = {
       'function_declaration',
     },
+    dockerfile = {
+      'from_instruction',
+    },
   },
 
   --- Template-like node types that wrap function/class definitions.
