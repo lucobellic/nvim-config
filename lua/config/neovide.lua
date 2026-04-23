@@ -76,6 +76,12 @@ if vim.g.neovide then
   vim.g.neovide_unlink_border_highlights = true
   vim.g.neovide_experimental_layer_grouping = true
 
+  -- Progress Bar
+  vim.g.neovide_progress_bar_enabled = true
+  vim.g.neovide_progress_bar_height = 1.0
+  vim.g.neovide_progress_bar_animation_speed = 200.0
+  vim.g.neovide_progress_bar_hide_delay = 0.2
+
   ---@param delta number
   local function change_font(delta)
     font_size = font_size + delta
