@@ -1,9 +1,9 @@
 ---@type CodeCompanion.Interactions
 local interactions = vim.env.INSIDE_DOCKER
     and {
-      cmd = { adapter = 'cursor', model = 'auto' },
-      chat = { adapter = 'cursor', model = 'auto' },
-      inline = { adapter = 'cursor', model = 'auto' },
+      cmd = { adapter = 'cursor_cli', model = 'Auto' },
+      chat = { adapter = 'cursor_cli', model = 'Auto' },
+      inline = { adapter = 'cursor_cli', model = 'Auto' },
     }
   or {
     cmd = { adapter = 'copilot', model = 'gpt-5-mini' },
@@ -23,19 +23,9 @@ return {
         })
       end,
       acp = {
-        opencode = function()
-          return require('codecompanion.adapters').extend('claude_code', {
-            name = 'opencode',
-            formatted_name = 'OpenCode',
-            commands = { default = { 'opencode', 'acp' } },
-          })
-        end,
-        cursor = function()
-          return require('codecompanion.adapters').extend('claude_code', {
-            defaults = { model = 'auto' },
-            name = 'cursor',
-            formatted_name = 'Cursor',
-            commands = { default = { 'cursor-agent', 'acp' } },
+        cursor_cli = function()
+          return require('codecompanion.adapters').extend('cursor_cli', {
+            defaults = { model = 'Auto' },
           })
         end,
         claude_code = function()
