@@ -437,7 +437,7 @@ function M.detach_to_window()
   end
 
   local term = M.active_term
-  if not term.bufnr or not term.index then
+  if not term or not term.bufnr or not term.index then
     vim.notify('Invalid terminal state', vim.log.levels.ERROR)
     return false
   end
