@@ -120,18 +120,13 @@ local function read_fileapi_targets(build_dir)
     return nil
   end
 
-  local seen = {}
-  local targets = vim
+  return vim
     .iter(target_files)
     :map(read_json)
-    :filter(function(d) return d and d.name and d.type and not seen[d.name] end)
-    :map(function(d)
-      seen[d.name] = true
-      return { name = d.name, type = d.type }
-    end)
+    :filter(function(d) return d and d.name and d.type end)
+    :map(function(d) return { name = d.name, type = d.type } end)
+    :unique(function(d) return d.name end)
     :totable()
-
-  return #targets > 0 and targets or nil
 end
 
 --- Parse custom targets from cmake/custom_targets.cmake.
@@ -169,7 +164,7 @@ local function resolve_cmake_targets()
   ensure_fileapi_query(build_dir)
 
   local targets = read_fileapi_targets(build_dir)
-  if not targets then
+  if not targets or #targets == 0 then
     vim.notify(
       'No CMake file-API reply found. Re-run cmake configure then refresh the cache (<leader>oec).',
       vim.log.levels.WARN,
@@ -301,6 +296,7 @@ local function scan_executables()
   local scan = require('plenary.scandir')
   local dirs = {
     vim.fn.resolve(vim.fn.getcwd() .. '/../build/Executables'),
+    vim.fn.resolve(vim.fn.getcwd() .. '/../build/Libs'),
     vim.fn.resolve(vim.fn.getcwd() .. '/../build/bindev'),
   }
 
