@@ -383,13 +383,13 @@ function M.git_diff_content(picker_opts)
   })
 end
 
---- Collect diff blocks from git log -p output for a specific file.
+--- Collect diff blocks from git log -p output.
 --- Parses commits with their diffs into blocks.
 --- @param ctx snacks.picker.finder.ctx Picker context
 --- @param cwd string Working directory
---- @param file string File path relative to git root
---- @return { commit: string, msg: string, block: snacks.picker.diff.Block }[]
-local function collect_file_history_blocks(ctx, cwd, file)
+--- @param extra_args? string[] Extra arguments for git log (e.g., {'--', file} or {'base..HEAD'})
+--- @return { commit: string, msg: string, date: string, ts: number, block: snacks.picker.diff.Block }[]
+local function collect_history_blocks(ctx, cwd, extra_args)
   local args = {
     '-c',
     'core.quotepath=false',
@@ -399,9 +399,10 @@ local function collect_file_history_blocks(ctx, cwd, file)
     '-p',
     '-U3',
     '--format=COMMIT>>%H>>%ct>>%as>>%s',
-    '--',
-    file,
   }
+  if extra_args then
+    vim.list_extend(args, extra_args)
+  end
   local lines = {} ---@type string[]
   require('snacks.picker.source.proc').proc(
     ctx:opts({
@@ -457,24 +458,18 @@ local function collect_file_history_blocks(ctx, cwd, file)
   return commits
 end
 
----@param _ snacks.picker.Config
----@param ctx snacks.picker.finder.ctx
----@param file string File path
----@param include 'changes'|'all'|'additions'|'deletions'
----@return snacks.picker.finder.async
-local function finder_file_history(_, ctx, file, include)
+--- Shared finder for git history pickers.
+--- @param ctx snacks.picker.finder.ctx Picker context
+--- @param extra_args string[] Extra arguments for git log
+--- @param include 'changes'|'all'|'additions'|'deletions'
+--- @return snacks.picker.finder.async
+local function finder_history(ctx, extra_args, include)
   local cwd = Snacks.git.get_root(ctx.filter.cwd) or ctx.filter.cwd
   ctx.picker:set_cwd(cwd)
 
-  -- Get the relative path from git root
-  local rel_file = vim.fn.fnamemodify(file, ':~:.')
-  if rel_file:sub(1, 1) == '/' then
-    rel_file = vim.fn.fnamemodify(file, ':.')
-  end
-
   ---@param cb async fun(item:snacks.picker.finder.Item)
   return function(cb)
-    local commits = collect_file_history_blocks(ctx, cwd, rel_file)
+    local commits = collect_history_blocks(ctx, cwd, extra_args)
 
     vim
       .iter(commits)
@@ -557,6 +552,12 @@ function M.git_file_history(opts)
     return
   end
 
+  -- Get the relative path from git root
+  local rel_file = vim.fn.fnamemodify(file, ':~:.')
+  if rel_file:sub(1, 1) == '/' then
+    rel_file = vim.fn.fnamemodify(file, ':.')
+  end
+
   local ns_search = vim.api.nvim_create_namespace('snacks.picker.git_file_history.search')
 
   Snacks.picker.pick({
@@ -567,8 +568,48 @@ function M.git_file_history(opts)
     matcher = { sort_empty = true, fuzzy = false },
     -- ensure commits are shown in chronological order (newest first)
     sort = { fields = { 'commit_date:desc', 'idx' } },
-    finder = function(config, ctx) return finder_file_history(config, ctx, file, include) end,
+    finder = function(_, ctx) return finder_history(ctx, { '--', rel_file }, include) end,
     format = format_history_item,
+    preview = function(ctx) render_diff_preview(ctx, ns_search) end,
+  })
+end
+
+--- Format a picker item for git branch history (includes filename).
+--- @param item snacks.picker.finder.Item Item to format
+--- @param picker snacks.Picker Picker instance
+--- @return snacks.picker.Highlight[]
+local function format_branch_history_item(item, picker)
+  local short_hash = item.commit:sub(1, 7)
+  local block = item.block ---@type snacks.picker.diff.Block
+  local status, status_hls = get_block_status(block)
+
+  ---@type snacks.picker.Highlight[]
+  return vim.list_extend({
+    { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true },
+    { short_hash .. ' ', 'SnacksPickerGitCommit', virtual = true },
+    { item.commit_date .. ' ', 'SnacksPickerComment', virtual = true },
+  }, Snacks.picker.format.filename(item, picker))
+end
+
+--- Git history picker: search through the complete git log.
+--- Shows one item per file per commit, with all changed content searchable.
+--- The preview shows the full diff with search matches highlighted.
+--- @param opts? { include?: 'changes'|'all'|'additions'|'deletions' }
+function M.git_history(opts)
+  opts = opts or {}
+  local include = opts.include or 'changes'
+
+  local ns_search = vim.api.nvim_create_namespace('snacks.picker.git_history.search')
+
+  Snacks.picker.pick({
+    source = 'git_diff_content',
+    title = 'Git History',
+    live = true,
+    supports_live = true,
+    matcher = { sort_empty = true, fuzzy = false },
+    sort = { fields = { 'commit_date:desc', 'idx' } },
+    finder = function(_, ctx) return finder_history(ctx, {}, include) end,
+    format = format_branch_history_item,
     preview = function(ctx) render_diff_preview(ctx, ns_search) end,
   })
 end

@@ -161,10 +161,12 @@ return {
   {
     'folke/which-key.nvim',
     optional = true,
-    opts = { spec = {
-      { '<leader>sg', group = 'git' },
-      { '<leader>sd', group = 'debug/diagnostics' },
-    } },
+    opts = {
+      spec = {
+        { '<leader>sg', group = 'git' },
+        { '<leader>sd', group = 'debug/diagnostics' },
+      },
+    },
   },
   {
     'snacks.nvim',
@@ -217,6 +219,11 @@ return {
         '<leader>sgs',
         function() require('util.snacks.picker.git').git_diff_content_branch() end,
         desc = 'Search Git Content (select branch)',
+      },
+      {
+        '<leader>sgh',
+        function() require('util.snacks.picker.git').git_history() end,
+        desc = 'Search Git History',
       },
       {
         '<leader>sgm',
