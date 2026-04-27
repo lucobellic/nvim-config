@@ -158,7 +158,7 @@ return {
           ['<2-LeftMouse>'] = 'open',
           ['<cr>'] = 'open',
           ['l'] = 'open',
-          ['<esc>'] = 'revert_preview',
+          ['<esc>'] = 'none',
           --["P"] = "toggle_preview", -- enter preview mode, which shows the current node without focusing
           ['P'] = { 'toggle_preview', config = { use_float = false } },
           ['S'] = 'open_split',
