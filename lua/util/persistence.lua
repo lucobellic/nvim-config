@@ -25,6 +25,25 @@ local function load_tab_names()
   end)
 end
 
+--- Remap scope_core.cache entries with sequential numeric keys
+--- onto the real tabpage handles, preserving order.
+--- This ensures scope.core.on_tab_enter, which keys the cache by actual tabpage
+--- handles, can locate the correct buffer lists after state deserialization.
+local function remap_scope_cache()
+  local scope_core = require('scope.core')
+  local tabs = vim.api.nvim_list_tabpages()
+  local remapped = {}
+  vim
+    .iter(ipairs(scope_core.cache))
+    :map(function(i, buf_ids) return tabs[i], buf_ids end)
+    :filter(function(handle) return handle ~= nil end)
+    :each(function(handle, buf_ids) remapped[handle] = buf_ids end)
+  scope_core.cache = remapped
+
+  -- Re-list current tab's buffers now that the cache is keyed correctly.
+  pcall(scope_core.on_tab_enter)
+end
+
 local function load_tab_buffers()
   vim
     .iter(vim.api.nvim_list_bufs())
@@ -79,6 +98,7 @@ end
 --- Callback after loading session
 function M.post_load()
   vim.cmd('ScopeLoadState')
+  remap_scope_cache()
   load_tab_names()
   load_tab_buffers()
   require('util.breakpoints').restore_breakpoints()
