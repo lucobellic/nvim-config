@@ -8,6 +8,7 @@ return {
   ansiblels                       = '󱂚',
   basedpyright                    = '󱔎',
   bashls                          = '',
+  biome                           = '󰔷',
   clangd                          = '',
   codebook                        = '',
   copilot                         = '',
