@@ -54,7 +54,7 @@ return {
           { icon = '', titles = { 'dapui_stacks', 'dapui_breakpoints' }, pick_key = 'd' },
         },
         bottom = {
-          { icon = '', titles = { 'toggleterm', 'toggleterm-tasks', 'overseer' }, pick_key = 'p' },
+          { icon = '', titles = { 'terminal', 'overseer-tasks', 'overseer' }, pick_key = 'p' },
           { icon = '', titles = { 'trouble-qflist', 'trouble-diagnostics' }, pick_key = 'x' },
           { icon = '', titles = { 'trouble-snacks', 'trouble-snacks-files' }, pick_key = 's' },
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-lsp-definitions' }, pick_key = 'r' },

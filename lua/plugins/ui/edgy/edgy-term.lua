@@ -3,44 +3,44 @@ return {
   opts = {
     bottom = {
       {
-        title = 'toggleterm',
-        ft = 'toggleterm',
+        title = 'terminal',
+        ft = 'snacks_terminal',
         filter = function(_, win) return vim.api.nvim_win_get_config(win).relative == '' end,
         open = function()
-          local buffers = vim.tbl_filter(function(buf)
-            local bufname = vim.fn.bufname(buf.bufnr)
-            return bufname:find('toggleterm') ~= nil and bufname:find('toggleterm.lua') == nil
-          end, vim.fn.getbufinfo({ buflisted = 0, buftype = 'terminal' }))
-
-          local toggleterm_open = #require('toggleterm.terminal').get_all(true) > 1
-          local terminal_open = toggleterm_open or #buffers > 0
-
-          -- Create a terminal if none exist, otherwise toggle all terminals
-          if terminal_open then
-            -- Toggle all terminal buffers with name containing 'toggleterm'
-            vim.tbl_map(function(buf) vim.cmd('sbuffer ' .. buf.bufnr) end, buffers)
-            if toggleterm_open then
-              require('toggleterm').toggle_all()
+          -- Don't open a snacks terminal if there are overseer tasks to display
+          local ok, task_list = pcall(require, 'overseer.task_list')
+          if ok then
+            local tasks = task_list.list_tasks({ filter = function(t) return t:get_bufnr() ~= nil end })
+            if #tasks > 0 then
+              return
             end
-          else
-            require('toggleterm').toggle()
           end
+          Snacks.terminal.toggle(nil, { win = { position = 'bottom' } })
         end,
       },
       {
-        title = 'toggleterm-tasks',
-        ft = '',
-        filter = function(buf)
-          local is_term = vim.bo[buf].buftype == 'terminal'
-          local is_toggleterm = vim.fn.bufname(buf):find('toggleterm')
-          return is_term and is_toggleterm
-        end,
-        open = '',
+        title = 'overseer-tasks',
+        ft = 'OverseerOutput',
       },
       {
         title = 'overseer',
         ft = 'OverseerList',
-        open = 'OverseerToggle!',
+        open = function()
+          local overseer_win = require('overseer.window')
+          local was_open = overseer_win.is_open()
+          vim.cmd('OverseerToggle!')
+          -- When opening the panel, also show the most recent task output in the bottom
+          if not was_open then
+            vim.schedule(function()
+              local tasks = require('overseer.task_list').list_tasks({
+                filter = function(t) return t:get_bufnr() ~= nil end,
+              })
+              if #tasks > 0 then
+                tasks[1]:open_output('horizontal')
+              end
+            end)
+          end
+        end,
         size = { width = 0.15 },
       },
     },
