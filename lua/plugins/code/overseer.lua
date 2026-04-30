@@ -115,6 +115,7 @@ return {
           -- TODO: Fix open_on_start_if_visible to not open window on restart if already visible
           -- { 'user.open_on_start_if_visible', direction = 'horizontal' }, -- open on start if overseer window is visible/open
           -- { 'display_duration', detail_level = 2 },
+          'user.interactive_shell', -- run tasks in interactive shell so aliases/functions are available
           'user.on_output_parse', -- parse with problem matcher
           { 'on_output_quickfix', tail = false }, -- parse errorformat
           'on_exit_set_status', -- set the status based on exit code
