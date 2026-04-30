@@ -17,16 +17,14 @@ local function setup_autocmds()
   local overseer = require('overseer')
   local task_list = require('overseer.task_list')
 
-  -- Close overseer window when all buffers are closed
+  -- Close overseer window when all task terminal buffers are closed
   vim.api.nvim_create_autocmd({ 'BufWinLeave' }, {
     pattern = '*',
     callback = function(ev)
       local is_terminal = vim.bo[ev.buf].buftype == 'terminal'
-      local is_toggleterm_buffer = vim.fn.bufname(ev.buf):find('toggleterm')
-      local is_toggleterm_task = is_terminal and is_toggleterm_buffer
-      local is_toggleterm = vim.bo[ev.buf].filetype == 'toggleterm'
+      local is_snacks_terminal = vim.bo[ev.buf].filetype == 'snacks_terminal'
 
-      if is_toggleterm or is_toggleterm_task then
+      if is_terminal and not is_snacks_terminal then
         vim.defer_fn(function()
           local tasks_with_buffer = task_list.list_tasks({ filter = function(task) return task:get_bufnr() ~= nil end })
           if #tasks_with_buffer == 0 then
@@ -39,7 +37,6 @@ local function setup_autocmds()
 
   --- User command to restart the last overseer task
   vim.api.nvim_create_user_command('OverseerRestartLast', function()
-    local overseer = require('overseer')
     local tasks = overseer.list_tasks({ recent_first = true })
     if vim.tbl_isempty(tasks) then
       vim.notify('No tasks found', vim.log.levels.WARN, { title = 'Overseer' })
@@ -82,11 +79,12 @@ return {
     },
   },
   {
-    'lucobellic/overseer.nvim',
-    cmd = { 'OverseerRun', 'OverseerInfo', 'OverseerToggle', 'OverseerFromTerminal' },
+    'stevearc/overseer.nvim',
+    version = '2.*',
+    cmd = { 'OverseerRun', 'OverseerToggle', 'OverseerFromTerminal' },
     keys = {
       { '<leader>or', '<cmd>OverseerRun<cr>', desc = 'Overseer Run' },
-      { '<leader>oi', '<cmd>OverseerInfo<cr>', desc = 'Overseer Info' },
+      { '<leader>oi', '<cmd>checkhealth overseer<cr>', desc = 'Overseer Checkhealth' },
       { '<leader>ot', '<cmd>OverseerToggle<cr>', desc = 'Overseer Toggle' },
       { '<leader>oa', '<cmd>OverseerRestartLast<cr>', desc = 'Overseer Restart Last' },
       { '<leader>ol', '<cmd>OverseerTaskAction<cr>', desc = 'Overseer Task Action' },
@@ -95,20 +93,14 @@ return {
     },
     opts = {
       dap = false,
-      strategy = {
-        'toggleterm',
-        size = 1000,
-        auto_scroll = false,
-        close_on_exit = false,
-        hidden = false,
-        open_on_start = false,
-        quit_on_exit = 'never',
-        use_shell = true,
+      output = {
+        use_terminal = true,
+        preserve_output = false,
       },
       task_list = {
         direction = 'right',
         separator = '',
-        bindings = {
+        keymaps = {
           ['<C-h>'] = '<C-w>h',
           ['<C-j>'] = '<C-w>j',
           ['<C-k>'] = '<C-w>k',
@@ -117,12 +109,11 @@ return {
       },
       templates = { 'builtin', 'user.script' },
       form = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
-      config = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
       task_win = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
-      help_win = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
       component_aliases = {
         default = {
-          { 'user.open_on_start_if_visible', direction = 'vertical' }, -- open on start if overseer window is visible/open
+          -- TODO: Fix open_on_start_if_visible to not open window on restart if already visible
+          -- { 'user.open_on_start_if_visible', direction = 'horizontal' }, -- open on start if overseer window is visible/open
           -- { 'display_duration', detail_level = 2 },
           'user.on_output_parse', -- parse with problem matcher
           { 'on_output_quickfix', tail = false }, -- parse errorformat
@@ -140,14 +131,6 @@ return {
     },
     config = function(_, opts)
       local overseer = require('overseer')
-
-      -- Override run_in_cwd to prevent fullscreen terminal execution and output flickering
-      --- @diagnostic disable-next-line: duplicate-set-field
-      require('overseer.util').run_in_cwd = function(cwd, callback)
-        vim.cmd.lcd({ args = { cwd }, mods = { silent = true, noautocmd = true } })
-        callback()
-      end
-
       overseer.setup(opts)
       setup_autocmds()
     end,

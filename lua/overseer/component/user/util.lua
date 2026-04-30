@@ -1,4 +1,4 @@
-local matcher = require('overseer.template.vscode.problem_matcher')
+local matcher = require('overseer.vscode.problem_matcher')
 
 local M = {}
 

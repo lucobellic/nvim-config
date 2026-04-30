@@ -81,20 +81,6 @@ vim.keymap.set('n', '.', function()
   end
 end, { desc = 'Dot repeat (change-aware)' })
 
--- Set toggleterm filetype to terminal buffer with toggleterm name
-vim.api.nvim_create_autocmd('BufEnter', {
-  pattern = { '*toggleterm*' },
-  callback = function(ev)
-    if
-      vim.api.nvim_buf_is_valid(ev.buf)
-      and vim.api.nvim_get_option_value('filetype', { buf = ev.buf }) == ''
-      and vim.api.nvim_get_option_value('buftype', { buf = ev.buf }) == 'terminal'
-    then
-      vim.api.nvim_set_option_value('filetype', 'toggleterm', { buf = ev.buf })
-    end
-  end,
-})
-
 local augroup = vim.api.nvim_create_augroup('LazyBufEnter', { clear = true })
 vim.api.nvim_create_autocmd('BufEnter', {
   group = augroup,

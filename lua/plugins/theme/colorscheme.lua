@@ -26,7 +26,6 @@ return {
     priority = 1000,
   },
   { 'EdenEast/nightfox.nvim' },
-  { 'RedsXDD/neopywal.nvim' },
   { 'Shatur/neovim-ayu' },
   { 'dasupradyumna/midnight.nvim' },
   { 'folke/tokyonight.nvim' },

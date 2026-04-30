@@ -32,7 +32,7 @@ local comp = {
         if not vim.tbl_contains(opts.statuses, task.status) then
           return
         end
-        self.timer = vim.loop.new_timer()
+        self.timer = vim.uv.new_timer()
         -- Start a repeating timer because the dispose could fail with a
         -- temporary reason (e.g. the task buffer is open, or the action menu is
         -- displayed for the task)

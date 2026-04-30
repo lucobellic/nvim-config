@@ -47,12 +47,12 @@ local function get_git_diff(props)
   return labels
 end
 
-local function get_toggleterm_id(props)
+local function get_snacks_terminal_id(props)
   local id = ' ' .. vim.fn.bufname(props.buf):sub(-1) .. ' '
   return { { id, group = props.focused and 'FloatTitle' or 'Title' } }
 end
 
-local function is_toggleterm(bufnr) return vim.bo[bufnr].filetype == 'toggleterm' end
+local function is_snacks_terminal(bufnr) return vim.bo[bufnr].filetype == 'snacks_terminal' end
 local function is_codecompanion(bufnr) return vim.bo[bufnr].filetype == 'codecompanion' end
 
 local edgy_filetypes = {
@@ -182,8 +182,8 @@ return {
     render = function(props)
       local filename = vim.fn.fnamemodify(vim.fn.bufname(props.buf), ':t')
 
-      if is_toggleterm(props.buf) then
-        return get_toggleterm_id(props)
+      if is_snacks_terminal(props.buf) then
+        return get_snacks_terminal_id(props)
       end
 
       if is_edgy_group(props, filename) then

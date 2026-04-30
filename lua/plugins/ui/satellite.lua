@@ -30,7 +30,7 @@ return {
       'cmp',
       'neo-tree',
       'telescope',
-      'toggleterm',
+      'snacks_terminal',
     },
     handlers = {
       cursor = {
