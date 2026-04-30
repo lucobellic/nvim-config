@@ -163,6 +163,20 @@ return {
     { mode = 'x', '<', '<gv' },
     { mode = 'x', '>', '>gv' },
 
+    -- Move Lines
+    {
+      mode = 'v',
+      '<A-j>',
+      ":<C-u>silent execute \"'<,'>move '>+\" . v:count1<cr>:silent normal! gv=gv<cr>",
+      desc = 'Move Down',
+    },
+    {
+      mode = 'v',
+      '<A-k>',
+      ":<C-u>silent execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>:silent normal! gv=gv<cr>",
+      desc = 'Move Up',
+    },
+
     { mode = { 'i', 'n' }, '<Tab>', tab, desc = 'Next suggestion' },
     {
       mode = { 'i', 'n' },
