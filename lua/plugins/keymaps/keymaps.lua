@@ -194,9 +194,21 @@ return {
       'S',
       function()
         local char = vim.fn.getcharstr()
+        local bracket_pairs = {
+          ['('] = { '(', ')' },
+          [')'] = { '(', ')' },
+          ['['] = { '[', ']' },
+          [']'] = { '[', ']' },
+          ['{'] = { '{', '}' },
+          ['}'] = { '{', '}' },
+          ['<'] = { '<', '>' },
+          ['>'] = { '<', '>' },
+        }
         local selected_text = require('util.util').get_visual_selection_text()
         local start_pos, end_pos = require('util.util').get_visual_selection_range()
-        local lines = vim.split(char .. selected_text .. char, '\n', { plain = true })
+        local left = bracket_pairs[char] and bracket_pairs[char][1] or char
+        local right = bracket_pairs[char] and bracket_pairs[char][2] or char
+        local lines = vim.split(left .. selected_text .. right, '\n', { plain = true })
         vim.api.nvim_buf_set_text(0, start_pos[2] - 1, start_pos[3] - 1, end_pos[2] - 1, end_pos[3], lines)
       end,
       desc = 'Surround',
