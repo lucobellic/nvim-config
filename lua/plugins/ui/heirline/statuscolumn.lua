@@ -62,7 +62,7 @@ local function get_sign(buf, line)
 end
 
 local statuscolumn = {
-  condition = function() return require('heirline.conditions').is_active() and vim.bo.buftype ~= 'nofile' end,
+  condition = function() return vim.bo.buftype ~= 'nofile' end,
   provider = function()
     if vim.g.zen_mode then
       return ''
