@@ -5,6 +5,7 @@ return {
   ['null-ls']                     = '',
   ['obsidian-ls']                 = '',
   ['rust-analyzer']               = '󱘗',
+  ['crates.nvim']                 = '󱘗',
   ansiblels                       = '󱂚',
   basedpyright                    = '󱔎',
   bashls                          = '',
