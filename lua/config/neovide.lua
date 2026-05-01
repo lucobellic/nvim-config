@@ -1,5 +1,5 @@
 if vim.g.neovide then
-  local font_family = 'DMMono Nerd Font'
+  local font_family = 'DM Mono Nerd Font'
   local font_size = 12
   vim.g.guifont = font_family .. ':h' .. font_size
   vim.opt.linespace = 2
