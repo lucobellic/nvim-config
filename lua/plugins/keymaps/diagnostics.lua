@@ -35,7 +35,7 @@ return {
         desc = 'Toggle Diagnostics',
       },
       {
-        '<leader>udf',
+        '<leader>udc',
         function() vim.cmd('CycleDiagnosticSeverity') end,
         repeatable = true,
         desc = 'Cycle Diagnostic Severity',
