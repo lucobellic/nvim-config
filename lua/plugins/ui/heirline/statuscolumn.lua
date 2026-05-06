@@ -64,6 +64,10 @@ end
 local statuscolumn = {
   condition = function() return vim.bo.buftype ~= 'nofile' end,
   provider = function()
+    if vim.bo.buftype == 'nofile' then
+      return ''
+    end
+
     if vim.g.zen_mode then
       return ''
     end
