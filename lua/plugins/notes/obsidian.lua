@@ -42,7 +42,7 @@ return {
   {
     'obsidian-nvim/obsidian.nvim',
     version = '3.15.5',
-    cond = vim.fn.isdirectory(vim.fn.expand('~/vaults/work')) == 1,
+    cond = vim.fn.isdirectory(vim.fn.expand('~/vaults')) == 1,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'snacks.nvim',
