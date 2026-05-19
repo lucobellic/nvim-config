@@ -100,7 +100,7 @@ end
 
 function Agent:send(content)
   if self:job_valid() then
-    vim.api.nvim_chan_send(self.terminal_job_id, content)
+    vim.api.nvim_chan_send(self.terminal_job_id, '\x1b[200~' .. content .. '\x1b[201~')
   end
 end
 

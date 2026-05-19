@@ -102,7 +102,6 @@ function M.setup_keymaps_and_commands(prefix, name, handlers)
     )
   end
 
-
   if handlers.toggle then
     vim.api.nvim_create_user_command(name .. 'Toggle', handlers.toggle, {})
   end

@@ -369,9 +369,8 @@ function AgentManager:send_current_buffer()
       return false
     end
 
-    local message = self.newline .. file
-    local input_message = input ~= '' and input .. self.newline or ''
-    agent:send(message .. self.newline .. input_message)
+    local message = table.concat({ self.newline, file, self.newline, input ~= '' and (input .. self.newline) or '' })
+    agent:send(message)
     return true
   end)
 end
@@ -479,23 +478,32 @@ function AgentManager:send_selection()
   local text = table.concat(lines, self.newline)
 
   local filetype = vim.api.nvim_get_option_value('filetype', { buf = 0 })
-  local formatted_text = self.newline
-    .. ' ```'
-    .. filetype
-    .. self.newline
-    .. text
-    .. self.newline
-    .. '```'
-    .. self.newline
+  local formatted_text = table.concat({
+    self.newline,
+    ' ```',
+    filetype,
+    self.newline,
+    text,
+    self.newline,
+    '```',
+    self.newline,
+  })
 
   self:input('Ask selection:', function(input)
     if not input then
       return false
     end
 
-    local message = ' ' .. vim.fn.expand('%:p') .. ' :' .. self.newline .. formatted_text
-    local input_message = input ~= '' and input .. self.newline or ''
-    agent:send(message .. self.newline .. input_message)
+    local message = table.concat({
+      ' ',
+      vim.fn.expand('%:p'),
+      ' :',
+      self.newline,
+      formatted_text,
+      self.newline,
+      input ~= '' and (input .. self.newline) or '',
+    })
+    agent:send(message)
     return true
   end)
 end
@@ -530,25 +538,31 @@ function AgentManager:send_buffer_diagnostics()
 
   table.sort(diagnostics, function(a, b) return a.lnum < b.lnum end)
 
-  local diagnostic_text = self.newline
-    .. '```'
-    .. self.newline
-    .. 'Diagnostics for '
-    .. vim.fn.expand('%:p')
-    .. ':'
-    .. self.newline
-    .. self.newline
+  local parts = {
+    self.newline,
+    '```',
+    self.newline,
+    'Diagnostics for ',
+    vim.fn.expand('%:p'),
+    ':',
+    self.newline,
+    self.newline,
+  }
 
   for _, diagnostic in ipairs(diagnostics) do
     local severity = vim.diagnostic.severity[diagnostic.severity] or 'UNKNOWN'
     local line_num = diagnostic.lnum + 1
     local col_num = diagnostic.col + 1
 
-    diagnostic_text = diagnostic_text
-      .. string.format('[%s] Line %d:%d - %s%s', severity, line_num, col_num, diagnostic.message, self.newline)
+    parts[#parts + 1] =
+      string.format('[%s] Line %d:%d - %s%s', severity, line_num, col_num, diagnostic.message, self.newline)
   end
 
-  agent:send(diagnostic_text .. self.newline .. '```' .. self.newline)
+  parts[#parts + 1] = self.newline
+  parts[#parts + 1] = '```'
+  parts[#parts + 1] = self.newline
+
+  agent:send(table.concat(parts))
 end
 
 function AgentManager:send_selection_diagnostics()
@@ -573,29 +587,35 @@ function AgentManager:send_selection_diagnostics()
 
   table.sort(diagnostics, function(a, b) return a.lnum < b.lnum end)
 
-  local diagnostic_text = self.newline
-    .. '```'
-    .. self.newline
-    .. 'Diagnostics for '
-    .. vim.fn.expand('%:p')
-    .. ' (lines '
-    .. (start_line + 1)
-    .. '-'
-    .. end_line
-    .. '):'
-    .. self.newline
-    .. self.newline
+  local parts = {
+    self.newline,
+    '```',
+    self.newline,
+    'Diagnostics for ',
+    vim.fn.expand('%:p'),
+    ' (lines ',
+    tostring(start_line + 1),
+    '-',
+    tostring(end_line),
+    '):',
+    self.newline,
+    self.newline,
+  }
 
   for _, diagnostic in ipairs(diagnostics) do
     local severity = vim.diagnostic.severity[diagnostic.severity] or 'UNKNOWN'
     local line_num = diagnostic.lnum + 1
     local col_num = diagnostic.col + 1
 
-    diagnostic_text = diagnostic_text
-      .. string.format('[%s] Line %d:%d - %s%s', severity, line_num, col_num, diagnostic.message, self.newline)
+    parts[#parts + 1] =
+      string.format('[%s] Line %d:%d - %s%s', severity, line_num, col_num, diagnostic.message, self.newline)
   end
 
-  agent:send(diagnostic_text .. self.newline .. '```' .. self.newline)
+  parts[#parts + 1] = self.newline
+  parts[#parts + 1] = '```'
+  parts[#parts + 1] = self.newline
+
+  agent:send(table.concat(parts))
 end
 
 return AgentManager
