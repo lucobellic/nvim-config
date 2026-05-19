@@ -17,6 +17,12 @@ return {
     sign = {
       enabled = false,
     },
+    pipe_table = {
+      border_enabled = false,
+    },
+    anti_conceal = {
+      enabled = true,
+    },
     heading = {
       sign = false,
       icons = {
@@ -31,7 +37,7 @@ return {
       width = 'block',
       right_pad = 1,
       border_prefix = false,
-      border = true,
+      border = false,
     },
     bullet = {
       enabled = true,
