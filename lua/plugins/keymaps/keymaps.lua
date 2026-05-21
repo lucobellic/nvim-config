@@ -247,6 +247,36 @@ return {
     },
 
     ------------------
+    -- Go to File
+    ------------------
+    {
+      'gf',
+      function()
+        local bufnr = vim.api.nvim_get_current_buf()
+        if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
+          vim.notify('Using edgy gf', vim.log.levels.WARN, { title = 'Info' })
+          require('util.util').open_file(false)
+        else
+          vim.notify('Using default gf', vim.log.levels.WARN, { title = 'Info' })
+          vim.cmd('normal! gf')
+        end
+      end,
+      desc = 'Go to file under cursor',
+    },
+    {
+      'gF',
+      function()
+        local bufnr = vim.api.nvim_get_current_buf()
+        if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
+          require('util.util').open_file(true)
+        else
+          vim.cmd('normal! gF')
+        end
+      end,
+      desc = 'Go to file under cursor (with line)',
+    },
+
+    ------------------
     -- Navigation
     ------------------
     { mode = { 'o', 'v', 'n' }, '>', ']', desc = 'Next', remap = true },

@@ -27,6 +27,8 @@ return {
           wo = { winbar = '' },
           keys = {
             term_normal = false,
+            gf = function(_self) require('util.util').open_file(false) end,
+            gF = function(_self) require('util.util').open_file(true) end,
           },
         },
       },

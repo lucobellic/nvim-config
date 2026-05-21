@@ -1,22 +1,64 @@
 local M = {}
 
-function M.open_file()
-  -- Find the first open window with a valid buffer
-  local buffers = vim.tbl_filter(
-    function(buffer) return #buffer.windows >= 1 end,
-    vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 })
-  )
-  local first_window = #buffers > 0 and buffers[1].windows[1] or nil
-
-  -- Open file under cursor in first valid window or in new window otherwise
-  local filename = vim.fn.findfile(vim.fn.expand('<cfile>'))
-  if vim.fn.filereadable(filename) == 1 then
-    if first_window then
-      vim.api.nvim_set_current_win(first_window)
+--- Find the first non-edgy, non-floating, normal editing window on the current tabpage.
+--- Skips the calling window so the file is never opened back into the source buffer.
+local function find_non_edgy_win()
+  local source_win = vim.api.nvim_get_current_win()
+  return vim.iter(vim.api.nvim_tabpage_list_wins(0)):find(function(winid)
+    if winid == source_win then
+      return false
     end
-    vim.cmd('edit ' .. filename)
+    local bufnr = vim.api.nvim_win_get_buf(winid)
+    local is_edgy = vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true
+    local is_floating = vim.api.nvim_win_get_config(winid).relative ~= ''
+    local buftype = vim.bo[bufnr].buftype
+    return not is_edgy and not is_floating and (buftype == '' or buftype == 'acwrite')
+  end)
+end
+
+--- Open file under cursor in a non-edgy window, replicating gf / gF behavior.
+--- Respects &path and &suffixesadd exactly as native gf does.
+--- If no valid non-edgy window exists, opens a new split (mirrors native gf fallback).
+--- @param with_lnum? boolean If true, also jump to line number (gF behavior)
+function M.open_file(with_lnum)
+  local cfile = vim.fn.expand('<cfile>')
+
+  local fname = cfile
+  local lnum = nil
+  if with_lnum then
+    -- gF recognizes a trailing :lnum suffix on the filename
+    local name, n = cfile:match('^(.+):(%d+)$')
+    if name and n then
+      fname = name
+      lnum = tonumber(n)
+    end
+  end
+
+  -- Resolve using &path with upward search (;), then plain fallback — mirrors native gf
+  local files = vim.fn.findfile(fname, vim.o.path .. ';')
+  local found = vim.islist(files) and files[1] or files
+
+  if found == '' then
+    found = vim.fn.findfile(fname)
+  end
+
+  if found == '' or vim.fn.filereadable(found) == 0 then
+    vim.notify('Can\'t find file "' .. fname .. '" in path', vim.log.levels.ERROR)
+    return
+  end
+
+  local target_win = find_non_edgy_win()
+  if target_win then
+    vim.api.nvim_set_current_win(target_win)
   else
-    vim.notify('File does not exist: ' .. filename)
+    -- No valid non-edgy window: open a new split, mirroring native gf fallback
+    vim.cmd('new')
+  end
+
+  vim.cmd('edit ' .. vim.fn.fnameescape(found))
+
+  if lnum then
+    vim.api.nvim_win_set_cursor(0, { lnum, 0 })
   end
 end
 
