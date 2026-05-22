@@ -62,7 +62,7 @@ vim.keymap.set({ 'n' }, '<C-x>', function()
   send_key(vim.fn.getcharstr())
 end, { buffer = true })
 
-vim.iter({ '<esc>', '<C-p>', '<tab>', '<cr>' }):each(function(key)
+vim.iter({ '<C-p>', '<tab>', '<cr>' }):each(function(key)
   vim.keymap.set({ 'n' }, key, function() send_key(key) end, { buffer = true })
 end)
 
