@@ -20,6 +20,10 @@ return {
         -- Use the interactive+login flag defined in lua/config/shell.lua for the active shell
         local shell_config = vim.g.shell_config
         task.cmd = { shell_config.shell, shell_config.interactive_login_flag, cmd_str }
+
+        -- Force a wide terminal so programs don't hard-wrap output at the display window width.
+        -- See: https://github.com/stevearc/overseer.nvim/pull/446
+        task.env = vim.tbl_extend('keep', task.env or {}, { COLUMNS = '9999' })
       end,
     }
   end,
