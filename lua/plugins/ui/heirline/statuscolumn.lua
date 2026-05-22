@@ -19,8 +19,11 @@ end
 ---@param extmarks table[]
 ---@return table?
 local function get_first_extmark(extmarks)
-  table.sort(extmarks, function(a, b) return (a[4].priority or 0) > (b[4].priority or 0) end)
-  return extmarks[1]
+  if extmarks and #extmarks > 0 then
+    table.sort(extmarks, function(a, b) return (a[4].priority or 0) > (b[4].priority or 0) end)
+    return extmarks[1]
+  end
+  return nil
 end
 
 ---@param text string
