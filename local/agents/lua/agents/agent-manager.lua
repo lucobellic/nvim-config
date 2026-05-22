@@ -2,6 +2,21 @@ local Agent = require('agents.agent')
 local AgentRegistry = require('agents.agent-registry')
 local Util = require('agents.util')
 
+--- Capture the current window and cursor position before opening a picker.
+---@return fun() restore function suitable for `on_close`
+local function save_win_cursor()
+  local win = vim.api.nvim_get_current_win()
+  local cursor = vim.api.nvim_win_get_cursor(win)
+  return function()
+    vim.schedule(function()
+      if vim.api.nvim_win_is_valid(win) then
+        vim.api.nvim_set_current_win(win)
+        pcall(vim.api.nvim_win_set_cursor, win, cursor)
+      end
+    end)
+  end
+end
+
 ---@class AgentManager
 ---@field private last_visited_agent Agent? last visited terminal instance
 ---@field private newline string newline character
@@ -384,9 +399,11 @@ function AgentManager:select_and_send_files()
   end
   AgentRegistry.update_last_used(self)
 
+  local restore_cursor_position = save_win_cursor()
   local snacks = require('snacks')
   snacks.picker.files({
     title = 'Select Files to Send to ' .. (agent.display_name or 'Agent'),
+    on_close = restore_cursor_position,
     confirm = function(picker)
       local files = picker:selected({ fallback = true })
       local files_names = vim.iter(files):map(function(f) return f.file end):join(' ')
@@ -405,9 +422,11 @@ function AgentManager:select_and_send_buffers()
   end
   AgentRegistry.update_last_used(self)
 
+  local restore_cursor_position = save_win_cursor()
   local snacks = require('snacks')
   snacks.picker.buffers({
     title = 'Select Buffers to Send to ' .. (agent.display_name or 'Agent'),
+    on_close = restore_cursor_position,
     confirm = function(picker)
       local buffers = picker:selected({ fallback = true })
       local buffers_names = vim
@@ -433,12 +452,14 @@ function AgentManager:select_and_send_terminals()
   end
   AgentRegistry.update_last_used(self)
 
+  local restore_cursor_position = save_win_cursor()
   local snacks = require('snacks')
   snacks.picker.buffers({
     title = 'Select Terminals to Send to ' .. (agent.display_name or 'Agent'),
     hidden = true,
     auto_confirm = true,
     sort_lastused = true,
+    on_close = restore_cursor_position,
     filter = {
       filter =
         ---@param item snacks.picker.finder.Item
