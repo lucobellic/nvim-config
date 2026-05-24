@@ -20,6 +20,7 @@ end
 
 return {
   'Civitasv/cmake-tools.nvim',
+  enabled = false,
   init = function() end,
   cmd = {
     'CMakeRun',

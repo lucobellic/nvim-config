@@ -13,6 +13,7 @@ return {
   },
   {
     't-troebst/perfanno.nvim',
+    enabled = false,
     cmd = {
       'PerfAnnotate',
       'PerfAnnotateFunction',

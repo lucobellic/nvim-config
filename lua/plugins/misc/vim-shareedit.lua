@@ -6,7 +6,7 @@ end
 
 return {
   'kbwo/vim-shareedit',
-  enabled = not vim.g.vscode,
+  enabled = false,
   dependencies = { 'vim-denops/denops.vim' },
   cmd = { 'ShareEditStart' },
   keys = {
