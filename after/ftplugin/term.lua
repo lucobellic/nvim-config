@@ -50,8 +50,20 @@ local function get_keymaps()
       opts = { buffer = true, silent = true, desc = 'Term Previous' },
     },
     {
+      mode = { 'n' },
+      lhs = '<S-h>',
+      rhs = function() core.prev() end,
+      opts = { buffer = true, silent = true, desc = 'Term Previous' },
+    },
+    {
       mode = { 't', 'n' },
       lhs = '<C-l>',
+      rhs = function() core.next() end,
+      opts = { buffer = true, silent = true, desc = 'Term Next' },
+    },
+    {
+      mode = { 'n' },
+      lhs = '<S-l>',
       rhs = function() core.next() end,
       opts = { buffer = true, silent = true, desc = 'Term Next' },
     },
