@@ -2,6 +2,8 @@ vim.lsp.enable({
   'codebook',
   'qmlls',
   'neocmake',
+  'nil_ls',
+  'nixd',
 })
 
 if vim.fn.has('nvim-0.12') == 1 then
