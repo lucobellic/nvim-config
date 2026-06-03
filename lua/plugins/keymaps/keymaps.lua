@@ -81,7 +81,13 @@ local function tab()
     end
   end
 
-  if require('copilot-nes').apply() then
+  local ok_copilot_nes, copilot_nes = pcall(require, 'copilot-nes')
+  if ok_copilot_nes and copilot_nes.apply() then
+    return
+  end
+
+  local ok_sidekick, sidekick_nes = pcall(require, 'sidekick.nes')
+  if ok_sidekick and sidekick_nes.enabled and sidekick_nes.apply() then
     return
   end
 
@@ -111,7 +117,8 @@ return {
       '<esc>',
       function()
         vim.cmd('noh')
-        require('copilot-nes').clear()
+        pcall(function() require('copilot-nes').cancel() end)
+        pcall(function() require('sidekick.nes').cancel() end)
         return '<esc>'
       end,
       expr = true,
