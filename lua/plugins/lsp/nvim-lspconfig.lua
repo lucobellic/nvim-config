@@ -48,6 +48,10 @@ return {
         width = 0.8,
         height = 0.8,
       },
+      firewall = {
+        enabled = true,
+        auto_managed = true,
+      },
     },
   },
   {
