@@ -104,4 +104,10 @@ function Agent:send(content)
   end
 end
 
+function Agent:send_enter()
+  if self:job_valid() then
+    vim.api.nvim_chan_send(self.terminal_job_id, '\r')
+  end
+end
+
 return Agent

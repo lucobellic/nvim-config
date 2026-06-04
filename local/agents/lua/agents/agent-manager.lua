@@ -59,7 +59,7 @@ function AgentManager:input(prompt, on_confirm)
           ---@type snacks.win.Action.spec
           function(win)
             if on_confirm(win:text()) then
-              vim.defer_fn(function() self.last_visited_agent:send('\r') end, 50)
+              vim.defer_fn(function() self.last_visited_agent:send_enter() end, 50)
             end
             win:close()
           end,
@@ -399,17 +399,27 @@ function AgentManager:select_and_send_files()
   end
   AgentRegistry.update_last_used(self)
 
-  local restore_cursor_position = save_win_cursor()
-  local snacks = require('snacks')
-  snacks.picker.files({
+  local function on_confirm(picker)
+    local files = picker:selected({ fallback = true })
+    local files_names = vim.iter(files):map(function(f) return f.file end):join(' ')
+    agent:send('files: ' .. files_names .. self.newline)
+    picker:close()
+  end
+
+  local function submit(picker)
+    on_confirm(picker)
+    vim.defer_fn(function() agent:send_enter() end, 50)
+  end
+
+  Snacks.picker.files({
     title = 'Select Files to Send to ' .. (agent.display_name or 'Agent'),
-    on_close = restore_cursor_position,
-    confirm = function(picker)
-      local files = picker:selected({ fallback = true })
-      local files_names = vim.iter(files):map(function(f) return f.file end):join(' ')
-      agent:send('files: ' .. files_names .. self.newline)
-      picker:close()
-    end,
+    on_close = save_win_cursor(),
+    confirm = on_confirm,
+    actions = { submit = submit },
+    win = {
+      input = { keys = { ['<C-CR>'] = { 'submit', mode = { 'n', 'i' } } } },
+      list = { keys = { ['<C-CR>'] = 'submit' } },
+    },
   })
 end
 
@@ -422,27 +432,37 @@ function AgentManager:select_and_send_buffers()
   end
   AgentRegistry.update_last_used(self)
 
-  local restore_cursor_position = save_win_cursor()
-  local snacks = require('snacks')
-  snacks.picker.buffers({
+  local function on_confirm(picker)
+    local buffers = picker:selected({ fallback = true })
+    local buffers_names = vim
+      .iter(buffers)
+      :map(function(buffer)
+        local buffer_name = vim.api.nvim_buf_get_name(buffer.buf)
+        return buffer_name ~= '' and buffer_name or '[No Name]'
+      end)
+      :join(' ')
+    agent:send('buffers: ' .. buffers_names .. self.newline)
+    picker:close()
+  end
+
+  local function submit(picker)
+    on_confirm(picker)
+    vim.defer_fn(function() agent:send_enter() end, 50)
+  end
+
+  Snacks.picker.buffers({
     title = 'Select Buffers to Send to ' .. (agent.display_name or 'Agent'),
-    on_close = restore_cursor_position,
-    confirm = function(picker)
-      local buffers = picker:selected({ fallback = true })
-      local buffers_names = vim
-        .iter(buffers)
-        :map(function(buffer)
-          local buffer_name = vim.api.nvim_buf_get_name(buffer.buf)
-          return buffer_name ~= '' and buffer_name or '[No Name]'
-        end)
-        :join(' ')
-      agent:send('buffers: ' .. buffers_names .. self.newline)
-      picker:close()
-    end,
+    on_close = save_win_cursor(),
+    confirm = on_confirm,
+    actions = { submit = submit },
+    win = {
+      input = { keys = { ['<C-CR>'] = { 'submit', mode = { 'n', 'i' } } } },
+      list = { keys = { ['<C-CR>'] = 'submit' } },
+    },
   })
 end
 
---- Open a terminal picker and send selected terminals to the terminal
+--- Open a terminal picker and send selected terminals content to the agent.
 --- Send the content of the terminal buffers
 function AgentManager:select_and_send_terminals()
   local agent = self.last_visited_agent
@@ -452,14 +472,31 @@ function AgentManager:select_and_send_terminals()
   end
   AgentRegistry.update_last_used(self)
 
-  local restore_cursor_position = save_win_cursor()
-  local snacks = require('snacks')
-  snacks.picker.buffers({
+  local function on_confirm(picker)
+    local terminals = picker:selected({ fallback = true })
+    local terminals_content = vim
+      .iter(terminals)
+      :map(function(t)
+        local lines = vim.api.nvim_buf_get_lines(t.buf, 0, -1, false)
+        return table.concat(lines, '\n')
+      end)
+      :join('\n\n')
+
+    agent:send(terminals_content .. self.newline)
+    picker:close()
+  end
+
+  local function submit(picker)
+    on_confirm(picker)
+    vim.defer_fn(function() agent:send_enter() end, 50)
+  end
+
+  Snacks.picker.buffers({
     title = 'Select Terminals to Send to ' .. (agent.display_name or 'Agent'),
     hidden = true,
     auto_confirm = true,
     sort_lastused = true,
-    on_close = restore_cursor_position,
+    on_close = save_win_cursor(),
     filter = {
       filter =
         ---@param item snacks.picker.finder.Item
@@ -469,19 +506,12 @@ function AgentManager:select_and_send_terminals()
             and item.buf ~= agent.terminal_buf
         end,
     },
-    confirm = function(picker)
-      local terminals = picker:selected({ fallback = true })
-      local terminals_content = vim
-        .iter(terminals)
-        :map(function(t)
-          local lines = vim.api.nvim_buf_get_lines(t.buf, 0, -1, false)
-          return table.concat(lines, '\n')
-        end)
-        :join('\n\n')
-
-      agent:send(terminals_content .. self.newline)
-      picker:close()
-    end,
+    confirm = on_confirm,
+    actions = { submit = submit },
+    win = {
+      input = { keys = { ['<C-CR>'] = { 'submit', mode = { 'n', 'i' } } } },
+      list = { keys = { ['<C-CR>'] = 'submit' } },
+    },
   })
 end
 
