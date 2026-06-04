@@ -1,6 +1,4 @@
 return {
-  { import = 'lazyvim.plugins.extras.ai.copilot' },
-
   { import = 'lazyvim.plugins.extras.coding.blink' },
   { import = 'lazyvim.plugins.extras.coding.neogen' },
 
@@ -11,9 +9,6 @@ return {
   { import = 'lazyvim.plugins.extras.editor.snacks_picker' },
   { import = 'lazyvim.plugins.extras.editor.refactoring' },
 
-  { import = 'lazyvim.plugins.extras.formatting.prettier' },
-
-  { import = 'lazyvim.plugins.extras.lang.cmake' },
   { import = 'lazyvim.plugins.extras.lang.docker' },
   { import = 'lazyvim.plugins.extras.lang.git' },
   { import = 'lazyvim.plugins.extras.lang.json' },
