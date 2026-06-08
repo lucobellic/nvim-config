@@ -47,8 +47,9 @@ end
 
 --- Prompt user for input and call on_confirm callback with the input.
 ---@param prompt string
+---@param target_agent Agent agent that will receive the text
 ---@param on_confirm fun(input: string): boolean callback that returns true if the input is valid
-function AgentManager:input(prompt, on_confirm)
+function AgentManager:input(prompt, target_agent, on_confirm)
   ---@type snacks.input.Opts
   Snacks.input.input({
     prompt = prompt,
@@ -59,7 +60,7 @@ function AgentManager:input(prompt, on_confirm)
           ---@type snacks.win.Action.spec
           function(win)
             if on_confirm(win:text()) then
-              vim.defer_fn(function() self.last_visited_agent:send_enter() end, 50)
+              vim.defer_fn(function() target_agent:send_enter() end, 50)
             end
             win:close()
           end,
@@ -203,9 +204,12 @@ function AgentManager:create()
     vim.api.nvim_set_current_win(first_win_that_show_agent)
   end
 
-  local agent = Agent.new(self.opts, nil, first_win_that_show_agent, nil)
+  --- Register agent BEFORE starting the terminal so that BufEnter/WinEnter
+  --- autocmds can find it in self.agents and update last_visited_agent correctly.
+  local agent = Agent.new(self.opts, nil, nil, nil)
   table.insert(self.agents, agent)
   self.last_visited_agent = agent
+  agent:start(first_win_that_show_agent)
 
   self:update_agent_names()
 end
@@ -226,6 +230,9 @@ function AgentManager:switch_focus(agent_to_focus)
   if win_to_focus then
     vim.api.nvim_win_set_buf(win_to_focus, agent_to_focus.terminal_buf)
     self.last_visited_agent = agent_to_focus
+    if agent_to_focus.on_focus then
+      agent_to_focus.on_focus(agent_to_focus)
+    end
   else
     agent_to_focus:focus()
     self.last_visited_agent = agent_to_focus
@@ -379,7 +386,7 @@ function AgentManager:send_current_buffer()
   AgentRegistry.update_last_used(self)
 
   local file = vim.fn.expand('%:p')
-  self:input('Ask about current file:', function(input)
+  self:input('Ask about current file:', agent, function(input)
     if input == nil then
       return false
     end
@@ -540,7 +547,7 @@ function AgentManager:send_selection()
     self.newline,
   })
 
-  self:input('Ask selection:', function(input)
+  self:input('Ask selection:', agent, function(input)
     if not input then
       return false
     end

@@ -22,6 +22,7 @@ local Agent = {}
 Agent.__index = Agent
 
 --- Create a new terminal controller for a specific external agent/executable.
+--- Does NOT open the window or start the terminal job; call `agent:start(win)` afterward.
 ---@param opts AgentsOpts options for the managed terminal
 ---@param buf? integer existing buffer number to attach to
 ---@param win? integer existing window number to attach to
@@ -38,19 +39,32 @@ function Agent.new(opts, buf, win, job_id)
     on_focus = opts.on_focus,
   }, Agent)
 
+  if job_id then
+    vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
+    if win then
+      vim.api.nvim_win_set_buf(win, self.terminal_buf)
+    end
+  end
+
+  return self
+end
+
+--- Open the terminal window and start the job process.
+--- Must be called after the agent has been registered in AgentManager.agents.
+---@param win? integer existing window number to attach to
+function Agent:start(win)
   vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
 
   if not win then
-    vim.api.nvim_open_win(self.terminal_buf, opts.focus, { split = opts.split or 'right', win = 0 })
+    vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
   else
     vim.api.nvim_win_set_buf(win, self.terminal_buf)
   end
 
-  if not job_id then
+  if not self.terminal_job_id then
     self.terminal_job_id = vim.fn.jobstart(self.executable, {
       term = true,
       on_exit = function()
-        -- Clean up the terminal buffer and job ID
         self.terminal_job_id = nil
         if self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) then
           vim.api.nvim_buf_delete(self.terminal_buf, { force = true })
@@ -59,8 +73,6 @@ function Agent.new(opts, buf, win, job_id)
       end,
     })
   end
-
-  return self
 end
 
 function Agent:buffer_valid() return self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) end
