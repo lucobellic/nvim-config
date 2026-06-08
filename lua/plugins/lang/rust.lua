@@ -10,7 +10,7 @@ return {
       callback = function()
         if timer then
           timer:stop()
-          timer:start(debounce_ms, 0, vim.schedule_wrap(vim.cmd.RustLsp({ 'flyCheck', 'run' })))
+          timer:start(debounce_ms, 0, vim.schedule_wrap(function() vim.cmd.RustLsp({ 'flyCheck', 'run' }) end))
         end
       end,
       desc = 'Run Rust flyCheck after delay',
