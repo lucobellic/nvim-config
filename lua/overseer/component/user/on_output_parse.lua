@@ -60,8 +60,12 @@ local comp = {
         end
 
         -- Extract command in one line and display it in the notification
-        ---@diagnostic disable-next-line: param-type-mismatch
-        local command_line = type(task.cmd) == 'string' and task.cmd or table.concat(task.cmd, ' ') or ''
+        local command_line = ''
+        if type(task.cmd) == 'string' then
+          command_line = task.cmd
+        elseif type(task.cmd) == 'table' then
+          command_line = table.concat(task.cmd, ' ')
+        end
 
         local pm = user_util.get_problem_matcher(command_line, params)
         if pm then

@@ -32,9 +32,11 @@ local Overseer = {
       ['CANCELED'] = ' ',
       ['SUCCESS'] = ' ',
       ['RUNNING'] = ' ',
+      ['PENDING'] = ' ',
     },
   },
 
+  rpad(OverseerTasksForStatus('PENDING')),
   rpad(OverseerTasksForStatus('CANCELED')),
   rpad(OverseerTasksForStatus('RUNNING')),
   rpad(OverseerTasksForStatus('SUCCESS')),
