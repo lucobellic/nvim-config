@@ -7,6 +7,7 @@ return {
   ['rust-analyzer']               = '󱘗',
   ['crates.nvim']                 = '󱘗',
   ansiblels                       = '󱂚',
+  cssls                           = '',
   basedpyright                    = '󱔎',
   bashls                          = '',
   biome                           = '󰔷',
