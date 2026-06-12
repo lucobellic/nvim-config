@@ -41,10 +41,10 @@ local blink = {
           },
           keymap = {
             ['<tab>'] = false,
-            ['<c-j>'] = { 'select_next', 'fallback' },
-            ['<down>'] = { 'select_next', 'fallback' },
-            ['<c-k>'] = { 'select_prev', 'fallback' },
-            ['<up>'] = { 'select_prev', 'fallback' },
+            ['<up>'] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, 'fallback' },
+            ['<down>'] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, 'fallback' },
+            ['<c-k>'] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, 'fallback' },
+            ['<c-j>'] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, 'fallback' },
           },
         },
         completion = {
