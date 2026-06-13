@@ -25,6 +25,7 @@ return {
   marksman                        = '',
   neocmake                        = '',
   nil_ls                          = '',
+  nixd                            = '',
   pylsp                           = '󰌠',
   pyrefly                         = '󱔎',
   qmlls                           = '',
