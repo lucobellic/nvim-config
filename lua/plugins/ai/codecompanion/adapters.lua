@@ -6,8 +6,8 @@ local interactions = vim.env.INSIDE_DOCKER
       inline = { adapter = 'cursor_cli', model = 'Auto' },
     }
   or {
-    cmd = { adapter = 'copilot', model = 'gpt-5-mini' },
-    chat = { adapter = { name = 'copilot', model = 'claude-sonnet-4.6' } },
+    cmd = { adapter = { name = 'copilot', model = 'gpt-5-mini' } },
+    chat = { adapter = { name = 'opencode', model = 'deepseek-v4-flash' } },
     inline = { adapter = { name = 'copilot', model = 'gpt-5-mini' } },
   }
 
@@ -34,6 +34,11 @@ return {
             env = {
               CLAUDE_CODE_OAUTH_TOKEN = vim.env.ANTHROPIC_API_KEY,
             },
+          })
+        end,
+        opencode = function()
+          return require('codecompanion.adapters').extend('opencode', {
+            commands = { default = { 'opencode', 'acp' } },
           })
         end,
       },
