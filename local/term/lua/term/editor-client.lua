@@ -30,20 +30,29 @@ end
 ---@param filepath string File path to open
 ---@return boolean success
 function M.open_in_parent(filepath)
+  if not filepath or filepath == '' then
+    vim.notify('term: no file path provided to editor client', vim.log.levels.ERROR)
+    return false
+  end
+
   local server = get_server_address()
   if not server then
-    vim.notify('No parent Neovim instance found (NVIM/NVIM_LISTEN_ADDRESS not set)', vim.log.levels.ERROR)
+    vim.notify('term: no parent Neovim instance found (NVIM/NVIM_LISTEN_ADDRESS not set)', vim.log.levels.ERROR)
     return false
   end
 
   -- Resolve to absolute path
   local abs_path = vim.fn.fnamemodify(filepath, ':p')
+  if not abs_path or abs_path == '' then
+    vim.notify('term: failed to resolve file path: ' .. tostring(filepath), vim.log.levels.ERROR)
+    return false
+  end
 
   local mode = get_connection_mode(server)
   local ok, channel = pcall(vim.fn.sockconnect, mode, server, { rpc = true })
 
   if not ok or channel == 0 then
-    vim.notify('Failed to connect to parent Neovim: ' .. server, vim.log.levels.ERROR)
+    vim.notify('term: failed to connect to parent Neovim: ' .. server, vim.log.levels.ERROR)
     return false
   end
 
@@ -78,7 +87,7 @@ function M.open_in_parent(filepath)
   pcall(vim.fn.chanclose, channel)
 
   if not ok then
-    vim.notify('Failed to send edit command to parent Neovim', vim.log.levels.ERROR)
+    vim.notify('term: failed to send edit command to parent Neovim', vim.log.levels.ERROR)
     return false
   end
 
@@ -87,18 +96,27 @@ end
 
 --- Create a headless nvim wrapper command (like floaterm's EDITOR)
 --- This returns a command string that can be used as EDITOR/GIT_EDITOR
----@return string editor_command
+---@return string? editor_command nil on failure
 function M.create_editor_wrapper()
   -- Get the current nvim executable path
   ---@diagnostic disable-next-line: undefined-field
-  local nvim_path = vim.fn.shellescape(vim.v.progpath)
+  local nvim_path = vim.v.progpath
+  if not nvim_path or nvim_path == '' then
+    vim.notify('term: cannot determine nvim executable path', vim.log.levels.ERROR)
+    return nil
+  end
+
+  local config_path = vim.fn.stdpath('config')
+  if not config_path or config_path == '' then
+    vim.notify('term: cannot determine config path', vim.log.levels.ERROR)
+    return nil
+  end
 
   -- Build the wrapper command that will be invoked by external tools
   -- This launches a headless nvim that connects back to parent and opens the file
-  local config_path = vim.fn.stdpath('config')
   local wrapper_script = string.format(
     [[%s --headless --clean --noplugin -n -R -c "set runtimepath^=%s" -c "lua require('term.editor-client').open_in_parent(vim.fn.argv()[-1])" -c "qall"]],
-    nvim_path,
+    vim.fn.shellescape(nvim_path),
     vim.fn.fnameescape(config_path)
   )
 

@@ -1,7 +1,13 @@
 local Term = require('term.term')
 local config = require('term.config')
+local util = require('term.util')
 
-local M = {}
+local M = {
+  safe_call = util.safe_call,
+  safe_api = util.safe_api,
+  safe_delete_buffer = util.safe_delete_buffer,
+  clamp = util.clamp,
+}
 
 --- Check if popup is currently visible and valid
 ---@param core TermCore Core module reference
@@ -22,8 +28,18 @@ end
 ---@param term_opts? TermOpts
 ---@return number width, number height
 function M.get_dimensions(term_opts)
-  local width = (term_opts and term_opts.width) or config.get_default_width()
-  local height = (term_opts and term_opts.height) or config.get_default_height()
+  local width = config.get_default_width()
+  local height = config.get_default_height()
+
+  if term_opts then
+    if type(term_opts.width) == 'number' then
+      width = term_opts.width
+    end
+    if type(term_opts.height) == 'number' then
+      height = term_opts.height
+    end
+  end
+
   return width, height
 end
 
@@ -35,11 +51,22 @@ function M.setup_window_buffer(winid, bufnr)
   if not vim.api.nvim_win_is_valid(winid) or not vim.api.nvim_buf_is_valid(bufnr) then
     return false
   end
-  vim.api.nvim_win_set_buf(winid, bufnr)
-  vim.api.nvim_set_option_value('sidescrolloff', 0, { win = winid })
-  vim.api.nvim_set_option_value('signcolumn', 'no', { win = winid })
-  vim.api.nvim_set_option_value('wrap', true, { win = winid })
-  vim.api.nvim_set_option_value('list', false, { win = winid })
+
+  local ok = M.safe_api('term: failed to set window buffer', vim.api.nvim_win_set_buf, winid, bufnr)
+  if not ok then
+    return false
+  end
+
+  local win_opts = {
+    sidescrolloff = 0,
+    signcolumn = 'no',
+    wrap = true,
+    list = false,
+  }
+  for opt, value in pairs(win_opts) do
+    M.safe_api('term: failed to set window option ' .. opt, vim.api.nvim_set_option_value, opt, value, { win = winid })
+  end
+
   return true
 end
 
@@ -52,11 +79,19 @@ function M.wrap_on_exit(opts, name, remove_fn)
   local user_on_exit = opts.on_exit
   opts.on_exit = function(term, code)
     if user_on_exit then
-      user_on_exit(term, code)
+      local ok, err = pcall(user_on_exit, term, code)
+      if not ok then
+        vim.notify('term: user on_exit failed: ' .. tostring(err), vim.log.levels.ERROR)
+      end
     end
     -- Remove terminal on normal exit to allow fresh creation next time
     if code == 0 then
-      vim.schedule(function() remove_fn(name) end)
+      vim.schedule(function()
+        local ok, err = pcall(remove_fn, name)
+        if not ok then
+          vim.notify('term: remove failed in on_exit: ' .. tostring(err), vim.log.levels.ERROR)
+        end
+      end)
     end
   end
   return opts
@@ -71,10 +106,19 @@ function M.generate_unique_name() return 'Terminal ' .. tostring(vim.uv.hrtime()
 ---@param opts? TermOpts Terminal options
 ---@return Term? term The created terminal or nil if invalid
 function M.create_term_from_buffer(bufnr, opts)
-  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+  if not vim.api.nvim_buf_is_valid(bufnr) then
+    vim.notify('term: buffer ' .. bufnr .. ' is not valid', vim.log.levels.ERROR)
+    return nil
+  end
+
+  local ok, buftype =
+    M.safe_api('term: failed to get buffer type', vim.api.nvim_get_option_value, 'buftype', { buf = bufnr })
+  if not ok then
+    return nil
+  end
 
   if buftype ~= 'terminal' then
-    vim.notify('Buffer ' .. bufnr .. ' is not a terminal buffer', vim.log.levels.ERROR)
+    vim.notify('term: buffer ' .. bufnr .. ' is not a terminal buffer', vim.log.levels.ERROR)
     return nil
   end
 
@@ -103,7 +147,10 @@ function M.create_term_from_buffer(bufnr, opts)
 
   term.kill = function(self)
     if self.opts.on_close then
-      self.opts.on_close(self)
+      local ok, err = pcall(self.opts.on_close, self)
+      if not ok then
+        vim.notify('term: on_close failed: ' .. tostring(err), vim.log.levels.ERROR)
+      end
     end
     -- Don't kill job or delete buffer for existing terminals
     self.job_id = nil

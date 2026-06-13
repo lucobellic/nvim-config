@@ -3,12 +3,26 @@ local M = {}
 --- Setup configuration
 ---@param opts? TermManagerConfig
 function M.setup(opts)
-  require('term.config').config = vim.tbl_deep_extend('force', require('term.config').defaults, opts or {})
-  M.setup_user_commands()
+  local ok, config = pcall(require, 'term.config')
+  if not ok then
+    vim.notify('term: failed to load config module: ' .. tostring(config), vim.log.levels.ERROR)
+    return
+  end
+
+  config.config = vim.tbl_deep_extend('force', config.defaults, opts or {})
+
+  ok = pcall(M.setup_user_commands)
+  if not ok then
+    vim.notify('term: failed to setup user commands', vim.log.levels.ERROR)
+  end
 end
 
 function M.setup_user_commands()
-  local Core = require('term.core')
+  local ok, Core = pcall(require, 'term.core')
+  if not ok then
+    vim.notify('term: failed to load core module: ' .. tostring(Core), vim.log.levels.ERROR)
+    return
+  end
 
   -- Define User commands
   vim.api.nvim_create_user_command('TermToggle', function(args)
@@ -28,7 +42,12 @@ function M.setup_user_commands()
 
   vim.api.nvim_create_autocmd('VimResized', {
     pattern = '*',
-    callback = function() Core.resize() end,
+    callback = function()
+      local resize_ok, err = pcall(Core.resize)
+      if not resize_ok then
+        vim.notify('term: resize failed: ' .. tostring(err), vim.log.levels.ERROR)
+      end
+    end,
   })
 end
 

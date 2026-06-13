@@ -1,5 +1,6 @@
 local Popup = require('nui.popup')
 local config = require('term.config')
+local helper = require('term.helper')
 
 ---@class TermManagerUI
 local M = {}
@@ -33,7 +34,7 @@ end
 ---@param term Term
 ---@param terminal_count integer
 function M.update_border(popup, term, terminal_count)
-  if not popup or not popup.border then
+  if not popup or not popup.border or not popup.border.set_text then
     return
   end
 
@@ -42,18 +43,32 @@ function M.update_border(popup, term, terminal_count)
   -- Use terminal's title if set, otherwise use 'Terminal' for auto-numbered ones
   local display_name = (term.opts and term.opts.title) or 'Terminal'
   local title = string.format(' %s %d/%d ', display_name, term.index, terminal_count)
-  popup.border:set_text('top', { { title, title_hl } }, 'center')
+  helper.safe_api(
+    'term: failed to set border title',
+    popup.border.set_text,
+    popup.border,
+    'top',
+    { { title, title_hl } },
+    'center'
+  )
 
   -- Update bottom border with terminal sequence
   local sequence = M.generate_sequence(term.index, terminal_count)
-  popup.border:set_text('bottom', sequence, 'center')
+  helper.safe_api(
+    'term: failed to set border sequence',
+    popup.border.set_text,
+    popup.border,
+    'bottom',
+    sequence,
+    'center'
+  )
 end
 
 --- Create popup window for terminal display
 ---@return NuiPopup
 function M.create_popup()
-  local width = config.get_default_width()
-  local height = config.get_default_height()
+  local width = config.validate_size(config.get_default_width(), config.defaults.defaults.width)
+  local height = config.validate_size(config.get_default_height(), config.defaults.defaults.height)
   local cfg = config.get()
 
   ---@diagnostic disable-next-line: missing-fields
@@ -77,7 +92,7 @@ function M.create_popup()
       signcolumn = 'no',
       wrap = true,
     },
-    zindex = cfg.defaults.zindex or 50,
+    zindex = (cfg.defaults and type(cfg.defaults.zindex) == 'number' and cfg.defaults.zindex) or 50,
   })
 end
 
