@@ -1,3 +1,5 @@
+local util = require('term.util')
+
 ---@class TermOpts
 ---@field width? number Window width (0.0-1.0 or absolute)
 ---@field height? number Window height (0.0-1.0 or absolute)
@@ -25,11 +27,15 @@ Term.__index = Term
 ---@param name string Terminal identifier
 ---@param cmd string|string[] Command to execute
 ---@param opts? TermOpts Terminal options
----@return Term
+---@return Term?
 function Term.new(name, cmd, opts)
   opts = opts or {}
 
   local bufnr = vim.api.nvim_create_buf(false, true) -- unlisted, scratch buffer
+  if bufnr == 0 then
+    vim.notify('term: failed to create terminal buffer', vim.log.levels.ERROR)
+    return nil
+  end
 
   local self = setmetatable({
     name = name,
@@ -43,12 +49,18 @@ function Term.new(name, cmd, opts)
   }, Term)
 
   -- Set buffer options (buftype will be set by termopen)
-  vim.api.nvim_set_option_value('bufhidden', 'hide', { buf = bufnr })
-  vim.api.nvim_set_option_value('filetype', 'term', { buf = bufnr })
+  util.safe_api('term: failed to set bufhidden', vim.api.nvim_set_option_value, 'bufhidden', 'hide', { buf = bufnr })
+  util.safe_api('term: failed to set filetype', vim.api.nvim_set_option_value, 'filetype', 'term', { buf = bufnr })
 
   -- Set buffer name
   local buf_name = string.format('term://%s#%d', name, bufnr)
-  pcall(vim.api.nvim_buf_set_name, bufnr, buf_name)
+  local ok = pcall(vim.api.nvim_buf_set_name, bufnr, buf_name)
+  if not ok then
+    -- Non-fatal, but clean up the buffer if naming truly failed in an unexpected way
+    util.safe_delete_buffer(bufnr)
+    vim.notify('term: failed to set terminal buffer name', vim.log.levels.ERROR)
+    return nil
+  end
 
   return self
 end
@@ -80,6 +92,7 @@ function Term:start()
   end
 
   if not self:is_valid() then
+    vim.notify('term: cannot start terminal, buffer is invalid: ' .. self.name, vim.log.levels.ERROR)
     return false
   end
 
@@ -87,50 +100,70 @@ function Term:start()
 
   -- Use nvim_buf_call to run jobstart in context of our buffer
   -- This avoids switching the current buffer which can cause flicker
-  vim.api.nvim_buf_call(self.bufnr, function()
-    self.job_id = vim.fn.jobstart(self.cmd, {
-      term = true,
-      env = build_env(),
-      on_exit = function(_, code)
-        self.job_id = nil
-        if on_exit then
-          on_exit(self, code)
-        end
-      end,
-    })
+  local ok = util.safe_api('term: failed to enter terminal buffer context', function()
+    vim.api.nvim_buf_call(self.bufnr, function()
+      self.job_id = vim.fn.jobstart(self.cmd, {
+        term = true,
+        env = build_env(),
+        on_exit = function(_, code)
+          self.job_id = nil
+          if on_exit then
+            local exit_ok, err = pcall(on_exit, self, code)
+            if not exit_ok then
+              vim.notify('term: on_exit failed: ' .. tostring(err), vim.log.levels.ERROR)
+            end
+          end
+        end,
+      })
+    end)
   end)
 
-  return self.job_id ~= nil and self.job_id > 0
+  if not ok then
+    return false
+  end
+
+  -- jobstart returns channel id (>0), 0 for invalid arguments, or -1 if command is not executable
+  if not self.job_id or self.job_id <= 0 then
+    vim.notify('term: failed to start terminal job: ' .. self.name, vim.log.levels.ERROR)
+    self.job_id = nil
+    return false
+  end
+
+  return true
 end
 
 --- Check if buffer is valid
 ---@return boolean
-function Term:is_valid() return self.bufnr and vim.api.nvim_buf_is_valid(self.bufnr) end
+function Term:is_valid() return self.bufnr ~= nil and self.bufnr ~= 0 and vim.api.nvim_buf_is_valid(self.bufnr) end
 
 --- Check if terminal job is running
 ---@return boolean
 function Term:is_job_running()
-  if not self.job_id then
+  if not self.job_id or self.job_id <= 0 then
     return false
   end
-  local result = vim.fn.jobwait({ self.job_id }, 0)
+  local ok, result = pcall(vim.fn.jobwait, { self.job_id }, 0)
+  if not ok or type(result) ~= 'table' then
+    return false
+  end
   return result[1] == -1
 end
 
 --- Kill terminal job and delete buffer
 function Term:kill()
   if self.opts.on_close then
-    self.opts.on_close(self)
+    local ok, err = pcall(self.opts.on_close, self)
+    if not ok then
+      vim.notify('term: on_close failed: ' .. tostring(err), vim.log.levels.ERROR)
+    end
   end
 
   if self.job_id and self:is_job_running() then
-    vim.fn.jobstop(self.job_id)
+    pcall(vim.fn.jobstop, self.job_id)
   end
   self.job_id = nil
 
-  if self:is_valid() then
-    vim.api.nvim_buf_delete(self.bufnr, { force = true })
-  end
+  util.safe_delete_buffer(self.bufnr)
 end
 
 --- Update terminal dimensions (stored in opts)
