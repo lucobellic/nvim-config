@@ -17,6 +17,54 @@ local blink_copilot = {
   },
 }
 
+--- Fix https://github.com/saghen/blink.cmp/issues/2419 (timer race in queue_auto_show):
+--- the completion menu can stay open after cursor moves away because a scheduled
+--- timer callback runs after reset_auto_show() has already stopped the timer.
+--- Overrides menu.queue_auto_show to check timer_key in the scheduled callback.
+local function patch_blink_menu_race(menu)
+  --- Creates the guarded timer callback that checks whether the menu should
+  --- still open after the timer fires.
+  ---@param auto table
+  ---@param timer_key string
+  local function make_show_callback(auto, timer_key)
+    return vim.schedule_wrap(function()
+      -- bail out if reset_auto_show() was called before this ran
+      if auto.timer_key ~= timer_key then
+        return
+      end
+      menu.open()
+      menu.update_position()
+    end)
+  end
+
+  --- Replacement for queue_auto_show with timer race guard.
+  ---@param context blink.cmp.Context
+  ---@param items blink.cmp.CompletionItem[]
+  ---@diagnostic disable-next-line: duplicate-index
+  menu.queue_auto_show = function(context, items)
+    local auto = menu.auto_show
+    if not auto.enabled(context, items) then
+      return
+    end
+
+    local delay_ms = math.max(0, auto.delay_ms(context, items) - (vim.uv.now() - context.timestamp))
+
+    if delay_ms == 0 then
+      menu.open()
+      menu.update_position()
+      return
+    end
+
+    local timer_key = ('%d|%d|%d'):format(context.id, context.cursor[1], context.cursor[2])
+    if auto.timer:is_active() and auto.timer_key == timer_key then
+      return
+    end
+
+    auto.timer_key = timer_key
+    auto.timer:start(delay_ms, 0, make_show_callback(auto, timer_key))
+  end
+end
+
 local blink = {
   {
     'saghen/blink.cmp',
@@ -99,6 +147,7 @@ local blink = {
     config = function(_, opts)
       opts.sources.compat = nil
       require('blink.cmp').setup(opts)
+      patch_blink_menu_race(require('blink.cmp.completion.windows.menu'))
     end,
   },
   {
