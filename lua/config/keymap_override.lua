@@ -181,10 +181,7 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
     local desc = _normalise_repeatable(repeatable, rhs)
     if desc then
       local has_motion = desc.forward ~= nil or desc.backward ~= nil
-      assert(
-        desc.dot ~= nil or has_motion,
-        'repeatable: at least one of ".", ";", "," must be specified'
-      )
+      assert(desc.dot ~= nil or has_motion, 'repeatable: at least one of ".", ";", "," must be specified')
 
       if desc.dot ~= nil then
         -- Dot-repeat path: register via operatorfunc / g@l so that `.` replays the action.

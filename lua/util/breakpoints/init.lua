@@ -95,7 +95,7 @@ function M.pick(filter)
     return vim
       .iter(breakpoints or {})
       :flatten()
-      :filter(function( breakpoint) return vim.api.nvim_buf_is_valid(breakpoint.buf) end)
+      :filter(function(breakpoint) return vim.api.nvim_buf_is_valid(breakpoint.buf) end)
       :enumerate()
       :map(
         ---@param idx number
