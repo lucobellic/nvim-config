@@ -53,7 +53,7 @@ return {
         split = 'right',
         focus = true,
         insert = false,
-      }
+      },
     },
   },
 }
