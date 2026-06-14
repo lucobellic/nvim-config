@@ -111,6 +111,7 @@ return {
           'on_result_diagnostics_quickfix', -- send diagnostics to quickfix or loclist
           'unique',
           { 'user.on_complete_close_term', statuses = { 'SUCCESS' }, timeout = 5 },
+          'user.on_dispose_close_term',
         },
         default_vscode = {
           'default',
@@ -120,6 +121,7 @@ return {
     config = function(_, opts)
       local overseer = require('overseer')
       overseer.setup(opts)
+      require('overseer.util.autoclose').setup()
     end,
   },
 }
