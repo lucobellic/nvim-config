@@ -1,3 +1,12 @@
+local symbols = {
+  ['FAILURE'] = ' ',
+  ['CANCELED'] = ' ',
+  ['SUCCESS'] = ' ',
+  ['RUNNING'] = ' ',
+  ['PENDING'] = ' ',
+  ['DISPOSED'] = ' ',
+}
+
 --- Opens the first failed task in a horizontal split
 local function open_first_failed_task()
   local overseer = require('overseer')
@@ -77,6 +86,10 @@ return {
       task_list = {
         direction = 'right',
         separator = '',
+        render = function(task)
+          local render = require('overseer.render')
+          return { render.join({ { symbols[task.status], 'Overseer' .. task.status } }, render.name(task), ' ') }
+        end,
         keymaps = {
           ['<C-h>'] = '<C-w>h',
           ['<C-j>'] = '<C-w>j',
@@ -89,9 +102,6 @@ return {
       task_win = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
       component_aliases = {
         default = {
-          -- TODO: Fix open_on_start_if_visible to not open window on restart if already visible
-          -- { 'user.open_on_start_if_visible', direction = 'horizontal' }, -- open on start if overseer window is visible/open
-          -- { 'display_duration', detail_level = 2 },
           'user.interactive_shell', -- run tasks in interactive shell so aliases/functions are available
           'user.on_output_parse', -- parse with problem matcher
           { 'on_output_quickfix', tail = false }, -- parse errorformat
