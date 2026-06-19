@@ -1,5 +1,6 @@
 ---@type snacks.picker.Config
 local overseer_template = {
+  layout = { preset = 'vscode' },
   win = {
     input = {
       keys = {
