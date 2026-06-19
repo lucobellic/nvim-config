@@ -6,22 +6,41 @@ local M = {}
 --- Checks both local and remote (origin/) branches.
 --- @param candidates string[]
 --- @param cwd? string
+--- @param remote? boolean When true, only check and return origin/{branch} refs
 --- @return string|nil
-function M.resolve_base_branch(candidates, cwd)
+function M.resolve_base_branch(candidates, cwd, remote)
   for _, branch in ipairs(candidates) do
-    -- check local branch
-    vim.fn.systemlist({ 'git', '-C', cwd or '.', 'rev-parse', '--verify', '--quiet', branch })
-    if vim.v.shell_error == 0 then
-      return branch
-    end
-    -- check remote branch
-    local remote = 'origin/' .. branch
-    vim.fn.systemlist({ 'git', '-C', cwd or '.', 'rev-parse', '--verify', '--quiet', remote })
-    if vim.v.shell_error == 0 then
-      return remote
+    if remote then
+      local ref = 'origin/' .. branch
+      vim.fn.systemlist({ 'git', '-C', cwd or '.', 'rev-parse', '--verify', '--quiet', ref })
+      if vim.v.shell_error == 0 then
+        return ref
+      end
+    else
+      -- check local branch
+      vim.fn.systemlist({ 'git', '-C', cwd or '.', 'rev-parse', '--verify', '--quiet', branch })
+      if vim.v.shell_error == 0 then
+        return branch
+      end
+      -- check remote branch
+      local remote_ref = 'origin/' .. branch
+      vim.fn.systemlist({ 'git', '-C', cwd or '.', 'rev-parse', '--verify', '--quiet', remote_ref })
+      if vim.v.shell_error == 0 then
+        return remote_ref
+      end
     end
   end
   return nil
+end
+
+--- Resolve the base branch as an origin/ remote ref (e.g. origin/develop).
+--- Falls back to 'origin/develop' when no candidate exists.
+--- @param candidates? string[] Defaults to { 'develop', 'main', 'master' }
+--- @param cwd? string
+--- @return string
+function M.resolve_origin_base_branch(candidates, cwd)
+  candidates = candidates or { 'develop', 'main', 'master' }
+  return M.resolve_base_branch(candidates, cwd, true) or 'origin/develop'
 end
 
 --- Build git diff command arguments.
