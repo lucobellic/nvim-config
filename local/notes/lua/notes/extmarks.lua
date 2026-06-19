@@ -58,6 +58,7 @@ function M.set_note(bufnr, line, text)
     virt_text = M.visible and M.build_virt_text(text) or {},
     virt_text_pos = 'eol',
     hl_mode = 'combine',
+    right_gravity = false,
   }, M.config.extmark or {})
 
   -- Always override virt_text based on visibility
