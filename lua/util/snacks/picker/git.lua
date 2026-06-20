@@ -2,6 +2,28 @@
 
 local M = {}
 
+-- ---------------------------------------------------------------------------
+-- History cache
+-- ---------------------------------------------------------------------------
+-- `collect_history_blocks` runs `git log -p` which is expensive (subprocess +
+-- megabytes of diff text).  With `live = true` the finder is re-invoked on
+-- every keystroke, so without caching the same git command fires repeatedly.
+-- We cache the parsed commits table keyed by (cwd + extra_args) and reuse it
+-- for CACHE_TTL seconds.  Call `M.clear_history_cache()` after committing or
+-- whenever you need fresh results immediately.
+local _history_cache = {} ---@type table<string, { commits: table, ts: number }>
+local HISTORY_CACHE_TTL = 60 -- seconds
+
+--- Build a stable string key from the working directory and extra git args.
+--- @param cwd string
+--- @param extra_args string[]
+--- @return string
+local function history_cache_key(cwd, extra_args) return cwd .. '\0' .. table.concat(extra_args or {}, '\0') end
+
+--- Invalidate all cached git history entries.
+--- Useful to call after a `git commit`, `git rebase`, etc.
+function M.clear_history_cache() _history_cache = {} end
+
 --- Resolve the first existing branch from a list of candidates.
 --- Checks both local and remote (origin/) branches.
 --- @param candidates string[]
@@ -415,6 +437,10 @@ local function collect_history_blocks(ctx, cwd, extra_args)
     '--no-pager',
     'log',
     '--no-color',
+    -- Only include normal file changes; skip broken pairs, unmerged entries,
+    -- and unknown items.  Binary files are excluded by omission of 'B', which
+    -- keeps diff output lean and avoids garbage in the searchable text.
+    '--diff-filter=ACDMRT',
     '-p',
     '-U3',
     '--format=COMMIT>>%H>>%ct>>%as>>%s',
@@ -477,6 +503,26 @@ local function collect_history_blocks(ctx, cwd, extra_args)
   return commits
 end
 
+--- Return history blocks for (cwd, extra_args), using a TTL cache.
+--- The cache avoids re-running `git log -p` on every keystroke in live mode.
+--- Results are keyed by cwd + extra_args and expire after HISTORY_CACHE_TTL
+--- seconds.  Use `M.clear_history_cache()` to invalidate manually.
+--- @param ctx snacks.picker.finder.ctx
+--- @param cwd string
+--- @param extra_args? string[]
+--- @return { commit: string, msg: string, date: string, ts: number, block: snacks.picker.diff.Block }[]
+local function get_history_blocks(ctx, cwd, extra_args)
+  local key = history_cache_key(cwd, extra_args or {})
+  local now = os.time()
+  local entry = _history_cache[key]
+  if entry and (now - entry.ts) < HISTORY_CACHE_TTL then
+    return entry.commits
+  end
+  local commits = collect_history_blocks(ctx, cwd, extra_args)
+  _history_cache[key] = { commits = commits, ts = now }
+  return commits
+end
+
 --- Shared finder for git history pickers.
 --- @param ctx snacks.picker.finder.ctx Picker context
 --- @param extra_args string[] Extra arguments for git log
@@ -488,7 +534,7 @@ local function finder_history(ctx, extra_args, include)
 
   ---@param cb async fun(item:snacks.picker.finder.Item)
   return function(cb)
-    local commits = collect_history_blocks(ctx, cwd, extra_args)
+    local commits = get_history_blocks(ctx, cwd, extra_args)
 
     vim
       .iter(commits)
