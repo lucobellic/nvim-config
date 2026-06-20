@@ -89,10 +89,10 @@ local blink = {
           },
           keymap = {
             ['<tab>'] = false,
-            ['<up>'] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, 'fallback' },
-            ['<down>'] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, 'fallback' },
-            ['<c-k>'] = { function(cmp) return cmp.select_prev({ auto_insert = false }) end, 'fallback' },
-            ['<c-j>'] = { function(cmp) return cmp.select_next({ auto_insert = false }) end, 'fallback' },
+            ['<up>'] = { function(cmp) return cmp.select_prev({ auto_insert = true }) end, 'fallback' },
+            ['<down>'] = { function(cmp) return cmp.select_next({ auto_insert = true }) end, 'fallback' },
+            ['<c-k>'] = { function(cmp) return cmp.select_prev({ auto_insert = true }) end, 'fallback' },
+            ['<c-j>'] = { function(cmp) return cmp.select_next({ auto_insert = true }) end, 'fallback' },
           },
         },
         completion = {
