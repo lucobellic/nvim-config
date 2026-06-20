@@ -613,12 +613,18 @@ end
 --- Git history picker: search through the complete git log.
 --- Shows one item per file per commit, with all changed content searchable.
 --- The preview shows the full diff with search matches highlighted.
---- @param opts? { include?: 'changes'|'all'|'additions'|'deletions' }
+--- Press <a-e> to double the commit look-back limit.
+--- @param opts? { include?: 'changes'|'all'|'additions'|'deletions', limit?: number }
 function M.git_history(opts)
   opts = opts or {}
-  local include = opts.include or 'changes'
 
+  local include = opts.include or 'changes'
   local ns_search = vim.api.nvim_create_namespace('snacks.picker.git_history.search')
+
+  -- Commit look-back limit, doubled by the expand_history action (<c-e>).
+  -- Set to nil to show all commits (toggle with <m-e>).
+  local limit = opts.limit or 1000
+  local unlimited = false
 
   Snacks.picker.pick({
     source = 'git_diff_content',
@@ -627,7 +633,42 @@ function M.git_history(opts)
     supports_live = true,
     matcher = { sort_empty = true, fuzzy = false },
     sort = { fields = { 'commit_date:desc', 'idx' } },
-    finder = function(_, ctx) return finder_history(ctx, {}, include) end,
+    actions = {
+      --- Double the commit limit and re-run the search immediately.
+      expand_history = function(picker)
+        limit = limit * 2
+        picker:find()
+        vim.notify(limit .. ' commits', vim.log.levels.INFO, { title = 'Git History' })
+      end,
+      --- Toggle the commit limit on/off.
+      expand_all = function(picker)
+        unlimited = not unlimited
+        picker:find()
+        if unlimited then
+          vim.notify('Showing all commits', vim.log.levels.INFO, { title = 'Git History' })
+        else
+          vim.notify(limit .. ' commits', vim.log.levels.INFO, { title = 'Git History' })
+        end
+      end,
+    },
+    win = {
+      input = {
+        keys = {
+          ['<c-e>'] = { 'expand_history', mode = { 'i', 'n' }, desc = 'Expand history (x2)' },
+          ['<m-e>'] = { 'expand_all', mode = { 'i', 'n' }, desc = 'Toggle limit' },
+        },
+      },
+      list = {
+        keys = {
+          ['<c-e>'] = { 'expand_history', desc = 'Expand history (x2)' },
+          ['<m-e>'] = { 'expand_all', desc = 'Toggle limit' },
+        },
+      },
+    },
+    finder = function(_, ctx)
+      local extra_args = unlimited and {} or { '-n', tostring(limit) }
+      return finder_history(ctx, extra_args, include)
+    end,
     format = format_branch_history_item,
     preview = function(ctx) render_diff_preview(ctx, ns_search) end,
   })
