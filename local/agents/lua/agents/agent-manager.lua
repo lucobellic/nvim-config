@@ -555,6 +555,10 @@ function AgentManager:send_selection()
     local message = table.concat({
       ' ',
       vim.fn.expand('%:p'),
+      ':',
+      tostring(start_line + 1),
+      '-',
+      tostring(end_line),
       ' :',
       self.newline,
       formatted_text,
