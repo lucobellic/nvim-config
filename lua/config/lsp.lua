@@ -4,6 +4,7 @@ vim.lsp.enable({
   'neocmake',
   'nil_ls',
   'nixd',
+  'clangd',
 })
 
 if vim.fn.has('nvim-0.12') == 1 then
