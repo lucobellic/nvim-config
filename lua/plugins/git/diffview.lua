@@ -22,7 +22,6 @@ return {
       'DiffviewFocusFiles',
       'DiffviewFileHistory',
       'DiffviewRangeFileHistory',
-      'DiffviewOriginDevelopHead',
     },
     dependencies = {
       'nvim-lua/plenary.nvim',
@@ -102,7 +101,7 @@ return {
     },
     opts = function(_, opts)
       ---@type DiffviewConfig.user
-      new_opts = {
+      local new_opts = {
         enhanced_diff_hl = true,
         diff_binaries = false, -- Show diffs for binaries
         icons = { -- Only applies when use_icons is true.
@@ -115,8 +114,6 @@ return {
           done = '',
         },
         view = {
-          default = { layout = 'diff1_inline' },
-          file_history = { layout = 'diff1_inline' },
           merge_tool = { layout = 'diff3_mixed' },
           inline = { style = 'unified', deletion_highlight = 'full_width' },
         },
