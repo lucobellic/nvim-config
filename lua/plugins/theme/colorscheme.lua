@@ -8,7 +8,9 @@ return {
       if not vim.g.distribution then
         vim.cmd([[colorscheme ayugloom]])
       end
+      vim.api.nvim_create_user_command('AyugloomCompile', function() require('ayugloom.compiler').compile() end, {})
     end,
+
     priority = 1000,
   },
   {
