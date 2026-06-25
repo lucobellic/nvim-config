@@ -16,10 +16,32 @@ function CodeCompanionHandler:render(props)
     :filter(function(_, chat_table) return chat_table.chat.bufnr == props.buf end)
     :nth(1)
 
-  if current_chat and current_chat.chat then
-    local model = current_chat.chat.settings and current_chat.chat.settings['model'] or ''
-    local adapter_name = current_chat.chat.adapter.name
-    title = model and ' ' .. adapter_name .. ': ' .. model .. ' ' or adapter_name
+  if current_chat then
+    local chat = current_chat.chat
+    if chat and chat.adapter then
+      local adapter = chat.adapter
+
+      -- Resolve model from adapter config:
+      --   HTTP adapters: chat.settings.model, adapter.model.name, adapter.schema.model.default
+      --   ACP adapters:  adapter.defaults.model (string or function)
+      local function defaults_model()
+        if adapter.defaults and adapter.defaults.model then
+          return type(adapter.defaults.model) == 'function' and adapter.defaults.model(adapter)
+            or adapter.defaults.model
+        end
+        return nil
+      end
+
+      local model = (chat and chat.settings and chat.settings['model'])
+        or (type(adapter.model) == 'table' and adapter.model.name)
+        or (type(adapter.model) == 'string' and adapter.model)
+        or (adapter.schema and adapter.schema.model and adapter.schema.model.default)
+        or defaults_model()
+        or ''
+
+      local name = adapter.formatted_name or adapter.name or ''
+      title = model and ' ' .. name .. ': ' .. model .. ' ' or name
+    end
   end
 
   if #loaded_chats > 1 and current_chat_index ~= nil then
