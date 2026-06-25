@@ -1,6 +1,6 @@
 ---
 name: Generate a Commit Message for Staged Files
-interaction: inline
+interaction: chat
 description: staged file commit messages
 opts:
   is_default: false

@@ -24,8 +24,8 @@ return {
             save_chat_keymap = '<localleader>hs',
             auto_generate_title = true,
             title_generation_opts = {
-              adapter = 'copilot',
-              model = 'gpt-5-mini',
+              adapter = 'opencode',
+              model = 'opencode-go/deepseek-v4-flash',
             },
           },
         },

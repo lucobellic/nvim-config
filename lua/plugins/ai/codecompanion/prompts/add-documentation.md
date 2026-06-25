@@ -1,6 +1,6 @@
 ---
 name: Add Documentation
-interaction: inline
+interaction: chat
 description: Add documentation to the selected code
 opts:
   is_default: false
