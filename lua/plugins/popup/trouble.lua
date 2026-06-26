@@ -33,6 +33,26 @@ return {
       '<cmd>Trouble qflist toggle<cr>',
       desc = 'Quickfix List (Trouble)',
     },
+    {
+      '<leader>xr',
+      function()
+        require('trouble').refresh('outgoing')
+        require('trouble').refresh('incoming')
+      end,
+      desc = 'Refresh outgoing and incoming view (Trouble)',
+      repeatable = true,
+    },
+    {
+      '<leader>xR',
+      function()
+        ---@diagnostic disable: missing-parameter, param-type-mismatch
+        require('trouble').toggle_refresh('outgoing')
+        require('trouble').toggle_refresh('incoming')
+        ---@diagnostic enable: missing-parameter, param-type-mismatch
+      end,
+      desc = 'Toggle auto refresh for outgoing and incoming views (Trouble)',
+      repeatable = true,
+    },
   },
   cmd = { 'Trouble' },
   --- @type trouble.Config
@@ -85,6 +105,26 @@ return {
           'lsp_incoming_calls',
           'lsp_outgoing_calls',
         },
+        title = false,
+        restore = true,
+        focus = false,
+        follow = false,
+        auto_refresh = false,
+      },
+
+      incoming = {
+        desc = 'LSP incoming calls',
+        sections = { 'lsp_incoming_calls' },
+        title = false,
+        restore = true,
+        focus = false,
+        follow = false,
+        auto_refresh = false,
+      },
+
+      outgoing = {
+        desc = 'LSP outgoing calls',
+        sections = { 'lsp_outgoing_calls' },
         title = false,
         restore = true,
         focus = false,
