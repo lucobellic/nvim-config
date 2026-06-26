@@ -96,6 +96,24 @@ return {
         open = 'Trouble loclist toggle',
       },
       {
+        title = 'trouble-incoming',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'incoming'
+        end,
+        open = 'Trouble incoming toggle restore=true focus=false win.position=bottom',
+      },
+      {
+        title = 'trouble-outgoing',
+        ft = 'trouble',
+        filter = function(_, win)
+          local win_trouble = vim.w[win].trouble
+          return win_trouble and win_trouble.mode == 'outgoing'
+        end,
+        open = 'Trouble outgoing toggle restore=true focus=false win.position=bottom',
+      },
+      {
         title = 'trouble-in-out',
         ft = 'trouble',
         filter = function(_, win)
