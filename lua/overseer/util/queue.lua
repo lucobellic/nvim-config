@@ -95,27 +95,32 @@ function M.schedule(opts, callback)
   local overseer = require('overseer')
   local task_name = opts.name or '(unnamed)'
 
-  -- Build task from template without starting it
   overseer.run_task(vim.tbl_extend('force', opts, { autostart = false }), function(task)
     if not task then
       notify('Failed to create task: ' .. task_name, vim.log.levels.ERROR)
       return
     end
-
-    task.metadata.queued = true
-
-    -- If task is disposed externally, remove from queue
-    task:subscribe(
-      'on_dispose',
-      vim.schedule_wrap(function()
-        queue = vim.iter(queue):filter(function(e) return e.task ~= task end):totable()
-      end)
-    )
-
-    table.insert(queue, { task = task, callback = callback })
-    notify('Queued task: ' .. task_name, vim.log.levels.INFO)
-    M.process()
+    M.schedule_task(task, callback)
   end)
+end
+
+---@param task overseer.Task
+---@param callback? fun(task: overseer.Task)
+function M.schedule_task(task, callback)
+  local task_name = task.name or '(unnamed)'
+
+  task.metadata.queued = true
+
+  task:subscribe(
+    'on_dispose',
+    vim.schedule_wrap(function()
+      queue = vim.iter(queue):filter(function(e) return e.task ~= task end):totable()
+    end)
+  )
+
+  table.insert(queue, { task = task, callback = callback })
+  notify('Queued task: ' .. task_name, vim.log.levels.INFO)
+  M.process()
 end
 
 function M.clear()

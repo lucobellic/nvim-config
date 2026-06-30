@@ -26,11 +26,13 @@ end
 
 -- ── CMake target cache ──────────────────────────────────────────────
 
+---@return string
 local function get_project_id()
   local cwd = vim.fn.getcwd()
   return vim.fn.fnamemodify(cwd, ':t') .. '_' .. vim.fn.sha256(cwd):sub(1, 8)
 end
 
+---@return string
 local function get_cache_file()
   vim.fn.mkdir(cache_dir, 'p')
   return cache_dir .. '/' .. get_project_id() .. '.json'
@@ -193,18 +195,24 @@ local function format_cmake_target(item)
 end
 
 ---@param choices snacks.picker.finder.Item[]
-local function run_cmake_builds(choices)
-  local overseer = require('overseer')
+---@param opts? {queue: boolean}
+local function run_cmake_builds(choices, opts)
+  local queued = opts and opts.queue
   vim.iter(choices):each(function(choice)
     local target = choice.item ---@type {name: string, type: string}
-    overseer
-      .new_task({
-        name = 'CMake build ' .. target.name,
-        cmd = 'cmake',
-        args = { '--build', '../build', '-j', '8', '--target', target.name },
-        components = { 'default', 'default_vscode' },
-      })
-      :start()
+    local spec = {
+      name = 'CMake build ' .. target.name,
+      cmd = 'cmake',
+      args = { '--build', '../build', '-j', '8', '--target', target.name },
+      components = { 'default', 'default_vscode' },
+    }
+
+    local task = require('overseer').new_task(spec)
+    if queued then
+      require('overseer.util.queue').schedule_task(task)
+    else
+      task:start()
+    end
   end)
 end
 
@@ -230,6 +238,13 @@ local function cmake_build()
     format = format_cmake_target,
     title = 'CMake Build Target',
     layout = { preset = 'vscode' },
+    win = {
+      input = {
+        keys = {
+          ['<c-cr>'] = { 'overseer_queue_cmake', mode = { 'n', 'i' }, desc = 'Queue cmake builds' },
+        },
+      },
+    },
     actions = {
       confirm = function(picker, item)
         picker:close()
@@ -243,12 +258,21 @@ local function cmake_build()
           end
         end)
       end,
+      overseer_queue_cmake = function(picker)
+        local selected = picker:selected({ fallback = true })
+        if #selected > 0 then
+          run_cmake_builds(selected, { queue = true })
+        end
+        picker:close()
+      end,
     },
   })
 end
 
 -- ── Reach ───────────────────────────────────────────────────────────
 
+---@param args table
+---@return table
 local function get_reach_result(args)
   local Job = require('plenary.job')
   local results = {}
@@ -267,24 +291,32 @@ local function get_reach_result(args)
   return results
 end
 
-local function reach_run(run_args, list_args)
-  local overseer = require('overseer')
+---@param run_args table
+---@param list_args table
+---@param opts? {queue: boolean}
+local function reach_run(run_args, list_args, opts)
+  local queued = opts and opts.queue
   local results = get_reach_result(list_args)
-  require('util.util').multi_select(results, { prompt = 'Select Reach Test' }, function(choices)
+  local prompt = queued and 'Queue Reach Test' or 'Select Reach Test'
+  require('util.util').multi_select(results, { prompt = prompt }, function(choices)
     if not choices or #choices == 0 then
       vim.notify('No Reach test selected', vim.log.levels.WARN)
       return
     end
     vim.iter(choices):each(function(choice)
       local args = vim.deepcopy(run_args)
-      overseer
-        .new_task({
-          name = choice,
-          cmd = 'reach',
-          args = vim.list_extend(args, { choice }),
-          components = { 'default' },
-        })
-        :start()
+      local spec = {
+        name = choice,
+        cmd = 'reach',
+        args = vim.list_extend(args, { choice }),
+        components = { 'default' },
+      }
+      local task = require('overseer').new_task(spec)
+      if queued then
+        require('overseer.util.queue').schedule_task(task)
+      else
+        task:start()
+      end
     end)
   end)
 end
@@ -388,10 +420,22 @@ vim.keymap.set(
   function() reach_run({ 'test', 'run', '-b' }, { 'test', 'list' }) end,
   { desc = 'Reach Test' }
 )
+vim.keymap.set(
+  'n',
+  '<leader>oeT',
+  function() reach_run({ 'test', 'run', '-b' }, { 'test', 'list' }, { queue = true }) end,
+  { desc = 'Reach Test (Queue)' }
+)
 vim.keymap.set('n', '<leader>oed', reach_debug_test, { desc = 'Reach Test (Debug)' })
 vim.keymap.set(
   'n',
   '<leader>oes',
   function() reach_run({ 'simu', 'run' }, { 'simu', 'list' }) end,
   { desc = 'Reach Simu' }
+)
+vim.keymap.set(
+  'n',
+  '<leader>oeS',
+  function() reach_run({ 'simu', 'run' }, { 'simu', 'list' }, { queue = true }) end,
+  { desc = 'Reach Simu (Queue)' }
 )
