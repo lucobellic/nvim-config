@@ -1,5 +1,3 @@
-local opencode_port = vim.env.INSIDE_DOCKER and '4097' or '4096'
-
 return {
   {
     'folke/which-key.nvim',
@@ -37,7 +35,7 @@ return {
         insert = false,
       },
       gemini = {
-        executable = 'gemini',
+        executable = 'agy',
         filetype = 'gemini',
         display_name = 'Gemini',
         leader = '<leader>lg',
