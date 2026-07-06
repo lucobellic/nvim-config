@@ -12,15 +12,15 @@ function M.create_autosave_autocmd()
       if modified and not_popup then
         -- Save and restore cursor position
         local cursor = vim.api.nvim_win_get_cursor(0)
-        -- Remove trailing whitespace
+        -- Remove trailing whitespace (merge into the last edit's undo block)
         if not markdown then
-          vim.cmd('silent! %s/\\s\\+$//e')
+          pcall(vim.cmd, 'silent! undojoin | %s/\\s\\+$//e')
         end
         vim.cmd('silent! write')
         vim.api.nvim_win_set_cursor(0, cursor)
       end
     end,
-    desc = 'Automatic save after insertion leave',
+    desc = 'Automatic save after leaving insert mode or text change',
   })
 end
 
