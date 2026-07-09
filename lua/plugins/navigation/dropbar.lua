@@ -1,5 +1,5 @@
---- @param opts { buf: number, win: number }
---- @return dropbar_t?, number?, dropbar_symbol_t?
+---@param opts { buf: number, win: number }
+---@return dropbar_t?, number?, dropbar_symbol_t?
 local function get_bar_with_opened_component(opts)
   ---@type dropbar_t | nil
   local current_bar = require('dropbar.utils.bar').get({ buf = opts.buf, win = opts.win })
@@ -31,7 +31,7 @@ return {
   event = { 'User LazyBufEnter' },
   keys = {
     {
-      '<C-m>',
+      '<A-/>',
       function()
         vim.g.dropbar_current_buffer = vim.api.nvim_get_current_buf()
         vim.g.dropbar_current_window = vim.api.nvim_get_current_win()
