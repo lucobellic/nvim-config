@@ -153,6 +153,28 @@ local function get_or_create_query(lang)
   return query ~= false and query or nil
 end
 
+--- Get the window displaying `bufnr`, falling back to the current window.
+---@param bufnr integer
+---@return integer
+local function get_win_for_buf(bufnr)
+  local win = vim.fn.bufwinid(bufnr)
+  return win == -1 and vim.api.nvim_get_current_win() or win
+end
+
+--- Width available for a full-width separator in `win`.
+--- When `leftcol` is true, span the entire window (for virt_lines_leftcol).
+---@param win integer
+---@param leftcol boolean
+---@return integer
+local function get_separator_width(win, leftcol)
+  local width = vim.api.nvim_win_get_width(win)
+  if leftcol then
+    return width
+  end
+  local wininfo = vim.fn.getwininfo(win)[1]
+  return width - (wininfo and wininfo.textoff or 0)
+end
+
 local function add_separators(bufnr)
   bufnr = bufnr or 0
   if not M.enabled then
@@ -206,24 +228,18 @@ local function add_separators(bufnr)
       ---@param node TSNode
       function(_, node)
         local row = node:range()
-        local line_above = vim.api.nvim_buf_get_lines(bufnr, row - 1, row, false)[1]
+        local win = get_win_for_buf(bufnr)
+        local width = get_separator_width(win, true)
 
-        -- Check if the line above is empty (whitespace only or nil)
-        local is_empty = not line_above or line_above:match('^%s*$')
-
-        if is_empty then
-          vim.api.nvim_buf_set_extmark(bufnr, ns_id, row - 1, 0, {
-            virt_text = { { string.rep('▄', vim.api.nvim_win_get_width(0)), highlight } },
-            virt_text_pos = 'inline',
-            invalidate = true,
-          })
-        else
-          vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
-            virt_lines = { { { string.rep('▄', vim.api.nvim_win_get_width(0)), highlight } } },
-            virt_lines_above = true,
-            invalidate = true,
-          })
-        end
+        -- virt_lines are not affected by 'wrap'; leftcol spans the full window
+        -- and trunc prevents overflow onto extra screen rows.
+        vim.api.nvim_buf_set_extmark(bufnr, ns_id, row, 0, {
+          virt_lines = { { { string.rep('▄', width), highlight } } },
+          virt_lines_above = true,
+          virt_lines_leftcol = true,
+          virt_lines_overflow = 'trunc',
+          invalidate = true,
+        })
       end
     )
 end
