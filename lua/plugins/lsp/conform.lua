@@ -28,11 +28,12 @@ return {
       opts.formatters_by_ft[ft] = opts.formatters_by_ft[ft] or {}
       ---@cast opts.formatters_by_ft[ft] string[]
       table.insert(opts.formatters_by_ft[ft], 1, 'biome-check')
-      opts.formatters_by_ft[ft].stop_after_first = true
+      opts.formatters_by_ft[ft].stop_after_first = false
     end
     opts.formatters = opts.formatters or {}
     opts.formatters['biome-check'] = {
       require_cwd = true,
     }
+    return opts
   end,
 }
