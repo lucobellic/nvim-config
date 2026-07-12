@@ -20,6 +20,7 @@ end
 return {
   {
     'lucobellic/edgy-group.nvim',
+    cond = vim.g.layout == 'edgy',
     dependencies = { 'folke/edgy.nvim' },
     dev = true,
     lazy = true,

@@ -104,6 +104,10 @@ local function create_resize_handler(winnr_direction, dimension, amount, fallbac
   end
 end
 
+if vim.g.layout ~= 'edgy' then
+  return {}
+end
+
 return {
   'folke/which-key.nvim',
   keys = {

@@ -126,11 +126,15 @@ function M.setup_window_resize(opts)
       local winid = vim.api.nvim_get_current_win()
       local buftype = vim.bo[args.buf].buftype
       local filetype = vim.bo[args.buf].filetype
+      local buffer = vim.b[args.buf]
 
       local disabled = vim.b.focus_disable
         or not vim.api.nvim_win_is_valid(winid)
         or vim.tbl_contains(ignore_buftypes, buftype)
         or vim.tbl_contains(ignore_filetypes, filetype)
+        or (buffer.edgy_keys ~= nil and buffer.edgy_disable ~= true)
+        or (buffer.layout ~= nil and buffer.layout.enabled ~= true)
+        or vim.w[winid].layout_managed ~= nil
 
       if not disabled then
         local current_width = vim.api.nvim_win_get_width(winid)
@@ -139,10 +143,10 @@ function M.setup_window_resize(opts)
         local change_height = current_height < min_height
 
         if change_width then
-          vim.api.nvim_win_set_width(winid, math.max(current_width, min_width))
+          vim.api.nvim_win_set_config(winid, { width = math.max(current_width, min_width) })
         end
         if change_height then
-          vim.api.nvim_win_set_height(winid, math.max(current_height, min_height))
+          vim.api.nvim_win_set_config(winid, { height = math.max(current_height, min_height) })
         end
       end
     end,

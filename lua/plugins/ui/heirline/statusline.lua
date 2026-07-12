@@ -3,12 +3,13 @@ local debug = require('plugins.ui.heirline.components.debug')
 local edgy = require('plugins.ui.heirline.components.edgy')
 local git = require('plugins.ui.heirline.components.git')
 local info = require('plugins.ui.heirline.components.info')
+local layout = require('plugins.ui.heirline.components.layout')
 local mode = require('plugins.ui.heirline.components.mode')
 local system = require('plugins.ui.heirline.components.system')
 local tasks = require('plugins.ui.heirline.components.tasks')
 
 local Left = { mode.ViMode, git.Git, info.LazyUpdates, info.Separator, debug.Dap, debug.Molten, debug.MacroRec }
-local Center = { edgy.LeftAlignment, edgy.Edgy }
+local Center = vim.g.layout == 'edgy' and { edgy.LeftAlignment, edgy.Edgy } or { layout.LeftAlignment, layout.Layout }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {
   mode.PrimarySpace,

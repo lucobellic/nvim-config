@@ -15,7 +15,7 @@ return {
     },
     {
       '<leader>xs',
-      '<cmd>Trouble symbols toggle focus=false<cr>',
+      '<cmd>Trouble symbols toggle focus=false win.position=left<cr>',
       desc = 'Symbols (Trouble)',
     },
     {

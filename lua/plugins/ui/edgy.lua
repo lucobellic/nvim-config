@@ -15,6 +15,7 @@ end
 return {
   'folke/edgy.nvim',
   lazy = true,
+  cond = vim.g.layout == 'edgy',
   keys = {
     {
       '<leader>wl',

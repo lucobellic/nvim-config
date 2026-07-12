@@ -139,6 +139,24 @@ local function get_edgy_group_icons(position)
   return result
 end
 
+local function get_layout_group_icons(position)
+  local result = {}
+  local statusline = require('layout').get_statusline(position)
+  vim.iter(statusline):each(function(item)
+    table.insert(result, { text = item })
+    table.insert(result, { text = ' ', link = 'Normal' })
+  end)
+  return result
+end
+
+local function get_group_icons(position)
+  if vim.g.layout == 'edgy' then
+    return get_edgy_group_icons(position)
+  else
+    return get_layout_group_icons(position)
+  end
+end
+
 local icon_hl_cache = {}
 
 --- Set the icon highlight color only for selected buffers
@@ -289,6 +307,10 @@ return {
               return false
             end
 
+            if vim.b[bufnr].layout ~= nil and vim.b[bufnr].layout.enabled ~= true then
+              return false
+            end
+
             if vim.bo[bufnr].filetype == '' and vim.bo[bufnr].buftype == '' then
               return false
             end
@@ -348,8 +370,8 @@ return {
           },
           hover = { enabled = false },
           custom_areas = {
-            left = function() return get_edgy_group_icons('left') end,
-            right = function() return get_edgy_group_icons('right') end,
+            left = function() return get_group_icons('left') end,
+            right = function() return get_group_icons('right') end,
           },
         },
       }

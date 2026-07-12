@@ -15,3 +15,8 @@ vim.g.python3_host_prog = '/usr/bin/python3'
 vim.g.suggestions = (not vim.env.INSIDE_DOCKER) and 'copilot' or false
 vim.g.ai_cmp = false
 vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
+
+---@type 'edgy'|'layout'
+-- vim.g.layout = 'layout'
+vim.g.layout = 'edgy'
+
