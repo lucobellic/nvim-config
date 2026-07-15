@@ -150,6 +150,15 @@ return {
         size = { width = 0.30 },
       },
       {
+        title = 'codex',
+        ft = 'codex',
+        open = 'CodexToggle',
+        filter = function(_, win)
+          return vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_config(win).relative == ''
+        end,
+        size = { width = 0.30 },
+      },
+      {
         title = 'claude',
         ft = 'claude',
         open = 'ClaudeToggle',

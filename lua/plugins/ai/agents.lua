@@ -52,6 +52,15 @@ return {
         focus = true,
         insert = false,
       },
+      codex = {
+        executable = 'codex',
+        filetype = 'codex',
+        display_name = 'Codex',
+        leader = '<leader>lx',
+        split = 'right',
+        focus = true,
+        insert = false,
+      },
     },
   },
 }

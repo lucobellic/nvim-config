@@ -49,6 +49,7 @@ return {
           { icon = '', titles = { 'codecompanion' }, pick_key = 'a' },
           { icon = '', titles = { 'opencode' }, pick_key = 'o' },
           { icon = '', titles = { 'cursor-agent' }, pick_key = 'c' },
+          { icon = '', titles = { 'codex' }, pick_key = 'x' },
           { icon = '', titles = { 'claude' }, pick_key = 'u' },
           { icon = '󰊭', titles = { 'gemini' }, pick_key = 'g' },
           { icon = '', titles = { 'neotest-summary' }, pick_key = 't' },
@@ -56,7 +57,7 @@ return {
         },
         bottom = {
           { icon = '', titles = { 'terminal', 'overseer-tasks', 'overseer' }, pick_key = 'p' },
-          { icon = '', titles = { 'trouble-qflist', 'trouble-diagnostics' }, pick_key = 'x' },
+          { icon = '', titles = { 'trouble-qflist', 'trouble-diagnostics' }, pick_key = 'q' },
           { icon = '', titles = { 'trouble-snacks', 'trouble-snacks-files' }, pick_key = 's' },
           { icon = '', titles = { 'trouble-incoming', 'trouble-outgoing' }, pick_key = 'r' },
           { icon = '', titles = { 'trouble-lsp-references', 'trouble-lsp-definitions', 'trouble-lsp' }, pick_key = 'l' },
