@@ -11,7 +11,7 @@ return {
         {
           section = 'terminal',
           align = 'center',
-          cmd = logo_path .. 'rainbow-logo.sh --speed 20 --play ' .. logo_path .. 'rainbow-logo.cache',
+          cmd = logo_path .. 'rainbow-logo.sh --speed 10',
           height = 14,
           width = 69,
           padding = 1,
