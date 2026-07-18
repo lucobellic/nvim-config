@@ -20,6 +20,74 @@ local HISTORY_CACHE_TTL = 60 -- seconds
 --- @return string
 local function history_cache_key(cwd, extra_args) return cwd .. '\0' .. table.concat(extra_args or {}, '\0') end
 
+--- Focus a commit after Diffview's initial asynchronous history load.
+--- @param view FileHistoryView
+--- @param item snacks.picker.Item
+local function focus_diffview_history_commit_on_load(view, item)
+  local panel = view.panel
+  if not panel or type(panel.update_entries) ~= 'function' then
+    return
+  end
+
+  local update_entries = panel.update_entries
+  rawset(panel, 'update_entries', function(self, callback)
+    rawset(self, 'update_entries', nil)
+    return update_entries(self, function(entries, status, ...)
+      if status == 1 and entries then
+        local file_path = vim.fs.normalize(item.file)
+        local target = vim
+          .iter(entries)
+          :filter(function(entry)
+            local hash = entry.commit and entry.commit.hash
+            return hash
+              and (hash == item.commit or hash:sub(1, #item.commit) == item.commit or item.commit:sub(1, #hash) == hash)
+          end)
+          :map(function(entry)
+            local same_path = vim
+              .iter(entry.files or {})
+              :find(function(file) return file.path and vim.fs.normalize(file.path) == file_path end)
+            return same_path or (entry.files and entry.files[1])
+          end)
+          :next()
+
+        if target and type(view.set_file) == 'function' then
+          view:set_file(target)
+        end
+      end
+      if callback then
+        callback(entries, status, ...)
+      end
+    end)
+  end)
+end
+
+--- Open Diffview history for a selected picker item and restore its commit.
+--- @param picker snacks.Picker
+local function open_diffview_file_history(picker)
+  local item = picker:selected({ fallback = true })[1]
+  if not item or not item.file or not item.cwd or not item.commit then
+    return
+  end
+
+  local ok, diffview = pcall(require, 'diffview.lib')
+  if not ok or type(diffview.file_history) ~= 'function' then
+    return
+  end
+
+  picker:close()
+
+  local view = diffview.file_history(nil, { '-C=' .. item.cwd, '--no-merges', '--follow', '--', item.file })
+  if not view or type(view.open) ~= 'function' then
+    return
+  end
+
+  -- The internal API constructs a FileHistoryView, but its inferred return type includes other Diffview views.
+  ---@diagnostic disable-next-line: cast-type-mismatch
+  ---@cast view FileHistoryView
+  focus_diffview_history_commit_on_load(view, item)
+  view:open()
+end
+
 --- Invalidate all cached git history entries.
 --- Useful to call after a `git commit`, `git rebase`, etc.
 function M.clear_history_cache() _history_cache = {} end
@@ -636,6 +704,23 @@ function M.git_file_history(opts)
     finder = function(_, ctx) return finder_history(ctx, { '--', rel_file }, include) end,
     format = format_history_item,
     preview = function(ctx) render_diff_preview(ctx, ns_search) end,
+    actions = { open_diffview_file_history = open_diffview_file_history },
+    win = {
+      input = {
+        keys = {
+          ['<c-cr>'] = {
+            'open_diffview_file_history',
+            mode = { 'i', 'n' },
+            desc = 'Open complete Diffview file history',
+          },
+        },
+      },
+      list = {
+        keys = {
+          ['<c-cr>'] = { 'open_diffview_file_history', desc = 'Open complete Diffview file history' },
+        },
+      },
+    },
   })
 end
 
@@ -696,18 +781,25 @@ function M.git_history(opts)
           vim.notify(limit .. ' commits', vim.log.levels.INFO, { title = 'Git History' })
         end
       end,
+      open_diffview_file_history = open_diffview_file_history,
     },
     win = {
       input = {
         keys = {
           ['<c-e>'] = { 'expand_history', mode = { 'i', 'n' }, desc = 'Expand history (x2)' },
           ['<m-e>'] = { 'expand_all', mode = { 'i', 'n' }, desc = 'Toggle limit' },
+          ['<c-cr>'] = {
+            'open_diffview_file_history',
+            mode = { 'i', 'n' },
+            desc = 'Open complete Diffview file history',
+          },
         },
       },
       list = {
         keys = {
           ['<c-e>'] = { 'expand_history', desc = 'Expand history (x2)' },
           ['<m-e>'] = { 'expand_all', desc = 'Toggle limit' },
+          ['<c-cr>'] = { 'open_diffview_file_history', desc = 'Open complete Diffview file history' },
         },
       },
     },

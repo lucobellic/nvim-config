@@ -136,6 +136,34 @@ return {
               require('diffview.actions').open_in_diffview,
               { desc = 'Open the entry under the cursor in a diffview' },
             },
+            {
+              'n',
+              '<C-h>',
+              function()
+                local view = require('diffview.lib').get_current_view()
+                local file = view and view:infer_cur_file()
+                if not (file and file.absolute_path) then
+                  vim.notify('No file under cursor', vim.log.levels.WARN)
+                  return
+                end
+
+                local new_view = require('diffview.lib').file_history(nil, {
+                  '--follow',
+                  file.absolute_path,
+                })
+                if new_view then
+                  vim.notify('Opening ' .. file.absolute_path .. ' history', vim.log.levels.INFO)
+                  new_view:open()
+                end
+              end,
+              { desc = 'Open file history under cursor' },
+            },
+            {
+              'n',
+              '<C-m>',
+              require('plugins.git.diffview.util').open_containing_merge_history,
+              { desc = 'Open containing merge history' },
+            },
             -- Fixup commit under cursor
             {
               'n',
