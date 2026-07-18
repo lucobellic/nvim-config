@@ -138,6 +138,7 @@ return {
     },
     config = function(_, opts)
       require('codecompanion').setup(opts)
+      require('plugins.ai.codecompanion.adapters.http.codex')
       require('plugins.ai.codecompanion.utils.extmarks').setup()
     end,
   },

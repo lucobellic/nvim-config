@@ -8,7 +8,7 @@ local interactions = vim.env.INSIDE_DOCKER
   or {
     cmd = { adapter = { name = 'opencode', model = 'opencode-go/deepseek-v4-flash' } },
     chat = { adapter = { name = 'opencode', model = 'opencode-go/deepseek-v4-flash' } },
-    inline = { adapter = { name = 'opencode', model = 'opencode-go/deepseek-v4-flash' } },
+    inline = { adapter = { name = 'cocodex', model = 'gpt-5.4-mini' } },
   }
 
 return {
@@ -16,6 +16,9 @@ return {
   opts = {
     ---@type CodeCompanion.Adapters
     adapters = {
+      http = {
+        cocodex = function() return require('plugins.ai.codecompanion.adapters.http.codex') end,
+      },
       copilot = function()
         return require('codecompanion.adapters').extend('copilot', {
           schema = { model = { default = 'gpt-5-mini' } },

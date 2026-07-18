@@ -22,7 +22,7 @@ return {
             dir_to_save = vim.fn.stdpath('data') .. '/codecompanion-history',
             auto_save = true,
             save_chat_keymap = '<localleader>hs',
-            auto_generate_title = true,
+            auto_generate_title = false,
             title_generation_opts = {
               adapter = 'opencode',
               model = 'opencode-go/deepseek-v4-flash',

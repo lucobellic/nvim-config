@@ -1,6 +1,6 @@
 ---
 name: agent
-interaction: chat
+interaction: inline
 description: AI agent inline completion
 opts:
   is_default: false
