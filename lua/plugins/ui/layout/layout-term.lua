@@ -17,7 +17,7 @@ return {
           {
             name = 'snacks',
             filter = ft_and('snacks_terminal', not_floating),
-            open = function() Snacks.terminal.toggle(nil, { win = { position = 'bottom' } }) end,
+            open = function() Snacks.terminal.toggle(nil, { win = { position = 'bottom', height = 10 } }) end,
           },
         },
       },

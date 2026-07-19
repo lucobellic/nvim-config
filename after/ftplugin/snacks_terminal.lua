@@ -62,6 +62,6 @@ vim.keymap.set(
 vim.keymap.set(
   'n',
   '<C-t>',
-  function() Snacks.terminal.toggle(nil, { win = { position = 'bottom' } }) end,
+  function() Snacks.terminal.open(nil, { position = 'bottom', height = 10 }) end,
   { buffer = true, desc = 'Open terminal' }
 )
