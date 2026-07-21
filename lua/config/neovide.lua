@@ -77,7 +77,7 @@ if vim.g.neovide then
   vim.g.neovide_experimental_layer_grouping = true
 
   -- Progress Bar
-  vim.g.neovide_progress_bar_enabled = true
+  vim.g.neovide_progress_bar_enabled = false
   vim.g.neovide_progress_bar_height = 1.0
   vim.g.neovide_progress_bar_animation_speed = 200.0
   vim.g.neovide_progress_bar_hide_delay = 0.2

@@ -66,6 +66,7 @@ return {
   {
     'folke/sidekick.nvim',
     ---@type sidekick.Config
+    enabled = false,
     keys = {
       {
         '<leader>ae',

@@ -1,5 +1,6 @@
 return {
   'lucobellic/gitlab.nvim',
+  enabled = false,
   branch = 'personal',
   cond = not vim.g.started_by_firenvim and vim.env.INSIDE_DOCKER ~= nil,
   dependencies = {

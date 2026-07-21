@@ -12,7 +12,7 @@ vim.g.neovide_floating_shadow = vim.g.neovide
 vim.g.python3_host_prog = '/usr/bin/python3'
 
 ---@type 'copilot'|'gitlab'|'supermaven'|false
-vim.g.suggestions = (not vim.env.INSIDE_DOCKER) and 'copilot' or false
+vim.g.suggestions = false
 vim.g.ai_cmp = false
 vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
 

@@ -20,7 +20,7 @@ local SystemStats = {
 local Right = {
   tasks.Overseer,
   info.LspProgress,
-  ai.Sidekick,
+  -- ai.Sidekick,
   -- ai.Copilot,
   ai.CodeCompanion,
   -- SystemStats,
