@@ -15,7 +15,7 @@ use crossterm::{
 };
 use palette::{Clamp, IntoColor, Oklch, Srgb};
 
-const DEFAULT_LOGO: &str = include_str!("../default-logo.txt");
+const DEFAULT_LOGO: &str = include_str!("../logo.txt");
 
 #[derive(Clone, Copy, ValueEnum)]
 enum PaletteName {
