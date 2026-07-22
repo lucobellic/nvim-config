@@ -22,48 +22,7 @@ local HISTORY_CACHE_TTL = 60 -- seconds
 --- @return string
 local function history_cache_key(cwd, extra_args) return cwd .. '\0' .. table.concat(extra_args or {}, '\0') end
 
---- Focus a commit after Diffview's initial asynchronous history load.
---- @param view FileHistoryView
---- @param item snacks.picker.Item
-local function focus_diffview_history_commit_on_load(view, item)
-  local panel = view.panel
-  if not panel or type(panel.update_entries) ~= 'function' then
-    return
-  end
-
-  local update_entries = panel.update_entries
-  rawset(panel, 'update_entries', function(self, callback)
-    rawset(self, 'update_entries', nil)
-    return update_entries(self, function(entries, status, ...)
-      if status == 1 and entries then
-        local file_path = vim.fs.normalize(item.file)
-        local target = vim
-          .iter(entries)
-          :filter(function(entry)
-            local hash = entry.commit and entry.commit.hash
-            return hash
-              and (hash == item.commit or hash:sub(1, #item.commit) == item.commit or item.commit:sub(1, #hash) == hash)
-          end)
-          :map(function(entry)
-            local same_path = vim
-              .iter(entry.files or {})
-              :find(function(file) return file.path and vim.fs.normalize(file.path) == file_path end)
-            return same_path or (entry.files and entry.files[1])
-          end)
-          :next()
-
-        if target and type(view.set_file) == 'function' then
-          view:set_file(target)
-        end
-      end
-      if callback then
-        callback(entries, status, ...)
-      end
-    end)
-  end)
-end
-
---- Open Diffview history for a selected picker item and restore its commit.
+--- Open the complete Diffview history for a selected picker item and focus its commit.
 --- @param picker snacks.Picker
 local function open_diffview_file_history(picker)
   local item = picker:selected({ fallback = true })[1]
@@ -78,16 +37,69 @@ local function open_diffview_file_history(picker)
 
   picker:close()
 
-  local view = diffview.file_history(nil, { '-C=' .. item.cwd, '--no-merges', '--follow', '--', item.file })
+  -- Diffview parses arguments after `--` as post-args and does not use them as
+  -- history paths. Keep the path in the regular argument list, including when
+  -- the selected historical file no longer exists in the working tree.
+  local view = diffview.file_history(nil, { '-C=' .. item.cwd, '--no-merges', item.file })
   if not view or type(view.open) ~= 'function' then
     return
   end
 
-  -- The internal API constructs a FileHistoryView, but its inferred return type includes other Diffview views.
-  ---@diagnostic disable-next-line: cast-type-mismatch
-  ---@cast view FileHistoryView
-  focus_diffview_history_commit_on_load(view, item)
+  -- This action promises the complete lineage, so do not inherit Diffview's
+  -- 256-entry default and omit the selected commit from an old history.
+  view.panel.log_options.single_file.max_count = nil
+  require('plugins.git.diffview.util').focus_file_history_commit_on_load(view, item.commit, item.file)
   view:open()
+end
+
+--- Open the merge history containing the selected picker item.
+---@param picker snacks.Picker
+local function open_containing_merge_history(picker)
+  local item = picker:selected({ fallback = true })[1]
+  if not item or not item.commit or not item.cwd then
+    return
+  end
+
+  picker:close()
+  require('plugins.git.diffview.util').open_containing_merge_history(item.commit, item.cwd)
+end
+
+--- Return shared Diffview history picker actions.
+---@return table<string, fun(picker: snacks.Picker)>
+local function history_picker_actions()
+  return {
+    open_diffview_file_history = open_diffview_file_history,
+    open_containing_merge_history = open_containing_merge_history,
+  }
+end
+
+--- Return shared Diffview history picker keymaps.
+---@return snacks.picker.Config
+local function history_picker_win()
+  return {
+    input = {
+      keys = {
+        ['<c-cr>'] = {
+          'open_diffview_file_history',
+          mode = { 'i', 'n' },
+          desc = 'Open complete Diffview file history',
+        },
+        ['<c-y>'] = {
+          'open_diffview_file_history',
+          mode = { 'i', 'n' },
+          desc = 'Open complete Diffview file history',
+        },
+        ['<c-m>'] = { 'open_containing_merge_history', mode = { 'i', 'n' }, desc = 'Open containing merge history' },
+      },
+    },
+    list = {
+      keys = {
+        ['<c-cr>'] = { 'open_diffview_file_history', desc = 'Open complete Diffview file history' },
+        ['<c-y>'] = { 'open_diffview_file_history', desc = 'Open complete Diffview file history' },
+        ['<c-m>'] = { 'open_containing_merge_history', desc = 'Open containing merge history' },
+      },
+    },
+  }
 end
 
 --- Invalidate all cached git history entries.
@@ -1129,26 +1141,10 @@ function M.git_file_history(opts)
     finder = function(_, ctx) return finder_history(ctx, { '--', rel_file }, include) end,
     format = format_history_item,
     preview = function(ctx) render_diff_preview(ctx, ns_search) end,
-    actions = { open_diffview_file_history = open_diffview_file_history },
-    win = {
-      input = {
-        keys = {
-          ['<c-cr>'] = {
-            'open_diffview_file_history',
-            mode = { 'i', 'n' },
-            desc = 'Open complete Diffview file history',
-          },
-        },
-      },
-      list = {
-        keys = {
-          ['<c-cr>'] = { 'open_diffview_file_history', desc = 'Open complete Diffview file history' },
-        },
-      },
-    },
+    actions = history_picker_actions(),
+    win = history_picker_win(),
   })
 end
-
 
 --- Git history picker: search through the complete git log.
 --- Shows one item per file per commit, with all changed content searchable.
@@ -1172,7 +1168,7 @@ function M.git_history(opts)
     supports_live = true,
     matcher = { sort_empty = true, fuzzy = false },
     sort = { fields = { 'commit_ts:desc', 'idx' } },
-    actions = {
+    actions = vim.tbl_extend('force', history_picker_actions(), {
       --- Double the commit limit and re-run the search immediately.
       expand_history = function(picker)
         if unlimited then
@@ -1193,28 +1189,21 @@ function M.git_history(opts)
           vim.notify(limit .. ' commits', vim.log.levels.INFO, { title = 'Git History' })
         end
       end,
-      open_diffview_file_history = open_diffview_file_history,
-    },
-    win = {
+    }),
+    win = vim.tbl_deep_extend('force', history_picker_win(), {
       input = {
         keys = {
           ['<c-e>'] = { 'expand_history', mode = { 'i', 'n' }, desc = 'Expand history (x2)' },
           ['<m-e>'] = { 'expand_all', mode = { 'i', 'n' }, desc = 'Toggle limit' },
-          ['<c-cr>'] = {
-            'open_diffview_file_history',
-            mode = { 'i', 'n' },
-            desc = 'Open complete Diffview file history',
-          },
         },
       },
       list = {
         keys = {
           ['<c-e>'] = { 'expand_history', desc = 'Expand history (x2)' },
           ['<m-e>'] = { 'expand_all', desc = 'Toggle limit' },
-          ['<c-cr>'] = { 'open_diffview_file_history', desc = 'Open complete Diffview file history' },
         },
       },
-    },
+    }),
     finder = function(_, ctx)
       local active_limit
       if not unlimited then

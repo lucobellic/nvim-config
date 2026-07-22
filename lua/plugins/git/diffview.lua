@@ -138,7 +138,7 @@ return {
             },
             {
               'n',
-              '<C-h>',
+              '<C-y>',
               function()
                 local view = require('diffview.lib').get_current_view()
                 local file = view and view:infer_cur_file()
