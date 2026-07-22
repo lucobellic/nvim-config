@@ -190,7 +190,19 @@ return {
             { '<c-k>', false, mode = { 'n', 'v', 'i' } },
             { 'gs', false, mode = { 'n', 'v' } },
             { 'gd', function() Snacks.picker.lsp_definitions() end, desc = 'Goto Definition', has = 'definition' },
-            { 'gr', function() Snacks.picker.lsp_references() end, nowait = true, desc = 'References' },
+            {
+              'gr',
+              function()
+                local rpc_references = require('util.cpp.rpc_references')
+                if rpc_references.is_cpp_file() and vim.fn.expand('<cword>'):match('^on(.+)$') then
+                  rpc_references.find()
+                else
+                  Snacks.picker.lsp_references()
+                end
+              end,
+              nowait = true,
+              desc = 'References',
+            },
             { 'gI', function() Snacks.picker.lsp_implementations() end, desc = 'Goto Implementation' },
             { 'gi', function() Snacks.picker.lsp_incoming_calls() end, desc = 'Goto Incoming Calls' },
             { 'go', function() Snacks.picker.lsp_outgoing_calls() end, desc = 'Goto Outgoing Calls' },
