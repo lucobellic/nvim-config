@@ -12,6 +12,8 @@ local M = {}
 -- for CACHE_TTL seconds.  Call `M.clear_history_cache()` after committing or
 -- whenever you need fresh results immediately.
 local _history_cache = {} ---@type table<string, { commits: table, ts: number }>
+local _branch_history_cache = {}
+local _history_preview_cache = {} ---@type table<string, string>
 local HISTORY_CACHE_TTL = 60 -- seconds
 
 --- Build a stable string key from the working directory and extra git args.
@@ -90,7 +92,11 @@ end
 
 --- Invalidate all cached git history entries.
 --- Useful to call after a `git commit`, `git rebase`, etc.
-function M.clear_history_cache() _history_cache = {} end
+function M.clear_history_cache()
+  _history_cache = {}
+  _branch_history_cache = {}
+  _history_preview_cache = {}
+end
 
 --- Resolve the first existing branch from a list of candidates.
 --- Checks both local and remote (origin/) branches.
@@ -540,7 +546,8 @@ local function collect_history_blocks(ctx, cwd, extra_args)
       if current_commit and #current_diff_lines > 0 then
         local parsed = require('snacks.picker.source.diff').parse(current_diff_lines)
         for _, block in ipairs(parsed.blocks) do
-          commits[#commits + 1] = { commit = current_commit, msg = current_msg, date = current_date, block = block }
+          commits[#commits + 1] =
+            { commit = current_commit, msg = current_msg, date = current_date, ts = current_ts, block = block }
         end
       end
       -- Parse new commit info (format: COMMIT>>hash>>date>>message)
@@ -633,6 +640,356 @@ local function finder_history(ctx, extra_args, include)
   end
 end
 
+--- @class GitHistoryMetadata
+--- @field head string
+--- @field cwd string
+--- @field limited boolean
+--- @field commits string[]
+--- @field items snacks.picker.Item[]
+--- @field queries table<string, snacks.picker.Item[]>
+
+--- Return the repository HEAD used to invalidate history caches after rewrites.
+--- @param ctx snacks.picker.finder.ctx
+--- @param cwd string
+--- @return string?
+local function history_head(ctx, cwd)
+  return ctx.async:schedule(function()
+    local output = vim.fn.systemlist({ 'git', '-C', cwd, 'rev-parse', '--verify', 'HEAD' })
+    return vim.v.shell_error == 0 and output[1] or nil
+  end)
+end
+
+--- @param cwd string
+--- @param head string
+--- @param limit number?
+--- @return string
+local function branch_history_cache_key(cwd, head, limit)
+  return table.concat({ cwd, head, limit and tostring(limit) or 'all' }, '\0')
+end
+
+--- Collect commit/file metadata without generating any patches.
+--- @param ctx snacks.picker.finder.ctx
+--- @param cwd string
+--- @param head string
+--- @param limit number?
+--- @return GitHistoryMetadata
+local function collect_history_metadata(ctx, cwd, head, limit)
+  local args = {
+    '-c',
+    'core.quotepath=false',
+    '--no-pager',
+    'log',
+    '--no-color',
+    '--diff-filter=ACDMRT',
+    '--name-status',
+    '--format=COMMIT>>%H>>%ct>>%as>>%s',
+  }
+  if limit then
+    vim.list_extend(args, { '-n', tostring(limit) })
+  end
+
+  local commits = {} ---@type string[]
+  local items = {} ---@type snacks.picker.Item[]
+  local item_limit = ctx.picker.opts.limit_live or math.huge
+  local commit, msg, date, ts
+
+  require('snacks.picker.source.proc').proc(
+    ctx:opts({
+      cmd = 'git',
+      args = args,
+      cwd = cwd,
+    }),
+    ctx
+  )(function(item)
+    local line = item.text
+    if line:match('^COMMIT>>') then
+      local parsed_commit, parsed_ts, parsed_date, parsed_msg = line:match('^COMMIT>>([^>]+)>>([^>]+)>>([^>]+)>>(.*)$')
+      commit, ts, date, msg = parsed_commit, tonumber(parsed_ts), parsed_date, parsed_msg
+      if commit then
+        commits[#commits + 1] = commit
+      end
+    elseif commit and line ~= '' and #items < item_limit then
+      local status, first, second = line:match('^([ACDMRT])%d*\t([^\t]+)\t?(.*)$')
+      if status and first then
+        local file = second ~= '' and second or first
+        status = status == 'T' and 'M' or status
+        items[#items + 1] = {
+          text = table.concat({ commit, msg or '', file }, ' '),
+          content_text = '',
+          file = file,
+          cwd = cwd,
+          pos = { 1, 0 },
+          status = status,
+          commit = commit,
+          commit_msg = msg,
+          commit_date = date,
+          commit_ts = ts,
+        }
+      end
+    end
+  end)
+
+  return { head = head, cwd = cwd, limited = limit ~= nil, commits = commits, items = items, queries = {} }
+end
+
+--- @param ctx snacks.picker.finder.ctx
+--- @param cwd string
+--- @param limit number?
+--- @return GitHistoryMetadata?
+local function get_history_metadata(ctx, cwd, limit)
+  local head = history_head(ctx, cwd)
+  if not head then
+    return nil
+  end
+  local key = branch_history_cache_key(cwd, head, limit)
+  if not _branch_history_cache[key] then
+    _branch_history_cache[key] = collect_history_metadata(ctx, cwd, head, limit)
+  end
+  return _branch_history_cache[key]
+end
+
+--- Escape a literal for Git's POSIX extended regular expression parser.
+--- @param text string
+--- @return string
+local function escape_ere(text) return text:gsub('([\\%^%$%.%[%]%*%+%?%(%)%{%}%|])', '\\%1') end
+
+--- Build a broad Git-side expression; exact smart-case AND matching remains in Lua.
+--- @param search string
+--- @return string
+--- @return boolean ignore_case
+local function history_search_regex(search)
+  local words = vim.iter(search:gmatch('%S+')):totable()
+  local ignore_case = vim.iter(words):any(function(word) return word == word:lower() end)
+  return '(' .. table.concat(vim.tbl_map(escape_ere, words), '|') .. ')', ignore_case
+end
+
+--- Run Git with strict revision input while streaming output into the async finder.
+--- @param ctx snacks.picker.finder.ctx
+--- @param cwd string
+--- @param args string[]
+--- @param commits? string[]
+--- @param on_line fun(line:string)
+local function stream_history_command(ctx, cwd, args, commits, on_line)
+  if commits and #commits == 0 then
+    return
+  end
+
+  local queue = require('snacks.picker.util.queue').new()
+  local partial = ''
+  local done = false
+  local result ---@type vim.SystemCompleted?
+
+  local process = vim.system(vim.list_extend({ 'git' }, args), {
+    cwd = cwd,
+    stdin = commits,
+    text = true,
+    stdout = function(err, data)
+      assert(not err, err)
+      if data then
+        queue:push(data)
+        ctx.async:resume()
+      end
+    end,
+  }, function(completed)
+    result = completed
+    done = true
+    ctx.async:resume()
+  end)
+
+  ctx.async:on('abort', function()
+    if not done then
+      process:kill('sigterm')
+    end
+  end)
+
+  local function process_chunk(chunk)
+    local data = partial .. chunk
+    local from = 1
+    while true do
+      local newline = data:find('\n', from, true)
+      if not newline then
+        partial = data:sub(from)
+        return
+      end
+      on_line(data:sub(from, newline - 1):gsub('\r$', ''))
+      from = newline + 1
+    end
+  end
+
+  while not done or not queue:empty() do
+    if not queue:empty() then
+      process_chunk(queue:pop())
+    else
+      ctx.async:suspend()
+    end
+  end
+  if partial ~= '' then
+    on_line(partial)
+  end
+  if result and result.code ~= 0 then
+    error(('git history search failed with exit code %d'):format(result.code))
+  end
+end
+
+--- Return the longest cached query that is a prefix of the current query.
+--- @param queries table<string, snacks.picker.Item[]>
+--- @param search string
+--- @return snacks.picker.Item[]?
+local function cached_history_subset(queries, search)
+  local best_query = ''
+  local best
+  for query, items in pairs(queries) do
+    if #query > #best_query and search:sub(1, #query) == query then
+      best_query, best = query, items
+    end
+  end
+  return best
+end
+
+--- Search patches for a strict set of commits and cache the matching file blocks.
+--- @param ctx snacks.picker.finder.ctx
+--- @param metadata GitHistoryMetadata
+--- @param include 'changes'|'all'|'additions'|'deletions'
+--- @param search string
+--- @param cb async fun(item:snacks.picker.Item)
+--- @param emitted table<string, boolean>
+local function search_history_content(ctx, metadata, include, search, cb, emitted)
+  local cached = metadata.queries[include .. '\0' .. search]
+  if not cached then
+    local queries = {} ---@type table<string, snacks.picker.Item[]>
+    for key, items in pairs(metadata.queries) do
+      local cached_include, query = key:match('^(.-)\0(.*)$')
+      if cached_include == include then
+        queries[query] = items
+      end
+    end
+    local subset = cached_history_subset(queries, search)
+    if subset then
+      cached = vim
+        .iter(subset)
+        :filter(function(item) return text_matches_search(item.content_text, search) end)
+        :totable()
+      metadata.queries[include .. '\0' .. search] = cached
+    end
+  end
+
+  if not cached then
+    cached = {}
+    local regex, ignore_case = history_search_regex(search)
+    local args = {
+      '-c',
+      'core.quotepath=false',
+      '--no-pager',
+      'log',
+      '--no-color',
+      '--diff-filter=ACDMRT',
+      '-p',
+      include == 'all' and '-U3' or '-U0',
+      '--format=COMMIT>>%H>>%ct>>%as>>%s',
+    }
+    if metadata.limited then
+      vim.list_extend(args, { '--stdin', '--no-walk=unsorted' })
+    end
+    if include ~= 'all' then
+      args[#args + 1] = '-G' .. regex
+    end
+    if ignore_case and include ~= 'all' then
+      args[#args + 1] = '--regexp-ignore-case'
+    end
+
+    local commit, msg, date, ts
+    local diff_lines = {} ---@type string[]
+
+    local function flush_diff()
+      if not commit or #diff_lines == 0 then
+        diff_lines = {}
+        return
+      end
+      local parsed = require('snacks.picker.source.diff').parse(diff_lines)
+      for _, block in ipairs(parsed.blocks) do
+        local content_text = table.concat(extract_block_content(block, include), '\n')
+        if text_matches_search(content_text, search) then
+          local item = {
+            text = table.concat({ commit, msg or '', block.file, content_text }, '\n'),
+            content_text = content_text,
+            file = block.file,
+            cwd = metadata.cwd,
+            pos = { block.hunks[1] and block.hunks[1].line or 1, 0 },
+            block = block,
+            status = get_block_status(block),
+            commit = commit,
+            commit_msg = msg,
+            commit_date = date,
+            commit_ts = ts,
+          }
+          cached[#cached + 1] = item
+          local key = commit .. '\0' .. block.file
+          if not emitted[key] then
+            emitted[key] = true
+            cb(item)
+          end
+        end
+      end
+      diff_lines = {}
+    end
+
+    stream_history_command(ctx, metadata.cwd, args, metadata.limited and metadata.commits or nil, function(line)
+      if line:match('^COMMIT>>') then
+        flush_diff()
+        local parsed_commit, parsed_ts, parsed_date, parsed_msg =
+          line:match('^COMMIT>>([^>]+)>>([^>]+)>>([^>]+)>>(.*)$')
+        commit, ts, date, msg = parsed_commit, tonumber(parsed_ts), parsed_date, parsed_msg
+      elseif line:match('^diff ') then
+        flush_diff()
+        diff_lines = { line }
+      elseif #diff_lines > 0 then
+        diff_lines[#diff_lines + 1] = line
+      end
+    end)
+    flush_diff()
+    metadata.queries[include .. '\0' .. search] = cached
+    return
+  end
+
+  for _, item in ipairs(cached) do
+    local key = item.commit .. '\0' .. item.file
+    if not emitted[key] then
+      emitted[key] = true
+      cb(item)
+    end
+  end
+end
+
+--- Query-first finder for complete Git history.
+--- @param ctx snacks.picker.finder.ctx
+--- @param limit number?
+--- @param include 'changes'|'all'|'additions'|'deletions'
+--- @return snacks.picker.finder.async
+local function finder_branch_history(ctx, limit, include)
+  local cwd = Snacks.git.get_root(ctx.filter.cwd) or ctx.filter.cwd
+  ctx.picker:set_cwd(cwd)
+
+  return function(cb)
+    local metadata = get_history_metadata(ctx, cwd, limit)
+    if not metadata then
+      return
+    end
+
+    local search = vim.trim(ctx.filter.search or '')
+    local emitted = {} ---@type table<string, boolean>
+    for _, item in ipairs(metadata.items) do
+      if search == '' or text_matches_search(item.text, search) then
+        local key = item.commit .. '\0' .. item.file
+        emitted[key] = true
+        cb(item)
+      end
+    end
+    if search ~= '' then
+      search_history_content(ctx, metadata, include, search, cb, emitted)
+    end
+  end
+end
+
 --- Format a picker item for git file history.
 --- @param item snacks.picker.finder.Item Item to format
 --- @return snacks.picker.Highlight[]
@@ -669,6 +1026,74 @@ function M.git_diff_content_branch(picker_opts)
       M.git_diff_content({ base = branch, include = include })
     end,
   })
+end
+
+--- Format a picker item for git branch history (includes filename).
+--- @param item snacks.picker.finder.Item Item to format
+--- @param picker snacks.Picker Picker instance
+--- @return snacks.picker.Highlight[]
+local function format_branch_history_item(item, picker)
+  local short_hash = item.commit:sub(1, 7)
+  local status, status_hls
+  if item.status then
+    status = item.status
+    _, status_hls = get_block_status({})
+  else
+    status, status_hls = get_block_status(item.block)
+  end
+
+  ---@type snacks.picker.Highlight[]
+  return vim.list_extend({
+    { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true },
+    { short_hash .. ' ', 'SnacksPickerGitCommit', virtual = true },
+    { item.commit_date .. ' ', 'SnacksPickerComment', virtual = true },
+  }, Snacks.picker.format.filename(item, picker))
+end
+
+--- Fetch full diffs only for the selected item, then reuse them across queries.
+--- @param ctx snacks.picker.preview.ctx
+--- @param ns_search number
+local function render_history_preview(ctx, ns_search)
+  local item = ctx.item
+  local key = table.concat({ item.cwd, item.commit, item.file }, '\0')
+  local cached = _history_preview_cache[key]
+  if cached then
+    item.diff = cached
+    render_diff_preview(ctx, ns_search)
+    return
+  end
+
+  ctx.preview:notify('Loading diff...')
+  vim.system({
+    'git',
+    '-c',
+    'core.quotepath=false',
+    '--no-pager',
+    'show',
+    '--no-color',
+    '--no-ext-diff',
+    '--format=',
+    '--find-renames',
+    '-U3',
+    item.commit,
+    '--',
+    item.file,
+  }, { cwd = item.cwd, text = true }, function(result)
+    vim.schedule(function()
+      if result.code ~= 0 then
+        if ctx.preview.item == item then
+          ctx.preview:notify('Unable to load diff', 'error')
+        end
+        return
+      end
+      local diff = result.stdout or ''
+      _history_preview_cache[key] = diff
+      item.diff = diff
+      if ctx.preview.item == item and ctx.preview.win:valid() then
+        render_diff_preview(ctx, ns_search)
+      end
+    end)
+  end)
 end
 
 --- Git file history picker: search through file history changes.
@@ -724,27 +1149,11 @@ function M.git_file_history(opts)
   })
 end
 
---- Format a picker item for git branch history (includes filename).
---- @param item snacks.picker.finder.Item Item to format
---- @param picker snacks.Picker Picker instance
---- @return snacks.picker.Highlight[]
-local function format_branch_history_item(item, picker)
-  local short_hash = item.commit:sub(1, 7)
-  local block = item.block ---@type snacks.picker.diff.Block
-  local status, status_hls = get_block_status(block)
-
-  ---@type snacks.picker.Highlight[]
-  return vim.list_extend({
-    { status .. ' ', status_hls[status] or 'SnacksPickerGitStatus', virtual = true },
-    { short_hash .. ' ', 'SnacksPickerGitCommit', virtual = true },
-    { item.commit_date .. ' ', 'SnacksPickerComment', virtual = true },
-  }, Snacks.picker.format.filename(item, picker))
-end
 
 --- Git history picker: search through the complete git log.
 --- Shows one item per file per commit, with all changed content searchable.
 --- The preview shows the full diff with search matches highlighted.
---- Press <a-e> to double the commit look-back limit.
+--- Press <c-e> to double the commit look-back limit.
 --- @param opts? { include?: 'changes'|'all'|'additions'|'deletions', limit?: number }
 function M.git_history(opts)
   opts = opts or {}
@@ -752,9 +1161,8 @@ function M.git_history(opts)
   local include = opts.include or 'changes'
   local ns_search = vim.api.nvim_create_namespace('snacks.picker.git_history.search')
 
-  -- Commit look-back limit, doubled by the expand_history action (<c-e>).
-  -- Set to nil to show all commits (toggle with <m-e>).
-  local limit = opts.limit or 1000
+  -- Commit look-back limit, doubled by <c-e> and toggled off with <m-e>.
+  local limit = opts.limit or 10000
   local unlimited = false
 
   Snacks.picker.pick({
@@ -763,10 +1171,14 @@ function M.git_history(opts)
     live = true,
     supports_live = true,
     matcher = { sort_empty = true, fuzzy = false },
-    sort = { fields = { 'commit_date:desc', 'idx' } },
+    sort = { fields = { 'commit_ts:desc', 'idx' } },
     actions = {
       --- Double the commit limit and re-run the search immediately.
       expand_history = function(picker)
+        if unlimited then
+          vim.notify('Already showing all commits', vim.log.levels.INFO, { title = 'Git History' })
+          return
+        end
         limit = limit * 2
         picker:find()
         vim.notify(limit .. ' commits', vim.log.levels.INFO, { title = 'Git History' })
@@ -804,11 +1216,14 @@ function M.git_history(opts)
       },
     },
     finder = function(_, ctx)
-      local extra_args = unlimited and {} or { '-n', tostring(limit) }
-      return finder_history(ctx, extra_args, include)
+      local active_limit
+      if not unlimited then
+        active_limit = limit
+      end
+      return finder_branch_history(ctx, active_limit, include)
     end,
     format = format_branch_history_item,
-    preview = function(ctx) render_diff_preview(ctx, ns_search) end,
+    preview = function(ctx) render_history_preview(ctx, ns_search) end,
   })
 end
 
