@@ -83,11 +83,6 @@ return {
             filter = ft_and('trouble', trouble_mode('outgoing')),
             open = 'Trouble outgoing toggle restore=true focus=false win.position=bottom',
           },
-          {
-            name = 'in_out',
-            filter = ft_and('trouble', trouble_mode('in_out')),
-            open = 'Trouble in_out toggle restore=true focus=false win.position=bottom',
-          },
         },
       },
       {
@@ -103,11 +98,6 @@ return {
             name = 'references',
             filter = ft_and('trouble', trouble_mode('lsp_references')),
             open = 'Trouble lsp_references toggle restore=true',
-          },
-          {
-            name = 'lsp',
-            filter = ft_and('trouble', trouble_mode('lsp')),
-            open = 'Trouble lsp toggle restore=true focus=false win.position=bottom',
           },
         },
       },
