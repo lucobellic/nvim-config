@@ -307,7 +307,8 @@ return {
               return false
             end
 
-            if vim.b[bufnr].layout ~= nil and vim.b[bufnr].layout.enabled ~= true then
+            local layout = vim.b[bufnr].layout
+            if type(layout) == 'table' and layout.enabled == true then
               return false
             end
 
