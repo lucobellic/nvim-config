@@ -33,6 +33,17 @@ return {
         },
       },
       {
+        name = 'opencode2',
+        picker = { icon = '"', key = '2' },
+        views = {
+          {
+            name = 'opencode2',
+            filter = ft_and('opencode2', not_floating),
+            open = 'OpenCode2Toggle',
+          },
+        },
+      },
+      {
         name = 'cursor',
         picker = { icon = '', key = 'c' },
         views = {

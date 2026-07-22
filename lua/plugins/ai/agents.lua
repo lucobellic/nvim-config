@@ -34,6 +34,15 @@ return {
         focus = true,
         insert = false,
       },
+      opencode2 = {
+        executable = 'opencode2',
+        filetype = 'opencode2',
+        display_name = 'OpenCode2',
+        leader = '<leader>l2',
+        split = 'right',
+        focus = true,
+        insert = false,
+      },
       gemini = {
         executable = 'agy',
         filetype = 'gemini',
