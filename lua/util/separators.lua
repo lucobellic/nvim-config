@@ -16,6 +16,9 @@ local M = {
     lua = {
       'function_declaration',
     },
+    rust = {
+      'function_item',
+    },
     dockerfile = {
       'from_instruction',
     },
