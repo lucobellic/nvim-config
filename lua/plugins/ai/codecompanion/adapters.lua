@@ -17,7 +17,12 @@ return {
     ---@type CodeCompanion.Adapters
     adapters = {
       http = {
-        cocodex = function() return require('plugins.ai.codecompanion.adapters.http.codex') end,
+        cocodex = function()
+          return require('codecompanion.adapters').extend(
+            require('plugins.ai.codecompanion.adapters.http.codex'),
+            { schema = { reasoning_effort = { default = 'none' } } }
+          )
+        end,
       },
       copilot = function()
         return require('codecompanion.adapters').extend('copilot', {
