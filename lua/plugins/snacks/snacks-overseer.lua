@@ -1,3 +1,22 @@
+local symbols = {
+  ['FAILURE'] = ' ',
+  ['CANCELED'] = ' ',
+  ['SUCCESS'] = ' ',
+  ['RUNNING'] = ' ',
+  ['PENDING'] = ' ',
+  ['DISPOSED'] = ' ',
+}
+
+---@param picker snacks.Picker
+local function start_insert(picker)
+  vim.schedule(function()
+    if not picker.closed then
+      picker:focus('input')
+      vim.cmd.startinsert()
+    end
+  end)
+end
+
 ---@type snacks.picker.Config
 local overseer_template = {
   layout = { preset = 'vscode' },
@@ -26,6 +45,20 @@ local overseer_template = {
 
 local overseer_task = {
   layout = { preset = 'vertical' },
+  format = function(item, picker)
+    local task = require('overseer.task_list').get(item.item.id)
+    local status = task and task.status
+    local idx = tostring(item.idx)
+    idx = (' '):rep(#tostring(picker:count()) - #idx) .. idx
+
+    return {
+      { idx .. '.', 'SnacksPickerIdx' },
+      { ' ' },
+      { symbols[status] or '', status and 'Overseer' .. status or nil },
+      { item.item.name },
+    }
+  end,
+  on_show = start_insert,
   preview = function(ctx)
     local task = require('overseer.task_list').get(ctx.item.item.id)
     local bufnr = task and task:get_bufnr()
@@ -68,23 +101,25 @@ local overseer_task = {
       table.sort(available_actions, function(a, b) return a.name < b.name end)
 
       picker:close()
-      vim.ui.select(available_actions, {
-        prompt = 'Action for selected tasks',
-        kind = 'overseer_task_options',
-        format_item = function(item)
-          if item.action.desc then
-            return string.format('%s (%s)', item.name, item.action.desc)
+      vim.schedule(function()
+        vim.ui.select(available_actions, {
+          prompt = 'Action for selected tasks',
+          kind = 'overseer_task_options',
+          format_item = function(item)
+            if item.action.desc then
+              return string.format('%s (%s)', item.name, item.action.desc)
+            end
+            return item.name
+          end,
+        }, function(item)
+          if item then
+            vim
+              .iter(task_ids)
+              :map(function(task_id) return task_list.get(task_id) end)
+              :filter(function(task) return task and (item.action.condition == nil or item.action.condition(task)) end)
+              :each(function(task) overseer.run_action(task, item.name) end)
           end
-          return item.name
-        end,
-      }, function(item)
-        if item then
-          vim
-            .iter(task_ids)
-            :map(function(task_id) return task_list.get(task_id) end)
-            :filter(function(task) return task and (item.action.condition == nil or item.action.condition(task)) end)
-            :each(function(task) overseer.run_action(task, item.name) end)
-        end
+        end)
       end)
     end,
   },
@@ -99,6 +134,7 @@ return {
           kinds = {
             overseer_template = overseer_template,
             overseer_task = overseer_task,
+            overseer_task_options = { focus = 'input', on_show = start_insert },
           },
         },
       },
