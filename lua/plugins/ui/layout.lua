@@ -116,32 +116,7 @@ return {
         },
       },
     },
-    right = {
-      size = 0.3,
-      {
-        name = 'search',
-        views = {
-          {
-            name = 'grug-far',
-            filter = ft_and('grug-far', not_floating),
-          },
-        },
-      },
-      {
-        name = 'notes',
-        views = {
-          {
-            name = 'notes',
-            filter = function(buf, win)
-              return vim.bo[buf].filetype == 'markdown'
-                and not_floating(buf, win)
-                and vim.api.nvim_buf_get_name(buf):find('/notes/') ~= nil
-                and vim.g.edgy_notes_disabled ~= true
-            end,
-          },
-        },
-      },
-    },
+    right = { size = 0.3 },
     bottom = {
       size = 0.2,
       align = 'full',
@@ -175,6 +150,7 @@ return {
     extend(require('plugins.ui.layout.layout-dap'), opts)
     extend(require('plugins.ui.layout.layout-test'), opts)
     extend(require('plugins.ui.layout.layout-ai'), opts)
+    extend(require('plugins.ui.layout.layout-misc'), opts)
     require('layout').setup(opts)
     -- Add autocmd to refresh the statusline when the window is opened
     vim.api.nvim_create_autocmd(
