@@ -9,6 +9,7 @@ require('config.lazy')
 require('config.diagnostic')
 require('config.filetype')
 require('config.neovide')
+require('util.lichtblick').setup()
 
 if not vim.g.started_by_firenvim then
   require('util.work.overseer')
