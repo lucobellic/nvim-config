@@ -100,7 +100,6 @@ return {
     '--clang-tidy',
     '--enable-config',
     '--header-insertion=iwyu',
-    '--all-scopes-completion',
     '-j',
     '2',
   },
