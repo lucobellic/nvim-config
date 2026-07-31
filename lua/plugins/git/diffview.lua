@@ -112,6 +112,10 @@ return {
         view = {
           merge_tool = { layout = 'diff3_mixed' },
           inline = { style = 'unified', deletion_highlight = 'full_width' },
+          cycle_layouts = {
+            default = { 'diff1_inline', 'diff2_horizontal', 'diff2_vertical' },
+            merge_tool = { 'diff1_plain', 'diff3_horizontal', 'diff3_mixed', 'diff3_vertical', 'diff4_mixed' },
+          },
         },
         default_args = {
           DiffviewOpen = {
