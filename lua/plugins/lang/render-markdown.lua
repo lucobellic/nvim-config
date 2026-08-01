@@ -14,7 +14,7 @@ return {
   opts_extend = { 'file_types', 'render_modes', 'sign.exclude.buftypes' },
   opts = {
     file_types = filetypes,
-    render_modes = { 'n', 'c', 'i' },
+    render_modes = true,
     restart_highlighter = false,
     sign = {
       enabled = false,
