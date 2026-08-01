@@ -1,17 +1,19 @@
+local filetypes = {
+  'codecompanion',
+  'codecompanion.floaterm',
+  'markdown',
+  'markdown.floaterm',
+  'mcphub',
+  'noice',
+  'obsidian',
+}
+
 return {
   'MeanderingProgrammer/render-markdown.nvim',
-  ft = { 'markdown', 'codecompanion', 'mcphub', 'obsidian' },
+  ft = filetypes,
   opts_extend = { 'file_types', 'render_modes', 'sign.exclude.buftypes' },
   opts = {
-    file_types = {
-      'markdown',
-      'markdown.floaterm',
-      'codecompanion',
-      'codecompanion.floaterm',
-      'mcphub',
-      'obsidian',
-      'noice',
-    },
+    file_types = filetypes,
     render_modes = { 'n', 'c', 'i' },
     restart_highlighter = false,
     sign = {
