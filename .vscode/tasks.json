@@ -1,0 +1,16 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Upgrade Neovim",
+      "type": "shell",
+      "command": "cargo",
+      "args": ["run"],
+      "options": {
+        "cwd": "${workspaceFolder}/scripts/upgrade"
+      },
+      "problemMatcher": ["$rustc"],
+      "detail": "Run upgrade script to update Neovim to a selected release"
+    }
+  ]
+}

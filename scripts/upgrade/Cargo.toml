@@ -1,0 +1,30 @@
+[package]
+name = "upgrade"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+crossterm = { version = "0.29", features = ["event-stream"] }
+flate2 = "1"
+futures = "0.3"
+indicatif = "0.18.4"
+inquire = "0.9.4"
+octocrab = "0.53.1"
+ratatui = "0.30.2"
+reqwest = { version = "0.13.4", default-features = false, features = ["native-tls", "stream"] }
+tar = "0.4"
+tokio = { version = "1.52.3", features = [
+  "rt-multi-thread",
+  "macros",
+  "fs",
+  "io-util",
+  "sync",
+] }
+
+[lints.clippy]
+missing_errors_doc = "warn"
+missing_panics_doc = "warn"
+missing_safety_doc = "warn"
+
+[lints.rustdoc]
+missing_docs = "warn"
