@@ -196,6 +196,12 @@ local function transform_messages(self, messages)
   return input, system_instruction
 end
 
+---@param messages table[]
+---@return boolean
+local function is_inline_request(messages)
+  return vim.iter(messages):any(function(message) return message._meta and message._meta.tag == 'system_tag' end)
+end
+
 local function resolve_model_opts(adapter)
   local model = adapter.schema.model.default
   local choices = adapter.schema.model.choices
@@ -353,11 +359,16 @@ return {
           }
         end
 
+        local text = { verbosity = params.text_verbosity or 'medium' }
+        if is_inline_request(messages) then
+          text.format = { type = 'json_object' }
+        end
+
         return {
           model = model,
           reasoning = reasoning,
           include = { 'reasoning.encrypted_content' },
-          text = { verbosity = params.text_verbosity or 'medium' },
+          text = text,
           store = false,
           -- The Codex backend accepts only streamed Responses API requests.
           stream = true,
@@ -368,6 +379,10 @@ return {
       ---@return table
       build_messages = function(self, messages)
         local input, system_instruction = transform_messages(self, messages)
+        if is_inline_request(messages) then
+          system_instruction = (system_instruction or '')
+            .. '\nThe code field must contain only the exact text to insert. Never wrap it in Markdown code fences.'
+        end
         return {
           instructions = system_instruction,
           input = input,
