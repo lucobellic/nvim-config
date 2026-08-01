@@ -299,6 +299,7 @@ return {
           agent_terminals = { layout = { preset = 'telescope_vertical' } },
           keymaps = { layout = { preset = 'telescope_preview' } },
           gitmoji = { layout = { preset = 'vscode' } },
+          gitanuki_merge_requests = { layout = { preset = 'telescope_preview' } },
         },
         layouts = {
           telescope_no_preview = telescope_no_preview,
