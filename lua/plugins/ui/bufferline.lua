@@ -302,6 +302,8 @@ return {
     opts = function()
       return {
         options = {
+          ---@param bufnr integer
+          ---@return boolean
           custom_filter = function(bufnr)
             if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
               return false
@@ -312,7 +314,9 @@ return {
               return false
             end
 
-            if vim.bo[bufnr].filetype == '' and vim.bo[bufnr].buftype == '' then
+            local has_no_type = vim.bo[bufnr].filetype == '' and vim.bo[bufnr].buftype == ''
+            local is_unnamed = vim.api.nvim_buf_get_name(bufnr) == ''
+            if has_no_type and (vim.api.nvim_buf_is_loaded(bufnr) or is_unnamed) then
               return false
             end
 
