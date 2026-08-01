@@ -1,4 +1,16 @@
+---@class Util.Persistence
 local M = {}
+
+---Close every open Diffview without loading the plugin unnecessarily.
+---@return nil
+local function close_diffviews()
+  local diffview = package.loaded['diffview']
+  if not diffview then
+    return
+  end
+
+  vim.iter(vim.api.nvim_list_tabpages()):each(function(tabpage) diffview.close(tabpage, { force = false }) end)
+end
 
 local function save_tab_names()
   local tabs = require('bufferline.tabpages').get()
@@ -95,6 +107,7 @@ end
 --- Callback before saving session
 --- @param session_file string
 function M.pre_save(session_file)
+  close_diffviews()
   vim.cmd('ScopeSaveState')
   pcall(save_tab_names)
   require('util.breakpoints').save_breakpoints(session_file)
