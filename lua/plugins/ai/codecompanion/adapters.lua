@@ -6,8 +6,8 @@ local interactions = vim.env.INSIDE_DOCKER
       inline = { adapter = 'cursor_cli', model = 'Auto' },
     }
   or {
-    cmd = { adapter = { name = 'opencode', model = 'opencode-go/deepseek-v4-flash' } },
-    chat = { adapter = { name = 'opencode', model = 'opencode-go/deepseek-v4-flash' } },
+    cmd = { adapter = { name = 'cocodex', model = 'gpt-5.6-sol' } },
+    chat = { adapter = { name = 'cocodex', model = 'gpt-5.6-sol' } },
     inline = { adapter = { name = 'cocodex', model = 'gpt-5.4-mini' } },
   }
 
