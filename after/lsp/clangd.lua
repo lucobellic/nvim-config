@@ -101,7 +101,7 @@ return {
     '--enable-config',
     '--header-insertion=iwyu',
     '-j',
-    '2',
+    '6',
   },
   handlers = {
     ['textDocument/inlayHint'] = on_inlayhint,
