@@ -7,6 +7,7 @@ vim.filetype.add({
     ['.gitlab-ci.yaml'] = 'yaml.gitlab',
   },
   extension = {
+    msg = 'ros',
     emjin = 'cpp.jinja',
     ezi = 'ezi',
     launch = 'python',
