@@ -52,12 +52,19 @@ return {
 
     vim.api.nvim_create_autocmd('User', {
       pattern = 'PersistenceSavePre',
+      nested = true,
       callback = function() util.pre_save(persistence.current()) end,
     })
 
     vim.api.nvim_create_autocmd('User', {
       pattern = 'PersistenceLoadPost',
       callback = function() util.post_load() end,
+    })
+
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'PersistenceLoadPre',
+      nested = true,
+      callback = function() util.pre_load() end,
     })
 
     -- Load session from persistence

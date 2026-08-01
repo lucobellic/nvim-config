@@ -1,15 +1,82 @@
 ---@class Util.Persistence
 local M = {}
 
----Close every open Diffview without loading the plugin unnecessarily.
+---List only the buffers associated with the focused regular tab.
+---@param buffers integer[]
+---@return nil
+local function restore_listed_buffers(buffers)
+  local listed = {}
+  vim.iter(buffers):each(function(bufnr) listed[bufnr] = true end)
+  vim.iter(vim.api.nvim_list_bufs()):each(function(bufnr)
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      vim.bo[bufnr].buflisted = listed[bufnr] == true
+    end
+  end)
+end
+
+---Focus the first regular tab and close every open Diffview.
 ---@return nil
 local function close_diffviews()
   local diffview = package.loaded['diffview']
-  if not diffview then
+  local diffview_lib = package.loaded['diffview.lib']
+  if not diffview or not diffview_lib then
     return
   end
 
-  vim.iter(vim.api.nvim_list_tabpages()):each(function(tabpage) diffview.close(tabpage, { force = false }) end)
+  local tabpages = vim.api.nvim_list_tabpages()
+  local diffview_tabpages = vim
+    .iter(tabpages)
+    :filter(function(tabpage) return diffview_lib.tabpage_to_view(tabpage) ~= nil end)
+    :totable()
+  if #diffview_tabpages == 0 then
+    return
+  end
+
+  local regular_tabpages = vim
+    .iter(tabpages)
+    :filter(function(tabpage) return diffview_lib.tabpage_to_view(tabpage) == nil end)
+    :totable()
+  local regular_tabpage = regular_tabpages[1]
+
+  local scope_core = package.loaded['scope.core']
+  if regular_tabpage then
+    vim.api.nvim_set_current_tabpage(regular_tabpage)
+  end
+
+  -- Capture after focusing so Scope has unlisted the Diffview buffers and exposed the regular tab's buffers.
+  local scope_cache = {}
+  if scope_core and regular_tabpage then
+    scope_core.revalidate()
+    vim.iter(regular_tabpages):each(function(tabpage) scope_cache[tabpage] = scope_core.cache[tabpage] end)
+  end
+
+  local closed_diffview_tabpages = vim
+    .iter(diffview_tabpages)
+    :filter(function(tabpage) return diffview.close(tabpage, { force = false }) end)
+    :totable()
+
+  if scope_core then
+    -- Scope removes cache[last_tab] on TabClosed, so restore regular entries and remove only closed Diffviews.
+    vim.iter(closed_diffview_tabpages):each(function(tabpage) scope_core.cache[tabpage] = nil end)
+    vim.iter(pairs(scope_cache)):each(function(tabpage, buffers) scope_core.cache[tabpage] = buffers end)
+    if #closed_diffview_tabpages == #diffview_tabpages and regular_tabpage then
+      restore_listed_buffers(scope_cache[regular_tabpage] or {})
+    end
+  end
+end
+
+---Save Scope's cache in tab order instead of hash-table iteration order.
+---@return nil
+local function save_scope_state()
+  vim.cmd('ScopeSaveState')
+
+  local scope_core = require('scope.core')
+  local scope_utils = require('scope.utils')
+  local cache = vim
+    .iter(vim.api.nvim_list_tabpages())
+    :map(function(tabpage) return scope_utils.get_buffer_names(scope_core.cache[tabpage] or {}) end)
+    :totable()
+  vim.g.ScopeState = vim.json.encode({ cache = cache, last_tab = scope_core.last_tab })
 end
 
 local function save_tab_names()
@@ -104,11 +171,16 @@ function M.post_load()
   require('util.breakpoints').restore_breakpoints()
 end
 
+---Close Diffview tabs before switching sessions.
+---@public
+---@return nil
+function M.pre_load() close_diffviews() end
+
 --- Callback before saving session
 --- @param session_file string
 function M.pre_save(session_file)
   close_diffviews()
-  vim.cmd('ScopeSaveState')
+  save_scope_state()
   pcall(save_tab_names)
   require('util.breakpoints').save_breakpoints(session_file)
 end
