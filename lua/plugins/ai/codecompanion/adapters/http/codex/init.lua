@@ -382,6 +382,16 @@ return {
         if is_inline_request(messages) then
           system_instruction = (system_instruction or '')
             .. '\nThe code field must contain only the exact text to insert. Never wrap it in Markdown code fences.'
+          table.insert(input, {
+            type = 'message',
+            role = 'user',
+            content = {
+              {
+                type = 'input_text',
+                text = 'Return only a JSON object matching the response schema in the instructions.',
+              },
+            },
+          })
         end
         return {
           instructions = system_instruction,
