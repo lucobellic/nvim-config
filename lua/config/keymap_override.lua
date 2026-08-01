@@ -41,7 +41,7 @@ local _repeat_id = 0
 ---Return a new unique slot name for `_G.__keymap_repeat_fns`.
 ---@return string
 local function _next_slot()
-  _repeat_id = _repeat_id + 1
+  _repeat_id += 1
   return 'fn' .. _repeat_id
 end
 

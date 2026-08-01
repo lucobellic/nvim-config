@@ -11,7 +11,7 @@ function M.reset() M.left_width = 0 end
 
 function M.add(text)
   if text and text ~= '' then
-    M.left_width = M.left_width + vim.api.nvim_eval_statusline(text, {}).width
+    M.left_width += vim.api.nvim_eval_statusline(text, {}).width
   end
 end
 

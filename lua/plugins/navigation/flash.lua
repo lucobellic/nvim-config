@@ -73,20 +73,16 @@ local function label2_jump(multi_window, pattern)
       local folds = {} ---@type table<number, boolean>
 
       for _, match in ipairs(search:get(_opts)) do
-        local skip = false
         add_fold(match)
 
         -- Only label the first match in each fold
-        if not skip and match.fold then
+        if match.fold then
           if folds[match.fold] then
-            skip = true
-          else
-            folds[match.fold] = true
+            continue
           end
+          folds[match.fold] = true
         end
-        if not skip then
-          table.insert(matches, match)
-        end
+        table.insert(matches, match)
       end
       return matches
     end,

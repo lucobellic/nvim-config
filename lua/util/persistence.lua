@@ -17,7 +17,7 @@ local function load_tab_names()
   local tabs = vim.json.decode(vim.g.ScopeTabNames or '{}')
   local current_tabs = vim.api.nvim_list_tabpages()
   vim.iter(tabs):enumerate():each(function(tabnr, tab)
-    local name = (tab.text or tostring(tabnr)):match('^%s*(.-)%s*$')
+    local name = (tab?.text or tostring(tabnr)):match('^%s*(.-)%s*$')
     local tab = current_tabs[tabnr]
     if tab and name then
       vim.api.nvim_tabpage_set_var(tab, 'name', name)

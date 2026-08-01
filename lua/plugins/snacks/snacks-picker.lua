@@ -93,7 +93,7 @@ local telescope_vertical = {
 
 ---@param picker snacks.Picker
 local function set_next_preferred_layout(picker)
-  local layout_name = picker.resolved_layout and picker.resolved_layout.preset
+  local layout_name = picker.resolved_layout?.preset
   if layout_name then
     local idx = vim.iter(preferred):enumerate():filter(function(_, v) return v == layout_name end):next()
     idx = idx % #preferred + 1
@@ -102,7 +102,7 @@ local function set_next_preferred_layout(picker)
 end
 
 local function set_prev_preferred_layout(picker)
-  local layout_name = picker.resolved_layout and picker.resolved_layout.preset
+  local layout_name = picker.resolved_layout?.preset
   if layout_name then
     local idx = vim.iter(preferred):enumerate():filter(function(_, v) return v == layout_name end):next()
     idx = idx == 1 and #preferred or idx - 1
@@ -129,7 +129,7 @@ end
 
 ---@param opts snacks.picker.recent.Config
 local function recent(opts)
-  local cwd = opts and opts.filter and opts.filter.cwd
+  local cwd = opts?.filter?.cwd
   local current_file = vim.fn.resolve(vim.fn.expand('%:p'))
   Snacks.picker.pick(vim.tbl_extend('force', opts or {}, {
     title = 'Recent Files',

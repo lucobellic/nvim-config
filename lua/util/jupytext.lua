@@ -30,7 +30,7 @@ end
 
 ---@param opts? { path: string?, extension: string? }
 M.pair = function(opts)
-  local notebook_path = opts and type(opts.path) == 'string' and opts.path or vim.fn.resolve(vim.fn.expand('%'))
+  local notebook_path = opts?.path and type(opts.path) == 'string' and opts.path or vim.fn.resolve(vim.fn.expand('%'))
   if validate() then
     if vim.fn.filereadable(notebook_path) == 0 then
       vim.notify('No notebook found: ' .. notebook_path, vim.log.levels.ERROR, { title = 'jupytext' })
@@ -42,7 +42,7 @@ M.pair = function(opts)
       return
     end
 
-    local extension = opts and type(opts.extension) == 'string' and opts.extension or 'py:percent'
+    local extension = opts?.extension and type(opts.extension) == 'string' and opts.extension or 'py:percent'
     local jupytext_pair_cmd = 'jupytext --set-formats ipynb,' .. extension .. ' ' .. notebook_path
     local pair_cmd_output = vim.fn.system(jupytext_pair_cmd)
     if vim.v.shell_error ~= 0 then

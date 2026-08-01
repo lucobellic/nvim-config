@@ -5,8 +5,8 @@ local function get_bar_with_opened_component(opts)
   local current_bar = require('dropbar.utils.bar').get({ buf = opts.buf, win = opts.win })
 
   local opened_component_id, opened_component = vim
-    .iter(ipairs(current_bar and current_bar.components or {}))
-    :filter(function(_, component) return component.menu and component.menu.is_opened end)
+    .iter(ipairs(current_bar?.components or {}))
+    :filter(function(_, component) return component.menu?.is_opened end)
     :next()
 
   return current_bar, opened_component_id, opened_component

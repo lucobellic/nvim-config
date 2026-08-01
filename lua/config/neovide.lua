@@ -84,7 +84,7 @@ if vim.g.neovide then
 
   ---@param delta number
   local function change_font(delta)
-    font_size = font_size + delta
+    font_size += delta
     vim.o.guifont = font_family .. ':h' .. font_size
   end
 

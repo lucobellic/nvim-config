@@ -1,4 +1,4 @@
-local function align(res) return (res and res.text) and res or { text = '  ' } end
+local function align(res) return res?.text and res or { text = '  ' } end
 
 return {
   {

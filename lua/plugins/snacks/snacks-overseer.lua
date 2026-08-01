@@ -47,7 +47,7 @@ local overseer_task = {
   layout = { preset = 'vertical' },
   format = function(item, picker)
     local task = require('overseer.task_list').get(item.item.id)
-    local status = task and task.status
+    local status = task?.status
     local idx = tostring(item.idx)
     idx = (' '):rep(#tostring(picker:count()) - #idx) .. idx
 
