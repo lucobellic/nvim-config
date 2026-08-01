@@ -105,9 +105,9 @@ require('util.commands').track_visited_files()
 -- Create block spinner command
 require('util.commands').create_block_spinner_command()
 -- Setup window resize utility
-require('util.commands').setup_window_resize({
-  min_width = 80,
-  min_height = 20,
-  ignore_buftypes = { 'nofile', 'prompt', 'popup', 'quickfix' },
-  ignore_filetypes = { 'neo-tree', 'opencode', 'cursor', 'gemini' },
-})
+-- require('util.commands').setup_window_resize({
+--   min_width = 80,
+--   min_height = 20,
+--   ignore_buftypes = { 'nofile', 'prompt', 'popup', 'quickfix' },
+--   ignore_filetypes = { 'neo-tree', 'opencode', 'cursor', 'gemini' },
+-- })
