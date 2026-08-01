@@ -1,3 +1,4 @@
+local auth_page = require('plugins.ai.codecompanion.adapters.http.codex.auth_page')
 local config = require('codecompanion.config')
 local constants = require('plugins.ai.codecompanion.adapters.http.codex.constants')
 local curl = require('plenary.curl')
@@ -217,6 +218,7 @@ end
 
 ---Start the OAuth2 PKCE flow with a local server
 ---@param token_file string
+---@return nil
 function M.authenticate(token_file)
   if is_authenticating then
     vim.notify('Codex: Authentication process already in progress.', vim.log.levels.WARN)
@@ -285,20 +287,19 @@ function M.authenticate(token_file)
 
         local response_body
         if code and received_state == state then
-          response_body = '<h1>Authentication Successful</h1>'
-            .. '<p>You can close this window and return to Neovim.</p>'
-            .. '<script>window.close()</script>'
+          response_body = auth_page.success()
           vim.schedule(function()
             exchange_code(token_file, code, verifier, constants.REDIRECT_URI)
             is_authenticating = false
           end)
         else
-          response_body = '<h1>Error</h1><p>Could not obtain code or invalid state.</p>'
+          response_body = auth_page.error('Could not obtain an authorization code or the OAuth state was invalid.')
           is_authenticating = false
         end
 
         local response = 'HTTP/1.1 200 OK\r\n'
-          .. 'Content-Type: text/html\r\n'
+          .. 'Content-Type: text/html; charset=utf-8\r\n'
+          .. 'Cache-Control: no-store\r\n'
           .. 'Content-Length: '
           .. #response_body
           .. '\r\n'

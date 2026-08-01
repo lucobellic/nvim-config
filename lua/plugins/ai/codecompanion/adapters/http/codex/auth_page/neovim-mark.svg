@@ -1,0 +1,22 @@
+        <svg class="neovim-mark" viewBox="0 0 602 734" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="nvim-blue" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop stop-color="#16b0ed" stop-opacity=".8" />
+              <stop offset="1" stop-color="#0f59b2" stop-opacity=".84" />
+            </linearGradient>
+            <linearGradient id="nvim-green-dark" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop stop-color="#7db643" />
+              <stop offset="1" stop-color="#367533" />
+            </linearGradient>
+            <linearGradient id="nvim-green" x1="50%" y1="0%" x2="50%" y2="100%">
+              <stop stop-color="#88c649" stop-opacity=".8" />
+              <stop offset="1" stop-color="#439240" stop-opacity=".84" />
+            </linearGradient>
+          </defs>
+          <g transform="translate(2 3)">
+            <path d="M0 155.5704 155-1l-.000003 728L0 572.237919V155.5704Z" fill="url(#nvim-blue)" />
+            <path d="M443.060403 156.982405 600-1l-3.181208 728L442 572.219941l1.060403-415.237536Z" fill="url(#nvim-green-dark)" transform="translate(1042 0) scale(-1 1)" />
+            <path d="M154.986294 0 558 615.189696 445.224605 728 42 114.172017 154.986294 0Z" fill="url(#nvim-green)" />
+            <path d="m155 283.83232-.213246 24.16768L31 124.710606 42.461949 113 155 283.83232Z" fill="#000" fill-opacity=".13" />
+          </g>
+        </svg>
