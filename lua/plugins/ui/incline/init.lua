@@ -73,6 +73,20 @@ local function get_search_count(props)
   return { { search_text, group = props.focused and 'Identifier' or unfocused } }
 end
 
+local function get_review_status(props)
+  local ok, gitanuki = pcall(require, 'gitanuki')
+  if not ok then
+    return {}
+  end
+
+  local viewed = gitanuki.review.is_viewed(props.buf)
+  if viewed == nil then
+    return {}
+  end
+
+  return { { viewed and ' ' or ' ', group = viewed and 'GitSignsAdd' or 'GitSignsDelete' } }
+end
+
 return {
   'b0o/incline.nvim',
   event = { 'User LazyBufEnter' },
@@ -126,6 +140,7 @@ return {
       local diagnostics = get_diagnostic_label(props)
       local diffs = get_git_diff(props)
       local search_count = get_search_count(props)
+      local review_status = get_review_status(props)
 
       local color = props.focused and focused or unfocused
       local icon = props.focused and { filetype_icon, guifg = filetype_color } or { filetype_icon, group = unfocused }
@@ -155,6 +170,7 @@ return {
         { diffs },
         { search_separator },
         { search_count },
+        { review_status },
       }
     end,
   },

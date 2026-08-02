@@ -1,34 +1,26 @@
 return {
-  {
-    'lucobellic/gitanuki.nvim',
-    dev = true,
-    lazy = false,
-    enabled = false,
-    opts = {},
-  },
-  {
-    'lucobellic/gitlab.nvim',
-    enabled = false,
-    branch = 'personal',
-    cond = not vim.g.started_by_firenvim and vim.env.INSIDE_DOCKER ~= nil,
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'stevearc/dressing.nvim', -- Recommended but not required. Better UI for pickers.
-      'nvim-tree/nvim-web-devicons', -- Recommended but not required. Icons in discussion tree.
-      {
-        'folke/which-key.nvim',
-        optional = true,
-        opts = {
-          spec = {
-            { '<leader>gl', group = 'gitlab' },
-            { '<leader>gla', group = 'assignee' },
-            { '<leader>glr', group = 'reviewer' },
-            { '<leader>gll', group = 'label' },
-          },
+  'lucobellic/gitlab.nvim',
+  enabled = false,
+  branch = 'personal',
+  cond = not vim.g.started_by_firenvim and vim.env.INSIDE_DOCKER ~= nil,
+  dependencies = {
+    'MunifTanjim/nui.nvim',
+    'nvim-lua/plenary.nvim',
+    'stevearc/dressing.nvim', -- Recommended but not required. Better UI for pickers.
+    'nvim-tree/nvim-web-devicons', -- Recommended but not required. Icons in discussion tree.
+    {
+      'folke/which-key.nvim',
+      optional = true,
+      opts = {
+        spec = {
+          { '<leader>gl', group = 'gitlab' },
+          { '<leader>gla', group = 'assignee' },
+          { '<leader>glr', group = 'reviewer' },
+          { '<leader>gll', group = 'label' },
         },
       },
     },
+  },
   -- stylua: ignore
   keys = {
     { '<leader>gl', false },
@@ -57,52 +49,52 @@ return {
     { '<leader>glP', function() require('gitlab').publish_all_drafts() end, desc = 'Gitlab Publish All Drafts' },
     { '<leader>glD', function() require('gitlab').toggle_draft_mode() end, desc = 'Gitlab Toggle Draft Mode' },
   },
-    build = function() require('gitlab.server').build(true) end, -- Builds the Go binary
-    --- @type Settings
-    --- @diagnostic disable-next-line: missing-fields
-    opts = {
-      discussion_tree = {
-        position = 'bottom',
-        resolved = '󱍧',
-        unresolved = '󱍮',
-        toggle_node = 'l',
-        draft = '',
-        draft_mode = true,
+  build = function() require('gitlab.server').build(true) end, -- Builds the Go binary
+  --- @type Settings
+  --- @diagnostic disable-next-line: missing-fields
+  opts = {
+    discussion_tree = {
+      position = 'bottom',
+      resolved = '󱍧',
+      unresolved = '󱍮',
+      toggle_node = 'l',
+      draft = '',
+      draft_mode = true,
+    },
+    discussion_sign_and_diagnostic = {
+      skip_resolved_discussion = true,
+    },
+    keymaps = {
+      global = { disable_all = true },
+      popup = { -- The popup for comment creation, editing, and replying
+        discard_changes = '<Esc>',
+        perform_action = '<c-cr>', -- Once in normal mode, does action (like saving comment or editing description, etc)
+        perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
       },
-      discussion_sign_and_diagnostic = {
-        skip_resolved_discussion = true,
+    },
+    discussion_signs = {
+      icons = {
+        comment = '',
+        range = '│',
       },
-      keymaps = {
-        global = { disable_all = true },
-        popup = { -- The popup for comment creation, editing, and replying
-          discard_changes = '<Esc>',
-          perform_action = '<c-cr>', -- Once in normal mode, does action (like saving comment or editing description, etc)
-          perform_linewise_action = '<leader>l', -- Once in normal mode, does the linewise action (see logs for this job, etc)
-        },
+    },
+    discussion_diagnostic = {
+      display_opts = {
+        underline = false,
       },
-      discussion_signs = {
-        icons = {
-          comment = '',
-          range = '│',
-        },
+    },
+    reviewer_settings = {
+      diffview = {
+        imply_local = true,
       },
-      discussion_diagnostic = {
-        display_opts = {
-          underline = false,
-        },
-      },
-      reviewer_settings = {
-        diffview = {
-          imply_local = true,
-        },
-      },
+    },
     -- stylua: ignore
     pipeline = {
       failed   = '',
       canceled = '',
       success  = '',
     },
-      colors = {
+    colors = {
       -- stylua: ignore
       discussion_tree = {
         username       = 'String',
@@ -118,7 +110,6 @@ return {
         draft_mode     = 'DiagnosticWarn',
         live_mode      = 'DiagnosticOk',
         sort_method    = 'Keyword',
-      },
       },
     },
   },
