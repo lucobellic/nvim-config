@@ -75,16 +75,14 @@ end
 
 local function get_review_status(props)
   local ok, gitanuki = pcall(require, 'gitanuki')
-  if not ok then
-    return {}
+  if ok then
+    local viewed = gitanuki.review.is_viewed(props.buf)
+    if viewed then
+      return { { viewed and ' ' or ' ', group = viewed and 'GitSignsAdd' or 'GitSignsDelete' } }
+    end
   end
 
-  local viewed = gitanuki.review.is_viewed(props.buf)
-  if viewed == nil then
-    return {}
-  end
-
-  return { { viewed and ' ' or ' ', group = viewed and 'GitSignsAdd' or 'GitSignsDelete' } }
+  return {}
 end
 
 return {
