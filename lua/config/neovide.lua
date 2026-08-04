@@ -1,4 +1,9 @@
 if vim.g.neovide then
+  -- Keep Neovim's clipboard provider when Neovide attaches to a remote instance.
+  -- Neovide's synchronous RPC provider can re-enter an embedded terminal while
+  -- a visual yank is still being handled and forward the interrupt to its TUI.
+  vim.g.neovide_no_custom_clipboard = true
+
   local font_family = 'DM Mono Nerd Font'
   local font_size = 12
   vim.g.guifont = font_family .. ':h' .. font_size
