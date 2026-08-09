@@ -1,6 +1,8 @@
+---@class TermManager
 local M = {}
 
 --- Setup configuration
+---@public
 ---@param opts? TermManagerConfig
 function M.setup(opts)
   local ok, config = pcall(require, 'term.config')
@@ -17,6 +19,7 @@ function M.setup(opts)
   end
 end
 
+---@public
 function M.setup_user_commands()
   local ok, Core = pcall(require, 'term.core')
   if not ok then

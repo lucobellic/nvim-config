@@ -27,6 +27,8 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
   desc = 'Set terminal buffer options',
 })
 
+require('config.osc').setup({ selectors = { '9', '99', '777' } })
+
 -- Automatic save
 require('util.autosave').setup()
 
