@@ -1,12 +1,4 @@
 if vim.g.neovide then
-  -- Keep Neovim's clipboard provider when Neovide attaches to a remote instance.
-  -- Neovide's synchronous RPC provider can re-enter an embedded terminal while
-  -- a visual yank is still being handled and forward the interrupt to its TUI.
-  vim.g.neovide_no_custom_clipboard = true
-
-  local font_family = 'DM Mono Nerd Font'
-  local font_size = 12
-  vim.g.guifont = font_family .. ':h' .. font_size
   vim.opt.linespace = 2
   vim.opt.columns = 1024
 
@@ -87,19 +79,16 @@ if vim.g.neovide then
   vim.g.neovide_progress_bar_animation_speed = 200.0
   vim.g.neovide_progress_bar_hide_delay = 0.2
 
-  ---@param delta number
-  local function change_font(delta)
-    font_size += delta
-    vim.o.guifont = font_family .. ':h' .. font_size
-  end
+  ---@param factor number
+  local function scale_font(factor) vim.g.neovide_scale_factor = (vim.g.neovide_scale_factor or 1.0) * factor end
 
-  vim.keymap.set({ 'n' }, '<C-+>', function() change_font(1) end, {
+  vim.keymap.set({ 'n' }, '<C-+>', function() scale_font(1.1) end, {
     noremap = true,
     silent = true,
     repeatable = true,
     desc = 'Increase font size',
   })
-  vim.keymap.set({ 'n' }, '<C-->', function() change_font(-1) end, {
+  vim.keymap.set({ 'n' }, '<C-->', function() scale_font(1 / 1.1) end, {
     noremap = true,
     silent = true,
     repeatable = true,
