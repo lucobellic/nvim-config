@@ -3,7 +3,7 @@ local M = {}
 
 --- Safely execute a function and notify on error
 ---@generic T
----@param fn fun(...): T
+---@param fn fun(...): T?
 ---@param ... any
 ---@return boolean ok
 ---@return T? result
@@ -19,7 +19,7 @@ end
 --- Safely execute an API call, optionally with a custom message prefix
 ---@generic T
 ---@param msg string Message prefix on failure
----@param fn fun(...): T
+---@param fn fun(...): T?
 ---@param ... any
 ---@return boolean ok
 ---@return T? result

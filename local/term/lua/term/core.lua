@@ -10,12 +10,12 @@ local CONSTANTS = config.CONSTANTS
 ---@field active_term Term? Active terminal instance
 ---@field popup NuiPopup? Popup window instance
 ---@field terminals Term[] List of terminal instances
----@field private disable_autohide boolean Temporary flag to disable auto-hide
+---@field private disable_auto_hide boolean Temporary flag to disable auto-hide
 local M = {
   active_term = nil,
   popup = nil,
   terminals = {},
-  disable_autohide = false,
+  disable_auto_hide = false,
 }
 
 local function ensure_popup()
@@ -40,14 +40,14 @@ local function ensure_popup()
   )
   if augroup_ok then
     helper.safe_api(
-      'term: failed to create autohide autocmd',
+      'term: failed to create auto hide autocmd',
       vim.api.nvim_create_autocmd,
       { 'WinEnter', 'BufEnter' },
       {
         group = augroup,
         callback = function(args)
           vim.schedule(function()
-            if M.disable_autohide then
+            if M.disable_auto_hide then
               return
             end
 
@@ -58,7 +58,7 @@ local function ensure_popup()
               if entered_win ~= M.popup.winid then
                 local hide_ok, hide_err = pcall(M.hide)
                 if not hide_ok then
-                  vim.notify('term: hide failed in autohide: ' .. tostring(hide_err), vim.log.levels.ERROR)
+                  vim.notify('term: hide failed in auto hide: ' .. tostring(hide_err), vim.log.levels.ERROR)
                 end
               end
             end
@@ -139,6 +139,9 @@ local function show_terminal(term)
   -- Ensure the popup window is the current window before starting insert
   if helper.is_popup_visible(M) and M.popup then
     local winid = M.popup.winid
+    if not winid then
+      return false
+    end
     local ok = helper.safe_api('term: failed to focus popup window', vim.api.nvim_set_current_win, winid)
     if not ok then
       return false
@@ -283,17 +286,17 @@ end
 
 --- Hide terminal popup (keeps terminals alive)
 ---@param unmount? boolean Whether to unmount the popup completely
----@param skip_autohide_disable? boolean Skip disabling auto-hide (for external calls)
-function M.hide(unmount, skip_autohide_disable)
+---@param skip_auto_hide_disable? boolean Skip disabling auto-hide (for external calls)
+function M.hide(unmount, skip_auto_hide_disable)
   if not M.popup then
     return
   end
 
   -- Temporarily disable auto-hide to prevent re-triggering during hide operation
   -- This is crucial for editor-wrapper workflow
-  if not skip_autohide_disable then
-    M.disable_autohide = true
-    vim.defer_fn(function() M.disable_autohide = false end, CONSTANTS.AUTOHIDE_DELAY)
+  if not skip_auto_hide_disable then
+    M.disable_auto_hide = true
+    vim.defer_fn(function() M.disable_auto_hide = false end, CONSTANTS.AUTO_HIDE_DELAY)
   end
 
   if unmount then

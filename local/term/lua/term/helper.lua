@@ -28,15 +28,19 @@ end
 ---@param term_opts? TermOpts
 ---@return number width, number height
 function M.get_dimensions(term_opts)
+  ---@type number
   local width = config.get_default_width()
+  ---@type number
   local height = config.get_default_height()
 
   if term_opts then
-    if type(term_opts.width) == 'number' then
-      width = term_opts.width
+    local opts_width = term_opts.width
+    if type(opts_width) == 'number' then
+      width = opts_width
     end
-    if type(term_opts.height) == 'number' then
-      height = term_opts.height
+    local opts_height = term_opts.height
+    if type(opts_height) == 'number' then
+      height = opts_height
     end
   end
 
