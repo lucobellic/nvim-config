@@ -129,11 +129,6 @@ return {
     { mode = { 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', desc = 'Save File' },
 
     --------------------
-    -- Which Key
-    --------------------
-    { '<localleader>', '<cmd>lua require("which-key").show("' .. vim.g.maplocalleader .. '")<cr>' },
-
-    --------------------
     -- Text Manipulation
     --------------------
 

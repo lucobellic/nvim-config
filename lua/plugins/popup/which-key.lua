@@ -1,5 +1,12 @@
 return {
   'folke/which-key.nvim',
+  keys = {
+    {
+      '<localleader>',
+      function() require('which-key.state').start({ keys = '<localleader>' }) end,
+      desc = 'which-key-trigger',
+    },
+  },
   opts = {
     preset = 'helix',
     delay = 300,
