@@ -374,10 +374,10 @@ return {
             },
           },
           hover = { enabled = false },
-          custom_areas = {
-            left = function() return get_group_icons('left') end,
-            right = function() return get_group_icons('right') end,
-          },
+          -- custom_areas = {
+          --   left = function() return get_group_icons('left') end,
+          --   right = function() return get_group_icons('right') end,
+          -- },
         },
       }
     end,

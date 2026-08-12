@@ -9,7 +9,7 @@ local system = require('plugins.ui.heirline.components.system')
 local tasks = require('plugins.ui.heirline.components.tasks')
 
 local Left = { mode.ViMode, git.Git, info.LazyUpdates, info.Separator, debug.Dap, debug.Molten, debug.MacroRec }
-local Center = vim.g.layout == 'edgy' and { edgy.LeftAlignment, edgy.Edgy } or { layout.LeftAlignment, layout.Layout }
+-- local Center = vim.g.layout == 'edgy' and { edgy.LeftAlignment, edgy.Edgy } or { layout.LeftAlignment, layout.Layout }
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {
   mode.PrimarySpace,
@@ -29,4 +29,5 @@ local Right = {
   info.Date,
 }
 
-return { Left, Center, Align, Right }
+-- return { Left, Center, Align, Right }
+return { Left, Align, Right }

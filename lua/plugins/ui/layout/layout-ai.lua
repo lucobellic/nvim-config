@@ -34,7 +34,7 @@ return {
       },
       {
         name = 'opencode2',
-        picker = { icon = '"', key = '2' },
+        picker = { icon = '', key = '2' },
         views = {
           {
             name = 'opencode2',

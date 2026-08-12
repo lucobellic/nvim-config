@@ -37,6 +37,7 @@ return {
   cond = vim.g.layout == 'layout',
   dev = true,
   lazy = true,
+  event = function() return { 'User LazyBufEnter' } end,
   keys = {
     {
       '<leader>;',
@@ -60,11 +61,17 @@ return {
     { '<leader>wl', '<cmd>Layout close right<cr>', desc = 'Layout Close Right' },
     { '<leader>wj', '<cmd>Layout close bottom<cr>', desc = 'Layout Close Bottom' },
   },
-  ---@type LayoutConfig
+  ---@type Layout.Config
   opts = {
-    autosave = {
-      panels = true,
-      views = false,
+    statusline = {
+      rail = {
+        enabled = true,
+        hover = true,
+        mode = 'buffer',
+        padding = 1,
+        position = 'left',
+        width = 3,
+      },
     },
     left = {
       size = 0.2,

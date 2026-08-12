@@ -126,6 +126,11 @@ return {
       unlisted_buffers = false,
     },
     render = function(props)
+      local buffer_options = vim.bo[props.buf]
+      if buffer_options.buftype == 'nofile' and (not buffer_options.filetype or buffer_options.filetype == '') then
+        return {}
+      end
+
       for _, handler in ipairs(handlers) do
         if handler:match(props) then
           return handler:render(props)
