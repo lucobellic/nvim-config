@@ -4,10 +4,13 @@ return {
     optional = true,
     opts = {
       spec = {
-        { '<leader>lo', group = 'OpenCode', mode = { 'n', 'v' } },
+        { '<leader>l', group = 'llm', mode = { 'n', 'v' } },
+        { '<leader>l2', group = 'OpenCode2', mode = { 'n', 'v' } },
         { '<leader>lc', group = 'Cursor', mode = { 'n', 'v' } },
         { '<leader>lg', group = 'Gemini', mode = { 'n', 'v' } },
-        { '<leader>l', group = 'llm', mode = { 'n', 'v' } },
+        { '<leader>lo', group = 'OpenCode', mode = { 'n', 'v' } },
+        { '<leader>lu', group = 'Claude', mode = { 'n', 'v' } },
+        { '<leader>lx', group = 'Codex', mode = { 'n', 'v' } },
       },
     },
   },
