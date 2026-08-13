@@ -16,7 +16,6 @@ vim.g.suggestions = false
 vim.g.ai_cmp = false
 vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
 
----@type 'edgy'|'layout'
--- vim.g.layout = 'layout'
+---@type 'edgy'|'layout'|'layout-with-rail'
+-- vim.g.layout = 'layout-with-rail'
 vim.g.layout = 'edgy'
-

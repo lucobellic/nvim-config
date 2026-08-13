@@ -128,35 +128,6 @@ local function navigate_buffer(direction)
   end
 end
 
---- @param position Edgy.Pos
-local function get_edgy_group_icons(position)
-  local result = {}
-  local statusline = require('edgy-group.stl').get_statusline(position)
-  for _, item in ipairs(statusline) do
-    table.insert(result, { text = item })
-    table.insert(result, { text = ' ', link = 'Normal' })
-  end
-  return result
-end
-
-local function get_layout_group_icons(position)
-  local result = {}
-  local statusline = require('layout').get_statusline(position)
-  vim.iter(statusline):each(function(item)
-    table.insert(result, { text = item })
-    table.insert(result, { text = ' ', link = 'Normal' })
-  end)
-  return result
-end
-
-local function get_group_icons(position)
-  if vim.g.layout == 'edgy' then
-    return get_edgy_group_icons(position)
-  else
-    return get_layout_group_icons(position)
-  end
-end
-
 local icon_hl_cache = {}
 
 --- Set the icon highlight color only for selected buffers
@@ -231,7 +202,6 @@ return {
     'akinsho/bufferline.nvim',
     cond = not (vim.g.started_by_firenvim or vim.env.KITTY_SCROLLBACK_NVIM == 'true'),
     event = function() return { 'User LazyBufEnter' } end,
-    dependencies = { { 'lucobellic/edgy-group.nvim', optional = true } },
     keys = function()
       return {
         {
@@ -374,10 +344,6 @@ return {
             },
           },
           hover = { enabled = false },
-          -- custom_areas = {
-          --   left = function() return get_group_icons('left') end,
-          --   right = function() return get_group_icons('right') end,
-          -- },
         },
       }
     end,

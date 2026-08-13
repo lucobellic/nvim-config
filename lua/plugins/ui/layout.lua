@@ -32,137 +32,162 @@ local function extend(src, dst)
   vim.iter({ 'bottom', 'left', 'right' }):each(function(pos) vim.list_extend(dst[pos], src_opts[pos] or {}) end)
 end
 
-return {
-  'lucobellic/layout.nvim',
-  cond = vim.g.layout == 'layout',
-  dev = true,
-  lazy = true,
-  event = function() return { 'User LazyBufEnter' } end,
-  keys = {
-    {
-      '<leader>;',
-      function() require('layout').pick() end,
-      desc = 'Layout Pick',
-      mode = { 'n', 'v' },
-    },
-    {
-      '<leader>we',
-      function()
-        if vim.b.layout then
-          local bufnr = vim.api.nvim_win_get_buf(0)
-          require('layout').set_buffer_enabled(bufnr, not vim.b.layout.enabled)
-          vim.api.nvim_set_option_value('buflisted', not vim.b.layout.enabled, { buf = 0 })
-          vim.schedule(function() vim.cmd('wincmd =') end)
-        end
-      end,
-      desc = 'Layout Toggle Attachment',
-    },
-    { '<leader>wh', '<cmd>Layout close left<cr>', desc = 'Layout Close Left' },
-    { '<leader>wl', '<cmd>Layout close right<cr>', desc = 'Layout Close Right' },
-    { '<leader>wj', '<cmd>Layout close bottom<cr>', desc = 'Layout Close Bottom' },
-  },
-  ---@type Layout.Config
-  opts = {
-    statusline = {
-      rail = {
-        enabled = true,
-        hover = true,
-        mode = 'buffer',
-        padding = 1,
-        position = 'left',
-        width = 3,
-      },
-    },
-    left = {
-      size = 0.2,
-      {
-        name = 'explorer',
-        picker = { icon = '', key = 'e' },
-        views = {
-          {
-            name = 'filesystem',
-            filter = function(buf)
-              return vim.bo[buf].filetype == 'neo-tree' and vim.b[buf].neo_tree_source == 'filesystem'
-            end,
-            open = 'Neotree show position=left filesystem',
-          },
-        },
-      },
-      {
-        name = 'diffview',
-        picker = { icon = '', key = 'i' },
-        views = {
-          {
-            name = 'diffview-file-panel',
-            filter = 'DiffviewFiles',
-            open = function()
-              local lib = require('diffview.lib')
-              local current_view = lib.get_current_view()
-              if current_view then
-                require('diffview.actions').toggle_files()
-              else
-                vim.cmd('DiffviewOpen')
-              end
-            end,
-          },
-        },
-      },
-      {
-        name = 'symbols',
-        views = {
-          {
-            name = 'aerial',
-            filter = 'aerial',
-            open = 'AerialToggle',
-          },
-          {
-            name = 'trouble-symbols',
-            filter = ft_and('trouble', trouble_mode('symbols')),
-            open = 'Trouble symbols toggle focus=false win.position=left',
-          },
-        },
-      },
-    },
-    right = { size = 0.3 },
-    bottom = {
-      size = 0.2,
-      align = 'full',
-      {
-        name = 'noice',
-        picker = { icon = '', key = 'n' },
-        views = {
-          {
-            name = 'messages',
-            title = 'noice',
-            filter = function(buf, win)
-              return vim.bo[buf].filetype == 'noice' and not_floating(buf, win) and vim.bo[buf].buftype == 'nofile'
-            end,
-            open = 'Noice',
-          },
-        },
-      },
-    },
+---@param position 'left'|'right'
+---@return table[]
+local function get_group_icons(position)
+  local result = {}
+  vim.iter(require('layout').get_statusline(position)):each(function(item)
+    table.insert(result, { text = item })
+    table.insert(result, { text = ' ', link = 'Normal' })
+  end)
+  return result
+end
 
-    -- TODO: do not work, to be fixed later.
-    workspaces = {
-      auto_save = false,
-      auto_restore = false,
-      dir = vim.fn.stdpath('data') .. '/layout',
+---@param _ LazyPlugin
+---@param opts table
+local function extend_bufferline(_, opts)
+  if vim.g.layout == 'layout' then
+    opts.options.custom_areas = {
+      left = function() return get_group_icons('left') end,
+      right = function() return get_group_icons('right') end,
+    }
+  end
+end
+
+return {
+  { 'akinsho/bufferline.nvim', optional = true, opts = extend_bufferline },
+  {
+    'lucobellic/layout.nvim',
+    cond = vim.g.layout == 'layout' or vim.g.layout == 'layout-with-rail',
+    dev = true,
+    lazy = true,
+    event = function() return { 'User LazyBufEnter' } end,
+    keys = {
+      {
+        '<leader>;',
+        function() require('layout').pick() end,
+        desc = 'Layout Pick',
+        mode = { 'n', 'v' },
+      },
+      {
+        '<leader>we',
+        function()
+          if vim.b.layout then
+            local bufnr = vim.api.nvim_win_get_buf(0)
+            require('layout').set_buffer_enabled(bufnr, not vim.b.layout.enabled)
+            vim.api.nvim_set_option_value('buflisted', not vim.b.layout.enabled, { buf = 0 })
+            vim.schedule(function() vim.cmd('wincmd =') end)
+          end
+        end,
+        desc = 'Layout Toggle Attachment',
+      },
+      { '<leader>wh', '<cmd>Layout close left<cr>', desc = 'Layout Close Left' },
+      { '<leader>wl', '<cmd>Layout close right<cr>', desc = 'Layout Close Right' },
+      { '<leader>wj', '<cmd>Layout close bottom<cr>', desc = 'Layout Close Bottom' },
     },
+    ---@type Layout.Config
+    opts = {
+      statusline = {
+        rail = {
+          enabled = vim.g.layout == 'layout-with-rail',
+          hover = true,
+          mode = 'buffer',
+          padding = 1,
+          position = 'left',
+          width = 3,
+        },
+      },
+      left = {
+        size = 0.2,
+        {
+          name = 'explorer',
+          picker = { icon = '', key = 'e' },
+          views = {
+            {
+              name = 'filesystem',
+              filter = function(buf)
+                return vim.bo[buf].filetype == 'neo-tree' and vim.b[buf].neo_tree_source == 'filesystem'
+              end,
+              open = 'Neotree show position=left filesystem',
+            },
+          },
+        },
+        {
+          name = 'diffview',
+          picker = { icon = '', key = 'i' },
+          views = {
+            {
+              name = 'diffview-file-panel',
+              filter = 'DiffviewFiles',
+              open = function()
+                local lib = require('diffview.lib')
+                local current_view = lib.get_current_view()
+                if current_view then
+                  require('diffview.actions').toggle_files()
+                else
+                  vim.cmd('DiffviewOpen')
+                end
+              end,
+            },
+          },
+        },
+        {
+          name = 'symbols',
+          views = {
+            {
+              name = 'aerial',
+              filter = 'aerial',
+              open = 'AerialToggle',
+            },
+            {
+              name = 'trouble-symbols',
+              filter = ft_and('trouble', trouble_mode('symbols')),
+              open = 'Trouble symbols toggle focus=false win.position=left',
+            },
+          },
+        },
+      },
+      right = { size = 0.3 },
+      bottom = {
+        size = 0.2,
+        align = 'full',
+        {
+          name = 'noice',
+          picker = { icon = '', key = 'n' },
+          views = {
+            {
+              name = 'messages',
+              title = 'noice',
+              filter = function(buf, win)
+                return vim.bo[buf].filetype == 'noice' and not_floating(buf, win) and vim.bo[buf].buftype == 'nofile'
+              end,
+              open = 'Noice',
+            },
+          },
+        },
+      },
+
+      -- TODO: do not work, to be fixed later.
+      workspaces = {
+        auto_save = false,
+        auto_restore = false,
+        dir = vim.fn.stdpath('data') .. '/layout',
+      },
+    },
+    ---@param opts LayoutConfig
+    config = function(_, opts)
+      extend(require('plugins.ui.layout.layout-trouble'), opts)
+      extend(require('plugins.ui.layout.layout-term'), opts)
+      extend(require('plugins.ui.layout.layout-dap'), opts)
+      extend(require('plugins.ui.layout.layout-test'), opts)
+      extend(require('plugins.ui.layout.layout-ai'), opts)
+      extend(require('plugins.ui.layout.layout-misc'), opts)
+      require('layout').setup(opts)
+      -- Add autocmd to refresh the statusline when the window is opened
+      vim.api.nvim_create_autocmd(
+        { 'WinResized' },
+        { pattern = { '*' }, callback = function() incline_safe_refresh() end }
+      )
+    end,
   },
-  ---@param opts LayoutConfig
-  config = function(_, opts)
-    extend(require('plugins.ui.layout.layout-trouble'), opts)
-    extend(require('plugins.ui.layout.layout-term'), opts)
-    extend(require('plugins.ui.layout.layout-dap'), opts)
-    extend(require('plugins.ui.layout.layout-test'), opts)
-    extend(require('plugins.ui.layout.layout-ai'), opts)
-    extend(require('plugins.ui.layout.layout-misc'), opts)
-    require('layout').setup(opts)
-    -- Add autocmd to refresh the statusline when the window is opened
-    vim.api.nvim_create_autocmd(
-      { 'WinResized' },
-      { pattern = { '*' }, callback = function() incline_safe_refresh() end }
-    )
-  end,
 }
