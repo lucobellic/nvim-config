@@ -97,7 +97,6 @@ local filter_skip = {
       { event = 'msg_show', kind = 'lua_error'   , find = 'bdelete'                     } ,
       { event = 'msg_show', kind = 'lua_error'   , find = 'inlay_hint'                  } ,
       { event = 'msg_show', kind = 'wmsg'        , find = 'BOTTOM'                      } ,
-      { event = 'notify'  , kind = 'error'       , find = 'Edgy'                        } ,
       { event = 'notify'  , kind = 'error'       , find = 'Failed to create diff buffer'} ,
       { event = 'notify'  , kind = 'error'       , find = 'Failed to set cursor'        } ,
       { event = 'notify'  , kind = 'error'       , find = 'InvalidParams'               } ,

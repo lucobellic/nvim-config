@@ -1,24 +1,40 @@
+---@class Util
 local M = {}
 
---- Find the first non-edgy, non-floating, normal editing window on the current tabpage.
+---Check whether layout.nvim is currently managing a buffer.
+---@public
+---@param bufnr? integer Defaults to the current buffer.
+---@return boolean
+function M.is_layout_managed(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local layout = vim.b[bufnr].layout
+  return type(layout) == 'table' and layout.enabled == true
+end
+
+---@param bufnr integer
+---@return boolean
+local function is_panel_buffer(bufnr)
+  return M.is_layout_managed(bufnr)
+end
+
+--- Find the first non-panel, non-floating, normal editing window on the current tabpage.
 --- Skips the calling window so the file is never opened back into the source buffer.
-local function find_non_edgy_win()
+local function find_non_panel_win()
   local source_win = vim.api.nvim_get_current_win()
   return vim.iter(vim.api.nvim_tabpage_list_wins(0)):find(function(winid)
     if winid == source_win then
       return false
     end
     local bufnr = vim.api.nvim_win_get_buf(winid)
-    local is_edgy = vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true
     local is_floating = vim.api.nvim_win_get_config(winid).relative ~= ''
     local buftype = vim.bo[bufnr].buftype
-    return not is_edgy and not is_floating and (buftype == '' or buftype == 'acwrite')
+    return not is_panel_buffer(bufnr) and not is_floating and (buftype == '' or buftype == 'acwrite')
   end)
 end
 
---- Open file under cursor in a non-edgy window, replicating gf / gF behavior.
+--- Open file under cursor in a non-layout window, replicating gf / gF behavior.
 --- Respects &path and &suffixesadd exactly as native gf does.
---- If no valid non-edgy window exists, opens a new split (mirrors native gf fallback).
+--- If no valid non-layout window exists, opens a new split (mirrors native gf fallback).
 --- @param with_lnum? boolean If true, also jump to line number (gF behavior)
 function M.open_file(with_lnum)
   local cfile = vim.fn.expand('<cfile>')
@@ -47,11 +63,11 @@ function M.open_file(with_lnum)
     return
   end
 
-  local target_win = find_non_edgy_win()
+  local target_win = find_non_panel_win()
   if target_win then
     vim.api.nvim_set_current_win(target_win)
   else
-    -- No valid non-edgy window: open a new split, mirroring native gf fallback
+    -- No valid non-panel window: open a new split, mirroring native gf fallback
     vim.cmd('new')
   end
 

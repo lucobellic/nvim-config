@@ -1,7 +1,9 @@
 local Handler = require('plugins.ui.incline.handler')
 
----@class EdgyHandler : InclineHandler
-local EdgyHandler = Handler:new({
+---@class LayoutHandler : InclineHandler
+---@field filetypes string[]
+---@field titles { string: string }
+local LayoutHandler = Handler:new({
   filetypes = {
     'neotest-output-panel',
     'neotest-summary',
@@ -24,9 +26,9 @@ local EdgyHandler = Handler:new({
   },
 })
 
-function EdgyHandler:match(props) return vim.tbl_contains(self.filetypes, vim.bo[props.buf].filetype) end
+function LayoutHandler:match(props) return vim.tbl_contains(self.filetypes, vim.bo[props.buf].filetype) end
 
-function EdgyHandler:render(props)
+function LayoutHandler:render(props)
   local filetype = vim.bo[props.buf].filetype
   local name = self.titles[filetype] or filetype
 
@@ -39,4 +41,4 @@ function EdgyHandler:render(props)
   return { { title, group = props.focused and 'FloatTitle' or 'Title' } }
 end
 
-return EdgyHandler
+return LayoutHandler

@@ -17,10 +17,10 @@ local git_icons = {
 
 -- Handlers are checked in order; first match wins
 local handlers = {
-  require('plugins.ui.incline.snacks-terminal'),
-  require('plugins.ui.incline.overseer-output'),
-  require('plugins.ui.incline.edgy'),
   require('plugins.ui.incline.codecompanion'),
+  require('plugins.ui.incline.layout'),
+  require('plugins.ui.incline.overseer-output'),
+  require('plugins.ui.incline.snacks-terminal'),
 }
 
 local function get_diagnostic_label(props)

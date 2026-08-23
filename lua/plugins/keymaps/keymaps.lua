@@ -238,8 +238,9 @@ return {
       'gf',
       function()
         local bufnr = vim.api.nvim_get_current_buf()
-        if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
-          require('util.util').open_file(false)
+        local util = require('util.util')
+        if util.is_layout_managed(bufnr) then
+          util.open_file(false)
         else
           vim.cmd('normal! gf')
         end
@@ -250,8 +251,9 @@ return {
       'gF',
       function()
         local bufnr = vim.api.nvim_get_current_buf()
-        if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
-          require('util.util').open_file(true)
+        local util = require('util.util')
+        if util.is_layout_managed(bufnr) then
+          util.open_file(true)
         else
           vim.cmd('normal! gF')
         end

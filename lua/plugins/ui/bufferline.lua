@@ -275,12 +275,7 @@ return {
           ---@param bufnr integer
           ---@return boolean
           custom_filter = function(bufnr)
-            if vim.b[bufnr].edgy_keys ~= nil and vim.b[bufnr].edgy_disable ~= true then
-              return false
-            end
-
-            local layout = vim.b[bufnr].layout
-            if type(layout) == 'table' and layout.enabled == true then
+            if require('util.util').is_layout_managed(bufnr) then
               return false
             end
 

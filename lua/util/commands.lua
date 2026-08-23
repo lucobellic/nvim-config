@@ -132,7 +132,6 @@ function M.setup_window_resize(opts)
         or not vim.api.nvim_win_is_valid(winid)
         or vim.tbl_contains(ignore_buftypes, buftype)
         or vim.tbl_contains(ignore_filetypes, filetype)
-        or (buffer.edgy_keys ~= nil and buffer.edgy_disable ~= true)
         or (buffer.layout ~= nil and buffer.layout.enabled ~= true)
         or vim.w[winid].layout_managed ~= nil
 

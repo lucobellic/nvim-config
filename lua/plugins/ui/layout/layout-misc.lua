@@ -28,7 +28,7 @@ return {
               return vim.bo[buf].filetype == 'markdown'
                 and not_floating(buf, win)
                 and vim.api.nvim_buf_get_name(buf):find('/notes/') ~= nil
-                and vim.g.edgy_notes_disabled ~= true
+                and vim.g.layout_notes_disabled ~= true
             end,
           },
         },
