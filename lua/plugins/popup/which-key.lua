@@ -35,6 +35,5 @@ return {
       border = vim.g.winborder,
       wo = { winblend = vim.o.winblend },
     },
-    sort = { 'alphanum', 'local', 'order', 'mod' },
   },
 }
