@@ -28,22 +28,8 @@ local keymap_set = vim.keymap.set
 ---  Mixed positional + keyed is allowed; an explicit function always wins over `rhs`.
 ---@alias RepeatableOpt boolean | RepeatKey | { [1]: RepeatKey?, [2]: RepeatKey?, ['.']: RepeatFn?, [',']: RepeatFn?, [';']: RepeatFn? }
 
--- Global table holding operatorfunc callbacks, keyed by unique slot names.
--- Must be global so "v:lua.__keymap_repeat_fns.fnN" is resolvable by Neovim.
-_G.__keymap_repeat_fns = _G.__keymap_repeat_fns or {}
-
 ---@type MotionState|nil
 local _last_motion = nil
-
--- Monotonic counter used to generate unique slot names.
-local _repeat_id = 0
-
----Return a new unique slot name for `_G.__keymap_repeat_fns`.
----@return string
-local function _next_slot()
-  _repeat_id += 1
-  return 'fn' .. _repeat_id
-end
 
 ---Ensure `rhs` is callable. String keysequences are wrapped in a feedkeys call
 ---so that `operatorfunc` can invoke them.
@@ -109,17 +95,14 @@ local function _normalise_repeatable(repeatable, rhs)
   return nil
 end
 
----Store `callback` under `slot` in the global operatorfunc table and return an
----`expr = true` wrapper. When the wrapper runs it sets `operatorfunc` to the slot
----and returns `"g@l"`, triggering the callback. On subsequent dot-repeats Neovim
----calls the slot directly, bypassing this wrapper entirely.
+---Return an `expr = true` wrapper. When the wrapper runs it sets `operatorfunc`
+---to `callback` and returns `"g@l"`, triggering the callback. On subsequent dot-repeats Neovim
+---calls the callback directly, bypassing this wrapper entirely.
 ---@param callback fun(): any
----@param slot string
 ---@return fun(): string
-local function _make_opfunc_wrapper(callback, slot)
-  _G.__keymap_repeat_fns[slot] = callback
+local function _make_opfunc_wrapper(callback)
   return function()
-    vim.go.operatorfunc = 'v:lua.__keymap_repeat_fns.' .. slot
+    vim.o.operatorfunc = callback
     return 'g@l'
   end
 end
@@ -194,8 +177,7 @@ vim.keymap.set = function(mode, lhs, rhs, opts)
           desc.dot()
         end
 
-        local slot = _next_slot()
-        local wrapper = _make_opfunc_wrapper(opfunc_callback, slot)
+        local wrapper = _make_opfunc_wrapper(opfunc_callback)
         return keymap_set(mode, lhs, wrapper, vim.tbl_extend('force', opts, { expr = true }))
       else
         -- Motion-only path: `'.'` was not requested, so do NOT register operatorfunc.
