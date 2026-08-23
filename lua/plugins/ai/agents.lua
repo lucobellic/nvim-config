@@ -5,7 +5,6 @@ return {
     opts = {
       spec = {
         { '<leader>l', group = 'llm', mode = { 'n', 'v' } },
-        { '<leader>l2', group = 'OpenCode2', mode = { 'n', 'v' } },
         { '<leader>lc', group = 'Cursor', mode = { 'n', 'v' } },
         { '<leader>lg', group = 'Gemini', mode = { 'n', 'v' } },
         { '<leader>lo', group = 'OpenCode', mode = { 'n', 'v' } },
@@ -29,19 +28,10 @@ return {
         insert = false,
       },
       opencode = {
-        executable = 'opencode',
+        executable = 'opencode2',
         filetype = 'opencode',
         display_name = 'OpenCode',
         leader = '<leader>lo',
-        split = 'right',
-        focus = true,
-        insert = false,
-      },
-      opencode2 = {
-        executable = 'opencode2',
-        filetype = 'opencode2',
-        display_name = 'OpenCode2',
-        leader = '<leader>l2',
         split = 'right',
         focus = true,
         insert = false,

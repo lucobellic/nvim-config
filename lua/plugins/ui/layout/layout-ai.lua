@@ -23,23 +23,12 @@ return {
       },
       {
         name = 'opencode',
-        picker = { icon = '', key = 'o' },
+        picker = { icon = '', key = 'o' },
         views = {
           {
             name = 'opencode',
             filter = ft_and('opencode', not_floating),
             open = 'OpenCodeToggle',
-          },
-        },
-      },
-      {
-        name = 'opencode2',
-        picker = { icon = '', key = '2' },
-        views = {
-          {
-            name = 'opencode2',
-            filter = ft_and('opencode2', not_floating),
-            open = 'OpenCode2Toggle',
           },
         },
       },
