@@ -59,6 +59,10 @@ return {
     event = 'LspAttach',
     opts = function(_, opts)
       opts = vim.tbl_deep_extend('force', opts or {}, {
+        servers = {
+          tsc = { mason = false },
+          vtsls = { enabled = false },
+        },
         codelens = { enabled = false },
         inlay_hints = { enabled = false },
         diagnostics = {
@@ -91,6 +95,7 @@ return {
         mason = false,
         enabled = false,
       })
+
       require('lspconfig.ui.windows').default_options.border = vim.g.border.style
 
       return opts
