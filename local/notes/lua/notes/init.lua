@@ -162,6 +162,42 @@ function M.delete_note()
   vim.notify('Note deleted', vim.log.levels.INFO, { title = 'Notes' })
 end
 
+--- Copy notes to the system clipboard.
+---@public
+---@param all? boolean Copy all notes in the current bookmark instead of only notes under the current working directory
+function M.copy_all_notes(all)
+  local store = require('notes.store')
+
+  collect_all_to_store()
+
+  local data = store.to_data()
+  local cwd = assert(vim.uv.cwd())
+  local cwd_prefix = cwd == '/' and cwd or cwd .. '/'
+  local paths = vim
+    .iter(vim.tbl_keys(data))
+    :filter(function(path) return all or vim.startswith(path, cwd_prefix) end)
+    :totable()
+  local lines = {}
+  table.sort(paths)
+
+  vim.iter(paths):each(function(path)
+    local notes = vim.deepcopy(data[path])
+    table.sort(notes, function(a, b) return a.line < b.line end)
+    vim
+      .iter(notes)
+      :each(function(note) table.insert(lines, string.format('%s:%d %s', path, note.line + 1, note.text)) end)
+  end)
+
+  if #lines == 0 then
+    local scope = all and 'the current bookmark' or 'the current directory'
+    vim.notify('No notes to copy in ' .. scope, vim.log.levels.WARN, { title = 'Notes' })
+    return
+  end
+
+  vim.fn.setreg('+', table.concat(lines, '\n'))
+  vim.notify(string.format('Copied %d notes', #lines), vim.log.levels.INFO, { title = 'Notes' })
+end
+
 --- Switch to a different bookmark session.
 --- Saves the current bookmark, clears the store and all extmarks,
 --- then loads the new bookmark into the store and restores extmarks.

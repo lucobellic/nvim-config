@@ -19,6 +19,8 @@ return {
       { '<leader>na', function() require('notes').add_note() end, desc = 'Notes Add' },
       { '<leader>nd', function() require('notes').delete_note() end, desc = 'Notes Delete' },
       { '<leader>nt', function() require('notes').toggle() end, desc = 'Notes Toggle' },
+      { '<leader>ny', function() require('notes').copy_all_notes() end, desc = 'Notes Copy (CWD)' },
+      { '<leader>nY', function() require('notes').copy_all_notes(true) end, desc = 'Notes Copy (All)' },
       { '<leader>ns', function() require('notes.picker').search_notes() end, desc = 'Notes Search (CWD)' },
       { '<leader>nS', function() require('notes.picker').search_all_notes() end, desc = 'Notes Search (All)' },
       { '<leader>nbs', function() require('notes').select_bookmark() end, desc = 'Notes Select Bookmark' },
