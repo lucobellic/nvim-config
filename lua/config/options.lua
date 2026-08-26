@@ -4,7 +4,7 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '_'
 vim.g.autoformat = false
-vim.g.markdown_folding = true
+vim.g.markdown_folding = false
 
 vim.g.winborder = vim.g.neovide_floating_shadow and 'solid' or 'single'
 vim.o.winborder = vim.g.winborder
