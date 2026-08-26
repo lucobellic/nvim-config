@@ -9,6 +9,10 @@ local format_extmark = function(extmark)
     return ' '
   end
 
+  if extmark[4].sign_text:match('^%s+$') then
+    return ' '
+  end
+
   if extmark[4].sign_hl_group then
     return ('%%#%s#%s'):format(extmark[4].sign_hl_group, extmark[4].sign_text):gsub('%s*$', '') .. '%*'
   end
