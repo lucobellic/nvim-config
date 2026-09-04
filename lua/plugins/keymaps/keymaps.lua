@@ -119,6 +119,8 @@ return {
         vim.cmd('noh')
         pcall(function() require('copilot-nes').cancel() end)
         pcall(function() require('sidekick.nes').cancel() end)
+        -- Clear multicursor
+			  vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace('nvim.multicursor'), 0, -1)
         return '<esc>'
       end,
       expr = true,
