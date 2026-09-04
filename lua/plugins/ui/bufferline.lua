@@ -130,6 +130,9 @@ end
 
 local icon_hl_cache = {}
 
+--- Clear custom icon highlights so they are recreated with the current colorscheme.
+local function reset_icon_highlight_cache() icon_hl_cache = {} end
+
 --- Set the icon highlight color only for selected buffers
 --- @param state bufferline.Visibility
 --- @param base_hl string
@@ -271,6 +274,11 @@ return {
     end,
     opts = function()
       return {
+        highlights = {
+          fill = {
+            bg = { attribute = 'bg', highlight = 'StatusLine' },
+          },
+        },
         options = {
           ---@param bufnr integer
           ---@return boolean
@@ -345,6 +353,15 @@ return {
     config = function(_, opts)
       require('bufferline.highlights').set_icon_highlight = set_icon_highlight
       require('bufferline').setup(opts)
+
+      vim.api.nvim_create_autocmd('ColorScheme', {
+        group = vim.api.nvim_create_augroup('BufferlineCustomIconHighlights', { clear = true }),
+        callback = function()
+          reset_icon_highlight_cache()
+          require('bufferline.ui').refresh()
+        end,
+        desc = 'Refresh custom bufferline icon highlights',
+      })
     end,
   },
 }
