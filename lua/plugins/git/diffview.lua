@@ -145,6 +145,7 @@ return {
               '<C-y>',
               function()
                 local view = require('diffview.lib').get_current_view()
+                ---@cast view FileHistoryView?
                 local file = view and view:infer_cur_file()
                 if not (file and file.absolute_path) then
                   vim.notify('No file under cursor', vim.log.levels.WARN)
