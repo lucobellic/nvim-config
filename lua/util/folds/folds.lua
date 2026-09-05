@@ -1,8 +1,33 @@
---- @class FoldVirtualText Module for adding virtual text to folded lines in Neovim
---- @field ns integer Namespace for virtual text extmarks
+---@class FoldVirtualText.Command
+---@field cmd string
+---@field desc string
+---@field per_cursor? boolean Apply the command at every native multicursor.
+
+---@class FoldVirtualText Module for adding virtual text to folded lines in Neovim
+---@field ns integer Namespace for virtual text extmarks
 local M = {
   ns = vim.api.nvim_create_namespace('fold_virtual_text'),
 }
+
+local multicursor_namespace = vim.api.nvim_create_namespace('nvim.multicursor')
+
+---@param command string
+local function execute_fold_command(command)
+  local multicursors = vim.api.nvim_buf_get_extmarks(0, multicursor_namespace, 0, -1, {})
+
+  if #multicursors == 0 then
+    vim.cmd('normal! ' .. command)
+    return
+  end
+
+  local primary_view = vim.fn.winsaveview()
+  pcall(vim.cmd, 'normal! ' .. command)
+  vim.iter(multicursors):each(function(multicursor)
+    vim.api.nvim_win_set_cursor(0, { multicursor[2] + 1, multicursor[3] })
+    pcall(vim.cmd, 'normal! ' .. command)
+  end)
+  vim.fn.winrestview(primary_view)
+end
 
 --- Add virtual text for folded lines in the current buffer
 --- Clears existing virtual text and adds new overlays for all closed folds
@@ -47,14 +72,15 @@ function M.setup()
     callback = M.add_fold_virtual_text,
   })
 
+  ---@type FoldVirtualText.Command[]
   local normal_fold_commands = {
-    { cmd = 'zo', desc = 'Open fold under cursor' },
-    { cmd = 'zO', desc = 'Open all folds under cursor recursively' },
-    { cmd = 'zc', desc = 'Close fold under cursor' },
-    { cmd = 'zC', desc = 'Close all folds under cursor recursively' },
-    { cmd = 'za', desc = 'Toggle fold under cursor' },
-    { cmd = 'zA', desc = 'Toggle all folds under cursor recursively' },
-    { cmd = 'zv', desc = 'View cursor line (open folds to reveal cursor)' },
+    { cmd = 'zo', desc = 'Open fold under cursor', per_cursor = true },
+    { cmd = 'zO', desc = 'Open all folds under cursor recursively', per_cursor = true },
+    { cmd = 'zc', desc = 'Close fold under cursor', per_cursor = true },
+    { cmd = 'zC', desc = 'Close all folds under cursor recursively', per_cursor = true },
+    { cmd = 'za', desc = 'Toggle fold under cursor', per_cursor = true },
+    { cmd = 'zA', desc = 'Toggle all folds under cursor recursively', per_cursor = true },
+    { cmd = 'zv', desc = 'View cursor line (open folds to reveal cursor)', per_cursor = true },
     { cmd = 'zx', desc = 'Update folds (undo manually opened/closed folds)' },
     { cmd = 'zX', desc = 'Undo manually opened/closed folds' },
     { cmd = 'zm', desc = 'Fold more (increase foldlevel)' },
@@ -77,7 +103,11 @@ function M.setup()
   vim.iter(normal_fold_commands):each(function(fold_cmd)
     vim.keymap.set('n', fold_cmd.cmd, function()
       pcall(function()
-        vim.cmd('normal! ' .. fold_cmd.cmd)
+        if fold_cmd.per_cursor then
+          execute_fold_command(fold_cmd.cmd)
+        else
+          vim.cmd('normal! ' .. fold_cmd.cmd)
+        end
         vim.schedule(M.add_fold_virtual_text)
         vim.api.nvim_exec_autocmds('User', { pattern = 'FoldChanged' })
       end)
