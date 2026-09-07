@@ -169,32 +169,6 @@ return {
               require('plugins.git.diffview.util').open_containing_merge_history,
               { desc = 'Open containing merge history' },
             },
-            -- Fixup commit under cursor
-            {
-              'n',
-              '<C-s>',
-              function()
-                local lazy = require('diffview.lazy')
-                ---@type FileHistoryView|LazyModule
-                local FileHistoryView =
-                  lazy.access('diffview.scene.views.file_history.file_history_view', 'FileHistoryView')
-                local view = require('diffview.lib').get_current_view()
-                if view and view:instanceof(FileHistoryView.__get()) then
-                  ---@cast view DiffView|FileHistoryView
-                  local file = view:infer_cur_file()
-                  local item = view.panel:get_item_at_cursor()
-
-                  if file and item then
-                    local path = file.absolute_path
-                    vim.system({ 'git', 'stash', '--keep-index' })
-                    vim.system({ 'git', 'commit', '--fixup=' .. item.commit.hash, '--', path })
-                    vim.system({ 'git', 'stash', 'pop', '--index' })
-                    vim.schedule(function() vim.notify('Fixup ' .. item.commit.hash, vim.log.levels.INFO) end)
-                  end
-                end
-              end,
-              { desc = 'Fixup current file staged change' },
-            },
           },
           view = {
             { 'n', '<leader>b', false },
