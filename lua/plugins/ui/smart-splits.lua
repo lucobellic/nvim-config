@@ -1,6 +1,7 @@
 return {
   'mrjones2014/smart-splits.nvim',
   vscode = false,
+  cond = not vim.g.started_by_firenvim,
   lazy = false,
   branch = 'master',
   keys = {
