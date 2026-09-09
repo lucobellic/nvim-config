@@ -93,7 +93,8 @@ local statuscolumn = {
     local buf = vim.api.nvim_get_current_buf()
     local sign = get_sign(buf, line)
     local git_sign = get_git_sign(buf, line)
-    local text = sign .. git_sign .. '%l%C '
+    local fold_column = vim.v.virtnum == 0 and '%C' or ' '
+    local text = sign .. git_sign .. '%l' .. fold_column .. ' '
     return text
     -- return add_copilot_highlight(text, buf, line)
   end,
