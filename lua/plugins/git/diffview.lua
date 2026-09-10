@@ -128,6 +128,18 @@ return {
             { 'n', '<leader>b', false },
             {
               'n',
+              'g<C-x>',
+              require('diffview.actions').cycle_layout,
+              { desc = 'Cycle available layouts', repeatable = true },
+            },
+            {
+              'n',
+              '<C-s>',
+              require('plugins.git.diffview.amend').under_cursor,
+              { desc = 'Amend commit with staged file change' },
+            },
+            {
+              'n',
               'gq',
               function()
                 require('diffview.actions').toggle_files()
@@ -174,6 +186,18 @@ return {
             { 'n', '<leader>b', false },
             {
               'n',
+              'g<C-x>',
+              require('diffview.actions').cycle_layout,
+              { desc = 'Cycle through available layouts', repeatable = true },
+            },
+            {
+              'n',
+              '<C-s>',
+              require('plugins.git.diffview.amend').under_cursor,
+              { desc = 'Amend commit with staged file change' },
+            },
+            {
+              'n',
               'gq',
               function()
                 require('diffview.actions').toggle_files()
@@ -183,6 +207,12 @@ return {
           },
           file_panel = {
             { 'n', '<leader>b', false },
+            {
+              'n',
+              'g<C-x>',
+              require('diffview.actions').cycle_layout,
+              { desc = 'Cycle available layouts', repeatable = true },
+            },
             {
               'n',
               'gq',
