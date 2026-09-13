@@ -1,5 +1,17 @@
+---@class MiniAiWhichKey.Object
+---@field [1] string
+---@field desc string
+
+local native_line_mappings = {
+  around_last = '',
+  inside_last = '',
+}
+
 if vim.g.distribution == 'lazyvim' then
-  return {}
+  return {
+    'nvim-mini/mini.ai',
+    opts = { mappings = native_line_mappings },
+  }
 end
 
 -- taken from MiniExtra.gen_ai_spec.buffer
@@ -21,6 +33,7 @@ end
 
 -- register all text objects with which-key
 local function ai_whichkey(opts)
+  ---@type MiniAiWhichKey.Object[]
   local objects = {
     { ' ', desc = 'whitespace' },
     { '"', desc = '" string' },
@@ -65,17 +78,33 @@ local function ai_whichkey(opts)
   mappings.goto_left = nil
   mappings.goto_right = nil
 
-  for name, prefix in pairs(mappings) do
-    name = name:gsub('^around_', ''):gsub('^inside_', '')
-    ret[#ret + 1] = { prefix, group = name }
-    for _, obj in ipairs(objects) do
-      local desc = obj.desc
-      if prefix:sub(1, 1) == 'i' then
-        desc = desc:gsub(' with ws', '')
-      end
-      ret[#ret + 1] = { prefix .. obj[1], desc = obj.desc }
-    end
+  ---Append which key specs for every text object.
+  ---@param prefix string
+  ---@param specs wk.Spec[]
+  ---@param textobjects MiniAiWhichKey.Object[]
+  ---@return wk.Spec[]
+  local function append_textobject_specs(prefix, specs, textobjects)
+    return vim
+      .iter(textobjects)
+      :map(function(object)
+        local desc = object.desc
+        if prefix:sub(1, 1) == 'i' then
+          desc = desc:gsub(' with ws', '')
+        end
+        return { prefix .. object[1], desc = desc }
+      end)
+      :fold(specs, function(result, spec)
+        result[#result + 1] = spec
+        return result
+      end)
   end
+
+  ret = vim.iter(mappings):filter(function(_, prefix) return prefix ~= '' end):fold(ret, function(specs, name, prefix)
+    local group_name = name:gsub('^around_', ''):gsub('^inside_', '')
+    specs[#specs + 1] = { prefix, group = group_name }
+    return append_textobject_specs(prefix, specs, objects)
+  end)
+
   require('which-key').add(ret, { notify = false })
 end
 
@@ -86,6 +115,7 @@ return {
     local ai = require('mini.ai')
     return {
       n_lines = 500,
+      mappings = native_line_mappings,
       custom_textobjects = {
         o = ai.gen_spec.treesitter({ -- code block
           a = { '@block.outer', '@conditional.outer', '@loop.outer' },
