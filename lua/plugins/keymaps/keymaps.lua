@@ -98,6 +98,33 @@ local function tab()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
 end
 
+--- Reflow the visual selection into one sentence per line.
+---
+--- Only a single period followed by whitespace ends a sentence.
+--- Ellipses and periods joined to text remain unchanged.
+local function split_selected_sentences()
+  local anchor_line = vim.fn.getpos('v')[2]
+  local cursor_line = vim.fn.getpos('.')[2]
+  local start_line = math.min(anchor_line, cursor_line) - 1
+  local end_line = math.max(anchor_line, cursor_line)
+  local selected_lines = vim.api.nvim_buf_get_lines(0, start_line, end_line, false)
+  local selected_text = vim
+    .iter(selected_lines)
+    :map(
+      ---@param line string
+      ---@return string
+      function(line) return vim.trim(line) end
+    )
+    :join(' ')
+  local replacement_lines = vim.split(selected_text:gsub('([^%.])%.%s+', '%1.\n'), '\n', { plain = true })
+
+  if replacement_lines[#replacement_lines] == '' then
+    table.remove(replacement_lines)
+  end
+
+  vim.api.nvim_buf_set_lines(0, start_line, end_line, false, replacement_lines)
+end
+
 return {
   'folke/which-key.nvim',
   event = 'VeryLazy',
@@ -120,7 +147,7 @@ return {
         pcall(function() require('copilot-nes').cancel() end)
         pcall(function() require('sidekick.nes').cancel() end)
         -- Clear multicursor
-			  vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace('nvim.multicursor'), 0, -1)
+        vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace('nvim.multicursor'), 0, -1)
         return '<esc>'
       end,
       expr = true,
@@ -166,6 +193,7 @@ return {
     { mode = { 'n', 'v' }, '<<', '<<', remap = false, desc = 'Decrease Indent' },
     { mode = 'x', '<', '<gv' },
     { mode = 'x', '>', '>gv' },
+    { mode = 'x', '<leader>c.', split_selected_sentences, desc = 'Split sentences at dots' },
 
     -- Move Lines
     {
