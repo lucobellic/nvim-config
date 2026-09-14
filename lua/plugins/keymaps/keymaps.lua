@@ -66,6 +66,15 @@ if vim.g.vscode then
 end
 
 local function tab()
+  if vim.g.suggestions == 'cursor-tab' then
+    local cursor_tab = vim.npcall(require, 'cursor-tab')
+    if cursor_tab then
+      if cursor_tab.accept() or cursor_tab.next_completion() then
+        return
+      end
+    end
+  end
+
   if vim.g.suggestions == 'copilot' and vim.lsp.inline_completion.get() then
     return
   end
@@ -144,6 +153,7 @@ return {
       '<esc>',
       function()
         vim.cmd('noh')
+        pcall(function() require('cursor-tab').dismiss() end)
         pcall(function() require('copilot-nes').cancel() end)
         pcall(function() require('sidekick.nes').cancel() end)
         -- Clear multicursor
@@ -214,11 +224,18 @@ return {
       mode = { 'i', 'n' },
       '<S-Tab>',
       function()
+        if vim.g.suggestions == 'cursor-tab' then
+          if require('cursor-tab').previous() then
+            return
+          end
+          return '<S-Tab>'
+        end
+
         if not require('copilot-nes').apply() then
           return '<S-Tab>'
         end
       end,
-      desc = 'Next suggestion',
+      desc = 'Previous suggestion',
       expr = true,
     },
     {

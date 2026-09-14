@@ -1,4 +1,5 @@
 local nes_namespace = vim.api.nvim_create_namespace('copilot_nes')
+local cursor_tab_sign_namespace = vim.api.nvim_create_namespace('cursor-tab.nvim.sign')
 local git_sign_namespace = vim.api.nvim_create_namespace('gitsigns_signs_')
 local git_sign_staged_namespace = vim.api.nvim_create_namespace('gitsigns_signs_staged')
 
@@ -37,6 +38,9 @@ local function add_copilot_highlight(text, buf, line)
   return #nes_signs > 0 and '%#CopilotNesDiffAdd#' .. text or text
 end
 
+---@param buf integer
+---@param line integer
+---@return string
 local function get_git_sign(buf, line)
   local extmarks = vim.api.nvim_buf_get_extmarks(
     buf,
@@ -57,12 +61,30 @@ local function get_git_sign(buf, line)
   return format_extmark(get_first_extmark(extmarks))
 end
 
+---@param buf integer
+---@param line integer
+---@return string
 local function get_sign(buf, line)
+  local cursor_tab_signs = vim.api.nvim_buf_get_extmarks(
+    buf,
+    cursor_tab_sign_namespace,
+    { line, 0 },
+    { line, 0 },
+    { details = true, type = 'sign' }
+  )
+  if #cursor_tab_signs > 0 then
+    return format_extmark(get_first_extmark(cursor_tab_signs))
+  end
+
   local extmarks = vim.api.nvim_buf_get_extmarks(buf, -1, { line, 0 }, { line, 0 }, { details = true, type = 'sign' })
   extmarks = vim
     .iter(extmarks or {})
     :filter(
-      function(extmark) return extmark[4].ns_id ~= git_sign_namespace and extmark[4].ns_id ~= git_sign_staged_namespace end
+      function(extmark)
+        return extmark[4].ns_id ~= cursor_tab_sign_namespace
+          and extmark[4].ns_id ~= git_sign_namespace
+          and extmark[4].ns_id ~= git_sign_staged_namespace
+      end
     )
     :totable()
   return format_extmark(get_first_extmark(extmarks))
