@@ -75,6 +75,7 @@ function M.setup_window_buffer(winid, bufnr)
 end
 
 --- Wrap user on_exit callback with cleanup logic
+---@public
 ---@param opts TermOpts
 ---@param name string Terminal name for cleanup
 ---@param remove_fn function Function to call for removing terminal
@@ -88,15 +89,13 @@ function M.wrap_on_exit(opts, name, remove_fn)
         vim.notify('term: user on_exit failed: ' .. tostring(err), vim.log.levels.ERROR)
       end
     end
-    -- Remove terminal on normal exit to allow fresh creation next time
-    if code == 0 then
-      vim.schedule(function()
-        local ok, err = pcall(remove_fn, name)
-        if not ok then
-          vim.notify('term: remove failed in on_exit: ' .. tostring(err), vim.log.levels.ERROR)
-        end
-      end)
-    end
+    -- A stopped job cannot be reused, regardless of its exit code.
+    vim.schedule(function()
+      local ok, err = pcall(remove_fn, name)
+      if not ok then
+        vim.notify('term: remove failed in on_exit: ' .. tostring(err), vim.log.levels.ERROR)
+      end
+    end)
   end
   return opts
 end

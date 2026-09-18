@@ -2,7 +2,6 @@ local Term = require('term.term')
 local config = require('term.config')
 local helper = require('term.helper')
 local ui = require('term.ui')
-local event = require('nui.utils.autocmd').event
 
 local CONSTANTS = config.CONSTANTS
 
@@ -18,6 +17,7 @@ local M = {
   disable_auto_hide = false,
 }
 
+---@return boolean success
 local function ensure_popup()
   if M.popup ~= nil then
     return true
@@ -45,7 +45,7 @@ local function ensure_popup()
       { 'WinEnter', 'BufEnter' },
       {
         group = augroup,
-        callback = function(args)
+        callback = function()
           vim.schedule(function()
             if M.disable_auto_hide then
               return
@@ -53,9 +53,7 @@ local function ensure_popup()
 
             -- Only hide if popup is still valid and we entered a different window
             if helper.is_popup_visible(M) and M.popup and M.popup.winid then
-              local entered_win = args.event == 'WinEnter' and vim.api.nvim_get_current_win()
-                or vim.api.nvim_get_current_win()
-              if entered_win ~= M.popup.winid then
+              if vim.api.nvim_get_current_win() ~= M.popup.winid then
                 local hide_ok, hide_err = pcall(M.hide)
                 if not hide_ok then
                   vim.notify('term: hide failed in auto hide: ' .. tostring(hide_err), vim.log.levels.ERROR)
@@ -68,18 +66,6 @@ local function ensure_popup()
     )
   end
 
-  -- Also handle when popup window is closed externally
-  helper.safe_api('term: failed to attach WinClosed handler', function()
-    M.popup:on(event.WinClosed, function()
-      vim.schedule(function()
-        if M.popup then
-          M.popup = nil
-          M.active_term = nil
-        end
-      end)
-    end)
-  end)
-
   return true
 end
 
@@ -87,37 +73,33 @@ end
 ---@param term Term
 ---@return boolean success
 local function show_terminal(term)
-  -- Validate buffer before proceeding - if invalid, remove stale terminal
+  -- Remove stale terminals instead of opening the popup with another buffer.
   if not term:is_valid() then
     vim.notify('term: terminal buffer is no longer valid: ' .. term.name, vim.log.levels.WARN)
-    local term_index = term.index
-    table.remove(M.terminals, term_index)
-    helper.reindex_terminals(M.terminals, term_index)
-    if #M.terminals > 0 then
-      local next_index = math.min(term_index, #M.terminals)
-      return show_terminal(M.terminals[next_index])
-    else
-      M.hide(true)
-      M.active_term = nil
-    end
-    return false
-  end
-
-  if not ensure_popup() then
+    M.remove(term.name)
     return false
   end
 
   if not term:is_job_running() then
     if not term:start() then
       vim.notify('term: failed to start terminal: ' .. term.name, vim.log.levels.ERROR)
+      M.remove(term.name)
       return false
     end
+  end
+
+  -- Create the window only after the terminal started successfully.
+  if not ensure_popup() then
+    M.remove(term.name)
+    return false
   end
 
   -- Show popup (mount if not mounted, otherwise just show)
   if M.popup then
     local ok = helper.safe_api('term: failed to show popup', M.popup.show, M.popup)
     if not ok then
+      M.hide(true)
+      M.remove(term.name)
       return false
     end
   end
@@ -136,22 +118,26 @@ local function show_terminal(term)
     )
   end
 
-  -- Ensure the popup window is the current window before starting insert
-  if helper.is_popup_visible(M) and M.popup then
-    local winid = M.popup.winid
-    if not winid then
-      return false
-    end
-    local ok = helper.safe_api('term: failed to focus popup window', vim.api.nvim_set_current_win, winid)
-    if not ok then
-      return false
-    end
+  if not helper.is_popup_visible(M) or not M.popup or not M.popup.winid then
+    vim.notify('term: popup window was not created', vim.log.levels.ERROR)
+    M.hide(true)
+    M.remove(term.name)
+    return false
+  end
 
-    if not helper.setup_window_buffer(winid, term.bufnr) then
-      vim.notify('term: failed to display terminal buffer: ' .. term.name, vim.log.levels.ERROR)
-      helper.safe_api('term: failed to hide popup after buffer setup failure', M.popup.hide, M.popup)
-      return false
-    end
+  local winid = M.popup.winid
+  local ok = helper.safe_api('term: failed to focus popup window', vim.api.nvim_set_current_win, winid)
+  if not ok then
+    M.hide(true)
+    M.remove(term.name)
+    return false
+  end
+
+  if not helper.setup_window_buffer(winid, term.bufnr) then
+    vim.notify('term: failed to display terminal buffer: ' .. term.name, vim.log.levels.ERROR)
+    M.hide(true)
+    M.remove(term.name)
+    return false
   end
 
   if M.popup then
@@ -265,23 +251,13 @@ function M.open(name, cmd, opts)
 end
 
 --- Close active terminal (kills job and removes from list)
+---@public
 function M.close()
   if not M.active_term then
     return
   end
 
-  local index = M.active_term.index
-  M.active_term:kill()
-  table.remove(M.terminals, index)
-  helper.reindex_terminals(M.terminals, index)
-
-  -- Show remaining terminal if any or hide
-  if #M.terminals > 0 then
-    local next_index = math.min(index, #M.terminals)
-    show_terminal(M.terminals[next_index])
-  else
-    M.hide()
-  end
+  M.remove(M.active_term.name)
 end
 
 --- Hide terminal popup (keeps terminals alive)
@@ -478,6 +454,7 @@ function M.decrease_size(percent)
 end
 
 --- Remove terminal from manager
+---@public
 ---@param name string Terminal name to remove
 function M.remove(name)
   local term = helper.find_terminal_by_name(M.terminals, name)
@@ -487,22 +464,29 @@ function M.remove(name)
 
   local term_index = term.index
   local was_active = M.active_term and M.active_term.name == name
-  if was_active and #M.terminals > 1 then
-    local next_term_to_show = term_index < #M.terminals and M.terminals[term_index + 1] or M.terminals[term_index - 1]
-    show_terminal(next_term_to_show)
+
+  table.remove(M.terminals, term_index)
+  helper.reindex_terminals(M.terminals, term_index)
+
+  if was_active then
+    M.active_term = nil
+
+    -- Remove failed candidates until one can be shown.
+    while #M.terminals > 0 and not M.active_term do
+      local next_index = math.min(term_index, #M.terminals)
+      show_terminal(M.terminals[next_index])
+    end
+
+    if not M.active_term then
+      -- Close the window before deleting its buffer so Neovim cannot show an empty replacement buffer.
+      M.hide(true)
+    end
   end
 
   if term:is_job_running() then
     term:kill()
   elseif term:is_valid() then
     helper.safe_delete_buffer(term.bufnr)
-  end
-
-  table.remove(M.terminals, term_index)
-  helper.reindex_terminals(M.terminals, term_index)
-  if was_active and #M.terminals == 0 then
-    M.hide(true)
-    M.active_term = nil
   end
 end
 
@@ -591,6 +575,7 @@ function M.detach_to_window()
 end
 
 --- Attach existing terminal buffer to floating manager
+---@public
 ---@param bufnr integer Terminal buffer number
 ---@param opts? TermOpts Terminal options
 ---@return boolean success Whether the operation succeeded
@@ -613,7 +598,9 @@ function M.attach_to_floating(bufnr, opts)
 
   term.index = #M.terminals + 1
   table.insert(M.terminals, term)
-  show_terminal(term)
+  if not show_terminal(term) then
+    return false
+  end
 
   -- Load the ftplugin for terminal
   helper.safe_api('term: failed to load term ftplugin', function() vim.cmd('runtime! after/ftplugin/term.lua') end)

@@ -8,12 +8,7 @@ return {
     { '<F7>', function() require('term.core').toggle() end, desc = 'Toggle Terminal' },
     {
       '<S-F7>',
-      function()
-        local core = require('term.core')
-        if core.popup then
-          core.popup:unmount()
-        end
-      end,
+      function() require('term.core').hide(true) end,
       desc = 'Term Unmount',
     },
 
