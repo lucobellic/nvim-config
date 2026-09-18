@@ -21,6 +21,36 @@ return {
         cterm_color = 214,
         name = 'Quarto',
       },
+      ['ezcan'] = {
+        icon = '󰈀',
+        color = '#6cb6eb',
+        cterm_color = 74,
+        name = 'Ezcan',
+      },
+      ['ezi'] = {
+        icon = '󰘧',
+        color = '#c2d94c',
+        cterm_color = 148,
+        name = 'Ezi',
+      },
+      ['msg'] = {
+        icon = '󰍡',
+        color = '#e6b450',
+        cterm_color = 214,
+        name = 'RosMsg',
+      },
+      ['srv'] = {
+        icon = '󰍡',
+        color = '#e6b450',
+        cterm_color = 214,
+        name = 'RosSrv',
+      },
+      ['action'] = {
+        icon = '󰍡',
+        color = '#e6b450',
+        cterm_color = 214,
+        name = 'RosAction',
+      },
     },
     override_by_filename = {
       ['cmakelists.txt'] = {

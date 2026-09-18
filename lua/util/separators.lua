@@ -22,6 +22,19 @@ local M = {
     dockerfile = {
       'from_instruction',
     },
+    ezcan = {
+      'enum',
+      'struct',
+      'rpc',
+      'critical',
+    },
+    ezi = {
+      'node',
+      'interface',
+      'struct',
+      'enum',
+      'variant',
+    },
   },
 
   --- Template-like node types that wrap function/class definitions.

@@ -8,8 +8,11 @@ vim.filetype.add({
   },
   extension = {
     msg = 'ros',
+    srv = 'ros',
+    action = 'ros',
     emjin = 'cpp.jinja',
     ezi = 'ezi',
+    ezcan = 'ezcan',
     launch = 'python',
     cu = 'cpp',
     cuh = 'cpp',
