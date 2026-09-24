@@ -26,7 +26,7 @@ vim.opt.wildmode = ''
 
 vim.opt.conceallevel = 2
 vim.opt.laststatus = 3
-vim.opt.signcolumn = 'yes:1'
+vim.opt.signcolumn = 'yes:2'
 vim.opt.foldcolumn = '1'
 vim.opt.cursorline = true
 vim.opt.showtabline = 2
