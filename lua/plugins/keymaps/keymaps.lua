@@ -110,7 +110,7 @@ end
 --- Reflow the visual selection into one sentence per line.
 ---
 --- Only a single period followed by whitespace ends a sentence.
---- Ellipses and periods joined to text remain unchanged.
+--- Ellipses, numbered list markers, and periods joined to text remain unchanged.
 local function split_selected_sentences()
   local anchor_line = vim.fn.getpos('v')[2]
   local cursor_line = vim.fn.getpos('.')[2]
@@ -125,7 +125,23 @@ local function split_selected_sentences()
       function(line) return vim.trim(line) end
     )
     :join(' ')
-  local replacement_lines = vim.split(selected_text:gsub('([^%.])%.%s+', '%1.\n'), '\n', { plain = true })
+
+  local split_text = selected_text:gsub(
+    '()([^%.])%.(%s+)',
+    ---@param position integer
+    ---@param preceding_character string
+    ---@param whitespace string
+    ---@return string
+    function(position, preceding_character, whitespace)
+      local number_start = selected_text:sub(1, position):match('()%d+$')
+      if number_start and (number_start == 1 or selected_text:sub(number_start - 1, number_start - 1):match('%s')) then
+        return preceding_character .. '.' .. whitespace
+      end
+
+      return preceding_character .. '.\n'
+    end
+  )
+  local replacement_lines = vim.split(split_text, '\n', { plain = true })
 
   if replacement_lines[#replacement_lines] == '' then
     table.remove(replacement_lines)
