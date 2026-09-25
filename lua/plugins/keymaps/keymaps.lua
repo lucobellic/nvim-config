@@ -172,8 +172,11 @@ return {
         pcall(function() require('cursor-tab').dismiss() end)
         pcall(function() require('copilot-nes').cancel() end)
         pcall(function() require('sidekick.nes').cancel() end)
-        -- Clear multicursor
-        vim.api.nvim_buf_clear_namespace(0, vim.api.nvim_create_namespace('nvim.multicursor'), 0, -1)
+        -- Keep cursors until the insert edit reaches every cursor.
+        if vim.fn.mode() == 'n' then
+          local multicursor_namespace = vim.api.nvim_create_namespace('nvim.multicursor')
+          vim.api.nvim_buf_clear_namespace(0, multicursor_namespace, 0, -1)
+        end
         return '<esc>'
       end,
       expr = true,
