@@ -25,3 +25,18 @@ A clean and aesthetic Neovim configuration made for my personal use
   <a href="https://github.com/lucobellic/ayugloom.nvim">ayugloom.nvim</a>, based on the ayu theme with personal preferences.<br>
   <a href="https://fonts.google.com/specimen/DM+Mono">DM Mono</a> Nerd Font with added ligatures.
 </p>
+
+<div align="center">
+  <h2>Animated logo</h2>
+</div>
+
+The dashboard logo starts with [`local/logo/logo.txt`](local/logo/logo.txt).  
+From the repository root, generate its 360 color frames with Rust:
+
+```sh
+cargo run -qr -m local/logo/Cargo.toml -- \
+  local/logo/logo.txt --palette vivid --generate local/logo/rainbow-logo.cache
+```
+
+The [dashboard](lua/plugins/snacks/snacks-dashboard.lua) plays the cache with `local/logo/rainbow-logo.sh --speed 10`.  
+Edit the text file and rerun the command to change the logo.
