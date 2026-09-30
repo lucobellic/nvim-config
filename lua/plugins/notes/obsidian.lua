@@ -98,18 +98,26 @@ return {
       require('obsidian').setup(opts)
 
       configure_blink_source(opts)
-      --- Create a new note with the name of the current task
+      ---Create or open the note for the current task.
       local function toggle_current_task()
-        -- Get name of the current branch
-        local branch = vim.fn.system('git rev-parse --abbrev-ref HEAD')
+        local branch = vim.fn.system({ 'git', 'rev-parse', '--abbrev-ref', 'HEAD' })
+        local task = vim.v.shell_error == 0 and branch:match('(%w+%-%d+)') or nil
 
-        -- Get the task based on regex
-        local task = branch and branch:match('(%w+%-%d+)') or ''
-        if task ~= '' then
-          vim.cmd('Obsidian new ' .. task)
-        else
+        if not task then
           vim.notify('Unable to create note', vim.log.levels.WARN, { title = 'obsidian.nvim' })
+          return
         end
+
+        local note = require('obsidian.note').create({
+          id = task,
+          title = task,
+          dir = 'notes/' .. task,
+          verbatim = true,
+        })
+        if not note:exists() then
+          note:write()
+        end
+        note:open({ sync = true })
       end
       vim.api.nvim_create_user_command('ObsidianTask', toggle_current_task, {})
     end,
