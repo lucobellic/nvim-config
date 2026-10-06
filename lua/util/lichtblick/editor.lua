@@ -39,7 +39,8 @@ local function save_script(bufnr, script)
 
   local backup_path
   if script.indexeddb then
-    local database_ok, database_result = indexeddb.save_script(script.indexeddb, script.id, source)
+    local database_ok, database_result =
+      indexeddb.save_script(script.indexeddb, script.id, source, script.is_new and script.name or nil)
     if not database_ok then
       notify(database_result, vim.log.levels.ERROR)
       return
@@ -47,6 +48,7 @@ local function save_script(bufnr, script)
     backup_path = database_result
   end
 
+  script.is_new = nil
   vim.bo[bufnr].modified = false
   local message = ('Saved %s to %s'):format(script.name, script.layout_name)
   if backup_path then
@@ -75,6 +77,7 @@ end
 
 ---Create or focus an editable TypeScript buffer for a user script.
 ---@param script Lichtblick.Script
+---@public
 function M.open(script)
   local origin = script.layout_path
     or table.concat({ script.indexeddb.database, script.indexeddb.namespace, script.indexeddb.id }, '\0')
@@ -104,6 +107,7 @@ function M.open(script)
   end
   vim.b[bufnr].lichtblick_script_id = script.id
   set_buffer_source(bufnr, script.source_code)
+  vim.bo[bufnr].modified = script.is_new == true
 
   open_buffers[key] = bufnr
   vim.api.nvim_create_autocmd('BufWriteCmd', {

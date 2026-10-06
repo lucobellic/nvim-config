@@ -5,16 +5,19 @@ local file = require('util.lichtblick.file')
 ---@field namespace string IndexedDB object-store namespace.
 ---@field id string Layout identifier.
 
----@class Lichtblick.Script
----@field id string User script identifier.
+---@class Lichtblick.Layout
 ---@field indexeddb? Lichtblick.IndexedDBMetadata IndexedDB origin for synchronized scripts.
 ---@field layout_name string Display name of the containing layout.
 ---@field layout_path? string Path of the local layout JSON file.
+
+---@class Lichtblick.Script: Lichtblick.Layout
+---@field id string User script identifier.
+---@field is_new? boolean Create the script on its first save.
 ---@field name string User script name.
 ---@field source_code string TypeScript source code.
 
 ---@class Lichtblick.LayoutModule
----@field discover_scripts fun(layout_dir: string): Lichtblick.Script[]|nil, string|nil, integer Discover scripts in local layouts.
+---@field discover_scripts fun(layout_dir: string): Lichtblick.Script[]|nil, string|nil, integer|nil, Lichtblick.Layout[]|nil Discover scripts and empty layouts.
 ---@field save_script fun(script: Lichtblick.Script, source: string): boolean, string|nil Save a script to its local layout.
 ---@type Lichtblick.LayoutModule
 local M = {}
@@ -63,7 +66,9 @@ end
 ---@param layout_dir string
 ---@return Lichtblick.Script[]|nil scripts
 ---@return string|nil error
----@return integer invalid_count Number of invalid JSON files skipped.
+---@return integer|nil invalid_count Number of invalid JSON files skipped.
+---@return Lichtblick.Layout[]|nil empty_layouts
+---@public
 function M.discover_scripts(layout_dir)
   local stat = vim.uv.fs_stat(layout_dir)
   if not stat or stat.type ~= 'directory' then
@@ -76,15 +81,17 @@ function M.discover_scripts(layout_dir)
     limit = math.huge,
   })
   local scripts = {}
+  local empty_layouts = {}
   local invalid_count = 0
 
   for _, path in ipairs(files) do
     local layout, _, err = decode(path)
     if err then
       invalid_count = invalid_count + 1
-    elseif type(layout.userNodes) == 'table' then
+    else
       local database = indexeddb_metadata(path)
-      for script_id, script in pairs(layout.userNodes) do
+      local script_count = #scripts
+      for script_id, script in pairs(type(layout.userNodes) == 'table' and layout.userNodes or {}) do
         if
           type(script_id) == 'string'
           and type(script) == 'table'
@@ -101,6 +108,13 @@ function M.discover_scripts(layout_dir)
           })
         end
       end
+      if #scripts == script_count then
+        table.insert(empty_layouts, {
+          indexeddb = database,
+          layout_path = path,
+          layout_name = vim.fn.fnamemodify(path, ':t:r'),
+        })
+      end
     end
   end
 
@@ -111,14 +125,15 @@ function M.discover_scripts(layout_dir)
     return left.layout_path < right.layout_path
   end)
 
-  return scripts, nil, invalid_count
+  return scripts, nil, invalid_count, empty_layouts
 end
 
----Replace a user script's source code in its local layout file.
+---Create or update a user script in its local layout file.
 ---@param script Lichtblick.Script
 ---@param source string
 ---@return boolean success
 ---@return string|nil error
+---@public
 function M.save_script(script, source)
   local layout, content, err = decode(script.layout_path)
   if not layout then
@@ -126,7 +141,10 @@ function M.save_script(script, source)
   end
 
   local stored_script = type(layout.userNodes) == 'table' and layout.userNodes[script.id] or nil
-  if type(stored_script) ~= 'table' or type(stored_script.sourceCode) ~= 'string' then
+  if
+    not (script.is_new and stored_script == nil)
+    and (type(stored_script) ~= 'table' or type(stored_script.sourceCode) ~= 'string')
+  then
     return false, ('Script %q no longer exists in %s'):format(script.name, script.layout_path)
   end
 
@@ -147,7 +165,12 @@ function M.save_script(script, source)
       '--rawfile',
       'source',
       source_path,
-      '.userNodes[$script_id].sourceCode = $source',
+      '--arg',
+      'name',
+      script.name,
+      script.is_new
+          and '.userNodes //= {} | .userNodes[$script_id] //= {name: $name} | .userNodes[$script_id].sourceCode = $source'
+        or '.userNodes[$script_id].sourceCode = $source',
     }, { stdin = content, text = true })
     :wait()
   vim.uv.fs_unlink(source_path)

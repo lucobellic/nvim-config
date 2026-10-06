@@ -19,8 +19,8 @@ local file = require('util.lichtblick.file')
 
 ---@class Lichtblick.IndexedDBModule
 ---@field read fun(): Lichtblick.StoredLayout[]|nil, string|nil Read layouts from Lichtblick IndexedDB.
----@field discover_scripts fun(): Lichtblick.Script[]|nil, string|nil Discover scripts from IndexedDB layouts.
----@field save_script fun(metadata: Lichtblick.IndexedDBMetadata, script_id: string, source_code: string): boolean, string|nil Save a script and create a backup.
+---@field discover_scripts fun(): Lichtblick.Script[]|nil, string|nil, Lichtblick.Layout[]|nil Discover scripts and empty layouts.
+---@field save_script fun(metadata: Lichtblick.IndexedDBMetadata, script_id: string, source_code: string, new_name?: string): boolean, string|nil Save a script and create a backup.
 ---@type Lichtblick.IndexedDBModule
 local M = {}
 
@@ -215,6 +215,8 @@ end
 ---Discover editable user scripts in IndexedDB layouts.
 ---@return Lichtblick.Script[]|nil scripts
 ---@return string|nil error
+---@return Lichtblick.Layout[]|nil empty_layouts
+---@public
 function M.discover_scripts()
   local layouts, err = M.read()
   if not layouts then
@@ -222,7 +224,9 @@ function M.discover_scripts()
   end
 
   local scripts = {}
+  local empty_layouts = {}
   for _, stored_layout in ipairs(layouts) do
+    local script_count = #scripts
     if type(stored_layout.data.userNodes) == 'table' then
       for script_id, script in pairs(stored_layout.data.userNodes) do
         if
@@ -245,17 +249,29 @@ function M.discover_scripts()
         end
       end
     end
+    if #scripts == script_count then
+      table.insert(empty_layouts, {
+        indexeddb = {
+          database = stored_layout.database,
+          id = stored_layout.id,
+          namespace = stored_layout.namespace,
+        },
+        layout_name = stored_layout.name,
+      })
+    end
   end
-  return scripts
+  return scripts, nil, empty_layouts
 end
 
----Back up the containing record and update one IndexedDB user script.
+---Back up the containing record and create or update an IndexedDB user script.
 ---@param metadata Lichtblick.IndexedDBMetadata
 ---@param script_id string
 ---@param source_code string
+---@param new_name? string Name used to create a missing script.
 ---@return boolean success
 ---@return string|nil backup_path_or_error
-function M.save_script(metadata, script_id, source_code)
+---@public
+function M.save_script(metadata, script_id, source_code, new_name)
   if vim.fn.executable('node') ~= 1 then
     return false, 'Node.js is required to write Lichtblick IndexedDB'
   end
@@ -300,6 +316,7 @@ function M.save_script(metadata, script_id, source_code)
     layoutId = metadata.id,
     scriptId = script_id,
     sourceCode = source_code,
+    newName = new_name,
   })
   if not result or result.updated ~= true then
     return false, ('Cannot update Lichtblick IndexedDB: %s'):format(write_err)

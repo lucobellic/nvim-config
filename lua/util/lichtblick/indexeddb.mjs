@@ -56,6 +56,9 @@ if (operation === 'write-script') {
       throw new Error(`Invalid write-script input: ${key}`);
     }
   }
+  if (input.newName !== undefined && typeof input.newName !== 'string') {
+    throw new Error('Invalid write-script input: newName');
+  }
 
   expression = `(async () => {
     const input = ${JSON.stringify(input)};
@@ -84,12 +87,18 @@ if (operation === 'write-script') {
             }
             const layout = record.layout;
             const currentData = layout.working?.data ?? layout.baseline?.data ?? layout.data ?? layout.state;
-            if (!currentData?.userNodes?.[input.scriptId]
-              || typeof currentData.userNodes[input.scriptId].sourceCode !== "string") {
+            if (!currentData) {
+              throw new Error("Lichtblick layout data no longer exists");
+            }
+            const script = currentData.userNodes?.[input.scriptId];
+            if (!(script == null && typeof input.newName === "string")
+              && typeof script?.sourceCode !== "string") {
               throw new Error("Lichtblick user script no longer exists");
             }
 
             const nextData = structuredClone(currentData);
+            nextData.userNodes ??= {};
+            nextData.userNodes[input.scriptId] ??= { name: input.newName };
             nextData.userNodes[input.scriptId].sourceCode = input.sourceCode;
             layout.working = {
               data: nextData,
