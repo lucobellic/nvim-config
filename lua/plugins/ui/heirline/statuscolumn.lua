@@ -155,10 +155,10 @@ local statuscolumn = {
     local cursor_background = is_cursor_line and vim.api.nvim_get_hl(0, { name = 'CursorLineNr' }).bg or nil
     local sign = get_sign(buf, line, cursor_background)
     local git_sign = get_git_sign(buf, line, cursor_background)
-    local fold_column = vim.v.virtnum == 0 and '%C' or ' '
+    local fold_column = vim.v.virtnum == 0 and '%C ' or '  '
     local cursor_highlight = is_cursor_line and '%#CursorLineNr#' or ''
     local trailing_highlight = is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#'
-    local text = cursor_highlight .. sign .. git_sign .. '%l' .. fold_column .. trailing_highlight .. ' '
+    local text = cursor_highlight .. sign .. git_sign .. '%=%l' .. fold_column .. trailing_highlight
     return text
     -- return add_copilot_highlight(text, buf, line)
   end,
