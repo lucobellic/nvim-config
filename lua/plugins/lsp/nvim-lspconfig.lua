@@ -243,19 +243,6 @@ return {
             { '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>' },
             { '<leader>rf', '<cmd>lua vim.lsp.buf.code_action({"refactor"})<CR>' },
             {
-              '<leader>=',
-              function() require('lazyvim.util.format').format({ force = true }) end,
-              desc = 'Format Document',
-              has = 'documentFormatting',
-            },
-            {
-              '<leader>=',
-              function() require('lazyvim.util.format').format({ force = true }) end,
-              desc = 'Format Range',
-              mode = 'v',
-              has = 'documentRangeFormatting',
-            },
-            {
               '<F2>',
               function() vim.lsp.buf.rename() end,
               desc = 'Rename current symbol',

@@ -11,3 +11,7 @@ pcall(function() vim.keymap.del('n', ']e') end)
 pcall(function() vim.keymap.del('n', '[e') end)
 pcall(function() vim.keymap.del('n', ']w') end)
 pcall(function() vim.keymap.del('n', '[w') end)
+
+if vim.g.distribution == 'lazyvim' and not vim.g.vscode then
+  vim.keymap.set({ 'n', 'x' }, '<leader>=', '<cmd>LazyFormat<cr>', { desc = 'Format Document or Selection', silent = true })
+end
