@@ -44,17 +44,11 @@ end
 
 return {
   {
-    'folke/which-key.nvim',
-    optional = true,
-    opts = {
-      spec = { { '<leader>m', group = 'molten' } },
-    },
-  },
-  {
     'benlubas/molten-nvim',
     dependencies = dependencies,
     build = ':UpdateRemotePlugins',
     event = 'Bufenter *.py,*.ipynb',
+    cond = false,
     keys = {
       { '<leader>mi', '<cmd>MoltenInit<CR>', desc = 'Molten Init' },
       { '<leader>me', '<cmd>MoltenEvaluateOperator<CR>', desc = 'Molten Evaluate Operator' },
