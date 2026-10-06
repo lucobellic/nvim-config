@@ -24,23 +24,7 @@ vim.opt.rtp:prepend(lazypath)
 local spec = function()
   local specs = {}
 
-  if vim.g.distribution == 'astronvim' then
-    specs = {
-      {
-        'AstroNvim/AstroNvim',
-        version = '^5',
-        import = 'astronvim.plugins',
-        opts = { -- AstroNvim options must be set here with the `import` key
-          mapleader = ' ', -- This ensures the leader key must be configured before Lazy is set up
-          maplocalleader = ',', -- This ensures the localleader key must be configured before Lazy is set up
-          icons_enabled = true, -- Set to false to disable icons (if no Nerd Font is available)
-          pin_plugins = nil, -- Default will pin plugins when tracking `version` of AstroNvim, set to true/false to override
-          update_notifications = true, -- Enable/disable notification about running `:Lazy update` twice to update pinned plugins
-        },
-      },
-      { import = 'distribution.astronvim' },
-    }
-  elseif vim.g.distribution == 'lazyvim' then
+  if vim.g.distribution == 'lazyvim' then
     specs = {
       { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
       { import = 'distribution.lazyvim.lazyvim' },

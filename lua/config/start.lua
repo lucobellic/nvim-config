@@ -1,6 +1,5 @@
---- @type 'astronvim'|'lazyvim'|nil
+---@type 'lazyvim'|nil
 vim.g.distribution = 'lazyvim'
--- vim.g.distribution = 'astronvim'
 -- vim.g.distribution = nil
 
 vim.g.mapleader = ' '
