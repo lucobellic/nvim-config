@@ -366,6 +366,7 @@ return {
 
         return {
           model = model,
+          service_tier = params.service_tier,
           reasoning = reasoning,
           include = { 'reasoning.encrypted_content' },
           text = text,
@@ -566,6 +567,15 @@ return {
       desc = 'The Codex model to use. Requires a ChatGPT Go/Plus/Pro subscription.',
       default = 'gpt-5.5',
       choices = {
+        ['gpt-6-luna'] = {
+          formatted_name = 'GPT 6 Luna',
+          opts = {
+            can_reason = true,
+            supports_xhigh = true,
+            supports_max = true,
+            has_vision = true,
+          },
+        },
         ['gpt-5.6-sol'] = {
           formatted_name = 'GPT 5.6 Sol',
           opts = {
@@ -658,6 +668,14 @@ return {
       default = 'medium',
       desc = 'Controls the verbosity of text output.',
       choices = { 'low', 'medium', 'high' },
+    },
+    service_tier = {
+      order = 5,
+      mapping = 'parameters',
+      type = 'string',
+      optional = true,
+      desc = 'Processing tier. Priority enables fast mode.',
+      choices = { 'default', 'priority' },
     },
   },
 }

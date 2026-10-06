@@ -9,7 +9,7 @@ opts:
   auto_submit: true
   adapter:
     name: cocodex
-    model: gpt-5.6-luna
+    model: gpt-6-luna
 ---
 
 ## user

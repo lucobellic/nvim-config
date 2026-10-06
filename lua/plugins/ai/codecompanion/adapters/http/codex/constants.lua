@@ -7,7 +7,7 @@ M.REDIRECT_URI = 'http://localhost:1455/auth/callback'
 M.SCOPE = 'openid profile email offline_access'
 M.API_BASE_URL = 'https://chatgpt.com/backend-api'
 M.TOKEN_FILE_NAME = 'codex_oauth_token.json'
-M.CODEX_VERSION = '0.144.5'
+M.CODEX_VERSION = '0.158.0'
 
 ---Get the path to the token file for a specific profile
 ---@param profile? string
