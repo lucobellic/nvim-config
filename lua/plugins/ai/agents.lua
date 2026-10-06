@@ -17,6 +17,13 @@ return {
     dir = vim.fn.stdpath('config') .. '/local/agents',
     name = 'agents',
     event = { 'User LazyBufEnter' },
+    keys = {
+      {
+        '<leader>lca',
+        function() require('plugins.ai.agents.cursor').pick_cursor_session() end,
+        desc = 'Cursor Attach Session',
+      },
+    },
     opts = {
       cursor = {
         executable = 'agent',
