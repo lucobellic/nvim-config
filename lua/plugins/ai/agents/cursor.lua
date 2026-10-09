@@ -21,10 +21,10 @@ local function parse_cursor_sessions(output)
 
         local task = block:match('Task:[ \t]*([^\r\n]+)') or session_id
         local status = block:match('Status:[ \t]*([^\r\n]+)') or ''
-        local workspace = block:match('Workspace:[ \t]*([^\r\n]+)') or ''
         return {
           session_id = session_id,
-          text = table.concat({ task, status, workspace, session_id }, ' | '),
+          text = task .. ' - ' .. status,
+          preview = { text = vim.trim(block), ft = 'text' },
         }
       end
     )
@@ -47,6 +47,43 @@ local function attach_cursor_session(picker, item)
         auto_insert = false,
         win = { position = 'right', bo = { filetype = 'cursor-agent' } },
       })
+    end
+  )
+end
+
+---@param picker snacks.Picker
+local function stop_cursor_sessions(picker)
+  vim.iter(picker:selected({ fallback = true })):each(
+    ---@param item CursorAgent.Session
+    function(item)
+      vim.system(
+        { 'agent', 'persist', 'stop', item.session_id },
+        { text = true, timeout = 10000 },
+        ---@param result vim.SystemCompleted
+        function(result)
+          vim.schedule(function()
+            if result.code ~= 0 then
+              vim.notify('Failed to stop Cursor session: ' .. vim.trim(result.stderr or ''), vim.log.levels.ERROR)
+              return
+            end
+
+            if picker.closed then
+              return
+            end
+
+            picker.preview:reset()
+            picker.opts.items = vim
+              .iter(picker.opts.items or {})
+              :filter(
+                ---@param session CursorAgent.Session
+                ---@return boolean
+                function(session) return session.session_id ~= item.session_id end
+              )
+              :totable()
+            picker:refresh()
+          end)
+        end
+      )
     end
   )
 end
@@ -78,7 +115,11 @@ local function pick_cursor_session()
           title = 'Cursor Agent Sessions',
           items = items,
           format = 'text',
+          preview = 'preview',
+          layout = { preset = 'vertical', preview = true },
           confirm = attach_cursor_session,
+          actions = { remove = stop_cursor_sessions },
+          win = { input = { keys = { ['<c-x>'] = { 'remove', mode = { 'i', 'n' } } } } },
         })
       end)
     end
