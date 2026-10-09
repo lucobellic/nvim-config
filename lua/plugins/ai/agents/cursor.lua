@@ -1,5 +1,6 @@
 ---@class CursorAgent.Session: snacks.picker.Item
 ---@field session_id string
+---@field attached boolean
 
 ---@class CursorAgent
 local M = {}
@@ -23,6 +24,7 @@ local function parse_cursor_sessions(output)
         local status = block:match('Status:[ \t]*([^\r\n]+)') or ''
         return {
           session_id = session_id,
+          attached = vim.startswith(status, 'Attached'),
           text = task .. ' - ' .. status,
           preview = { text = vim.trim(block), ft = 'text' },
         }
@@ -88,6 +90,66 @@ local function stop_cursor_sessions(picker)
   )
 end
 
+---@param picker snacks.Picker
+local function detach_cursor_sessions(picker)
+  local tmux = vim.env.CURSOR_AGENT_TMUX_PATH
+    or (vim.env.AGENT_TMUX_ROOT_PATH and vim.env.AGENT_TMUX_ROOT_PATH .. '/bin/tmux')
+    or 'tmux'
+  vim.iter(picker:selected({ fallback = true })):each(
+    ---@param item CursorAgent.Session
+    function(item)
+      if not item.attached then
+        return
+      end
+
+      vim.system(
+        {
+          tmux,
+          '-L',
+          vim.env.CURSOR_AGENT_TMUX_SERVER_NAME or 'cursor-agent',
+          'detach-client',
+          '-s',
+          '=' .. item.session_id,
+        },
+        { text = true, timeout = 10000, env = { TMUX_TMPDIR = '/tmp' } },
+        ---@param result vim.SystemCompleted
+        function(result)
+          if result.code ~= 0 then
+            vim.schedule(
+              function()
+                vim.notify('Failed to detach Cursor session: ' .. vim.trim(result.stderr or ''), vim.log.levels.ERROR)
+              end
+            )
+            return
+          end
+
+          vim.system(
+            { 'agent', 'persist', 'list' },
+            { text = true, timeout = 10000 },
+            ---@param sessions vim.SystemCompleted
+            function(sessions)
+              vim.schedule(function()
+                if sessions.code ~= 0 then
+                  vim.notify(
+                    'Failed to list Cursor sessions: ' .. vim.trim(sessions.stderr or ''),
+                    vim.log.levels.ERROR
+                  )
+                  return
+                end
+                if not picker.closed then
+                  picker.preview:reset()
+                  picker.opts.items = parse_cursor_sessions(sessions.stdout or '')
+                  picker:refresh()
+                end
+              end)
+            end
+          )
+        end
+      )
+    end
+  )
+end
+
 local function pick_cursor_session()
   if vim.fn.executable('agent') == 0 then
     vim.notify('Cursor agent executable not found', vim.log.levels.ERROR)
@@ -118,8 +180,15 @@ local function pick_cursor_session()
           preview = 'preview',
           layout = { preset = 'vertical', preview = true },
           confirm = attach_cursor_session,
-          actions = { remove = stop_cursor_sessions },
-          win = { input = { keys = { ['<c-x>'] = { 'remove', mode = { 'i', 'n' } } } } },
+          actions = { remove = stop_cursor_sessions, detach = detach_cursor_sessions },
+          win = {
+            input = {
+              keys = {
+                ['<c-x>'] = { 'remove', mode = { 'i', 'n' } },
+                ['<c-d>'] = { 'detach', mode = { 'i', 'n' } },
+              },
+            },
+          },
         })
       end)
     end
