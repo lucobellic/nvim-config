@@ -2,7 +2,8 @@ local Util = require('agents.util')
 
 ---@class AgentsOpts
 ---@field display_name string Human-readable name (e.g., 'OpenCode')
----@field executable string Command to launch (e.g., 'opencode')
+---@field executable string|string[] Command to launch (e.g., 'opencode')
+---@field env? table<string, string> Environment overrides for the terminal
 ---@field filetype string Filetype to set on terminal buffer
 ---@field focus boolean
 ---@field insert boolean
@@ -12,7 +13,7 @@ local Util = require('agents.util')
 
 ---@class Agent
 ---@field display_name string
----@field executable string
+---@field executable string|string[]
 ---@field filetype string
 ---@field terminal_buf? integer
 ---@field terminal_job_id? integer
@@ -64,6 +65,7 @@ function Agent:start(win)
   if not self.terminal_job_id then
     self.terminal_job_id = vim.fn.jobstart(self.executable, {
       term = true,
+      env = self.opts.env,
       on_exit = function()
         self.terminal_job_id = nil
         if self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) then

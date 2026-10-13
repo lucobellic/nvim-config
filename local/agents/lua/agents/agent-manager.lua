@@ -188,7 +188,10 @@ function AgentManager:hide_all()
 end
 
 --- Create the terminal buffer/window and start the agent process.
-function AgentManager:create()
+---@public
+---@param command? string|string[]
+---@param environment? table<string, string>
+function AgentManager:create(command, environment)
   AgentRegistry.update_last_used(self)
   -- Get first available window or create a new split
   local first_win_that_show_agent = self:get_current_agent_win()
@@ -206,7 +209,8 @@ function AgentManager:create()
 
   --- Register agent BEFORE starting the terminal so that BufEnter/WinEnter
   --- autocmds can find it in self.agents and update last_visited_agent correctly.
-  local agent = Agent.new(self.opts, nil, nil, nil)
+  local opts = vim.tbl_deep_extend('force', self.opts, { executable = command, env = environment })
+  local agent = Agent.new(opts, nil, nil, nil)
   table.insert(self.agents, agent)
   self.last_visited_agent = agent
   agent:start(first_win_that_show_agent)

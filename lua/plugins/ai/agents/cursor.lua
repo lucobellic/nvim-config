@@ -5,6 +5,13 @@
 ---@class CursorAgent
 local M = {}
 
+---@return string
+local function cursor_tmux()
+  return vim.env.CURSOR_AGENT_TMUX_PATH
+    or (vim.env.AGENT_TMUX_ROOT_PATH and vim.env.AGENT_TMUX_ROOT_PATH .. '/bin/tmux')
+    or 'tmux'
+end
+
 ---@param output string
 ---@return CursorAgent.Session[]
 local function parse_cursor_sessions(output)
@@ -41,14 +48,38 @@ local function attach_cursor_session(picker, item)
     return
   end
 
-  vim.schedule(
-    function()
-      Snacks.terminal({ 'agent', 'persist', 'attach', item.session_id }, {
-        env = { TERM = 'xterm-256color' },
-        start_insert = false,
-        auto_insert = false,
-        win = { position = 'right', bo = { filetype = 'cursor-agent' } },
-      })
+  local manager = vim.iter(require('agents.agent-registry').managers):find(
+    ---@param candidate AgentManager
+    ---@return boolean
+    function(candidate) return candidate.opts.filetype == 'cursor-agent' end
+  )
+  if not manager then
+    vim.notify('Cursor agent manager is not available', vim.log.levels.ERROR)
+    return
+  end
+
+  vim.system(
+    {
+      cursor_tmux(),
+      '-L',
+      vim.env.CURSOR_AGENT_TMUX_SERVER_NAME or 'cursor-agent',
+      'set-option',
+      '-t',
+      item.session_id,
+      'mouse',
+      'on',
+    },
+    { text = true, timeout = 10000, env = { TMUX_TMPDIR = '/tmp' } },
+    ---@param result vim.SystemCompleted
+    function(result)
+      vim.schedule(function()
+        if result.code ~= 0 then
+          vim.notify('Failed to enable Cursor mouse support: ' .. vim.trim(result.stderr or ''), vim.log.levels.ERROR)
+          return
+        end
+
+        manager:create({ 'agent', 'persist', 'attach', item.session_id }, { TERM = 'xterm-256color' })
+      end)
     end
   )
 end
@@ -92,9 +123,6 @@ end
 
 ---@param picker snacks.Picker
 local function detach_cursor_sessions(picker)
-  local tmux = vim.env.CURSOR_AGENT_TMUX_PATH
-    or (vim.env.AGENT_TMUX_ROOT_PATH and vim.env.AGENT_TMUX_ROOT_PATH .. '/bin/tmux')
-    or 'tmux'
   vim.iter(picker:selected({ fallback = true })):each(
     ---@param item CursorAgent.Session
     function(item)
@@ -104,7 +132,7 @@ local function detach_cursor_sessions(picker)
 
       vim.system(
         {
-          tmux,
+          cursor_tmux(),
           '-L',
           vim.env.CURSOR_AGENT_TMUX_SERVER_NAME or 'cursor-agent',
           'detach-client',
