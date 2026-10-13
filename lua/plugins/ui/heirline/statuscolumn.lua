@@ -1,14 +1,59 @@
-local nes_namespace = vim.api.nvim_create_namespace('copilot_nes')
+---@class User.Statuscolumn.Line
+---@field sign? table
+---@field git? table
+---@field text? string
+
+---@class User.Statuscolumn.Window
+---@field first integer
+---@field last integer
+---@field lines table<integer, User.Statuscolumn.Line>
+---@field hidden boolean
+---@field signs boolean
+---@field numbers boolean
+---@field cursor? integer
+---@field background? integer
+
 local cursor_tab_sign_namespace = vim.api.nvim_create_namespace('cursor-tab.nvim.sign')
 local git_sign_namespace = vim.api.nvim_create_namespace('gitsigns_signs_')
 local git_sign_staged_namespace = vim.api.nvim_create_namespace('gitsigns_signs_staged')
 
+---@type table<integer, User.Statuscolumn.Window>
+local windows = {}
+---@type table<string, string>
+local redraw_highlights = {}
 ---@type table<string, string>
 local cursor_sign_highlights = {}
 local next_cursor_sign_highlight = 0
+local redrawing = false
+
+-- Signs can change without a text edit or a cursor event.
+---@type fun()
+local function clear_redraw_cache()
+  windows = {}
+  redraw_highlights = {}
+end
+
+vim.api.nvim_set_decoration_provider(vim.api.nvim_create_namespace('user.statuscolumn'), {
+  ---@param _ string
+  ---@param _tick integer
+  on_start = function(_, _tick)
+    clear_redraw_cache()
+    redrawing = true
+  end,
+  ---@param _ string
+  ---@param _tick integer
+  on_end = function(_, _tick)
+    clear_redraw_cache()
+    redrawing = false
+  end,
+})
 
 vim.api.nvim_create_autocmd('ColorScheme', {
-  callback = function() cursor_sign_highlights = {} end,
+  ---@param _ vim.api.keyset.create_autocmd.callback_args
+  callback = function(_)
+    cursor_sign_highlights = {}
+    clear_redraw_cache()
+  end,
 })
 
 ---@param sign_group string
@@ -19,8 +64,14 @@ local function get_cursor_sign_highlight(sign_group, background)
     return sign_group
   end
 
+  local redraw_key = sign_group .. ':' .. background
+  if redraw_highlights[redraw_key] then
+    return redraw_highlights[redraw_key]
+  end
+
   local sign_highlight = vim.api.nvim_get_hl(0, { name = sign_group })
   if not sign_highlight.bg or sign_highlight.bg == background then
+    redraw_highlights[redraw_key] = sign_group
     return sign_group
   end
 
@@ -31,7 +82,8 @@ local function get_cursor_sign_highlight(sign_group, background)
     cursor_sign_highlights[key] = name
     vim.api.nvim_set_hl(0, name, vim.tbl_extend('force', sign_highlight, { bg = background }))
   end
-  return cursor_sign_highlights[key]
+  redraw_highlights[redraw_key] = cursor_sign_highlights[key]
+  return redraw_highlights[redraw_key]
 end
 
 ---@param extmark table?
@@ -54,113 +106,109 @@ local format_extmark = function(extmark, cursor_background)
   return extmark[4].sign_text
 end
 
----@param extmarks table[]
----@return table?
-local function get_first_extmark(extmarks)
-  if extmarks and #extmarks > 0 then
-    table.sort(extmarks, function(a, b) return (a[4].priority or 0) > (b[4].priority or 0) end)
-    return extmarks[1]
+---@param candidate table
+---@param current table?
+---@param preferred_namespace integer
+---@return boolean
+local function prefer_sign(candidate, current, preferred_namespace)
+  if not current then
+    return true
   end
-  return nil
+  local preferred = candidate[4].ns_id == preferred_namespace
+  if preferred ~= (current[4].ns_id == preferred_namespace) then
+    return preferred
+  end
+  return (candidate[4].priority or 0) > (current[4].priority or 0)
 end
 
----@param text string
----@param buf integer
+---@param win integer
 ---@param line integer
----@return string
-local function add_copilot_highlight(text, buf, line)
-  local nes_signs = vim.api.nvim_buf_get_extmarks(buf, nes_namespace, { line, 0 }, { line, 0 }, { type = 'sign' })
-  return #nes_signs > 0 and '%#CopilotNesDiffAdd#' .. text or text
-end
+---@return User.Statuscolumn.Window
+local function get_window(win, line)
+  if not redrawing then
+    clear_redraw_cache()
+  end
+  local cached = windows[win]
+  if cached and line >= cached.first and line <= cached.last then
+    return cached
+  end
 
----@param buf integer
----@param line integer
----@param cursor_background integer?
----@return string
-local function get_git_sign(buf, line, cursor_background)
+  local buf = vim.api.nvim_win_get_buf(win)
+  local options = vim.wo[win]
+  ---@type User.Statuscolumn.Window
+  local state = {
+    first = math.min(vim.fn.line('w0', win), line),
+    last = math.max(vim.fn.line('w$', win), line),
+    lines = {},
+    hidden = vim.bo[buf].buftype == 'nofile' or not not vim.g.zen_mode,
+    signs = options.signcolumn ~= 'no',
+    numbers = options.number or options.relativenumber,
+    cursor = options.cursorline and vim.api.nvim_win_get_cursor(win)[1] or nil,
+  }
+  windows[win] = state
+  if state.hidden or not state.signs then
+    return state
+  end
+  state.background = state.cursor and vim.api.nvim_get_hl(0, { name = 'CursorLineNr' }).bg or nil
+
   local extmarks = vim.api.nvim_buf_get_extmarks(
     buf,
-    git_sign_namespace,
-    { line, 0 },
-    { line, 0 },
+    -1,
+    { state.first - 1, 0 },
+    { state.last - 1, -1 },
     { details = true, type = 'sign' }
   )
-  if #extmarks == 0 then
-    extmarks = vim.api.nvim_buf_get_extmarks(
-      buf,
-      git_sign_staged_namespace,
-      { line, 0 },
-      { line, 0 },
-      { details = true, type = 'sign' }
-    )
-  end
-  return format_extmark(get_first_extmark(extmarks), cursor_background)
-end
-
----@param buf integer
----@param line integer
----@param cursor_background integer?
----@return string
-local function get_sign(buf, line, cursor_background)
-  local cursor_tab_signs = vim.api.nvim_buf_get_extmarks(
-    buf,
-    cursor_tab_sign_namespace,
-    { line, 0 },
-    { line, 0 },
-    { details = true, type = 'sign' }
-  )
-  if #cursor_tab_signs > 0 then
-    return format_extmark(get_first_extmark(cursor_tab_signs), cursor_background)
-  end
-
-  local extmarks = vim.api.nvim_buf_get_extmarks(buf, -1, { line, 0 }, { line, 0 }, { details = true, type = 'sign' })
-  extmarks = vim
-    .iter(extmarks or {})
-    :filter(
-      function(extmark)
-        return extmark[4].ns_id ~= cursor_tab_sign_namespace
-          and extmark[4].ns_id ~= git_sign_namespace
-          and extmark[4].ns_id ~= git_sign_staged_namespace
+  ---@param extmark table
+  local function collect_sign(extmark)
+    local row = extmark[2] + 1
+    local entry = state.lines[row] or {}
+    state.lines[row] = entry
+    local namespace = extmark[4].ns_id
+    if namespace == git_sign_namespace or namespace == git_sign_staged_namespace then
+      if prefer_sign(extmark, entry.git, git_sign_namespace) then
+        entry.git = extmark
       end
-    )
-    :totable()
-  return format_extmark(get_first_extmark(extmarks), cursor_background)
+    elseif prefer_sign(extmark, entry.sign, cursor_tab_sign_namespace) then
+      entry.sign = extmark
+    end
+  end
+  vim.iter(extmarks):each(collect_sign)
+  return state
 end
 
 local statuscolumn = {
-  condition = function() return vim.bo.buftype ~= 'nofile' end,
+  ---@return string
   provider = function()
-    if vim.bo.buftype == 'nofile' then
-      return ''
-    end
-
-    if vim.g.zen_mode then
-      return ''
-    end
-
     if vim.v.virtnum < 0 then
       return ''
     end
 
-    -- Only display line numbers when signcolumn is 'no'
-    if vim.opt_local.signcolumn:get() == 'no' then
-      local show_line_number = vim.opt_local.number:get() or vim.opt_local.relativenumber:get()
-      return (show_line_number and vim.v.virtnum == 0) and '%l ' or ''
+    local line = vim.v.lnum
+    local win = vim.g.statusline_winid or vim.api.nvim_get_current_win()
+    local state = get_window(win, line)
+    if state.hidden then
+      return ''
     end
 
-    local line = vim.v.lnum - 1
-    local buf = vim.api.nvim_get_current_buf()
-    local win = vim.g.statusline_winid or vim.api.nvim_get_current_win()
-    local is_cursor_line = vim.wo[win].cursorline and vim.api.nvim_win_get_cursor(win)[1] == vim.v.lnum
-    local cursor_background = is_cursor_line and vim.api.nvim_get_hl(0, { name = 'CursorLineNr' }).bg or nil
-    local sign = get_sign(buf, line, cursor_background)
-    local git_sign = get_git_sign(buf, line, cursor_background)
+    -- Only display line numbers when signcolumn is 'no'
+    if not state.signs then
+      return (state.numbers and vim.v.virtnum == 0) and '%l ' or ''
+    end
+
+    local is_cursor_line = state.cursor == line
+    local entry = state.lines[line]
+    local signs = '  '
+    if entry then
+      if not entry.text then
+        local background = is_cursor_line and state.background or nil
+        entry.text = format_extmark(entry.sign, background) .. format_extmark(entry.git, background)
+      end
+      signs = entry.text
+    end
     local fold_column = vim.v.virtnum == 0 and '%C ' or '  '
     local cursor_highlight = is_cursor_line and '%#CursorLineNr#' or ''
     local trailing_highlight = is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#'
-    local text = cursor_highlight .. sign .. git_sign .. '%=%l' .. fold_column .. trailing_highlight
-    return text
-    -- return add_copilot_highlight(text, buf, line)
+    return cursor_highlight .. signs .. '%=%l' .. fold_column .. trailing_highlight
   end,
 }
 
