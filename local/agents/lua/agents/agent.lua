@@ -29,6 +29,7 @@ Agent.__index = Agent
 ---@param win? integer existing window number to attach to
 ---@param job_id? integer existing buffer number to attach to
 ---@return Agent
+---@public
 function Agent.new(opts, buf, win, job_id)
   local self = setmetatable({
     display_name = opts.display_name,
@@ -44,6 +45,7 @@ function Agent.new(opts, buf, win, job_id)
     vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
     if win then
       vim.api.nvim_win_set_buf(win, self.terminal_buf)
+      vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
     end
   end
 
@@ -53,14 +55,16 @@ end
 --- Open the terminal window and start the job process.
 --- Must be called after the agent has been registered in AgentManager.agents.
 ---@param win? integer existing window number to attach to
+---@public
 function Agent:start(win)
   vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
 
   if not win then
-    vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
+    win = vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
   else
     vim.api.nvim_win_set_buf(win, self.terminal_buf)
   end
+  vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
 
   if not self.terminal_job_id then
     self.terminal_job_id = vim.fn.jobstart(self.executable, {
@@ -81,6 +85,7 @@ function Agent:buffer_valid() return self.terminal_buf and vim.api.nvim_buf_is_v
 function Agent:is_open() return #Util.buf_get_valid_wins(self.terminal_buf) > 0 end
 function Agent:job_valid() return self.terminal_job_id and vim.fn.jobwait({ self.terminal_job_id }, 0)[1] == -1 end
 
+---@public
 function Agent:focus()
   if not self:buffer_valid() then
     vim.notify('Terminal buffer is not valid', vim.log.levels.ERROR)
@@ -88,11 +93,13 @@ function Agent:focus()
   end
 
   local wins = Util.buf_get_valid_wins(self.terminal_buf)
+  local win = wins[1]
   if #wins > 0 then
-    vim.api.nvim_set_current_win(wins[1])
+    vim.api.nvim_set_current_win(win)
   else
-    vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
+    win = vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
   end
+  vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
 
   if self.opts.insert then
     vim.cmd('startinsert')
