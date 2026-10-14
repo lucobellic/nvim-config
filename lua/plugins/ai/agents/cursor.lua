@@ -1,3 +1,5 @@
+-- cspell:ignore trimempty
+
 ---@class CursorAgent.Session: snacks.picker.Item
 ---@field session_id string
 ---@field attached boolean
@@ -12,32 +14,29 @@ local function cursor_tmux()
     or 'tmux'
 end
 
+---@param block string
+---@return CursorAgent.Session?
+local function parse_cursor_session(block)
+  local session_id = block:match('Session:%s*([^%s]+)')
+  if not session_id then
+    return nil
+  end
+
+  local task = block:match('Task:[ \t]*([^\r\n]+)') or session_id
+  local status = block:match('Status:[ \t]*([^\r\n]+)') or ''
+  return {
+    session_id = session_id,
+    attached = vim.startswith(status, 'Attached'),
+    text = task .. ' - ' .. status,
+    preview = { text = vim.trim(block), ft = 'text' },
+  }
+end
+
 ---@param output string
 ---@return CursorAgent.Session[]
 local function parse_cursor_sessions(output)
   output = output:gsub('\27%[[%d;]*m', '')
-  return vim
-    .iter(vim.split(output, '\n\n', { trimempty = true }))
-    :map(
-      ---@param block string
-      ---@return CursorAgent.Session?
-      function(block)
-        local session_id = block:match('Session:%s*([^%s]+)')
-        if not session_id then
-          return
-        end
-
-        local task = block:match('Task:[ \t]*([^\r\n]+)') or session_id
-        local status = block:match('Status:[ \t]*([^\r\n]+)') or ''
-        return {
-          session_id = session_id,
-          attached = vim.startswith(status, 'Attached'),
-          text = task .. ' - ' .. status,
-          preview = { text = vim.trim(block), ft = 'text' },
-        }
-      end
-    )
-    :totable()
+  return vim.iter(vim.split(output, '\n\n', { trimempty = true })):map(parse_cursor_session):totable()
 end
 
 ---@param picker snacks.Picker
@@ -206,7 +205,7 @@ local function pick_cursor_session()
           items = items,
           format = 'text',
           preview = 'preview',
-          layout = { preset = 'vertical', preview = true },
+          layout = { preset = 'vertical' },
           confirm = attach_cursor_session,
           actions = { remove = stop_cursor_sessions, detach = detach_cursor_sessions },
           win = {
