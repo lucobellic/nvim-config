@@ -95,6 +95,7 @@ function AgentManager:setup_autocmds()
         :next()
 
       if entered_agent and entered_agent:buffer_valid() then
+        entered_agent:configure_window(vim.api.nvim_get_current_win())
         self.last_visited_agent = entered_agent
         AgentRegistry.update_last_used(self)
       end

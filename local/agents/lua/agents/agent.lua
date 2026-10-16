@@ -22,6 +22,14 @@ local Util = require('agents.util')
 local Agent = {}
 Agent.__index = Agent
 
+---@public
+---@param win integer
+function Agent:configure_window(win)
+  vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
+  -- Keep visual selections at the right edge from scrolling the TUI horizontally.
+  vim.api.nvim_set_option_value('wrap', true, { win = win, scope = 'local' })
+end
+
 --- Create a new terminal controller for a specific external agent/executable.
 --- Does NOT open the window or start the terminal job; call `agent:start(win)` afterward.
 ---@param opts AgentsOpts options for the managed terminal
@@ -45,7 +53,7 @@ function Agent.new(opts, buf, win, job_id)
     vim.api.nvim_set_option_value('filetype', self.filetype, { buf = self.terminal_buf })
     if win then
       vim.api.nvim_win_set_buf(win, self.terminal_buf)
-      vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
+      self:configure_window(win)
     end
   end
 
@@ -64,7 +72,6 @@ function Agent:start(win)
   else
     vim.api.nvim_win_set_buf(win, self.terminal_buf)
   end
-  vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
 
   if not self.terminal_job_id then
     self.terminal_job_id = vim.fn.jobstart(self.executable, {
@@ -79,6 +86,8 @@ function Agent:start(win)
       end,
     })
   end
+  -- Terminal defaults and TermOpen handlers can disable wrapping during jobstart.
+  self:configure_window(win)
 end
 
 function Agent:buffer_valid() return self.terminal_buf and vim.api.nvim_buf_is_valid(self.terminal_buf) end
@@ -99,7 +108,7 @@ function Agent:focus()
   else
     win = vim.api.nvim_open_win(self.terminal_buf, self.opts.focus, { split = self.opts.split or 'right', win = 0 })
   end
-  vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
+  self:configure_window(win)
 
   if self.opts.insert then
     vim.cmd('startinsert')
