@@ -302,10 +302,11 @@ return {
     ------------------
     {
       'gf',
+      mode = { 'n', 'x' },
       function()
         local bufnr = vim.api.nvim_get_current_buf()
         local util = require('util.util')
-        if util.is_layout_managed(bufnr) then
+        if util.is_layout_managed(bufnr) or vim.bo[bufnr].buftype == 'terminal' then
           util.open_file(false)
         else
           vim.cmd('normal! gf')
@@ -315,10 +316,11 @@ return {
     },
     {
       'gF',
+      mode = { 'n', 'x' },
       function()
         local bufnr = vim.api.nvim_get_current_buf()
         local util = require('util.util')
-        if util.is_layout_managed(bufnr) then
+        if util.is_layout_managed(bufnr) or vim.bo[bufnr].buftype == 'terminal' then
           util.open_file(true)
         else
           vim.cmd('normal! gF')

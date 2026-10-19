@@ -32,17 +32,30 @@ local function find_non_panel_win()
   end)
 end
 
---- Open file under cursor in a non-layout window, replicating gf / gF behavior.
---- Respects &path and &suffixesadd exactly as native gf does.
---- If no valid non-layout window exists, opens a new split (mirrors native gf fallback).
---- @param with_lnum? boolean If true, also jump to line number (gF behavior)
+---Open the file under the cursor or in the visual selection in an editing window.
+---@public
+---@param with_lnum? boolean Also recognize a trailing :lnum suffix.
 function M.open_file(with_lnum)
-  local cfile = vim.fn.expand('<cfile>')
+  local mode = vim.fn.mode()
+  local visual = mode == 'v' or mode == 'V' or mode == '\22'
+  local cfile
+  if visual then
+    cfile = vim.trim(table.concat(
+      vim.fn.getregion(vim.fn.getpos('v'), vim.fn.getpos('.'), {
+        type = mode,
+        exclusive = vim.o.selection == 'exclusive',
+      }),
+      ''
+    ))
+    vim.cmd.normal({ args = { vim.keycode('<Esc>') }, bang = true })
+  else
+    cfile = vim.fn.expand('<cfile>')
+  end
 
-  local fname = cfile
-  local lnum = nil
-  if with_lnum then
-    -- gF recognizes a trailing :lnum suffix on the filename
+  local fname, line = cfile:match('^(.+)#L(%d+)$')
+  local lnum = tonumber(line)
+  fname = fname or cfile
+  if not lnum and with_lnum then
     local name, n = cfile:match('^(.+):(%d+)$')
     if name and n then
       fname = name
@@ -74,7 +87,7 @@ function M.open_file(with_lnum)
   vim.cmd('edit ' .. vim.fn.fnameescape(found))
 
   if lnum then
-    vim.api.nvim_win_set_cursor(0, { lnum, 0 })
+    vim.api.nvim_win_set_cursor(0, { math.max(1, math.min(lnum, vim.api.nvim_buf_line_count(0))), 0 })
   end
 end
 
