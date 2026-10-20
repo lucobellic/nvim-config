@@ -291,6 +291,7 @@ return {
           lsp_references = { layout = { preset = 'telescope_preview' } },
           lsp_definitions = { layout = { preset = 'telescope_preview' } },
           jumps = { layout = { preset = 'telescope_vertical' } },
+          undo = { layout = { preset = 'telescope_vertical' } },
           colorschemes = { layout = { preset = 'ivy' } },
           git_diff = { layout = { preset = 'telescope_preview' } },
           git_diff_content = { layout = { preset = 'telescope_preview' } },
