@@ -97,7 +97,7 @@ return {
           ['<C-l>'] = '<C-w>l',
         },
       },
-      templates = { 'builtin', 'user.script' },
+      templates = { 'builtin', 'user.script', 'user.cmake' },
       form = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
       task_win = { border = vim.g.border.style, win_opts = { winblend = vim.o.pumblend } },
       component_aliases = {
