@@ -7,7 +7,7 @@ local mode = require('plugins.ui.heirline.components.mode')
 local system = require('plugins.ui.heirline.components.system')
 local tasks = require('plugins.ui.heirline.components.tasks')
 
-local Left = { mode.ViMode, git.Git, info.LazyUpdates, info.Separator, debug.Dap, debug.Molten, debug.MacroRec }
+local Left = { mode.ViMode, git.Git, info.LazyUpdates, info.Separator, debug.Dap, debug.MacroRec }
 local Center = vim.g.layout == 'layout' and { layout.LeftAlignment, layout.Layout } or {}
 local Align = { provider = '%=', hl = { bg = 'none' } }
 local SystemStats = {

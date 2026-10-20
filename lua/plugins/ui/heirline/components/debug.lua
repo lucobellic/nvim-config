@@ -1,17 +1,6 @@
 local mode_helpers = require('plugins.ui.heirline.components.mode')
 local colors = require('plugins.ui.heirline.colors').colors
 
-local Molten = {
-  condition = function() return package.loaded.molten end,
-  init = function(self)
-    local kernels = require('molten.status').kernels()
-    self.text = kernels ~= '' and '  (' .. kernels .. ') ' or ''
-    require('plugins.ui.heirline.utils.width_tracker').add(self.text)
-  end,
-  provider = function(self) return self.text end,
-  hl = mode_helpers.secondary_highlight,
-}
-
 local Dap = {
   condition = function()
     local ok, dap = pcall(require, 'dap')
@@ -36,7 +25,6 @@ local MacroRec = {
 }
 
 return {
-  Molten = Molten,
   Dap = Dap,
   MacroRec = MacroRec,
 }

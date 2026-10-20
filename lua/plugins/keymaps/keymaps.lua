@@ -65,41 +65,8 @@ if vim.g.vscode then
   vim.keymap.set('n', '<C-r>', "<Cmd>call VSCodeNotify('redo')<CR>")
 end
 
+---@type fun()
 local function tab()
-  if vim.g.suggestions == 'cursor-tab' then
-    local cursor_tab = vim.npcall(require, 'cursor-tab')
-    if cursor_tab then
-      if cursor_tab.accept() or cursor_tab.next_completion() then
-        return
-      end
-    end
-  end
-
-  if vim.g.suggestions == 'copilot' and vim.lsp.inline_completion.get() then
-    return
-  end
-
-  if vim.g.suggestions == 'gitlab' then
-    local GhostText = require('gitlab.ghost_text')
-    local ns = vim.api.nvim_create_namespace('gitlab.GhostText')
-    local bufnr = vim.api.nvim_get_current_buf()
-    local has_suggestion = #vim.api.nvim_buf_get_extmarks(bufnr or 0, ns, 0, -1, { limit = 1 }) > 0
-    if has_suggestion then
-      GhostText.insert_ghost_text()
-      return
-    end
-  end
-
-  local ok_copilot_nes, copilot_nes = pcall(require, 'copilot-nes')
-  if ok_copilot_nes and copilot_nes.apply() then
-    return
-  end
-
-  local ok_sidekick, sidekick_nes = pcall(require, 'sidekick.nes')
-  if ok_sidekick and sidekick_nes.enabled and sidekick_nes.apply() then
-    return
-  end
-
   if require('blink.cmp').accept({ force = true }) then
     return
   end
@@ -169,9 +136,6 @@ return {
       '<esc>',
       function()
         vim.cmd('noh')
-        pcall(function() require('cursor-tab').dismiss() end)
-        pcall(function() require('copilot-nes').cancel() end)
-        pcall(function() require('sidekick.nes').cancel() end)
         -- Keep cursors until the insert edit reaches every cursor.
         if vim.fn.mode() == 'n' then
           local multicursor_namespace = vim.api.nvim_create_namespace('nvim.multicursor')
@@ -239,24 +203,6 @@ return {
     },
 
     { mode = { 'i', 'n' }, '<Tab>', tab, desc = 'Next suggestion' },
-    {
-      mode = { 'i', 'n' },
-      '<S-Tab>',
-      function()
-        if vim.g.suggestions == 'cursor-tab' then
-          if require('cursor-tab').previous() then
-            return
-          end
-          return '<S-Tab>'
-        end
-
-        if not require('copilot-nes').apply() then
-          return '<S-Tab>'
-        end
-      end,
-      desc = 'Previous suggestion',
-      expr = true,
-    },
     {
       mode = 'v',
       'S',
