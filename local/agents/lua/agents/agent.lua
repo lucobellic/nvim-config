@@ -26,8 +26,9 @@ Agent.__index = Agent
 ---@param win integer
 function Agent:configure_window(win)
   vim.api.nvim_set_option_value('list', false, { win = win, scope = 'local' })
-  -- Keep visual selections at the right edge from scrolling the TUI horizontally.
-  vim.api.nvim_set_option_value('wrap', true, { win = win, scope = 'local' })
+  -- Avoid wrapping during resize and horizontal scrolling at the right edge.
+  vim.api.nvim_set_option_value('wrap', false, { win = win, scope = 'local' })
+  vim.api.nvim_set_option_value('sidescrolloff', 0, { win = win, scope = 'local' })
 end
 
 --- Create a new terminal controller for a specific external agent/executable.
@@ -86,7 +87,7 @@ function Agent:start(win)
       end,
     })
   end
-  -- Terminal defaults and TermOpen handlers can disable wrapping during jobstart.
+  -- Apply window options after terminal defaults and TermOpen handlers.
   self:configure_window(win)
 end
 
