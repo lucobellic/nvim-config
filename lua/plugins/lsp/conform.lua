@@ -71,6 +71,7 @@ return {
   ---@param opts conform.setupOpts
   opts = function(_, opts)
     opts.formatters_by_ft = vim.tbl_deep_extend('force', opts.formatters_by_ft or {}, {
+      cmake = { 'cmakefmt' },
       go = { 'goimports', 'gofmt' },
       rust = { 'rustfmt' },
     })
@@ -87,6 +88,11 @@ return {
     )
     opts.formatters = vim.tbl_deep_extend('force', opts.formatters or {}, {
       ['biome-check'] = { require_cwd = true },
+      cmakefmt = {
+        command = 'cmakefmt',
+        args = { '--stdin-path', '$FILENAME', '-' },
+        stdin = true,
+      },
       prettier = { options = { ft_parsers = { htmlangular = 'angular' } } },
     })
     require('util.formatters').setup()

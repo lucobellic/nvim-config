@@ -67,13 +67,14 @@ local scheduled = false
 local function formatter_name(package_name)
   local formatter_alias = formatter_aliases[package_name]
   local candidates = formatter_alias and { formatter_alias } or { package_name, (package_name:gsub('-', '_')) }
-  return vim.iter(candidates):find(
+  local formatter = vim.iter(candidates):find(
     ---@param name string
     ---@return boolean
     function(name)
       return #vim.api.nvim_get_runtime_file('lua/conform/formatters/' .. name .. '.lua', false) > 0
     end
   )
+  return formatter
 end
 
 local function refresh()
