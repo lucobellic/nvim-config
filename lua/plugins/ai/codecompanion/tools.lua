@@ -15,7 +15,7 @@ return {
           },
           ['cmd_runner'] = {
             opts = {
-              allowed_in_yolo_mode = true,
+              protect = false,
               require_approval_before = false,
               require_cmd_approval = false,
             },
@@ -28,7 +28,7 @@ return {
           },
           ['delete_file'] = {
             opts = {
-              allowed_in_yolo_mode = true,
+              protect = false,
               require_approval_before = false,
               require_cmd_approval = false,
             },
@@ -51,7 +51,7 @@ return {
             default_tools = { 'code_execution', 'agent' },
             require_approval_before = false,
             require_cmd_approval = false,
-            allowed_in_yolo_mode = true,
+            protect = false,
             auto_submit_errors = true, -- Send any errors to the LLM automatically
             auto_submit_success = true, -- Send any successful output to the LLM automatically
           },
