@@ -93,6 +93,10 @@ fn install(path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
         let mut entry = entry?;
         let entry_path = entry.path()?;
         let stripped: PathBuf = entry_path.components().skip(1).collect();
+        // Skip the desktop launcher managed by Home Manager
+        if stripped == std::path::Path::new("share/applications/org.neovim.nvim.desktop") {
+            continue;
+        }
         let dest = local.join(&stripped);
 
         if let Some(parent) = dest.parent() {
