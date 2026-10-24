@@ -50,6 +50,16 @@ return {
     opts = {
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = vim.g.border.style,
+      event_handlers = {
+        {
+          event = 'neo_tree_window_after_open',
+          ---@param args { winid: integer }
+          handler = function(args)
+            vim.wo[args.winid].statuscolumn = ''
+            vim.wo[args.winid].foldcolumn = '0'
+          end,
+        },
+      },
 
       enable_git_status = true,
       enable_diagnostics = true,
