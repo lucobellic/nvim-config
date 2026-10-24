@@ -52,7 +52,6 @@ return {
   },
   config = function()
     require('heirline').setup({
-      statusline = require('plugins.ui.heirline.statusline'),
       statuscolumn = require('plugins.ui.heirline.statuscolumn'),
       opts = {
         colors = require('plugins.ui.heirline.colors').colors,
