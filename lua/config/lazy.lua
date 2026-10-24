@@ -50,6 +50,7 @@ local spec = function()
     { import = 'plugins.terminal' },
     { import = 'plugins.theme' },
     { import = 'plugins.ui' },
+    { import = 'plugins.ui.statusline' },
   })
 
   return specs

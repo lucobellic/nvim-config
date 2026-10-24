@@ -1,15 +1,17 @@
 vim.opt.runtimepath:prepend(vim.fn.getcwd())
 vim.opt.runtimepath:prepend(vim.fn.getcwd() .. '/local/statusline')
 
-local components = require('statusline.components')
-local events = require('statusline.events')
+local spec = require('plugins.ui.statusline')
 local statusline = require('statusline')
-local theme = require('statusline.theme')
+local options = spec.opts()
 
 vim.o.laststatus = 3
 vim.o.columns = 180
 vim.o.cmdheight = 0
-require('plugins.ui.statusline').config()
+spec.config(nil, options)
+
+---@return string
+local function codecompanion() return options.right[3].provider({}) end
 
 ---@return vim.api.keyset.eval_statusline_ret
 local function evaluate()
@@ -38,12 +40,15 @@ package.loaded.dap = {
   ---@return string
   status = function() return 'stopped%here' end,
 }
+local task_calls = 0
+local task_status = 'SUCCESS'
 package.loaded.overseer = {
   ---@param options table
   ---@return table[]
   list_tasks = function(options)
+    task_calls = task_calls + 1
     assert(options.unique)
-    return { { status = 'SUCCESS' }, { status = 'RUNNING' }, { status = 'RUNNING' } }
+    return { { status = task_status }, { status = 'RUNNING' }, { status = 'RUNNING' } }
   end,
 }
 local expected_window = vim.api.nvim_get_current_win()
@@ -69,8 +74,12 @@ local recording = vim.fn.reg_recording
 ---@return string
 vim.fn.reg_recording = function() return 'q' end
 local searchcount = vim.fn.searchcount
+---@param options table
 ---@return table
-vim.fn.searchcount = function() return { current = 2, total = 4, maxcount = 999 } end
+vim.fn.searchcount = function(options)
+  assert(options.recompute == false)
+  return { current = 2, total = 4, maxcount = 999 }
+end
 vim.v.hlsearch = 1
 
 local result = evaluate()
@@ -78,6 +87,8 @@ local text = result.str
 assert(text:find('   feature%branch UPDATES   stopped%here q', 1, true) == 1)
 assert(text:find(' 2  1 LSP%   [2/4]    ', 1, true), text)
 assert(progress_window == expected_window)
+evaluate()
+assert(task_calls == 1)
 local center_byte = assert(text:find('CENTER', 1, true))
 assert(vim.fn.strdisplaywidth(text:sub(1, center_byte - 1)) == math.floor((vim.o.columns - 6) / 2))
 
@@ -90,6 +101,7 @@ local context = {
   bufnr = vim.api.nvim_get_current_buf(),
   width = vim.o.columns,
   active = true,
+  mode = 'n',
 }
 vim
   .iter({
@@ -107,7 +119,9 @@ vim
     ---@param entry string[]
     function(entry)
       mode = entry[1]
-      local primary, secondary = theme.groups()
+      context.mode = mode
+      local primary = options.left[1].hl(context)
+      local secondary = options.left[4].hl(context)
       assert(primary == 'UserStatuslinePrimary' .. entry[2])
       assert(secondary == 'UserStatuslineSecondary' .. entry[2])
       local highlight = vim.api.nvim_get_hl(0, { name = primary })
@@ -116,7 +130,7 @@ vim
         assert(highlight.fg == color and highlight.bg == nil)
       else
         assert(highlight.bg == color and highlight.fg == tonumber('0F131A', 16))
-        assert(components.left(context):find('┃', 1, true))
+        assert(statusline.render():find('┃', 1, true))
       end
     end
   )
@@ -126,10 +140,30 @@ vim.api.nvim_set_hl(0, 'UserStatuslinePrimaryInsert', {})
 vim.api.nvim_exec_autocmds('ColorScheme', {})
 assert(vim.api.nvim_get_hl(0, { name = 'UserStatuslinePrimaryInsert' }).bg == tonumber('AAD94C', 16))
 vim.api.nvim_set_hl(0, 'OverseerSUCCESS', { fg = '#123456', bg = '#654321', bold = true })
+task_status = 'FAILURE'
+local previous_calls = task_calls
 vim.api.nvim_exec_autocmds('User', { pattern = 'OverseerListUpdate' })
+assert(evaluate().str:find(' 1 ', 1, true))
+assert(task_calls == previous_calls + 1)
 local task_highlight = vim.api.nvim_get_hl(0, { name = 'UserStatuslineTaskSUCCESS' })
 assert(task_highlight.fg == tonumber('123456', 16))
 assert(task_highlight.bg == nil and task_highlight.bold == nil)
+
+local highlight_writes = 0
+local set_highlight = vim.api.nvim_set_hl
+---@param namespace integer
+---@param name string
+---@param highlight table
+vim.api.nvim_set_hl = function(namespace, name, highlight)
+  highlight_writes = highlight_writes + 1
+  set_highlight(namespace, name, highlight)
+end
+vim.api.nvim_exec_autocmds('User', { pattern = 'OverseerListUpdate' })
+vim.api.nvim_exec_autocmds('User', { pattern = 'OverseerListUpdate' })
+evaluate()
+assert(task_calls == previous_calls + 2)
+assert(highlight_writes == 0)
+vim.api.nvim_set_hl = set_highlight
 
 local set_highlight = vim.api.nvim_set_hl
 ---@param namespace integer
@@ -140,33 +174,33 @@ evaluate()
 vim.api.nvim_set_hl = set_highlight
 
 vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestStarted' })
-local spinner = events.codecompanion()
+local spinner = codecompanion()
 assert(not spinner:find('', 1, true))
-assert(events.codecompanion() == spinner)
+assert(codecompanion() == spinner)
 assert(vim.wait(
   500,
   ---@return boolean
-  function() return events.codecompanion() ~= spinner end,
+  function() return codecompanion() ~= spinner end,
   20
 ))
 vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestStarted' })
 vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestFinished' })
-assert(not events.codecompanion():find('', 1, true))
+assert(not codecompanion():find('', 1, true))
 vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestFinished' })
-assert(events.codecompanion() == '  ')
+assert(codecompanion() == '  ')
 
 vim.cmd('vsplit')
 local current = vim.api.nvim_get_current_win()
 context.active = false
-components.right(context)
+vim.api.nvim_eval_statusline(vim.o.statusline, { winid = expected_window, maxwidth = vim.o.columns })
 assert(progress_window == expected_window)
 assert(vim.api.nvim_get_current_win() == current)
 
 vim.fn.reg_recording = recording
 vim.fn.searchcount = searchcount
 vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestStarted' })
-events.setup()
-assert(events.codecompanion() == '  ')
+spec.config(nil, options)
+assert(codecompanion() == '  ')
 assert(vim.o.statusline:find("require'statusline'", 1, true))
 assert(statusline.highlight('text', 'Title', 'Normal') == '%#Title#text%#Normal#')
 
