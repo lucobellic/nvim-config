@@ -23,7 +23,7 @@ return {
       end,
       desc = 'Toggle Relative Line Number',
     },
-    { '<leader>u=', '<cmd>ToggleFocusResize<cr>', desc = 'Toggle Focus Resize' },
+    -- { '<leader>u=', '<cmd>ToggleFocusResize<cr>', desc = 'Toggle Focus Resize' },
     {
       '<leader>uw',
       function() vim.opt_local.wrap = not vim.opt_local.wrap:get() end,
