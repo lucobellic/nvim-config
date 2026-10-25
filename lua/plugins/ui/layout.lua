@@ -147,7 +147,7 @@ return {
           },
         },
       },
-      right = { size = 0.3 },
+      right = { size = 0.5 },
       bottom = {
         size = 0.2,
         align = 'full',
@@ -183,6 +183,8 @@ return {
       extend(require('plugins.ui.layout.layout-ai'), opts)
       extend(require('plugins.ui.layout.layout-misc'), opts)
       require('layout').setup(opts)
+      -- Override layout's zero minimum so shrinking the center can grow side panels.
+      vim.o.winminwidth = 1
       -- Add autocmd to refresh the statusline when the window is opened
       vim.api.nvim_create_autocmd(
         { 'WinResized' },
