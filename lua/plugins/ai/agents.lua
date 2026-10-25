@@ -62,7 +62,7 @@ return {
         insert = false,
       },
       codex = {
-        executable = 'codex',
+        executable = vim.env.INSIDE_DOCKER and 'codex --no-daemon' or 'codex',
         filetype = 'codex',
         display_name = 'Codex',
         leader = '<leader>lx',
