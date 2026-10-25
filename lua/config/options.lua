@@ -130,5 +130,3 @@ vim.g.python3_host_prog = '/usr/bin/python3'
 vim.g.lazyvim_python_lsp = 'ty'
 
 vim.g.kind_filter = require('config.icons').kind_filter
-
-vim.opt.statuscolumn = [[%!v:lua.require'heirline'.eval_statuscolumn()]]

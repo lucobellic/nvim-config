@@ -13,6 +13,9 @@
 ---@field cursor? integer
 ---@field background? integer
 
+---@class User.Statuscolumn
+local M = {}
+
 local cursor_tab_sign_namespace = vim.api.nvim_create_namespace('cursor-tab.nvim.sign')
 local git_sign_namespace = vim.api.nvim_create_namespace('gitsigns_signs_')
 local git_sign_staged_namespace = vim.api.nvim_create_namespace('gitsigns_signs_staged')
@@ -32,29 +35,6 @@ local function clear_redraw_cache()
   windows = {}
   redraw_highlights = {}
 end
-
-vim.api.nvim_set_decoration_provider(vim.api.nvim_create_namespace('user.statuscolumn'), {
-  ---@param _ string
-  ---@param _tick integer
-  on_start = function(_, _tick)
-    clear_redraw_cache()
-    redrawing = true
-  end,
-  ---@param _ string
-  ---@param _tick integer
-  on_end = function(_, _tick)
-    clear_redraw_cache()
-    redrawing = false
-  end,
-})
-
-vim.api.nvim_create_autocmd('ColorScheme', {
-  ---@param _ vim.api.keyset.create_autocmd.callback_args
-  callback = function(_)
-    cursor_sign_highlights = {}
-    clear_redraw_cache()
-  end,
-})
 
 ---@param sign_group string
 ---@param background integer?
@@ -176,40 +156,69 @@ local function get_window(win, line)
   return state
 end
 
-local statuscolumn = {
-  ---@return string
-  provider = function()
-    if vim.v.virtnum < 0 then
-      return ''
-    end
+---@public
+---@return string
+function M.render()
+  if vim.v.virtnum < 0 then
+    return ''
+  end
 
-    local line = vim.v.lnum
-    local win = vim.g.statusline_winid or vim.api.nvim_get_current_win()
-    local state = get_window(win, line)
-    if state.hidden then
-      return ''
-    end
+  local line = vim.v.lnum
+  local win = vim.g.statusline_winid or vim.api.nvim_get_current_win()
+  local state = get_window(win, line)
+  if state.hidden then
+    return ''
+  end
 
-    -- Only display line numbers when signcolumn is 'no'
-    if not state.signs then
-      return (state.numbers and vim.v.virtnum == 0) and '%l ' or ''
-    end
+  -- Only display line numbers when signcolumn is 'no'
+  if not state.signs then
+    return (state.numbers and vim.v.virtnum == 0) and '%l ' or ''
+  end
 
-    local is_cursor_line = state.cursor == line
-    local entry = state.lines[line]
-    local signs = '  '
-    if entry then
-      if not entry.text then
-        local background = is_cursor_line and state.background or nil
-        entry.text = format_extmark(entry.sign, background) .. format_extmark(entry.git, background)
-      end
-      signs = entry.text
+  local is_cursor_line = state.cursor == line
+  local entry = state.lines[line]
+  local signs = '  '
+  if entry then
+    if not entry.text then
+      local background = is_cursor_line and state.background or nil
+      entry.text = format_extmark(entry.sign, background) .. format_extmark(entry.git, background)
     end
-    local fold_column = vim.v.virtnum == 0 and '%C ' or '  '
-    local cursor_highlight = is_cursor_line and '%#CursorLineNr#' or ''
-    local trailing_highlight = is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#'
-    return cursor_highlight .. signs .. '%=%l' .. fold_column .. trailing_highlight
-  end,
-}
+    signs = entry.text
+  end
+  local fold_column = vim.v.virtnum == 0 and '%C ' or '  '
+  local cursor_highlight = is_cursor_line and '%#CursorLineNr#' or ''
+  local trailing_highlight = is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#'
+  return cursor_highlight .. signs .. '%=%l' .. fold_column .. trailing_highlight
+end
 
-return statuscolumn
+---@public
+function M.setup()
+  clear_redraw_cache()
+  cursor_sign_highlights = {}
+  redrawing = false
+  vim.api.nvim_set_decoration_provider(vim.api.nvim_create_namespace('user.statuscolumn'), {
+    ---@param _ string
+    ---@param _tick integer
+    on_start = function(_, _tick)
+      clear_redraw_cache()
+      redrawing = true
+    end,
+    ---@param _ string
+    ---@param _tick integer
+    on_end = function(_, _tick)
+      clear_redraw_cache()
+      redrawing = false
+    end,
+  })
+  vim.api.nvim_create_autocmd('ColorScheme', {
+    group = vim.api.nvim_create_augroup('UserStatuscolumn', { clear = true }),
+    ---@param _ vim.api.keyset.create_autocmd.callback_args
+    callback = function(_)
+      cursor_sign_highlights = {}
+      clear_redraw_cache()
+    end,
+  })
+  vim.o.statuscolumn = "%!v:lua.require'statuscolumn'.render()"
+end
+
+return M
