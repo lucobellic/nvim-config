@@ -69,9 +69,23 @@ vim.iter({ '<C-p>', '<tab>', '<cr>' }):each(function(key)
   vim.keymap.set({ 'n' }, key, function() send_key(key) end, { buffer = true })
 end)
 
-vim.keymap.set({ 'n' }, '<LeftMouse>', function() send_mouse_event(0, false) end, { buffer = true })
-vim.keymap.set({ 'n' }, '<LeftRelease>', function() send_mouse_event(0, true) end, { buffer = true })
-vim.keymap.set({ 'n' }, '<RightMouse>', function() send_mouse_event(2, false) end, { buffer = true })
-vim.keymap.set({ 'n' }, '<RightRelease>', function() send_mouse_event(2, true) end, { buffer = true })
-vim.keymap.set({ 'n' }, '<ScrollWheelUp>', function() send_scroll_event(true) end, { buffer = true })
-vim.keymap.set({ 'n' }, '<ScrollWheelDown>', function() send_scroll_event(false) end, { buffer = true })
+---@param key string
+---@param callback fun()
+local function map_mouse(key, callback)
+  vim.keymap.set('n', key, function()
+    local mouse = vim.fn.getmousepos()
+    -- Let Neovim handle other windows, status lines and separators.
+    if mouse.winid ~= vim.api.nvim_get_current_win() or mouse.line == 0 then
+      return key
+    end
+    callback()
+    return ''
+  end, { buffer = true, expr = true })
+end
+
+map_mouse('<LeftMouse>', function() send_mouse_event(0, false) end)
+map_mouse('<LeftRelease>', function() send_mouse_event(0, true) end)
+map_mouse('<RightMouse>', function() send_mouse_event(2, false) end)
+map_mouse('<RightRelease>', function() send_mouse_event(2, true) end)
+map_mouse('<ScrollWheelUp>', function() send_scroll_event(true) end)
+map_mouse('<ScrollWheelDown>', function() send_scroll_event(false) end)
