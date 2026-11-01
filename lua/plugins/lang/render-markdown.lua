@@ -1,6 +1,5 @@
 local filetypes = {
   'codecompanion',
-  'codecompanion.floaterm',
   'markdown',
   'markdown.floaterm',
   'mcphub',

@@ -58,10 +58,10 @@ local lsp_progress = {
 }
 
 ---@type User.Statusline.Component
-local codecompanion = {
+local inline_prompt = {
   ---@param _ User.Statusline.Context
   ---@return string
-  provider = function(_) return (shared.requests > 0 and shared.frames[shared.frame] or '') .. '  ' end,
+  provider = function(_) return require('inline-prompt').status() end,
   hl = shared.secondary,
 }
 
@@ -100,6 +100,6 @@ local clock = {
 }
 
 ---@type User.Statusline.Component[]
-local right = { tasks, lsp_progress, codecompanion, search_count, separator, clock }
+local right = { tasks, lsp_progress, inline_prompt, search_count, separator, clock }
 
 return right

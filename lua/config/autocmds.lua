@@ -110,8 +110,6 @@ require('util.folds.folds').setup()
 
 -- Track visited files by keeping a list in a global variable
 require('util.commands').track_visited_files()
--- Create block spinner command
-require('util.commands').create_block_spinner_command()
 -- Setup window resize utility
 -- require('util.commands').setup_window_resize({
 --   min_width = 80,

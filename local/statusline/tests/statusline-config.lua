@@ -10,9 +10,6 @@ vim.o.columns = 180
 vim.o.cmdheight = 0
 spec.config(nil, options)
 
----@return string
-local function codecompanion() return options.right[3].provider({}) end
-
 ---@return vim.api.keyset.eval_statusline_ret
 local function evaluate()
   return vim.api.nvim_eval_statusline(vim.o.statusline, { maxwidth = vim.o.columns, highlights = true })
@@ -173,22 +170,6 @@ vim.api.nvim_set_hl = function(namespace, name, highlight) error('Highlights mus
 evaluate()
 vim.api.nvim_set_hl = set_highlight
 
-vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestStarted' })
-local spinner = codecompanion()
-assert(not spinner:find('', 1, true))
-assert(codecompanion() == spinner)
-assert(vim.wait(
-  500,
-  ---@return boolean
-  function() return codecompanion() ~= spinner end,
-  20
-))
-vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestStarted' })
-vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestFinished' })
-assert(not codecompanion():find('', 1, true))
-vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestFinished' })
-assert(codecompanion() == '  ')
-
 vim.cmd('vsplit')
 local current = vim.api.nvim_get_current_win()
 context.active = false
@@ -198,9 +179,7 @@ assert(vim.api.nvim_get_current_win() == current)
 
 vim.fn.reg_recording = recording
 vim.fn.searchcount = searchcount
-vim.api.nvim_exec_autocmds('User', { pattern = 'CodeCompanionRequestStarted' })
 spec.config(nil, options)
-assert(codecompanion() == '  ')
 assert(vim.o.statusline:find("require'statusline'", 1, true))
 assert(statusline.highlight('text', 'Title', 'Normal') == '%#Title#text%#Normal#')
 

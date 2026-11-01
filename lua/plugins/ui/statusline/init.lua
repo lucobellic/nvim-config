@@ -73,34 +73,6 @@ return {
     close_timer()
     shared.requests = 0
     local group = vim.api.nvim_create_augroup('UserStatuslineIntegrations', { clear = true })
-    vim.api.nvim_create_autocmd('User', {
-      group = group,
-      pattern = { 'CodeCompanionRequestStarted', 'CodeCompanionRequestFinished' },
-      ---@param event vim.api.keyset.create_autocmd.callback_args
-      callback = function(event)
-        if event.match == 'CodeCompanionRequestStarted' then
-          shared.requests = shared.requests + 1
-          if not timer then
-            shared.frame = 1
-            timer = assert(vim.uv.new_timer())
-            timer:start(
-              200,
-              200,
-              vim.schedule_wrap(function()
-                shared.frame = shared.frame % #shared.frames + 1
-                statusline.redraw()
-              end)
-            )
-          end
-        else
-          shared.requests = math.max(0, shared.requests - 1)
-          if shared.requests == 0 then
-            close_timer()
-          end
-        end
-        statusline.redraw()
-      end,
-    })
     vim.api.nvim_create_autocmd('VimLeavePre', { group = group, callback = close_timer })
     statusline.setup(opts)
   end,

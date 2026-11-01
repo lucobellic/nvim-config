@@ -117,11 +117,10 @@ Custom integrations may request `require('statusline').redraw()` outside renderi
 ## Existing configuration
 
 Your configuration preserves the mode icon, Git, Lazy updates, debugger, macro
-recording, centered layout indicators, tasks, LSP progress, CodeCompanion, search
+recording, centered layout indicators, tasks, LSP progress, search
 count, separators, clock, and mode colors. Disabled components remain disabled.
 Optional plugins are read only after loading. Search counts reuse native cached
-results. Task summaries use event based caching. The CodeCompanion timer runs
-only during active requests and is managed by the configuration.
+results. Task summaries use event based caching.
 
 ## Checks
 

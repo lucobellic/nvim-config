@@ -11,17 +11,6 @@ return {
   opts = {
     right = {
       {
-        name = 'codecompanion',
-        picker = { icon = '', key = 'a' },
-        views = {
-          {
-            name = 'codecompanion',
-            filter = ft_and('codecompanion', not_floating),
-            open = 'CodeCompanionChat toggle',
-          },
-        },
-      },
-      {
         name = 'opencode',
         picker = { icon = '', key = 'o' },
         views = {
