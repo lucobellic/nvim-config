@@ -26,7 +26,7 @@ M.options = {
   },
   context_lines = 100,
   timeout = 120000,
-  shuffle_interval = 80,
+  shuffle_interval = 120,
 }
 
 ---@param opts? InlinePrompt.Options
