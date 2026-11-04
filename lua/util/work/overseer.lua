@@ -181,6 +181,63 @@ local function resolve_cmake_targets()
   return targets
 end
 
+-- ── Task picker ─────────────────────────────────────────────────────
+
+---@param specs table[]
+---@param queued? boolean
+local function start_tasks(specs, queued)
+  vim.iter(specs):each(function(spec)
+    local task = require('overseer').new_task(spec)
+    if queued then
+      require('overseer.util.queue').schedule_task(task)
+    else
+      task:start()
+    end
+  end)
+end
+
+--- Pick values and turn them into overseer tasks. Confirm starts them, <c-cr> queues them.
+---@generic T
+---@param opts {source: string, title: string, values: T[], label: (fun(value: T): string), to_spec: (fun(value: T): table), format?: string|snacks.picker.format, queue?: boolean}
+local function pick_tasks(opts)
+  ---@type snacks.picker.finder.Item[]
+  local items = vim
+    .iter(ipairs(opts.values))
+    :map(function(idx, value) return { text = opts.label(value), item = value, idx = idx } end)
+    :totable()
+
+  local function run(picker, queued)
+    local selected = picker:selected({ fallback = true })
+    picker:close()
+    vim.schedule(function()
+      if #selected == 0 then
+        vim.notify('Nothing selected', vim.log.levels.WARN, { title = opts.title })
+        return
+      end
+      start_tasks(vim.iter(selected):map(function(choice) return opts.to_spec(choice.item) end):totable(), queued)
+    end)
+  end
+
+  Snacks.picker.pick({
+    source = opts.source,
+    items = items,
+    format = opts.format or 'text',
+    title = opts.title,
+    layout = { preset = 'vscode' },
+    win = {
+      input = {
+        keys = {
+          ['<c-cr>'] = { 'overseer_queue_tasks', mode = { 'n', 'i' }, desc = 'Queue tasks' },
+        },
+      },
+    },
+    actions = {
+      confirm = function(picker) run(picker, opts.queue) end,
+      overseer_queue_tasks = function(picker) run(picker, true) end,
+    },
+  })
+end
+
 -- ── CMake build picker ──────────────────────────────────────────────
 
 ---@param item snacks.picker.finder.Item
@@ -194,78 +251,26 @@ local function format_cmake_target(item)
   }
 end
 
----@param choices snacks.picker.finder.Item[]
----@param opts? {queue: boolean}
-local function run_cmake_builds(choices, opts)
-  local queued = opts and opts.queue
-  vim.iter(choices):each(function(choice)
-    local target = choice.item ---@type {name: string, type: string}
-    local spec = {
-      name = 'CMake build ' .. target.name,
-      cmd = 'cmake',
-      args = { '--build', '../build', '-j', '8', '--target', target.name },
-      components = { 'default', 'default_vscode' },
-    }
-
-    local task = require('overseer').new_task(spec)
-    if queued then
-      require('overseer.util.queue').schedule_task(task)
-    else
-      task:start()
-    end
-  end)
-end
-
 local function cmake_build()
   local targets = resolve_cmake_targets()
   if not targets then
     return
   end
 
-  ---@type snacks.picker.finder.Item[]
-  local items = vim
-    .iter(ipairs(targets))
-    :map(
-      function(idx, target)
-        return { formatted = target.name, text = idx .. ' ' .. target.name, item = target, idx = idx }
-      end
-    )
-    :totable()
-
-  Snacks.picker.pick({
+  pick_tasks({
     source = 'work_cmake_targets',
-    items = items,
-    format = format_cmake_target,
     title = 'CMake Build Target',
-    layout = { preset = 'vscode' },
-    win = {
-      input = {
-        keys = {
-          ['<c-cr>'] = { 'overseer_queue_cmake', mode = { 'n', 'i' }, desc = 'Queue cmake builds' },
-        },
-      },
-    },
-    actions = {
-      confirm = function(picker, item)
-        picker:close()
-        vim.schedule(function()
-          local selected = picker:selected()
-          local choices = (selected and #selected > 0) and selected or (item and { item } or {})
-          if #choices > 0 then
-            run_cmake_builds(choices)
-          else
-            vim.notify('No cmake target selected', vim.log.levels.WARN)
-          end
-        end)
-      end,
-      overseer_queue_cmake = function(picker)
-        local selected = picker:selected({ fallback = true })
-        if #selected > 0 then
-          run_cmake_builds(selected, { queue = true })
-        end
-        picker:close()
-      end,
-    },
+    values = targets,
+    format = format_cmake_target,
+    label = function(target) return target.name end,
+    to_spec = function(target)
+      return {
+        name = 'CMake build ' .. target.name,
+        cmd = 'cmake',
+        args = { '--build', '../build', '-j', '8', '--target', target.name },
+        components = { 'default', 'default_vscode' },
+      }
+    end,
   })
 end
 
@@ -296,29 +301,21 @@ end
 ---@param opts? {queue: boolean}
 local function reach_run(run_args, list_args, opts)
   local queued = opts and opts.queue
-  local results = get_reach_result(list_args)
-  local prompt = queued and 'Queue Reach Test' or 'Select Reach Test'
-  require('util.util').multi_select(results, { prompt = prompt }, function(choices)
-    if not choices or #choices == 0 then
-      vim.notify('No Reach test selected', vim.log.levels.WARN)
-      return
-    end
-    vim.iter(choices):each(function(choice)
-      local args = vim.deepcopy(run_args)
-      local spec = {
+  pick_tasks({
+    source = 'work_reach_' .. list_args[1],
+    title = queued and 'Queue Reach Test' or 'Select Reach Test',
+    values = get_reach_result(list_args),
+    queue = queued,
+    label = tostring,
+    to_spec = function(choice)
+      return {
         name = choice,
         cmd = 'reach',
-        args = vim.list_extend(args, { choice }),
+        args = vim.list_extend(vim.deepcopy(run_args), { choice }),
         components = { 'default' },
       }
-      local task = require('overseer').new_task(spec)
-      if queued then
-        require('overseer.util.queue').schedule_task(task)
-      else
-        task:start()
-      end
-    end)
-  end)
+    end,
+  })
 end
 
 -- ── Debug executable picker ─────────────────────────────────────────
