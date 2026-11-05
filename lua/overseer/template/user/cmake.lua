@@ -20,16 +20,11 @@ return {
       return 'Command "cmake" not found'
     end
 
-    local project = vim.fs.find({ 'CMakePresets.json', 'CMakeLists.txt' }, {
-      path = opts.dir,
-      upward = true,
-      type = 'file',
-    })[1]
-    if not project then
+    local directory = vim.fs.root(opts.dir, 'CMakePresets.json') or vim.fs.root(opts.dir, 'CMakeLists.txt')
+    if not directory then
       return 'No CMake project found'
     end
 
-    local directory = vim.fs.dirname(project)
     local build_directory = 'build'
     if vim.fn.isdirectory(directory .. '/build') == 0 and vim.fn.isdirectory(directory .. '/../build') == 1 then
       build_directory = '../build'
