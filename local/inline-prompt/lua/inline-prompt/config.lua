@@ -9,7 +9,13 @@
 ---@field models table<string, InlinePrompt.Model>
 ---@field context_lines integer Lines sent before and after the selection
 ---@field timeout integer Request timeout in milliseconds
----@field shuffle_interval integer Time in milliseconds between two shuffles of the text while waiting
+---@field rain InlinePrompt.RainOptions Digital rain shown over the lines while waiting
+
+---Same meaning as the unimatrix options.
+---@class InlinePrompt.RainOptions
+---@field speed integer Up to 100, each step below removes 10 milliseconds per frame
+---@field flashers boolean Some characters keep changing in place
+---@field characters string Character set letter codes among `k`, `n`, `s` and `m`
 
 ---@class InlinePrompt.Config
 ---@field options InlinePrompt.Options
@@ -26,7 +32,7 @@ M.options = {
   },
   context_lines = 100,
   timeout = 120000,
-  shuffle_interval = 120,
+  rain = { speed = 95, flashers = true, characters = 'kns' },
 }
 
 ---@param opts? InlinePrompt.Options

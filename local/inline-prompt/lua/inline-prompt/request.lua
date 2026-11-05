@@ -1,7 +1,7 @@
 local config = require('inline-prompt.config')
 local notify = require('inline-prompt.notify')
 local prompt = require('inline-prompt.prompt')
-local shuffle = require('inline-prompt.shuffle')
+local rain = require('inline-prompt.rain')
 local status = require('inline-prompt.status')
 
 ---@class InlinePrompt.Request
@@ -9,7 +9,7 @@ local status = require('inline-prompt.status')
 ---@field mark integer
 ---@field original string[] Text at submission, used to detect edits made during the request
 ---@field cancelled? boolean
----@field stop_shuffle? fun()
+---@field stop_rain? fun()
 ---@field process? vim.SystemObj
 
 ---@class InlinePrompt.RequestModule
@@ -64,7 +64,7 @@ end
 local function on_exit(request, result)
   requests[request] = nil
   status.update(vim.tbl_count(requests))
-  request.stop_shuffle()
+  request.stop_rain()
   if not vim.api.nvim_buf_is_loaded(request.buf) then
     return
   end
@@ -114,7 +114,7 @@ function M.send(buf, mark, range, instruction, command)
   local request = { buf = buf, mark = mark, original = selection }
   requests[request] = true
   status.update(vim.tbl_count(requests))
-  request.stop_shuffle = shuffle.start(buf, function() return mark_range(buf, mark) end)
+  request.stop_rain = rain.start(buf, function() return mark_range(buf, mark) end)
 
   request.process = vim.system(command, {
     stdin = prompt.build(buf, range, instruction, selection),

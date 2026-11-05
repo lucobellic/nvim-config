@@ -1,105 +1,194 @@
 local config = require('inline-prompt.config')
 
----@class InlinePrompt.Run
+---@class InlinePrompt.Cell
+---@field [1] string Character
+---@field [2] string Highlight group
+---@field flash? boolean Keeps changing until erased
+
+---@class InlinePrompt.Node
+---@field col integer Next cell to draw
+---@field writer boolean Draws characters, otherwise erases them
+---@field head boolean Draws a bright character in front of the stream
+---@field last_char? string Character under the head, faded once the head moves on
+---@field expired? boolean
+
+---@class InlinePrompt.Stream
 ---@field row integer
----@field col integer
----@field parts string[] Glyphs and gaps picked once, then only reordered
----@field inline? boolean Insert the text instead of covering the buffer text
+---@field timer integer Ticks before the next node spawns
+---@field drawing boolean
+---@field nodes InlinePrompt.Node[]
+---@field cells InlinePrompt.Cell[]
 
 ---@class InlinePrompt.Layout
----@field tick integer
----@field range InlinePrompt.Range
----@field runs InlinePrompt.Run[]
+---@field start_row integer
+---@field end_row integer
+---@field width integer
+---@field streams InlinePrompt.Stream[]
 
----@class InlinePrompt.Shuffle
+---@class InlinePrompt.Rain
 local M = {}
 
--- The same katakana in full width, two cells wide.
-local WIDE_GLYPHS =
-  vim.fn.split('ハヒシツウーナミモニサワオリホマエキムテケメカユラセネスタヌ', '\\zs')
+-- Same letter codes as unimatrix.
+local CHARACTER_SETS = {
+  k = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ',
+  n = '1234567890',
+  s = [[-=*_+|:<>"]],
+}
+CHARACTER_SETS.m = CHARACTER_SETS.k .. CHARACTER_SETS.n:rep(2) .. CHARACTER_SETS.s:rep(4)
 
--- Glyphs seen in the digital rain of the first film, all one cell wide.
-local GLYPHS = vim.fn.split(
-  'ﾊﾋｼﾂｳｰﾅﾐﾓﾆｻﾜｵﾘﾎﾏｴｷﾑﾃｹﾒｶﾕﾗｾﾈｽﾀﾇ'
-    .. '0123456789Z'
-    .. [[:."=*+-<>¦|_]],
-  '\\zs'
-)
+---@type InlinePrompt.Cell
+local BLANK = { ' ', 'InlinePromptRain' }
 
----Random glyphs and gaps that fill exactly `width` cells, so the layout never shifts.
----Gaps and padded glyphs keep the rain airy, like the film.
+---@param list string Letter codes, repeated letters make a set more frequent
+---@return string[] characters
+local function characters_from(list)
+  return vim
+    .iter(vim.fn.split(list, '\\zs'))
+    :map(
+      function(letter) return vim.fn.split(assert(CHARACTER_SETS[letter], 'Unknown character set ' .. letter), '\\zs') end
+    )
+    :flatten()
+    :totable()
+end
+
+-- Defined on each start, because a color scheme change clears them.
+local function define_highlights()
+  local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
+  vim.api.nvim_set_hl(0, 'InlinePromptRain', { default = true, link = 'DiagnosticOk' })
+  vim.api.nvim_set_hl(0, 'InlinePromptRainHead', { default = true, fg = normal.fg, bold = true })
+end
+
+---A drawn character. Some of them flash until an eraser removes them.
+---@param char string
+---@return InlinePrompt.Cell
+local function character_cell(char)
+  return { char, 'InlinePromptRain', flash = config.options.rain.flashers and math.random(10) == 1 }
+end
+
+---@param row integer
 ---@param width integer
----@return string[] parts
-local function random_parts(width)
-  local parts = {}
-  local remaining = width
-  while remaining > 0 do
-    local roll = math.random()
-    local glyph = GLYPHS[math.random(#GLYPHS)]
-    if remaining == 1 then
-      parts[#parts + 1] = roll < 0.6 and glyph or ' '
-      remaining = 0
-    elseif roll < 0.4 then
-      parts[#parts + 1] = WIDE_GLYPHS[math.random(#WIDE_GLYPHS)]
-      remaining = remaining - 2
-    elseif roll < 0.7 then
-      parts[#parts + 1] = glyph .. ' '
-      remaining = remaining - 2
-    else
-      parts[#parts + 1] = roll < 0.85 and glyph or ' '
-      remaining = remaining - 1
+---@return InlinePrompt.Stream
+local function new_stream(row, width)
+  local cells = {}
+  for col = 1, width do
+    cells[col] = BLANK
+  end
+  -- The first node comes within a second so every line shows activity quickly.
+  return {
+    row = row,
+    timer = math.random(math.min(width, 10)),
+    drawing = false,
+    nodes = {},
+    cells = cells,
+  }
+end
+
+---Alternate between a writer and an eraser, with gaps sized like unimatrix.
+---@param stream InlinePrompt.Stream
+---@param width integer
+local function spawn(stream, width)
+  stream.drawing = not stream.drawing
+  stream.timer = stream.drawing and math.random(3, math.max(3, width - 3)) or math.random(width)
+  table.insert(stream.nodes, { col = 1, writer = stream.drawing, head = stream.drawing and math.random(3) == 1 })
+end
+
+---@param stream InlinePrompt.Stream
+---@param node InlinePrompt.Node
+---@param characters string[]
+local function draw(stream, node, characters)
+  if not node.writer then
+    stream.cells[node.col] = BLANK
+    return
+  end
+
+  local char = characters[math.random(#characters)]
+  if not node.head then
+    stream.cells[node.col] = character_cell(char)
+    return
+  end
+
+  stream.cells[node.col] = { char, 'InlinePromptRainHead' }
+  if node.last_char then
+    stream.cells[node.col - 1] = character_cell(node.last_char)
+  end
+  node.last_char = char
+end
+
+---Move the nodes of a stream one step to the right.
+---@param stream InlinePrompt.Stream
+---@param width integer
+---@param frame integer
+---@param characters string[]
+local function step(stream, width, frame, characters)
+  if stream.timer == 0 then
+    spawn(stream, width)
+  end
+  stream.timer = stream.timer - 1
+
+  for _, node in ipairs(stream.nodes) do
+    draw(stream, node, characters)
+    node.col = node.col + 1
+
+    if node.col > width then
+      -- Fade the head left on the last cell.
+      if node.head then
+        stream.cells[width] = character_cell(node.last_char)
+      end
+      node.expired = true
     end
   end
-  return parts
-end
 
----Reorder in place. The parts stay the same, so the width stays the same.
----@param parts string[]
-local function shuffle(parts)
-  for index = #parts, 2, -1 do
-    local other = math.random(index)
-    parts[index], parts[other] = parts[other], parts[index]
-  end
-end
-
----Split the range into one run per line, spaces and indent included.
----@param buf integer
----@param range InlinePrompt.Range
----@return InlinePrompt.Run[]
-local function find_runs(buf, range)
-  local lines = vim.api.nvim_buf_get_text(buf, range.start_row, range.start_col, range.end_row, range.end_col, {})
-
-  local runs = vim
-    .iter(ipairs(lines))
-    :filter(function(_, line) return line ~= '' end)
-    :map(
-      function(index, line)
-        return {
-          row = range.start_row + index - 1,
-          col = index == 1 and range.start_col or 0,
-          parts = random_parts(vim.fn.strdisplaywidth(line)),
-        }
+  -- Like unimatrix, flashers change every third frame.
+  if frame % 3 == 0 then
+    for _, cell in ipairs(stream.cells) do
+      if cell.flash then
+        cell[1] = characters[math.random(#characters)]
       end
-    )
-    :totable()
-
-  -- Show one glyph when the range has no character, for example when inserting at the cursor.
-  if #runs == 0 then
-    return { { row = range.start_row, col = range.start_col, parts = random_parts(1), inline = true } }
+    end
   end
-  return runs
+
+  stream.nodes = vim.iter(stream.nodes):filter(function(node) return not node.expired end):totable()
 end
 
----Reorder the random glyphs covering the range at every `shuffle_interval` until stopped.
+---Merge neighbor cells with the same highlight to send fewer chunks.
+---@param cells InlinePrompt.Cell[]
+---@return InlinePrompt.Cell[] chunks
+local function chunks(cells)
+  local result = {}
+  for _, cell in ipairs(cells) do
+    local last = result[#result]
+    if last and last[2] == cell[2] then
+      last[1] = last[1] .. cell[1]
+    else
+      result[#result + 1] = { cell[1], cell[2] }
+    end
+  end
+  return result
+end
+
+---Rows covered by the range. A range ending at the start of a line does not cover it.
+---@param range InlinePrompt.Range
+---@return integer start_row, integer end_row
+local function rows(range)
+  local end_row = (range.end_col == 0 and range.end_row > range.start_row) and range.end_row - 1 or range.end_row
+  return range.start_row, end_row
+end
+
+---Run a digital rain from the left to the right of the window on each line of the range until stopped.
 ---@public
 ---@param buf integer
 ---@param get_range fun(): InlinePrompt.Range? Current range, which can move while the request runs
 ---@return fun() stop
 function M.start(buf, get_range)
+  local options = config.options.rain
+  local characters = characters_from(options.characters)
   local namespace = vim.api.nvim_create_namespace('')
   local timer = assert(vim.uv.new_timer())
+  local frame = 0
   ---@type InlinePrompt.Layout?
   local layout
+
+  define_highlights()
 
   local function stop()
     if not timer:is_closing() then
@@ -111,21 +200,33 @@ function M.start(buf, get_range)
     end
   end
 
-  -- Glyphs are picked when the text or the range changes, then only reordered on each tick.
+  -- Streams restart only when the rows or the window width change, not on every edit.
   ---@param range InlinePrompt.Range
-  ---@return InlinePrompt.Run[]
-  local function current_runs(range)
-    local tick = vim.api.nvim_buf_get_changedtick(buf)
-    if not layout or layout.tick ~= tick or not vim.deep_equal(layout.range, range) then
+  ---@param width integer
+  ---@return InlinePrompt.Stream[]
+  local function current_streams(range, width)
+    local start_row, end_row = rows(range)
+    if not layout or layout.start_row ~= start_row or layout.end_row ~= end_row or layout.width ~= width then
       vim.api.nvim_buf_clear_namespace(buf, namespace, 0, -1)
-      layout = { tick = tick, range = range, runs = find_runs(buf, range) }
+      layout = {
+        start_row = start_row,
+        end_row = end_row,
+        width = width,
+        streams = vim
+          .iter(vim.fn.range(start_row, end_row))
+          :map(function(row) return new_stream(row, width) end)
+          :totable(),
+      }
     end
-    return layout.runs
+    return layout.streams
   end
+
+  -- Unimatrix speed 100 has no delay; a timer needs at least a few milliseconds.
+  local interval = math.max(10, (100 - options.speed) * 10)
 
   timer:start(
     0,
-    config.options.shuffle_interval,
+    interval,
     vim.schedule_wrap(function()
       local range = vim.api.nvim_buf_is_loaded(buf) and get_range()
       if not range then
@@ -133,16 +234,25 @@ function M.start(buf, get_range)
         return
       end
 
+      -- Skip frames while the buffer is hidden.
+      local window = vim.fn.bufwinid(buf)
+      if window == -1 then
+        return
+      end
+      local info = vim.fn.getwininfo(window)[1]
+      local width = math.max(1, info.width - info.textoff)
+
       -- Reusing the extmark id updates it in place instead of creating a new one.
-      for index, run in ipairs(current_runs(range)) do
-        shuffle(run.parts)
-        vim.api.nvim_buf_set_extmark(buf, namespace, run.row, run.col, {
+      for index, stream in ipairs(current_streams(range, width)) do
+        step(stream, width, frame, characters)
+        vim.api.nvim_buf_set_extmark(buf, namespace, stream.row, 0, {
           id = index,
-          virt_text = { { table.concat(run.parts), 'Comment' } },
-          virt_text_pos = run.inline and 'inline' or 'overlay',
-          hl_mode = 'combine',
+          virt_text = chunks(stream.cells),
+          virt_text_win_col = 0,
         })
       end
+
+      frame = frame + 1
     end)
   )
 
