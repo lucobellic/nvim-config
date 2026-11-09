@@ -39,6 +39,14 @@ CHARACTER_SETS.m = CHARACTER_SETS.k .. CHARACTER_SETS.n:rep(2) .. CHARACTER_SETS
 ---@type InlinePrompt.Cell
 local BLANK = { ' ', 'InlinePromptRain' }
 
+-- A space after each character makes the rain easier to read.
+local SPACING = ' '
+
+-- Streams and the gaps between them stay short so the rain looks dense
+-- while the code under it remains recognizable.
+local MIN_LENGTH = 3
+local MAX_LENGTH = 20
+
 ---@param list string Letter codes, repeated letters make a set more frequent
 ---@return string[] characters
 local function characters_from(list)
@@ -83,12 +91,18 @@ local function new_stream(row, width)
   }
 end
 
----Alternate between a writer and an eraser, with gaps sized like unimatrix.
+---Between MIN_LENGTH and MAX_LENGTH cells, mostly around half of the maximum.
+---@return integer
+local function random_length()
+  local half = MAX_LENGTH / 2
+  return math.max(MIN_LENGTH, math.random(0, half) + math.random(0, half))
+end
+
+---Alternate between a writer and an eraser, each lasting a random length.
 ---@param stream InlinePrompt.Stream
----@param width integer
-local function spawn(stream, width)
+local function spawn(stream)
   stream.drawing = not stream.drawing
-  stream.timer = stream.drawing and math.random(3, math.max(3, width - 3)) or math.random(width)
+  stream.timer = random_length()
   table.insert(stream.nodes, { col = 1, writer = stream.drawing, head = stream.drawing and math.random(3) == 1 })
 end
 
@@ -121,7 +135,7 @@ end
 ---@param characters string[]
 local function step(stream, width, frame, characters)
   if stream.timer == 0 then
-    spawn(stream, width)
+    spawn(stream)
   end
   stream.timer = stream.timer - 1
 
@@ -157,10 +171,11 @@ local function chunks(cells)
   local result = {}
   for _, cell in ipairs(cells) do
     local last = result[#result]
+    local text = cell[1] .. SPACING
     if last and last[2] == cell[2] then
-      last[1] = last[1] .. cell[1]
+      last[1] = last[1] .. text
     else
-      result[#result + 1] = { cell[1], cell[2] }
+      result[#result + 1] = { text, cell[2] }
     end
   end
   return result
@@ -240,7 +255,8 @@ function M.start(buf, get_range)
         return
       end
       local info = vim.fn.getwininfo(window)[1]
-      local width = math.max(1, info.width - info.textoff)
+      -- Each cell takes its character plus the spacing. Rounding up covers the last column, the overflow is clipped.
+      local width = math.max(1, math.ceil((info.width - info.textoff) / (1 + #SPACING)))
 
       -- Reusing the extmark id updates it in place instead of creating a new one.
       for index, stream in ipairs(current_streams(range, width)) do
