@@ -53,8 +53,8 @@ local function send_scroll_event(up)
   vim.api.nvim_chan_send(chan, seq)
 end
 
-vim.keymap.set({ 'n', 't', 'i' }, '<A-l>', '<cmd>OpenCodeNext<cr>', { buffer = true })
-vim.keymap.set({ 'n', 't', 'i' }, '<A-h>', '<cmd>OpenCodePrev<cr>', { buffer = true })
+vim.keymap.set({ 'n' }, '<A-l>', '<cmd>OpenCodeNext<cr>', { buffer = true })
+vim.keymap.set({ 'n' }, '<A-h>', '<cmd>OpenCodePrev<cr>', { buffer = true })
 vim.keymap.set({ 'n' }, '<S-l>', '<cmd>OpenCodeNext<cr>', { buffer = true })
 vim.keymap.set({ 'n' }, '<S-h>', '<cmd>OpenCodePrev<cr>', { buffer = true })
 vim.keymap.set({ 'n', 't', 'i' }, '<C-q>', '<cmd>OpenCodeClose<cr>', { buffer = true })
