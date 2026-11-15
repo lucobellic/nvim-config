@@ -62,7 +62,7 @@ vim.opt.number = false
 vim.opt.relativenumber = false
 vim.opt.wrap = false
 vim.opt.linebreak = true
-vim.opt.showbreak = '↪'
+vim.opt.showbreak = '│ '
 vim.opt.breakindent = true
 
 vim.opt.autoread = true
