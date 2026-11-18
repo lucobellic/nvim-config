@@ -10,6 +10,7 @@ local Util = require('agents.util')
 ---@field leader string Keymap prefix (e.g., '<leader>c') for setting up default keymaps
 ---@field split 'right'|'left'|'above'|'below'
 ---@field on_focus? fun(agent: Agent) Callback when agent is focused
+---@field submit_keys? string Keys sent to submit a prompt (default '<CR>')
 
 ---@class Agent
 ---@field display_name string
@@ -137,7 +138,8 @@ end
 
 function Agent:send_enter()
   if self:job_valid() then
-    vim.api.nvim_chan_send(self.terminal_job_id, '\r')
+    local keys = vim.api.nvim_replace_termcodes(self.opts.submit_keys or '<CR>', true, false, true)
+    vim.api.nvim_chan_send(self.terminal_job_id, keys)
   end
 end
 

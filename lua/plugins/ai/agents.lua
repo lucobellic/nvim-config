@@ -42,6 +42,8 @@ return {
         split = 'right',
         focus = true,
         insert = false,
+        -- Queue the prompt so it does not interrupt the running task
+        submit_keys = '<C-x><CR>',
       },
       gemini = {
         executable = 'agy',
