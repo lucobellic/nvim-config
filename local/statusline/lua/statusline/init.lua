@@ -79,6 +79,13 @@ function M.highlight(format, highlight, restore)
   return '%#' .. highlight .. '#' .. format .. (restore and ('%#' .. restore .. '#') or '%*')
 end
 
+---@param winid integer
+---@return boolean
+local function cursor_in_buffer(winid)
+  local line = vim.api.nvim_win_get_cursor(winid)[1]
+  return line <= vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(winid))
+end
+
 ---Coalesce update requests into one scheduled redraw.
 ---@public
 function M.redraw()
@@ -88,7 +95,13 @@ function M.redraw()
   redraw_pending = true
   vim.schedule(function()
     redraw_pending = false
-    vim.cmd.redrawstatus()
+    -- Callbacks can run inside a plugin vim.wait while a window cursor still points past a buffer being
+    -- loaded. Drawing now would read that missing line, so let the main loop redraw once the cursor is fixed.
+    if vim.iter(vim.api.nvim_tabpage_list_wins(0)):all(cursor_in_buffer) then
+      vim.cmd.redrawstatus()
+    else
+      vim.go.statusline = vim.go.statusline
+    end
   end)
 end
 
