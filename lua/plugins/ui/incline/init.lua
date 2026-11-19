@@ -1,5 +1,5 @@
 local separator_char = '-'
-local unfocused = 'NonText'
+local unfocused = 'InclineUnfocused'
 local focused = 'Comment'
 
 local icons = {
