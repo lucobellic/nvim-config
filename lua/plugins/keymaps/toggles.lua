@@ -23,7 +23,18 @@ return {
       end,
       desc = 'Toggle Relative Line Number',
     },
-    -- { '<leader>u=', '<cmd>ToggleFocusResize<cr>', desc = 'Toggle Focus Resize' },
+    {
+      '<leader>u=',
+      function()
+        -- Keep manual sizes, such as diffview splits, when other windows open or close
+        local is_enabled = not vim.o.equalalways
+        vim.o.equalalways = is_enabled
+        local text = (is_enabled and 'Enabled' or 'Disabled') .. ' window auto equalize'
+        local level = is_enabled and vim.log.levels.INFO or vim.log.levels.WARN
+        vim.notify(text, level, { title = 'Options' })
+      end,
+      desc = 'Toggle Window Auto Equalize',
+    },
     {
       '<leader>uw',
       function() vim.opt_local.wrap = not vim.opt_local.wrap:get() end,
