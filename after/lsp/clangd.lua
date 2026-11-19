@@ -88,10 +88,11 @@ end
 
 -- Load mutable reference hints module
 local mutable_ref_hints = require('util.cpp.mutable_reference_hints')
+local llvm_bin = vim.env.INSIDE_DOCKER and '/opt/nvim-llvm/bin' or nil
 return {
+  cmd_env = llvm_bin and { PATH = llvm_bin .. ':' .. vim.env.PATH } or nil,
   cmd = {
-    'clangd',
-    -- '/usr/local/bin/clangd',
+    llvm_bin and (llvm_bin .. '/clangd') or 'clangd',
     '--background-index',
     '--background-index-priority=background',
     '--all-scopes-completion',
