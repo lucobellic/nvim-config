@@ -47,6 +47,9 @@ local SPACING = ' '
 local MIN_LENGTH = 3
 local MAX_LENGTH = 20
 
+-- Above the default extmark priority, so the rain covers decorations from other plugins.
+local PRIORITY = 4096 + 1
+
 ---@param list string Letter codes, repeated letters make a set more frequent
 ---@return string[] characters
 local function characters_from(list)
@@ -265,6 +268,7 @@ function M.start(buf, get_range)
           id = index,
           virt_text = chunks(stream.cells),
           virt_text_win_col = 0,
+          priority = PRIORITY,
         })
       end
 
