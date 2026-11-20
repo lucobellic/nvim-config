@@ -1,3 +1,9 @@
+local function refresh_ribbon()
+  if vim.g.diff_ribbon then
+    require('diff-ribbon').refresh()
+  end
+end
+
 return {
   {
     'folke/which-key.nvim',
@@ -22,6 +28,7 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-neotest/nvim-nio',
+      'diff-ribbon',
     },
     keys = {
       {
@@ -116,6 +123,13 @@ return {
             default = { 'diff1_inline', 'diff2_horizontal', 'diff2_vertical' },
             merge_tool = { 'diff1_plain', 'diff3_horizontal', 'diff3_mixed', 'diff3_vertical', 'diff4_mixed' },
           },
+        },
+        hooks = {
+          view_enter = refresh_ribbon,
+          view_leave = refresh_ribbon,
+          view_closed = refresh_ribbon,
+          view_post_layout = refresh_ribbon,
+          diff_buf_win_enter = refresh_ribbon,
         },
         default_args = {
           DiffviewOpen = {

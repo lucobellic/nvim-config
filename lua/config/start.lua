@@ -17,3 +17,6 @@ vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
 
 ---@type 'layout'|'layout-with-rail'
 vim.g.layout = 'layout'
+
+-- Kitty ribbons between diffview sides, with matching gutter colors in the statuscolumn.
+vim.g.diff_ribbon = true
