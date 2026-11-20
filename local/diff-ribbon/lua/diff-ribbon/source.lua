@@ -27,6 +27,10 @@ function M.pair(layouts)
   if not (visible(first) and visible(second)) then
     return nil
   end
+  -- A fully added or deleted file has an empty side, so a single ribbon would only repeat the highlight.
+  if layout.a:is_nulled() or layout.b:is_nulled() then
+    return nil
+  end
   if vim.api.nvim_win_get_position(first)[2] > vim.api.nvim_win_get_position(second)[2] then
     first, second = second, first
   end
