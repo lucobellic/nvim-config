@@ -15,7 +15,7 @@ return {
     },
   },
   keys = {
-    { '<leader>ms', '1Q', mode = { 'n', 'x' }, desc = 'Multicursor at search matches' },
+    { '<leader>ms', 'zqgn', mode = { 'n', 'x' }, desc = 'Multicursor at search matches' },
     { '<leader>mc', 'Q', desc = 'Multicursor toggle current position' },
     { '<leader>mf', 'q=', desc = 'Multicursor toggle follow mode' },
     { '<leader>mr', 'gQ', desc = 'Multicursor restore multicursors' },
