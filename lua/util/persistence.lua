@@ -139,6 +139,34 @@ function M.get_session_path(session)
   return session_path:gsub('%%', '/'):gsub('.vim$', '')
 end
 
+---Save the current session, unless only the dashboard is shown.
+---@return nil
+local function save_current_session()
+  if vim.bo.filetype == 'dashboard' then
+    return
+  end
+  local persistence = require('persistence')
+  persistence.fire('SavePre')
+  persistence.save()
+  persistence.fire('SavePost')
+end
+
+---Close every tab, window and buffer so a new session starts empty.
+---@return nil
+local function clear_editor()
+  vim.cmd('silent! tabonly')
+  vim.cmd('silent! only')
+  Snacks.bufdelete.all()
+end
+
+---Get the session file persistence uses for a directory
+---@param directory string
+---@return string session_file
+function M.get_directory_session(directory)
+  local name = directory:gsub('[\\/:]+', '%%')
+  return require('persistence.config').options.dir .. name .. '.vim'
+end
+
 ---Load session from file
 ---@param session_file string
 function M.load_session(session_file)
@@ -151,16 +179,33 @@ function M.load_session(session_file)
 
   if session_file and vim.fn.filereadable(session_file) ~= 0 then
     -- Save current session before loading a new one
-    if vim.bo.filetype ~= 'dashboard' then
-      persistence.fire('SavePre')
-      persistence.save()
-      persistence.fire('SavePost')
-    end
+    save_current_session()
 
     persistence.fire('LoadPre')
     vim.cmd('silent! source ' .. vim.fn.fnameescape(session_file))
     persistence.fire('LoadPost')
   end
+end
+
+---Load the session of a directory, or start a new empty one rooted there
+---@public
+---@param directory string
+---@return nil
+function M.open_directory(directory)
+  if directory == vim.fn.getcwd() then
+    return
+  end
+
+  local session_file = M.get_directory_session(directory)
+  if vim.fn.filereadable(session_file) == 1 then
+    M.load_session(session_file)
+    return
+  end
+
+  save_current_session()
+  clear_editor()
+  -- A global cd keys the new session on this directory and is restored by the session file.
+  vim.cmd.cd(vim.fn.fnameescape(directory))
 end
 
 --- Callback after loading session

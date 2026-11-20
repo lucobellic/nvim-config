@@ -17,6 +17,11 @@ return {
       desc = 'Find Sessions',
     },
     {
+      '<leader>fw',
+      function() require('util.worktree').select_worktree() end,
+      desc = 'Find Worktrees',
+    },
+    {
       '<leader>qr',
       function() require('persistence').load() end,
       desc = 'Restore session',
