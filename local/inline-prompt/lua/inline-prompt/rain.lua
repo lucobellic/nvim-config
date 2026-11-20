@@ -30,7 +30,7 @@ local M = {}
 
 -- Same letter codes as unimatrix.
 local CHARACTER_SETS = {
-  k = 'ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ',
+  k = 'ヲァィゥェォャュョッーアイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワン',
   n = '1234567890',
   s = [[-=*_+|:<>"]],
 }
@@ -39,8 +39,9 @@ CHARACTER_SETS.m = CHARACTER_SETS.k .. CHARACTER_SETS.n:rep(2) .. CHARACTER_SETS
 ---@type InlinePrompt.Cell
 local BLANK = { ' ', 'InlinePromptRain' }
 
--- A space after each character makes the rain easier to read.
-local SPACING = ' '
+-- Each cell spans two columns, so wide katakana and narrow characters line up.
+-- Narrow characters get a trailing space, which also makes the rain easier to read.
+local CELL_WIDTH = 2
 
 -- Streams and the gaps between them stay short so the rain looks dense
 -- while the code under it remains recognizable.
@@ -174,7 +175,7 @@ local function chunks(cells)
   local result = {}
   for _, cell in ipairs(cells) do
     local last = result[#result]
-    local text = cell[1] .. SPACING
+    local text = cell[1] .. (' '):rep(CELL_WIDTH - vim.api.nvim_strwidth(cell[1]))
     if last and last[2] == cell[2] then
       last[1] = last[1] .. text
     else
@@ -258,8 +259,8 @@ function M.start(buf, get_range)
         return
       end
       local info = vim.fn.getwininfo(window)[1]
-      -- Each cell takes its character plus the spacing. Rounding up covers the last column, the overflow is clipped.
-      local width = math.max(1, math.ceil((info.width - info.textoff) / (1 + #SPACING)))
+      -- Rounding up covers the last column, the overflow is clipped.
+      local width = math.max(1, math.ceil((info.width - info.textoff) / CELL_WIDTH))
 
       -- Reusing the extmark id updates it in place instead of creating a new one.
       for index, stream in ipairs(current_streams(range, width)) do
