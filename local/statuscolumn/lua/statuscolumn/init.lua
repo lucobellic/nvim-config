@@ -1,6 +1,7 @@
 ---@class User.Statuscolumn.Line
 ---@field sign? table
 ---@field git? table
+---@field gutter? vim.api.keyset.highlight Background and underline set by diff ribbons
 ---@field text? string
 
 ---@class User.Statuscolumn.Window
@@ -66,10 +67,33 @@ local function get_cursor_sign_highlight(sign_group, background)
   return redraw_highlights[redraw_key]
 end
 
+---@param group string
+---@param gutter vim.api.keyset.highlight
+---@return string
+local function get_gutter_highlight(group, gutter)
+  local redraw_key = group .. ':' .. vim.inspect(gutter)
+  if redraw_highlights[redraw_key] then
+    return redraw_highlights[redraw_key]
+  end
+
+  local highlight = vim.api.nvim_get_hl(0, { name = group, link = false })
+  local key = group .. vim.inspect(highlight) .. vim.inspect(gutter)
+  if not cursor_sign_highlights[key] then
+    next_cursor_sign_highlight = next_cursor_sign_highlight + 1
+    local name = 'StatusColumnGutter' .. next_cursor_sign_highlight
+    cursor_sign_highlights[key] = name
+    vim.api.nvim_set_hl(0, name, vim.tbl_extend('force', highlight, gutter))
+  end
+  redraw_highlights[redraw_key] = cursor_sign_highlights[key]
+  return redraw_highlights[redraw_key]
+end
+
 ---@param extmark table?
 ---@param cursor_background integer?
+---@param gutter vim.api.keyset.highlight?
+---@param reset string Highlight that follows the sign
 ---@return string
-local format_extmark = function(extmark, cursor_background)
+local format_extmark = function(extmark, cursor_background, gutter, reset)
   if not extmark or not extmark[4] or not extmark[4].sign_text or extmark[4].sign_text == '' then
     return ' '
   end
@@ -79,11 +103,49 @@ local format_extmark = function(extmark, cursor_background)
   end
 
   if extmark[4].sign_hl_group then
-    local highlight = get_cursor_sign_highlight(extmark[4].sign_hl_group, cursor_background)
-    return ('%%#%s#%s'):format(highlight, extmark[4].sign_text):gsub('%s*$', '') .. '%*'
+    local highlight = gutter and get_gutter_highlight(extmark[4].sign_hl_group, gutter)
+      or get_cursor_sign_highlight(extmark[4].sign_hl_group, cursor_background)
+    return ('%%#%s#%s'):format(highlight, extmark[4].sign_text):gsub('%s*$', '') .. reset
   end
 
   return extmark[4].sign_text
+end
+
+---@param win integer
+---@return integer?
+local function ribbon_namespace(win)
+  local namespace = vim.api.nvim_get_namespaces()['diff-ribbon.decorations']
+  if not namespace or not vim.list_contains(vim.api.nvim__ns_get(namespace).wins or {}, win) then
+    return nil
+  end
+  return namespace
+end
+
+--- Diff ribbons color the gutter of changed lines, so the band runs unbroken from the ribbon to the text.
+---@param state User.Statuscolumn.Window
+---@param win integer
+---@param buf integer
+local function collect_gutter(state, win, buf)
+  local namespace = vim.g.diff_ribbon and ribbon_namespace(win)
+  if not namespace then
+    return
+  end
+  local extmarks = vim.api.nvim_buf_get_extmarks(
+    buf,
+    namespace,
+    { state.first - 1, 0 },
+    { state.last - 1, -1 },
+    { details = true }
+  )
+  vim.iter(extmarks):each(function(extmark)
+    local group = extmark[4].number_hl_group
+    if group then
+      local highlight = vim.api.nvim_get_hl(0, { name = group, link = false })
+      local row = extmark[2] + 1
+      state.lines[row] = state.lines[row] or {}
+      state.lines[row].gutter = { bg = highlight.bg, underline = highlight.underline, sp = highlight.sp }
+    end
+  end)
 end
 
 ---@param candidate table
@@ -126,7 +188,11 @@ local function get_window(win, line)
     cursor = options.cursorline and vim.api.nvim_win_get_cursor(win)[1] or nil,
   }
   windows[win] = state
-  if state.hidden or not state.signs then
+  if state.hidden then
+    return state
+  end
+  collect_gutter(state, win, buf)
+  if not state.signs then
     return state
   end
   state.background = state.cursor and vim.api.nvim_get_hl(0, { name = 'CursorLineNr' }).bg or nil
@@ -170,24 +236,31 @@ function M.render()
     return ''
   end
 
-  -- Only display line numbers when signcolumn is 'no'
-  if not state.signs then
-    return (state.numbers and vim.v.virtnum == 0) and '%l ' or ''
-  end
-
   local is_cursor_line = state.cursor == line
   local entry = state.lines[line]
+  local gutter = entry and entry.gutter
+  local gutter_highlight = gutter
+    and ('%#' .. get_gutter_highlight(is_cursor_line and 'CursorLineNr' or 'LineNr', gutter) .. '#')
+
+  -- Only display line numbers when signcolumn is 'no'
+  if not state.signs then
+    return (state.numbers and vim.v.virtnum == 0) and ((gutter_highlight or '') .. '%l ') or ''
+  end
+
   local signs = '  '
   if entry then
     if not entry.text then
       local background = is_cursor_line and state.background or nil
-      entry.text = format_extmark(entry.sign, background) .. format_extmark(entry.git, background)
+      local reset = gutter_highlight or '%*'
+      entry.text = format_extmark(entry.sign, background, gutter, reset)
+        .. format_extmark(entry.git, background, gutter, reset)
     end
     signs = entry.text
   end
-  local fold_column = vim.v.virtnum == 0 and '%C ' or '  '
-  local cursor_highlight = is_cursor_line and '%#CursorLineNr#' or ''
-  local trailing_highlight = is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#'
+  -- Changed lines sit outside diff folds, so a blank keeps the fold column from breaking the gutter color.
+  local fold_column = (vim.v.virtnum == 0 and not gutter) and '%C ' or '  '
+  local cursor_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or '')
+  local trailing_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#')
   return cursor_highlight .. signs .. '%=%l' .. fold_column .. trailing_highlight
 end
 
