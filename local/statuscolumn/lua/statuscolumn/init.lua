@@ -10,6 +10,9 @@
 ---@field first_from_start boolean The first selected line starts at its first character
 ---@field rest_from_start boolean The other selected lines start at their first character
 ---@field gutter vim.api.keyset.highlight
+---@field plain vim.api.keyset.highlight Gutter of the cursor line when it is not selected from its start
+---@field folds boolean The window shows a fold column
+---@field fillchars table<string, string>
 
 ---@class User.Statuscolumn.Window
 ---@field first integer
@@ -186,6 +189,13 @@ local function collect_selection(win)
     first_from_start = mode == 'V' or first[3] == 1,
     rest_from_start = true,
     gutter = { bg = vim.api.nvim_get_hl(0, { name = 'Visual', link = false }).bg },
+    -- An empty background would fall back to the native cursor line color.
+    plain = {
+      bg = vim.api.nvim_get_hl(0, { name = 'LineNr', link = false }).bg
+        or vim.api.nvim_get_hl(0, { name = 'Normal', link = false }).bg,
+    },
+    folds = vim.wo[win].foldcolumn ~= '0',
+    fillchars = vim.opt_local.fillchars:get(),
   }
   if mode == '\22' then
     local left = math.min(vim.fn.virtcol('v', true)[1], vim.fn.virtcol('.', true)[1])
@@ -204,6 +214,56 @@ local function is_selected_from_start(selection, line)
     return false
   end
   return line == selection.first and selection.first_from_start or line > selection.first and selection.rest_from_start
+end
+
+--- Native fold markers keep their own background, so lines colored while selecting draw the marker themselves.
+---@param selection User.Statuscolumn.Selection
+---@param line integer
+---@param gutter vim.api.keyset.highlight
+---@return string
+local function format_own_fold(selection, line, gutter)
+  if not selection.folds then
+    return ''
+  end
+  local marker = ' '
+  if vim.fn.foldclosed(line) == line then
+    marker = selection.fillchars.foldclose or '+'
+  elseif vim.fn.foldlevel(line) > vim.fn.foldlevel(line - 1) then
+    marker = selection.fillchars.foldopen or '-'
+  end
+  return '%#' .. get_gutter_highlight('FoldColumn', gutter) .. '#' .. marker
+end
+
+---@param state User.Statuscolumn.Window
+---@param line integer
+---@param ribbon vim.api.keyset.highlight?
+---@param own_gutter vim.api.keyset.highlight? Gutter colored while selecting
+---@param gutter_highlight string?
+---@return string
+local function format_fold_column(state, line, ribbon, own_gutter, gutter_highlight)
+  if vim.v.virtnum ~= 0 then
+    return '  '
+  end
+  if own_gutter then
+    return format_own_fold(state.selection, line, own_gutter) .. gutter_highlight .. ' '
+  end
+  -- Changed lines sit outside diff folds, so a blank keeps the fold column from breaking the gutter color.
+  return ribbon and '  ' or '%C '
+end
+
+--- While selecting, the cursor line gets a plain gutter so only the selection stands out.
+---@param state User.Statuscolumn.Window
+---@param line integer
+---@param ribbon vim.api.keyset.highlight?
+---@return vim.api.keyset.highlight?
+local function get_own_gutter(state, line, ribbon)
+  if is_selected_from_start(state.selection, line) then
+    return state.selection.gutter
+  end
+  if state.selection and state.cursor == line and not ribbon then
+    return state.selection.plain
+  end
+  return nil
 end
 
 ---@param candidate table
@@ -297,10 +357,10 @@ function M.render()
 
   -- While selecting, the selection alone decides the gutter color.
   local is_cursor_line = state.cursor == line and not state.selection
-  local idle_highlight = (state.cursor == line and state.selection) and '%#LineNr#' or ''
   local entry = state.lines[line]
   local ribbon = entry and entry.gutter
-  local gutter = is_selected_from_start(state.selection, line) and state.selection.gutter or ribbon
+  local own_gutter = get_own_gutter(state, line, ribbon)
+  local gutter = own_gutter or ribbon
   local gutter_highlight = gutter
     and ('%#' .. get_gutter_highlight(is_cursor_line and 'CursorLineNr' or 'LineNr', gutter) .. '#')
 
@@ -319,9 +379,8 @@ function M.render()
     end
     signs = entry.text
   end
-  -- Changed lines sit outside diff folds, so a blank keeps the fold column from breaking the gutter color.
-  local fold_column = (vim.v.virtnum == 0 and not ribbon) and '%C ' or '  '
-  local cursor_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or idle_highlight)
+  local fold_column = format_fold_column(state, line, ribbon, own_gutter, gutter_highlight)
+  local cursor_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or '')
   local trailing_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#')
   return cursor_highlight .. signs .. '%=%l' .. fold_column .. trailing_highlight
 end
