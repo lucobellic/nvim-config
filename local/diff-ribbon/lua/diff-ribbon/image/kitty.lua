@@ -11,7 +11,7 @@
 ---@field rows integer Cells
 
 local ffi = require('ffi')
-local zlib = require('diff-ribbon.zlib')
+local zlib = require('diff-ribbon.image.zlib')
 
 local M = {}
 

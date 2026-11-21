@@ -1,9 +1,9 @@
 local config = require('diff-ribbon.config')
-local kitty = require('diff-ribbon.kitty')
-local overlay = require('diff-ribbon.overlay')
-local raster = require('diff-ribbon.raster')
+local kitty = require('diff-ribbon.image.kitty')
+local overlay = require('diff-ribbon.ui.overlay')
+local raster = require('diff-ribbon.image.raster')
 
--- The ribbon between two neighbouring windows: its images and its overlay.
+-- The ribbon between two neighboring windows: its images and its overlay.
 ---@class DiffRibbon.Connector
 ---@field image_ids integer[] Two images take turns, see `draw`
 ---@field image_slot integer Index in `image_ids` of the image the overlay shows

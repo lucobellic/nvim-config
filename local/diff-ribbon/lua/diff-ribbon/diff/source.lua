@@ -38,7 +38,7 @@ end
 --- Windows stacked above one another get no ribbon.
 ---@param ids integer[]
 ---@return DiffRibbon.Pair[]
-local function neighbours(ids)
+local function neighbors(ids)
   local result = {}
   for _, left in ipairs(ids) do
     for _, right in ipairs(ids) do
@@ -73,7 +73,17 @@ function M.view(layouts)
     return nil
   end
 
-  local windows = vim.iter(symbols):map(function(symbol) return layout[symbol] end):totable()
+  local windows = vim
+    .iter(symbols)
+    :map(
+      ---@param symbol string
+      ---@return Window?
+      function(symbol)
+        ---@diagnostic disable-next-line: missing-return-value
+        return layout[symbol]
+      end
+    )
+    :totable()
   if #windows < 2 then
     return nil
   end
@@ -89,7 +99,7 @@ function M.view(layouts)
   end
 
   local ids = vim.tbl_map(function(window) return window.id end, windows)
-  local window_pairs = neighbours(ids)
+  local window_pairs = neighbors(ids)
   if #window_pairs == 0 then
     return nil
   end

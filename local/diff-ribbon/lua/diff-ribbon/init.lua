@@ -1,13 +1,13 @@
 local config = require('diff-ribbon.config')
-local connector = require('diff-ribbon.connector')
-local decorations = require('diff-ribbon.decorations')
-local filler = require('diff-ribbon.filler')
-local geometry = require('diff-ribbon.geometry')
-local hunks = require('diff-ribbon.hunks')
-local kitty = require('diff-ribbon.kitty')
-local overlay = require('diff-ribbon.overlay')
-local palette = require('diff-ribbon.palette')
-local source = require('diff-ribbon.source')
+local connector = require('diff-ribbon.ui.connector')
+local decorations = require('diff-ribbon.ui.decorations')
+local filler = require('diff-ribbon.diff.filler')
+local geometry = require('diff-ribbon.ui.geometry')
+local hunks = require('diff-ribbon.diff.hunks')
+local kitty = require('diff-ribbon.image.kitty')
+local overlay = require('diff-ribbon.ui.overlay')
+local palette = require('diff-ribbon.ui.palette')
+local source = require('diff-ribbon.diff.source')
 
 ---@class DiffRibbon
 local M = {}
@@ -21,13 +21,13 @@ local state = {
   active = false,
   -- Turned off by the user for this session, whatever `enabled` says.
   paused = false,
-  -- One per pair of neighbouring windows, kept between redraws.
+  -- One per pair of neighboring windows, kept between redraws.
   ---@type DiffRibbon.Connector[]
   connectors = {},
   -- Keys remember the last inputs, so unchanged work is skipped.
   ---@type string?
   hunks_key = nil,
-  -- Hunks of each pair of neighbouring windows, from left to right.
+  -- Hunks of each pair of neighboring windows, from left to right.
   ---@type DiffRibbon.Hunk[][]
   hunks = {},
   ---@type string?
@@ -51,7 +51,13 @@ end
 --- Image ids of every connector, for their highlights.
 ---@return integer[]
 local function all_image_ids()
-  return vim.iter(state.connectors):fold({}, function(ids, item) return vim.list_extend(ids, item.image_ids) end)
+  return vim.iter(state.connectors):fold(
+    {},
+    ---@param ids integer[]
+    ---@param item DiffRibbon.Connector
+    ---@return integer[]
+    function(ids, item) return vim.list_extend(ids, item.image_ids) end
+  )
 end
 
 --- Hunks of every pair, computed again only after an edit or a 'diffopt' change. With three
@@ -230,7 +236,10 @@ function M.setup(options)
   vim.api.nvim_create_autocmd('ColorScheme', {
     group = group,
     callback = function()
-      vim.iter(state.connectors):each(function(item) item:invalidate() end)
+      vim.iter(state.connectors):each(
+        ---@param item DiffRibbon.Connector
+        function(item) item:invalidate() end
+      )
       state.decorations_key = nil
       overlay.reset_highlights()
       M.refresh()

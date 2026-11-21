@@ -4,7 +4,7 @@
 ---@alias DiffRibbon.Masks table<DiffRibbon.Side, table<integer, true>>
 
 local config = require('diff-ribbon.config')
-local kitty = require('diff-ribbon.kitty')
+local kitty = require('diff-ribbon.image.kitty')
 
 local M = {}
 
