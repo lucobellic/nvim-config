@@ -11,6 +11,7 @@
 ---@field rows integer Cells
 
 local ffi = require('ffi')
+local zlib = require('diff-ribbon.zlib')
 
 local M = {}
 
@@ -84,51 +85,38 @@ local function send(command, payload)
   vim.api.nvim_ui_send('\27_G' .. command .. (payload and ';' .. payload or '') .. '\27\\')
 end
 
--- Kitty reads each frame a moment after it is sent, so a few frames rotate before one is overwritten.
-local FRAMES = 4
-local transmissions = 0
----@type string?
-local directory = nil
----@type string?
-local image_path = nil
+-- Kitty accepts at most this many base64 characters per message.
+local CHUNK_SIZE = 4096
 
----@param folder string
----@param index integer
----@return string
-local function frame_path(folder, index) return ('%s/frame-%d-%d.rgba'):format(folder, vim.fn.getpid(), index) end
-
---- Folders for frames: Neovim writes them in `path`, Kitty reads them in `terminal_path`.
---- They differ when Neovim runs in a container whose shared folder sits elsewhere on the host.
----@param path string
----@param terminal_path string
-function M.set_directory(path, terminal_path)
-  directory = path
-  image_path = terminal_path
-  vim.fn.mkdir(path, 'p')
-end
-
-function M.remove_frames()
-  for index = 0, FRAMES - 1 do
-    os.remove(frame_path(directory, index))
+--- Split the base64 payload into messages. Only the first carries the image settings.
+---@param command string
+---@param payload string
+---@return string[]
+local function chunks(command, payload)
+  local messages = {}
+  for start = 1, #payload, CHUNK_SIZE do
+    local more = start + CHUNK_SIZE <= #payload and 1 or 0
+    local control = start == 1 and ('%s,m=%d'):format(command, more) or ('q=2,m=%d'):format(more)
+    table.insert(messages, '\27_G' .. control .. ';' .. payload:sub(start, start + CHUNK_SIZE - 1) .. '\27\\')
   end
+  return messages
 end
 
---- Transmit the pixels and create a virtual placement shown through placeholder cells.
+--- Transmit the pixels inside the escape codes and create a virtual placement shown through placeholder cells.
+--- Sending the data itself works wherever Kitty runs, even when Neovim runs in a container.
 ---@param transmission DiffRibbon.Transmission
 function M.transmit(transmission)
-  transmissions = transmissions + 1
-  local index = transmissions % FRAMES
-  local file = assert(io.open(frame_path(directory, index), 'wb'))
-  file:write(transmission.bytes)
-  file:close()
-  local command = ('a=T,U=1,f=32,t=f,q=2,i=%d,s=%d,v=%d,c=%d,r=%d'):format(
+  local compressed = zlib.compress(transmission.bytes)
+  local command = ('a=T,U=1,f=32,t=d,q=2,i=%d,s=%d,v=%d,c=%d,r=%d%s'):format(
     transmission.id,
     transmission.width,
     transmission.height,
     transmission.columns,
-    transmission.rows
+    transmission.rows,
+    compressed and ',o=z' or ''
   )
-  send(command, vim.base64.encode(frame_path(image_path, index)))
+  -- One call keeps the chunks together, since Kitty needs them without other graphics codes between.
+  vim.api.nvim_ui_send(table.concat(chunks(command, vim.base64.encode(compressed or transmission.bytes))))
 end
 
 ---@param id integer

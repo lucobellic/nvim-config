@@ -8,8 +8,6 @@
 ---@field colors table<DiffRibbon.Kind, string[]> Highlight groups whose background colors each kind, first match wins
 ---@field insertion_line { thickness: number, offset: number } Underline size and gap above the row boundary, in fractions of a row
 ---@field zindex integer Stacking order of the ribbon overlay among floating windows
----@field directory string Folder where Neovim writes image frames
----@field image_path? string Same folder as Kitty sees it, when Kitty runs elsewhere such as on a container host. Defaults to `directory`
 
 --- User options given to `setup`, merged over the defaults.
 ---@class DiffRibbon.Options
@@ -22,8 +20,6 @@
 ---@field colors? table<DiffRibbon.Kind, string[]>
 ---@field insertion_line? { thickness: number, offset: number }
 ---@field zindex? integer
----@field directory? string
----@field image_path? string
 
 local decorations = require('diff-ribbon.decorations')
 local filler = require('diff-ribbon.filler')
@@ -37,14 +33,10 @@ local source = require('diff-ribbon.source')
 ---@class DiffRibbon
 local M = {}
 
-local plugin_root = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
-
 ---@type DiffRibbon.Config
 local defaults = {
   -- A container does not see the Kitty variables, but it is expected to run inside Kitty on the host.
   enabled = function() return (vim.env.KITTY_WINDOW_ID or vim.env.INSIDE_DOCKER) ~= nil and vim.env.TMUX == nil end,
-  -- The plugin folder is shared with containers, so Kitty on the host can read frames there.
-  directory = plugin_root .. '/.frames',
   width = 5,
   -- Above scrollbars such as satellite.nvim (40), below popups and terminals (50 and up).
   zindex = 45,
@@ -257,7 +249,6 @@ end
 ---@param options? DiffRibbon.Options
 function M.setup(options)
   config = vim.tbl_deep_extend('force', defaults, options or {})
-  kitty.set_directory(config.directory, config.image_path or config.directory)
   overlay.zindex = config.zindex
   local group = vim.api.nvim_create_augroup('diff-ribbon', { clear = true })
   vim.api.nvim_create_autocmd({
@@ -280,13 +271,7 @@ function M.setup(options)
       M.refresh()
     end,
   })
-  vim.api.nvim_create_autocmd('VimLeavePre', {
-    group = group,
-    callback = function()
-      deactivate()
-      kitty.remove_frames()
-    end,
-  })
+  vim.api.nvim_create_autocmd('VimLeavePre', { group = group, callback = deactivate })
 end
 
 return M
