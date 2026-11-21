@@ -50,25 +50,45 @@ local function kind(left_count, right_count)
   return 'change'
 end
 
+---@param left_start integer
+---@param left_count integer
+---@param right_start integer
+---@param right_count integer
+---@return DiffRibbon.Hunk
+local function hunk(left_start, left_count, right_start, right_count)
+  return {
+    kind = kind(left_count, right_count),
+    left_start = left_start,
+    left_count = left_count,
+    right_start = right_start,
+    right_count = right_count,
+  }
+end
+
+--- Neovim pairs the lines of a changed block in order and shows the extra lines of the longer side
+--- as added or deleted, so the block is split the same way: a change, then an addition or deletion
+--- whose empty side sits right after the last paired line.
+---@param index integer[] Start and count on each side, as returned by `vim.text.diff`
+---@return DiffRibbon.Hunk[]
+local function split(index)
+  local left_start, left_count, right_start, right_count = unpack(index)
+  local paired = math.min(left_count, right_count)
+  if paired == 0 or left_count == right_count then
+    return { hunk(left_start, left_count, right_start, right_count) }
+  end
+  local change = hunk(left_start, paired, right_start, paired)
+  if left_count > right_count then
+    return { change, hunk(left_start + paired, left_count - paired, right_start + paired - 1, 0) }
+  end
+  return { change, hunk(left_start + paired - 1, 0, right_start + paired, right_count - paired) }
+end
+
 ---@param left_buffer integer
 ---@param right_buffer integer
 ---@return DiffRibbon.Hunk[]
 function M.compute(left_buffer, right_buffer)
   local indices = vim.text.diff(buffer_text(left_buffer), buffer_text(right_buffer), diff_options()) --[[@as integer[][] ]]
-  return vim
-    .iter(indices)
-    :map(
-      function(index)
-        return {
-          kind = kind(index[2], index[4]),
-          left_start = index[1],
-          left_count = index[2],
-          right_start = index[3],
-          right_count = index[4],
-        }
-      end
-    )
-    :totable()
+  return vim.iter(indices):fold({}, function(hunks, index) return vim.list_extend(hunks, split(index)) end)
 end
 
 return M

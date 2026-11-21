@@ -151,7 +151,12 @@ local function collect_gutter(state, win, buf)
       local highlight = vim.api.nvim_get_hl(0, { name = group, link = false })
       local row = extmark[2] + 1
       state.lines[row] = state.lines[row] or {}
-      state.lines[row].gutter = { bg = highlight.bg, underline = highlight.underline, sp = highlight.sp }
+      -- A changed line right above a deletion gets both a background and an underline, so merge them.
+      state.lines[row].gutter = vim.tbl_extend(
+        'force',
+        state.lines[row].gutter or {},
+        { bg = highlight.bg, underline = highlight.underline, sp = highlight.sp }
+      )
     end
   end)
 end
