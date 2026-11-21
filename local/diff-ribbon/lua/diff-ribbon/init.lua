@@ -125,20 +125,35 @@ local function image_key(ribbons, placement, palette)
   return table.concat({ area, vim.inspect(palette), table.concat(parts, ';') }, '|')
 end
 
---- Overlay rows covering changed lines of the right window, where its gutter is colored.
+--- Mark the overlay rows where one side of a hunk shows diff colors: its changed lines,
+--- or for a gap, the underlined line just above it.
+---@param rows table<integer, true>
+---@param top number
+---@param bottom number
+---@param height integer
+local function mark_side(rows, top, bottom, height)
+  local first, last = math.floor(top), math.ceil(bottom) - 1
+  if bottom <= top then
+    first, last = top - 1, top - 1
+  end
+  for row = math.max(0, first), math.min(height - 1, last) do
+    rows[row] = true
+  end
+end
+
+--- Rows where overlay blanks must hide the diff colors below: line highlights and underlines on
+--- each side, and the separator wherever either side has them.
 ---@param ribbons DiffRibbon.Ribbon[]
 ---@param placement DiffRibbon.Placement
----@return table<integer, true>
-local function right_rows(ribbons, placement)
-  local rows = {}
+---@return DiffRibbon.Masks
+local function masks(ribbons, placement)
+  local result = { left = {}, center = {}, right = {} }
   vim.iter(ribbons):each(function(ribbon)
-    local first = math.max(0, math.floor(ribbon.right_top))
-    local last = math.min(placement.height, math.ceil(ribbon.right_bottom)) - 1
-    for row = first, last do
-      rows[row] = true
-    end
+    mark_side(result.left, ribbon.left_top, ribbon.left_bottom, placement.height)
+    mark_side(result.right, ribbon.right_top, ribbon.right_bottom, placement.height)
   end)
-  return rows
+  result.center = vim.tbl_extend('force', result.left, result.right)
+  return result
 end
 
 ---@param ribbons DiffRibbon.Ribbon[]
@@ -170,7 +185,7 @@ local function draw(ribbons, placement)
     columns = placement.width,
     rows = placement.height,
   })
-  overlay.show(placement, cells, right_rows(ribbons, placement))
+  overlay.show(placement, cells, masks(ribbons, placement))
 end
 
 ---@param pair DiffRibbon.Pair

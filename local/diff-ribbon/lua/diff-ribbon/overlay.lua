@@ -3,6 +3,11 @@
 ---@field window? integer
 ---@field placement? DiffRibbon.Placement
 
+---@alias DiffRibbon.Side 'left'|'center'|'right'
+
+--- Overlay rows where blanks are opaque, per overlay side, as `masks[side][row] = true`.
+---@alias DiffRibbon.Masks table<DiffRibbon.Side, table<integer, true>>
+
 local kitty = require('diff-ribbon.kitty')
 
 local M = {}
@@ -47,20 +52,33 @@ local function open(placement)
   vim.wo[overlay.window].wrap = false
 end
 
+--- Side of the overlay a column sits on: over the left window, the separator, or the right window.
+---@param column integer
+---@param width integer
+---@return DiffRibbon.Side
+local function side(column, width)
+  local center = math.floor(width / 2)
+  if column < center then
+    return 'left'
+  elseif column == center then
+    return 'center'
+  end
+  return 'right'
+end
+
 --- Fill one row with placeholders on ribbon cells and blanks elsewhere.
---- On masked rows, blanks over the right window are opaque, so its colored gutter stays behind the ribbon.
+--- Masked blanks are opaque, so diff colors and underlines below stay hidden behind the ribbon.
 ---@param row integer
 ---@param width integer
 ---@param columns table<integer, true>
----@param masked boolean
-local function fill_row(row, width, columns, masked)
-  local first_right_column = math.floor(width / 2) + 1
+---@param masks DiffRibbon.Masks
+local function fill_row(row, width, columns, masks)
   local line, ranges = '', {}
   for column = 0, width - 1 do
     local cell, group = ' ', nil
     if columns[column] then
       cell, group = kitty.placeholder(row, column), M.highlight
-    elseif masked and column >= first_right_column then
+    elseif masks[side(column, width)][row] then
       group = M.mask_highlight
     end
     if group then
@@ -84,12 +102,12 @@ end
 
 ---@param placement DiffRibbon.Placement
 ---@param cells DiffRibbon.Cells
----@param masked_rows table<integer, true>
-local function fill(placement, cells, masked_rows)
+---@param masks DiffRibbon.Masks
+local function fill(placement, cells, masks)
   vim.api.nvim_buf_clear_namespace(overlay.buffer, namespace, 0, -1)
   vim.api.nvim_buf_set_lines(overlay.buffer, 0, -1, false, {})
   for row = 0, placement.height - 1 do
-    fill_row(row, placement.width, cells[row] or {}, masked_rows[row] == true)
+    fill_row(row, placement.width, cells[row] or {}, masks)
   end
 end
 
@@ -102,18 +120,18 @@ function M.set_image(id)
   vim.api.nvim_set_hl(0, M.mask_highlight, { bg = normal.bg, blend = 0 })
 end
 
---- Show placeholders on the ribbon `cells` at `placement`, masking the right gutter on `masked_rows`.
+--- Show placeholders on the ribbon `cells` at `placement`, with opaque blanks where `masks` asks.
 ---@param placement DiffRibbon.Placement
 ---@param cells DiffRibbon.Cells
----@param masked_rows table<integer, true>
-function M.show(placement, cells, masked_rows)
+---@param masks DiffRibbon.Masks
+function M.show(placement, cells, masks)
   if not (overlay.window and vim.api.nvim_win_is_valid(overlay.window)) then
     open(placement)
   elseif not vim.deep_equal(overlay.placement, placement) then
     vim.api.nvim_win_set_config(overlay.window, window_config(placement))
   end
   overlay.placement = placement
-  fill(placement, cells, masked_rows)
+  fill(placement, cells, masks)
 end
 
 function M.hide()
