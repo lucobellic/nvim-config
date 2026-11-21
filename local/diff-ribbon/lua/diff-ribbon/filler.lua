@@ -3,6 +3,7 @@ local M = {}
 -- True while this plugin is the reason 'filler' is missing from 'diffopt'.
 local removed = false
 
+--- Items of 'diffopt' as a list.
 ---@return string[]
 local function items() return vim.split(vim.o.diffopt, ',', { trimempty = true }) end
 
@@ -15,12 +16,14 @@ function M.remove()
   end
 end
 
+--- Give filler lines back, but only when this plugin removed them.
 function M.restore()
   local current = items()
   if removed and not vim.list_contains(current, 'filler') then
     table.insert(current, 'filler')
     vim.o.diffopt = table.concat(current, ',')
   end
+
   removed = false
 end
 

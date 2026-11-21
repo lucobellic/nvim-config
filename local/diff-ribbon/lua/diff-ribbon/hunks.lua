@@ -10,6 +10,7 @@
 local M = {}
 
 -- Flags mirror 'diffopt' so the ribbons agree with the highlights Neovim draws.
+---@type table<string, [string, boolean]>
 local flag_options = {
   ['indent-heuristic'] = { 'indent_heuristic', true },
   iwhite = { 'ignore_whitespace_change', true },
@@ -18,26 +19,36 @@ local flag_options = {
   iblank = { 'ignore_blank_lines', true },
 }
 
+--- Options for `vim.text.diff`, read from the user's 'diffopt'.
 ---@return table
 local function diff_options()
+  ---@type table<string, string|number|boolean|nil>
   local options = { result_type = 'indices' }
-  vim.iter(vim.split(vim.o.diffopt, ',', { trimempty = true })):each(function(item)
-    local key, value = item:match('^(%w+):(.+)$')
-    if key == 'algorithm' then
-      options.algorithm = value
-    elseif key == 'linematch' then
-      options.linematch = tonumber(value)
-    elseif flag_options[item] then
-      options[flag_options[item][1]] = flag_options[item][2]
+
+  vim.iter(vim.split(vim.o.diffopt, ',', { trimempty = true })):each(
+    ---@param item string
+    function(item)
+      -- Some items carry a value, such as `algorithm:patience`.
+      local key, value = item:match('^(%w+):(.+)$')
+      if key == 'algorithm' then
+        options.algorithm = value
+      elseif key == 'linematch' then
+        options.linematch = tonumber(value)
+      elseif flag_options[item] then
+        options[flag_options[item][1]] = flag_options[item][2]
+      end
     end
-  end)
+  )
+
   return options
 end
 
+--- Whole buffer as one text, ending with a newline like a file on disk.
 ---@param buffer integer
 ---@return string
 local function buffer_text(buffer) return table.concat(vim.api.nvim_buf_get_lines(buffer, 0, -1, false), '\n') .. '\n' end
 
+--- Kind of a block, seen from the left side to the right side.
 ---@param left_count integer
 ---@param right_count integer
 ---@return DiffRibbon.Kind
@@ -47,6 +58,7 @@ local function kind(left_count, right_count)
   elseif right_count == 0 then
     return 'delete'
   end
+
   return 'change'
 end
 
@@ -73,16 +85,20 @@ end
 local function split(index)
   local left_start, left_count, right_start, right_count = unpack(index)
   local paired = math.min(left_count, right_count)
+  -- Additions, deletions and changes with as many lines on each side stay whole.
   if paired == 0 or left_count == right_count then
     return { hunk(left_start, left_count, right_start, right_count) }
   end
+
   local change = hunk(left_start, paired, right_start, paired)
   if left_count > right_count then
     return { change, hunk(left_start + paired, left_count - paired, right_start + paired - 1, 0) }
   end
+
   return { change, hunk(left_start + paired - 1, 0, right_start + paired, right_count - paired) }
 end
 
+--- Changed blocks between both buffers, split the way Neovim highlights them.
 ---@param left_buffer integer
 ---@param right_buffer integer
 ---@return DiffRibbon.Hunk[]

@@ -15,10 +15,13 @@ local ffi = require('ffi')
 
 local M = {}
 
+-- Samples per pixel column, so ribbon edges get smooth instead of jagged.
 local SUBSAMPLES = 4
+
 -- Bezier control point position used by JetBrains for its diff divider.
 local CONTROL = 0.3
 
+--- Horizontal position (0 to 1) of the curve at time `t`.
 ---@param t number
 ---@return number
 local function bezier_x(t)
@@ -30,6 +33,7 @@ end
 ---@param fraction number
 ---@return number
 local function progress(fraction)
+  -- Halve the search range until it finds the time where the curve reaches `fraction`.
   local low, high = 0, 1
   for _ = 1, 30 do
     local middle = (low + high) / 2
@@ -39,13 +43,17 @@ local function progress(fraction)
       high = middle
     end
   end
+
+  -- Ease in and out, so the ribbon leaves and joins each side flat.
   local t = (low + high) / 2
   return 3 * t * t - 2 * t * t * t
 end
 
+-- The curve only depends on the width, so it is computed once per width.
 ---@type table<integer, number[]>
 local shapes = {}
 
+--- Progress of the ribbon edge at every sample across `width` pixels.
 ---@param width integer
 ---@return number[]
 local function shape(width)
@@ -53,12 +61,21 @@ local function shape(width)
     local samples = width * SUBSAMPLES
     shapes[width] = vim
       .iter(vim.fn.range(samples))
-      :map(function(index) return progress((index + 0.5) / samples) end)
+      :map(
+        ---@param index integer
+        ---@return number
+        function(index)
+          ---@diagnostic disable-next-line: missing-return-value
+          return progress((index + 0.5) / samples)
+        end
+      )
       :totable()
   end
+
   return shapes[width]
 end
 
+--- Grow a band thinner than `thickness` around its middle, so it never fades out.
 ---@param top number
 ---@param bottom number
 ---@param thickness number
@@ -67,6 +84,7 @@ local function thicken(top, bottom, thickness)
   if bottom - top >= thickness then
     return top, bottom
   end
+
   local middle = (top + bottom) / 2
   return middle - thickness / 2, middle + thickness / 2
 end
@@ -81,6 +99,7 @@ local function side_extent(image, top, bottom)
   if bottom > top then
     return top * image.cell_height, bottom * image.cell_height
   end
+
   local line_bottom = top * image.cell_height - image.line_offset
   return line_bottom - image.line_thickness, line_bottom
 end
@@ -94,14 +113,18 @@ local function blend(pixels, index, color, alpha)
   if alpha <= 0 then
     return
   end
+
+  -- Share of the existing pixel that still shows through.
   local below = pixels[index + 3] / 255 * (1 - alpha)
   local total = alpha + below
+
   for channel = 0, 2 do
     pixels[index + channel] = math.floor((color[channel + 1] * alpha + pixels[index + channel] * below) / total + 0.5)
   end
   pixels[index + 3] = math.floor(total * 255 + 0.5)
 end
 
+--- Share (0 to 1) of pixel `row` the ribbon covers, averaged over the samples.
 ---@param tops number[]
 ---@param bottoms number[]
 ---@param row integer
@@ -111,9 +134,11 @@ local function coverage(tops, bottoms, row)
   for sample = 1, SUBSAMPLES do
     covered = covered + math.max(0, math.min(bottoms[sample], row + 1) - math.max(tops[sample], row))
   end
+
   return covered / SUBSAMPLES
 end
 
+--- Remember the terminal cell under pixel `x`, `y`, so only those cells get placeholders.
 ---@param cells DiffRibbon.Cells
 ---@param image DiffRibbon.Image
 ---@param x integer
@@ -124,6 +149,7 @@ local function mark(cells, image, x, y)
   cells[row][math.floor(x / image.cell_width)] = true
 end
 
+--- Paint one ribbon, column by column, from its left side to its right side.
 ---@param pixels ffi.cdata*
 ---@param cells DiffRibbon.Cells
 ---@param image DiffRibbon.Image
@@ -135,12 +161,16 @@ local function fill(pixels, cells, image, ribbon, color)
   local left_top, left_bottom = side_extent(image, ribbon.left_top, ribbon.left_bottom)
   local right_top, right_bottom = side_extent(image, ribbon.right_top, ribbon.right_bottom)
   local tops, bottoms = {}, {}
+
   for x = 0, image.width - 1 do
+    -- Move each edge from its left position to its right position along the curve.
     for sample = 1, SUBSAMPLES do
       local step = edges[x * SUBSAMPLES + sample]
       tops[sample], bottoms[sample] =
         thicken(left_top + (right_top - left_top) * step, left_bottom + (right_bottom - left_bottom) * step, thickness)
     end
+
+    -- Only visit the pixel rows the ribbon can touch in this column.
     local first = math.max(0, math.floor(math.min(unpack(tops))))
     local last = math.min(image.height - 1, math.ceil(math.max(unpack(bottoms))) - 1)
     for y = first, last do
@@ -162,12 +192,18 @@ function M.render(ribbons, image)
   local size = image.width * image.height * 4
   local pixels = ffi.new('uint8_t[?]', size)
   local cells = {}
-  vim.iter(ribbons):each(function(ribbon)
-    local color = image.colors[ribbon.kind]
-    if color then
-      fill(pixels, cells, image, ribbon, color)
+
+  vim.iter(ribbons):each(
+    ---@param ribbon DiffRibbon.Ribbon
+    function(ribbon)
+      local color = image.colors[ribbon.kind]
+      -- A kind without a highlight color has no ribbon.
+      if color then
+        fill(pixels, cells, image, ribbon, color)
+      end
     end
-  end)
+  )
+
   return ffi.string(pixels, size), cells
 end
 
