@@ -32,7 +32,8 @@ local defaults = {
   width = 5,
   -- Above scrollbars such as satellite.nvim (40), below popups and terminals (50 and up).
   zindex = 45,
-  layouts = { 'diff2_horizontal', 'diff3_horizontal' },
+  -- Layouts with windows side by side. Stacked windows in the mixed ones get no ribbon.
+  layouts = { 'diff2_horizontal', 'diff2_horizontal_pinned', 'diff3_horizontal', 'diff3_mixed', 'diff4_mixed' },
   opacity = 1,
   debounce = 16,
   -- Lines that only one side has are drawn with DiffAdd in that window. diffview-plus remaps it to

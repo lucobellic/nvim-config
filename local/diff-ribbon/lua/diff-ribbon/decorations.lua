@@ -117,31 +117,40 @@ local function decorate_side(buffer, start, count, kind, index, gutter)
   end
 end
 
---- Replace the gutter colors and underlines of every window with those of `decorations`, given
---- from left to right. With three windows, the middle one belongs to two ribbons. The gutter sits
---- on the left of a window, so it takes the colors of the ribbon touching it, the one on its left.
---- The leftmost window has none there and takes the first ribbon's. Underlines run through the
---- text up to both ribbons, so every ribbon draws them.
+--- Replace the gutter colors and underlines of every window with those of `decorations`. A window
+--- between two others belongs to two ribbons. The gutter sits on the left of a window, so it takes
+--- the colors of the ribbon touching it, the one on its left. A window with no ribbon on its left
+--- takes the colors of the one on its right. Underlines run through the text up to both ribbons,
+--- so every ribbon draws them. Windows without a ribbon, such as one stacked below, stay plain.
 ---@param decorations DiffRibbon.Decoration[]
 function M.show(decorations)
   M.clear()
 
-  -- Only the diff windows show them, even when the same buffer is open elsewhere.
-  local windows = { decorations[1].pair.left }
+  -- Only the windows next to a ribbon show them, even when the same buffer is open elsewhere.
+  ---@type table<integer, true>
+  local windows = {}
   for _, decoration in ipairs(decorations) do
-    table.insert(windows, decoration.pair.right)
+    windows[decoration.pair.left] = true
+    windows[decoration.pair.right] = true
   end
-  vim.api.nvim__ns_set(M.namespace, { wins = windows })
+  vim.api.nvim__ns_set(M.namespace, { wins = vim.tbl_keys(windows) })
+
+  ---@type table<integer, true>
+  local has_left_ribbon = {}
+  for _, decoration in ipairs(decorations) do
+    has_left_ribbon[decoration.pair.right] = true
+  end
 
   for index, decoration in ipairs(decorations) do
     set_colors(index, decoration.palette)
 
     local left = vim.api.nvim_win_get_buf(decoration.pair.left)
     local right = vim.api.nvim_win_get_buf(decoration.pair.right)
+    local left_gutter = not has_left_ribbon[decoration.pair.left]
     vim.iter(decoration.hunks):each(
       ---@param hunk DiffRibbon.Hunk
       function(hunk)
-        decorate_side(left, hunk.left_start, hunk.left_count, hunk.kind, index, index == 1)
+        decorate_side(left, hunk.left_start, hunk.left_count, hunk.kind, index, left_gutter)
         decorate_side(right, hunk.right_start, hunk.right_count, hunk.kind, index, true)
       end
     )

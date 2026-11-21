@@ -229,25 +229,21 @@ local function between(block, left, right, lines)
   return result
 end
 
---- Hunks between each pair of neighbouring buffers, split the way Neovim highlights them.
----@param buffers integer[] From left to right
----@param base integer Index of the buffer Neovim compares the others with, the first one in diff mode
----@return DiffRibbon.Hunk[][] One list per pair, the first one between buffers 1 and 2
-function M.compute(buffers, base)
+--- Hunks between pairs of buffers, split the way Neovim highlights them.
+---@param buffers integer[] Every buffer in diff mode, the first one being the one Neovim compares the others with
+---@param links [integer, integer][] Indices in `buffers` of each pair, left one first
+---@return DiffRibbon.Hunk[][] One list per pair
+function M.compute(buffers, links)
   local lines = vim.tbl_map(function(buffer) return vim.api.nvim_buf_get_lines(buffer, 0, -1, false) end, buffers)
   -- Whole buffers as texts that end with a newline, like files on disk.
   local texts = vim.tbl_map(function(list) return table.concat(list, '\n') .. '\n' end, lines)
-  local block_list = blocks(texts, base)
+  local block_list = blocks(texts, 1)
 
-  local result = {}
-  for index = 1, #buffers - 1 do
-    result[index] = vim.iter(block_list):fold(
-      {},
-      function(list, block) return vim.list_extend(list, between(block, index, index + 1, lines)) end
-    )
-  end
-
-  return result
+  return vim.tbl_map(function(link)
+    return vim
+      .iter(block_list)
+      :fold({}, function(list, block) return vim.list_extend(list, between(block, link[1], link[2], lines)) end)
+  end, links)
 end
 
 return M

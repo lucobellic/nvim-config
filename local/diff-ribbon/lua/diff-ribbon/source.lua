@@ -3,9 +3,8 @@
 ---@field right integer Window
 
 ---@class DiffRibbon.View
----@field windows integer[] From left to right
----@field base integer Index in `windows` of the one Neovim compares the others with
----@field pairs DiffRibbon.Pair[] Neighbouring windows, from left to right
+---@field windows integer[] Every diff window, in diffview-plus order. It turns on diff mode in that order, so Neovim compares the others with the first one
+---@field pairs DiffRibbon.Pair[] Windows that sit side by side, from left to right
 
 local M = {}
 
@@ -21,8 +20,48 @@ local function visible(window)
     and vim.api.nvim_win_get_tabpage(window) == vim.api.nvim_get_current_tabpage()
 end
 
---- Diff windows of the current diffview-plus view when its layout is one of `layouts`, with their
---- neighbouring pairs: one pair for two windows, two pairs for three.
+--- Whether `right` sits just right of `left`, across one separator, with rows in common.
+---@param left integer
+---@param right integer
+---@return boolean
+local function side_by_side(left, right)
+  local left_row, left_col = unpack(vim.api.nvim_win_get_position(left))
+  local right_row, right_col = unpack(vim.api.nvim_win_get_position(right))
+  local touching = right_col == left_col + vim.api.nvim_win_get_width(left) + 1
+  local overlapping = left_row < right_row + vim.api.nvim_win_get_height(right)
+    and right_row < left_row + vim.api.nvim_win_get_height(left)
+
+  return touching and overlapping
+end
+
+--- Windows that sit side by side, each pair from left to right, ordered by position on screen.
+--- Windows stacked above one another get no ribbon.
+---@param ids integer[]
+---@return DiffRibbon.Pair[]
+local function neighbours(ids)
+  local result = {}
+  for _, left in ipairs(ids) do
+    for _, right in ipairs(ids) do
+      if left ~= right and side_by_side(left, right) then
+        table.insert(result, { left = left, right = right })
+      end
+    end
+  end
+
+  local function position(pair) return vim.api.nvim_win_get_position(pair.left) end
+  table.sort(result, function(first, second)
+    local first_position, second_position = position(first), position(second)
+    if first_position[1] ~= second_position[1] then
+      return first_position[1] < second_position[1]
+    end
+    return first_position[2] < second_position[2]
+  end)
+
+  return result
+end
+
+--- Diff windows of the current diffview-plus view when its layout is one of `layouts`, with the
+--- pairs that sit side by side: one pair for two windows, two for three in a row.
 ---@param layouts string[]
 ---@return DiffRibbon.View?
 function M.view(layouts)
@@ -49,21 +88,13 @@ function M.view(layouts)
     end
   end
 
-  -- Order by column, so each pair has its left window on the left of the screen.
   local ids = vim.tbl_map(function(window) return window.id end, windows)
-  table.sort(
-    ids,
-    function(first, second) return vim.api.nvim_win_get_position(first)[2] < vim.api.nvim_win_get_position(second)[2] end
-  )
-
-  local window_pairs = {}
-  for index = 1, #ids - 1 do
-    table.insert(window_pairs, { left = ids[index], right = ids[index + 1] })
+  local window_pairs = neighbours(ids)
+  if #window_pairs == 0 then
+    return nil
   end
 
-  -- diffview-plus turns on diff mode in its window order, so Neovim takes the first one as base.
-  local base = vim.fn.index(ids, windows[1].id) + 1
-  return { windows = ids, base = base, pairs = window_pairs }
+  return { windows = ids, pairs = window_pairs }
 end
 
 return M

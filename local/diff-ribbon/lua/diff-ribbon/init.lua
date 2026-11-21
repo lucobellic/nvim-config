@@ -55,17 +55,23 @@ local function all_image_ids()
 end
 
 --- Hunks of every pair, computed again only after an edit or a 'diffopt' change. With three
---- windows, Neovim merges the changes of all buffers into shared blocks, so each pair depends on
---- every buffer.
+--- windows or more, Neovim merges the changes of all buffers into shared blocks, so each pair
+--- depends on every buffer, even one stacked below that gets no ribbon.
 ---@param view DiffRibbon.View
 ---@return DiffRibbon.Hunk[][]
 local function current_hunks(view)
   local buffers = vim.tbl_map(vim.api.nvim_win_get_buf, view.windows)
+  local links = vim.tbl_map(
+    function(pair) return { vim.fn.index(view.windows, pair.left) + 1, vim.fn.index(view.windows, pair.right) + 1 } end,
+    view.pairs
+  )
+
   local parts = vim.tbl_map(function(buffer) return buffer .. ':' .. vim.b[buffer].changedtick end, buffers)
-  local key = table.concat(vim.list_extend(parts, { view.base, vim.o.diffopt }), '|')
+  local link_parts = vim.tbl_map(function(link) return table.concat(link, '-') end, links)
+  local key = table.concat(vim.list_extend(vim.list_extend(parts, link_parts), { vim.o.diffopt }), '|')
 
   if key ~= state.hunks_key then
-    state.hunks = hunks.compute(buffers, view.base)
+    state.hunks = hunks.compute(buffers, links)
     state.hunks_key = key
   end
 
