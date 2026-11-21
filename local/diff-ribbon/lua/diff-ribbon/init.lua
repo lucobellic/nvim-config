@@ -90,11 +90,17 @@ local function background(groups)
     and { bit.band(bit.rshift(color, 16), 0xFF), bit.band(bit.rshift(color, 8), 0xFF), bit.band(color, 0xFF) }
 end
 
+--- Colors per change kind, the same whichever side has focus. Highlight lookups follow the current
+--- window's 'winhighlight', and diffview remaps DiffAdd to its deletion color on the left side,
+--- so the lookup always runs in the right window.
+---@param pair DiffRibbon.Pair
 ---@return table<DiffRibbon.Kind, integer[]?>
-local function colors()
-  return vim.iter(config.colors):fold({}, function(result, kind, groups)
-    result[kind] = background(groups)
-    return result
+local function colors(pair)
+  return vim.api.nvim_win_call(pair.right, function()
+    return vim.iter(config.colors):fold({}, function(result, kind, groups)
+      result[kind] = background(groups)
+      return result
+    end)
   end)
 end
 
@@ -163,8 +169,8 @@ end
 
 ---@param ribbons DiffRibbon.Ribbon[]
 ---@param placement DiffRibbon.Placement
-local function draw(ribbons, placement)
-  local palette = colors()
+---@param palette table<DiffRibbon.Kind, integer[]?>
+local function draw(ribbons, placement, palette)
   local key = image_key(ribbons, placement, palette)
   if key == state.image_key then
     return
@@ -201,8 +207,8 @@ end
 
 ---@param pair DiffRibbon.Pair
 ---@param hunk_list DiffRibbon.Hunk[]
-local function decorate(pair, hunk_list)
-  local palette = colors()
+---@param palette table<DiffRibbon.Kind, integer[]?>
+local function decorate(pair, hunk_list, palette)
   local key = table.concat({ state.hunks_key, pair.left, pair.right, vim.inspect(palette) }, '|')
   if key == state.decorations_key then
     return
@@ -256,9 +262,13 @@ local function render()
     return hide()
   end
   local hunk_list = current_hunks(pair)
-  decorate(pair, hunk_list)
-  overlay.set_images(image_ids)
-  draw(geometry.ribbons(hunk_list, left, right, placement), placement)
+  local palette = colors(pair)
+  -- These also read highlights (Normal, LineNr), so they use the right window too, whatever has focus.
+  vim.api.nvim_win_call(pair.right, function()
+    decorate(pair, hunk_list, palette)
+    overlay.set_images(image_ids)
+  end)
+  draw(geometry.ribbons(hunk_list, left, right, placement), placement, palette)
 end
 
 --- Schedule a redraw. Many events arrive together while scrolling, so they share one redraw.
