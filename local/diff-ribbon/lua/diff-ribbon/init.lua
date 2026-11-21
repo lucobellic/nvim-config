@@ -3,6 +3,7 @@ local connector = require('diff-ribbon.connector')
 local decorations = require('diff-ribbon.decorations')
 local filler = require('diff-ribbon.filler')
 local geometry = require('diff-ribbon.geometry')
+local hunks = require('diff-ribbon.hunks')
 local kitty = require('diff-ribbon.kitty')
 local overlay = require('diff-ribbon.overlay')
 local palette = require('diff-ribbon.palette')
@@ -23,7 +24,12 @@ local state = {
   -- One per pair of neighbouring windows, kept between redraws.
   ---@type DiffRibbon.Connector[]
   connectors = {},
-  -- Remembers the last decorated hunks, windows and colors, so unchanged work is skipped.
+  -- Keys remember the last inputs, so unchanged work is skipped.
+  ---@type string?
+  hunks_key = nil,
+  -- Hunks of each pair of neighbouring windows, from left to right.
+  ---@type DiffRibbon.Hunk[][]
+  hunks = {},
   ---@type string?
   decorations_key = nil,
 }
@@ -48,18 +54,31 @@ local function all_image_ids()
   return vim.iter(state.connectors):fold({}, function(ids, item) return vim.list_extend(ids, item.image_ids) end)
 end
 
+--- Hunks of every pair, computed again only after an edit or a 'diffopt' change. With three
+--- windows, Neovim merges the changes of all buffers into shared blocks, so each pair depends on
+--- every buffer.
+---@param view DiffRibbon.View
+---@return DiffRibbon.Hunk[][]
+local function current_hunks(view)
+  local buffers = vim.tbl_map(vim.api.nvim_win_get_buf, view.windows)
+  local parts = vim.tbl_map(function(buffer) return buffer .. ':' .. vim.b[buffer].changedtick end, buffers)
+  local key = table.concat(vim.list_extend(parts, { view.base, vim.o.diffopt }), '|')
+
+  if key ~= state.hunks_key then
+    state.hunks = hunks.compute(buffers, view.base)
+    state.hunks_key = key
+  end
+
+  return state.hunks
+end
+
 --- Color the gutters and underline the gaps, unless nothing changed since last time.
 ---@param items DiffRibbon.Decoration[]
 local function decorate(items)
-  -- Each connector's hunk key already changes with its buffers and their edits.
-  local parts = {}
-  for index, item in ipairs(items) do
-    parts[index] = table.concat({
-      state.connectors[index].hunks_key,
-      item.pair.left,
-      item.pair.right,
-      vim.inspect(item.palette),
-    }, ':')
+  -- The hunk key already changes with the buffers and their edits.
+  local parts = { state.hunks_key }
+  for _, item in ipairs(items) do
+    table.insert(parts, table.concat({ item.pair.left, item.pair.right, vim.inspect(item.palette) }, ':'))
   end
 
   local key = table.concat(parts, '|')
@@ -132,16 +151,20 @@ end
 
 --- Bring the ribbons and gutter colors in line with the current diff view.
 local function render()
-  local window_pairs = enabled() and source.pairs(config.options.layouts)
-  if not window_pairs then
+  local view = enabled() and source.view(config.options.layouts)
+  if not view then
     return deactivate()
   end
   state.active = true
   filler.remove()
 
+  local window_pairs = view.pairs
+  local hunk_lists = current_hunks(view)
   local items = {}
   for index, pair in ipairs(window_pairs) do
-    items[index] = { pair = pair, hunks = connector_at(index):current_hunks(pair), palette = palette.resolve(pair) }
+    -- Each pair needs its connector before the image highlights below are set.
+    connector_at(index)
+    items[index] = { pair = pair, hunks = hunk_lists[index], palette = palette.resolve(pair) }
   end
 
   -- These read the Normal and LineNr highlights, so they run in a diff window whatever has focus.

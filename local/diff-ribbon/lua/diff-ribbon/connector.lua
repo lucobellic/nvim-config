@@ -1,16 +1,13 @@
 local config = require('diff-ribbon.config')
-local hunks = require('diff-ribbon.hunks')
 local kitty = require('diff-ribbon.kitty')
 local overlay = require('diff-ribbon.overlay')
 local raster = require('diff-ribbon.raster')
 
--- The ribbon between two neighbouring windows: its hunks, its images and its overlay.
+-- The ribbon between two neighbouring windows: its images and its overlay.
 ---@class DiffRibbon.Connector
 ---@field image_ids integer[] Two images take turns, see `draw`
 ---@field image_slot integer Index in `image_ids` of the image the overlay shows
----@field hunks_key? string Keys remember the last inputs, so unchanged work is skipped
----@field hunks DiffRibbon.Hunk[]
----@field image_key? string
+---@field image_key? string Remembers the last inputs, so an unchanged image is not drawn again
 ---@field overlay DiffRibbon.Overlay
 local Connector = {}
 Connector.__index = Connector
@@ -20,22 +17,7 @@ local M = {}
 ---@param image_ids integer[]
 ---@return DiffRibbon.Connector
 function M.new(image_ids)
-  return setmetatable({ image_ids = image_ids, image_slot = 1, hunks = {}, overlay = overlay.new() }, Connector)
-end
-
---- Hunks of both buffers, computed again only after an edit or a 'diffopt' change.
----@param pair DiffRibbon.Pair
----@return DiffRibbon.Hunk[]
-function Connector:current_hunks(pair)
-  local left, right = vim.api.nvim_win_get_buf(pair.left), vim.api.nvim_win_get_buf(pair.right)
-  local key = table.concat({ left, vim.b[left].changedtick, right, vim.b[right].changedtick, vim.o.diffopt }, ':')
-
-  if key ~= self.hunks_key then
-    self.hunks = hunks.compute(left, right)
-    self.hunks_key = key
-  end
-
-  return self.hunks
+  return setmetatable({ image_ids = image_ids, image_slot = 1, overlay = overlay.new() }, Connector)
 end
 
 --- Text that changes whenever the image would look different.
