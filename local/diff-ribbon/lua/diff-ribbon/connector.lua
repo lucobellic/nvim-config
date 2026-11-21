@@ -105,8 +105,9 @@ function Connector:draw(ribbons, placement, palette)
     cell_height = height / placement.height,
     colors = palette,
     opacity = config.options.opacity,
-    line_thickness = math.max(1, config.options.insertion_line.thickness * height / placement.height),
-    line_offset = config.options.insertion_line.offset * height / placement.height,
+    -- Whole pixels, as the terminal draws its underline, so the ribbon lands on the same pixel rows.
+    line_thickness = math.max(1, math.floor(config.options.insertion_line.thickness * cell.height + 0.5)),
+    line_offset = math.floor(config.options.insertion_line.offset * cell.height + 0.5),
   })
 
   -- Switch to the other image id, since the current one is still on screen.

@@ -43,8 +43,8 @@ local defaults = {
     delete = { 'DiffAdd' },
     change = { 'DiffChange' },
   },
-  -- A terminal underline is about one eighteenth of a row thick, drawn just above the row boundary.
-  insertion_line = { thickness = 1 / 18, offset = 1 / 18 },
+  -- Kitty draws the underline about one eighteenth of a row thick, on the last pixel rows of the cell.
+  insertion_line = { thickness = 1 / 18, offset = 0 },
 }
 
 M.options = defaults
