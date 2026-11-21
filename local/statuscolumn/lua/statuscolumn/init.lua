@@ -4,6 +4,13 @@
 ---@field gutter? vim.api.keyset.highlight Background and underline set by diff ribbons
 ---@field text? string
 
+---@class User.Statuscolumn.Selection
+---@field first integer
+---@field last integer
+---@field first_from_start boolean The first selected line starts at its first character
+---@field rest_from_start boolean The other selected lines start at their first character
+---@field gutter vim.api.keyset.highlight
+
 ---@class User.Statuscolumn.Window
 ---@field first integer
 ---@field last integer
@@ -13,6 +20,7 @@
 ---@field numbers boolean
 ---@field cursor? integer
 ---@field background? integer
+---@field selection? User.Statuscolumn.Selection
 
 ---@class User.Statuscolumn
 local M = {}
@@ -148,6 +156,51 @@ local function collect_gutter(state, win, buf)
   end)
 end
 
+--- The order of two getpos() positions in the buffer.
+---@param left integer[]
+---@param right integer[]
+---@return boolean
+local function is_before(left, right) return left[2] < right[2] or (left[2] == right[2] and left[3] < right[3]) end
+
+--- Only the bounds are read so the cost stays the same for huge selections.
+---@param win integer
+---@return User.Statuscolumn.Selection?
+local function collect_selection(win)
+  local mode = vim.fn.mode()
+  if not (mode == 'v' or mode == 'V' or mode == '\22') or win ~= vim.api.nvim_get_current_win() then
+    return nil
+  end
+  local anchor, cursor = vim.fn.getpos('v'), vim.fn.getpos('.')
+  local first, last = anchor, cursor
+  if is_before(cursor, anchor) then
+    first, last = cursor, anchor
+  end
+  local selection = {
+    first = first[2],
+    last = last[2],
+    first_from_start = mode == 'V' or first[3] == 1,
+    rest_from_start = true,
+    gutter = { bg = vim.api.nvim_get_hl(0, { name = 'Visual', link = false }).bg },
+  }
+  if mode == '\22' then
+    local left = math.min(vim.fn.virtcol('v', true)[1], vim.fn.virtcol('.', true)[1])
+    selection.first_from_start = left == 1
+    selection.rest_from_start = left == 1
+  end
+  return selection
+end
+
+--- The gutter joins the selection only when the line is selected from its first character.
+---@param selection User.Statuscolumn.Selection?
+---@param line integer
+---@return boolean
+local function is_selected_from_start(selection, line)
+  if not selection or line < selection.first or line > selection.last then
+    return false
+  end
+  return line == selection.first and selection.first_from_start or line > selection.first and selection.rest_from_start
+end
+
 ---@param candidate table
 ---@param current table?
 ---@param preferred_namespace integer
@@ -186,6 +239,7 @@ local function get_window(win, line)
     signs = options.signcolumn ~= 'no',
     numbers = options.number or options.relativenumber,
     cursor = options.cursorline and vim.api.nvim_win_get_cursor(win)[1] or nil,
+    selection = collect_selection(win),
   }
   windows[win] = state
   if state.hidden then
@@ -236,9 +290,12 @@ function M.render()
     return ''
   end
 
-  local is_cursor_line = state.cursor == line
+  -- While selecting, the selection alone decides the gutter color.
+  local is_cursor_line = state.cursor == line and not state.selection
+  local idle_highlight = (state.cursor == line and state.selection) and '%#LineNr#' or ''
   local entry = state.lines[line]
-  local gutter = entry and entry.gutter
+  local ribbon = entry and entry.gutter
+  local gutter = is_selected_from_start(state.selection, line) and state.selection.gutter or ribbon
   local gutter_highlight = gutter
     and ('%#' .. get_gutter_highlight(is_cursor_line and 'CursorLineNr' or 'LineNr', gutter) .. '#')
 
@@ -258,8 +315,8 @@ function M.render()
     signs = entry.text
   end
   -- Changed lines sit outside diff folds, so a blank keeps the fold column from breaking the gutter color.
-  local fold_column = (vim.v.virtnum == 0 and not gutter) and '%C ' or '  '
-  local cursor_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or '')
+  local fold_column = (vim.v.virtnum == 0 and not ribbon) and '%C ' or '  '
+  local cursor_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or idle_highlight)
   local trailing_highlight = gutter_highlight or (is_cursor_line and '%#CursorLineNr#' or '%#FoldColumn#')
   return cursor_highlight .. signs .. '%=%l' .. fold_column .. trailing_highlight
 end
