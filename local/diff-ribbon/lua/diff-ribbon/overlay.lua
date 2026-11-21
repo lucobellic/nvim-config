@@ -66,18 +66,25 @@ local function side(column, width)
   return 'right'
 end
 
---- Fill one row with placeholders on ribbon cells and blanks elsewhere.
+---@param id integer
+---@return string
+local function image_highlight(id) return M.highlight .. id end
+
+--- Build one row with placeholders on ribbon cells and blanks elsewhere.
 --- Masked blanks are opaque, so diff colors and underlines below stay hidden behind the ribbon.
 ---@param row integer
 ---@param width integer
 ---@param columns table<integer, true>
 ---@param masks DiffRibbon.Masks
-local function fill_row(row, width, columns, masks)
+---@param id integer Image shown by the placeholders
+---@return string line
+---@return { [1]: integer, [2]: integer, [3]: string }[] ranges Byte ranges and their highlight
+local function build_row(row, width, columns, masks, id)
   local line, ranges = '', {}
   for column = 0, width - 1 do
     local cell, group = ' ', nil
     if columns[column] then
-      cell, group = kitty.placeholder(row, column), M.highlight
+      cell, group = kitty.placeholder(row, column), image_highlight(id)
     elseif masks[side(column, width)][row] then
       group = M.mask_highlight
     end
@@ -86,52 +93,69 @@ local function fill_row(row, width, columns, masks)
     end
     line = line .. cell
   end
-  vim.api.nvim_buf_set_lines(overlay.buffer, row, row + 1, false, { line })
-  vim.iter(ranges):each(
-    function(range)
+  return line, ranges
+end
+
+---@param placement DiffRibbon.Placement
+---@param cells DiffRibbon.Cells
+---@param masks DiffRibbon.Masks
+---@param id integer
+local function fill(placement, cells, masks, id)
+  local lines, row_ranges = {}, {}
+  for row = 0, placement.height - 1 do
+    lines[row + 1], row_ranges[row + 1] = build_row(row, placement.width, cells[row] or {}, masks, id)
+  end
+  vim.api.nvim_buf_clear_namespace(overlay.buffer, namespace, 0, -1)
+  vim.api.nvim_buf_set_lines(overlay.buffer, 0, -1, false, lines)
+  for row, ranges in ipairs(row_ranges) do
+    for _, range in ipairs(ranges) do
       vim.api.nvim_buf_set_extmark(
         overlay.buffer,
         namespace,
-        row,
+        row - 1,
         range[1],
         { end_col = range[2], hl_group = range[3] }
       )
     end
-  )
-end
-
----@param placement DiffRibbon.Placement
----@param cells DiffRibbon.Cells
----@param masks DiffRibbon.Masks
-local function fill(placement, cells, masks)
-  vim.api.nvim_buf_clear_namespace(overlay.buffer, namespace, 0, -1)
-  vim.api.nvim_buf_set_lines(overlay.buffer, 0, -1, false, {})
-  for row = 0, placement.height - 1 do
-    fill_row(row, placement.width, cells[row] or {}, masks)
   end
 end
 
---- Set the color the terminal reads as the image id. No blending, or the id would change.
---- The mask uses the editor background, like the clear pixels of the ribbon cells.
----@param id integer
-function M.set_image(id)
-  local normal = vim.api.nvim_get_hl(0, { name = 'Normal', link = false })
-  vim.api.nvim_set_hl(0, M.highlight, { fg = id, bg = normal.bg, blend = 0 })
-  vim.api.nvim_set_hl(0, M.mask_highlight, { bg = normal.bg, blend = 0 })
+---@type string?
+local highlights_key = nil
+
+--- Colors the terminal reads as image ids, with no blending or the ids would change. The mask uses
+--- the editor background, like the clear pixels of ribbon cells. Highlights are only set when they
+--- change, since setting one makes Neovim redraw every window.
+---@param ids integer[]
+function M.set_images(ids)
+  local background = vim.api.nvim_get_hl(0, { name = 'Normal', link = false }).bg
+  local key = tostring(background) .. ':' .. table.concat(ids, ',')
+  if key == highlights_key then
+    return
+  end
+  highlights_key = key
+  for _, id in ipairs(ids) do
+    vim.api.nvim_set_hl(0, image_highlight(id), { fg = id, bg = background, blend = 0 })
+  end
+  vim.api.nvim_set_hl(0, M.mask_highlight, { bg = background, blend = 0 })
 end
 
---- Show placeholders on the ribbon `cells` at `placement`, with opaque blanks where `masks` asks.
+--- Highlights are lost when the color scheme changes, so set them again next time.
+function M.reset_highlights() highlights_key = nil end
+
+--- Show placeholders for image `id` on the ribbon `cells` at `placement`, with opaque blanks where `masks` asks.
 ---@param placement DiffRibbon.Placement
 ---@param cells DiffRibbon.Cells
 ---@param masks DiffRibbon.Masks
-function M.show(placement, cells, masks)
+---@param id integer
+function M.show(placement, cells, masks, id)
   if not (overlay.window and vim.api.nvim_win_is_valid(overlay.window)) then
     open(placement)
   elseif not vim.deep_equal(overlay.placement, placement) then
     vim.api.nvim_win_set_config(overlay.window, window_config(placement))
   end
   overlay.placement = placement
-  fill(placement, cells, masks)
+  fill(placement, cells, masks, id)
 end
 
 function M.hide()

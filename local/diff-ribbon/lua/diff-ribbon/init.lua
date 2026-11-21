@@ -55,11 +55,16 @@ local defaults = {
 ---@type DiffRibbon.Config
 local config = defaults
 
--- Image id spread over 24 bits so several Neovim instances in one terminal do not collide.
-local image_id = 0x100000 + (vim.fn.getpid() * 7919 + vim.uv.hrtime()) % 0xEFFFFF
+-- Image ids spread over 24 bits so several Neovim instances in one terminal do not collide.
+-- Two images take turns: the next one loads while the current one stays on screen, so the
+-- switch happens in a single screen update instead of showing a half updated ribbon.
+local first_image_id = 0x100000 + (vim.fn.getpid() * 7919 + vim.uv.hrtime()) % 0xEFFFFE
+local image_ids = { first_image_id, first_image_id + 1 }
 
 local state = {
   active = false,
+  -- Index in `image_ids` of the image the overlay shows.
+  image_slot = 1,
   -- Turned off by the user for this session, whatever `enabled` says.
   paused = false,
   ---@type string?
@@ -177,15 +182,21 @@ local function draw(ribbons, placement)
     line_thickness = math.max(1, config.insertion_line.thickness * height / placement.height),
     line_offset = config.insertion_line.offset * height / placement.height,
   })
+  state.image_slot = 3 - state.image_slot
+  local id = image_ids[state.image_slot]
+  -- Kitty gets the new image right away, while the screen still shows the previous one.
+  -- The previous image is not deleted: the next draw replaces it, and deleting it now could
+  -- remove it before the screen update below has moved the cells away from it.
   kitty.transmit({
-    id = image_id,
+    id = id,
     bytes = bytes,
     width = width,
     height = height,
     columns = placement.width,
     rows = placement.height,
   })
-  overlay.show(placement, cells, masks(ribbons, placement))
+  -- The cells switch to the new image in the next screen update, in one frame.
+  overlay.show(placement, cells, masks(ribbons, placement), id)
 end
 
 ---@param pair DiffRibbon.Pair
@@ -203,7 +214,7 @@ end
 
 local function hide()
   if state.image_key then
-    kitty.delete(image_id)
+    vim.iter(image_ids):each(kitty.delete)
   end
   state.image_key = nil
   state.decorations_key = nil
@@ -246,7 +257,7 @@ local function render()
   end
   local hunk_list = current_hunks(pair)
   decorate(pair, hunk_list)
-  overlay.set_image(image_id)
+  overlay.set_images(image_ids)
   draw(geometry.ribbons(hunk_list, left, right, placement), placement)
 end
 
@@ -266,9 +277,16 @@ function M.setup(options)
   config = vim.tbl_deep_extend('force', defaults, options or {})
   overlay.zindex = config.zindex
   local group = vim.api.nvim_create_augroup('diff-ribbon', { clear = true })
+  -- Scrolling and resizing draw right away: these events run just before Neovim draws the screen,
+  -- so the text and the ribbon move in the same frame instead of the ribbon lagging behind.
+  vim.api.nvim_create_autocmd({ 'WinScrolled', 'WinResized' }, {
+    group = group,
+    callback = function()
+      timer:stop()
+      render()
+    end,
+  })
   vim.api.nvim_create_autocmd({
-    'WinScrolled',
-    'WinResized',
     'WinEnter',
     'WinClosed',
     'TabEnter',
@@ -283,6 +301,7 @@ function M.setup(options)
     callback = function()
       state.image_key = nil
       state.decorations_key = nil
+      overlay.reset_highlights()
       M.refresh()
     end,
   })
