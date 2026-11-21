@@ -1,3 +1,9 @@
+--- Hunks of one pair of windows, with the colors of its ribbon.
+---@class DiffRibbon.Decoration
+---@field pair DiffRibbon.Pair
+---@field hunks DiffRibbon.Hunk[]
+---@field palette DiffRibbon.Palette
+
 local M = {}
 
 -- Other plugins, such as a custom statuscolumn, read the gutter colors from this namespace.
@@ -7,20 +13,23 @@ M.namespace = vim.api.nvim_create_namespace('diff-ribbon.decorations')
 ---@type table<integer, true>
 local marked = {}
 
---- Highlight name for a kind, such as `DiffRibbonGutterAdd`.
+--- Highlight name for a kind of the ribbon at `index`, such as `DiffRibbonGutterAdd1`. Each ribbon
+--- has its own, since its colors come from its own windows.
 ---@param prefix string
 ---@param kind DiffRibbon.Kind
+---@param index integer
 ---@return string
-local function highlight(prefix, kind) return prefix .. kind:sub(1, 1):upper() .. kind:sub(2) end
+local function highlight(prefix, kind, index) return prefix .. kind:sub(1, 1):upper() .. kind:sub(2) .. index end
 
 --- Color as one number, the form highlights expect.
 ---@param rgb integer[]
 ---@return integer
 local function to_integer(rgb) return rgb[1] * 0x10000 + rgb[2] * 0x100 + rgb[3] end
 
---- Groups colored like the ribbons: row backgrounds in the gutter, and underlines at gaps.
----@param palette table<DiffRibbon.Kind, integer[]?>
-function M.set_colors(palette)
+--- Groups colored like the ribbon at `index`: row backgrounds in the gutter, and underlines at gaps.
+---@param index integer
+---@param palette DiffRibbon.Palette
+local function set_colors(index, palette)
   -- Line numbers keep their usual color on top of the band.
   local number = vim.api.nvim_get_hl(0, { name = 'LineNr', link = false }).fg
 
@@ -29,11 +38,11 @@ function M.set_colors(palette)
     ---@param rgb integer[]
     function(kind, rgb)
       local color = to_integer(rgb)
-      vim.api.nvim_set_hl(0, highlight('DiffRibbonGutter', kind), { fg = number, bg = color })
-      vim.api.nvim_set_hl(0, highlight('DiffRibbonInsertion', kind), { underline = true, sp = color })
+      vim.api.nvim_set_hl(0, highlight('DiffRibbonGutter', kind, index), { fg = number, bg = color })
+      vim.api.nvim_set_hl(0, highlight('DiffRibbonInsertion', kind, index), { underline = true, sp = color })
       vim.api.nvim_set_hl(
         0,
-        highlight('DiffRibbonGutterInsertion', kind),
+        highlight('DiffRibbonGutterInsertion', kind, index),
         { fg = number, underline = true, sp = color }
       )
     end
@@ -54,9 +63,10 @@ end
 ---@param start integer
 ---@param count integer
 ---@param kind DiffRibbon.Kind
-local function color_rows(buffer, start, count, kind)
+---@param index integer
+local function color_rows(buffer, start, count, kind, index)
   for line = start, start + count - 1 do
-    mark(buffer, line, { number_hl_group = highlight('DiffRibbonGutter', kind) })
+    mark(buffer, line, { number_hl_group = highlight('DiffRibbonGutter', kind, index) })
   end
 end
 
@@ -64,15 +74,17 @@ end
 ---@param buffer integer
 ---@param line integer Line just above the gap, 1 based
 ---@param kind DiffRibbon.Kind
-local function underline(buffer, line, kind)
+---@param index integer
+---@param gutter boolean Whether the underline also crosses the gutter
+local function underline(buffer, line, kind, index, gutter)
   -- Nothing sits above a gap at the very top, so there is no line to underline.
   if line < 1 then
     return
   end
 
   mark(buffer, line, {
-    line_hl_group = highlight('DiffRibbonInsertion', kind),
-    number_hl_group = highlight('DiffRibbonGutterInsertion', kind),
+    line_hl_group = highlight('DiffRibbonInsertion', kind, index),
+    number_hl_group = gutter and highlight('DiffRibbonGutterInsertion', kind, index) or nil,
   })
 end
 
@@ -95,31 +107,45 @@ end
 ---@param start integer
 ---@param count integer
 ---@param kind DiffRibbon.Kind
-local function decorate_side(buffer, start, count, kind)
+---@param index integer
+---@param gutter boolean Whether this ribbon colors the window's gutter
+local function decorate_side(buffer, start, count, kind, index, gutter)
   if count == 0 then
-    underline(buffer, start, kind)
-  else
-    color_rows(buffer, start, count, kind)
+    underline(buffer, start, kind, index, gutter)
+  elseif gutter then
+    color_rows(buffer, start, count, kind, index)
   end
 end
 
---- Replace the gutter colors and underlines of both windows with those of `hunks`.
----@param pair DiffRibbon.Pair
----@param hunks DiffRibbon.Hunk[]
-function M.show(pair, hunks)
+--- Replace the gutter colors and underlines of every window with those of `decorations`, given
+--- from left to right. With three windows, the middle one belongs to two ribbons. The gutter sits
+--- on the left of a window, so it takes the colors of the ribbon touching it, the one on its left.
+--- The leftmost window has none there and takes the first ribbon's. Underlines run through the
+--- text up to both ribbons, so every ribbon draws them.
+---@param decorations DiffRibbon.Decoration[]
+function M.show(decorations)
   M.clear()
 
   -- Only the diff windows show them, even when the same buffer is open elsewhere.
-  vim.api.nvim__ns_set(M.namespace, { wins = { pair.left, pair.right } })
+  local windows = { decorations[1].pair.left }
+  for _, decoration in ipairs(decorations) do
+    table.insert(windows, decoration.pair.right)
+  end
+  vim.api.nvim__ns_set(M.namespace, { wins = windows })
 
-  local left, right = vim.api.nvim_win_get_buf(pair.left), vim.api.nvim_win_get_buf(pair.right)
-  vim.iter(hunks):each(
-    ---@param hunk DiffRibbon.Hunk
-    function(hunk)
-      decorate_side(left, hunk.left_start, hunk.left_count, hunk.kind)
-      decorate_side(right, hunk.right_start, hunk.right_count, hunk.kind)
-    end
-  )
+  for index, decoration in ipairs(decorations) do
+    set_colors(index, decoration.palette)
+
+    local left = vim.api.nvim_win_get_buf(decoration.pair.left)
+    local right = vim.api.nvim_win_get_buf(decoration.pair.right)
+    vim.iter(decoration.hunks):each(
+      ---@param hunk DiffRibbon.Hunk
+      function(hunk)
+        decorate_side(left, hunk.left_start, hunk.left_count, hunk.kind, index, index == 1)
+        decorate_side(right, hunk.right_start, hunk.right_count, hunk.kind, index, true)
+      end
+    )
+  end
 end
 
 return M

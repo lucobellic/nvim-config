@@ -1,8 +1,3 @@
----@class DiffRibbon.Overlay
----@field buffer? integer
----@field window? integer
----@field placement? DiffRibbon.Placement
-
 ---@alias DiffRibbon.Side 'left'|'center'|'right'
 
 --- Overlay rows where blanks are opaque, per overlay side, as `masks[side][row] = true`.
@@ -20,9 +15,16 @@ M.mask_highlight = 'DiffRibbonMask'
 
 local namespace = vim.api.nvim_create_namespace('diff-ribbon')
 
--- The one floating window that holds the placeholders, reused between redraws.
----@type DiffRibbon.Overlay
-local overlay = {}
+-- A floating window that holds the placeholders of one ribbon, reused between redraws.
+---@class DiffRibbon.Overlay
+---@field buffer? integer
+---@field window? integer
+---@field placement? DiffRibbon.Placement
+local Overlay = {}
+Overlay.__index = Overlay
+
+---@return DiffRibbon.Overlay
+function M.new() return setmetatable({}, Overlay) end
 
 --- Floating window position and size, the part that changes between redraws.
 ---@param placement DiffRibbon.Placement
@@ -38,8 +40,9 @@ local function window_config(placement)
 end
 
 --- Open the overlay window, out of the way of the cursor, the mouse and autocommands.
+---@param overlay DiffRibbon.Overlay
 ---@param placement DiffRibbon.Placement
-local function open(placement)
+local function open(overlay, placement)
   if not (overlay.buffer and vim.api.nvim_buf_is_valid(overlay.buffer)) then
     overlay.buffer = vim.api.nvim_create_buf(false, true)
   end
@@ -110,11 +113,12 @@ local function build_row(row, width, columns, masks, id)
 end
 
 --- Replace the overlay text and highlights with the rows for image `id`.
+---@param overlay DiffRibbon.Overlay
 ---@param placement DiffRibbon.Placement
 ---@param cells DiffRibbon.Cells
 ---@param masks DiffRibbon.Masks
 ---@param id integer
-local function fill(placement, cells, masks, id)
+local function fill(overlay, placement, cells, masks, id)
   local lines, row_ranges = {}, {}
   for row = 0, placement.height - 1 do
     lines[row + 1], row_ranges[row + 1] = build_row(row, placement.width, cells[row] or {}, masks, id)
@@ -166,26 +170,26 @@ function M.reset_highlights() highlights_key = nil end
 ---@param cells DiffRibbon.Cells
 ---@param masks DiffRibbon.Masks
 ---@param id integer
-function M.show(placement, cells, masks, id)
+function Overlay:show(placement, cells, masks, id)
   -- Moving the window only when needed avoids extra redraws.
-  if not (overlay.window and vim.api.nvim_win_is_valid(overlay.window)) then
-    open(placement)
-  elseif not vim.deep_equal(overlay.placement, placement) then
-    vim.api.nvim_win_set_config(overlay.window, window_config(placement))
+  if not (self.window and vim.api.nvim_win_is_valid(self.window)) then
+    open(self, placement)
+  elseif not vim.deep_equal(self.placement, placement) then
+    vim.api.nvim_win_set_config(self.window, window_config(placement))
   end
-  overlay.placement = placement
+  self.placement = placement
 
-  fill(placement, cells, masks, id)
+  fill(self, placement, cells, masks, id)
 end
 
 --- Close the overlay window but keep its buffer for the next time.
-function M.hide()
-  if overlay.window and vim.api.nvim_win_is_valid(overlay.window) then
-    vim.api.nvim_win_close(overlay.window, true)
+function Overlay:hide()
+  if self.window and vim.api.nvim_win_is_valid(self.window) then
+    vim.api.nvim_win_close(self.window, true)
   end
 
-  overlay.window = nil
-  overlay.placement = nil
+  self.window = nil
+  self.placement = nil
 end
 
 return M

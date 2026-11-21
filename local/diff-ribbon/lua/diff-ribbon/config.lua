@@ -5,7 +5,7 @@
 ---@field opacity number Ribbon opacity from 0 to 1
 ---@field debounce integer Milliseconds between redraws
 ---@field cell_size? DiffRibbon.CellSize Pixel size of one cell when the terminal cannot report it
----@field colors table<DiffRibbon.Kind, string[]> Highlight groups whose background colors each kind, first match wins
+---@field colors table<DiffRibbon.Kind, string[]> Highlight groups whose background colors each kind, first match wins, looked up in the window that shows those lines
 ---@field insertion_line { thickness: number, offset: number } Underline size and gap above the row boundary, in fractions of a row
 ---@field zindex integer Stacking order of the ribbon overlay among floating windows
 
@@ -32,12 +32,14 @@ local defaults = {
   width = 5,
   -- Above scrollbars such as satellite.nvim (40), below popups and terminals (50 and up).
   zindex = 45,
-  layouts = { 'diff2_horizontal' },
+  layouts = { 'diff2_horizontal', 'diff3_horizontal' },
   opacity = 1,
   debounce = 16,
+  -- Lines that only one side has are drawn with DiffAdd in that window. diffview-plus remaps it to
+  -- its deletion color in the left window of two way diffs, so deletions match it there.
   colors = {
     add = { 'DiffAdd' },
-    delete = { 'DiffviewDiffAddAsDelete', 'DiffDelete' },
+    delete = { 'DiffAdd' },
     change = { 'DiffChange' },
   },
   -- A terminal underline is about one eighteenth of a row thick, drawn just above the row boundary.
