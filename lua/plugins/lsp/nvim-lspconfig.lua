@@ -14,23 +14,9 @@ if vim.g.vscode then
   vim.keymap.set('n', '<W', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
 end
 
-local function goto_next(severity)
-  local Diagnostic = require('lspsaga.diagnostic')
-  if severity then
-    Diagnostic:goto_next({ severity = severity })
-  else
-    Diagnostic:goto_next()
-  end
-end
+local function goto_next(severity) vim.diagnostic.jump({ count = 1, severity = severity, float = true }) end
 
-local function goto_prev(severity)
-  local Diagnostic = require('lspsaga.diagnostic')
-  if severity then
-    Diagnostic:goto_prev({ severity = severity })
-  else
-    Diagnostic:goto_prev()
-  end
-end
+local function goto_prev(severity) vim.diagnostic.jump({ count = -1, severity = severity, float = true }) end
 
 local function repeatable(severity)
   return { [','] = function() goto_prev(severity) end, [';'] = function() goto_next(severity) end }
@@ -248,7 +234,6 @@ return {
               desc = 'Rename current symbol',
               cond = 'textDocument/rename',
             },
-            { 'gK', '<cmd>Lspsaga hover_doc<CR>' },
           },
         },
       },
