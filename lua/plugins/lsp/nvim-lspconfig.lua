@@ -14,9 +14,9 @@ if vim.g.vscode then
   vim.keymap.set('n', '<W', function() vscode.action('editor.action.marker.prev') end, { desc = 'Prev Diagnostic' })
 end
 
-local function goto_next(severity) vim.diagnostic.jump({ count = 1, severity = severity, float = true }) end
+local function goto_next(severity) require('lsp-ui').jump_diagnostic({ count = 1, severity = severity }) end
 
-local function goto_prev(severity) vim.diagnostic.jump({ count = -1, severity = severity, float = true }) end
+local function goto_prev(severity) require('lsp-ui').jump_diagnostic({ count = -1, severity = severity }) end
 
 local function repeatable(severity)
   return { [','] = function() goto_prev(severity) end, [';'] = function() goto_next(severity) end }
