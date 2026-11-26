@@ -11,65 +11,112 @@ local M = {
 
 local multicursor_namespace = vim.api.nvim_create_namespace('nvim.multicursor')
 
+--- Methods where Neovim lets the user create and delete folds by hand
+local editable_foldmethods = { manual = true, marker = true }
+
+--- Build the keys to replay, keeping the count typed before the mapping
 ---@param command string
-local function execute_fold_command(command)
+---@return string
+local function with_count(command) return (vim.v.count > 0 and vim.v.count or '') .. command end
+
+---@param keys string
+local function run_normal(keys) pcall(vim.cmd.normal, { keys, bang = true }) end
+
+---@param keys string
+local function run_at_every_cursor(keys)
   local multicursors = vim.api.nvim_buf_get_extmarks(0, multicursor_namespace, 0, -1, {})
-
-  if #multicursors == 0 then
-    vim.cmd('normal! ' .. command)
-    return
-  end
-
   local primary_view = vim.fn.winsaveview()
-  pcall(vim.cmd, 'normal! ' .. command)
+
+  run_normal(keys)
   vim.iter(multicursors):each(function(multicursor)
     vim.api.nvim_win_set_cursor(0, { multicursor[2] + 1, multicursor[3] })
-    pcall(vim.cmd, 'normal! ' .. command)
+    run_normal(keys)
   end)
-  vim.fn.winrestview(primary_view)
-end
 
---- Add virtual text for folded lines in the current buffer
---- Clears existing virtual text and adds new overlays for all closed folds
-function M.add_fold_virtual_text()
-  -- Clear existing virtual text
-  vim.api.nvim_buf_clear_namespace(0, M.ns, 0, -1)
-
-  -- Get all folds in the current buffer
-  local line_count = vim.api.nvim_buf_line_count(0)
-
-  for line = 1, line_count do
-    local fold_closed = vim.fn.foldclosed(line)
-
-    if fold_closed ~= -1 and fold_closed == line then
-      -- This is the first line of a closed fold
-      local fold_end = vim.fn.foldclosedend(line)
-      local lines_folded = fold_end - line + 1
-
-      -- Get the line content to determine overlay position
-      local line_content = vim.api.nvim_buf_get_lines(0, line - 1, line, false)[1] or ''
-      local col = #line_content
-
-      vim.api.nvim_buf_set_extmark(0, M.ns, line - 1, col, {
-        virt_text = {
-          { ' ', 'Normal' },
-          { ' +' .. lines_folded .. '  ', 'UfoFoldedEllipsis' },
-        },
-        virt_text_pos = 'overlay',
-        virt_text_hide = false,
-        invalidate = true,
-      })
-    end
+  if #multicursors > 0 then
+    vim.fn.winrestview(primary_view)
   end
 end
 
---- Set up autocommands and keymaps for fold virtual text
---- Creates autocommands for buffer events and cursor movements
---- Overrides fold-related keymaps to trigger virtual text updates
+---@param fold_command FoldVirtualText.Command
+local function run_fold_command(fold_command)
+  local keys = with_count(fold_command.cmd)
+  if fold_command.per_cursor then
+    run_at_every_cursor(keys)
+  else
+    run_normal(keys)
+  end
+  vim.api.nvim_exec_autocmds('User', { pattern = 'FoldChanged' })
+end
+
+---@param fold_command FoldVirtualText.Command
+local function run_manual_fold_command(fold_command)
+  -- Switching to manual keeps the current folds, so the user can edit them by hand
+  if not editable_foldmethods[vim.wo.foldmethod] then
+    vim.wo[0][0].foldmethod = 'manual'
+  end
+  run_normal(fold_command.cmd)
+  vim.api.nvim_exec_autocmds('User', { pattern = 'FoldChanged' })
+end
+
+---@param bufnr integer
+---@param row integer 0 based first line of the closed fold
+---@param fold_end integer 1 based last line of the closed fold
+local function add_fold_label(bufnr, row, fold_end)
+  local line_content = vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false)[1] or ''
+
+  vim.api.nvim_buf_set_extmark(bufnr, M.ns, row, #line_content, {
+    virt_text = {
+      { ' ', 'Normal' },
+      { ' +' .. (fold_end - row) .. '  ', 'UfoFoldedEllipsis' },
+    },
+    virt_text_pos = 'overlay',
+    ephemeral = true,
+  })
+end
+
+--- Label each closed fold while it is drawn, so folds from any source show their size
+---@param winid integer
+---@param bufnr integer
+---@param row integer
+local function decorate_range(_, winid, bufnr, row)
+  local fold_end = vim.api.nvim_win_call(
+    winid,
+    function() return vim.fn.foldclosed(row + 1) == row + 1 and vim.fn.foldclosedend(row + 1) or -1 end
+  )
+
+  if fold_end ~= -1 then
+    add_fold_label(bufnr, row, fold_end)
+  end
+end
+
+---@param fold_command FoldVirtualText.Command
+local function map_normal_fold_command(fold_command)
+  vim.keymap.set(
+    'n',
+    fold_command.cmd,
+    function() run_fold_command(fold_command) end,
+    { desc = fold_command.desc, repeatable = true }
+  )
+end
+
+---@param fold_command FoldVirtualText.Command
+local function map_visual_fold_command(fold_command)
+  vim.keymap.set(
+    'x',
+    fold_command.cmd,
+    function() run_manual_fold_command(fold_command) end,
+    { desc = fold_command.desc }
+  )
+end
+
+--- Set up the fold labels and fold keymaps
 function M.setup()
-  -- Set up autocommands to update virtual text when folds change
-  vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'WinEnter' }, {
-    callback = M.add_fold_virtual_text,
+  -- An empty foldtext draws the real first line, which the label sits after
+  vim.o.foldtext = ''
+
+  vim.api.nvim_set_decoration_provider(M.ns, {
+    on_range = decorate_range,
   })
 
   ---@type FoldVirtualText.Command[]
@@ -92,6 +139,7 @@ function M.setup()
     { cmd = 'zi', desc = 'Invert folding' },
   }
 
+  ---@type FoldVirtualText.Command[]
   local visual_fold_commands = {
     { cmd = 'zf', desc = 'Create fold from selection' },
     { cmd = 'zF', desc = 'Create fold from selection (alternative)' },
@@ -100,32 +148,10 @@ function M.setup()
     { cmd = 'zE', desc = 'Eliminate all folds in window' },
   }
 
-  vim.iter(normal_fold_commands):each(function(fold_cmd)
-    vim.keymap.set('n', fold_cmd.cmd, function()
-      pcall(function()
-        if fold_cmd.per_cursor then
-          execute_fold_command(fold_cmd.cmd)
-        else
-          vim.cmd('normal! ' .. fold_cmd.cmd)
-        end
-        vim.schedule(M.add_fold_virtual_text)
-        vim.api.nvim_exec_autocmds('User', { pattern = 'FoldChanged' })
-      end)
-    end, { desc = fold_cmd.desc, repeatable = true })
-  end)
+  vim.iter(normal_fold_commands):each(map_normal_fold_command)
 
   --- Allow visual mode folding commands to work with any foldmethod
-  vim.iter(visual_fold_commands):each(function(fold_cmd)
-    vim.keymap.set('v', fold_cmd.cmd, function()
-      pcall(function()
-        local previous_foldmethod = vim.wo.foldmethod
-        vim.wo.foldmethod = 'manual'
-        vim.cmd('normal! ' .. fold_cmd.cmd)
-        vim.schedule(M.add_fold_virtual_text)
-        vim.wo.foldmethod = previous_foldmethod
-      end)
-    end, { desc = fold_cmd.desc })
-  end)
+  vim.iter(visual_fold_commands):each(map_visual_fold_command)
 
   if vim.g.vscode then
     local vscode = require('vscode')
@@ -139,26 +165,12 @@ function M.setup()
     vim.keymap.set('n', 'za', function() vscode.action('editor.toggleFold') end)
   end
 
+  -- LazyVim already picks treesitter or LSP folds per window
   if vim.g.distribution ~= 'lazyvim' then
-    vim.opt.foldexpr = "v:lua.require('util.folds.folds').foldexpr()"
+    vim.o.foldmethod = 'expr'
+    -- The builtin expression returns no folds when a buffer has no parser
+    vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
   end
-end
-
-function M.foldexpr()
-  local buf = vim.api.nvim_get_current_buf()
-  if vim.b[buf].ts_folds == nil then
-    -- as long as we don't have a filetype, don't bother
-    -- checking if treesitter is available (it won't)
-    if vim.bo[buf].filetype == '' then
-      return '0'
-    end
-    if vim.bo[buf].filetype:find('dashboard') then
-      vim.b[buf].ts_folds = false
-    else
-      vim.b[buf].ts_folds = pcall(vim.treesitter.get_parser, buf)
-    end
-  end
-  return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or '0'
 end
 
 return M
