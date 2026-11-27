@@ -67,6 +67,10 @@ end
 
 ---@type fun()
 local function tab()
+  local cursor = package.loaded['cursor-cpp']
+  if vim.g.suggestions == 'cursor-cpp' and cursor and cursor.accept() then
+    return
+  end
   if require('blink.cmp').accept({ force = true }) then
     return
   end

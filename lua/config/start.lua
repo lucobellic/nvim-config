@@ -10,8 +10,8 @@ vim.g.neovide_floating_shadow = vim.g.neovide
 
 vim.g.python3_host_prog = '/usr/bin/python3'
 
----@type 'copilot'|'cursor-tab'|'gitlab'|'supermaven'|false
-vim.g.suggestions = false
+---@type 'copilot'|'cursor-tab'|'cursor-cpp'|'gitlab'|'supermaven'|false
+vim.g.suggestions = 'cursor-cpp'
 vim.g.ai_cmp = false
 vim.g.cmp_mode = 'super-tab' --- @type 'default'|'super-tab'|'enter'|'none'
 
