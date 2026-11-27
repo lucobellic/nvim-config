@@ -33,6 +33,9 @@ vim.api.nvim_create_autocmd({ 'TermOpen' }, {
   desc = 'Set terminal buffer options',
 })
 
+-- Redraw terminal apps once their window size settles
+require('util.terminal-refresh').setup()
+
 require('config.osc').setup({ selectors = { '9', '99', '777' } })
 
 -- Automatic save
