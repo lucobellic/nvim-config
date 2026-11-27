@@ -14,7 +14,20 @@ return {
 
     -- Named terminal keymaps
     { '<leader>er', function() require('term.core').toggle('ranger') end, desc = 'Term Ranger File Manager' },
-    { '<leader>g;', function() require('term.core').toggle('lazygit') end, desc = 'Term LazyGit' },
+    {
+      '<leader>g;',
+      function()
+        -- One lazygit per project so switching repos opens the right one instead of the last used
+        local root = vim.fs.root(0, '.git') or vim.uv.cwd()
+        local lazygit = require('term.config').get().terminals.lazygit
+        local opts = vim.tbl_extend('force', lazygit.opts, {
+          cwd = root,
+          title = lazygit.opts.title .. ' ' .. vim.fs.basename(root),
+        })
+        require('term.core').toggle('lazygit:' .. root, lazygit.cmd, opts)
+      end,
+      desc = 'Term LazyGit',
+    },
     { '<leader>eg', function() require('term.core').toggle('lazygit') end, desc = 'Term LazyGit' },
     { '<leader>ey', function() require('term.core').toggle('yazi') end, desc = 'Term Yazi File Manager' },
     { '<leader>ed', function() require('term.core').toggle('lazydash') end, desc = 'Term LazyDash' },

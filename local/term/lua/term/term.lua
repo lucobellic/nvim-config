@@ -7,6 +7,7 @@ local util = require('term.util')
 ---@field zindex? number Z-index for floating window
 ---@field title? string Display title
 ---@field start_insert? boolean Whether to start in insert mode (default: false)
+---@field cwd? string Working directory for the job (defaults to Neovim cwd)
 ---@field on_open? fun(term: Term) Callback when terminal opens
 ---@field on_close? fun(term: Term) Callback when terminal closes
 ---@field on_exit? fun(term: Term, code: number) Callback when job exits
@@ -104,6 +105,7 @@ function Term:start()
     vim.api.nvim_buf_call(self.bufnr, function()
       self.job_id = vim.fn.jobstart(self.cmd, {
         term = true,
+        cwd = self.opts.cwd,
         env = build_env(),
         on_exit = function(_, code)
           self.job_id = nil
