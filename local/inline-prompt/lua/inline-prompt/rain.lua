@@ -14,15 +14,18 @@ local config = require('inline-prompt.config')
 
 ---@class InlinePrompt.Stream
 ---@field row integer
+---@field col integer Byte where its screen line starts
 ---@field timer integer Ticks before the next node spawns
 ---@field drawing boolean
 ---@field nodes InlinePrompt.Node[]
 ---@field cells InlinePrompt.Cell[]
 
+---@class InlinePrompt.ScreenLine
+---@field row integer
+---@field col integer Byte where the screen line starts
+
 ---@class InlinePrompt.Layout
----@field start_row integer
----@field end_row integer
----@field width integer
+---@field key string Width and rows of the screen lines
 ---@field streams InlinePrompt.Stream[]
 
 ---@class InlinePrompt.Rain
@@ -77,17 +80,18 @@ local function character_cell(char)
   return { char, 'InlinePromptRain', flash = config.options.rain.flashers and math.random(10) == 1 }
 end
 
----@param row integer
+---@param line InlinePrompt.ScreenLine
 ---@param width integer
 ---@return InlinePrompt.Stream
-local function new_stream(row, width)
+local function new_stream(line, width)
   local cells = {}
   for col = 1, width do
     cells[col] = BLANK
   end
   -- The first node comes within a second so every line shows activity quickly.
   return {
-    row = row,
+    row = line.row,
+    col = line.col,
     timer = math.random(math.min(width, 10)),
     drawing = false,
     nodes = {},
@@ -193,7 +197,53 @@ local function rows(range)
   return range.start_row, end_row
 end
 
----Run a digital rain from the left to the right of the window on each line of the range until stopped.
+---Height of a line without the virtual lines around it.
+---@param window integer
+---@param row integer
+---@param end_vcol? integer
+---@return integer
+local function text_height(window, row, end_vcol)
+  local height = vim.api.nvim_win_text_height(window, { start_row = row, end_row = row, end_vcol = end_vcol })
+  return height.all - height.fill
+end
+
+---First virtual column shown on a screen line of a wrapped line, found by bisection
+---because line breaks, show break and break indent move the wrap points.
+---@param window integer
+---@param row integer
+---@param screen_line integer Index from 0 for the first screen line
+---@return integer vcol From 0
+local function first_vcol(window, row, screen_line)
+  local low, high = 0, vim.fn.virtcol({ row + 1, '$' }, false, window)
+  while low < high do
+    local middle = math.floor((low + high) / 2)
+    if text_height(window, row, middle + 1) > screen_line then
+      high = middle
+    else
+      low = middle + 1
+    end
+  end
+  return low
+end
+
+---Screen lines covered by the range, a wrapped line spans several of them.
+---@param window integer
+---@param range InlinePrompt.Range
+---@return InlinePrompt.ScreenLine[]
+local function screen_lines(window, range)
+  local start_row, end_row = rows(range)
+  local lines = {}
+  for row = start_row, end_row do
+    lines[#lines + 1] = { row = row, col = 0 }
+    for screen_line = 1, text_height(window, row) - 1 do
+      local col = vim.fn.virtcol2col(window, row + 1, first_vcol(window, row, screen_line) + 1) - 1
+      lines[#lines + 1] = { row = row, col = col }
+    end
+  end
+  return lines
+end
+
+---Run a digital rain from the left to the right of the window on each screen line of the range until stopped.
 ---@public
 ---@param buf integer
 ---@param get_range fun(): InlinePrompt.Range? Current range, which can move while the request runs
@@ -219,23 +269,24 @@ function M.start(buf, get_range)
     end
   end
 
-  -- Streams restart only when the rows or the window width change, not on every edit.
+  -- Streams restart only when the screen lines or the window width change, not on every edit.
+  -- Edits still move the wrap points, so each stream follows the start of its screen line.
+  ---@param window integer
   ---@param range InlinePrompt.Range
   ---@param width integer
   ---@return InlinePrompt.Stream[]
-  local function current_streams(range, width)
-    local start_row, end_row = rows(range)
-    if not layout or layout.start_row ~= start_row or layout.end_row ~= end_row or layout.width ~= width then
+  local function current_streams(window, range, width)
+    local lines = screen_lines(window, range)
+    local key = width .. ':' .. table.concat(vim.tbl_map(function(line) return line.row end, lines), ',')
+    if not layout or layout.key ~= key then
       vim.api.nvim_buf_clear_namespace(buf, namespace, 0, -1)
       layout = {
-        start_row = start_row,
-        end_row = end_row,
-        width = width,
-        streams = vim
-          .iter(vim.fn.range(start_row, end_row))
-          :map(function(row) return new_stream(row, width) end)
-          :totable(),
+        key = key,
+        streams = vim.tbl_map(function(line) return new_stream(line, width) end, lines),
       }
+    end
+    for index, stream in ipairs(layout.streams) do
+      stream.col = lines[index].col
     end
     return layout.streams
   end
@@ -263,9 +314,9 @@ function M.start(buf, get_range)
       local width = math.max(1, math.ceil((info.width - info.textoff) / CELL_WIDTH))
 
       -- Reusing the extmark id updates it in place instead of creating a new one.
-      for index, stream in ipairs(current_streams(range, width)) do
+      for index, stream in ipairs(current_streams(window, range, width)) do
         step(stream, width, frame, characters)
-        vim.api.nvim_buf_set_extmark(buf, namespace, stream.row, 0, {
+        vim.api.nvim_buf_set_extmark(buf, namespace, stream.row, stream.col, {
           id = index,
           virt_text = chunks(stream.cells),
           virt_text_win_col = 0,
