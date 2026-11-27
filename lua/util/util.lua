@@ -40,13 +40,12 @@ function M.open_file(with_lnum)
   local visual = mode == 'v' or mode == 'V' or mode == '\22'
   local cfile
   if visual then
-    cfile = vim.trim(table.concat(
-      vim.fn.getregion(vim.fn.getpos('v'), vim.fn.getpos('.'), {
-        type = mode,
-        exclusive = vim.o.selection == 'exclusive',
-      }),
-      ''
-    ))
+    local lines = vim.fn.getregion(vim.fn.getpos('v'), vim.fn.getpos('.'), {
+      type = mode,
+      exclusive = vim.o.selection == 'exclusive',
+    })
+    -- Paths wrapped over several lines carry padding at each break, so trim every line like gx does
+    cfile = table.concat(vim.iter(lines):map(vim.trim):totable())
     vim.cmd.normal({ args = { vim.keycode('<Esc>') }, bang = true })
   else
     cfile = vim.fn.expand('<cfile>')
